@@ -5908,18 +5908,14 @@
 				}
 			}
 			
-			/* Convert the layout array into a node array
-			 * Note the use of aLayout[0] in the outloop, we want the outer loop to occur the same
-			 * number of times as there are columns. Unusual having nested loops this way around
-			 * but is what we need here.
-			 */
-			for ( i=0, iLen=aLayout[0].length ; i<iLen ; i++ )
+			/* Convert the layout array into a node array */
+			for ( i=0, iLen=aLayout.length ; i<iLen ; i++ )
 			{
-				for ( j=0, jLen=aLayout.length ; j<jLen ; j++ )
+				for ( j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
 				{
-					if ( typeof aLayout[j][i] == 'object' )
+					if ( typeof aLayout[i][j] == 'object' )
 					{
-						aReturn.push( aLayout[j][i] );
+						aReturn[j] = aLayout[i][j];
 					}
 				}
 			}
