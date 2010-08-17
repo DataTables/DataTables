@@ -1,0 +1,573 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link rel="shortcut icon" type="image/ico" href="http://www.sprymedia.co.uk/media/images/favicon.ico" />
+		
+		<title>DataTables example</title>
+		<style type="text/css" title="currentStyle">
+			@import "../../media/css/demo_page.css";
+			@import "../../media/css/demo_table.css";
+		</style>
+		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+				$('#example').dataTable( {
+					"oLanguage": {
+						"sLengthMenu": "Display _MENU_ records per page",
+						"sZeroRecords": "Nothing found - sorry",
+						"sInfo": "Showing _START_ to _END_ of _TOTAL_ records",
+						"sInfoEmpty": "Showing 0 to 0 of 0 records",
+						"sInfoFiltered": "(filtered from _MAX_ total records)"
+					}
+				} );
+			} );
+		</script>
+	</head>
+	<body id="dt_example">
+		<div id="container">
+			<div class="full_width big">
+				<i>DataTables</i> dynamic language
+			</div>
+
+			<h1>Preamble</h1>
+			<p>Changing the language information displayed by <i>DataTables</i> is as simple as passing in a language object to the dataTable constructor. The example above shows a different set of English language definitions to be used, rather than the defaults.</p>
+			
+			<h1>Live example</h1>
+			<div id="demo">
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+	<thead>
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="gradeX">
+			<td>Trident</td>
+			<td>Internet Explorer 4.0</td>
+			<td>Win 95+</td>
+			<td class="center">4</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="gradeC">
+			<td>Trident</td>
+			<td>Internet Explorer 5.0</td>
+			<td>Win 95+</td>
+			<td class="center">5</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Trident</td>
+			<td>Internet Explorer 5.5</td>
+			<td>Win 95+</td>
+			<td class="center">5.5</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Trident</td>
+			<td>Internet Explorer 6</td>
+			<td>Win 98+</td>
+			<td class="center">6</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Trident</td>
+			<td>Internet Explorer 7</td>
+			<td>Win XP SP2+</td>
+			<td class="center">7</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Trident</td>
+			<td>AOL browser (AOL desktop)</td>
+			<td>Win XP</td>
+			<td class="center">6</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 1.0</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.7</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 1.5</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 2.0</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Firefox 3.0</td>
+			<td>Win 2k+ / OSX.3+</td>
+			<td class="center">1.9</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Camino 1.0</td>
+			<td>OSX.2+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Camino 1.5</td>
+			<td>OSX.3+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Netscape 7.2</td>
+			<td>Win 95+ / Mac OS 8.6-9.2</td>
+			<td class="center">1.7</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Netscape Browser 8</td>
+			<td>Win 98SE+</td>
+			<td class="center">1.7</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Netscape Navigator 9</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.0</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.1</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.1</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.2</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.2</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.3</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.3</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.4</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.4</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.5</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.5</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.6</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">1.6</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.7</td>
+			<td>Win 98+ / OSX.1+</td>
+			<td class="center">1.7</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Mozilla 1.8</td>
+			<td>Win 98+ / OSX.1+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Seamonkey 1.1</td>
+			<td>Win 98+ / OSX.2+</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Gecko</td>
+			<td>Epiphany 2.20</td>
+			<td>Gnome</td>
+			<td class="center">1.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>Safari 1.2</td>
+			<td>OSX.3</td>
+			<td class="center">125.5</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>Safari 1.3</td>
+			<td>OSX.3</td>
+			<td class="center">312.8</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>Safari 2.0</td>
+			<td>OSX.4+</td>
+			<td class="center">419.3</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>Safari 3.0</td>
+			<td>OSX.4+</td>
+			<td class="center">522.1</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>OmniWeb 5.5</td>
+			<td>OSX.4+</td>
+			<td class="center">420</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>iPod Touch / iPhone</td>
+			<td>iPod</td>
+			<td class="center">420.1</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Webkit</td>
+			<td>S60</td>
+			<td>S60</td>
+			<td class="center">413</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 7.0</td>
+			<td>Win 95+ / OSX.1+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 7.5</td>
+			<td>Win 95+ / OSX.2+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 8.0</td>
+			<td>Win 95+ / OSX.2+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 8.5</td>
+			<td>Win 95+ / OSX.2+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 9.0</td>
+			<td>Win 95+ / OSX.3+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 9.2</td>
+			<td>Win 88+ / OSX.3+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera 9.5</td>
+			<td>Win 88+ / OSX.3+</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Opera for Wii</td>
+			<td>Wii</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Nokia N800</td>
+			<td>N800</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Presto</td>
+			<td>Nintendo DS browser</td>
+			<td>Nintendo DS</td>
+			<td class="center">8.5</td>
+			<td class="center">C/A<sup>1</sup></td>
+		</tr>
+		<tr class="gradeC">
+			<td>KHTML</td>
+			<td>Konqureror 3.1</td>
+			<td>KDE 3.1</td>
+			<td class="center">3.1</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeA">
+			<td>KHTML</td>
+			<td>Konqureror 3.3</td>
+			<td>KDE 3.3</td>
+			<td class="center">3.3</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeA">
+			<td>KHTML</td>
+			<td>Konqureror 3.5</td>
+			<td>KDE 3.5</td>
+			<td class="center">3.5</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeX">
+			<td>Tasman</td>
+			<td>Internet Explorer 4.5</td>
+			<td>Mac OS 8-9</td>
+			<td class="center">-</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="gradeC">
+			<td>Tasman</td>
+			<td>Internet Explorer 5.1</td>
+			<td>Mac OS 7.6-9</td>
+			<td class="center">1</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeC">
+			<td>Tasman</td>
+			<td>Internet Explorer 5.2</td>
+			<td>Mac OS 8-X</td>
+			<td class="center">1</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Misc</td>
+			<td>NetFront 3.1</td>
+			<td>Embedded devices</td>
+			<td class="center">-</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeA">
+			<td>Misc</td>
+			<td>NetFront 3.4</td>
+			<td>Embedded devices</td>
+			<td class="center">-</td>
+			<td class="center">A</td>
+		</tr>
+		<tr class="gradeX">
+			<td>Misc</td>
+			<td>Dillo 0.8</td>
+			<td>Embedded devices</td>
+			<td class="center">-</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="gradeX">
+			<td>Misc</td>
+			<td>Links</td>
+			<td>Text only</td>
+			<td class="center">-</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="gradeX">
+			<td>Misc</td>
+			<td>Lynx</td>
+			<td>Text only</td>
+			<td class="center">-</td>
+			<td class="center">X</td>
+		</tr>
+		<tr class="gradeC">
+			<td>Misc</td>
+			<td>IE Mobile</td>
+			<td>Windows Mobile 6</td>
+			<td class="center">-</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeC">
+			<td>Misc</td>
+			<td>PSP browser</td>
+			<td>PSP</td>
+			<td class="center">-</td>
+			<td class="center">C</td>
+		</tr>
+		<tr class="gradeU">
+			<td>Other browsers</td>
+			<td>All others</td>
+			<td>-</td>
+			<td class="center">-</td>
+			<td class="center">U</td>
+		</tr>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+		</tr>
+	</tfoot>
+</table>
+			</div>
+			<div class="spacer"></div>
+			
+			
+			<h1>Initialisation code</h1>
+			<pre>$(document).ready(function() {
+$('#example').dataTable( {
+		"oLanguage": {
+			"sLengthMenu": "Display _MENU_ records per page",
+			"sZeroRecords": "Nothing found - sorry",
+			"sInfo": "Showing _START_ to _END_ of _TOTAL_ records",
+			"sInfoEmpty": "Showing 0 to 0 of 0 records",
+			"sInfoFiltered": "(filtered from _MAX_ total records)"
+		}
+	} );
+} );</pre>
+			
+			
+			<h1>Other examples</h1>
+			<h2>Basic initialisation</h2>
+			<ul>
+				<li><a href="../basic_init/zero_config.html">Zero configuration</a></li>
+				<li><a href="../basic_init/filter_only.html">Feature enablement</a></li>
+				<li><a href="../basic_init/table_sorting.html">Sorting data</a></li>
+				<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+				<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
+				<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
+				<li><a href="../basic_init/dom.html">DOM positioning</a></li>
+				<li><a href="../basic_init/state_save.html">State saving</a></li>
+				<li><a href="../basic_init/alt_pagination.html">Alternative pagination styles</a></li>
+				<li>Scrolling: 
+					<a href="../basic_init/scroll_x.html">Horizontal</a> / 
+					<a href="../basic_init/scroll_y.html">Vertical</a> / 
+					<a href="../basic_init/scroll_xy.html">Both</a> / 
+					<a href="../basic_init/scroll_y_theme.html">Themed</a>
+				</li>
+				<li><a href="../basic_init/language.html">Change language information (internationalisation)</a></li>
+				<li><a href="../basic_init/themes.html">ThemeRoller themes (Smoothness)</a></li>
+			</ul>
+			
+			<h2>Advanced initialisation</h2>
+			<ul>
+				<li><a href="../advanced_init/events_pre_init.html">Events (pre initialisation)</a></li>
+				<li><a href="../advanced_init/events_post_init.html">Events (post initialisation)</a></li>
+				<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
+				<li><a href="../advanced_init/html_sort.html">Sorting without HTML tags</a></li>
+				<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table controls (sDom)</a></li>
+				<li><a href="../advanced_init/length_menu.html">Defining length menu options</a></li>
+				<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar (element) around table</a></li>
+				<li><a href="../advanced_init/highlight.html">Row highlighting with CSS</a></li>
+				<li><a href="../advanced_init/complex_header.html">Column grouping through col/row spans</a></li>
+				<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
+				<li><a href="../advanced_init/row_callback.html">Row callback</a></li>
+				<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
+				<li><a href="../advanced_init/language_file.html">Change language information from a file (internationalisation)</a></li>
+			</ul>
+			
+			<h2>Data sources</h2>
+			<ul>
+				<li><a href="../data_sources/dom.html">DOM</a></li>
+				<li><a href="../data_sources/js_array.html">Javascript array</a></li>
+				<li><a href="../data_sources/ajax.html">Ajax source</a></li>
+				<li><a href="../data_sources/server_side.html">Server side processing</a></li>
+			</ul>
+			
+			<h2>Server-side processing</h2>
+			<ul>
+				<li><a href="../server_side/server_side.html">Obtain server-side data</a></li>
+				<li><a href="../server_side/custom_vars.html">Add extra HTTP variables</a></li>
+				<li><a href="../server_side/post.html">Use HTTP POST</a></li>
+				<li><a href="../server_side/column_ordering.html">Custom column ordering (in callback data)</a></li>
+				<li><a href="../server_side/pipeline.html">Pipelining data (reduce Ajax calls for paging)</a></li>
+				<li><a href="../server_side/row_details.html">Show and hide details about a particular record</a></li>
+				<li><a href="../server_side/select_rows.html">User selectable rows (multiple rows)</a></li>
+			</ul>
+			
+			<h2>API</h2>
+			<ul>
+				<li><a href="../api/add_row.html">Dynamically add a new row</a></li>
+				<li><a href="../api/multi_filter.html">Individual column filtering (using "input" elements)</a></li>
+				<li><a href="../api/multi_filter_select.html">Individual column filtering (using "select" elements)</a></li>
+				<li><a href="../api/highlight.html">Highlight rows and columns</a></li>
+				<li><a href="../api/row_details.html">Show and hide details about a particular record</a></li>
+				<li><a href="../api/select_row.html">User selectable rows (multiple rows)</a></li>
+				<li><a href="../api/select_single_row.html">User selectable rows (single row) and delete rows</a></li>
+				<li><a href="../api/editable.html">Editable rows (with jEditable)</a></li>
+				<li><a href="../api/form.html">Submit form with elements in table</a></li>
+				<li><a href="../api/counter_column.html">Index column (static number column)</a></li>
+				<li><a href="../api/show_hide.html">Show and hide columns dynamically</a></li>
+				<li><a href="../api/api_in_init.html">API function use in initialisation object (callback)</a></li>
+				<li><a href="../api/tabs_and_scrolling.html">DataTables scrolling and tabs</a></li>
+				<li><a href="../api/regex.html">Regular expression filtering</a></li>
+			</ul>
+			
+			<h2>Plug-ins</h2>
+			<ul>
+				<li><a href="../plug-ins/plugin_api.html">Add custom API functions</a></li>
+				<li><a href="../plug-ins/sorting_plugin.html">Sorting and type detection</a></li>
+				<li><a href="../plug-ins/paging_plugin.html">Custom pagination controls</a></li>
+				<li><a href="../plug-ins/range_filtering.html">Range filtering / custom filtering</a></li>
+				<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+				<li><a href="../plug-ins/html_sort.html">Automatic HTML type detection</a></li>
+			</ul>
+			
+			
+			<p>Please refer to the <a href="http://www.datatables.net/"><i>DataTables</i> documentation</a> for full information about its API properties and methods.</p>
+			
+			
+			<div id="footer" style="text-align:center;">
+				<span style="font-size:10px;">DataTables &copy; Allan Jardine 2008-2010</span>
+			</div>
+		</div>
+	</body>
+</html>
