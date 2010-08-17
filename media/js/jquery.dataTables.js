@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.7.0
+ * Version:     1.7.1 dev
  * CVS:         $Id$
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
@@ -70,7 +70,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.7.0";
+	_oExt.sVersion = "1.7.1.dev";
 	
 	/*
 	 * Variable: sErrMode
@@ -874,7 +874,7 @@
 			this.fnDisplayEnd = function ()
 			{
 				if ( this.oFeatures.bServerSide ) {
-					if ( this.oFeatures.bPaginate === false ) {
+					if ( this.oFeatures.bPaginate === false || this._iDisplayLength == -1 ) {
 						return this._iDisplayStart+this.aiDisplay.length;
 					} else {
 						return Math.min( this._iDisplayStart+this._iDisplayLength, 
@@ -3995,6 +3995,9 @@
 				{
 					nTmp.innerHTML = oSettings.asDataSearch[i];
 					oSettings.asDataSearch[i] = nTmp.textContent ? nTmp.textContent : nTmp.innerText;
+					
+					/* IE and Opera appear to put an newline where there is a <br> tag - remove it */
+					oSettings.asDataSearch[i] = oSettings.asDataSearch[i].replace(/\n/g," ").replace(/\r/g,"");
 				}
 			}
 		}
@@ -5269,7 +5272,7 @@
 		 */
 		function _fnGetMaxLenString( oSettings, iCol )
 		{
-			var iMax = 0;
+			var iMax = -1;
 			var iMaxIndex = -1;
 			
 			for ( var i=0 ; i<oSettings.aoData.length ; i++ )
