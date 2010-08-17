@@ -6470,7 +6470,7 @@
 			
 			/*
 			 * Final init
-			 * Sanity check that there is a thead and tfoot. If not let's just create them
+			 * Sanity check that there is a thead and tbody. If not let's just create them
 			 */
 			if ( this.getElementsByTagName('thead').length === 0 )
 			{
