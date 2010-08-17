@@ -967,7 +967,8 @@
 					"sPrevious": "Previous",
 					"sNext":     "Next",
 					"sLast":     "Last"
-				}
+				},
+				"fnInfoCallback": null
 			};
 			
 			/*
@@ -4651,56 +4652,56 @@
 				return;
 			}
 			
-			var jqFirst = $(oSettings.aanFeatures.i[0]);
 			var
-				sMax = oSettings.fnFormatNumber(oSettings.fnRecordsTotal()),
-				sStart = oSettings.fnFormatNumber(oSettings._iDisplayStart+1),
-				sEnd = oSettings.fnFormatNumber(oSettings.fnDisplayEnd()),
-				sTotal = oSettings.fnFormatNumber(oSettings.fnRecordsDisplay());
+				iStart = oSettings._iDisplayStart+1, iEnd = oSettings.fnDisplayEnd(),
+				iMax = oSettings.fnRecordsTotal(), iTotal = oSettings.fnRecordsDisplay(),
+				sStart = oSettings.fnFormatNumber( iStart ), sEnd = oSettings.fnFormatNumber( iEnd ),
+				sMax = oSettings.fnFormatNumber( iMax ), sTotal = oSettings.fnFormatNumber( iTotal ),
+				sOut;
 			
 			if ( oSettings.fnRecordsDisplay() === 0 && 
 				   oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
 			{
 				/* Empty record set */
-				jqFirst.html( oSettings.oLanguage.sInfoEmpty+ oSettings.oLanguage.sInfoPostFix );
+				sOut = oSettings.oLanguage.sInfoEmpty+ oSettings.oLanguage.sInfoPostFix;
 			}
 			else if ( oSettings.fnRecordsDisplay() === 0 )
 			{
 				/* Rmpty record set after filtering */
-				jqFirst.html( oSettings.oLanguage.sInfoEmpty +' '+ 
+				sOut = oSettings.oLanguage.sInfoEmpty +' '+ 
 					oSettings.oLanguage.sInfoFiltered.replace('_MAX_', sMax)+
-						oSettings.oLanguage.sInfoPostFix );
+						oSettings.oLanguage.sInfoPostFix;
 			}
 			else if ( oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
 			{
 				/* Normal record set */
-				jqFirst.html( oSettings.oLanguage.sInfo.
+				sOut = oSettings.oLanguage.sInfo.
 						replace('_START_', sStart).
 						replace('_END_',   sEnd).
 						replace('_TOTAL_', sTotal)+ 
-					oSettings.oLanguage.sInfoPostFix );
+					oSettings.oLanguage.sInfoPostFix;
 			}
 			else
 			{
 				/* Record set after filtering */
-				jqFirst.html( oSettings.oLanguage.sInfo.
+				sOut = oSettings.oLanguage.sInfo.
 						replace('_START_', sStart).
 						replace('_END_',   sEnd).
 						replace('_TOTAL_', sTotal) +' '+ 
 					oSettings.oLanguage.sInfoFiltered.replace('_MAX_', 
 						oSettings.fnFormatNumber(oSettings.fnRecordsTotal()))+ 
-					oSettings.oLanguage.sInfoPostFix );
+					oSettings.oLanguage.sInfoPostFix;
 			}
 			
-			/* No point in recalculating for the other info elements, just copy the first one in */
-			var n = oSettings.aanFeatures.i;
-			if ( n.length > 1 )
+			if ( oSettings.oLanguage.fnInfoCallback != null )
 			{
-				var sInfo = jqFirst.html();
-				for ( var i=1, iLen=n.length ; i<iLen ; i++ )
-				{
-					$(n[i]).html( sInfo );
-				}
+				sOut = oSettings.oLanguage.fnInfoCallback( oSettings, iStart, iEnd, iMax, iTotal, sOut );
+			}
+			
+			var n = oSettings.aanFeatures.i;
+			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
+			{
+				$(n[i]).html( sOut );
 			}
 		}
 		
@@ -6204,6 +6205,7 @@
 				_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 				_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 				_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
+				_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 				
 				if ( typeof oInit.fnDrawCallback == 'function' )
 				{
