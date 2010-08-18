@@ -5305,6 +5305,10 @@
 			
 			if ( typeof s == 'number' )
 			{
+				if ( s < 0 )
+				{
+					return "0px";
+				}
 				return s+"px";
 			}
 			
