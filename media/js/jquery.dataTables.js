@@ -2422,7 +2422,8 @@
 			if ( aDataSupplied.length != oSettings.aoColumns.length &&
 				oSettings.iDrawError != oSettings.iDraw )
 			{
-				_fnLog( oSettings, 0, "Added data does not match known number of columns" );
+				_fnLog( oSettings, 0, "Added data (size "+aDataSupplied.length+") does not match known "+
+					"number of columns ("+oSettings.aoColumns.length+")" );
 				oSettings.iDrawError = oSettings.iDraw;
 				return -1;
 			}
