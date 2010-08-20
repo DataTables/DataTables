@@ -2194,7 +2194,7 @@
 			{
 				_fnProcessingDisplay( oSettings, true );
 				
-				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, null, function(json) {
+				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
 					/* Got the data - add it to the table */
 					for ( var i=0 ; i<json.aaData.length ; i++ )
 					{
