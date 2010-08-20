@@ -5625,14 +5625,14 @@
 			/* Store the interesting variables */
 			var i;
 			var sValue = "{";
-			sValue += '"iCreate": '+new Date().getTime()+',';
-			sValue += '"iStart": '+oSettings._iDisplayStart+',';
-			sValue += '"iEnd": '+oSettings._iDisplayEnd+',';
-			sValue += '"iLength": '+oSettings._iDisplayLength+',';
-			sValue += '"sFilter": "'+oSettings.oPreviousSearch.sSearch.replace('"','\\"')+'",';
-			sValue += '"sFilterEsc": '+!oSettings.oPreviousSearch.bRegex+',';
+			sValue += '"iCreate":'+ new Date().getTime()+',';
+			sValue += '"iStart":'+ oSettings._iDisplayStart+',';
+			sValue += '"iEnd":'+ oSettings._iDisplayEnd+',';
+			sValue += '"iLength":'+ oSettings._iDisplayLength+',';
+			sValue += '"sFilter":"'+ oSettings.oPreviousSearch.sSearch.replace('"','\\"')+'",';
+			sValue += '"sFilterEsc":'+ !oSettings.oPreviousSearch.bRegex+',';
 			
-			sValue += '"aaSorting": [ ';
+			sValue += '"aaSorting":[';
 			for ( i=0 ; i<oSettings.aaSorting.length ; i++ )
 			{
 				sValue += '['+oSettings.aaSorting[i][0]+',"'+oSettings.aaSorting[i][1]+'"],';
@@ -5640,7 +5640,7 @@
 			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "],";
 			
-			sValue += '"aaSearchCols": [ ';
+			sValue += '"aaSearchCols":[';
 			for ( i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 			{
 				sValue += '["'+oSettings.aoPreSearchCols[i].sSearch.replace('"','\\"')+
@@ -5649,7 +5649,7 @@
 			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "],";
 			
-			sValue += '"abVisCols": [ ';
+			sValue += '"abVisCols":[';
 			for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 			{
 				sValue += oSettings.aoColumns[i].bVisible+",";
@@ -5686,7 +5686,7 @@
 				try
 				{
 					oData = (typeof $.parseJSON == 'function') ? 
-						$.parseJSON( oData.replace(/'/g, '"') ) : eval( '('+sData+')' );
+						$.parseJSON( sData.replace(/'/g, '"') ) : eval( '('+sData+')' );
 				}
 				catch( e )
 				{
