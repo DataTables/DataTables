@@ -1216,6 +1216,13 @@
 			this.sCookiePrefix = "SpryMedia_DataTables_";
 			
 			/*
+			 * Variable: fnCookieCallback
+			 * Purpose:  Callback function for cookie creation
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.fnCookieCallback = null;
+			
+			/*
 			 * Variable: sAjaxSource
 			 * Purpose:  Source url for AJAX data for the table
 			 * Scope:    jQuery.dataTable.classSettings
@@ -5628,7 +5635,7 @@
 			sValue += '"aaSorting": [ ';
 			for ( i=0 ; i<oSettings.aaSorting.length ; i++ )
 			{
-				sValue += "["+oSettings.aaSorting[i][0]+",'"+oSettings.aaSorting[i][1]+"'],";
+				sValue += '['+oSettings.aaSorting[i][0]+',"'+oSettings.aaSorting[i][1]+'"],';
 			}
 			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "],";
@@ -5636,8 +5643,8 @@
 			sValue += '"aaSearchCols": [ ';
 			for ( i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 			{
-				sValue += "['"+oSettings.aoPreSearchCols[i].sSearch.replace("'","\'")+
-					"',"+!oSettings.aoPreSearchCols[i].bRegex+"],";
+				sValue += '["'+oSettings.aoPreSearchCols[i].sSearch.replace('"','\\"')+
+					'",'+!oSettings.aoPreSearchCols[i].bRegex+'],';
 			}
 			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "],";
@@ -5652,7 +5659,7 @@
 			
 			sValue += "}";
 			_fnCreateCookie( oSettings.sCookiePrefix+oSettings.sInstance, sValue, 
-				oSettings.iCookieDuration, oSettings.sCookiePrefix );
+				oSettings.iCookieDuration, oSettings.sCookiePrefix, oSettings.fnCookieCallback );
 		}
 		
 		/*
@@ -5673,22 +5680,13 @@
 			var sData = _fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
 			if ( sData !== null && sData !== '' )
 			{
-				/* Try/catch the JSON eval - if it is bad then we ignore it */
+				/* Try/catch the JSON eval - if it is bad then we ignore it - note that 1.7.0 and before
+				 * incorrectly used single quotes for some strings - hence the replace below
+				 */
 				try
 				{
-					/* Use the JSON library for safety - if it is available */
-					if ( typeof JSON == 'object' && typeof JSON.parse == 'function' )
-					{
-						/* DT 1.4.0 used single quotes for a string - JSON.parse doesn't allow this and throws
-						 * an error. So for now we can do this. This can be removed in future it is just to
-						 * allow the tranfrer to 1.4.1+ to occur
-						 */
-						oData = JSON.parse( sData.replace(/'/g, '"') );
-					}
-					else
-					{
-						oData = eval( '('+sData+')' );
-					}
+					oData = (typeof $.parseJSON == 'function') ? 
+						$.parseJSON( oData.replace(/'/g, '"') ) : eval( '('+sData+')' );
 				}
 				catch( e )
 				{
@@ -5750,8 +5748,9 @@
 		 *           string:sValue - the value the cookie should take
 		 *           int:iSecs - duration of the cookie
 		 *           string:sBaseName - sName is made up of the base + file name - this is the base
+		 *           function:fnCallback - User definable function to modify the cookie
 		 */
-		function _fnCreateCookie ( sName, sValue, iSecs, sBaseName )
+		function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 		{
 			var date = new Date();
 			date.setTime( date.getTime()+(iSecs*1000) );
@@ -5764,9 +5763,20 @@
 			 */
 			var aParts = window.location.pathname.split('/');
 			var sNameFile = sName + '_' + aParts.pop().replace(/[\/:]/g,"").toLowerCase();
-			var sFullCookie = sNameFile + "=" + encodeURIComponent(sValue) +
-				"; expires=" + date.toGMTString() +
-				"; path=" + aParts.join('/') + "/";
+			var sFullCookie;
+			
+			if ( fnCallback != null )
+			{
+				var oData = (typeof $.parseJSON == 'function') ? 
+					$.parseJSON( sValue ) : eval( '('+sData+')' );
+				sFullCookie = fnCallback( sNameFile, oData, date.toGMTString(),
+					aParts.join('/')+"/" );
+			}
+			else
+			{
+				sFullCookie = sNameFile + "=" + encodeURIComponent(sValue) +
+					"; expires=" + date.toGMTString() +"; path=" + aParts.join('/')+"/";
+			}
 			
 			/* Are we going to go over the cookie limit of 4KiB? If so, try to delete a cookies
 			 * belonging to DataTables. This is FAR from bullet proof
@@ -6195,6 +6205,7 @@
 				_fnMap( oSettings, oInit, "fnRowCallback" );
 				_fnMap( oSettings, oInit, "fnHeaderCallback" );
 				_fnMap( oSettings, oInit, "fnFooterCallback" );
+				_fnMap( oSettings, oInit, "fnCookieCallback" );
 				_fnMap( oSettings, oInit, "fnInitComplete" );
 				_fnMap( oSettings, oInit, "fnServerData" );
 				_fnMap( oSettings, oInit, "fnFormatNumber" );
