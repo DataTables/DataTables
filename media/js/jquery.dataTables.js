@@ -5135,6 +5135,10 @@
 				var nWrapper = oSettings.nTable.parentNode;
 				nWrapper.appendChild( nCalcTmp );
 				
+				/* When scrolling (X or Y) we want to set the width of the table as appropriate. However,
+				 * when not scrolling leave the table width as it is. This results in slightly different,
+				 * but I think correct behaviour
+				 */
 				if ( oSettings.oScroll.sX !== "" && oSettings.oScroll.sXInner !== "" )
 				{
 					nCalcTmp.style.width = _fnStringToCss(oSettings.oScroll.sXInner);
@@ -5147,7 +5151,7 @@
 						nCalcTmp.style.width = _fnStringToCss( nWrapper.offsetWidth );
 					}
 				}
-				else
+				else if ( oSettings.oScroll.sY !== "" )
 				{
 					nCalcTmp.style.width = _fnStringToCss( nWrapper.offsetWidth );
 				}
