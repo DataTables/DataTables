@@ -205,17 +205,17 @@
 	 */
 	_oExt.oJUIClasses = {
 		/* Two buttons buttons */
-		"sPagePrevEnabled": "fg-button ui-state-default ui-corner-left",
-		"sPagePrevDisabled": "fg-button ui-state-default ui-corner-left ui-state-disabled",
-		"sPageNextEnabled": "fg-button ui-state-default ui-corner-right",
-		"sPageNextDisabled": "fg-button ui-state-default ui-corner-right ui-state-disabled",
+		"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
+		"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",
+		"sPageNextEnabled": "fg-button ui-button ui-state-default ui-corner-right",
+		"sPageNextDisabled": "fg-button ui-button ui-state-default ui-corner-right ui-state-disabled",
 		"sPageJUINext": "ui-icon ui-icon-circle-arrow-e",
 		"sPageJUIPrev": "ui-icon ui-icon-circle-arrow-w",
 		
 		/* Full numbers paging buttons */
-		"sPageButton": "fg-button ui-state-default",
-		"sPageButtonActive": "fg-button ui-state-default ui-state-disabled",
-		"sPageButtonStaticDisabled": "fg-button ui-state-default ui-state-disabled",
+		"sPageButton": "fg-button ui-button ui-state-default",
+		"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-disabled",
+		"sPageButtonStaticDisabled": "fg-button ui-button ui-state-default ui-state-disabled",
 		"sPageFirst": "first ui-corner-tl ui-corner-bl",
 		"sPagePrevious": "previous",
 		"sPageNext": "next",
@@ -232,7 +232,8 @@
 		"sWrapper": "dataTables_wrapper",
 		"sFilter": "dataTables_filter",
 		"sInfo": "dataTables_info",
-		"sPaging": "dataTables_paginate fg-buttonset fg-buttonset-multi paging_", /* Note that the type is postfixed */
+		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
+			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
 		"sLength": "dataTables_length",
 		"sProcessing": "dataTables_processing",
 		
@@ -551,10 +552,9 @@
 					}
 					
 					/* Build up the dynamic list forst - html and listeners */
-					nPaginateList = an[i].childNodes[2];
-					nPaginateList.innerHTML = sList;
-					
-					$('span', nPaginateList).click( fnClick ).bind( 'mousedown', fnFalse )
+					var qjPaginateList = $('span:eq(2)', an[i]);
+					qjPaginateList.html( sList );
+					$('span', qjPaginateList).click( fnClick ).bind( 'mousedown', fnFalse )
 						.bind( 'selectstart', fnFalse );
 					
 					/* Update the 'premanent botton's classes */
@@ -3252,11 +3252,11 @@
 						/* Replace jQuery UI constants */
 						if ( sClass == "H" )
 						{
-							sClass = "fg-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix";
+							sClass = "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix";
 						}
 						else if ( sClass == "F" )
 						{
-							sClass = "fg-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix";
+							sClass = "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix";
 						}
 						
 						nNewNode.className = sClass;

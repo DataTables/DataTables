@@ -31,28 +31,37 @@
  * jQuery UI specific styling
  */
 
-.paging_two_button .fg-button {
+.paging_two_button .ui-button {
 	float: left;
 	cursor: pointer;
 	* cursor: hand;
 }
 
-.paging_full_numbers .fg-button {
+.paging_full_numbers .ui-button {
 	padding: 2px 6px;
+	margin: 0;
 	cursor: pointer;
 	* cursor: hand;
+}
+
+.ui-buttonset .ui-button {
+	margin-right: -0.1em !important;
 }
 
 .paging_full_numbers {
 	width: 350px !important;
 }
 
-.fg-toolbar {
+.ui-toolbar {
 	padding: 5px;
 }
 
 .dataTables_paginate {
 	width: auto;
+}
+
+.dataTables_info {
+	padding-top: 3px;
 }
 
 table.display thead th {
