@@ -4478,7 +4478,7 @@
 							for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
 							{
 								nTds[(iColumns*j)+i].className = 
-									nTds[(iColumns*j)+i].className.replace( " "+sClass+"1", "" );
+									$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"1", "" ) );
 							}
 						}
 						else if ( nTds[i].className.indexOf(sClass+"2") != -1 )
@@ -4486,7 +4486,7 @@
 							for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
 							{
 								nTds[(iColumns*j)+i].className = 
-									nTds[(iColumns*j)+i].className.replace( " "+sClass+"2", "" );
+									$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"2", "" ) );
 							}
 						}
 						else if ( nTds[i].className.indexOf(sClass+"3") != -1 )
@@ -4494,7 +4494,7 @@
 							for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
 							{
 								nTds[(iColumns*j)+i].className = 
-									nTds[(iColumns*j)+i].className.replace( " "+sClass+"3", "" );
+									$.trim( nTds[(iColumns*j)+i].className.replace( " "+sClass+"3", "" ) );
 							}
 						}
 					}
