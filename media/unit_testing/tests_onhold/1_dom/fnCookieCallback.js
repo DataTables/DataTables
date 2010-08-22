@@ -68,7 +68,7 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"bStateSave": true,
 				"fnCookieCallback": function (sName, oData, sExpires, sPath) {
-					mPass = sExpires.match(/GMT/);
+					mPass = typeof sExpires == 'string';
 					return sName + "=; expires=" + sExpires +"; path=" + sPath;
 				}
 			} );
