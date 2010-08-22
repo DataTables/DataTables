@@ -2040,6 +2040,15 @@
 			var nBody = oSettings.nTBody;
 			var i, iLen;
 			
+			/* Restore hidden columns */
+			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			{
+				if ( oSettings.aoColumns[i].bVisible === false )
+				{
+					this.fnSetColumnVis( i, true );
+				}
+			}
+			
 			/* Remove the DataTables generated nodes, events and classes */
 			oSettings.nTable.parentNode.removeChild( oSettings.nTable );
 			$(oSettings.nTableWrapper).remove();
