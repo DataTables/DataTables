@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.7.1
+ * Version:     1.7.2 dev
  * CVS:         $Id$
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
@@ -70,7 +70,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.7.1";
+	_oExt.sVersion = "1.7.2.dev";
 	
 	/*
 	 * Variable: sErrMode
@@ -2192,6 +2192,12 @@
 			
 			/* Draw the headers for the table */
 			_fnDrawHead( oSettings );
+			
+			/* Calculate sizes for columns */
+			if ( oSettings.oFeatures.bAutoWidth )
+			{
+				_fnCalculateColumnWidths( oSettings );
+			}
 			
 			/* If there is default sorting required - let's do it. The sort function
 			 * will do the drawing for us. Otherwise we draw the table
@@ -5075,15 +5081,13 @@
 				}
 			}
 			
-			/* If the number of columns in the DOM equals the number that we
-			 * have to process in dataTables, then we can use the offsets that are
-			 * created by the web-browser. No custom sizes can be set in order for
-			 * this to happen
+			/* If the number of columns in the DOM equals the number that we have to process in 
+			 * DataTables, then we can use the offsets that are created by the web-browser. No custom 
+			 * sizes can be set in order for this to happen, nor scrolling used
 			 */
-			if ( iColums == oHeaders.length && iUserInputs === 0 && iVisibleColumns == iColums )
+			if ( iColums == oHeaders.length && iUserInputs === 0 && iVisibleColumns == iColums &&
+				oSettings.oScroll.sX === "" && oSettings.oScroll.sY === "" )
 			{
-				_fnScrollingWidthAdjust( oSettings, oSettings.nTable );
-				
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
 					iTmpWidth = $(oHeaders[i]).width();
@@ -6541,12 +6545,6 @@
 			
 			/* Copy the data index array */
 			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-			
-			/* Calculate sizes for columns */
-			if ( oSettings.oFeatures.bAutoWidth )
-			{
-				_fnCalculateColumnWidths( oSettings );
-			}
 			
 			/* Initialisation complete - table can be drawn */
 			oSettings.bInitialised = true;
