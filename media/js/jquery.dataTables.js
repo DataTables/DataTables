@@ -2790,18 +2790,18 @@
 					if ( oSettings.aoColumns[i].bSortable !== false )
 					{
 						_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
+						
+						/* Take the brutal approach to cancelling text selection in header */
+						$('th', oSettings.nTHead).mousedown( function (e) {
+							this.onselectstart = function() { return false; };
+							return false;
+						} );
 					}
 					else
 					{
 						$(oSettings.aoColumns[i].nTh).addClass( oSettings.oClasses.sSortableNone );
 					}
 				}
-				
-				/* Take the brutal approach to cancelling text selection in header */
-				$('th', oSettings.nTHead).mousedown( function (e) {
-					this.onselectstart = function() { return false; };
-					return false;
-				} );
 			}
 			
 			/* Cache the footer elements */
