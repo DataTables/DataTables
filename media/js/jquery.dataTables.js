@@ -185,6 +185,7 @@
 		"sSortJUI": "",
 		"sSortJUIAscAllowed": "",
 		"sSortJUIDescAllowed": "",
+		"sSortJUIWrapper": "",
 		
 		/* Scrolling */
 		"sScrollWrapper": "dataTables_scroll",
@@ -250,6 +251,7 @@
 		"sSortJUI": "css_right ui-icon ui-icon-carat-2-n-s",
 		"sSortJUIAscAllowed": "css_right ui-icon ui-icon-carat-1-n",
 		"sSortJUIDescAllowed": "css_right ui-icon ui-icon-carat-1-s",
+		"sSortJUIWrapper": "DataTables_sort_wrapper",
 		
 		/* Scrolling */
 		"sScrollWrapper": "dataTables_scroll",
@@ -2702,7 +2704,7 @@
 		 */
 		function _fnDrawHead( oSettings )
 		{
-			var i, nTh, iLen;
+			var i, nTh, iLen, j, jLen;
 			var iThs = oSettings.nTHead.getElementsByTagName('th').length;
 			var iCorrector = 0;
 			
@@ -2768,8 +2770,15 @@
 			{
 				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
-					oSettings.aoColumns[i].nTh.insertBefore( document.createElement('span'),
-						oSettings.aoColumns[i].nTh.firstChild );
+					/* xxx */
+					nTh = oSettings.aoColumns[i].nTh;
+					
+					var nDiv = document.createElement('div');
+					nDiv.className = oSettings.oClasses.sSortJUIWrapper
+					$(nTh).contents().appendTo(nDiv);
+					
+					nDiv.appendChild( document.createElement('span') );
+					nTh.appendChild( nDiv );
 				}
 			}
 			
