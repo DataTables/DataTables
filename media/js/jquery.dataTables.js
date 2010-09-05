@@ -929,6 +929,8 @@
 				"sXInner": "",
 				"sY": "",
 				"bCollapse": false,
+				"bInfinite": false,
+				"iLoadGap": 100,
 				"iBarWidth": 0
 			};
 			
@@ -1303,6 +1305,13 @@
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
 			this.iDraw = 0;
+			
+			/*
+			 * Variable: bDrawing
+			 * Purpose:  Indicate if a redraw is being done - useful for Ajax
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.bDrawing = 0;
 			
 			/*
 			 * Variable: iDrawError
@@ -2776,7 +2785,6 @@
 			{
 				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
-					/* xxx */
 					nTh = oSettings.aoColumns[i].nTh;
 					
 					var nDiv = document.createElement('div');
@@ -2851,6 +2859,8 @@
 			var iStrips = oSettings.asStripClasses.length;
 			var iOpenRows = oSettings.aoOpenRows.length;
 			
+			oSettings.bDrawing = true;
+			
 			/* Check and see if we have an initial draw position from state saving */
 			if ( typeof oSettings.iInitDisplayStart != 'undefined' && oSettings.iInitDisplayStart != -1 )
 			{
@@ -2872,6 +2882,10 @@
 			     !_fnAjaxUpdate( oSettings ) )
 			{
 				return;
+			}
+			else if ( !oSettings.oFeatures.bServerSide )
+			{
+				oSettings.iDraw++;
 			}
 			
 			if ( oSettings.aiDisplay.length !== 0 )
@@ -2987,10 +3001,17 @@
 				nBodyPar = oSettings.nTBody.parentNode;
 				nRemoveFrag.appendChild( oSettings.nTBody );
 				
-				nTrs = oSettings.nTBody.childNodes;
-				for ( i=nTrs.length-1 ; i>=0 ; i-- )
+				/* When doing infinite scrolling, only remove child rows when sorting, filtering or start
+				 * up. When not infinite scroll, always do it.
+				 */
+				if ( !oSettings.oScroll.bInfinite || !oSettings._bInitComplete ||
+				 	oSettings.bSorted || oSettings.bFiltered )
 				{
-					nTrs[i].parentNode.removeChild( nTrs[i] );
+					nTrs = oSettings.nTBody.childNodes;
+					for ( i=nTrs.length-1 ; i>=0 ; i-- )
+					{
+						nTrs[i].parentNode.removeChild( nTrs[i] );
+					}
 				}
 				
 				/* Put the draw table into the dom */
@@ -3039,6 +3060,7 @@
 			/* Draw is complete, sorting and filtering must be as well */
 			oSettings.bSorted = false;
 			oSettings.bFiltered = false;
+			oSettings.bDrawing = false;
 		}
 		
 		/*
@@ -3341,7 +3363,7 @@
 				}
 				
 				/* Add to the 2D features array */
-				if ( iPushFeature == 1 )
+				if ( iPushFeature == 1 && nTmp !== null )
 				{
 					if ( typeof oSettings.aanFeatures[cOption] != 'object' )
 					{
@@ -3482,13 +3504,34 @@
 				nScrollBody.style.height = _fnStringToCss( oSettings.oScroll.sY );
 			}
 			
-			/*
-			 * Redraw - align columns across the tables
-			 */
+			/* Redraw - align columns across the tables */
 			oSettings.aoDrawCallback.push( {
 				"fn": _fnScrollDraw,
 				"sName": "scrolling"
 			} );
+			
+			/* Infinite scrolling event handlers */
+			if ( oSettings.oScroll.bInfinite )
+			{
+				$(nScrollBody).scroll( function() {
+					/* Use a blocker to stop scrolling from loading more data while other data is still loading */
+					if ( !oSettings.bDrawing )
+					{
+						/* Check if we should load the next data set */
+						if ( $(this).scrollTop() + $(this).height() > 
+							$(oSettings.nTable).height() - oSettings.oScroll.iLoadGap )
+						{
+							/* Only do the redraw if we have to - we might be at the end of the data */
+							if ( oSettings.fnDisplayEnd() < oSettings.fnRecordsDisplay() )
+							{
+								_fnPageChange( oSettings, 'next' );
+								_fnCalculateEnd( oSettings );
+								_fnDraw( oSettings );
+							}
+						}
+					}
+				} );
+			}
 			
 			oSettings.nScrollHead = nScrollHead;
 			oSettings.nScrollFoot = nScrollFoot;
@@ -3734,6 +3777,12 @@
 				
 				nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+o.oScroll.iBarWidth );
 				nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
+			}
+			
+			/* If sorting or filtering has occured, jump the scrolling back to the top */
+			if ( o.bSorted || o.bFiltered )
+			{
+				nScrollBody.scrollTop = 0;
 			}
 		}
 		
@@ -4547,6 +4596,11 @@
 		 */
 		function _fnFeatureHtmlPaginate ( oSettings )
 		{
+			if ( oSettings.oScroll.bInfinite )
+			{
+				return null;
+			}
+			
 			var nPaginate = document.createElement( 'div' );
 			nPaginate.className = oSettings.oClasses.sPaging+oSettings.sPaginationType;
 			
@@ -4750,6 +4804,11 @@
 		 */
 		function _fnFeatureHtmlLength ( oSettings )
 		{
+			if ( oSettings.oScroll.bInfinite )
+			{
+				return null;
+			}
+			
 			/* This can be overruled by not using the _MENU_ var/macro in the language variable */
 			var sName = (oSettings.sTableId === "") ? "" : 'name="'+oSettings.sTableId+'_length"';
 			var sStdMenu = '<select size="1" '+sName+'>';
@@ -6227,6 +6286,8 @@
 				_fnMap( oSettings.oScroll, oInit, "sScrollXInner", "sXInner" );
 				_fnMap( oSettings.oScroll, oInit, "sScrollY", "sY" );
 				_fnMap( oSettings.oScroll, oInit, "bScrollCollapse", "bCollapse" );
+				_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
+				_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 				_fnMap( oSettings, oInit, "asStripClasses" );
 				_fnMap( oSettings, oInit, "fnRowCallback" );
 				_fnMap( oSettings, oInit, "fnHeaderCallback" );

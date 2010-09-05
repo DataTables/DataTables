@@ -8,15 +8,16 @@
 		<style type="text/css" title="currentStyle">
 			@import "../../media/css/demo_page.css";
 			@import "../../media/css/demo_table.css";
+			div.table_Wrapper { border:10px solid blue; }
 		</style>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				$('#example').dataTable( {
-					"sScrollY": 200,
-					"sScrollX": "100%",
-					"sScrollXInner": "110%"
+					"bScrollInfinite": true,
+					"bScrollCollapse": true,
+					"sScrollY": "200px"
 				} );
 			} );
 		</script>
@@ -24,15 +25,15 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				DataTables horizontal and vertical scrolling example
+				DataTables infinite vertical scrolling example
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>In this example you can see DataTables doing horizontal and vertical scrolling at the same time. Note also that pagination is enabled, and the scrolling accounts for this.</p>
+			<p>This example shows the DataTables table body scrolling in the vertical direction with infinite scrolling. The idea of infinite scrolling means that data will be added to the table dynamically, as and when needed by the user scrolling the table. A sub-set of the data is loaded initially, and more added as needed (technically of course, it is not "infinite" since it will stop loading data at the end of the data set!). Note that pagination much be enabled for infinite scrolling to work, but the pagination controls will not be shown (they could be, but can cause very confusing user interaction).</p>
+			<p>DataTables' infinite scroll can be used with any of the <a href="http://datatables.net/usage/#data_sources">four data sources</a> supported, and they do not require any modification to work (including server-side scripts).</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
-
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
 	<thead>
 		<tr>
@@ -43,6 +44,15 @@
 			<th>CSS grade</th>
 		</tr>
 	</thead>
+	<tfoot>
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+		</tr>
+	</tfoot>
 	<tbody>
 		<tr class="odd gradeX">
 			<td>Trident</td>
@@ -456,9 +466,9 @@
 			<h1>Initialisation code</h1>
 			<pre>$(document).ready(function() {
 	$('#example').dataTable( {
-		"sScrollY": 200,
-		"sScrollX": "100%",
-		"sScrollXInner": "110%"
+		"bScrollInfinite": true,
+		"bScrollCollapse": true,
+		"sScrollY": "200px"
 	} );
 } );</pre>
 			
