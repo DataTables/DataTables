@@ -2189,6 +2189,8 @@
 		 */
 		function _fnInitalise ( oSettings )
 		{
+			var i, iLen;
+			
 			/* Ensure that the table data is fully initialised */
 			if ( oSettings.bInitialised === false )
 			{
@@ -2202,10 +2204,18 @@
 			/* Draw the headers for the table */
 			_fnDrawHead( oSettings );
 			
-			/* Calculate sizes for columns */
+			/* Calculate sizes for columns xxx */
 			if ( oSettings.oFeatures.bAutoWidth )
 			{
 				_fnCalculateColumnWidths( oSettings );
+			}
+			
+			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			{
+				if ( oSettings.aoColumns[i].sWidth !== null )
+				{
+					oSettings.aoColumns[i].nTh.style.width = _fnStringToCss( oSettings.aoColumns[i].sWidth );
+				}
 			}
 			
 			/* If there is default sorting required - let's do it. The sort function
@@ -2229,7 +2239,7 @@
 				
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
 					/* Got the data - add it to the table */
-					for ( var i=0 ; i<json.aaData.length ; i++ )
+					for ( i=0 ; i<json.aaData.length ; i++ )
 					{
 						_fnAddData( oSettings, json.aaData[i] );
 					}
@@ -2733,12 +2743,6 @@
 					
 					if ( oSettings.aoColumns[i].bVisible )
 					{
-						/* Set width */
-						if ( oSettings.aoColumns[i].sWidth !== null )
-						{
-							nTh.style.width = oSettings.aoColumns[i].sWidth;
-						}
-						
 						/* Set the title of the column if it is user defined (not what was auto detected) */
 						if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
 						{
@@ -2767,11 +2771,6 @@
 						if ( oSettings.aoColumns[i].sClass !== null )
 						{
 							nTh.className = oSettings.aoColumns[i].sClass;
-						}
-						
-						if ( oSettings.aoColumns[i].sWidth !== null )
-						{
-							nTh.style.width = oSettings.aoColumns[i].sWidth;
 						}
 						
 						nTr.appendChild( nTh );
