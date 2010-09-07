@@ -2262,19 +2262,13 @@
 					
 					_fnProcessingDisplay( oSettings, false );
 					
-					/* Run the init callback if there is one */
+					/* Run the init callback if there is one - done here for ajax source for json obj */
 					if ( typeof oSettings.fnInitComplete == 'function' )
 					{
 						oSettings.fnInitComplete.call( oSettings.oInstance, oSettings, json );
 					}
 				} );
 				return;
-			}
-			
-			/* Run the init callback if there is one */
-			if ( typeof oSettings.fnInitComplete == 'function' )
-			{
-				oSettings.fnInitComplete.call( oSettings.oInstance, oSettings );
 			}
 			
 			if ( !oSettings.oFeatures.bServerSide )
@@ -3039,6 +3033,12 @@
 					$(oSettings.nTableWrapper).width() > $(oSettings.nTable.parentNode).width() )
 				{
 					_fnAjustColumnSizing( oSettings );
+				}
+				
+				if ( typeof oSettings.fnInitComplete == 'function' &&
+					   (oSettings.oFeatures.bServerSide || oSettings.sAjaxSource === null) )
+				{
+					oSettings.fnInitComplete.call( oSettings.oInstance, oSettings );
 				}
 				
 				/* Set an absolute width for the table such that pagination doesn't

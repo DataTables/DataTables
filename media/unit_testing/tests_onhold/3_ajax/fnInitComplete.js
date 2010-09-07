@@ -19,7 +19,7 @@ $(document).ready( function () {
 	
 	
 	oTest.fnWaitTest( 
-		"One argument passed (for Ajax!)",
+		"Two arguments passed (for Ajax!)",
 		function () {
 			oSession.fnRestore();
 			
@@ -75,6 +75,23 @@ $(document).ready( function () {
 			$('#example_next').click();
 		},
 		function () { return mPass == 1; }
+	);
+	
+	
+	oTest.fnWaitTest( 
+		"10 rows in the table on complete",
+		function () {
+			oSession.fnRestore();
+			
+			mPass = 0;
+			$('#example').dataTable( {
+				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"fnInitComplete": function ( ) {
+					mPass = $('#example tbody tr').length;
+				}
+			} );
+		},
+		function () { return mPass == 10; }
 	);
 	
 	

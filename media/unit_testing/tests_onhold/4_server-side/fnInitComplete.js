@@ -62,7 +62,7 @@ $(document).ready( function () {
 			mPass = 0;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+				"sAjaxSource": "../../../examples/examples_support/server_processing.php",
 				"fnInitComplete": function ( ) {
 					mPass++;
 				}
@@ -79,6 +79,24 @@ $(document).ready( function () {
 			$('#example_next').click();
 		},
 		function () { return mPass == 1; }
+	);
+	
+	
+	oTest.fnWaitTest( 
+		"10 rows in the table on complete",
+		function () {
+			oSession.fnRestore();
+			
+			mPass = 0;
+			$('#example').dataTable( {
+				"bServerSide": true,
+				"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+				"fnInitComplete": function ( ) {
+					mPass = $('#example tbody tr').length;
+				}
+			} );
+		},
+		function () { return mPass == 10; }
 	);
 	
 	

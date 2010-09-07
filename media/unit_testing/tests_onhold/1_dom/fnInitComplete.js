@@ -73,6 +73,22 @@ $(document).ready( function () {
 	);
 	
 	
+	oTest.fnWaitTest( 
+		"10 rows in the table on complete",
+		function () {
+			oSession.fnRestore();
+			
+			mPass = 0;
+			$('#example').dataTable( {
+				"fnInitComplete": function ( ) {
+					mPass = $('#example tbody tr').length;
+				}
+			} );
+		},
+		function () { return mPass == 10; }
+	);
+	
+	
 	
 	oTest.fnComplete();
 } );
