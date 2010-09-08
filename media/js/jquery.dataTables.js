@@ -3255,7 +3255,7 @@
 			
 			/* Loop over the user set positioning and place the elements as needed */
 			var aDom = oSettings.sDom.split('');
-			var nTmp, iPushFeature, cOption, nNewNode, cNext, sClass, j;
+			var nTmp, iPushFeature, cOption, nNewNode, cNext, sAttr, j;
 			for ( var i=0 ; i<aDom.length ; i++ )
 			{
 				iPushFeature = 0;
@@ -3266,29 +3266,46 @@
 					/* New container div */
 					nNewNode = document.createElement( 'div' );
 					
-					/* Check to see if we should append a class name to the container */
+					/* Check to see if we should append an id and/or a class name to the container */
 					cNext = aDom[i+1];
 					if ( cNext == "'" || cNext == '"' )
 					{
-						sClass = "";
+						sAttr = "";
 						j = 2;
 						while ( aDom[i+j] != cNext )
 						{
-							sClass += aDom[i+j];
+							sAttr += aDom[i+j];
 							j++;
 						}
 						
 						/* Replace jQuery UI constants */
-						if ( sClass == "H" )
+						if ( sAttr == "H" )
 						{
-							sClass = "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix";
+							sAttr = "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix";
 						}
-						else if ( sClass == "F" )
+						else if ( sAttr == "F" )
 						{
-							sClass = "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix";
+							sAttr = "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix";
 						}
 						
-						nNewNode.className = sClass;
+						/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
+						 * breaks the string into parts and applies them as needed
+						 */
+						if ( sAttr.indexOf('.') != -1 )
+						{
+							var aSplit = sAttr.split('.');
+							nNewNode.setAttribute('id', aSplit[0].substr(1, aSplit[0].length-1) );
+							nNewNode.className = aSplit[1];
+						}
+						else if ( sAttr.charAt(0) == "#" )
+						{
+							nNewNode.setAttribute('id', sAttr.substr(1, sAttr.length-1) );
+						}
+						else
+						{
+							nNewNode.className = sAttr;
+						}
+						
 						i += j; /* Move along the position array */
 					}
 					
