@@ -2792,7 +2792,7 @@
 					nTh = oSettings.aoColumns[i].nTh;
 					
 					var nDiv = document.createElement('div');
-					nDiv.className = oSettings.oClasses.sSortJUIWrapper
+					nDiv.className = oSettings.oClasses.sSortJUIWrapper;
 					$(nTh).contents().appendTo(nDiv);
 					
 					nDiv.appendChild( document.createElement('span') );
@@ -2801,6 +2801,11 @@
 			}
 			
 			/* Add sort listener */
+			var fnNoSelect = function (e) {
+				this.onselectstart = function() { return false; };
+				return false;
+			};
+			
 			if ( oSettings.oFeatures.bSort )
 			{
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
@@ -2810,10 +2815,7 @@
 						_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
 						
 						/* Take the brutal approach to cancelling text selection in header */
-						$('th', oSettings.nTHead).mousedown( function (e) {
-							this.onselectstart = function() { return false; };
-							return false;
-						} );
+						$(oSettings.aoColumns[i].nTh).mousedown( fnNoSelect );
 					}
 					else
 					{
@@ -4788,7 +4790,7 @@
 					oSettings.oLanguage.sInfoPostFix;
 			}
 			
-			if ( oSettings.oLanguage.fnInfoCallback != null )
+			if ( oSettings.oLanguage.fnInfoCallback !== null )
 			{
 				sOut = oSettings.oLanguage.fnInfoCallback( oSettings, iStart, iEnd, iMax, iTotal, sOut );
 			}
@@ -5857,12 +5859,12 @@
 			 */
 			var aParts = window.location.pathname.split('/');
 			var sNameFile = sName + '_' + aParts.pop().replace(/[\/:]/g,"").toLowerCase();
-			var sFullCookie;
+			var sFullCookie, oData;
 			
-			if ( fnCallback != null )
+			if ( fnCallback !== null )
 			{
-				var oData = (typeof $.parseJSON == 'function') ? 
-					$.parseJSON( sValue ) : eval( '('+sData+')' );
+				oData = (typeof $.parseJSON == 'function') ? 
+					$.parseJSON( sValue ) : eval( '('+sValue+')' );
 				sFullCookie = fnCallback( sNameFile, oData, date.toGMTString(),
 					aParts.join('/')+"/" );
 			}
@@ -5875,7 +5877,7 @@
 			/* Are we going to go over the cookie limit of 4KiB? If so, try to delete a cookies
 			 * belonging to DataTables. This is FAR from bullet proof
 			 */
-			var sOldName="", iOldTime=9999999999999, oData;
+			var sOldName="", iOldTime=9999999999999;
 			var iLength = _fnReadCookie( sNameFile )!==null ? document.cookie.length : 
 				sFullCookie.length + document.cookie.length;
 			
