@@ -2060,6 +2060,19 @@
 				}
 			}
 			
+			/* When scrolling we had to break the table up - restore it */
+			if ( oSettings.nTable != oSettings.nTHead.parentNode )
+			{
+				$('>thead', oSettings.nTable).remove();
+				oSettings.nTable.appendChild( oSettings.nTHead );
+			}
+			
+			if ( oSettings.nTFoot && oSettings.nTable != oSettings.nTFoot.parentNode )
+			{
+				$('>tfoot', oSettings.nTable).remove();
+				oSettings.nTable.appendChild( oSettings.nTFoot );
+			}
+			
 			/* Remove the DataTables generated nodes, events and classes */
 			oSettings.nTable.parentNode.removeChild( oSettings.nTable );
 			$(oSettings.nTableWrapper).remove();
@@ -2204,7 +2217,7 @@
 			/* Draw the headers for the table */
 			_fnDrawHead( oSettings );
 			
-			/* Calculate sizes for columns xxx */
+			/* Calculate sizes for columns */
 			if ( oSettings.oFeatures.bAutoWidth )
 			{
 				_fnCalculateColumnWidths( oSettings );
@@ -3020,36 +3033,6 @@
 				}
 			}
 			
-			/* Perform certain DOM operations after the table has been drawn for the first time */
-			if ( typeof oSettings._bInitComplete == "undefined" )
-			{
-				oSettings._bInitComplete = true;
-				
-				/* It is possible that some of the DOM created (particularly if custom) has padding etc
-				 * on it which means that the table size is more constrained that when we originally
-				 * measured it. As such we check here if this is the case, and correct if needed
-				 */
-				if ( oSettings.nTableWrapper != oSettings.nTable.parentNode &&
-					$(oSettings.nTableWrapper).width() > $(oSettings.nTable.parentNode).width() )
-				{
-					_fnAjustColumnSizing( oSettings );
-				}
-				
-				if ( typeof oSettings.fnInitComplete == 'function' &&
-					   (oSettings.oFeatures.bServerSide || oSettings.sAjaxSource === null) )
-				{
-					oSettings.fnInitComplete.call( oSettings.oInstance, oSettings );
-				}
-				
-				/* Set an absolute width for the table such that pagination doesn't
-				 * cause the table to resize - disabled for now.
-				 */
-				//if ( oSettings.oFeatures.bAutoWidth && oSettings.nTable.offsetWidth !== 0 )
-				//{
-				//	//oSettings.nTable.style.width = oSettings.nTable.offsetWidth+"px";
-				//}
-			}
-			
 			/* Call all required callback functions for the end of a draw */
 			for ( i=0, iLen=oSettings.aoDrawCallback.length ; i<iLen ; i++ )
 			{
@@ -3060,6 +3043,18 @@
 			oSettings.bSorted = false;
 			oSettings.bFiltered = false;
 			oSettings.bDrawing = false;
+				
+			/* On first draw, initilaisation is now complete */
+			if ( typeof oSettings._bInitComplete == "undefined" )
+			{
+				oSettings._bInitComplete = true;
+				
+				if ( typeof oSettings.fnInitComplete == 'function' &&
+					   (oSettings.oFeatures.bServerSide || oSettings.sAjaxSource === null) )
+				{
+					oSettings.fnInitComplete.call( oSettings.oInstance, oSettings );
+				}
+			}
 		}
 		
 		/*
