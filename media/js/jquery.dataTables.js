@@ -878,7 +878,7 @@
 						return this._iDisplayStart+this.aiDisplay.length;
 					} else {
 						return Math.min( this._iDisplayStart+this._iDisplayLength, 
-							this._iDisplayStart+this.aiDisplay.length );
+							this._iRecordsDisplay );
 					}
 				} else {
 					return this._iDisplayEnd;
