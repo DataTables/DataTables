@@ -2507,15 +2507,6 @@
 					aData[i] = '';
 				}
 				
-				/* Cast everything as a string - this allows us to treat everything accurately in the
-				 * sorting functions
-				 */
-				if ( typeof aData[i] != 'string' )
-				{
-					aData[i] += "";
-				}
-				aData[i] = $.trim(aData[i]);
-				
 				if ( typeof oSettings.aoColumns[i].fnRender == 'function' )
 				{
 					var sRendered = oSettings.aoColumns[i].fnRender( {
@@ -2536,6 +2527,14 @@
 					nTd.innerHTML = aData[i];
 				}
 				
+				/* Cast everything as a string - so we can treat everything equally when sorting */
+				if ( typeof aData[i] != 'string' )
+				{
+					aData[i] += "";
+				}
+				aData[i] = $.trim(aData[i]);
+				
+				/* Add user defined class */
 				if ( oSettings.aoColumns[i].sClass !== null )
 				{
 					nTd.className = oSettings.aoColumns[i].sClass;
