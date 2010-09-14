@@ -2058,6 +2058,9 @@
 				}
 			}
 			
+			/* If there is an 'empty' indicator row, remove it */
+			$('tbody>tr>td.'+oSettings.oClasses.sRowEmpty, oSettings.nTable).parent().remove();
+			
 			/* When scrolling we had to break the table up - restore it */
 			if ( oSettings.nTable != oSettings.nTHead.parentNode )
 			{
@@ -5733,7 +5736,7 @@
 			sValue += '"iStart":'+ oSettings._iDisplayStart+',';
 			sValue += '"iEnd":'+ oSettings._iDisplayEnd+',';
 			sValue += '"iLength":'+ oSettings._iDisplayLength+',';
-			sValue += '"sFilter":"'+ oSettings.oPreviousSearch.sSearch.replace('"','\\"')+'",';
+			sValue += '"sFilter":"'+ escape(oSettings.oPreviousSearch.sSearch)+'",';
 			sValue += '"sFilterEsc":'+ !oSettings.oPreviousSearch.bRegex+',';
 			
 			sValue += '"aaSorting":[';
@@ -5747,7 +5750,7 @@
 			sValue += '"aaSearchCols":[';
 			for ( i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 			{
-				sValue += '["'+oSettings.aoPreSearchCols[i].sSearch.replace('"','\\"')+
+				sValue += '["'+escape(oSettings.aoPreSearchCols[i].sSearch)+
 					'",'+!oSettings.aoPreSearchCols[i].bRegex+'],';
 			}
 			sValue = sValue.substring(0, sValue.length-1);
@@ -5802,7 +5805,7 @@
 				oSettings.iInitDisplayStart = oData.iStart;
 				oSettings._iDisplayEnd = oData.iEnd;
 				oSettings._iDisplayLength = oData.iLength;
-				oSettings.oPreviousSearch.sSearch = oData.sFilter;
+				oSettings.oPreviousSearch.sSearch = unescape(oData.sFilter);
 				oSettings.aaSorting = oData.aaSorting.slice();
 				oSettings.saved_aaSorting = oData.aaSorting.slice();
 				
@@ -5822,7 +5825,7 @@
 					for ( var i=0 ; i<oData.aaSearchCols.length ; i++ )
 					{
 						oSettings.aoPreSearchCols[i] = {
-							"sSearch": oData.aaSearchCols[i][0],
+							"sSearch": unescape(oData.aaSearchCols[i][0]),
 							"bRegex": !oData.aaSearchCols[i][1]
 						};
 					}
