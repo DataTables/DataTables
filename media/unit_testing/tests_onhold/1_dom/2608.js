@@ -36,5 +36,18 @@ $(document).ready( function () {
 		function () { return $('#example_filter input').val() == ''; }
 	);
 	
+	oTest.fnTest( 
+		"Clean up",
+		function () {
+			$('#example').dataTable( {
+				"bStateSave": true,
+				"bDestroy": true
+			} );
+			$('#example_filter input').val( '' );
+			$('#example_filter input').keyup();
+		},
+		function () { return $('#example_filter input').val() == ''; }
+	);
+	
 	oTest.fnComplete();
 } );

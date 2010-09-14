@@ -2015,6 +2015,7 @@
 			 */
 			_fnAjustColumnSizing( oSettings );
 			_fnDraw( oSettings );
+			_fnSaveState( oSettings );
 		};
 		
 		/*
@@ -2048,6 +2049,9 @@
 			var nOrig = oSettings.nTableWrapper.parentNode;
 			var nBody = oSettings.nTBody;
 			var i, iLen;
+			
+			/* Flag to note that the table is currently being destoryed - no action should be taken */
+			oSettings.bDestroying = true;
 			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
@@ -5724,7 +5728,7 @@
 		 */
 		function _fnSaveState ( oSettings )
 		{
-			if ( !oSettings.oFeatures.bStateSave )
+			if ( !oSettings.oFeatures.bStateSave || typeof oSettings.bDestroying != 'undefined' )
 			{
 				return;
 			}
@@ -6480,30 +6484,35 @@
 			
 			/*
 			 * Columns
-			 * See if we should load columns automatically or use defined ones - a bit messy this...
+			 * See if we should load columns automatically or use defined ones
 			 */
 			var nThead = this.getElementsByTagName('thead');
 			var anThs = nThead.length===0 ? [] : _fnGetUniqueThs( nThead[0] );
-			var bUseCols = typeof oInit.aoColumns != 'undefined';
 			
-			for ( i=0, iLen=bUseCols ? oInit.aoColumns.length : anThs.length ; i<iLen ; i++ )
+			/* If not given a column array, generate one with nulls */
+			if ( typeof oInit.aoColumns == 'undefined' )
 			{
-				var oCol = bUseCols ? oInit.aoColumns[i] : null;
-				var nTh = anThs ? anThs[i] : null;
-				
-				/* Check if we have column visibilty state to restore, and also that the length of the 
-				 * state saved columns matches the currently know number of columns
-				 */
+				oInit.aoColumns = [];
+				for ( i=0, iLen=anThs.length ; i<iLen ; i++ )
+				{
+					oInit.aoColumns.push( null );
+				}
+			}
+			
+			/* Add the columns */
+			for ( i=0, iLen=oInit.aoColumns.length ; i<iLen ; i++ )
+			{
+				/* Check if we have column visibilty state to restore */
 				if ( typeof oInit.saved_aoColumns != 'undefined' && oInit.saved_aoColumns.length == iLen )
 				{
-					if ( oCol === null )
+					if ( oInit.aoColumns[i] === null )
 					{
-						oCol = {};
+						oInit.aoColumns[i] = {};
 					}
-					oCol.bVisible = oInit.saved_aoColumns[i].bVisible;
+					oInit.aoColumns[i].bVisible = oInit.saved_aoColumns[i].bVisible;
 				}
 				
-				_fnAddColumn( oSettings, nTh );
+				_fnAddColumn( oSettings, anThs ? anThs[i] : null );
 			}
 			
 			/* Add options from column definations */
