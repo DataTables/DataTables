@@ -15,9 +15,21 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
+		"Info",
+		null,
+		function () { return $('#example_info').html() == "Showing 1 to 10 of 57 entries"; }
+	);
+	
+	oTest.fnTest( 
 		"Scroll on 20px adds 10 rows",
 		function () { $('div.dataTables_scrollBody').scrollTop(20); },
 		function () { return $('#example tbody tr').length == 20; }
+	);
+	
+	oTest.fnTest( 
+		"Info after 20px scroll",
+		null,
+		function () { return $('#example_info').html() == "Showing 1 to 20 of 57 entries"; }
 	);
 	
 	oTest.fnTest( 
@@ -27,15 +39,33 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
+		"Info after 10 more px scroll",
+		null,
+		function () { return $('#example_info').html() == "Showing 1 to 20 of 57 entries"; }
+	);
+	
+	oTest.fnTest( 
 		"Scroll to 240px adds another 10 rows",
 		function () { $('div.dataTables_scrollBody').scrollTop(240); },
 		function () { return $('#example tbody tr').length == 30; }
 	);
 	
 	oTest.fnTest( 
+		"Info after 240px scroll",
+		null,
+		function () { return $('#example_info').html() == "Showing 1 to 30 of 57 entries"; }
+	);
+	
+	oTest.fnTest( 
 		"Filtering will drop back to 10 rows",
 		function () { oTable.fnFilter('gec') },
 		function () { return $('#example tbody tr').length == 10; }
+	);
+	
+	oTest.fnTest( 
+		"Info after filtering",
+		null,
+		function () { return $('#example_info').html() == "Showing 1 to 10 of 20 entries (filtered from 57 total entries)"; }
 	);
 	
 	oTest.fnTest( 

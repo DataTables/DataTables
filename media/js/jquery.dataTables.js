@@ -4756,6 +4756,14 @@
 				sMax = oSettings.fnFormatNumber( iMax ), sTotal = oSettings.fnFormatNumber( iTotal ),
 				sOut;
 			
+			/* When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
+			 * internally
+			 */
+			if ( oSettings.oScroll.bInfinite )
+			{
+				sStart = oSettings.fnFormatNumber( 1 );
+			}
+			
 			if ( oSettings.fnRecordsDisplay() === 0 && 
 				   oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
 			{
