@@ -5740,7 +5740,7 @@
 			sValue += '"iStart":'+ oSettings._iDisplayStart+',';
 			sValue += '"iEnd":'+ oSettings._iDisplayEnd+',';
 			sValue += '"iLength":'+ oSettings._iDisplayLength+',';
-			sValue += '"sFilter":"'+ escape(oSettings.oPreviousSearch.sSearch)+'",';
+			sValue += '"sFilter":"'+ encodeURIComponent(oSettings.oPreviousSearch.sSearch)+'",';
 			sValue += '"sFilterEsc":'+ !oSettings.oPreviousSearch.bRegex+',';
 			
 			sValue += '"aaSorting":[';
@@ -5754,7 +5754,7 @@
 			sValue += '"aaSearchCols":[';
 			for ( i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 			{
-				sValue += '["'+escape(oSettings.aoPreSearchCols[i].sSearch)+
+				sValue += '["'+encodeURIComponent(oSettings.aoPreSearchCols[i].sSearch)+
 					'",'+!oSettings.aoPreSearchCols[i].bRegex+'],';
 			}
 			sValue = sValue.substring(0, sValue.length-1);
@@ -5809,7 +5809,7 @@
 				oSettings.iInitDisplayStart = oData.iStart;
 				oSettings._iDisplayEnd = oData.iEnd;
 				oSettings._iDisplayLength = oData.iLength;
-				oSettings.oPreviousSearch.sSearch = unescape(oData.sFilter);
+				oSettings.oPreviousSearch.sSearch = decodeURIComponent(oData.sFilter);
 				oSettings.aaSorting = oData.aaSorting.slice();
 				oSettings.saved_aaSorting = oData.aaSorting.slice();
 				
@@ -5829,7 +5829,7 @@
 					for ( var i=0 ; i<oData.aaSearchCols.length ; i++ )
 					{
 						oSettings.aoPreSearchCols[i] = {
-							"sSearch": unescape(oData.aaSearchCols[i][0]),
+							"sSearch": decodeURIComponent(oData.aaSearchCols[i][0]),
 							"bRegex": !oData.aaSearchCols[i][1]
 						};
 					}
