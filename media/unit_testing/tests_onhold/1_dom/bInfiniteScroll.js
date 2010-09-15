@@ -21,6 +21,12 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
+		"Get nodes",
+		null,
+		function () { return $('#example tbody>tr').length == 10; }
+	);
+	
+	oTest.fnWaitTest( 
 		"Scroll on 20px adds 10 rows",
 		function () { $('div.dataTables_scrollBody').scrollTop(20); },
 		function () { return $('#example tbody tr').length == 20; }
@@ -30,6 +36,12 @@ $(document).ready( function () {
 		"Info after 20px scroll",
 		null,
 		function () { return $('#example_info').html() == "Showing 1 to 20 of 57 entries"; }
+	);
+	
+	oTest.fnTest( 
+		"Get nodes after 20px scroll",
+		null,
+		function () { return $('#example tbody>tr').length == 20; }
 	);
 	
 	oTest.fnTest( 
@@ -44,7 +56,7 @@ $(document).ready( function () {
 		function () { return $('#example_info').html() == "Showing 1 to 20 of 57 entries"; }
 	);
 	
-	oTest.fnTest( 
+	oTest.fnWaitTest( 
 		"Scroll to 240px adds another 10 rows",
 		function () { $('div.dataTables_scrollBody').scrollTop(240); },
 		function () { return $('#example tbody tr').length == 30; }
@@ -57,8 +69,17 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
+		"Get nodes after 240px scroll",
+		null,
+		function () { return $('#example tbody>tr').length == 30; }
+	);
+	
+	oTest.fnTest( 
 		"Filtering will drop back to 10 rows",
-		function () { oTable.fnFilter('gec') },
+		function () { 
+			$('div.dataTables_scrollBody').scrollTop(0);
+			oTable.fnFilter('gec')
+		},
 		function () { return $('#example tbody tr').length == 10; }
 	);
 	
@@ -69,9 +90,21 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
+		"Get nodes after filtering",
+		null,
+		function () { return $('#example tbody>tr').length == 10; }
+	);
+	
+	oTest.fnWaitTest( 
 		"Scroll after filtering adds 10",
 		function () { $('div.dataTables_scrollBody').scrollTop(20); },
 		function () { return $('#example tbody tr').length == 20; }
+	);
+	
+	oTest.fnTest( 
+		"Get nodes after filtering",
+		null,
+		function () { return $('#example tbody>tr').length == 20; }
 	);
 	
 	oTest.fnTest( 
@@ -80,10 +113,16 @@ $(document).ready( function () {
 		function () { return $('#example tbody tr').length == 10; }
 	);
 	
-	oTest.fnTest( 
+	oTest.fnWaitTest( 
 		"Scroll after sorting adds 10",
 		function () { $('div.dataTables_scrollBody').scrollTop(20); },
 		function () { return $('#example tbody tr').length == 20; }
+	);
+	
+	oTest.fnTest( 
+		"Get nodes after scrolling",
+		null,
+		function () { return $('#example tbody>tr').length == 20; }
 	);
 	
 	

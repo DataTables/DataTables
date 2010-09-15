@@ -3189,7 +3189,11 @@
 				}
 			}
 			
-			_fnClearTable( oSettings );
+			if ( !oSettings.oScroll.bInfinite ||
+				   (oSettings.oScroll.bInfinite && (oSettings.bSorted || oSettings.bFiltered)) )
+			{
+				_fnClearTable( oSettings );
+			}
 			oSettings._iRecordsTotal = json.iTotalRecords;
 			oSettings._iRecordsDisplay = json.iTotalDisplayRecords;
 			
