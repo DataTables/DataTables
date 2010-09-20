@@ -24,7 +24,10 @@
 						oTable.fnUpdate( sValue, aPos[0], aPos[1] );
 					},
 					"submitdata": function ( value, settings ) {
-						return { "row_id": this.parentNode.getAttribute('id') };
+						return {
+							"row_id": this.parentNode.getAttribute('id'),
+							"column": oTable.fnGetPosition( this )[2]
+						};
 					},
 					"height": "14px"
 				} );
@@ -487,7 +490,10 @@
 			oTable.fnUpdate( sValue, aPos[0], aPos[1] );
 		},
 		"submitdata": function ( value, settings ) {
-			return { "row_id": this.parentNode.getAttribute('id') };
+			return {
+				"row_id": this.parentNode.getAttribute('id'),
+				"column": oTable.fnGetPosition( this )[2]
+			};
 		},
 		"height": "14px"
 	} );
