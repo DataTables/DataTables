@@ -6491,28 +6491,33 @@
 			 */
 			var nThead = this.getElementsByTagName('thead');
 			var anThs = nThead.length===0 ? [] : _fnGetUniqueThs( nThead[0] );
+			var aoColumnsInit;
 			
 			/* If not given a column array, generate one with nulls */
 			if ( typeof oInit.aoColumns == 'undefined' )
 			{
-				oInit.aoColumns = [];
+				aoColumnsInit = [];
 				for ( i=0, iLen=anThs.length ; i<iLen ; i++ )
 				{
-					oInit.aoColumns.push( null );
+					aoColumnsInit.push( null );
 				}
+			}
+			else
+			{
+				aoColumnsInit = oInit.aoColumns;
 			}
 			
 			/* Add the columns */
-			for ( i=0, iLen=oInit.aoColumns.length ; i<iLen ; i++ )
+			for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 			{
 				/* Check if we have column visibilty state to restore */
 				if ( typeof oInit.saved_aoColumns != 'undefined' && oInit.saved_aoColumns.length == iLen )
 				{
-					if ( oInit.aoColumns[i] === null )
+					if ( aoColumnsInit[i] === null )
 					{
-						oInit.aoColumns[i] = {};
+						aoColumnsInit[i] = {};
 					}
-					oInit.aoColumns[i].bVisible = oInit.saved_aoColumns[i].bVisible;
+					aoColumnsInit[i].bVisible = oInit.saved_aoColumns[i].bVisible;
 				}
 				
 				_fnAddColumn( oSettings, anThs ? anThs[i] : null );
@@ -6563,11 +6568,11 @@
 			}
 			
 			/* Add options from column array - after the defs array so this has priority */
-			if ( typeof oInit.aoColumns != 'undefined' )
+			if ( typeof aoColumnsInit != 'undefined' )
 			{
-				for ( i=0, iLen=oInit.aoColumns.length ; i<iLen ; i++ )
+				for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 				{
-					_fnColumnOptions( oSettings, i, oInit.aoColumns[i] );
+					_fnColumnOptions( oSettings, i, aoColumnsInit[i] );
 				}
 			}
 			
