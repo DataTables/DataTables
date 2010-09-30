@@ -27,28 +27,6 @@
 				return sOut;
 			}
 			
-			/* Event handler function */
-			function fnOpenClose ( oSettings )
-			{
-				$('td img', oTable.fnGetNodes() ).each( function () {
-					$(this).click( function () {
-						var nTr = this.parentNode.parentNode;
-						if ( this.src.match('details_close') )
-						{
-							/* This row is already open - close it */
-							this.src = "../examples_support/details_open.png";
-							oTable.fnClose( nTr );
-						}
-						else
-						{
-							/* Open this row */
-							this.src = "../examples_support/details_close.png";
-							oTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
-						}
-					} );
-				} );
-			}
-			
 			$(document).ready(function() {
 				oTable = $('#example').dataTable( {
 					"bProcessing": true,
@@ -63,7 +41,22 @@
 						{ "sClass": "center" }
 					],
 					"aaSorting": [[1, 'asc']],
-					"fnDrawCallback": fnOpenClose
+				} );
+				
+				$('#example tbody td img').live( 'click', function () {
+					var nTr = this.parentNode.parentNode;
+					if ( this.src.match('details_close') )
+					{
+						/* This row is already open - close it */
+						this.src = "../examples_support/details_open.png";
+						oTable.fnClose( nTr );
+					}
+					else
+					{
+						/* Open this row */
+						this.src = "../examples_support/details_close.png";
+						oTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
+					}
 				} );
 			} );
 		</script>
@@ -126,28 +119,6 @@ function fnFormatDetails ( nTr )
 	return sOut;
 }
 
-/* Event handler function */
-function fnOpenClose ( oSettings )
-{
-	$('td img', oTable.fnGetNodes() ).each( function () {
-		$(this).click( function () {
-			var nTr = this.parentNode.parentNode;
-			if ( this.src.match('details_close') )
-			{
-				/* This row is already open - close it */
-				this.src = "../examples_support/details_open.png";
-				oTable.fnClose( nTr );
-			}
-			else
-			{
-				/* Open this row */
-				this.src = "../examples_support/details_close.png";
-				oTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
-			}
-		} );
-	} );
-}
-
 $(document).ready(function() {
 	oTable = $('#example').dataTable( {
 		"bProcessing": true,
@@ -162,7 +133,22 @@ $(document).ready(function() {
 			{ "sClass": "center" }
 		],
 		"aaSorting": [[1, 'asc']],
-		"fnDrawCallback": fnOpenClose
+	} );
+	
+	$('#example tbody td img').live( 'click', function () {
+		var nTr = this.parentNode.parentNode;
+		if ( this.src.match('details_close') )
+		{
+			/* This row is already open - close it */
+			this.src = "../examples_support/details_open.png";
+			oTable.fnClose( nTr );
+		}
+		else
+		{
+			/* Open this row */
+			this.src = "../examples_support/details_close.png";
+			oTable.fnOpen( nTr, fnFormatDetails(nTr), 'details' );
+		}
 	} );
 } );</pre>
 			

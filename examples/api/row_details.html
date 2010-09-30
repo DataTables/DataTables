@@ -56,22 +56,20 @@
 				 * Note that the indicator for showing which row is open is not controlled by DataTables,
 				 * rather it is done here
 				 */
-				$('td img', oTable.fnGetNodes() ).each( function () {
-					$(this).click( function () {
-						var nTr = this.parentNode.parentNode;
-						if ( this.src.match('details_close') )
-						{
-							/* This row is already open - close it */
-							this.src = "../examples_support/details_open.png";
-							oTable.fnClose( nTr );
-						}
-						else
-						{
-							/* Open this row */
-							this.src = "../examples_support/details_close.png";
-							oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
-						}
-					} );
+				$('#example tbody td img').live('click', function () {
+					var nTr = this.parentNode.parentNode;
+					if ( this.src.match('details_close') )
+					{
+						/* This row is already open - close it */
+						this.src = "../examples_support/details_open.png";
+						oTable.fnClose( nTr );
+					}
+					else
+					{
+						/* Open this row */
+						this.src = "../examples_support/details_close.png";
+						oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
+					}
 				} );
 			} );
 		</script>
@@ -552,22 +550,20 @@ $(document).ready(function() {
 	 * Note that the indicator for showing which row is open is not controlled by DataTables,
 	 * rather it is done here
 	 */
-	$('td img', oTable.fnGetNodes() ).each( function () {
-		$(this).click( function () {
-			var nTr = this.parentNode.parentNode;
-			if ( this.src.match('details_close') )
-			{
-				/* This row is already open - close it */
-				this.src = "../examples_support/details_open.png";
-				oTable.fnClose( nTr );
-			}
-			else
-			{
-				/* Open this row */
-				this.src = "../examples_support/details_close.png";
-				oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
-			}
-		} );
+	$('#example tbody td img').live('click', function () {
+		var nTr = this.parentNode.parentNode;
+		if ( this.src.match('details_close') )
+		{
+			/* This row is already open - close it */
+			this.src = "../examples_support/details_open.png";
+			oTable.fnClose( nTr );
+		}
+		else
+		{
+			/* Open this row */
+			this.src = "../examples_support/details_close.png";
+			oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
+		}
 	} );
 } );</pre>
 			
