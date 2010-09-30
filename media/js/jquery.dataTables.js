@@ -1072,6 +1072,13 @@
 			this.asDestoryStrips = [];
 			
 			/*
+			 * Variable: sDestroyWidth
+			 * Purpose:  If restoring a table - we should restore it's width
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.sDestroyWidth = 0;
+			
+			/*
 			 * Variable: fnRowCallback
 			 * Purpose:  Call this function every time a row is inserted (draw)
 			 * Scope:    jQuery.dataTable.classSettings
@@ -2112,6 +2119,9 @@
 			{
 				nBody.appendChild( oSettings.aoData[i].nTr );
 			}
+			
+			/* Restore the width of the original table */
+			oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
 			
 			/* If the were originally odd/even type classes - then we add them back here. Note
 			 * this is not fool proof (for example if not all rows as odd/even classes - but 
@@ -6314,6 +6324,9 @@
 			 * available
 			 */
 			oSettings.oApi = _that.oApi;
+			
+			/* State the table's width for if a destroy is called at a later time */
+			oSettings.sDestroyWidth = $(this).width();
 			
 			/* Store the features that we have available */
 			if ( typeof oInit != 'undefined' && oInit !== null )
