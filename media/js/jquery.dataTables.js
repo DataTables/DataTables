@@ -4234,7 +4234,10 @@
 					 *  }
 					 * So basically we have a test for each column, and if that column matches, test the
 					 * next one. If all columns match, then we use a numeric sort on the position the two
-					 * row have in the original data array in order to provide a stable sort.
+					 * row have in the original data array in order to provide a stable sort. In order to
+					 * get the position for the numeric stablisation, we need to take a clone of the current
+					 * display array and then get the position of the sorting value from that during the
+					 * sort.
 					 *
 					 * Note that for use with the Closure compiler, we need to be very careful how we deal 
 					 * with this eval. Closure will rename all of our local variables, resutling in breakage
@@ -4245,11 +4248,13 @@
 					this.ClosureDataTables = {
 						"fn": function(){},
 						"data": aoData,
-						"sort": _oExt.oSort
+						"sort": _oExt.oSort,
+						"master": oSettings.aiDisplayMaster.slice()
 					};
 					var sDynamicSort = "this.ClosureDataTables.fn = function(a,b){"+
 						"var iTest, oSort=this.ClosureDataTables.sort, "+
-						"aoData=this.ClosureDataTables.data;";
+						"aoData=this.ClosureDataTables.data, "+
+						"aiOrig=this.ClosureDataTables.master;";
 					
 					for ( i=0 ; i<aaSort.length-1 ; i++ )
 					{
@@ -4265,7 +4270,8 @@
 						iDataType = oSettings.aoColumns[ iDataSort ].sType;
 						sDynamicSort += "iTest = oSort['"+iDataType+"-"+aaSort[aaSort.length-1][1]+"']"+
 							"( aoData[a]._aData["+iDataSort+"], aoData[b]._aData["+iDataSort+"] );"+
-							"if (iTest===0) return oSort['numeric-"+aaSort[aaSort.length-1][1]+"'](a, b); "+
+							"if (iTest===0) "+
+								"return oSort['numeric-asc'](jQuery.inArray(a,aiOrig), jQuery.inArray(b,aiOrig)); "+
 							"return iTest;}";
 						
 						/* The eval has to be done to a variable for IE */
