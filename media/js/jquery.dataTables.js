@@ -3697,6 +3697,7 @@
 				nToSize.style.width = _fnStringToCss( iWidth );
 				aApplied.push( iWidth );
 			}, anHeadSizers, anHeadToSize );
+			$(anHeadSizers).height(0);
 			
 			if ( o.nTFoot !== null )
 			{
@@ -3715,6 +3716,7 @@
 					nToSize.style.width = _fnStringToCss( iWidth );
 					aApplied.push( iWidth );
 				}, anFootSizers, anFootToSize );
+				$(anFootSizers).height(0);
 			}
 			
 			/*
