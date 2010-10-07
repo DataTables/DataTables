@@ -163,7 +163,10 @@
 			else if ( $aColumns[$i] != ' ' )
 			{
 				/* General output */
-				$sOutput .= '"'.str_replace('"', '\"', $aRow[ $aColumns[$i] ]).'",';
+				$sOutput .= '"'.str_replace(
+					array( '"', "\n", "\r" ), 
+					array( '\\"', "\\n", "\\n"),
+					$aRow[ $aColumns[$i] ] ).'",';
 			}
 		}
 		
