@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.7.3
+ * Version:     1.7.4 dev
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
  * Created:     28/3/2008
@@ -68,7 +68,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.7.3";
+	_oExt.sVersion = "1.7.4.dev";
 	
 	/*
 	 * Variable: sErrMode
@@ -3799,8 +3799,10 @@
 			}
 			
 			/* Finally set the width's of the header and footer tables */
-			nScrollHeadTable.style.width = _fnStringToCss( $(o.nTable).outerWidth() );
-			nScrollHeadInner.style.width = _fnStringToCss( $(o.nTable).outerWidth()+o.oScroll.iBarWidth );
+			var iOuterWidth = $(o.nTable).outerWidth();
+			nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
+			nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+o.oScroll.iBarWidth );
+			nScrollHeadInner.parentNode.style.width = _fnStringToCss( iOuterWidth );
 			
 			if ( o.nTFoot !== null )
 			{
