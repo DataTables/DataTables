@@ -143,45 +143,31 @@
 	/*
 	 * Output
 	 */
-	$sOutput = '{';
-	$sOutput .= '"sEcho": '.intval($_GET['sEcho']).', ';
-	$sOutput .= '"iTotalRecords": '.$iTotal.', ';
-	$sOutput .= '"iTotalDisplayRecords": '.$iFilteredTotal.', ';
-	$sOutput .= '"aaData": [ ';
+	$output = array(
+		"sEcho" => intval($_GET['sEcho']),
+		"iTotalRecords" => $iTotal,
+		"iTotalDisplayRecords" => $iFilteredTotal,
+		"aaData" => array()
+	);
+	
 	while ( $aRow = mysql_fetch_array( $rResult ) )
 	{
-		$sOutput .= "[";
+		$row = array();
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
 		{
 			if ( $aColumns[$i] == "version" )
 			{
-				/* Special output formatting for 'version' */
-				$sOutput .= ($aRow[ $aColumns[$i] ]=="0") ?
-					'"-",' :
-					'"'.str_replace('"', '\"', $aRow[ $aColumns[$i] ]).'",';
+				/* Special output formatting for 'version' column */
+				$row[] = ($aRow[ $aColumns[$i] ]=="0") ? '-' : $aRow[ $aColumns[$i] ];
 			}
 			else if ( $aColumns[$i] != ' ' )
 			{
 				/* General output */
-				$sOutput .= '"'.str_replace(
-					array( '"', "\n", "\r" ), 
-					array( '\\"', "\\n", "\\n"),
-					$aRow[ $aColumns[$i] ] ).'",';
+				$row[] = $aRow[ $aColumns[$i] ];
 			}
 		}
-		
-		/*
-		 * Optional Configuration:
-		 * If you need to add any extra columns (add/edit/delete etc) to the table, that aren't in the
-		 * database - you can do it here
-		 */
-		
-		
-		$sOutput = substr_replace( $sOutput, "", -1 );
-		$sOutput .= "],";
+		$output['aaData'][] = $row;
 	}
-	$sOutput = substr_replace( $sOutput, "", -1 );
-	$sOutput .= '] }';
 	
-	echo $sOutput;
+	echo json_encode( $output );
 ?>
