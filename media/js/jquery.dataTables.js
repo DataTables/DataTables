@@ -26,7 +26,7 @@
  * building the dynamic multi-column sort functions.
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnGatherData,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnGatherData,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxIntervalUpdate,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1237,6 +1237,13 @@
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
 			this.sAjaxSource = null;
+
+			/*
+			 * Variable: iAjaxInterval
+			 * Purpose:  Update interval for AJAX data for the table (in milliseconds)
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.iAjaxInterval = null;
 			
 			/*
 			 * Variable: bAjaxDataGet
@@ -2263,6 +2270,12 @@
 			/* if there is an ajax source */
 			if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 			{
+
+				if ( oSettings.iAjaxInterval !== null && !isNaN( oSettings.iAjaxInterval )
+						&& oSettings.iAjaxInterval !== 0 ) {
+					setInterval ( function () { _fnAjaxIntervalUpdate( oSettings ); }, oSettings.iAjaxInterval );
+				}
+
 				_fnProcessingDisplay( oSettings, true );
 				
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
@@ -2303,6 +2316,51 @@
 			{
 				_fnProcessingDisplay( oSettings, false );
 			}
+		}
+
+		/*
+		 * Function: _fnAjaxIntervalUpdate
+		 * Purpose:  Update the table using an Ajax call upon completion of specified interval
+		 * Returns:  -
+		 * Inputs:   object:oSettings - dataTables settings object
+		 */
+		function _fnAjaxIntervalUpdate( oSettings )
+		{
+			_fnProcessingDisplay( oSettings, true );
+
+			oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
+				_fnClearTable ( oSettings );
+
+				/* Got the data - add it to the table */
+				for ( i=0 ; i<json.aaData.length ; i++ )
+				{
+					_fnAddData( oSettings, json.aaData[i] );
+				}
+
+				/* Reset the init display for cookie saving. We've already done a filter, and
+				 * therefore cleared it before. So we need to make it appear 'fresh'
+				 */
+				oSettings.iInitDisplayStart = oSettings._iDisplayStart;
+
+				if ( oSettings.oFeatures.bSort )
+				{
+					_fnSort( oSettings );
+				}
+				else
+				{
+					oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+					_fnCalculateEnd( oSettings );
+					_fnDraw( oSettings );
+				}
+
+				_fnProcessingDisplay( oSettings, false );
+
+				/* Run the init callback if there is one - done here for ajax source for json obj */
+				if ( typeof oSettings.fnInitComplete == 'function' )
+				{
+					oSettings.fnInitComplete.call( oSettings.oInstance, oSettings, json );
+				}
+			} );
 		}
 		
 		/*
@@ -6237,7 +6295,7 @@
 		this.oApi._fnScrollBarWidth = _fnScrollBarWidth;
 		this.oApi._fnApplyToChildren = _fnApplyToChildren;
 		this.oApi._fnMap = _fnMap;
-		
+		this.oApi._fnAjaxIntervalUpdate = _fnAjaxIntervalUpdate;
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 * Section - Constructor
@@ -6361,6 +6419,7 @@
 				_fnMap( oSettings, oInit, "aaSortingFixed" );
 				_fnMap( oSettings, oInit, "aLengthMenu" );
 				_fnMap( oSettings, oInit, "sPaginationType" );
+				_fnMap( oSettings, oInit, "iAjaxInterval" );
 				_fnMap( oSettings, oInit, "sAjaxSource" );
 				_fnMap( oSettings, oInit, "iCookieDuration" );
 				_fnMap( oSettings, oInit, "sCookiePrefix" );
