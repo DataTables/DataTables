@@ -5475,7 +5475,7 @@
 			}
 			
 			if ( s.indexOf('em') != -1 || s.indexOf('%') != -1 || s.indexOf('ex') != -1 ||
-			     s.indexOf('px') != -1 )
+			     s.indexOf('px') != -1 || s.indexOf('pt') != -1 )
 			{
 				return s;
 			}
