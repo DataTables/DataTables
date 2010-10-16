@@ -2236,6 +2236,9 @@
 			/* Draw the headers for the table */
 			_fnDrawHead( oSettings );
 			
+			/* Okay to show that something is going on now */
+			_fnProcessingDisplay( oSettings, true );
+			
 			/* Calculate sizes for columns */
 			if ( oSettings.oFeatures.bAutoWidth )
 			{
@@ -2267,8 +2270,6 @@
 			/* if there is an ajax source */
 			if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 			{
-				_fnProcessingDisplay( oSettings, true );
-				
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
 					/* Got the data - add it to the table */
 					for ( i=0 ; i<json.aaData.length ; i++ )
