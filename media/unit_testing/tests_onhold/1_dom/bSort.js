@@ -66,6 +66,12 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest(
+		"Disabled classes applied",
+		null,
+		function () { return $('#example thead th:eq(0)').hasClass('sorting_disabled'); }
+	);
+	
+	oTest.fnTest(
 		"Click on second column has no effect",
 		function () { $('#example thead th:eq(1)').click(); },
 		function () { return $('#example tbody td:eq(3)').html() == "4"; }
