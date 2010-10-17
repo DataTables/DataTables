@@ -35,5 +35,6 @@ $(document).ready( function () {
 		function () { return $('#example thead th').length == 5; }
 	);
 	
+	oTest.fnCookieDestroy( $('#example').dataTable() );
 	oTest.fnComplete();
 } );

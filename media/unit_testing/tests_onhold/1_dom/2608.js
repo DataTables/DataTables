@@ -49,5 +49,6 @@ $(document).ready( function () {
 		function () { return $('#example_filter input').val() == ''; }
 	);
 	
+	oTest.fnCookieDestroy( $('#example').dataTable() );
 	oTest.fnComplete();
 } );

@@ -34,5 +34,6 @@ $(document).ready( function () {
 		function () { return $('#example tbody td:eq(1)').html() == "Camino 1.0"; }
 	);
 	
+	oTest.fnCookieDestroy( $('#example').dataTable() );
 	oTest.fnComplete();
 } );

@@ -92,5 +92,6 @@ $(document).ready( function () {
 	);
 	
 	
+	oTest.fnCookieDestroy( $('#example').dataTable() );
 	oTest.fnComplete();
 } );
