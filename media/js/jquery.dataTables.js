@@ -856,7 +856,7 @@
 			this.fnRecordsTotal = function ()
 			{
 				if ( this.oFeatures.bServerSide ) {
-					return this._iRecordsTotal;
+					return parseInt(this._iRecordsTotal, 10);
 				} else {
 					return this.aiDisplayMaster.length;
 				}
@@ -865,7 +865,7 @@
 			this.fnRecordsDisplay = function ()
 			{
 				if ( this.oFeatures.bServerSide ) {
-					return this._iRecordsDisplay;
+					return parseInt(this._iRecordsDisplay, 10);
 				} else {
 					return this.aiDisplay.length;
 				}
