@@ -1257,9 +1257,11 @@
 					"success": callback,
 					"dataType": "json",
 					"cache": false,
-					"error": function () {
-						alert( "DataTables warning: JSON data from server failed to load or be parsed. "+
-							"This is most likely to be caused by a JSON formatting error." );
+					"error": function (xhr, error, thrown) {
+						if ( error == "parsererror" ) {
+							alert( "DataTables warning: JSON data from server could not be parsed. "+
+								"This is caused by a JSON formatting error." );
+						}
 					}
 				} );
 			};
