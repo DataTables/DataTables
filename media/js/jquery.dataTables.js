@@ -5477,12 +5477,12 @@
 				return s+"px";
 			}
 			
-			if ( s.indexOf('em') != -1 || s.indexOf('%') != -1 || s.indexOf('ex') != -1 ||
-			     s.indexOf('px') != -1 || s.indexOf('pt') != -1 )
+			/* Check if the last character is not 0-9 */
+			var c = s.charCodeAt( s.length-1 );
+			if (c < 0x30 || c > 0x39)
 			{
 				return s;
 			}
-			
 			return s+"px";
 		}
 		
