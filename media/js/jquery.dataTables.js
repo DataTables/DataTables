@@ -1159,13 +1159,6 @@
 			this.nTableWrapper = null;
 			
 			/*
-			 * Variable: iDefaultSortIndex
-			 * Purpose:  Sorting index which will be used by default
-			 * Scope:    jQuery.dataTable.classSettings
-			 */
-			this.iDefaultSortIndex = 0;
-			
-			/*
 			 * Variable: bInitialised
 			 * Purpose:  Indicate if all required information has been read in
 			 * Scope:    jQuery.dataTable.classSettings
