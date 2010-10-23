@@ -2576,6 +2576,7 @@
 				if ( oSettings.aoColumns[i].bVisible )
 				{
 					oSettings.aoData[iThisIndex].nTr.appendChild( nTd );
+					oSettings.aoData[iThisIndex]._anHidden[i] = null;
 				}
 				else
 				{
@@ -2737,6 +2738,10 @@
 						{
 							oSettings.aoData[iRow]._anHidden[iColumn] = nCell;
 							nCell.parentNode.removeChild( nCell );
+						}
+						else
+						{
+							oSettings.aoData[iRow]._anHidden[iColumn] = null;
 						}
 					}
 				}
