@@ -458,22 +458,53 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>var oTable;
-
+			<p>Javascript:</p>
+			<pre>
 $(document).ready(function() {
-	$('#example tbody td').hover( function() {
-		var iCol = $('td').index(this) % 5;
-		var nTrs = oTable.fnGetNodes();
-		$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
-	}, function() {
-		var nTrs = oTable.fnGetNodes();
-		$('td.highlighted', nTrs).removeClass('highlighted');
-	} );
-	
-	oTable = $('#example').dataTable( {
-		"bSortClasses": false
-	} );
+	$('#example').dataTable();
 } );</pre>
+
+			<p>CSS (note that for this example the selector ".ex_highlight" is used to limit the CSS here to just this example.</p>
+			<pre>.ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
+	background-color: #ECFFB3;
+}
+
+.ex_highlight #example tbody tr.odd:hover, #example tbody tr.odd td.highlighted {
+	background-color: #E6FF99;
+}
+
+.ex_highlight_row #example tr.even:hover {
+	background-color: #ECFFB3;
+}
+
+.ex_highlight_row #example tr.even:hover td.sorting_1 {
+	background-color: #DDFF75;
+}
+
+.ex_highlight_row #example tr.even:hover td.sorting_2 {
+	background-color: #E7FF9E;
+}
+
+.ex_highlight_row #example tr.even:hover td.sorting_3 {
+	background-color: #E2FF89;
+}
+
+.ex_highlight_row #example tr.odd:hover {
+	background-color: #E6FF99;
+}
+
+.ex_highlight_row #example tr.odd:hover td.sorting_1 {
+	background-color: #D6FF5C;
+}
+
+.ex_highlight_row #example tr.odd:hover td.sorting_2 {
+	background-color: #E0FF84;
+}
+
+.ex_highlight_row #example tr.odd:hover td.sorting_3 {
+	background-color: #DBFF70;
+}
+</pre>
 			
 			
 			<h1>Other examples</h1>
