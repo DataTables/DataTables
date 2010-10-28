@@ -3157,6 +3157,15 @@
 				aoData.push( { "name": "iDisplayLength", "value": oSettings.oFeatures.bPaginate !== false ?
 					oSettings._iDisplayLength : -1 } );
 				
+				/* Column names */
+				for ( i=0 ; i<iColumns ; i++ )
+				{
+					if ( oSettings.aoColumns[i].sName != '' )
+					{
+						aoData.push( { "name": "sName"+i, "value": oSettings.aoColumns[i].sName } );
+					}
+				}
+				
 				/* Filtering */
 				if ( oSettings.oFeatures.bFilter !== false )
 				{
