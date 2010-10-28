@@ -3525,6 +3525,7 @@
 			nScrollFootInner.className = oClasses.sScrollFootInner;
 			
 			nScrollHead.style.overflow = "hidden";
+			nScrollHead.style.position = "relative";
 			nScrollFoot.style.overflow = "hidden";
 			nScrollBody.style.overflow = "auto";
 			nScrollHead.style.border = "0";
