@@ -1225,6 +1225,36 @@
 			this.fnCookieCallback = null;
 			
 			/*
+			 * Variable: aoStateSave
+			 * Purpose:  Array of callback functions for state saving
+			 * Scope:    jQuery.dataTable.classSettings
+			 * Notes:    Each array element is an object with the following parameters:
+			 *   function:fn - function to call. Takes two parameters, oSettings and the JSON string to
+			 *     save that has been thus far created. Returns a JSON string to be inserted into a 
+			 *     json object (i.e. '"param": [ 0, 1, 2]')
+			 *   string:sName - name of callback
+			 */
+			this.aoStateSave = [];
+			
+			/*
+			 * Variable: aoStateLoad
+			 * Purpose:  Array of callback functions for state loading
+			 * Scope:    jQuery.dataTable.classSettings
+			 * Notes:    Each array element is an object with the following parameters:
+			 *   function:fn - function to call. Takes two parameters, oSettings and the object stored.
+			 *     May return false to cancel state loading.
+			 *   string:sName - name of callback
+			 */
+			this.aoStateLoad = [];
+			
+			/*
+			 * Variable: oLoadedState
+			 * Purpose:  State that was loaded from the cookie. Useful for back reference
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.oLoadedState = null;
+			
+			/*
 			 * Variable: sAjaxSource
 			 * Purpose:  Source url for AJAX data for the table
 			 * Scope:    jQuery.dataTable.classSettings
@@ -5778,7 +5808,7 @@
 			}
 			
 			/* Store the interesting variables */
-			var i;
+			var i, iLen, sTmp;
 			var sValue = "{";
 			sValue += '"iCreate":'+ new Date().getTime()+',';
 			sValue += '"iStart":'+ oSettings._iDisplayStart+',';
@@ -5811,6 +5841,16 @@
 			}
 			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "]";
+			
+			/* Save state from any plug-ins */
+			for ( i=0, iLen=oSettings.aoStateSave.length ; i<iLen ; i++ )
+			{
+				sTmp = oSettings.aoStateSave[i].fn( oSettings, sValue );
+				if ( sTmp != "" )
+				{
+					sValue = sTmp;
+				}
+			}
 			
 			sValue += "}";
 			
@@ -5848,6 +5888,20 @@
 				{
 					return;
 				}
+				
+				/* Allow custom and plug-in manipulation functions to alter the data set which was
+				 * saved, and also reject any saved state by returning false
+				 */
+				for ( i=0, iLen=oSettings.aoStateLoad.length ; i<iLen ; i++ )
+				{
+					if ( !oSettings.aoStateLoad[i].fn( oSettings, oData ) )
+					{
+						return;
+					}
+				}
+				
+				/* Store the saved state so it might be accessed at any time (particualrly a plug-in */
+				oSettings.oLoadedState = $.extend( true, {}, oData );
 				
 				/* Restore key features */
 				oSettings._iDisplayStart = oData.iStart;
@@ -6393,11 +6447,27 @@
 				_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
 				_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 				
+				/* Callback functions which are array driven */
 				if ( typeof oInit.fnDrawCallback == 'function' )
 				{
-					/* Add user given callback function to array */
 					oSettings.aoDrawCallback.push( {
 						"fn": oInit.fnDrawCallback,
+						"sName": "user"
+					} );
+				}
+				
+				if ( typeof oInit.fnStateSaveCallback == 'function' )
+				{
+					oSettings.aoStateSave.push( {
+						"fn": oInit.fnStateSaveCallback,
+						"sName": "user"
+					} );
+				}
+				
+				if ( typeof oInit.fnStateLoadCallback == 'function' )
+				{
+					oSettings.aoStateLoad.push( {
+						"fn": oInit.fnStateLoadCallback,
 						"sName": "user"
 					} );
 				}
