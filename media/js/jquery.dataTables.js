@@ -3158,13 +3158,12 @@
 					oSettings._iDisplayLength : -1 } );
 				
 				/* Column names */
+				var aNames = [];
 				for ( i=0 ; i<iColumns ; i++ )
 				{
-					if ( oSettings.aoColumns[i].sName != '' )
-					{
-						aoData.push( { "name": "sName"+i, "value": oSettings.aoColumns[i].sName } );
-					}
+					aNames.push( oSettings.aoColumns[i].sName );
 				}
+				aoData.push( { "name": "sNames", "value": aNames.join(',') } );
 				
 				/* Filtering */
 				if ( oSettings.oFeatures.bFilter !== false )
