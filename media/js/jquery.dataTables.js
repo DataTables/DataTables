@@ -3923,11 +3923,14 @@
 				}
 				
 				/* Now do the filter */
-				_fnFilterComplete( oSettings, { 
-					"sSearch": this.value, 
-					"bRegex":  oSettings.oPreviousSearch.bRegex,
-					"bSmart":  oSettings.oPreviousSearch.bSmart 
-				} );
+				if ( this.value != oSettings.oPreviousSearch.sSearch )
+				{
+					_fnFilterComplete( oSettings, { 
+						"sSearch": this.value, 
+						"bRegex":  oSettings.oPreviousSearch.bRegex,
+						"bSmart":  oSettings.oPreviousSearch.bSmart 
+					} );
+				}
 			} );
 			
 			jqFilter.keypress( function(e) {
