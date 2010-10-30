@@ -6727,6 +6727,10 @@
 			 */
 			for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
 			{
+				if ( oSettings.aaSorting[i][0] >= oSettings.aoColumns.length )
+				{
+					oSettings.aaSorting[i][0] = 0;
+				}
 				var oColumn = oSettings.aoColumns[ oSettings.aaSorting[i][0] ];
 				
 				/* Add a default sorting index */
