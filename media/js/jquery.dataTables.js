@@ -1939,8 +1939,9 @@
 		 * Returns:  -
 		 * Inputs:   int:iCol - the column whose display should be changed
 		 *           bool:bShow - show (true) or hide (false) the column
+		 *           bool:bRedraw - redraw the table or not - default true
 		 */
-		this.fnSetColumnVis = function ( iCol, bShow )
+		this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		{
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
 			var i, iLen;
@@ -2049,8 +2050,12 @@
 			/* Do a redraw incase anything depending on the table columns needs it 
 			 * (built-in: scrolling) 
 			 */
-			_fnAjustColumnSizing( oSettings );
-			_fnDraw( oSettings );
+			if ( typeof bRedraw == 'undefined' || bRedraw )
+			{
+				_fnAjustColumnSizing( oSettings );
+				_fnDraw( oSettings );
+			}
+			
 			_fnSaveState( oSettings );
 		};
 		
