@@ -6672,6 +6672,10 @@
 				{
 					/* Each column def can target multiple columns, as it is an array */
 					var aTargets = oInit.aoColumnDefs[i].aTargets;
+					if ( !$.isArray( aTargets ) )
+					{
+						_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
+					}
 					for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
 					{
 						if ( typeof aTargets[j] == 'number' && aTargets[j] >= 0 )
