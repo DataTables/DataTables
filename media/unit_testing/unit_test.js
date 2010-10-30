@@ -29,7 +29,7 @@ var oTest = {
 	iReTestLimit: 20,
 	
 	/* Amount of time to wait between trying for an async test */
-	iReTestDelay: 100,
+	iReTestDelay: 150,
 	
 	/* End tests - external control */
 	bEnd: false,
