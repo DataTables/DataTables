@@ -5863,7 +5863,7 @@
 			for ( i=0, iLen=oSettings.aoStateSave.length ; i<iLen ; i++ )
 			{
 				sTmp = oSettings.aoStateSave[i].fn( oSettings, sValue );
-				if ( sTmp != "" )
+				if ( sTmp !== "" )
 				{
 					sValue = sTmp;
 				}
@@ -5889,7 +5889,7 @@
 				return;
 			}
 			
-			var oData;
+			var oData, i, iLen;
 			var sData = _fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
 			if ( sData !== null && sData !== '' )
 			{
@@ -5942,7 +5942,7 @@
 				/* Column filtering - added in 1.5.0 beta 6 */
 				if ( typeof oData.aaSearchCols != 'undefined' )
 				{
-					for ( var i=0 ; i<oData.aaSearchCols.length ; i++ )
+					for ( i=0 ; i<oData.aaSearchCols.length ; i++ )
 					{
 						oSettings.aoPreSearchCols[i] = {
 							"sSearch": decodeURIComponent(oData.aaSearchCols[i][0]),
