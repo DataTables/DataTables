@@ -3162,14 +3162,6 @@
 				aoData.push( { "name": "iDisplayLength", "value": oSettings.oFeatures.bPaginate !== false ?
 					oSettings._iDisplayLength : -1 } );
 				
-				/* Column names */
-				var aNames = [];
-				for ( i=0 ; i<iColumns ; i++ )
-				{
-					aNames.push( oSettings.aoColumns[i].sName );
-				}
-				aoData.push( { "name": "sNames", "value": aNames.join(',') } );
-				
 				/* Filtering */
 				if ( oSettings.oFeatures.bFilter !== false )
 				{

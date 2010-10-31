@@ -8,13 +8,13 @@
 	 * 
 	 *   1. Data from server to client - notice that the $aColumns array below is in a different
 	 * order to that from the array in server_processing.php, but DataTables will render the
-	 * table in the same order. This reordering is done on the client-side by using the sNames 
+	 * table in the same order. This reordering is done on the client-side by using the sColumns 
 	 * parameter which is passed back, stating the order which the server is sending data back in.
 	 * DataTables will compaire this to the sName parameter for each column and reorder as needed.
 	 * 
 	 *   2. Data from client to server - in order that the columns can be sent to the server in
 	 * any order (it is expected in this script that the server-side will always work with a static
-	 * array which is not reordered dynamically) DataTables will send the parameter 'sNames' which
+	 * array which is not reordered dynamically) DataTables will send the parameter 'sColumns' which
 	 * like it's return counterpart is a comma seperated list of the column names, telling the
 	 * server-side what order the columns are being shown on the client-side. As such it is now
 	 * possible to realise what column sSearch_{i} (for example) refers to. This is done by a look
@@ -66,7 +66,7 @@
 	/*
 	 * Names - this is specific to server-side column re-ordering
 	 */
-	$aNames = explode( ',', $_GET['sNames'] );
+	$aNames = explode( ',', $_GET['sColumns'] );
 	
 	
 	/* 
