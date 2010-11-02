@@ -1946,7 +1946,7 @@
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
 			var i, iLen;
 			var iColumns = oSettings.aoColumns.length;
-			var nTd, anTds;
+			var nTd, anTds, nCell, anTrs, jqChildren;
 			
 			/* No point in doing anything if we are requesting what is already true */
 			if ( oSettings.aoColumns[iCol].bVisible == bShow )
@@ -1980,9 +1980,20 @@
 				if ( iInsert >= _fnVisbleColumns( oSettings ) )
 				{
 					nTrHead.appendChild( anTheadTh[iCol] );
+					anTrs = $('>tr', oSettings.nTHead);
+					for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
+					{
+						anTrs[i].appendChild( oSettings.aoColumns[iCol].anThExtra[i-1] );
+					}	
+					
 					if ( nTrFoot )
 					{
 						nTrFoot.appendChild( anTfootTh[iCol] );
+						anTrs = $('>tr', oSettings.nTFoot);
+						for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
+						{
+							anTrs[i].appendChild( oSettings.aoColumns[iCol].anTfExtra[i-1] );
+						}	
 					}
 					
 					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
@@ -2005,9 +2016,22 @@
 					}
 					
 					nTrHead.insertBefore( anTheadTh[iCol], nTrHead.getElementsByTagName('th')[iBefore] );
+					anTrs = $('>tr', oSettings.nTHead);
+					for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
+					{
+						jqChildren = $(anTrs[i]).children();
+						anTrs[i].insertBefore( oSettings.aoColumns[iCol].anThExtra[i-1], jqChildren[iBefore] );
+					}	
+					
 					if ( nTrFoot )
 					{
 						nTrFoot.insertBefore( anTfootTh[iCol], nTrFoot.getElementsByTagName('th')[iBefore] );
+						anTrs = $('>tr', oSettings.nTFoot);
+						for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
+						{
+							jqChildren = $(anTrs[i]).children();
+							anTrs[i].insertBefore( oSettings.aoColumns[iCol].anTfExtra[i-1], jqChildren[iBefore] );
+						}	
 					}
 					
 					anTds = _fnGetTdNodes( oSettings );
@@ -2025,9 +2049,20 @@
 			{
 				/* Remove a column from display */
 				nTrHead.removeChild( anTheadTh[iCol] );
+				for ( i=0, iLen=oSettings.aoColumns[iCol].anThExtra.length ; i<iLen ; i++ )
+				{
+					nCell = oSettings.aoColumns[iCol].anThExtra[i];
+					nCell.parentNode.removeChild( nCell );
+				}
+				
 				if ( nTrFoot )
 				{
 					nTrFoot.removeChild( anTfootTh[iCol] );
+					for ( i=0, iLen=oSettings.aoColumns[iCol].anTfExtra.length ; i<iLen ; i++ )
+					{
+						nCell = oSettings.aoColumns[iCol].anTfExtra[i];
+						nCell.parentNode.removeChild( nCell );
+					}
 				}
 				
 				anTds = _fnGetTdNodes( oSettings );
@@ -2411,7 +2446,9 @@
 				"iDataSort": oSettings.aoColumns.length-1,
 				"sSortDataType": 'std',
 				"nTh": nTh ? nTh : document.createElement('th'),
-				"nTf": null
+				"nTf": null,
+				"anThExtra": [],
+				"anTfExtra": []
 			};
 			
 			var iCol = oSettings.aoColumns.length-1;
@@ -2791,8 +2828,10 @@
 		function _fnDrawHead( oSettings )
 		{
 			var i, nTh, iLen, j, jLen;
+			var anTr = oSettings.nTHead.getElementsByTagName('tr');
 			var iThs = oSettings.nTHead.getElementsByTagName('th').length;
 			var iCorrector = 0;
+			var jqChildren;
 			
 			/* If there is a header in place - then use it - otherwise it's going to get nuked... */
 			if ( iThs !== 0 )
@@ -2801,6 +2840,17 @@
 				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
 					nTh = oSettings.aoColumns[i].nTh;
+					
+					/* Cache and remove (if needed) any extra elements for this column in the header */
+					for ( j=1, jLen=anTr.length ; j<jLen ; j++ )
+					{
+						jqChildren = $(anTr[j]).children();
+						oSettings.aoColumns[i].anThExtra.push( jqChildren[i-iCorrector] );
+						if ( !oSettings.aoColumns[i].bVisible )
+						{
+							anTr[j].removeChild( jqChildren[i-iCorrector] );
+						}
+					}
 					
 					if ( oSettings.aoColumns[i].bVisible )
 					{
@@ -2884,7 +2934,9 @@
 			if ( oSettings.nTFoot !== null )
 			{
 				iCorrector = 0;
-				var nTfs = oSettings.nTFoot.getElementsByTagName('th');
+				anTr = oSettings.nTFoot.getElementsByTagName('tr');
+				var nTfs = anTr[0].getElementsByTagName('th');
+				
 				for ( i=0, iLen=nTfs.length ; i<iLen ; i++ )
 				{
 					if ( typeof oSettings.aoColumns[i] != 'undefined' )
@@ -2894,6 +2946,17 @@
 						if ( oSettings.oClasses.sFooterTH !== "" )
 						{
 							oSettings.aoColumns[i].nTf.className += " "+oSettings.oClasses.sFooterTH;
+						}
+						
+						/* Deal with any extra elements for this column from the footer */
+						for ( j=1, jLen=anTr.length ; j<jLen ; j++ )
+						{
+							jqChildren = $(anTr[j]).children();
+							oSettings.aoColumns[i].anTfExtra.push( jqChildren[i-iCorrector] );
+							if ( !oSettings.aoColumns[i].bVisible )
+							{
+								anTr[j].removeChild( jqChildren[i-iCorrector] );
+							}
 						}
 						
 						if ( !oSettings.aoColumns[i].bVisible )
@@ -6148,7 +6211,7 @@
 			{
 				for ( j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
 				{
-					if ( typeof aLayout[i][j] == 'object' )
+					if ( typeof aLayout[i][j] == 'object' && typeof aReturn[j] == 'undefined' )
 					{
 						aReturn[j] = aLayout[i][j];
 					}
