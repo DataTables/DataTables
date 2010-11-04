@@ -2842,6 +2842,11 @@
 				{
 					nTh = oSettings.aoColumns[i].nTh;
 					
+					if ( oSettings.aoColumns[i].sClass !== null )
+					{
+						$(nTh).addClass( oSettings.aoColumns[i].sClass );
+					}
+					
 					/* Cache and remove (if needed) any extra elements for this column in the header */
 					for ( j=1, jLen=anTr.length ; j<jLen ; j++ )
 					{
@@ -2878,13 +2883,13 @@
 					nTh = oSettings.aoColumns[i].nTh;
 					nTh.innerHTML = oSettings.aoColumns[i].sTitle;
 					
+					if ( oSettings.aoColumns[i].sClass !== null )
+					{
+						$(nTh).addClass( oSettings.aoColumns[i].sClass );
+					}
+					
 					if ( oSettings.aoColumns[i].bVisible )
 					{
-						if ( oSettings.aoColumns[i].sClass !== null )
-						{
-							nTh.className = oSettings.aoColumns[i].sClass;
-						}
-						
 						nTr.appendChild( nTh );
 					}
 				}
