@@ -929,7 +929,8 @@
 				"bCollapse": false,
 				"bInfinite": false,
 				"iLoadGap": 100,
-				"iBarWidth": 0
+				"iBarWidth": 0,
+				"bAutoCss": true
 			};
 			
 			/*
@@ -3583,10 +3584,14 @@
 			nScrollFoot.className = oClasses.sScrollFoot;
 			nScrollFootInner.className = oClasses.sScrollFootInner;
 			
-			nScrollHead.style.overflow = "hidden";
-			nScrollHead.style.position = "relative";
-			nScrollFoot.style.overflow = "hidden";
-			nScrollBody.style.overflow = "auto";
+			if ( oSettings.oScroll.bAutoCss )
+			{
+				nScrollHead.style.overflow = "hidden";
+				nScrollHead.style.position = "relative";
+				nScrollFoot.style.overflow = "hidden";
+				nScrollBody.style.overflow = "auto";
+			}
+			
 			nScrollHead.style.border = "0";
 			nScrollFoot.style.border = "0";
 			nScrollHeadInner.style.width = "150%"; /* will be overwritten */
@@ -6497,6 +6502,7 @@
 				_fnMap( oSettings.oScroll, oInit, "bScrollCollapse", "bCollapse" );
 				_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
 				_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
+				_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
 				_fnMap( oSettings, oInit, "asStripClasses" );
 				_fnMap( oSettings, oInit, "fnRowCallback" );
 				_fnMap( oSettings, oInit, "fnHeaderCallback" );
