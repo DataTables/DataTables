@@ -70,6 +70,10 @@ table.display thead th {
 	* cursor: hand;
 }
 
+div.dataTables_wrapper .ui-widget-header {
+	font-weight: normal;
+}
+
 
 /*
  * Sort arrow icon positioning
