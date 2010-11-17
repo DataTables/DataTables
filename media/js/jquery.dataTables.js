@@ -3009,7 +3009,7 @@
 			}
 			
 			/* If we are dealing with Ajax - do it here */
-			if ( oSettings.oFeatures.bServerSide && 
+			if ( !oSettings.bDestroying && oSettings.oFeatures.bServerSide && 
 			     !_fnAjaxUpdate( oSettings ) )
 			{
 				return;
