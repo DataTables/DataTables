@@ -18,15 +18,15 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
-		"Sorting on non-unique TH and second TH will sort",
+		"Sorting on non-unique TH and second TH will not sort",
 		function () { $('#example thead th:eq(6)').click(); },
 		function () { return $('#example tbody tr td:eq(4)').html() == "A"; }
 	);
 	
 	oTest.fnTest( 
-		"Sorting on non-unique TH and second TH will sort - reserve",
+		"Sorting on non-unique TH and second TH will not sort - reserve",
 		function () { $('#example thead th:eq(6)').click(); },
-		function () { return $('#example tbody tr td:eq(4)').html() == "X"; }
+		function () { return $('#example tbody tr td:eq(4)').html() == "A"; }
 	);
 	
 	oTest.fnTest( 
