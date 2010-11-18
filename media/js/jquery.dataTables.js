@@ -2222,11 +2222,17 @@
 		 */
 		this.fnAdjustColumnSizing = function ( bRedraw )
 		{
-			_fnAjustColumnSizing( _fnSettingsFromNode( this[_oExt.iApiIndex] ) );
+			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
+			_fnAjustColumnSizing( oSettings );
 			
 			if ( typeof bRedraw == 'undefined' || bRedraw )
 			{
 				this.fnDraw( false );
+			}
+			else if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
+			{
+				/* If not redrawing, but scrolling, we want to apply the new column sizes anyway */
+				this.oApi._fnScrollDraw(oSettings);
 			}
 		};
 		
