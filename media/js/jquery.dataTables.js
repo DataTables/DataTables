@@ -4328,12 +4328,14 @@
 		 */
 		function _fnSort ( oSettings, bApplyClasses )
 		{
-			var aaSort = [];
-			var oSort = _oExt.oSort;
-			var aoData = oSettings.aoData;
-			var iDataSort;
-			var iDataType;
-			var i, j, jLen;
+			var
+				iDataSort, iDataType,
+				i, iLen, j, jLen,
+				aaSort = [],
+			 	aiOrig = [],
+				oSort = _oExt.oSort,
+				aoData = oSettings.aoData,
+				aoColumns = oSettings.aoColumns;
 			
 			/* No sorting required if server-side or no sorting array */
 			if ( !oSettings.oFeatures.bServerSide && 
@@ -4366,109 +4368,51 @@
 					}
 				}
 				
-				/* DataTables offers two different methods for doing the 2D array sorting over multiple
-				 * columns. The first is to construct a function dynamically, and then evaluate and run
-				 * the function, while the second has no need for evalulation, but is a little bit slower.
-				 * This is used for environments which do not allow eval() for code execuation such as AIR
+				/* Create a value - key array of the current row positions such that we can use their
+				 * current position during the sort, if values match, in order to perform stable sorting
 				 */
-				if ( !window.runtime )
+				for ( i=0, iLen=oSettings.aiDisplayMaster.length ; i<iLen ; i++ )
 				{
-					/* Dynamically created sorting function. Based on the information that we have, we can
-					 * create a sorting function as if it were specifically written for this sort. Here we
-					 * want to build a function something like (for two column sorting):
-					 *  fnLocalSorting = function(a,b){
-					 *  	var iTest;
-					 *  	iTest = oSort['string-asc']('data11', 'data12');
-					 *  	if (iTest === 0)
-					 *  		iTest = oSort['numeric-desc']('data21', 'data22');
-					 *  		if (iTest === 0)
-					 *  			return oSort['numeric-desc'](1,2);
-					 *  	return iTest;
-					 *  }
-					 * So basically we have a test for each column, and if that column matches, test the
-					 * next one. If all columns match, then we use a numeric sort on the position the two
-					 * row have in the original data array in order to provide a stable sort. In order to
-					 * get the position for the numeric stablisation, we need to take a clone of the current
-					 * display array and then get the position of the sorting value from that during the
-					 * sort.
-					 *
-					 * Note that for use with the Closure compiler, we need to be very careful how we deal 
-					 * with this eval. Closure will rename all of our local variables, resutling in breakage
-					 * if the variables in the eval don't also reflect this. For this reason, we need to use
-					 * 'this' to store the variables we need in the eval, so we can control them. A little
-					 * nasty, but well worth it for using Closure.
-					 */
-					this.ClosureDataTables = {
-						"fn": function(){},
-						"data": aoData,
-						"sort": _oExt.oSort,
-						"master": oSettings.aiDisplayMaster.slice()
-					};
-					var sDynamicSort = "this.ClosureDataTables.fn = function(a,b){"+
-						"var iTest, oSort=this.ClosureDataTables.sort, "+
-						"aoData=this.ClosureDataTables.data, "+
-						"aiOrig=this.ClosureDataTables.master;";
-					
-					for ( i=0 ; i<aaSort.length-1 ; i++ )
+					aiOrig[ oSettings.aiDisplayMaster[i] ] = i;
+				}
+				
+				/* Do the sort - here we want multi-column sorting based on a given data source (column)
+				 * and sorting function (from oSort) in a certain direction. It's reasonably complex to
+				 * follow on it's own, but this is what we want (example two column sorting):
+				 *  fnLocalSorting = function(a,b){
+				 *  	var iTest;
+				 *  	iTest = oSort['string-asc']('data11', 'data12');
+				 *  	if (iTest !== 0)
+				 *  		return iTest;
+				 *    iTest = oSort['numeric-desc']('data21', 'data22');
+				 *    if (iTest !== 0)
+				 *  		return iTest;
+				 *  	return oSort['numeric-asc']( aiOrig[a], aiOrig[b] );
+				 *  }
+				 * Basically we have a test for each sorting column, if the data in that column is equal,
+				 * test the next column. If all columns match, then we use a numeric sort on the row 
+				 * positions in the original data array to provide a stable sort.
+				 */
+				var iSortLen = aaSort.length;
+				oSettings.aiDisplayMaster.sort( function ( a, b ) {
+					var iTest;
+					for ( i=0 ; i<iSortLen ; i++ )
 					{
-						iDataSort = oSettings.aoColumns[ aaSort[i][0] ].iDataSort;
-						iDataType = oSettings.aoColumns[ iDataSort ].sType;
-						sDynamicSort += "iTest = oSort['"+iDataType+"-"+aaSort[i][1]+"']"+
-							"( aoData[a]._aData["+iDataSort+"], aoData[b]._aData["+iDataSort+"] ); if ( iTest === 0 )";
-					}
-					
-					if ( aaSort.length > 0 )
-					{
-						iDataSort = oSettings.aoColumns[ aaSort[aaSort.length-1][0] ].iDataSort;
-						iDataType = oSettings.aoColumns[ iDataSort ].sType;
-						sDynamicSort += "iTest = oSort['"+iDataType+"-"+aaSort[aaSort.length-1][1]+"']"+
-							"( aoData[a]._aData["+iDataSort+"], aoData[b]._aData["+iDataSort+"] );"+
-							"if (iTest===0) "+
-								"return oSort['numeric-asc'](jQuery.inArray(a,aiOrig), jQuery.inArray(b,aiOrig)); "+
-							"return iTest;}";
+						iDataSort = aoColumns[ aaSort[i][0] ].iDataSort;
+						iDataType = aoColumns[ iDataSort ].sType;
+						iTest = oSort[ iDataType+"-"+aaSort[i][1] ](
+							aoData[a]._aData[iDataSort],
+							aoData[b]._aData[iDataSort]
+						);
 						
-						/* The eval has to be done to a variable for IE */
-						eval( sDynamicSort );
-						oSettings.aiDisplayMaster.sort( this.ClosureDataTables.fn );
-					}
-					this.ClosureDataTables = undefined;
-				}
-				else
-				{
-					/*
-					 * Non-eval() sorting (AIR and other environments which doesn't allow code in eval()
-					 * Note that for reasonable sized data sets this method is around 1.5 times slower than
-					 * the eval above (hence why it is not used all the time). Oddly enough, it is ever so
-					 * slightly faster for very small sets (presumably the eval has overhead).
-					 *   Single column (1083 records) - eval: 32mS   AIR: 38mS
-					 *   Two columns (1083 records) -   eval: 55mS   AIR: 66mS
-					 */
-					
-					/* Build a cached array so the sort doesn't have to process this stuff on every call */
-					var aAirSort = [];
-					var iLen = aaSort.length;
-					for ( i=0 ; i<iLen ; i++ )
-					{
-						iDataSort = oSettings.aoColumns[ aaSort[i][0] ].iDataSort;
-						aAirSort.push( [
-							iDataSort,
-							oSettings.aoColumns[ iDataSort ].sType+'-'+aaSort[i][1]
-						] );
-					}
-					
-					oSettings.aiDisplayMaster.sort( function (a,b) {
-						var iTest;
-						for ( var i=0 ; i<iLen ; i++ )
+						if ( iTest !== 0 )
 						{
-							iTest = oSort[ aAirSort[i][1] ]( aoData[a]._aData[aAirSort[i][0]], aoData[b]._aData[aAirSort[i][0]] );
-							if ( iTest !== 0 )
-							{
-								return iTest;
-							}
+							return iTest;
 						}
-						return 0;
-					} );
-				}
+					}
+					
+					return oSort['numeric-asc']( aiOrig[a], aiOrig[b] );
+				} );
 			}
 			
 			/* Alter the sorting classes to take account of the changes */
