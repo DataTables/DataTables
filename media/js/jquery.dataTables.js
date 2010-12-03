@@ -956,7 +956,7 @@
 			 */
 			this.oLanguage = {
 				"sProcessing": "Processing...",
-				"sLengthMenu": "Show _MENU_ entries",
+				"sLengthMenu": "Max. elements displayed:",
 				"sZeroRecords": "No matching records found",
 				"sEmptyTable": "No data available in table",
 				"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
@@ -3982,8 +3982,10 @@
 				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
 			}
 			nFilter.className = oSettings.oClasses.sFilter;
-			var sSpace = oSettings.oLanguage.sSearch==="" ? "" : " ";
-			nFilter.innerHTML = oSettings.oLanguage.sSearch+sSpace+'<input type="text" />';
+			/* Accessibility fix: add label to search input. */
+			var stdSearch = '<label class="dataTables_labels" for="'+oSettings.sTableId+'_searchbox">'+oSettings.oLanguage.sSearch+'</label>';
+			stdSearch += '<input type="text" id="'+oSettings.sTableId+'_searchbox" />';
+			nFilter.innerHTML = stdSearch;
 			
 			var jqFilter = $("input", nFilter);
 			jqFilter.val( oSettings.oPreviousSearch.sSearch.replace('"','&quot;') );
@@ -4942,8 +4944,12 @@
 			}
 			
 			/* This can be overruled by not using the _MENU_ var/macro in the language variable */
-			var sName = (oSettings.sTableId === "") ? "" : 'name="'+oSettings.sTableId+'_length"';
-			var sStdMenu = '<select size="1" '+sName+'>';
+			/* Accessibility fix: add a label to the length select. */
+			var sName = (oSettings.sTableId === "") ? "" : oSettings.sTableId+'_length_select';
+			var sStdMenu = '<label class="dataTables_labels" for="'+sName+'">'+oSettings.oLanguage.sLengthMenu+'</label>';
+			sStdMenu += '<select size="1" ';
+			sStdMenu += (sName === "") ? "" : 'name="'+sName+'" id="'+sName+'"';
+			sStdMenu += '>';
 			var i, iLen;
 			
 			if ( oSettings.aLengthMenu.length == 2 && typeof oSettings.aLengthMenu[0] == 'object' && 
@@ -4971,7 +4977,8 @@
 				nLength.setAttribute( 'id', oSettings.sTableId+'_length' );
 			}
 			nLength.className = oSettings.oClasses.sLength;
-			nLength.innerHTML = oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu );
+			/* Accessibility fix: add a label to the length select. */
+			nLength.innerHTML = sStdMenu;
 			
 			/*
 			 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,
