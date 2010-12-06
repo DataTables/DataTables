@@ -3983,8 +3983,9 @@
 			}
 			nFilter.className = oSettings.oClasses.sFilter;
 			/* Accessibility fix: add label to search input. */
-			var stdSearch = '<label class="dataTables_labels" for="'+oSettings.sTableId+'_searchbox">'+oSettings.oLanguage.sSearch+'</label>';
-			stdSearch += '<input type="text" id="'+oSettings.sTableId+'_searchbox" />';
+			var stdTmpId = oSettings.sTableId+'_searchbox_'+Math.floor(Math.random()*1000);
+			var stdSearch = '<label class="dataTables_labels" for="'+stdTmpId+'">'+oSettings.oLanguage.sSearch+'</label>';
+			stdSearch += '<input type="text" id="'+stdTmpId+'" />';
 			nFilter.innerHTML = stdSearch;
 			
 			var jqFilter = $("input", nFilter);
@@ -4945,10 +4946,11 @@
 			
 			/* This can be overruled by not using the _MENU_ var/macro in the language variable */
 			/* Accessibility fix: add a label to the length select. */
-			var sName = (oSettings.sTableId === "") ? "" : oSettings.sTableId+'_length_select';
-			var sStdMenu = '<label class="dataTables_labels" for="'+sName+'">'+oSettings.oLanguage.sLengthMenu+'</label>';
+			var sName = (oSettings.sTableId === "") ? "" : oSettings.sTableId+'_length';
+			var sStdTmpId = sName+'_select_'+Math.floor(Math.random()*1000);
+			var sStdMenu = '<label class="dataTables_labels" for="'+sStdTmpId+'">'+oSettings.oLanguage.sLengthMenu+'</label>';
 			sStdMenu += '<select size="1" ';
-			sStdMenu += (sName === "") ? "" : 'name="'+sName+'" id="'+sName+'"';
+			sStdMenu += (sName === "") ? "" : 'name="'+sName+'" id="'+sStdTmpId+'"';
 			sStdMenu += '>';
 			var i, iLen;
 			
