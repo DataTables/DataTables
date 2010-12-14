@@ -3165,7 +3165,7 @@
 			}
 			
 			/* Call all required callback functions for the end of a draw */
-			for ( i=0, iLen=oSettings.aoDrawCallback.length ; i<iLen ; i++ )
+			for ( i=oSettings.aoDrawCallback.length-1 ; i>=0 ; i-- )
 			{
 				oSettings.aoDrawCallback[i].fn.call( oSettings.oInstance, oSettings );
 			}
