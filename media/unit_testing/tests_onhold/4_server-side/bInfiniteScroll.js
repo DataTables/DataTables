@@ -71,8 +71,8 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnWaitTest( 
-		"Scroll to 240px adds another 10 rows",
-		function () { $('div.dataTables_scrollBody').scrollTop(240); },
+		"Scroll to 280px adds another 10 rows",
+		function () { $('div.dataTables_scrollBody').scrollTop(280); },
 		function () { return $('#example tbody tr').length == 30; }
 	);
 	
@@ -124,13 +124,13 @@ $(document).ready( function () {
 		function () { return $('#example tbody tr').length == 20; }
 	);
 	
-	oTest.fnTest( 
+	oTest.fnWaitTest( 
 		"Get nodes after filtering",
 		null,
 		function () { return $('#example tbody>tr').length == 20; }
 	);
 	
-	oTest.fnTest( 
+	oTest.fnWaitTest( 
 		"Get nodes function after filtering",
 		null,
 		function () { return $('#example').dataTable().fnGetNodes().length == 20; }
@@ -138,7 +138,10 @@ $(document).ready( function () {
 	
 	oTest.fnWaitTest( 
 		"Sorting will drop back to 10 rows",
-		function () { oTable.fnSort([[1,'asc']]) },
+		function () {
+			$('div.dataTables_scrollBody').scrollTop(0);
+			oTable.fnSort([[1,'asc']])
+		},
 		function () { return $('#example tbody tr').length == 10; }
 	);
 	
