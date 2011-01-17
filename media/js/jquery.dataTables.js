@@ -5405,7 +5405,7 @@
 				{
 					if ( oSettings.aoColumns[i].bVisible )
 					{
-						iWidth = $(oNodes[iCorrector]).width();
+						iWidth = $(oNodes[iCorrector]).outerWidth();
 						if ( iWidth !== null && iWidth > 0 )
 						{
 							oSettings.aoColumns[i].sWidth = _fnStringToCss( iWidth );
