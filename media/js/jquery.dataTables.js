@@ -2214,7 +2214,7 @@
 		};
 		
 		/*
-		 * Function: _fnAjustColumnSizing
+		 * Function: fnAjustColumnSizing
 		 * Purpose:  Update tale sizing based on content. This would most likely be used for scrolling
 		 *   and will typically need a redraw after it.
 		 * Returns:  -
