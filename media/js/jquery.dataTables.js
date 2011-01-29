@@ -6450,11 +6450,13 @@
 				return;
 			}
 			
-			/* Store 'this' in the settings object for later retrieval */
-			oSettings.oInstance = _that;
-			
 			/* Set the table node */
 			oSettings.nTable = this;
+			
+			/* Keep a reference to the 'this' instance for the table. Note that if this table is being
+			 * created with others, we retrieve a unique instance to ease API access.
+			 */
+			oSettings.oInstance = _that.length == 1 ? _that : $(this).dataTable();
 			
 			/* Bind the API functions to the settings, so we can perform actions whenever oSettings is
 			 * available
