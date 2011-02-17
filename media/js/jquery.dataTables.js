@@ -1762,7 +1762,7 @@
 			{
 				var iRow = (typeof mRow == 'object') ? 
 					_fnNodeToDataIndex(oSettings, mRow) : mRow;
-				return oSettings.aoData[iRow]._aData;
+				return ( (aRowData = oSettings.aoData[iRow]) ? aRowData._aData : null);
 			}
 			return _fnGetDataMaster( oSettings );
 		};
@@ -1782,7 +1782,7 @@
 			
 			if ( typeof iRow != 'undefined' )
 			{
-				return oSettings.aoData[iRow].nTr;
+				return ( (aRowData = oSettings.aoData[iRow]) ? aRowData.nTr : null );
 			}
 			return _fnGetTrNodes( oSettings );
 		};
