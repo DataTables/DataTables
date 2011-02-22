@@ -1873,6 +1873,10 @@
 					oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
 						sDisplay;
 				}
+				else
+				{
+					oSettings.aoData[iRow]._anHidden[iColumn].innerHTML = sDisplay;
+				}
 			}
 			else
 			{
@@ -1908,6 +1912,10 @@
 					{
 						oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
 							sDisplay;
+					}
+					else
+					{
+						oSettings.aoData[iRow]._anHidden[i].innerHTML = sDisplay;
 					}
 				}
 			}
