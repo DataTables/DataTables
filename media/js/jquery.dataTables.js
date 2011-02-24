@@ -3629,6 +3629,7 @@
 			}
 			
 			nScrollHead.style.border = "0";
+			nScrollHead.style.width = "100%";
 			nScrollFoot.style.border = "0";
 			nScrollHeadInner.style.width = "150%"; /* will be overwritten */
 			
@@ -3947,7 +3948,6 @@
 			var iOuterWidth = $(o.nTable).outerWidth();
 			nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
 			nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+o.oScroll.iBarWidth );
-			nScrollHeadInner.parentNode.style.width = _fnStringToCss( $(nScrollBody).width() );
 			
 			if ( o.nTFoot !== null )
 			{
