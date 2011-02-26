@@ -2139,7 +2139,7 @@
 			oSettings.bDestroying = true;
 			
 			/* Blitz all DT events */
-			$(oSettings.nTableWrapper).find('*').unbind('.DT');
+			$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
 			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
