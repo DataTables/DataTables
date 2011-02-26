@@ -318,7 +318,7 @@
 				nPaging.appendChild( nPrevious );
 				nPaging.appendChild( nNext );
 				
-				$(nPrevious).click( function() {
+				$(nPrevious).bind( 'click.DT', function() {
 					if ( oSettings.oApi._fnPageChange( oSettings, "previous" ) )
 					{
 						/* Only draw when the page has actually changed */
@@ -326,7 +326,7 @@
 					}
 				} );
 				
-				$(nNext).click( function() {
+				$(nNext).bind( 'click.DT', function() {
 					if ( oSettings.oApi._fnPageChange( oSettings, "next" ) )
 					{
 						fnCallbackDraw( oSettings );
@@ -334,8 +334,8 @@
 				} );
 				
 				/* Take the brutal approach to cancelling text selection */
-				$(nPrevious).bind( 'selectstart', function () { return false; } );
-				$(nNext).bind( 'selectstart', function () { return false; } );
+				$(nPrevious).bind( 'selectstart.DT', function () { return false; } );
+				$(nNext).bind( 'selectstart.DT', function () { return false; } );
 				
 				/* ID the first elements only */
 				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
@@ -425,28 +425,28 @@
 				nPaging.appendChild( nNext );
 				nPaging.appendChild( nLast );
 				
-				$(nFirst).click( function () {
+				$(nFirst).bind( 'click.DT', function () {
 					if ( oSettings.oApi._fnPageChange( oSettings, "first" ) )
 					{
 						fnCallbackDraw( oSettings );
 					}
 				} );
 				
-				$(nPrevious).click( function() {
+				$(nPrevious).bind( 'click.DT', function() {
 					if ( oSettings.oApi._fnPageChange( oSettings, "previous" ) )
 					{
 						fnCallbackDraw( oSettings );
 					}
 				} );
 				
-				$(nNext).click( function() {
+				$(nNext).bind( 'click.DT', function() {
 					if ( oSettings.oApi._fnPageChange( oSettings, "next" ) )
 					{
 						fnCallbackDraw( oSettings );
 					}
 				} );
 				
-				$(nLast).click( function() {
+				$(nLast).bind( 'click.DT', function() {
 					if ( oSettings.oApi._fnPageChange( oSettings, "last" ) )
 					{
 						fnCallbackDraw( oSettings );
@@ -455,8 +455,8 @@
 				
 				/* Take the brutal approach to cancelling text selection */
 				$('span', nPaging)
-					.bind( 'mousedown', function () { return false; } )
-					.bind( 'selectstart', function () { return false; } );
+					.bind( 'mousedown.DT', function () { return false; } )
+					.bind( 'selectstart.DT', function () { return false; } );
 				
 				/* ID the first elements only */
 				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
@@ -554,8 +554,8 @@
 					/* Build up the dynamic list forst - html and listeners */
 					var qjPaginateList = $('span:eq(2)', an[i]);
 					qjPaginateList.html( sList );
-					$('span', qjPaginateList).click( fnClick ).bind( 'mousedown', fnFalse )
-						.bind( 'selectstart', fnFalse );
+					$('span', qjPaginateList).bind( 'click.DT', fnClick ).bind( 'mousedown.DT', fnFalse )
+						.bind( 'selectstart.DT', fnFalse );
 					
 					/* Update the 'premanent botton's classes */
 					anButtons = an[i].getElementsByTagName('span');
@@ -2138,6 +2138,9 @@
 			/* Flag to note that the table is currently being destoryed - no action should be taken */
 			oSettings.bDestroying = true;
 			
+			/* Blitz all DT events */
+			$(oSettings.nTableWrapper).find('*').unbind('.DT');
+			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
@@ -2961,7 +2964,7 @@
 						_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
 						
 						/* Take the brutal approach to cancelling text selection in header */
-						$(oSettings.aoColumns[i].nTh).mousedown( fnNoSelect );
+						$(oSettings.aoColumns[i].nTh).bind( 'mousedown.DT', fnNoSelect );
 					}
 					else
 					{
@@ -4015,7 +4018,7 @@
 			
 			var jqFilter = $("input", nFilter);
 			jqFilter.val( oSettings.oPreviousSearch.sSearch.replace('"','&quot;') );
-			jqFilter.keyup( function(e) {
+			jqFilter.bind( 'keyup.DT', function(e) {
 				/* Update all other filter input elements for the new display */
 				var n = oSettings.aanFeatures.f;
 				for ( var i=0, iLen=n.length ; i<iLen ; i++ )
@@ -4037,7 +4040,7 @@
 				}
 			} );
 			
-			jqFilter.keypress( function(e) {
+			jqFilter.bind( 'keypress.DT', function(e) {
 				/* Prevent default */
 				if ( e.keyCode == 13 )
 				{
@@ -4478,7 +4481,7 @@
 		 */
 		function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		{
-			$(nNode).click( function (e) {
+			$(nNode).bind( 'click.DT', function (e) {
 				/* If the column is not sortable - don't to anything */
 				if ( oSettings.aoColumns[iDataIndex].bSortable === false )
 				{
@@ -5013,7 +5016,7 @@
 			 */
 			$('select option[value="'+oSettings._iDisplayLength+'"]',nLength).attr("selected",true);
 			
-			$('select', nLength).change( function(e) {
+			$('select', nLength).bind( 'change.DT', function(e) {
 				var iVal = $(this).val();
 				
 				/* Update all other length options for the new display */
