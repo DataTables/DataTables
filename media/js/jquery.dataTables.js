@@ -3870,6 +3870,7 @@
 					oStyle.paddingBottom = "0";
 					oStyle.borderTopWidth = "0";
 					oStyle.borderBottomWidth = "0";
+					oStyle.height = 0;
 					
 					iWidth = $(nSizer).width();
 					nToSize.style.width = _fnStringToCss( iWidth );
