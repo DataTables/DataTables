@@ -67,16 +67,16 @@
 				
 				/* Get the tests dynamically from the 'tests' directory, and their templates */
 				$aFiles = array();
-				fnReadDir( &$aFiles, "tests" );
+				fnReadDir( $aFiles, "tests" );
 				
 				for ( $i=0 ; $i<count($aFiles) ; $i++ )
 				{
 					$sTemplate;
 					$fp = fopen( $aFiles[$i], "r" );
-					fscanf( $fp, "// DATA_TEMPLATE: %s", &$sTemplate );
+					fscanf( $fp, "// DATA_TEMPLATE: %s", $sTemplate );
 					fclose( $fp );
 					
-					$aPath = split('/', $aFiles[$i]);
+					$aPath = explode('/', $aFiles[$i]);
 					
 					echo '{ '.
 						'"sTemplate": "'.$sTemplate.'", '.
