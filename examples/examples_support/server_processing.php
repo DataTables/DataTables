@@ -53,6 +53,7 @@
 	/*
 	 * Ordering
 	 */
+	$sOrder = "";
 	if ( isset( $_GET['iSortCol_0'] ) )
 	{
 		$sOrder = "ORDER BY  ";
@@ -80,7 +81,7 @@
 	 * on very large tables, and MySQL's regex functionality is very limited
 	 */
 	$sWhere = "";
-	if ( $_GET['sSearch'] != "" )
+	if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 	{
 		$sWhere = "WHERE (";
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
@@ -94,7 +95,7 @@
 	/* Individual column filtering */
 	for ( $i=0 ; $i<count($aColumns) ; $i++ )
 	{
-		if ( $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' )
+		if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' )
 		{
 			if ( $sWhere == "" )
 			{
