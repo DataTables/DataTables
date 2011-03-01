@@ -19,7 +19,7 @@
 		<script type="text/javascript" language="javascript" src="../../js/jquery.dataTables.js"></script>
 		<script type="text/javascript" language="javascript" src="../unit_test.js"></script>
 		<?php
-			$aScripts = split( ":", $_GET['scripts'] );
+			$aScripts = explode( ":", $_GET['scripts'] );
 			for ( $i=0 ; $i<count($aScripts) ; $i++ )
 			{
 				echo '<script type="text/javascript" language="javascript" src="../'.$aScripts[$i].'?rand='.rand().'"></script>'."\n";

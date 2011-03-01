@@ -24,7 +24,7 @@
 			} );
 		</script>
 		<?php
-			$aScripts = split( ":", $_GET['scripts'] );
+			$aScripts = explode( ":", $_GET['scripts'] );
 			for ( $i=0 ; $i<count($aScripts) ; $i++ )
 			{
 				echo '<script type="text/javascript" language="javascript" src="../'.$aScripts[$i].'?rand='.rand().'"></script>'."\n";
