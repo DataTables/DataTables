@@ -6648,7 +6648,7 @@
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var bStripeRemove = false;
-			var anRows = $('tbody>tr', this);
+			var anRows = $('>tbody>tr', this);
 			for ( i=0, iLen=oSettings.asStripClasses.length ; i<iLen ; i++ )
 			{
 				if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripClasses[i]) )
