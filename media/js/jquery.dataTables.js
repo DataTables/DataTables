@@ -1160,6 +1160,14 @@
 			this.nTableWrapper = null;
 			
 			/*
+			 * Variable: bDeferLoading
+			 * Purpose:  Indicate if when using server-side processing the loading of data 
+			 *           should be defered until the second draw
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.bDeferLoading = false;
+			
+			/*
 			 * Variable: bInitialised
 			 * Purpose:  Indicate if all required information has been read in
 			 * Scope:    jQuery.dataTable.classSettings
@@ -2711,7 +2719,7 @@
 			 * Add the data object for the whole table - storing the tr node. Note - no point in getting
 			 * DOM based data if we are going to go and replace it with Ajax source data.
 			 */
-			if ( oSettings.sAjaxSource === null )
+			if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
 			{
 				nTrs = oSettings.nTBody.childNodes;
 				for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
@@ -3045,15 +3053,19 @@
 				_fnCalculateEnd( oSettings );
 			}
 			
-			/* If we are dealing with Ajax - do it here */
-			if ( !oSettings.bDestroying && oSettings.oFeatures.bServerSide && 
-			     !_fnAjaxUpdate( oSettings ) )
+			/* Server-side processing draw intercept */
+			if ( oSettings.bDeferLoading )
 			{
-				return;
+				oSettings.bDeferLoading = false;
+				oSettings.iDraw++;
 			}
 			else if ( !oSettings.oFeatures.bServerSide )
 			{
 				oSettings.iDraw++;
+			}
+			else if ( !oSettings.bDestroying && !_fnAjaxUpdate( oSettings ) )
+			{
+				return;
 			}
 			
 			if ( oSettings.aiDisplay.length !== 0 )
@@ -6585,6 +6597,13 @@
 						"fn": _fnSaveState,
 						"sName": "state_save"
 					} );
+				}
+
+				if ( typeof oInit.iDeferLoading != 'undefined' )
+				{
+					oSettings.bDeferLoading = true;
+					oSettings._iRecordsTotal = oInit.iDeferLoading;
+					oSettings._iRecordsDisplay = oInit.iDeferLoading;
 				}
 				
 				if ( typeof oInit.aaData != 'undefined' )
