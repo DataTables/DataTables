@@ -1162,7 +1162,7 @@
 			/*
 			 * Variable: bDeferLoading
 			 * Purpose:  Indicate if when using server-side processing the loading of data 
-			 *           should be defered until the second draw
+			 *           should be deferred until the second draw
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
 			this.bDeferLoading = false;
