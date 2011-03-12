@@ -2614,7 +2614,10 @@
 				"_anHidden": [],
 				"_sRowStripe": ''
 			} );
-			
+
+			if(typeof oSettings.aoAdditional == 'object')
+				jQuery(oSettings.aoData[iThisIndex].nTr).data('aoAdditional', oSettings.aoAdditional[iThisIndex]);
+
 			/* Create the cells */
 			var nTd, sThisType;
 			for ( var i=0 ; i<aData.length ; i++ )
@@ -3349,7 +3352,9 @@
 			}
 			oSettings._iRecordsTotal = json.iTotalRecords;
 			oSettings._iRecordsDisplay = json.iTotalDisplayRecords;
-			
+
+			oSettings.aoAdditional = json.aoAdditional;
+
 			/* Determine if reordering is required */
 			var sOrdering = _fnColumnOrdering(oSettings);
 			var bReOrder = (typeof json.sColumns != 'undefined' && sOrdering !== "" && json.sColumns != sOrdering );
