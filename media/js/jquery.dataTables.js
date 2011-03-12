@@ -5885,8 +5885,8 @@
 			var i, iLen, sTmp;
 			var sValue = "{";
 			sValue += '"iCreate":'+ new Date().getTime()+',';
-			sValue += '"iStart":'+ oSettings._iDisplayStart+',';
-			sValue += '"iEnd":'+ oSettings._iDisplayEnd+',';
+			sValue += '"iStart":'+ (oSettings.oScroll.bInfinite ? 0 : oSettings._iDisplayStart)+',';
+			sValue += '"iEnd":'+ (oSettings.oScroll.bInfinite ? oSettings._iDisplayLength : oSettings._iDisplayEnd)+',';
 			sValue += '"iLength":'+ oSettings._iDisplayLength+',';
 			sValue += '"sFilter":"'+ encodeURIComponent(oSettings.oPreviousSearch.sSearch)+'",';
 			sValue += '"sFilterEsc":'+ !oSettings.oPreviousSearch.bRegex+',';
