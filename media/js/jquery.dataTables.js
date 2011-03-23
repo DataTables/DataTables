@@ -2313,7 +2313,7 @@
 		 */
 		function _fnInitalise ( oSettings )
 		{
-			var i, iLen, bDefer=oSettings.bDeferLoading;
+			var i, iLen, bDefer=oSettings.bDeferLoading, iAjaxStart=oSettings.iInitDisplayStart;
 			
 			/* Ensure that the table data is fully initialised */
 			if ( oSettings.bInitialised === false )
@@ -2373,7 +2373,7 @@
 					/* Reset the init display for cookie saving. We've already done a filter, and
 					 * therefore cleared it before. So we need to make it appear 'fresh'
 					 */
-					oSettings.iInitDisplayStart = oSettings._iDisplayStart;
+					oSettings.iInitDisplayStart = iAjaxStart;
 					
 					if ( oSettings.oFeatures.bSort )
 					{
