@@ -26,7 +26,7 @@
  * building the dynamic multi-column sort functions.
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnGatherData,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnGatherData,_fnBuildHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -272,15 +272,15 @@
 		/*
 		 * Variable: two_button
 		 * Purpose:  Standard two button (forward/back) pagination
-	 	 * Scope:    jQuery.fn.dataTableExt.oPagination
+		 * Scope:    jQuery.fn.dataTableExt.oPagination
 		 */
 		"two_button": {
 			/*
 			 * Function: oPagination.two_button.fnInit
 			 * Purpose:  Initalise dom elements required for pagination with forward/back buttons only
 			 * Returns:  -
-	 		 * Inputs:   object:oSettings - dataTables settings object
-	     *           node:nPaging - the DIV which contains this pagination control
+			 * Inputs:   object:oSettings - dataTables settings object
+			 *           node:nPaging - the DIV which contains this pagination control
 			 *           function:fnCallbackDraw - draw function which must be called on update
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
@@ -350,7 +350,7 @@
 			 * Function: oPagination.two_button.fnUpdate
 			 * Purpose:  Update the two button pagination at the end of the draw
 			 * Returns:  -
-	 		 * Inputs:   object:oSettings - dataTables settings object
+			 * Inputs:   object:oSettings - dataTables settings object
 			 *           function:fnCallbackDraw - draw function to call on page change
 			 */
 			"fnUpdate": function ( oSettings, fnCallbackDraw )
@@ -382,22 +382,22 @@
 		/*
 		 * Variable: iFullNumbersShowPages
 		 * Purpose:  Change the number of pages which can be seen
-	 	 * Scope:    jQuery.fn.dataTableExt.oPagination
+		 * Scope:    jQuery.fn.dataTableExt.oPagination
 		 */
 		"iFullNumbersShowPages": 5,
 		
 		/*
 		 * Variable: full_numbers
 		 * Purpose:  Full numbers pagination
-	 	 * Scope:    jQuery.fn.dataTableExt.oPagination
+		 * Scope:    jQuery.fn.dataTableExt.oPagination
 		 */
 		"full_numbers": {
 			/*
 			 * Function: oPagination.full_numbers.fnInit
 			 * Purpose:  Initalise dom elements required for pagination with a list of the pages
 			 * Returns:  -
-	 		 * Inputs:   object:oSettings - dataTables settings object
-	     *           node:nPaging - the DIV which contains this pagination control
+			 * Inputs:   object:oSettings - dataTables settings object
+			 *           node:nPaging - the DIV which contains this pagination control
 			 *           function:fnCallbackDraw - draw function which must be called on update
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
@@ -473,7 +473,7 @@
 			 * Function: oPagination.full_numbers.fnUpdate
 			 * Purpose:  Update the list of page buttons shows
 			 * Returns:  -
-	 		 * Inputs:   object:oSettings - dataTables settings object
+			 * Inputs:   object:oSettings - dataTables settings object
 			 *           function:fnCallbackDraw - draw function to call on page change
 			 */
 			"fnUpdate": function ( oSettings, fnCallbackDraw )
@@ -646,7 +646,7 @@
 			
 			if ( isNaN(x) || x==="" )
 			{
-    		x = Date.parse( "01/01/1970 00:00:00" );
+			x = Date.parse( "01/01/1970 00:00:00" );
 			}
 			if ( isNaN(y) || y==="" )
 			{
@@ -663,7 +663,7 @@
 			
 			if ( isNaN(x) || x==="" )
 			{
-    		x = Date.parse( "01/01/1970 00:00:00" );
+			x = Date.parse( "01/01/1970 00:00:00" );
 			}
 			if ( isNaN(y) || y==="" )
 			{
@@ -1007,6 +1007,20 @@
 			 * Scope:    jQuery.dataTable.classSettings 
 			 */
 			this.aoColumns = [];
+							
+			/*
+			 * Variable: aoHeader
+			 * Purpose:  Store information about the table's header
+			 * Scope:    jQuery.dataTable.classSettings 
+			 */
+			this.aoHeader = [];
+							
+			/*
+			 * Variable: aoFooter
+			 * Purpose:  Store information about the table's footer
+			 * Scope:    jQuery.dataTable.classSettings 
+			 */
+			this.aoFooter = [];
 			
 			/*
 			 * Variable: iNextId
@@ -1388,7 +1402,7 @@
 			this.bJUI = false;
 			
 			/*
-			 * Variable: bJUI
+			 * Variable: oClasses
 			 * Purpose:  Should we add the markup needed for jQuery UI theming?
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
@@ -1401,6 +1415,15 @@
 			 */
 			this.bFiltered = false;
 			this.bSorted = false;
+			
+			/*
+			 * Variable: bSortCellsTop
+			 * Purpose:  Indicate that if multiple rows are in the header and there is more than one
+			 *           unique cell per column, if the top one (true) or bottom one (false) should
+			 *           be used for sorting / title by DataTables
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.bSortCellsTop = false;
 			
 			/*
 			 * Variable: oInit
@@ -1972,16 +1995,6 @@
 				return;
 			}
 			
-			var nTrHead = $('>tr', oSettings.nTHead)[0];
-			var nTrFoot = $('>tr', oSettings.nTFoot)[0];
-			var anTheadTh = [];
-			var anTfootTh = [];
-			for ( i=0 ; i<iColumns ; i++ )
-			{
-				anTheadTh.push( oSettings.aoColumns[i].nTh );
-				anTfootTh.push( oSettings.aoColumns[i].nTf );
-			}
-			
 			/* Show the column */
 			if ( bShow )
 			{
@@ -1997,23 +2010,6 @@
 				/* Need to decide if we should use appendChild or insertBefore */
 				if ( iInsert >= _fnVisbleColumns( oSettings ) )
 				{
-					nTrHead.appendChild( anTheadTh[iCol] );
-					anTrs = $('>tr', oSettings.nTHead);
-					for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
-					{
-						anTrs[i].appendChild( oSettings.aoColumns[iCol].anThExtra[i-1] );
-					}	
-					
-					if ( nTrFoot )
-					{
-						nTrFoot.appendChild( anTfootTh[iCol] );
-						anTrs = $('>tr', oSettings.nTFoot);
-						for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
-						{
-							anTrs[i].appendChild( oSettings.aoColumns[iCol].anTfExtra[i-1] );
-						}	
-					}
-					
 					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 					{
 						nTd = oSettings.aoData[i]._anHidden[iCol];
@@ -2033,25 +2029,6 @@
 						}
 					}
 					
-					nTrHead.insertBefore( anTheadTh[iCol], nTrHead.getElementsByTagName('th')[iBefore] );
-					anTrs = $('>tr', oSettings.nTHead);
-					for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
-					{
-						jqChildren = $(anTrs[i]).children();
-						anTrs[i].insertBefore( oSettings.aoColumns[iCol].anThExtra[i-1], jqChildren[iBefore] );
-					}	
-					
-					if ( nTrFoot )
-					{
-						nTrFoot.insertBefore( anTfootTh[iCol], nTrFoot.getElementsByTagName('th')[iBefore] );
-						anTrs = $('>tr', oSettings.nTFoot);
-						for ( i=1, iLen=anTrs.length ; i<iLen ; i++ )
-						{
-							jqChildren = $(anTrs[i]).children();
-							anTrs[i].insertBefore( oSettings.aoColumns[iCol].anTfExtra[i-1], jqChildren[iBefore] );
-						}	
-					}
-					
 					anTds = _fnGetTdNodes( oSettings );
 					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 					{
@@ -2060,29 +2037,10 @@
 							oSettings.aoData[i].nTr)[0] );
 					}
 				}
-				
-				oSettings.aoColumns[iCol].bVisible = true;
 			}
 			else
 			{
 				/* Remove a column from display */
-				nTrHead.removeChild( anTheadTh[iCol] );
-				for ( i=0, iLen=oSettings.aoColumns[iCol].anThExtra.length ; i<iLen ; i++ )
-				{
-					nCell = oSettings.aoColumns[iCol].anThExtra[i];
-					nCell.parentNode.removeChild( nCell );
-				}
-				
-				if ( nTrFoot )
-				{
-					nTrFoot.removeChild( anTfootTh[iCol] );
-					for ( i=0, iLen=oSettings.aoColumns[iCol].anTfExtra.length ; i<iLen ; i++ )
-					{
-						nCell = oSettings.aoColumns[iCol].anTfExtra[i];
-						nCell.parentNode.removeChild( nCell );
-					}
-				}
-				
 				anTds = _fnGetTdNodes( oSettings );
 				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 				{
@@ -2090,8 +2048,16 @@
 					oSettings.aoData[i]._anHidden[iCol] = nTd;
 					nTd.parentNode.removeChild( nTd );
 				}
-				
-				oSettings.aoColumns[iCol].bVisible = false;
+			}
+
+			/* Clear to set the visible flag */
+			oSettings.aoColumns[iCol].bVisible = bShow;
+
+			/* Redraw the header and footer based on the new column visibility */
+			_fnDrawHead( oSettings, oSettings.aoHeader, oSettings.nTHead );
+			if ( oSettings.nTFoot )
+			{
+				_fnDrawHead( oSettings, oSettings.aoFooter, oSettings.nTFoot );
 			}
 			
 			/* If there are any 'open' rows, then we need to alter the colspan for this col change */
@@ -2325,9 +2291,14 @@
 			/* Show the display HTML options */
 			_fnAddOptionsHtml( oSettings );
 			
-			/* Draw the headers for the table */
-			_fnDrawHead( oSettings );
-			
+			/* Build and draw the header / footer for the table */
+			_fnBuildHead( oSettings );
+			_fnDrawHead( oSettings, oSettings.aoHeader, oSettings.nTHead );
+			if ( oSettings.nTFoot )
+			{
+				_fnDrawHead( oSettings, oSettings.aoFooter, oSettings.nTFoot );
+			}
+
 			/* Okay to show that something is going on now */
 			_fnProcessingDisplay( oSettings, true );
 			
@@ -2492,10 +2463,7 @@
 				"bUseRendered": true,
 				"iDataSort": oSettings.aoColumns.length-1,
 				"sSortDataType": 'std',
-				"nTh": nTh ? nTh : document.createElement('th'),
-				"nTf": null,
-				"anThExtra": [],
-				"anTfExtra": []
+				"nTh": nTh ? nTh : document.createElement('th')
 			};
 			
 			var iCol = oSettings.aoColumns.length-1;
@@ -2860,19 +2828,13 @@
 			}
 		}
 		
-		
-		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Drawing functions
-		 */
-		
 		/*
-		 * Function: _fnDrawHead
+		 * Function: _fnBuildHead
 		 * Purpose:  Create the HTML header for the table
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
 		 */
-		function _fnDrawHead( oSettings )
+		function _fnBuildHead( oSettings )
 		{
 			var i, nTh, iLen, j, jLen;
 			var anTr = oSettings.nTHead.getElementsByTagName('tr');
@@ -2893,29 +2855,10 @@
 						$(nTh).addClass( oSettings.aoColumns[i].sClass );
 					}
 					
-					/* Cache and remove (if needed) any extra elements for this column in the header */
-					for ( j=1, jLen=anTr.length ; j<jLen ; j++ )
+					/* Set the title of the column if it is user defined (not what was auto detected) */
+					if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
 					{
-						jqChildren = $(anTr[j]).children();
-						oSettings.aoColumns[i].anThExtra.push( jqChildren[i-iCorrector] );
-						if ( !oSettings.aoColumns[i].bVisible )
-						{
-							anTr[j].removeChild( jqChildren[i-iCorrector] );
-						}
-					}
-					
-					if ( oSettings.aoColumns[i].bVisible )
-					{
-						/* Set the title of the column if it is user defined (not what was auto detected) */
-						if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
-						{
-							nTh.innerHTML = oSettings.aoColumns[i].sTitle;
-						}
-					}
-					else
-					{
-						nTh.parentNode.removeChild( nTh );
-						iCorrector++;
+						nTh.innerHTML = oSettings.aoColumns[i].sTitle;
 					}
 				}
 			}
@@ -2934,12 +2877,10 @@
 						$(nTh).addClass( oSettings.aoColumns[i].sClass );
 					}
 					
-					if ( oSettings.aoColumns[i].bVisible )
-					{
-						nTr.appendChild( nTh );
-					}
+					nTr.appendChild( nTh );
 				}
 				$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
+				_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 			}
 			
 			/* Add the extra markup needed by jQuery UI's themes */
@@ -2982,40 +2923,99 @@
 				}
 			}
 			
-			/* Cache the footer elements */
-			if ( oSettings.nTFoot !== null )
+			/* Deal with the footer - add classes if required */
+			if ( oSettings.oClasses.sFooterTH !== "" )
 			{
-				iCorrector = 0;
-				anTr = oSettings.nTFoot.getElementsByTagName('tr');
-				var nTfs = anTr[0].getElementsByTagName('th');
-				
-				for ( i=0, iLen=nTfs.length ; i<iLen ; i++ )
+				$('>tr>th', oSettings.nTFoot).addClass( oSettings.oClasses.sFooterTH );
+			}
+		}
+
+		
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 * Section - Drawing functions
+		 */
+		
+		/*
+		 * Function: _fnDrawHead
+		 * Purpose:  Draw the header (or footer) element based on the column visibility states. The
+		 *           methodology here is to use the layout array from _fnDetectHeader, modified for
+		 *           the instantaneous column visibility, to construct the new layout. The grid is
+		 *           traversed over cell at a time in a rows x columns grid fashion, although each 
+		 *           cell insert can cover multiple elements in the grid - which is tracks using the
+		 *           aApplied array. Cell inserts in the grid will only occur where there isn't
+		 *           already a cell in that position.
+		 * Returns:  -
+		 * Inputs:   object:oSettings - dataTables settings object
+		 *           array objects:aoSource - Layout array from _fnDetectHeader
+		 *           node:nTarget - The header or footer element to layout
+		 */
+		function _fnDrawHead( oSettings, aoSource, nTarget )
+		{
+			var i, iLen;
+			var aoLocal = [];
+			var aApplied = [];
+			var iColumns = oSettings.aoColumns.length;
+			var iRowspan, iColspan;
+
+			/* Make a copy of the master layout array, but without the visible columns in it */
+			for ( i=0, iLen=aoSource.length ; i<iLen ; i++ )
+			{
+				aoLocal[i] = aoSource[i].slice();
+				aoLocal[i].nTr = aoSource[i].nTr;
+
+				/* Remove any columns which are currently hidden */
+				for ( j=iColumns-1 ; j>=0 ; j-- )
 				{
-					if ( typeof oSettings.aoColumns[i] != 'undefined' )
+					if ( !oSettings.aoColumns[j].bVisible )
 					{
-						oSettings.aoColumns[i].nTf = nTfs[i-iCorrector];
-						
-						if ( oSettings.oClasses.sFooterTH !== "" )
+						aoLocal[i].splice( j, 1 );
+					}
+				}
+
+				/* Prep the applied array - it needs an element for each row */
+				aApplied.push( [] );
+			}
+
+			for ( i=0, iLen=aoLocal.length ; i<iLen ; i++ )
+			{
+				/* All cells are going to be replaced, so empty out the row */
+				$(aoLocal[i].nTr).empty();
+				for ( j=0, jLen=aoLocal[i].length ; j<jLen ; j++ )
+				{
+					iRowspan = 1;
+					iColspan = 1;
+
+					/* Check to see if there is already a cell (row/colspan) covering our target
+					 * insert point. If there is, then there is nothing to do.
+					 */
+					if ( typeof aApplied[i][j] == 'undefined' )
+					{
+						aoLocal[i].nTr.appendChild( aoLocal[i][j].cell );
+						aApplied[i][j] = 1;
+
+						/* Expand the cell to cover as many rows as needed */
+						while ( typeof aoLocal[i+iRowspan] != 'undefined' &&
+						        aoLocal[i][j].cell == aoLocal[i+iRowspan][j].cell )
 						{
-							oSettings.aoColumns[i].nTf.className += " "+oSettings.oClasses.sFooterTH;
+							aApplied[i+iRowspan][j] = 1;
+							iRowspan++;
 						}
-						
-						/* Deal with any extra elements for this column from the footer */
-						for ( j=1, jLen=anTr.length ; j<jLen ; j++ )
+
+						/* Expand the cell to cover as many columns as needed */
+						while ( typeof aoLocal[i][j+iColspan] != 'undefined' &&
+						        aoLocal[i][j].cell == aoLocal[i][j+iColspan].cell )
 						{
-							jqChildren = $(anTr[j]).children();
-							oSettings.aoColumns[i].anTfExtra.push( jqChildren[i-iCorrector] );
-							if ( !oSettings.aoColumns[i].bVisible )
+							/* Must update the applied array over the rows for the columns */
+							for ( var k=0 ; k<iRowspan ; k++ )
 							{
-								anTr[j].removeChild( jqChildren[i-iCorrector] );
+								aApplied[i+k][j+iColspan] = 1;
 							}
+							iColspan++;
 						}
-						
-						if ( !oSettings.aoColumns[i].bVisible )
-						{
-							nTfs[i-iCorrector].parentNode.removeChild( nTfs[i-iCorrector] );
-							iCorrector++;
-						}
+
+						/* Do the actual expansion in the DOM */
+						aoLocal[i][j].cell.setAttribute('rowspan', iRowspan);
+						aoLocal[i][j].cell.setAttribute('colspan', iColspan);
 					}
 				}
 			}
@@ -3613,7 +3613,7 @@
 			 	nTfoot = oSettings.nTable.getElementsByTagName('tfoot').length === 0 ? null : 
 					oSettings.nTable.getElementsByTagName('tfoot')[0],
 				oClasses = (typeof oInit.bJQueryUI != 'undefined' && oInit.bJQueryUI) ?
-			 		_oExt.oJUIClasses : _oExt.oStdClasses;
+					_oExt.oJUIClasses : _oExt.oStdClasses;
 			
 			nScrollHead.appendChild( nScrollHeadInner );
 			nScrollFoot.appendChild( nScrollFootInner );
@@ -4225,7 +4225,7 @@
 				{
 			  	/* Using old search array - refine it - do it this way for speed
 			  	 * Don't have to search the whole master array again
-			 		 */
+					 */
 			  	var iIndexCorrector = 0;
 			  	
 			  	/* Search the current results */
@@ -4501,7 +4501,7 @@
 				
 				/*
 				 * This is a little bit odd I admit... I declare a temporary function inside the scope of
-				 * _fnDrawHead and the click handler in order that the code presented here can be used 
+				 * _fnBuildHead and the click handler in order that the code presented here can be used 
 				 * twice - once for when bProcessing is enabled, and another time for when it is 
 				 * disabled, as we need to perform slightly different actions.
 				 *   Basically the issue here is that the Javascript engine in modern browsers don't 
@@ -4619,7 +4619,7 @@
 				if ( oSettings.aoColumns[i].bSortable )
 				{
 					$(oSettings.aoColumns[i].nTh).removeClass( oClasses.sSortAsc +" "+ oClasses.sSortDesc +
-				 		" "+ oSettings.aoColumns[i].sSortingClass );
+						" "+ oSettings.aoColumns[i].sSortingClass );
 				}
 			}
 			
@@ -6130,92 +6130,95 @@
 		}
 		
 		/*
-		 * Function: _fnGetUniqueThs
-		 * Purpose:  Get an array of unique th elements, one for each column
-		 * Returns:  array node:aReturn - list of unique ths
-		 * Inputs:   node:nThead - The thead element for the table
+		 * Function: _fnDetectHeader
+		 * Purpose:  Use the DOM source to create up an array of header cells. The idea here is to
+		 *           create a layout grid (array) of rows x columns, which contains a reference
+		 *           to the cell that that point in the grid (regardless of col/rowspan), such that
+		 *           any column / row could be removed and the new grid constructed
+		 * Returns:  void
+		 * Outputs:  array object:aLayout - Array to store the calculated layout in
+		 * Inputs:   node:nThead - The header/footer element for the table
 		 */
-		function _fnGetUniqueThs ( nThead )
+		function _fnDetectHeader ( aLayout, nThead )
 		{
 			var nTrs = nThead.getElementsByTagName('tr');
-			
-			/* Nice simple case */
-			if ( nTrs.length == 1 )
-			{
-				return nTrs[0].getElementsByTagName('th');
-			}
-			
-			/* Otherwise we need to figure out the layout array to get the nodes */
-			var aLayout = [], aReturn = [];
-			var ROWSPAN = 2, COLSPAN = 3, TDELEM = 4;
-			var i, j, k, iLen, jLen, iColumnShifted;
+			var nCell;
+			var i, j, k, l, iLen, jLen, iColShifted;
 			var fnShiftCol = function ( a, i, j ) {
 				while ( typeof a[i][j] != 'undefined' ) {
 					j++;
 				}
 				return j;
 			};
-			var fnAddRow = function ( i ) {
-				if ( typeof aLayout[i] == 'undefined' ) {
-					aLayout[i] = [];
-				}
-			};
+
+			aLayout.splice( 0, aLayout.length );
+			
+			/* We know how many rows there are in the layout - so prep it */
+			for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
+			{
+				aLayout.push( [] );
+			}
 			
 			/* Calculate a layout array */
 			for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 			{
-				fnAddRow( i );
 				var iColumn = 0;
-				var nTds = [];
 				
+				/* For every cell in the row... */
 				for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
 				{
-					if ( nTrs[i].childNodes[j].nodeName.toUpperCase() == "TD" ||
-					     nTrs[i].childNodes[j].nodeName.toUpperCase() == "TH" )
+					nCell = nTrs[i].childNodes[j];
+
+					if ( nCell.nodeName.toUpperCase() == "TD" ||
+					     nCell.nodeName.toUpperCase() == "TH" )
 					{
-						nTds.push( nTrs[i].childNodes[j] );
-					}
-				}
-				
-				for ( j=0, jLen=nTds.length ; j<jLen ; j++ )
-				{
-					var iColspan = nTds[j].getAttribute('colspan') * 1;
-					var iRowspan = nTds[j].getAttribute('rowspan') * 1;
-					
-					if ( !iColspan || iColspan===0 || iColspan===1 )
-					{
-						iColumnShifted = fnShiftCol( aLayout, i, iColumn );
-						aLayout[i][iColumnShifted] = (nTds[j].nodeName.toUpperCase()=="TD") ? TDELEM : nTds[j];
-						if ( iRowspan || iRowspan===0 || iRowspan===1 )
+						/* Get the col and rowspan attributes from the DOM and sanitise them */
+						var iColspan = nCell.getAttribute('colspan') * 1;
+						var iRowspan = nCell.getAttribute('rowspan') * 1;
+						iColspan = (!iColspan || iColspan===0 || iColspan===1) ? 1 : iColspan;
+						iRowspan = (!iRowspan || iRowspan===0 || iRowspan===1) ? 1 : iRowspan;
+
+						/* There might be colspan cells already in this row, so shift our target 
+						 * accordingly
+						 */
+						iColShifted = fnShiftCol( aLayout, i, iColumn );
+						
+						/* If there is col / rowspan, copy the information into the layout grid */
+						for ( l=0 ; l<iColspan ; l++ )
 						{
-							for ( k=1 ; k<iRowspan ; k++ )
+							for ( k=0 ; k<iRowspan ; k++ )
 							{
-								fnAddRow( i+k );
-								aLayout[i+k][iColumnShifted] = ROWSPAN;
+								aLayout[i+k][iColShifted+l] = {
+									"cell": nCell,
+									"unique": iColspan == 1 ? true : false
+								};
+								aLayout[i+k].nTr = nTrs[i];
 							}
 						}
-						iColumn++;
-					}
-					else
-					{
-						iColumnShifted = fnShiftCol( aLayout, i, iColumn );
-						for ( k=0 ; k<iColspan ; k++ )
-						{
-							aLayout[i][iColumnShifted+k] = COLSPAN;
-						}
-						iColumn += iColspan;
 					}
 				}
 			}
+		}
+		
+		/*
+		 * Function: _fnGetUniqueThs
+		 * Purpose:  Get an array of unique th elements, one for each column
+		 * Returns:  array node:aReturn - list of unique ths
+		 * Inputs:   object:oSettings - dataTables settings object
+		 */
+		function _fnGetUniqueThs ( oSettings )
+		{
+			var aReturn = [];
+			var aLayout = oSettings.aoHeader;
 			
-			/* Convert the layout array into a node array */
 			for ( i=0, iLen=aLayout.length ; i<iLen ; i++ )
 			{
 				for ( j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
 				{
-					if ( typeof aLayout[i][j] == 'object' && typeof aReturn[j] == 'undefined' )
+					if ( aLayout[i][j].unique && 
+						 (typeof aReturn[j] == 'undefined' || !oSettings.bSortCellsTop) )
 					{
-						aReturn[j] = aLayout[i][j];
+						aReturn[j] = aLayout[i][j].cell;
 					}
 				}
 			}
@@ -6328,7 +6331,7 @@
 		this.oApi._fnColumnOptions = _fnColumnOptions;
 		this.oApi._fnAddData = _fnAddData;
 		this.oApi._fnGatherData = _fnGatherData;
-		this.oApi._fnDrawHead = _fnDrawHead;
+		this.oApi._fnBuildHead = _fnBuildHead;
 		this.oApi._fnDraw = _fnDraw;
 		this.oApi._fnReDraw = _fnReDraw;
 		this.oApi._fnAjaxUpdate = _fnAjaxUpdate;
@@ -6518,6 +6521,7 @@
 				_fnMap( oSettings, oInit, "iCookieDuration" );
 				_fnMap( oSettings, oInit, "sCookiePrefix" );
 				_fnMap( oSettings, oInit, "sDom" );
+				_fnMap( oSettings, oInit, "bSortCellsTop" );
 				_fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
 				_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 				_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
@@ -6697,9 +6701,14 @@
 			 * Columns
 			 * See if we should load columns automatically or use defined ones
 			 */
-			var nThead = this.getElementsByTagName('thead');
-			var anThs = nThead.length===0 ? [] : _fnGetUniqueThs( nThead[0] );
+			var anThs = [];
 			var aoColumnsInit;
+			var nThead = this.getElementsByTagName('thead');
+			if ( nThead.length !== 0 )
+			{
+				_fnDetectHeader( oSettings.aoHeader, nThead[0] );
+				anThs = _fnGetUniqueThs( oSettings );
+			}
 			
 			/* If not given a column array, generate one with nulls */
 			if ( typeof oInit.aoColumns == 'undefined' )
@@ -6848,6 +6857,7 @@
 			if ( this.getElementsByTagName('tfoot').length > 0 )
 			{
 				oSettings.nTFoot = this.getElementsByTagName('tfoot')[0];
+				_fnDetectHeader( oSettings.aoFooter, oSettings.nTFoot );
 			}
 			
 			/* Check if there is data passing into the constructor */
