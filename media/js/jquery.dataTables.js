@@ -5371,7 +5371,6 @@
 				/* Apply custom sizing to the cloned header */
 				var nThs = _fnGetUniqueThs( oSettings, nTheadClone );
 				iCorrector = 0;
-				console.log( nThs );
 				for ( i=0 ; i<iColums ; i++ )
 				{
 					var oColumn = oSettings.aoColumns[i];
@@ -5381,7 +5380,6 @@
 					}
 					else if ( oColumn.bVisible )
 					{
-						console.log( i, iCorrector );
 						nThs[i-iCorrector].style.width = "";
 					}
 					else
