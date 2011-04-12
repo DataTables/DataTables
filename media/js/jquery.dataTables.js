@@ -3795,7 +3795,7 @@
 			 * Get the unique column headers in the newly created (cloned) header. We want to apply the
 			 * calclated sizes to this header
 			 */
-			var nThs = _fnGetUniqueThs( nTheadSize );
+			var nThs = _fnGetUniqueThs( o, nTheadSize );
 			for ( i=0, iLen=nThs.length ; i<iLen ; i++ )
 			{
 				iVis = _fnVisibleToColumnIndex( o, i );
