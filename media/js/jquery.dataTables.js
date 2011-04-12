@@ -2951,7 +2951,7 @@
 		 */
 		function _fnDrawHead( oSettings, aoSource, nTarget )
 		{
-			var i, iLen;
+			var i, iLen, k, kLen;
 			var aoLocal = [];
 			var aApplied = [];
 			var iColumns = oSettings.aoColumns.length;
@@ -2979,7 +2979,11 @@
 			for ( i=0, iLen=aoLocal.length ; i<iLen ; i++ )
 			{
 				/* All cells are going to be replaced, so empty out the row */
-				$(aoLocal[i].nTr).empty();
+				for ( k=0, kLen=aoLocal[i].nTr.childNodes.length ; k<kLen ; k++ )
+				{
+					aoLocal[i].nTr.removeChild( aoLocal[i].nTr.childNodes[0] );
+				}
+
 				for ( j=0, jLen=aoLocal[i].length ; j<jLen ; j++ )
 				{
 					iRowspan = 1;
@@ -3006,7 +3010,7 @@
 						        aoLocal[i][j].cell == aoLocal[i][j+iColspan].cell )
 						{
 							/* Must update the applied array over the rows for the columns */
-							for ( var k=0 ; k<iRowspan ; k++ )
+							for ( k=0 ; k<iRowspan ; k++ )
 							{
 								aApplied[i+k][j+iColspan] = 1;
 							}
@@ -5290,7 +5294,7 @@
 			var iTmpWidth;
 			var iVisibleColumns = 0;
 			var iColums = oSettings.aoColumns.length;
-			var i;
+			var i, iIndex, iCorrector, iWidth;
 			var oHeaders = $('th', oSettings.nTHead);
 			
 			/* Convert any user input sizes into pixel sizes */
@@ -5339,12 +5343,13 @@
 				 */
 				var
 					nCalcTmp = oSettings.nTable.cloneNode( false ),
+					nTheadClone = oSettings.nTHead.cloneNode(true),
 					nBody = document.createElement( 'tbody' ),
 					nTr = document.createElement( 'tr' ),
 					nDivSizing;
 				
 				nCalcTmp.removeAttribute( "id" );
-				nCalcTmp.appendChild( oSettings.nTHead.cloneNode(true) );
+				nCalcTmp.appendChild( nTheadClone );
 				if ( oSettings.nTFoot !== null )
 				{
 					nCalcTmp.appendChild( oSettings.nTFoot.cloneNode(true) );
@@ -5362,15 +5367,23 @@
 				{
 					jqColSizing = $('tbody tr:eq(0)>td', nCalcTmp);
 				}
-				jqColSizing.each( function (i) {
-					this.style.width = "";
-					
-					var iIndex = _fnVisibleToColumnIndex( oSettings, i );
-					if ( iIndex !== null && oSettings.aoColumns[iIndex].sWidthOrig !== "" )
+
+				/* Apply custom sizing to the cloned header */
+				var nThs = _fnGetUniqueThs( oSettings, nTheadClone );
+				iCorrector = 0;
+				for ( i=0 ; i<iColums ; i++ )
+				{
+					var oColumn = oSettings.aoColumns[i];
+					if ( oColumn.bVisible && oColumn.sWidthOrig !== null && oColumn.sWidthOrig !== "" )
 					{
-						this.style.width = oSettings.aoColumns[iIndex].sWidthOrig;
+						nThs[i-iCorrector].style.width = _fnStringToCss( oColumn.sWidthOrig );
+						iCorrector++;
 					}
-				} );
+					else if ( oColumn.bVisible )
+					{
+						nThs[i-iCorrector].style.width = "";
+					}
+				}
 				
 				/* Find the biggest td for each column and put it into the table */
 				for ( i=0 ; i<iColums ; i++ )
@@ -5425,7 +5438,7 @@
 					oNodes = $("thead tr:eq(0)>th", nCalcTmp);
 				}
 				
-				var iIndex, iCorrector = 0, iWidth;
+				iCorrector = 0;
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
 					if ( oSettings.aoColumns[i].bVisible )
@@ -6205,12 +6218,18 @@
 		 * Purpose:  Get an array of unique th elements, one for each column
 		 * Returns:  array node:aReturn - list of unique ths
 		 * Inputs:   object:oSettings - dataTables settings object
+		 *           node:nHeader - automatically detect the layout from this node - optional
 		 */
-		function _fnGetUniqueThs ( oSettings )
+		function _fnGetUniqueThs ( oSettings, nHeader )
 		{
 			var aReturn = [];
 			var aLayout = oSettings.aoHeader;
-			
+			if ( typeof nHeader != 'undefined' )
+			{
+				aLayout = [];
+				_fnDetectHeader( aLayout, nHeader );
+			}
+
 			for ( i=0, iLen=aLayout.length ; i<iLen ; i++ )
 			{
 				for ( j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
