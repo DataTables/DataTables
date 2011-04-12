@@ -5371,17 +5371,22 @@
 				/* Apply custom sizing to the cloned header */
 				var nThs = _fnGetUniqueThs( oSettings, nTheadClone );
 				iCorrector = 0;
+				console.log( nThs );
 				for ( i=0 ; i<iColums ; i++ )
 				{
 					var oColumn = oSettings.aoColumns[i];
 					if ( oColumn.bVisible && oColumn.sWidthOrig !== null && oColumn.sWidthOrig !== "" )
 					{
 						nThs[i-iCorrector].style.width = _fnStringToCss( oColumn.sWidthOrig );
-						iCorrector++;
 					}
 					else if ( oColumn.bVisible )
 					{
+						console.log( i, iCorrector );
 						nThs[i-iCorrector].style.width = "";
+					}
+					else
+					{
+						iCorrector++;
 					}
 				}
 				
