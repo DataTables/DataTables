@@ -18,7 +18,7 @@
 				oTable = $('#example').dataTable( {
 					"bProcessing": true,
 					"bServerSide": true,
-					"sAjaxSource": "../examples_support/server_processing.php",
+					"sAjaxSource": "scripts/server_processing.php",
 					"fnDrawCallback": function () {
 						$('#example tbody td').editable( '../examples_support/editable_ajax.php', {
 							"callback": function( sValue, y ) {
@@ -78,7 +78,7 @@
 	$('#example').dataTable( {
 		"bProcessing": true,
 		"bServerSide": true,
-		"sAjaxSource": "../examples_support/server_processing.php"
+		"sAjaxSource": "scripts/server_processing.php"
 	} );
 } );</pre>
 			

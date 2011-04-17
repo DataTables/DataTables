@@ -25,7 +25,7 @@ $(document).ready(function() {
 	oTable = $("#example").dataTable({
 		"bProcessing": true,
 		"bServerSide": true,
-		"sAjaxSource": "../examples_support/server_processing_id.php",
+		"sAjaxSource": "scripts/id.php",
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 			if ( jQuery.inArray(aData[0], gaiSelected) != -1 )
 			{
@@ -116,7 +116,7 @@ $(document).ready(function() {
 	oTable = $("#example").dataTable({
 		"bProcessing": true,
 		"bServerSide": true,
-		"sAjaxSource": "../examples_support/server_processing_id.php",
+		"sAjaxSource": "scripts/id.php",
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
 			if ( jQuery.inArray(aData[0], gaiSelected) != -1 )
 			{

@@ -16,7 +16,7 @@
 				$('#example').dataTable( {
 					"bProcessing": true,
 					"bServerSide": true,
-					"sAjaxSource": "../examples_support/server_processing.php",
+					"sAjaxSource": "scripts/server_processing.php",
 					"fnServerData": function ( sSource, aoData, fnCallback ) {
 						/* Add some extra data to the sender */
 						aoData.push( { "name": "more_data", "value": "my_value" } );
@@ -74,7 +74,7 @@
 	$('#example').dataTable( {
 		"bProcessing": true,
 		"bServerSide": true,
-		"sAjaxSource": "../examples_support/server_processing.php",
+		"sAjaxSource": "scripts/server_processing.php",
 		"fnServerData": function ( sSource, aoData, fnCallback ) {
 			/* Add some extra data to the sender */
 			aoData.push( { "name": "more_data", "value": "my_value" } );
