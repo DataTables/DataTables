@@ -4,7 +4,7 @@ oTest.fnStart( "bFilter" );
 $(document).ready( function () {
 	/* Check the default */
 	$('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	
 	oTest.fnWaitTest( 
@@ -19,7 +19,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"bFilter": false
 			} );
 		},
@@ -32,7 +32,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"bFilter": true
 			} );
 		},

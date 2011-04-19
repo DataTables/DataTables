@@ -1,14 +1,47 @@
 <?php
-  /* MySQL connection */
-	include( $_SERVER['DOCUMENT_ROOT']."/datatables/mysql.php" ); /* ;-) */
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
 	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+	$aColumns = array( 'engine', 'browser', 'platform', 'version', 'grade' );
+	
+	/* Indexed column (used for fast and accurate table cardinality) */
+	$sIndexColumn = "id";
+	
+	/* DB table to use */
+	$sTable = "ajax";
+	
+	/* Database connection information */
+	$gaSql['user']       = "";
+	$gaSql['password']   = "";
+	$gaSql['db']         = "";
+	$gaSql['server']     = "localhost";
+	
+	/* REMOVE THIS LINE (it just includes my SQL connection user/pass) */
+	include( $_SERVER['DOCUMENT_ROOT']."/datatables/mysql.php" );
+	
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * If you just want to use the basic configuration for DataTables with PHP server-side, there is
+	 * no need to edit below this line
+	 */
+	
+	/* 
+	 * MySQL connection
+	 */
 	$gaSql['link'] =  mysql_pconnect( $gaSql['server'], $gaSql['user'], $gaSql['password']  ) or
 		die( 'Could not open connection to server' );
 	
 	mysql_select_db( $gaSql['db'], $gaSql['link'] ) or 
 		die( 'Could not select database '. $gaSql['db'] );
 	
-	/* Paging */
+	
+	/* 
+	 * Paging
+	 */
 	$sLimit = "";
 	if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
 	{
@@ -16,38 +49,81 @@
 			mysql_real_escape_string( $_GET['iDisplayLength'] );
 	}
 	
-	/* Ordering */
+	
+	/*
+	 * Ordering
+	 */
+	$sOrder = "";
 	if ( isset( $_GET['iSortCol_0'] ) )
 	{
 		$sOrder = "ORDER BY  ";
-		for ( $i=0 ; $i<mysql_real_escape_string( $_GET['iSortingCols'] ) ; $i++ )
+		for ( $i=0 ; $i<intval( $_GET['iSortingCols'] ) ; $i++ )
 		{
-			$sOrder .= fnColumnToField(mysql_real_escape_string( $_GET['iSortCol_'.$i] ))."
-			 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
+			{
+				$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+				 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+			}
 		}
+		
 		$sOrder = substr_replace( $sOrder, "", -2 );
+		if ( $sOrder == "ORDER BY" )
+		{
+			$sOrder = "";
+		}
 	}
 	
-	/* Filtering */
+	
+	/* 
+	 * Filtering
+	 * NOTE this does not match the built-in DataTables filtering which does it
+	 * word by word on any field. It's possible to do here, but concerned about efficiency
+	 * on very large tables, and MySQL's regex functionality is very limited
+	 */
 	$sWhere = "";
-	if ( $_GET['sSearch'] != "" )
+	if ( isset($_GET['sSearch']) && $_GET['sSearch'] != "" )
 	{
-		$sWhere = "WHERE engine LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ".
-		                "browser LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ".
-		                "platform LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ".
-		                "version LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ".
-		                "grade LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%'";
+		$sWhere = "WHERE (";
+		for ( $i=0 ; $i<count($aColumns) ; $i++ )
+		{
+			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
+		}
+		$sWhere = substr_replace( $sWhere, "", -3 );
+		$sWhere .= ')';
 	}
 	
+	/* Individual column filtering */
+	for ( $i=0 ; $i<count($aColumns) ; $i++ )
+	{
+		if ( isset($_GET['bSearchable_'.$i]) && $_GET['bSearchable_'.$i] == "true" && $_GET['sSearch_'.$i] != '' )
+		{
+			if ( $sWhere == "" )
+			{
+				$sWhere = "WHERE ";
+			}
+			else
+			{
+				$sWhere .= " AND ";
+			}
+			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
+		}
+	}
+	
+	
+	/*
+	 * SQL queries
+	 * Get data to display
+	 */
 	$sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS id, engine, browser, platform, version, grade
-		FROM   ajax
+		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+		FROM   $sTable
 		$sWhere
 		$sOrder
 		$sLimit
 	";
 	$rResult = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
 	
+	/* Data set length after filtering */
 	$sQuery = "
 		SELECT FOUND_ROWS()
 	";
@@ -55,52 +131,49 @@
 	$aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
 	$iFilteredTotal = $aResultFilterTotal[0];
 	
+	/* Total data set length */
 	$sQuery = "
-		SELECT COUNT(id)
-		FROM   ajax
+		SELECT COUNT(".$sIndexColumn.")
+		FROM   $sTable
 	";
 	$rResultTotal = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
 	$aResultTotal = mysql_fetch_array($rResultTotal);
 	$iTotal = $aResultTotal[0];
 	
 	
-	$sOutput = '{';
-	$sOutput .= '"sEcho": '.intval($_GET['sEcho']).', ';
-	$sOutput .= '"iTotalRecords": '.$iTotal.', ';
-	$sOutput .= '"iTotalDisplayRecords": '.$iFilteredTotal.', ';
-	$sOutput .= '"aaData": [ ';
+	/*
+	 * Output
+	 */
+	$output = array(
+		"sEcho" => intval($_GET['sEcho']),
+		"iTotalRecords" => $iTotal,
+		"iTotalDisplayRecords" => $iFilteredTotal,
+		"aaData" => array()
+	);
+	
 	while ( $aRow = mysql_fetch_array( $rResult ) )
 	{
-		$sOutput .= "[";
-		$sOutput .= '"<img src=\"../examples_support/details_open.png\">",';
-		$sOutput .= '"'.str_replace('"', '\"', $aRow['engine']).'",';
-		$sOutput .= '"'.str_replace('"', '\"', $aRow['browser']).'",';
-		$sOutput .= '"'.str_replace('"', '\"', $aRow['platform']).'",';
-		if ( $aRow['version'] == "0" )
-			$sOutput .= '"-",';
-		else
-			$sOutput .= '"'.str_replace('"', '\"', $aRow['version']).'",';
-		$sOutput .= '"'.str_replace('"', '\"', $aRow['grade']).'"';
-		$sOutput .= "],";
+		$row = array();
+
+		/* Add the  details image at the start of the display array */
+		$row[] = '<img src="../examples_support/details_open.png">';
+
+		for ( $i=0 ; $i<count($aColumns) ; $i++ )
+		{
+			if ( $aColumns[$i] == "version" )
+			{
+				/* Special output formatting for 'version' column */
+				$row[] = ($aRow[ $aColumns[$i] ]=="0") ? '-' : $aRow[ $aColumns[$i] ];
+			}
+			else if ( $aColumns[$i] != ' ' )
+			{
+				/* General output */
+				$row[] = $aRow[ $aColumns[$i] ];
+			}
+		}
+		$row['extra'] = 'hrmll';
+		$output['aaData'][] = $row;
 	}
-	$sOutput = substr_replace( $sOutput, "", -1 );
-	$sOutput .= '] }';
 	
-	echo $sOutput;
-	
-	
-	function fnColumnToField( $i )
-	{
-		/* Note that column 0 is the details column */
-		if ( $i == 0 ||$i == 1 )
-			return "engine";
-		else if ( $i == 2 )
-			return "browser";
-		else if ( $i == 3 )
-			return "platform";
-		else if ( $i == 4 )
-			return "version";
-		else if ( $i == 5 )
-			return "grade";
-	}
+	echo json_encode( $output );
 ?>

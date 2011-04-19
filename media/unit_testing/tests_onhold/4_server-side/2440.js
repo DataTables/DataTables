@@ -10,7 +10,7 @@ oTest.fnStart( "Info element with display all" );
 $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	
 	oTable.fnSettings()._iDisplayLength = -1;

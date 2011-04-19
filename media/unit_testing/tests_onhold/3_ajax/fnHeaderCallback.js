@@ -4,7 +4,7 @@ oTest.fnStart( "fnHeaderCallback" );
 $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	var oSettings = oTable.fnSettings();
 	var mPass, bInit;
@@ -24,7 +24,7 @@ $(document).ready( function () {
 			mPass = -1;
 			bInit = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( ) {
 					mPass = arguments.length;
 				},
@@ -46,7 +46,7 @@ $(document).ready( function () {
 			mPass = 0;
 			bInit = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					mPass++;
 				},
@@ -70,7 +70,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					nHead.getElementsByTagName('th')[0].innerHTML = "Displaying "+(iEnd-iStart)+" records";
 				}
@@ -87,7 +87,7 @@ $(document).ready( function () {
 			
 			mPass = true;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( iStart != 0 )
 					{
@@ -107,7 +107,7 @@ $(document).ready( function () {
 			
 			mPass = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( iStart == 10 )
 					{
@@ -130,7 +130,7 @@ $(document).ready( function () {
 			
 			mPass = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( iEnd == 20 )
 					{
@@ -153,7 +153,7 @@ $(document).ready( function () {
 			
 			mPass = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( aiDisplay.length == 57 )
 					{
@@ -172,7 +172,7 @@ $(document).ready( function () {
 			
 			mPass = false;
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( aiDisplay.length == 9 )
 					{

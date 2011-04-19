@@ -7,7 +7,7 @@ $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	var oSettings = oTable.fnSettings();
 	var mPass;
@@ -27,7 +27,7 @@ $(document).ready( function () {
 			mPass = -1;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnRowCallback": function ( nTr ) {
 					mPass = arguments.length;
 					return nTr;
@@ -46,7 +46,7 @@ $(document).ready( function () {
 			mPass = 0;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					mPass++;
 					return nTr;
@@ -62,7 +62,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					$(nTr).addClass('unit_test');
 					return nTr;
@@ -80,7 +80,7 @@ $(document).ready( function () {
 			mPass = true;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					if ( asData.length != 5 )
 						mPass = false;
@@ -100,7 +100,7 @@ $(document).ready( function () {
 			var iCount = 0;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					if ( iCount != iDrawIndex )
 						mPass = false;

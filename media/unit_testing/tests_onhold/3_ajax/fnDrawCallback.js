@@ -6,7 +6,7 @@ oTest.fnStart( "fnDrawCallback" );
 $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	var oSettings = oTable.fnSettings();
 	var mPass, bInit;
@@ -26,7 +26,7 @@ $(document).ready( function () {
 			mPass = -1;
 			bInit = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnDrawCallback": function ( ) {
 					mPass = arguments.length;
 				},
@@ -46,7 +46,7 @@ $(document).ready( function () {
 			
 			bInit = false;
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnDrawCallback": function ( oSettings ) {
 					mPass = oSettings;
 				},
@@ -68,7 +68,7 @@ $(document).ready( function () {
 			mPass = 0;
 			bInit = false;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnDrawCallback": function ( ) {
 					mPass++;
 				},

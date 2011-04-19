@@ -10,7 +10,7 @@ $(document).ready( function () {
 	var mTmp = 0;
 	
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 		"aoColumns": [
 			null,
 			{ "fnRender": function (a) {
@@ -39,7 +39,7 @@ $(document).ready( function () {
 			mTmp = 0;
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"aoColumns": [
 					null,
 					{ 
@@ -73,7 +73,7 @@ $(document).ready( function () {
 			
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"aoColumns": [
 					{
 						"fnRender": function (a) {

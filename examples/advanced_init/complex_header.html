@@ -17,7 +17,16 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				$('#example').dataTable();
+				$('#example').dataTable( {
+					"sScrollY": "300px",
+					"bPaginate": false,
+					"aoColumnDefs": [
+						{ "bVisible": false, "aTargets": [3] },
+						{ "sWidth": "50%", "aTargets": [2] }
+					]	
+				} );
+				//$('#example').dataTable().fnSetColumnVis( 1, false );
+				//$('#example').dataTable().fnSetColumnVis( 1, true );
 			} );
 		</script>
 	</head>
@@ -35,6 +44,38 @@
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
 	<thead>
 		<tr>
+			<th class="bl bt">Rendering engine</th>
+			<th colspan="3" rowspan="2" class="bl br bt">Browser details</th>
+			<th class="br bt">CSS grade</th>
+		</tr>
+		<tr>
+			<th class="bl br" rowspan="3">1</th>
+			<td class="bl br">3</td>
+		</tr>
+		<tr>
+			<th class="bl br" colspan="2">Browser</th>
+			<th class="br" rowspan="3">Engine version</th>
+			<th class="br bt" rowspan="3">CSS grade</th>
+		</tr>
+		<tr>
+			<th class="bl br">Browser</th>
+			<th class="bl br">Platform(s)</th>
+		</tr>
+		<tr>
+			<th class="bl br" colspan="2">2</th>
+			<th class="bl br">Platform(s)</th>
+		</tr>
+		<!--
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+			<th>Market share</th>
+		</tr>
+		
+		
+		<tr>
 			<th rowspan="2" class="bl bt">Rendering engine</th>
 			<th colspan="3" class="bl br bt">Browser details</th>
 			<th rowspan="2" class="br bt">CSS grade</th>
@@ -44,7 +85,8 @@
 			<th>Platform(s)</th>
 			<th class="br">Engine version</th>
 		</tr>
-		<!--
+		
+		
 		<tr>
 			<th rowspan="2">Rendering engine</th>
 			<th>Browser</th>
@@ -464,11 +506,13 @@
 	</tbody>
 	<tfoot>
 		<tr>
-			<th>Rendering engine</th>
-			<th>Browser</th>
-			<th>Platform(s)</th>
-			<th>Engine version</th>
-			<th>CSS grade</th>
+			<th class="bl bt">Rendering engine</th>
+			<th colspan="3" rowspan="2" class="bl br bt">Browser details</th>
+			<th class="br bt">CSS grade</th>
+		</tr>
+		<tr>
+			<th class="bl br">1</th>
+			<th class="bl br">3</th>
 		</tr>
 	</tfoot>
 </table>

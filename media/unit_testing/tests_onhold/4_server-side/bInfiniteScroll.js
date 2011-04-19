@@ -7,7 +7,7 @@ $(document).ready( function () {
 		"bScrollInfinite": true,
 		"sScrollY": "200px",
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	
 	oTest.fnWaitTest( 

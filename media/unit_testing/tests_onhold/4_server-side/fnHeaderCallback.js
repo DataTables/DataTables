@@ -5,7 +5,7 @@ $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	var oSettings = oTable.fnSettings();
 	var mPass;
@@ -25,7 +25,7 @@ $(document).ready( function () {
 			mPass = -1;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( ) {
 					mPass = arguments.length;
 				}
@@ -43,7 +43,7 @@ $(document).ready( function () {
 			mPass = 0;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					mPass++;
 				}
@@ -65,7 +65,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					nHead.getElementsByTagName('th')[0].innerHTML = "Displaying "+(iEnd-iStart)+" records";
 				}
@@ -83,7 +83,7 @@ $(document).ready( function () {
 			mPass = true;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( iStart != 0 )
 					{
@@ -104,7 +104,7 @@ $(document).ready( function () {
 			mPass = false;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( iStart == 0 )
 					{
@@ -128,7 +128,7 @@ $(document).ready( function () {
 			mPass = false;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( iEnd == 10 )
 					{
@@ -152,7 +152,7 @@ $(document).ready( function () {
 			mPass = false;
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( aiDisplay.length == 10 )
 					{
@@ -172,7 +172,7 @@ $(document).ready( function () {
 			mPass = false;
 			oTable = $('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnHeaderCallback": function ( nHead, aasData, iStart, iEnd, aiDisplay ) {
 					if ( aiDisplay.length == 9 )
 					{

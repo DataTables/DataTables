@@ -6,7 +6,7 @@ oTest.fnStart( "fnInitComplete" );
 $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	var oSettings = oTable.fnSettings();
 	var mPass;
@@ -25,7 +25,7 @@ $(document).ready( function () {
 			
 			mPass = -1;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnInitComplete": function ( ) {
 					mPass = arguments.length;
 				}
@@ -41,7 +41,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnInitComplete": function ( oSettings ) {
 					mPass = oSettings;
 				}
@@ -58,7 +58,7 @@ $(document).ready( function () {
 			
 			mPass = 0;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnInitComplete": function ( ) {
 					mPass++;
 				}
@@ -85,7 +85,7 @@ $(document).ready( function () {
 			
 			mPass = 0;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnInitComplete": function ( ) {
 					mPass = $('#example tbody tr').length;
 				}

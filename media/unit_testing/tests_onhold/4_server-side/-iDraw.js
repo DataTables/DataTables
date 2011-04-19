@@ -5,7 +5,7 @@ oTest.fnStart( "iDraw - check that iDraw increments for each draw" );
 $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	var oSettings = oTable.fnSettings();
 	

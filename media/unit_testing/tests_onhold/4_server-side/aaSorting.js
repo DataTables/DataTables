@@ -5,7 +5,7 @@ $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	var oSettings = oTable.fnSettings();
 	
@@ -39,7 +39,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['1','asc']]
 			} );
 		},
@@ -53,7 +53,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['1','desc']]
 			} );
 		},
@@ -67,7 +67,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['1','asc']]
 			} );
 		},
@@ -81,7 +81,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['1','desc']]
 			} );
 		},
@@ -95,7 +95,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','asc'], ['1','asc']]
 			} );
 		},
@@ -108,7 +108,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','asc'], ['1','desc']]
 			} );
 		},
@@ -121,7 +121,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','desc'], ['1','asc']]
 			} );
 		},
@@ -134,7 +134,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','desc'], ['1','desc']]
 			} );
 		},
@@ -148,7 +148,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','asc'], ['3','asc']]
 			} );
 		},
@@ -161,7 +161,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','asc'], ['3','desc']]
 			} );
 		},
@@ -174,7 +174,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','desc'], ['3','asc']]
 			} );
 		},
@@ -187,7 +187,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','desc'], ['3','desc']]
 			} );
 		},
@@ -200,7 +200,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"aaSorting": [['0','asc'], ['3','asc'], ['1','asc']]
 			} );
 		},

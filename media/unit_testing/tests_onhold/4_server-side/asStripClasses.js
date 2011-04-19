@@ -5,7 +5,7 @@ $(document).ready( function () {
 	/* Check the default */
 	$('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	
 	oTest.fnWaitTest( 
@@ -37,7 +37,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"asStripClasses": []
 			} );
 		},
@@ -61,7 +61,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"asStripClasses": [ 'test1', 'test2' ]
 			} );
 		},
@@ -81,7 +81,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"asStripClasses": [ 'test1', 'test2', 'test3', 'test4' ]
 			} );
 		},

@@ -4,7 +4,7 @@ oTest.fnStart( "sPaginationType" );
 $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	var oSettings = oTable.fnSettings();
 	
@@ -60,7 +60,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"sPaginationType": "full_numbers",
 				"fnInitComplete": function () {
 					bComplete = true;

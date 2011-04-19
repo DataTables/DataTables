@@ -28,7 +28,7 @@ oTest.fnWaitTest(
 $(document).ready( function () {
 	$('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	
 	/* Basic checks */

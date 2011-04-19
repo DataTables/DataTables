@@ -9,7 +9,7 @@ oTest.fnStart( "aoColumns.sWidth" );
 $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 		"bAutoWidth": false,
 		"aoColumns": [
 			null,
@@ -32,7 +32,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"bAutoWidth": false,
 				"aoColumns": [
 					null,
@@ -57,7 +57,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"aoColumns": [
 					null,
 					null,

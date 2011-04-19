@@ -7,7 +7,7 @@ $(document).ready( function () {
 	
 	$('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 		"aoColumnDefs": [ 
 			{ "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] },
 			{ "bVisible": false, "aTargets": [ 3 ] }
@@ -29,7 +29,7 @@ $(document).ready( function () {
 		function () {
 			$('#example').dataTable( {
 				"bServerSide": true,
-				"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+				"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"sScrollY": 200,
 				"aoColumnDefs": [ 
 					{ "bSearchable": false, "bVisible": false, "aTargets": [ 2 ] },

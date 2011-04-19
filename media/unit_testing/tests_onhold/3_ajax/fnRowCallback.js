@@ -6,7 +6,7 @@ oTest.fnStart( "fnRowCallback" );
 $(document).ready( function () {
 	/* Check the default */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	var oSettings = oTable.fnSettings();
 	var mPass;
@@ -25,7 +25,7 @@ $(document).ready( function () {
 			
 			mPass = -1;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnRowCallback": function ( nTr ) {
 					mPass = arguments.length;
 					return nTr;
@@ -43,7 +43,7 @@ $(document).ready( function () {
 			
 			mPass = 0;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					mPass++;
 					return nTr;
@@ -58,7 +58,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					$(nTr).addClass('unit_test');
 					return nTr;
@@ -75,7 +75,7 @@ $(document).ready( function () {
 			
 			mPass = true;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					if ( asData.length != 5 )
 						mPass = false;
@@ -94,7 +94,7 @@ $(document).ready( function () {
 			mPass = true;
 			var iCount = 0;
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					if ( iCount != iDrawIndex )
 						mPass = false;

@@ -4,7 +4,7 @@ oTest.fnStart( "2600 - Display rewind when changing length" );
 $(document).ready( function () {
 	$('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	
 	oTest.fnWaitTest( 

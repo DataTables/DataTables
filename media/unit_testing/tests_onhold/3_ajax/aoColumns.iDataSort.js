@@ -6,7 +6,7 @@ $(document).ready( function () {
 	 * right in here
 	 */
 	var oTable = $('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 		"aoColumns": [
 			null,
 			{ "iDataSort": 4 },
@@ -48,7 +48,7 @@ $(document).ready( function () {
 			mTmp = 0;
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"aoColumns": [
 					null,
 					{ "iDataSort": 4 },

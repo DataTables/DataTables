@@ -4,7 +4,7 @@ oTest.fnStart( "asStripClasses" );
 $(document).ready( function () {
 	/* Check the default */
 	$('#example').dataTable( {
-		"sAjaxSource": "../../../examples/examples_support/json_source.txt"
+		"sAjaxSource": "../../../examples/ajax/sources/arrays.txt"
 	} );
 	
 	oTest.fnWaitTest( 
@@ -35,7 +35,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"asStripClasses": []
 			} );
 		},
@@ -58,7 +58,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"asStripClasses": [ 'test1', 'test2' ]
 			} );
 		},
@@ -77,7 +77,7 @@ $(document).ready( function () {
 		function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
-				"sAjaxSource": "../../../examples/examples_support/json_source.txt",
+				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"asStripClasses": [ 'test1', 'test2', 'test3', 'test4' ]
 			} );
 		},

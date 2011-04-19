@@ -5,7 +5,7 @@ $(document).ready( function () {
 	/* Check the default */
 	$('#example').dataTable( {
 		"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php"
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php"
 	} );
 	
 	oTest.fnWaitTest( 
@@ -63,7 +63,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"bSort": false
 			} );
 		},
@@ -89,7 +89,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"bServerSide": true,
-		"sAjaxSource": "../../../examples/examples_support/server_processing.php",
+		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"bSort": true
 			} );
 		},

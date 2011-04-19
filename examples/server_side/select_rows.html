@@ -12,46 +12,31 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
-var oTable;
-var gaiSelected =  [];
-
 $(document).ready(function() {
-	$('#form').submit( function() {
-		alert (gaiSelected);
-		return false;
-	} );
-
+	var aSelected = [];
+	
 	/* Init the table */
-	oTable = $("#example").dataTable({
+	$("#example").dataTable({
 		"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": "scripts/id.php",
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-			if ( jQuery.inArray(aData[0], gaiSelected) != -1 )
-			{
+			if ( jQuery.inArray(aData.DT_RowId, aSelected) !== -1 ) {
 				$(nRow).addClass('row_selected');
 			}
 			return nRow;
-		},
-		"aoColumnDefs": [
-			{ "bVisible": 0, "aTargets": [0] }
-		]
+		}
 	});
 	
 	/* Click event handler */
 	$('#example tbody tr').live('click', function () {
-		var aData = oTable.fnGetData( this );
-		var iId = aData[0];
+		var id = this.id;
+		var index = jQuery.inArray(id, aSelected);
 		
-		if ( jQuery.inArray(iId, gaiSelected) == -1 )
-		{
-			gaiSelected[gaiSelected.length++] = iId;
-		}
-		else
-		{
-			gaiSelected = jQuery.grep(gaiSelected, function(value) {
-				return value != iId;
-			} );
+		if ( index === -1 ) {
+			aSelected.push( id );
+		} else {
+			aSelected.splice( index, 1 );
 		}
 		
 		$(this).toggleClass('row_selected');
@@ -66,15 +51,13 @@ $(document).ready(function() {
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>When you want to detail with user selectable rows and DataTables, it is relatively simple when using DOM based data - but if using server-side processing, DataTables doesn't retain state over pages / filters etc, leaving this to the server-side instead. As such, you will need to keep a track of which rows a user as selected and mark them as selected on each draw. This is shown in this demo, which uses a unique ID in the first (and hidden) column.</p>
-			<p>Credit for this example belongs with forum member <a href="http://datatables.net/forums/comments.php?DiscussionID=582&page=1#Item_4">iuliandum</a>. Thanks!</p>
+			<p>When you want to detail with user selectable rows and DataTables, it is relatively simple when using DOM based data - but if using server-side processing, DataTables doesn't retain state over pages / filters etc, leaving this to the server-side instead. As such, you will need to keep a track of which rows a user as selected and mark them as selected on each draw. This is shown in this demo, which uses a unique ID assigned to the TR element (this is done automatically through the use of the <i>DT_RowId</i> special property returned as part of the object given by the server for each row).</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
 	<thead>
 		<tr>
-			<th width="0%">ID</th>
 			<th width="20%">Rendering engine</th>
 			<th width="25%">Browser</th>
 			<th width="25%">Platform(s)</th>
@@ -89,7 +72,6 @@ $(document).ready(function() {
 	</tbody>
 	<tfoot>
 		<tr>
-			<th>ID</th>
 			<th>Rendering engine</th>
 			<th>Browser</th>
 			<th>Platform(s)</th>
@@ -103,46 +85,31 @@ $(document).ready(function() {
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>var oTable;
-var gaiSelected =  [];
-
-$(document).ready(function() {
-	$('#form').submit( function() {
-		alert (gaiSelected);
-		return false;
-	} );
-
+			<pre>$(document).ready(function() {
+	var aSelected = [];
+	
 	/* Init the table */
-	oTable = $("#example").dataTable({
+	$("#example").dataTable({
 		"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": "scripts/id.php",
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
-			if ( jQuery.inArray(aData[0], gaiSelected) != -1 )
-			{
+			if ( jQuery.inArray(aData.DT_RowId, aSelected) !== -1 ) {
 				$(nRow).addClass('row_selected');
 			}
 			return nRow;
-		},
-		"aoColumns": [
-			{ "bVisible": 0, "aTargets": [0] }
-		]
+		}
 	});
 	
 	/* Click event handler */
 	$('#example tbody tr').live('click', function () {
-		var aData = oTable.fnGetData( this );
-		var iId = aData[0];
+		var id = this.id;
+		var index = jQuery.inArray(id, aSelected);
 		
-		if ( jQuery.inArray(iId, gaiSelected) == -1 )
-		{
-			gaiSelected[gaiSelected.length++] = iId;
-		}
-		else
-		{
-			gaiSelected = jQuery.grep(gaiSelected, function(value) {
-				return value != iId;
-			} );
+		if ( index === -1 ) {
+			aSelected.push( id );
+		} else {
+			aSelected.splice( index, 1 );
 		}
 		
 		$(this).toggleClass('row_selected');
