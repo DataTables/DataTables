@@ -1776,16 +1776,15 @@
 		 * Function: fnGetData
 		 * Purpose:  Return an array with the data which is used to make up the table
 		 * Returns:  array array string: 2d data array ([row][column]) or array string: 1d data array
-		 *           or
-		 *           array string (if iRow specified)
+		 *           or string if both row and column are given
 		 * Inputs:   mixed:mRow - optional - if not present, then the full 2D array for the table 
 		 *             if given then:
-		 *               int: - return 1D array for aoData entry of this index
-		 *               node(TR): - return 1D array for this TR element
-		 * Inputs:   int:iRow - optional - if present then the array returned will be the data for
-		 *             the row with the index 'iRow'
+		 *               int: - return data object for aoData entry of this index
+		 *               node(TR): - return data object for this TR element
+		 *           int:iCol - optional - the column that you want the data of. This will take into
+		 *               account mDataSource and return the value DataTables uses for this column
 		 */
-		this.fnGetData = function( mRow )
+		this.fnGetData = function( mRow, iCol )
 		{
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
 			
@@ -1794,6 +1793,10 @@
 				var iRow = (typeof mRow == 'object') ? 
 					_fnNodeToDataIndex(oSettings, mRow) : mRow;
 				
+				if ( typeof iCol != 'undefined' )
+				{
+					return _fnGetCellData( oSettings, iRow, iCol, '' );
+				}
 				return (typeof oSettings.aoData[iRow] != 'undefined') ? 
 					_fnGetRowData( oSettings, iRow, '' ) : null;
 			}
