@@ -1285,6 +1285,15 @@
 			this.sAjaxSource = null;
 			
 			/*
+			 * Variable: sAjaxDataProp
+			 * Purpose:  Property from a given object from which to read the table data from. This can
+			 *           be an empty string (when not server-side processing), in which case it is 
+			 *           assumed an an array is given directly.
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.sAjaxDataProp = 'aaData';
+			
+			/*
 			 * Variable: bAjaxDataGet
 			 * Purpose:  Note if draw should be blocked while getting data
 			 * Scope:    jQuery.dataTable.classSettings
@@ -2340,10 +2349,17 @@
 			if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide && !bDefer )
 			{
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
-					/* Got the data - add it to the table */
-					for ( i=0 ; i<json.aaData.length ; i++ )
+					var aData = json;
+					if ( oSettings.sAjaxDataProp != "" )
 					{
-						_fnAddData( oSettings, json.aaData[i] );
+						var fnDataSrc = _fnGetObjectDataFn( oSettings.sAjaxDataProp );
+						aData = fnDataSrc( json );
+					}
+
+					/* Got the data - add it to the table */
+					for ( i=0 ; i<aData.length ; i++ )
+					{
+						_fnAddData( oSettings, aData[i] );
 					}
 					
 					/* Reset the init display for cookie saving. We've already done a filter, and
@@ -3380,8 +3396,11 @@
 			{
 				var aiIndex = _fnReOrderIndex( oSettings, json.sColumns );
 			}
+
+			var fnDataSrc = _fnGetObjectDataFn( oSettings.sAjaxDataProp );
+			aData = fnDataSrc( json );
 			
-			for ( var i=0, iLen=json.aaData.length ; i<iLen ; i++ )
+			for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 			{
 				if ( bReOrder )
 				{
@@ -3389,14 +3408,14 @@
 					var aData = [];
 					for ( var j=0, jLen=oSettings.aoColumns.length ; j<jLen ; j++ )
 					{
-						aData.push( json.aaData[i][ aiIndex[j] ] );
+						aData.push( aData[i][ aiIndex[j] ] );
 					}
 					_fnAddData( oSettings, aData );
 				}
 				else
 				{
 					/* No re-order required, sever got it "right" - just straight add */
-					_fnAddData( oSettings, json.aaData[i] );
+					_fnAddData( oSettings, aData[i] );
 				}
 			}
 			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
@@ -6718,6 +6737,7 @@
 				_fnMap( oSettings, oInit, "aLengthMenu" );
 				_fnMap( oSettings, oInit, "sPaginationType" );
 				_fnMap( oSettings, oInit, "sAjaxSource" );
+				_fnMap( oSettings, oInit, "sAjaxDataProp" );
 				_fnMap( oSettings, oInit, "iCookieDuration" );
 				_fnMap( oSettings, oInit, "sCookiePrefix" );
 				_fnMap( oSettings, oInit, "sDom" );
