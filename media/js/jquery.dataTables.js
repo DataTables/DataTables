@@ -6978,7 +6978,7 @@
 							for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
 							{
 								if ( aTargets[j] == "_all" ||
-								     oSettings.aoColumns[k].nTh.className.indexOf( aTargets[j] ) != -1 )
+								     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
 								{
 									_fnColumnOptions( oSettings, k, oInit.aoColumnDefs[i] );
 								}
