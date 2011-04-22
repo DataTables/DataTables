@@ -2305,7 +2305,7 @@
 		 */
 		function _fnInitalise ( oSettings )
 		{
-			var i, iLen, bDefer=oSettings.bDeferLoading, iAjaxStart=oSettings.iInitDisplayStart;
+			var i, iLen, iAjaxStart=oSettings.iInitDisplayStart;
 			
 			/* Ensure that the table data is fully initialised */
 			if ( oSettings.bInitialised === false )
@@ -2358,7 +2358,7 @@
 			}
 			
 			/* if there is an ajax source load the data */
-			if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide && !bDefer )
+			if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 			{
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
 					var aData = json;
