@@ -9,7 +9,7 @@
  * Project:     Mtaala
  * Contact:     allan.jardine@sprymedia.co.uk
  * 
- * Copyright 2008-2010 Allan Jardine, all rights reserved.
+ * Copyright 2008-2011 Allan Jardine, all rights reserved.
  *
  * This source file is free software, under either the GPL v2 license or a
  * BSD style license, as supplied with this software.
@@ -22,8 +22,7 @@
  */
 
 /*
- * When considering jsLint, we need to allow eval() as it it is used for reading cookies and 
- * building the dynamic multi-column sort functions.
+ * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
 /*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnGatherData,_fnBuildHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap*/
