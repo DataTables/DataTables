@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnGatherData,_fnBuildHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -2362,7 +2362,7 @@
 			{
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
 					var aData = json;
-					if ( oSettings.sAjaxDataProp != "" )
+					if ( oSettings.sAjaxDataProp !== "" )
 					{
 						var fnDataSrc = _fnGetObjectDataFn( oSettings.sAjaxDataProp );
 						aData = fnDataSrc( json );
@@ -2643,7 +2643,7 @@
 			var nTd, sThisType;
 			for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
-				var oCol = oSettings.aoColumns[i];
+				oCol = oSettings.aoColumns[i];
 
 				/* Use rendered data for filtering/sorting */
 				if ( typeof oCol.fnRender == 'function' && oCol.bUseRendered )
@@ -3013,7 +3013,7 @@
 		 */
 		function _fnDrawHead( oSettings, aoSource, nTarget )
 		{
-			var i, iLen, k, kLen;
+			var i, iLen, j, jLen, k, kLen;
 			var aoLocal = [];
 			var aApplied = [];
 			var iColumns = oSettings.aoColumns.length;
@@ -3152,7 +3152,6 @@
 					if ( aoData.nTr === null )
 					{
 						_fnCreateTr( oSettings, oSettings.aiDisplay[j] );
-						bNewRowCreated = true;
 					}
 
 					var nRow = aoData.nTr;
@@ -3444,19 +3443,19 @@
 			}
 
 			var fnDataSrc = _fnGetObjectDataFn( oSettings.sAjaxDataProp );
-			aData = fnDataSrc( json );
+			var aData = fnDataSrc( json );
 			
 			for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 			{
 				if ( bReOrder )
 				{
 					/* If we need to re-order, then create a new array with the correct order and add it */
-					var aData = [];
+					var aDataSorted = [];
 					for ( var j=0, jLen=oSettings.aoColumns.length ; j<jLen ; j++ )
 					{
-						aData.push( aData[i][ aiIndex[j] ] );
+						aDataSorted.push( aData[i][ aiIndex[j] ] );
 					}
-					_fnAddData( oSettings, aData );
+					_fnAddData( oSettings, aDataSorted );
 				}
 				else
 				{
@@ -5763,7 +5762,7 @@
 			var iCorrector;
 			var anTds;
 			var iRow, iRows=oSettings.aoData.length,
-				iColumn, iColumns;
+				iColumn, iColumns, oData;
 
 			for ( iRow=0 ; iRow<iRows ; iRow++ )
 			{
@@ -6282,9 +6281,9 @@
 				_fnDetectHeader( aLayout, nHeader );
 			}
 
-			for ( i=0, iLen=aLayout.length ; i<iLen ; i++ )
+			for ( var i=0, iLen=aLayout.length ; i<iLen ; i++ )
 			{
-				for ( j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
+				for ( var j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
 				{
 					if ( aLayout[i][j].unique && 
 						 (typeof aReturn[j] == 'undefined' || !oSettings.bSortCellsTop) )
@@ -6420,7 +6419,7 @@
 			var oCol = oSettings.aoColumns[iCol];
 			var oData = oSettings.aoData[iRow]._aData;
 
-			if ( (sData=oCol.fnGetData( oData )) == undefined )
+			if ( (sData=oCol.fnGetData( oData )) === undefined )
 			{
 				if ( oSettings.iDrawError != oSettings.iDraw )
 				{
@@ -6530,7 +6529,7 @@
 				{
 					return function (data, val) {
 						data[ a[0] ][ a[1] ] = val;
-					}
+					};
 				}
 				else if ( a.length == 3 )
 				{
@@ -6546,7 +6545,7 @@
 							data = data[ a[i] ];
 						}
 						data[ a[a.length-1] ] = val;
-					}
+					};
 				}
 			}
 			else
@@ -6561,20 +6560,19 @@
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 * Section - API
-		 * 
-		 * I'm not overly happy with this solution - I'd much rather that there was a way of getting
-		 * a list of all the private functions and do what we need to dynamically - but that doesn't
-		 * appear to be possible. Bonkers. A better solution would be to provide a 'bind' type object
-		 * To do - bind type method in DTs 2.x.
+		 * I'm not happy with this solution... - To be fixed in 2.0
 		 */
 		this.oApi._fnExternApiFunc = _fnExternApiFunc;
 		this.oApi._fnInitalise = _fnInitalise;
+		this.oApi._fnInitComplete = _fnInitComplete;
 		this.oApi._fnLanguageProcess = _fnLanguageProcess;
 		this.oApi._fnAddColumn = _fnAddColumn;
 		this.oApi._fnColumnOptions = _fnColumnOptions;
 		this.oApi._fnAddData = _fnAddData;
+		this.oApi._fnCreateTr = _fnCreateTr;
 		this.oApi._fnGatherData = _fnGatherData;
 		this.oApi._fnBuildHead = _fnBuildHead;
+		this.oApi._fnDrawHead = _fnDrawHead;
 		this.oApi._fnDraw = _fnDraw;
 		this.oApi._fnReDraw = _fnReDraw;
 		this.oApi._fnAjaxUpdate = _fnAjaxUpdate;
@@ -6629,10 +6627,16 @@
 		this.oApi._fnLoadState = _fnLoadState;
 		this.oApi._fnCreateCookie = _fnCreateCookie;
 		this.oApi._fnReadCookie = _fnReadCookie;
+		this.oApi._fnDetectHeader = _fnDetectHeader;
 		this.oApi._fnGetUniqueThs = _fnGetUniqueThs;
 		this.oApi._fnScrollBarWidth = _fnScrollBarWidth;
 		this.oApi._fnApplyToChildren = _fnApplyToChildren;
 		this.oApi._fnMap = _fnMap;
+		this.oApi._fnGetRowData = _fnGetRowData;
+		this.oApi._fnGetCellData = _fnGetCellData;
+		this.oApi._fnSetCellData = _fnSetCellData;
+		this.oApi._fnGetObjectDataFn = _fnGetObjectDataFn;
+		this.oApi._fnSetObjectDataFn = _fnSetObjectDataFn;
 		
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
