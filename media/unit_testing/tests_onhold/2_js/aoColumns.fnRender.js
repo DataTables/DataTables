@@ -20,9 +20,9 @@ $(document).ready( function () {
 	var oSettings = oTable.fnSettings();
 	
 	oTest.fnTest( 
-		"Single column - fnRender is called once for each row",
+		"Single column - fnRender is called twice for each row",
 		null,
-		function () { return mTmp == 57; }
+		function () { return mTmp == 114; }
 	);
 	
 	oTest.fnTest( 
@@ -40,33 +40,6 @@ $(document).ready( function () {
 						{
 							mTmp = false;
 						}
-						return a.aData[a.iDataColumn];
-					} },
-					null,
-					null,
-					null
-				]
-			} );
-		},
-		function () { return mTmp; }
-	);
-	
-	oTest.fnTest( 
-		"fnRender iDataColumn is row number",
-		function () {
-			var iCount = 0;
-			mTmp = true;
-			oSession.fnRestore();
-			oTable = $('#example').dataTable( {
-				"aaData": gaaData,
-				"aoColumns": [
-					null,
-					{ "fnRender": function (a) {
-						if ( iCount != a.iDataRow )
-						{
-							mTmp = false;
-						}
-						iCount++;
 						return a.aData[a.iDataColumn];
 					} },
 					null,

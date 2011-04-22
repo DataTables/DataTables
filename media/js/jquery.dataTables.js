@@ -914,7 +914,8 @@
 				"bProcessing": false,
 				"bSortClasses": true,
 				"bStateSave": false,
-				"bServerSide": false
+				"bServerSide": false,
+				"bDeferRender": false
 			};
 			
 			/*
@@ -2026,8 +2027,11 @@
 				{
 					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 					{
-						nTd = oSettings.aoData[i]._anHidden[iCol];
-						oSettings.aoData[i].nTr.appendChild( nTd );
+						if ( oSettings.aoData[i].nTr !== null )
+						{
+							nTd = oSettings.aoData[i]._anHidden[iCol];
+							oSettings.aoData[i].nTr.appendChild( nTd );
+						}
 					}
 				}
 				else
@@ -2046,9 +2050,12 @@
 					anTds = _fnGetTdNodes( oSettings );
 					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 					{
-						nTd = oSettings.aoData[i]._anHidden[iCol];
-						oSettings.aoData[i].nTr.insertBefore( nTd, $('>td:eq('+iBefore+')', 
-							oSettings.aoData[i].nTr)[0] );
+						if ( oSettings.aoData[i].nTr !== null )
+						{
+							nTd = oSettings.aoData[i]._anHidden[iCol];
+							oSettings.aoData[i].nTr.insertBefore( nTd, $('>td:eq('+iBefore+')', 
+								oSettings.aoData[i].nTr)[0] );
+						}
 					}
 				}
 			}
@@ -2058,9 +2065,12 @@
 				anTds = _fnGetTdNodes( oSettings );
 				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 				{
-					nTd = anTds[ ( i*oSettings.aoColumns.length) + (iCol*1) ];
-					oSettings.aoData[i]._anHidden[iCol] = nTd;
-					nTd.parentNode.removeChild( nTd );
+					if ( oSettings.aoData[i].nTr !== null )
+					{
+						nTd = anTds[ ( i*oSettings.aoColumns.length) + (iCol*1) ];
+						oSettings.aoData[i]._anHidden[iCol] = nTd;
+						nTd.parentNode.removeChild( nTd );
+					}
 				}
 			}
 
@@ -2187,7 +2197,10 @@
 			nOrig.appendChild( oSettings.nTable );
 			for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 			{
-				nBody.appendChild( oSettings.aoData[i].nTr );
+				if ( oSettings.aoData[i].nTr !== null )
+				{
+					nBody.appendChild( oSettings.aoData[i].nTr );
+				}
 			}
 			
 			/* Restore the width of the original table */
@@ -2608,7 +2621,7 @@
 			/* Create the object for storing information about this new row */
 			var iRow = oSettings.aoData.length;
 			var oData = {
-				"nTr": document.createElement('tr'),
+				"nTr": null,//xxx document.createElement('tr'),
 				"_iId": oSettings.iNextId++,
 				"_aData": aDataIn,
 				"_anHidden": [],
@@ -2629,36 +2642,19 @@
 
 			/* Create the cells */
 			var nTd, sThisType;
-			for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
+			for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
 				var oCol = oSettings.aoColumns[i];
-				nTd = document.createElement('td');
 
-				/* Pre-render if needed */
-				if ( typeof oCol.fnRender == 'function' )
+				/* Use rendered data for filtering/sorting */
+				if ( typeof oCol.fnRender == 'function' && oCol.bUseRendered )
 				{
-					var sRendered = oCol.fnRender( {
+					_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
 						"iDataRow": iRow,
 						"iDataColumn": i,
-						"aData": aDataIn,
+						"aData": oData._aData,
 						"oSettings": oSettings
-					} );
-					nTd.innerHTML = sRendered;
-					if ( oCol.bUseRendered )
-					{
-						/* Use the rendered data for filtering/sorting */
-						_fnSetCellData( oSettings, iRow, i, sRendered );
-					}
-				}
-				else
-				{
-					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, '' );
-				}
-				
-				/* Add user defined class */
-				if ( oCol.sClass !== null )
-				{
-					nTd.className = oCol.sClass;
+					} ) );
 				}
 				
 				/* See if we should auto-detect the column type */
@@ -2676,21 +2672,66 @@
 						oCol.sType = 'string';
 					}
 				}
-					
-				if ( oCol.bVisible )
-				{
-					oData.nTr.appendChild( nTd );
-					oData._anHidden[i] = null;
-				}
-				else
-				{
-					oData._anHidden[i] = nTd;
-				}
 			}
 			
 			/* Add to the display array */
 			oSettings.aiDisplayMaster.push( iRow );
+
+			/* Create the DOM imformation */
+			if ( !oSettings.oFeatures.bDeferRender )
+			{
+				_fnCreateTr( oSettings, iRow );
+			}
+
 			return iRow;
+		}
+
+		function _fnCreateTr ( oSettings, iRow )
+		{
+			var oData = oSettings.aoData[iRow];
+			var nTd;
+
+			if ( oData.nTr === null )
+			{
+				oData.nTr = document.createElement('tr');
+
+				for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+				{
+					var oCol = oSettings.aoColumns[i];
+					nTd = document.createElement('td');
+
+					/* Render if needed */
+					if ( typeof oCol.fnRender == 'function' )
+					{
+						nTd.innerHTML = oCol.fnRender( {
+							"iDataRow": iRow,
+							"iDataColumn": i,
+							"aData": oData._aData,
+							"oSettings": oSettings
+						} );
+					}
+					else
+					{
+						nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, '' );
+					}
+				
+					/* Add user defined class */
+					if ( oCol.sClass !== null )
+					{
+						nTd.className = oCol.sClass;
+					}
+					
+					if ( oCol.bVisible )
+					{
+						oData.nTr.appendChild( nTd );
+						oData._anHidden[i] = null;
+					}
+					else
+					{
+						oData._anHidden[i] = nTd;
+					}
+				}
+			}
 		}
 		
 		/*
@@ -3109,6 +3150,12 @@
 				for ( var j=iStart ; j<iEnd ; j++ )
 				{
 					var aoData = oSettings.aoData[ oSettings.aiDisplay[j] ];
+					if ( aoData.nTr === null )
+					{
+						_fnCreateTr( oSettings, oSettings.aiDisplay[j] );
+						bNewRowCreated = true;
+					}
+
 					var nRow = aoData.nTr;
 					
 					/* Remove the old stripping classes and then add the new one */
@@ -4487,7 +4534,7 @@
 			}
 			
 			/* Alter the sorting classes to take account of the changes */
-			if ( typeof bApplyClasses == 'undefined' || bApplyClasses )
+			if ( (typeof bApplyClasses == 'undefined' || bApplyClasses) && !oSettings.oFeatures.bDeferRender )
 			{
 				_fnSortingClasses( oSettings );
 			}
@@ -4720,15 +4767,22 @@
 			 * Further to this, note that this code is admitadly fairly ugly. It could be made a lot 
 			 * simpiler using jQuery selectors and add/removeClass, but that is significantly slower
 			 * (on the order of 5 times slower) - hence the direct DOM manipulation here.
+			 * Note that for defered drawing we do use jQuery - the reason being that taking the first
+			 * row found to see if the whole column needs processed can miss classes since the first
+			 * column might be new.
 			 */
 			sClass = oClasses.sSortColumn;
 			
 			if ( oSettings.oFeatures.bSort && oSettings.oFeatures.bSortClasses )
 			{
 				var nTds = _fnGetTdNodes( oSettings );
-				
+
 				/* Remove the old classes */
-				if ( nTds.length >= iColumns )
+				if ( oSettings.oFeatures.bDeferRender )
+				{
+					$(nTds).removeClass(sClass+'1 '+sClass+'2 '+sClass+'3');
+				}
+				else if ( nTds.length >= iColumns )
 				{
 					for ( i=0 ; i<iColumns ; i++ )
 					{
@@ -5515,61 +5569,25 @@
 		 * Returns:  string: - max strlens for each column
 		 * Inputs:   object:oSettings - dataTables settings object
 		 *           int:iCol - column of interest
-		 *           boolean:bFast - Should we use fast (but non-accurate) calculation - optional,
-		 *             default true
-		 * Notes:    This operation is _expensive_ (!!!). It requires a lot of DOM interaction, but
-		 *   this is the only way to reliably get the widest string. For example 'mmm' would be wider
-		 *   than 'iiii' so we can't just ocunt characters. If this can be optimised it would be good
-		 *   to do so!
 		 */
-		function _fnGetWidestNode( oSettings, iCol, bFast )
+		function _fnGetWidestNode( oSettings, iCol )
 		{
-			/* Use fast not non-accurate calculate based on the strlen */
-			if ( typeof bFast == 'undefined' || bFast )
+			var iMaxIndex = _fnGetMaxLenString( oSettings, iCol );
+			var iVis = _fnColumnIndexToVisible( oSettings, iCol);
+			if ( iMaxIndex < 0 )
 			{
-				var iMaxLen = _fnGetMaxLenString( oSettings, iCol );
-				var iFastVis = _fnColumnIndexToVisible( oSettings, iCol);
-				if ( iMaxLen < 0 )
-				{
-					return null;
-				}
-				return oSettings.aoData[iMaxLen].nTr.getElementsByTagName('td')[iFastVis];
+				return null;
 			}
-			
-			/* Use the slow approach, but get high quality answers - note that this code is not actually
-			 * used by DataTables by default. If you want to use it you can alter the call to 
-			 * _fnGetWidestNode to pass 'false' as the third argument
-			 */
-			var
-				iMax = -1, i, iLen,
-				iMaxIndex = -1,
-				n = document.createElement('div');
-			
-			n.style.visibility = "hidden";
-			n.style.position = "absolute";
-			document.body.appendChild( n );
-			
-			for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+
+			if ( oSettings.aoData[iMaxIndex].nTr === null )
 			{
-				n.innerHTML = _fnGetCellData( oSettings, i, iCol, '' );
-				if ( n.offsetWidth > iMax )
-				{
-					iMax = n.offsetWidth;
-					iMaxIndex = i;
-				}
+				var n = document.createElement('td');
+				n.appendChild( document.createTextNode(
+					_fnGetCellData( oSettings, iMaxIndex, iCol, '' ) )
+				);
+				return n;
 			}
-			document.body.removeChild( n );
-			
-			if ( iMaxIndex >= 0 )
-			{
-				var iVis = _fnColumnIndexToVisible( oSettings, iCol);
-				var nRet = oSettings.aoData[iMaxIndex].nTr.getElementsByTagName('td')[iVis];
-				if ( nRet )
-				{
-					return nRet;
-				}
-			}
-			return null;
+			return oSettings.aoData[iMaxIndex].nTr.getElementsByTagName('td')[iVis];
 		}
 		
 		/*
@@ -5724,54 +5742,61 @@
 		function _fnGetTrNodes ( oSettings )
 		{
 			var aNodes = [];
-			var iLen = oSettings.aoData.length;
-			for ( var i=0 ; i<iLen ; i++ )
+			for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 			{
-				aNodes.push( oSettings.aoData[i].nTr );
+				if ( oSettings.aoData[i].nTr !== null )
+				{
+					aNodes.push( oSettings.aoData[i].nTr );
+				}
 			}
 			return aNodes;
 		}
 		
 		/*
 		 * Function: _fnGetTdNodes
-		 * Purpose:  Return an array with the TD nodes for the table
+		 * Purpose:  Return an flat array with all TD nodes for the table
 		 * Returns:  array: - TD array
 		 * Inputs:   object:oSettings - dataTables settings object
 		 */
 		function _fnGetTdNodes ( oSettings )
 		{
-			var nTrs = _fnGetTrNodes( oSettings );
-			var nTds = [], nTd;
 			var anReturn = [];
 			var iCorrector;
-			var iRow, iRows, iColumn, iColumns;
-			
-			for ( iRow=0, iRows=nTrs.length ; iRow<iRows ; iRow++ )
+			var anTds;
+			var iRow, iRows=oSettings.aoData.length,
+				iColumn, iColumns;
+
+			for ( iRow=0 ; iRow<iRows ; iRow++ )
 			{
-				nTds = [];
-				for ( iColumn=0, iColumns=nTrs[iRow].childNodes.length ; iColumn<iColumns ; iColumn++ )
+				oData = oSettings.aoData[iRow];
+				if ( oData.nTr !== null )
 				{
-					nTd = nTrs[iRow].childNodes[iColumn];
-					if ( nTd.nodeName.toUpperCase() == "TD" )
+					/* get the TD child nodes - taking into account text etc nodes */
+					anTds = [];
+					for ( iColumn=0, iColumns=oData.nTr.childNodes.length ; iColumn<iColumns ; iColumn++ )
 					{
-						nTds.push( nTd );
+						if ( oData.nTr.childNodes[iColumn].nodeName.toLowerCase() == 'td' )
+						{
+							anTds.push( oData.nTr.childNodes[iColumn] );
+						}
 					}
-				}
-				
-				iCorrector = 0;
-				for ( iColumn=0, iColumns=oSettings.aoColumns.length ; iColumn<iColumns ; iColumn++ )
-				{
-					if ( oSettings.aoColumns[iColumn].bVisible )
+
+					iCorrector = 0;
+					for ( iColumn=0, iColumns=oSettings.aoColumns.length ; iColumn<iColumns ; iColumn++ )
 					{
-						anReturn.push( nTds[iColumn-iCorrector] );
-					}
-					else
-					{
-						anReturn.push( oSettings.aoData[iRow]._anHidden[iColumn] );
-						iCorrector++;
+						if ( oSettings.aoColumns[iColumn].bVisible )
+						{
+							anReturn.push( anTds[iColumn-iCorrector] );
+						}
+						else
+						{
+							anReturn.push( oData._anHidden[iColumn] );
+							iCorrector++;
+						}
 					}
 				}
 			}
+
 			return anReturn;
 		}
 		
@@ -6717,6 +6742,7 @@
 				_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
 				_fnMap( oSettings.oFeatures, oInit, "bSortClasses" );
 				_fnMap( oSettings.oFeatures, oInit, "bServerSide" );
+				_fnMap( oSettings.oFeatures, oInit, "bDeferRender" );
 				_fnMap( oSettings.oScroll, oInit, "sScrollX", "sX" );
 				_fnMap( oSettings.oScroll, oInit, "sScrollXInner", "sXInner" );
 				_fnMap( oSettings.oScroll, oInit, "sScrollY", "sY" );
@@ -6782,6 +6808,16 @@
 					oSettings.aoDrawCallback.push( {
 						"fn": _fnSortingClasses,
 						"sName": "server_side_sort_classes"
+					} );
+				}
+				else if ( oSettings.oFeatures.bDeferRender && oSettings.oFeatures.bSortClasses )
+				{
+					/* Enable sort classes for server-side processing. Safe to do it here, since server-side
+					 * processing must be enabled by the developer
+					 */
+					oSettings.aoDrawCallback.push( {
+						"fn": _fnSortingClasses,
+						"sName": "defer_sort_classes"
 					} );
 				}
 				

@@ -23,9 +23,9 @@ $(document).ready( function () {
 	var oSettings = oTable.fnSettings();
 	
 	oTest.fnWaitTest( 
-		"Single column - fnRender is called once for each row",
+		"Single column - fnRender is called twice for each row",
 		null,
-		function () { return mTmp == 57; }
+		function () { return mTmp == 114; }
 	);
 	
 	oTest.fnWaitTest( 
@@ -47,36 +47,6 @@ $(document).ready( function () {
 							return a.aData['browser'];
 						},
 						"mDataSource": "browser"
-					},
-					{ "mDataSource": "platform" },
-					{ "mDataSource": "version" },
-					{ "mDataSource": "grade" }
-				]
-			} );
-		},
-		function () { return mTmp; }
-	);
-	
-	oTest.fnWaitTest( 
-		"fnRender iDataColumn is row number",
-		function () {
-			var iCount = 0;
-			mTmp = true;
-			oSession.fnRestore();
-			oTable = $('#example').dataTable( {
-				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
-				"aoColumns": [
-					{ "mDataSource": "engine" },
-					{
-						"mDataSource": "browser",
-						"fnRender": function (a) {
-							if ( iCount != a.iDataRow )
-							{
-								mTmp = false;
-							}
-							iCount++;
-							return a.aData['browser'];
-						}
 					},
 					{ "mDataSource": "platform" },
 					{ "mDataSource": "version" },
