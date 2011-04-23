@@ -6,11 +6,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataSource": "engine" },
-			{ "mDataSource": "browser" },
-			{ "mDataSource": "platform" },
-			{ "mDataSource": "version" },
-			{ "mDataSource": "grade" }
+			{ "mDataProp": "engine" },
+			{ "mDataProp": "browser" },
+			{ "mDataProp": "platform" },
+			{ "mDataProp": "version" },
+			{ "mDataProp": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -35,11 +35,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"oLanguage": {
 					"sInfoPostFix": "unit test"
@@ -64,11 +64,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"oLanguage": {
 					"sInfoPostFix": "unit _START_ _END_ _TOTAL_ test"
@@ -86,11 +86,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"oLanguage": {
 					"sInfoPostFix": "unit test"

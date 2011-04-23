@@ -12,9 +12,9 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataSource": "engine" },
+			{ "mDataProp": "engine" },
 			{
-				"mDataSource": "browser",
+				"mDataProp": "browser",
 				"fnRender": function (a) {
 					if ( mTmp == 0 ) {
 						mTmp++;
@@ -23,9 +23,9 @@ $(document).ready( function () {
 						return a.aData['browser'];
 				}
 			},
-			{ "mDataSource": "platform" },
-			{ "mDataSource": "version" },
-			{ "mDataSource": "grade" }
+			{ "mDataProp": "platform" },
+			{ "mDataProp": "version" },
+			{ "mDataProp": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -44,9 +44,9 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataSource": "engine" },
+					{ "mDataProp": "engine" },
 					{ 
-						"mDataSource": "browser",
+						"mDataProp": "browser",
 						"bUseRendered": false,
 						"fnRender": function (a) {
 							if ( mTmp == 0 ) {
@@ -57,9 +57,9 @@ $(document).ready( function () {
 							}
 						}
 					},
-					{ "mDataSource": "platform" },
-					{ "mDataSource": "version" },
-					{ "mDataSource": "grade" }
+					{ "mDataProp": "platform" },
+					{ "mDataProp": "version" },
+					{ "mDataProp": "grade" }
 				]
 			} );
 			$('#example thead th:eq(1)').click();
@@ -80,7 +80,7 @@ $(document).ready( function () {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
 					{
-						"mDataSource": "engine",
+						"mDataProp": "engine",
 						"fnRender": function (a) {
 							if ( mTmp == 0 ) {
 								mTmp++;
@@ -91,7 +91,7 @@ $(document).ready( function () {
 						}
 					},
 					{ 
-						"mDataSource": "browser",
+						"mDataProp": "browser",
 						"bUseRendered": false,
 						"fnRender": function (a) {
 							if ( mTmp2 == 0 ) {
@@ -103,7 +103,7 @@ $(document).ready( function () {
 						}
 					},
 					{
-						"mDataSource": "platform",
+						"mDataProp": "platform",
 						"fnRender": function (a) {
 							if ( mTmp3 == 0 ) {
 								mTmp3++;
@@ -113,8 +113,8 @@ $(document).ready( function () {
 							}
 						}
 					},
-					{ "mDataSource": "version" },
-					{ "mDataSource": "grade" }
+					{ "mDataProp": "version" },
+					{ "mDataProp": "grade" }
 				]
 			} );
 		},

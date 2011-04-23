@@ -8,11 +8,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataSource": "engine" },
-			{ "mDataSource": "browser" },
-			{ "mDataSource": "platform" },
-			{ "mDataSource": "version", "sName": 'unit test' },
-			{ "mDataSource": "grade" }
+			{ "mDataProp": "engine" },
+			{ "mDataProp": "browser" },
+			{ "mDataProp": "platform" },
+			{ "mDataProp": "version", "sName": 'unit test' },
+			{ "mDataProp": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();

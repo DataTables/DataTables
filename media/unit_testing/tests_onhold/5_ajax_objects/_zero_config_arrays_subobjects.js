@@ -24,9 +24,9 @@ $(document).ready( function () {
 		"aoColumns": [
 			null,
 			null,
-			{ "mDataSource": 2 },
-			{ "mDataSource": "3.version" },
-			{ "mDataSource": "3.grade" }
+			{ "mDataProp": 2 },
+			{ "mDataProp": "3.version" },
+			{ "mDataProp": "3.grade" }
 		],
 		"aaData": [
 	[

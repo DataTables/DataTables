@@ -26,7 +26,7 @@ $(document).ready( function () {
 			null,
 			null,
 			null,
-			{ "mDataSource": null }
+			{ "mDataProp": null }
 		],
 		"aaData": gaaData
 	};

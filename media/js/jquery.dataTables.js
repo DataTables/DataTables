@@ -1801,7 +1801,7 @@
 		 *               int: - return data object for aoData entry of this index
 		 *               node(TR): - return data object for this TR element
 		 *           int:iCol - optional - the column that you want the data of. This will take into
-		 *               account mDataSource and return the value DataTables uses for this column
+		 *               account mDataProp and return the value DataTables uses for this column
 		 */
 		this.fnGetData = function( mRow, iCol )
 		{
@@ -2521,7 +2521,7 @@
 				"fnRender": null,
 				"bUseRendered": true,
 				"iDataSort": iCol,
-				"mDataSource": iCol,
+				"mDataProp": iCol,
 				"fnGetData": null,
 				"fnSetData": null,
 				"sSortDataType": 'std',
@@ -2589,14 +2589,14 @@
 				_fnMap( oCol, oOptions, "fnRender" );
 				_fnMap( oCol, oOptions, "bUseRendered" );
 				_fnMap( oCol, oOptions, "iDataSort" );
-				_fnMap( oCol, oOptions, "mDataSource" );
+				_fnMap( oCol, oOptions, "mDataProp" );
 				_fnMap( oCol, oOptions, "asSorting" );
 				_fnMap( oCol, oOptions, "sSortDataType" );
 			}
 
 			/* Cache the data get and set functions for speed */
-			oCol.fnGetData = _fnGetObjectDataFn( oCol.mDataSource );
-			oCol.fnSetData = _fnSetObjectDataFn( oCol.mDataSource );
+			oCol.fnGetData = _fnGetObjectDataFn( oCol.mDataProp );
+			oCol.fnSetData = _fnSetObjectDataFn( oCol.mDataProp );
 			
 			/* Feature sorting overrides column specific when off */
 			if ( !oSettings.oFeatures.bSort )
@@ -6451,7 +6451,7 @@
 			{
 				if ( oSettings.iDrawError != oSettings.iDraw )
 				{
-					_fnLog( oSettings, 0, "Requested unknown parameter '"+oCol.mDataSource+
+					_fnLog( oSettings, 0, "Requested unknown parameter '"+oCol.mDataProp+
 						"' from the data source for row "+iRow );
 					oSettings.iDrawError = oSettings.iDraw;
 					return '';

@@ -12,11 +12,11 @@ $(document).ready( function () {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"bAutoWidth": false,
 		"aoColumns": [
-			{ "mDataSource": "engine" },
-			{ "mDataSource": "browser", "sWidth": '40%' },
-			{ "mDataSource": "platform" },
-			{ "mDataSource": "version" },
-			{ "mDataSource": "grade" }
+			{ "mDataProp": "engine" },
+			{ "mDataProp": "browser", "sWidth": '40%' },
+			{ "mDataProp": "platform" },
+			{ "mDataProp": "version" },
+			{ "mDataProp": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -35,11 +35,11 @@ $(document).ready( function () {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"bAutoWidth": false,
 				"aoColumns": [
-					{ "mDataSource": "engine" },
-					{ "mDataSource": "browser" },
-					{ "mDataSource": "platform", "sWidth": '20%' },
-					{ "mDataSource": "version", "sWidth": '30%' },
-					{ "mDataSource": "grade" }
+					{ "mDataProp": "engine" },
+					{ "mDataProp": "browser" },
+					{ "mDataProp": "platform", "sWidth": '20%' },
+					{ "mDataProp": "version", "sWidth": '30%' },
+					{ "mDataProp": "grade" }
 				]
 			} );
 		},
@@ -59,11 +59,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataSource": "engine" },
-					{ "mDataSource": "browser" },
-					{ "mDataSource": "platform" },
-					{ "mDataSource": "version", "sWidth": '40%' },
-					{ "mDataSource": "grade" }
+					{ "mDataProp": "engine" },
+					{ "mDataProp": "browser" },
+					{ "mDataProp": "platform" },
+					{ "mDataProp": "version", "sWidth": '40%' },
+					{ "mDataProp": "grade" }
 				]
 			} );
 		},

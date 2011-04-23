@@ -10,11 +10,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"fnServerData": function () {
 					mPass = arguments.length;
@@ -31,11 +31,11 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"fnServerData": function (sUrl, aoData, fnCallback) {
 					mPass = sUrl == "../../../examples/ajax/sources/objects.txt";
@@ -52,11 +52,11 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"fnServerData": function (sUrl, aoData, fnCallback) {
 					mPass = aoData.length==0;
@@ -73,11 +73,11 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataSource": "engine", "aTargets": [0] },
-					{ "mDataSource": "browser", "aTargets": [1] },
-					{ "mDataSource": "platform", "aTargets": [2] },
-					{ "mDataSource": "version", "aTargets": [3] },
-					{ "mDataSource": "grade", "aTargets": [4] }
+					{ "mDataProp": "engine", "aTargets": [0] },
+					{ "mDataProp": "browser", "aTargets": [1] },
+					{ "mDataProp": "platform", "aTargets": [2] },
+					{ "mDataProp": "version", "aTargets": [3] },
+					{ "mDataProp": "grade", "aTargets": [4] }
 				],
 				"fnServerData": function (sUrl, aoData, fnCallback) {
 					mPass = typeof fnCallback == 'function';
