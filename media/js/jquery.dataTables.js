@@ -1720,10 +1720,10 @@
 		 * Purpose:  Open a display row (append a row after the row in question)
 		 * Returns:  node:nNewRow - the row opened
 		 * Inputs:   node:nTr - the table row to 'open'
-		 *           string:sHtml - the HTML to put into the row
+		 *           string|node|jQuery:mHtml - the HTML to put into the row
 		 *           string:sClass - class to give the new TD cell
 		 */
-		this.fnOpen = function( nTr, sHtml, sClass )
+		this.fnOpen = function( nTr, mHtml, sClass )
 		{
 			/* Find settings from table node */
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
@@ -1736,8 +1736,16 @@
 			nNewRow.appendChild( nNewCell );
 			nNewCell.className = sClass;
 			nNewCell.colSpan = _fnVisbleColumns( oSettings );
-			nNewCell.innerHTML = sHtml;
-			
+
+			if( typeof mHtml.jquery != 'undefined' || typeof mHtml == "object" )
+			{
+				nNewCell.appendChild( mHtml );
+			}
+			else
+			{
+				nNewCell.innerHTML = mHtml;
+			}
+
 			/* If the nTr isn't on the page at the moment - then we don't insert at the moment */
 			var nTrs = $('tr', oSettings.nTBody);
 			if ( $.inArray(nTr, nTrs) != -1 )
