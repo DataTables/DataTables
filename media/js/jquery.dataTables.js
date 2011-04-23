@@ -2653,17 +2653,6 @@
 			};
 			oSettings.aoData.push( oData );
 
-			/* Special parameters can be given by the data source to be used on the row */
-			if ( typeof aDataIn.DT_RowId != 'undefined' )
-			{
-				oData.nTr.setAttribute( 'id', aDataIn.DT_RowId );
-			}
-
-			if ( typeof aDataIn.DT_RowClass != 'undefined' )
-			{
-				$(oData.nTr).addClass( aDataIn.DT_RowClass );
-			}
-
 			/* Create the cells */
 			var nTd, sThisType;
 			for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
@@ -2709,7 +2698,14 @@
 
 			return iRow;
 		}
-
+		
+		/*
+		 * Function: _fnCreateTr
+		 * Purpose:  Create a new TR element (and it's TD children) for a row
+		 * Returns:  void
+		 * Inputs:   object:oSettings - dataTables settings object
+		 *           int:iRow - Row to consider
+		 */
 		function _fnCreateTr ( oSettings, iRow )
 		{
 			var oData = oSettings.aoData[iRow];
@@ -2719,6 +2715,18 @@
 			{
 				oData.nTr = document.createElement('tr');
 
+				/* Special parameters can be given by the data source to be used on the row */
+				if ( typeof oData.DT_RowId != 'undefined' )
+				{
+					oData.nTr.setAttribute( 'id', oData.DT_RowId );
+				}
+
+				if ( typeof oData.DT_RowClass != 'undefined' )
+				{
+					$(oData.nTr).addClass( oData.DT_RowClass );
+				}
+
+				/* Process each column */
 				for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
 					var oCol = oSettings.aoColumns[i];
