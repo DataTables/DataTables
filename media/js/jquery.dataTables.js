@@ -2210,7 +2210,15 @@
 			}
 			
 			/* Add the TR elements back into the table in their original order */
-			nOrig.appendChild( oSettings.nTable );
+			if ( oSettings.nTableReinsertBefore )
+			{
+				nOrig.insertBefore( oSettings.nTable, oSettings.nTableReinsertBefore );
+			}
+			else
+			{
+				nOrig.appendChild( oSettings.nTable );
+			}
+
 			for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 			{
 				if ( oSettings.aoData[i].nTr !== null )
@@ -3511,8 +3519,7 @@
 			oSettings.nTable.parentNode.insertBefore( nHolding, oSettings.nTable );
 			
 			/* 
-			 * All DataTables are wrapped in a div - this is not currently optional - backwards 
-			 * compatability. It can be removed if you don't want it.
+			 * All DataTables are wrapped in a div
 			 */
 			oSettings.nTableWrapper = document.createElement( 'div' );
 			oSettings.nTableWrapper.className = oSettings.oClasses.sWrapper;
@@ -3520,7 +3527,9 @@
 			{
 				oSettings.nTableWrapper.setAttribute( 'id', oSettings.sTableId+'_wrapper' );
 			}
-			
+
+			oSettings.nTableReinsertBefore = oSettings.nTable.nextSibling;
+
 			/* Track where we want to insert the option */
 			var nInsertNode = oSettings.nTableWrapper;
 			
