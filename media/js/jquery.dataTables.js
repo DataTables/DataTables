@@ -183,6 +183,7 @@
 		"sSortJUIAscAllowed": "",
 		"sSortJUIDescAllowed": "",
 		"sSortJUIWrapper": "",
+		"sSortIcon": "",
 		
 		/* Scrolling */
 		"sScrollWrapper": "dataTables_scroll",
@@ -249,6 +250,7 @@
 		"sSortJUIAscAllowed": "css_right ui-icon ui-icon-carat-1-n",
 		"sSortJUIDescAllowed": "css_right ui-icon ui-icon-carat-1-s",
 		"sSortJUIWrapper": "DataTables_sort_wrapper",
+		"sSortIcon": "DataTables_sort_icon",
 		
 		/* Scrolling */
 		"sScrollWrapper": "dataTables_scroll",
@@ -2197,7 +2199,14 @@
 					_oExt.oJUIClasses.sSortableDesc,
 					_oExt.oJUIClasses.sSortableNone ].join(' ')
 				);
-				$('th span', oSettings.nTHead).remove();
+				$('th span.'+_oExt.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
+
+				$('th', oSettings.nTHead).each( function () {
+					var jqWrapper = $('div.'+_oExt.oJUIClasses.sSortJUIWrapper, this);
+					var kids = jqWrapper.contents();
+					$(this).append( kids );
+					jqWrapper.remove();
+				} );
 			}
 			
 			/* Add the TR elements back into the table in their original order */
@@ -2964,7 +2973,9 @@
 					nDiv.className = oSettings.oClasses.sSortJUIWrapper;
 					$(nTh).contents().appendTo(nDiv);
 					
-					nDiv.appendChild( document.createElement('span') );
+					var nSpan = document.createElement('span');
+					nSpan.className = oSettings.oClasses.sSortIcon;
+					nDiv.appendChild( nSpan );
 					nTh.appendChild( nDiv );
 				}
 			}
