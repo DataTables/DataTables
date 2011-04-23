@@ -2716,14 +2716,14 @@
 				oData.nTr = document.createElement('tr');
 
 				/* Special parameters can be given by the data source to be used on the row */
-				if ( typeof oData.DT_RowId != 'undefined' )
+				if ( typeof oData._aData.DT_RowId != 'undefined' )
 				{
-					oData.nTr.setAttribute( 'id', oData.DT_RowId );
+					oData.nTr.setAttribute( 'id', oData._aData.DT_RowId );
 				}
 
-				if ( typeof oData.DT_RowClass != 'undefined' )
+				if ( typeof oData._aData.DT_RowClass != 'undefined' )
 				{
-					$(oData.nTr).addClass( oData.DT_RowClass );
+					$(oData.nTr).addClass( oData._aData.DT_RowClass );
 				}
 
 				/* Process each column */
