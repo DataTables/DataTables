@@ -13,15 +13,16 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				var oTable = $('#example').dataTable( {
+				$('#example').dataTable( {
 					"bProcessing": true,
-					"sAjaxSource": "sources/objects_subarrays.txt",
+					"bServerSide": true,
+					"sAjaxSource": "scripts/objects.php",
 					"aoColumns": [
 						{ "mDataProp": "engine" },
 						{ "mDataProp": "browser" },
 						{ "mDataProp": "platform" },
-						{ "mDataProp": "details.0" },
-						{ "mDataProp": "details.1" }
+						{ "mDataProp": "version" },
+						{ "mDataProp": "grade" }
 					]
 				} );
 			} );
@@ -30,11 +31,12 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				DataTables AJAX source example - array of objects with sub-arrays as a data source
+				DataTables server-side processing example - object based data source
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>While the ability of DataTables to read arbitrary objects properties as a data source for any column is very powerful, it actually goes further than single level object properties; it is possible to read a data source for a column from a deeply nested array or property. This is specified in typical Javascript dotted object notation. For example "details.0" (used in this example) refers to the first property in an array called "details". "details.1" refers to the second property, etc. Object properties can also be used - for example "details.version" is perfectly valid, if that property is available in your data source.</p>
+			<p>The "native" data format that DataTables expects for server-side processing is a 2D array of data (rows by columns). However, this is often not flexible enough for either the server-side environment, or you might want to convey more information in the data source than is necessary to show in the table (row IDs from the database for example). For this DataTables supports the reading of data for objects as well as arrays.</p>
+			<p>In this example the server responds with an array of objects, and DataTables will look up each property that is specified by the <b>mDataProp</b> property given for each column</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -49,7 +51,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		
+		<tr>
+			<td colspan="5" class="dataTables_empty">Loading data from server</td>
+		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
@@ -67,15 +71,16 @@
 			
 			<h1>Initialisation code</h1>
 			<pre>$(document).ready(function() {
-	var oTable = $('#example').dataTable( {
+	$('#example').dataTable( {
 		"bProcessing": true,
-		"sAjaxSource": "sources/objects_subarrays.txt",
+		"bServerSide": true,
+		"sAjaxSource": "scripts/objects.php",
 		"aoColumns": [
 			{ "mDataProp": "engine" },
 			{ "mDataProp": "browser" },
 			{ "mDataProp": "platform" },
-			{ "mDataProp": "details.0" },
-			{ "mDataProp": "details.1" }
+			{ "mDataProp": "version" },
+			{ "mDataProp": "grade" }
 		]
 	} );
 } );</pre>

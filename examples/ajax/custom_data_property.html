@@ -15,14 +15,8 @@
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
 					"bProcessing": true,
-					"sAjaxSource": "sources/objects_subarrays.txt",
-					"aoColumns": [
-						{ "mDataProp": "engine" },
-						{ "mDataProp": "browser" },
-						{ "mDataProp": "platform" },
-						{ "mDataProp": "details.0" },
-						{ "mDataProp": "details.1" }
-					]
+					"sAjaxSource": "sources/custom_prop.txt",
+					"sAjaxDataProp": "demo"
 				} );
 			} );
 		</script>
@@ -30,11 +24,11 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				DataTables AJAX source example - array of objects with sub-arrays as a data source
+				DataTables AJAX source example - reading an arbitrary data source property
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>While the ability of DataTables to read arbitrary objects properties as a data source for any column is very powerful, it actually goes further than single level object properties; it is possible to read a data source for a column from a deeply nested array or property. This is specified in typical Javascript dotted object notation. For example "details.0" (used in this example) refers to the first property in an array called "details". "details.1" refers to the second property, etc. Object properties can also be used - for example "details.version" is perfectly valid, if that property is available in your data source.</p>
+			<p>By default DataTables will read the data to show in the table from the <i>aaData</i> property of the object returned from the server. By using the initialisation option <b>sAjaxDataProp</b> you can customise this to whatever you wish. This examples shows it being set to 'demo'. Note that this option will also work with server-side processing. Additionally, it is possible to set <b>sAjaxDataProp</b> to be an empty string, which results in DataTables treating the given data source as the table data array (rather than as property of an object).</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -67,16 +61,10 @@
 			
 			<h1>Initialisation code</h1>
 			<pre>$(document).ready(function() {
-	var oTable = $('#example').dataTable( {
+	$('#example').dataTable( {
 		"bProcessing": true,
-		"sAjaxSource": "sources/objects_subarrays.txt",
-		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "details.0" },
-			{ "mDataProp": "details.1" }
-		]
+		"sAjaxSource": "sources/custom_prop.txt",
+		"sAjaxDataProp": "demo"
 	} );
 } );</pre>
 			

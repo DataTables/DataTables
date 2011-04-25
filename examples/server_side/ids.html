@@ -13,16 +13,10 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				var oTable = $('#example').dataTable( {
+				$('#example').dataTable( {
 					"bProcessing": true,
-					"sAjaxSource": "sources/arrays.txt",
-					"aoColumns": [
-						null,
-						null,
-						null,
-						null,
-						{ "mDataProp": null }
-					]
+					"bServerSide": true,
+					"sAjaxSource": "scripts/id.php"
 				} );
 			} );
 		</script>
@@ -30,11 +24,11 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				<i>DataTables</i> AJAX source example
+				DataTables server-side processing example - automatic row ID addition
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>Although <i>DataTables</i> is built from the principle of progressive enhancement, it is often useful to be able to construct a table from an AJAX source. This can be done in one of two ways - either using the <b>aData</b> initialisation parameter which takes an array of data, or using the <b>sAjaxSource</b> initialisation parameter which will have <i>DataTables</i> go to that source with an XHR call and load data from there. This example shows the latter method in action. <i>DataTables</i> expects an object with an array called "aaData" with the data source.</p>
+			<p>Often when using server-side processing you will find that it can be useful to have a specific ID on each row (the row ID from the database for example). By assigning the ID you want to apply to each row using the property <b>DT_RowId</b> of the data source object for each row, DataTables will automatically add it for you. Likewise there is a <b>DT_RowClass</b> option which will add your given class. This example shows both and is a trivial modification of the server-side script to add these two options, with no changes on the client-side.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -49,7 +43,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		
+		<tr>
+			<td colspan="5" class="dataTables_empty">Loading data from server</td>
+		</tr>
 	</tbody>
 	<tfoot>
 		<tr>
@@ -69,7 +65,8 @@
 			<pre>$(document).ready(function() {
 	$('#example').dataTable( {
 		"bProcessing": true,
-		"sAjaxSource": "sources/arrays.txt"
+		"bServerSide": true,
+		"sAjaxSource": "scripts/ids.php"
 	} );
 } );</pre>
 			
@@ -162,7 +159,7 @@
 			</ul>
 			
 			
-			<p>Please refer to the <a href="http://www.datatables.net/"><i>DataTables</i> documentation</a> for full information about its API properties and methods.</p>
+			<p>Please refer to the <a href="http://www.datatables.net/">DataTables documentation</a> for full information about its API properties and methods.</p>
 			
 			
 			<div id="footer" style="text-align:center;">

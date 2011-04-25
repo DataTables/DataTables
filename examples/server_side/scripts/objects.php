@@ -115,7 +115,7 @@
 	 * Get data to display
 	 */
 	$sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS id, ".str_replace(" , ", " ", implode(", ", $aColumns))."
+		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
 		FROM   $sTable
 		$sWhere
 		$sOrder
@@ -154,22 +154,17 @@
 	while ( $aRow = mysql_fetch_array( $rResult ) )
 	{
 		$row = array();
-		
-		// Add the row ID and class to the object
-		$row['DT_RowId'] = 'row_'.$aRow['id'];
-		$row['DT_RowClass'] = 'grade'.$aRow['grade'];
-		
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
 		{
 			if ( $aColumns[$i] == "version" )
 			{
 				/* Special output formatting for 'version' column */
-				$row[] = ($aRow[ $aColumns[$i] ]=="0") ? '-' : $aRow[ $aColumns[$i] ];
+				$row[ $aColumns[$i] ] = ($aRow[ $aColumns[$i] ]=="0") ? '-' : $aRow[ $aColumns[$i] ];
 			}
 			else if ( $aColumns[$i] != ' ' )
 			{
 				/* General output */
-				$row[] = $aRow[ $aColumns[$i] ];
+				$row[ $aColumns[$i] ] = $aRow[ $aColumns[$i] ];
 			}
 		}
 		$output['aaData'][] = $row;

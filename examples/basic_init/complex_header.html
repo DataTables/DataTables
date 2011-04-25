@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/media/images/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico" />
 		
 		<title>DataTables example</title>
 		<style type="text/css" title="currentStyle">
@@ -17,27 +17,42 @@
 			} );
 		</script>
 	</head>
-	<body id="dt_example" class="ex_highlight_row">
+	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				DataTables highlighting via CSS example
+				DataTables complex header example (row and colspans)
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>When highlighting rows using CSS :hover, you need to be aware of the sorting class which is applied to elements in the column currently being sorted (assuming it is enabled - it is by default). This example shows how to consider this in CSS, with highlighting for each row, and a little tint for the sorting column to maintain it's visibility as the column currently being sorted upon.</p>
+			<p>When using tables to display data, you will often wish to display column information in groups. DataTables fully supports colspan and rowspans in the header, assigning the required sorting listeners to the TH element suitable for that column. Each column must have one TH cell (and only one) which is unique to it for the listeners to be added. The example shown below has the core browser information grouped together.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
 <table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
 	<thead>
 		<tr>
-			<th>Rendering engine</th>
-			<th>Browser</th>
+			<th rowspan="2">Rendering engine</th>
+			<th rowspan="2">Browser</th>
+			<th colspan="3">Details</th>
+		</tr>
+		<tr>
 			<th>Platform(s)</th>
 			<th>Engine version</th>
 			<th>CSS grade</th>
 		</tr>
 	</thead>
+	<tfoot>
+		<tr>
+			<th rowspan="2">Rendering engine</th>
+			<th rowspan="2">Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+		</tr>
+		<tr>
+			<th colspan="3">Details</th>
+		</tr>
+	</tfoot>
 	<tbody>
 		<tr class="gradeX">
 			<td>Trident</td>
@@ -443,68 +458,15 @@
 			<td class="center">U</td>
 		</tr>
 	</tbody>
-	<tfoot>
-		<tr>
-			<th>Rendering engine</th>
-			<th>Browser</th>
-			<th>Platform(s)</th>
-			<th>Engine version</th>
-			<th>CSS grade</th>
-		</tr>
-	</tfoot>
 </table>
 			</div>
 			<div class="spacer"></div>
 			
 			
 			<h1>Initialisation code</h1>
-			<p>Javascript:</p>
-			<pre>
-$(document).ready(function() {
+			<pre>$(document).ready(function() {
 	$('#example').dataTable();
 } );</pre>
-
-			<p>CSS (note that for this example the selector ".ex_highlight" is used to limit the CSS here to just this example.</p>
-			<pre>.ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
-	background-color: #ECFFB3;
-}
-
-.ex_highlight #example tbody tr.odd:hover, #example tbody tr.odd td.highlighted {
-	background-color: #E6FF99;
-}
-
-.ex_highlight_row #example tr.even:hover {
-	background-color: #ECFFB3;
-}
-
-.ex_highlight_row #example tr.even:hover td.sorting_1 {
-	background-color: #DDFF75;
-}
-
-.ex_highlight_row #example tr.even:hover td.sorting_2 {
-	background-color: #E7FF9E;
-}
-
-.ex_highlight_row #example tr.even:hover td.sorting_3 {
-	background-color: #E2FF89;
-}
-
-.ex_highlight_row #example tr.odd:hover {
-	background-color: #E6FF99;
-}
-
-.ex_highlight_row #example tr.odd:hover td.sorting_1 {
-	background-color: #D6FF5C;
-}
-
-.ex_highlight_row #example tr.odd:hover td.sorting_2 {
-	background-color: #E0FF84;
-}
-
-.ex_highlight_row #example tr.odd:hover td.sorting_3 {
-	background-color: #DBFF70;
-}
-</pre>
 			
 			
 			<h1>Other examples</h1>
@@ -599,7 +561,9 @@ $(document).ready(function() {
 			
 			
 			<div id="footer" style="text-align:center;">
-				<span style="font-size:10px;">DataTables &copy; Allan Jardine 2008-2010</span>
+				<span style="font-size:10px;">
+					DataTables &copy; Allan Jardine 2008-2010.
+				</span>
 			</div>
 		</div>
 	</body>

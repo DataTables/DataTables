@@ -15,14 +15,9 @@
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
 					"bProcessing": true,
-					"sAjaxSource": "sources/objects_subarrays.txt",
-					"aoColumns": [
-						{ "mDataProp": "engine" },
-						{ "mDataProp": "browser" },
-						{ "mDataProp": "platform" },
-						{ "mDataProp": "details.0" },
-						{ "mDataProp": "details.1" }
-					]
+					"sAjaxSource": "sources/arrays.txt",
+					"bDeferRender": true,
+					bSortClasses: true
 				} );
 			} );
 		</script>
@@ -30,11 +25,11 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				DataTables AJAX source example - array of objects with sub-arrays as a data source
+				DataTables AJAX source example - with deferred rendering
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>While the ability of DataTables to read arbitrary objects properties as a data source for any column is very powerful, it actually goes further than single level object properties; it is possible to read a data source for a column from a deeply nested array or property. This is specified in typical Javascript dotted object notation. For example "details.0" (used in this example) refers to the first property in an array called "details". "details.1" refers to the second property, etc. Object properties can also be used - for example "details.version" is perfectly valid, if that property is available in your data source.</p>
+			<p>When working with large data sources, you might seek to improve the speed at which DataTables runs. One method to do this is to make use of the build in deferred rendering. Rather than have DataTables create all TR and TD nodes required for the table when the data is loaded, when deferred rendering is enabled, DataTables will only create the nodes required for each individual display - these nodes are then retained incase they are needed again. This can give a significant performance increase, since a lot less work is done at initialisation time.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -67,16 +62,10 @@
 			
 			<h1>Initialisation code</h1>
 			<pre>$(document).ready(function() {
-	var oTable = $('#example').dataTable( {
+	$('#example').dataTable( {
 		"bProcessing": true,
-		"sAjaxSource": "sources/objects_subarrays.txt",
-		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "details.0" },
-			{ "mDataProp": "details.1" }
-		]
+		"sAjaxSource": "sources/arrays.txt",
+		"bDeferRender": true
 	} );
 } );</pre>
 			

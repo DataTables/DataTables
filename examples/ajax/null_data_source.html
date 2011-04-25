@@ -15,17 +15,15 @@
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
 					"bProcessing": true,
-					"sAjaxSource": "sources/arrays_subobjects.txt",
+					"sAjaxSource": "sources/arrays.txt",
 					"aoColumns": [
 						null,
 						null,
-						{ "mDataProp": 2 },
-						{ "mDataProp": "3.version" },
-						{ "mDataProp": "3.grade" }
-					],
-					"fnInitComplete": function () {
-						oTable.fnUpdate( 'AAAA', $('tbody>tr:eq(0)')[0], 4 );
-					}
+						null,
+						null,
+						null,
+						{ "mDataProp": null }
+					]
 				} );
 			} );
 		</script>
@@ -33,11 +31,11 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				<i>DataTables</i> AJAX source example
+				DataTables AJAX source example - null data source for a column
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>Although <i>DataTables</i> is built from the principle of progressive enhancement, it is often useful to be able to construct a table from an AJAX source. This can be done in one of two ways - either using the <b>aData</b> initialisation parameter which takes an array of data, or using the <b>sAjaxSource</b> initialisation parameter which will have <i>DataTables</i> go to that source with an XHR call and load data from there. This example shows the latter method in action. <i>DataTables</i> expects an object with an array called "aaData" with the data source.</p>
+			<p>In some tables it can be useful to not need to specify any data source for a column, as it's content is automatically generated (for example using fnRender). This is fairly common with add, edit and delete columns for a CRUD interface. You can now use the <b>mDataProp</b> set to <i>null</i> to specify that the column has no data source. DataTables will render this column as empty.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -48,21 +46,11 @@
 			<th width="25%">Browser</th>
 			<th width="25%">Platform(s)</th>
 			<th width="15%">Engine version</th>
-			<th width="15%">CSS grade</th>
+			<th width="10%">CSS grade</th>
+			<th width="5%">Empty!</th>
 		</tr>
 	</thead>
-	<tbody>
-		
-	</tbody>
-	<tfoot>
-		<tr>
-			<th>Rendering engine</th>
-			<th>Browser</th>
-			<th>Platform(s)</th>
-			<th>Engine version</th>
-			<th>CSS grade</th>
-		</tr>
-	</tfoot>
+	<tbody></tbody>
 </table>
 			</div>
 			<div class="spacer"></div>
@@ -70,9 +58,17 @@
 			
 			<h1>Initialisation code</h1>
 			<pre>$(document).ready(function() {
-	$('#example').dataTable( {
+	var oTable = $('#example').dataTable( {
 		"bProcessing": true,
-		"sAjaxSource": "sources/arrays.txt"
+		"sAjaxSource": "sources/arrays.txt",
+		"aoColumns": [
+			null,
+			null,
+			null,
+			null,
+			null,
+			{ "mDataProp": null }
+		]
 	} );
 } );</pre>
 			
@@ -165,7 +161,7 @@
 			</ul>
 			
 			
-			<p>Please refer to the <a href="http://www.datatables.net/"><i>DataTables</i> documentation</a> for full information about its API properties and methods.</p>
+			<p>Please refer to the <a href="http://www.datatables.net/">DataTables documentation</a> for full information about its API properties and methods.</p>
 			
 			
 			<div id="footer" style="text-align:center;">
