@@ -2,21 +2,39 @@
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico" />
+		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/media/images/favicon.ico" />
 		
 		<title>DataTables example</title>
 		<style type="text/css" title="currentStyle">
 			@import "../../media/css/demo_page.css";
 			@import "../../media/css/demo_table.css";
+			@import "../examples_support/jquery.tooltip.css";
 		</style>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" language="javascript" src="../examples_support/jquery.tooltip.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				$('#example').dataTable( {
-					"sScrollX": "100%",
-					"sScrollXInner": "110%",
-					"bScrollCollapse": true
+				/* Init DataTables */
+				$('#example').dataTable();
+				
+				/* Add events */
+				$('#example tbody tr').live('click', function () {
+					var sTitle;
+					var nTds = $('td', this);
+					var sBrowser = $(nTds[1]).text();
+					var sGrade = $(nTds[4]).text();
+					
+					if ( sGrade == "A" )
+						sTitle =  sBrowser+' will provide a first class (A) level of CSS support.';
+					else if ( sGrade == "C" )
+						sTitle = sBrowser+' will provide a core (C) level of CSS support.';
+					else if ( sGrade == "X" )
+						sTitle = sBrowser+' does not provide CSS support or has a broken implementation. Block CSS.';
+					else
+						sTitle = sBrowser+' will provide an undefined level of CSS support.';
+					
+					alert( sTitle )
 				} );
 			} );
 		</script>
@@ -24,12 +42,11 @@
 	<body id="dt_example">
 		<div id="container">
 			<div class="full_width big">
-				DataTables horizontal scrolling example
+				DataTables - live events example
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>This DataTables horizontal scrolling example shows horizontal scrolling on a DataTable, which is very useful for when you have a wide table, with a large number of columns to display, but want to constrain it to a limited horizontal display area. To enable x scrolling simply set the sScrollX parameter to be whatever you want the container wrapper's width to be (any CSS measurement is acceptable, or just a number which is treated as pixels). Note also that sScrollXInner is used here o force the table it be wider than is strictly needed. You may or may not want to include this parameter depending on your application.</p>
-			<p>Also shown in this example is the use of a 'collapsing scroll table' by using <b>bScrollCollapse</b>. When this parameter is set to true, the table size will 'collapse' down to match the number of rows, if the table height is smaller than the scrollable area.</p>
+			<p>Events assigned to the table can be exceptionally useful for user interaction, however you must be aware that DataTables will add and remove rows from the DOM as they are needed (i.e. when paging only the visible elements are actually available in the DOM). As such, this can lead to the odd hiccup when working with events. One of the best ways of dealing with this is through the use of live events, as shown in this example.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -43,25 +60,18 @@
 			<th>CSS grade</th>
 		</tr>
 	</thead>
-	<tfoot>
-		<tr>
-			<th>Rendering engine</th>
-			<th>Browser</th>
-			<th>Platform(s)</th>
-			<th>Engine version</th>
-			<th>CSS grade</th>
-		</tr>
-	</tfoot>
 	<tbody>
-		<tr class="odd gradeX">
+		<tr class="gradeX">
 			<td>Trident</td>
 			<td>Internet
-				 Explorer 4.0</td>
+				 Explorer 
+				4.0
+				</td>
 			<td>Win 95+</td>
 			<td class="center">4</td>
 			<td class="center">X</td>
 		</tr>
-		<tr class="odd gradeC">
+		<tr class="gradeC">
 			<td>Trident</td>
 			<td>Internet
 				 Explorer 5.0</td>
@@ -69,7 +79,7 @@
 			<td class="center">5</td>
 			<td class="center">C</td>
 		</tr>
-		<tr class="odd gradeA">
+		<tr class="gradeA">
 			<td>Trident</td>
 			<td>Internet
 				 Explorer 5.5</td>
@@ -77,7 +87,7 @@
 			<td class="center">5.5</td>
 			<td class="center">A</td>
 		</tr>
-		<tr class="odd gradeA">
+		<tr class="gradeA">
 			<td>Trident</td>
 			<td>Internet
 				 Explorer 6</td>
@@ -85,14 +95,14 @@
 			<td class="center">6</td>
 			<td class="center">A</td>
 		</tr>
-		<tr class="odd gradeA">
+		<tr class="gradeA">
 			<td>Trident</td>
 			<td>Internet Explorer 7</td>
 			<td>Win XP SP2+</td>
 			<td class="center">7</td>
 			<td class="center">A</td>
 		</tr>
-		<tr class="odd gradeA">
+		<tr class="gradeA">
 			<td>Trident</td>
 			<td>AOL browser (AOL desktop)</td>
 			<td>Win XP</td>
@@ -457,6 +467,15 @@
 			<td class="center">U</td>
 		</tr>
 	</tbody>
+	<tfoot>
+		<tr>
+			<th>Rendering engine</th>
+			<th>Browser</th>
+			<th>Platform(s)</th>
+			<th>Engine version</th>
+			<th>CSS grade</th>
+		</tr>
+	</tfoot>
 </table>
 			</div>
 			<div class="spacer"></div>
@@ -464,10 +483,26 @@
 			
 			<h1>Initialisation code</h1>
 			<pre>$(document).ready(function() {
-	$('#example').dataTable( {
-		"sScrollX": "100%",
-		"sScrollXInner": "110%",
-		"bScrollCollapse": true
+	/* Init DataTables */
+	$('#example').dataTable();
+	
+	/* Add events */
+	$('#example tbody tr').live('click', function () {
+		var sTitle;
+		var nTds = $('td', this);
+		var sBrowser = $(nTds[1]).text();
+		var sGrade = $(nTds[4]).text();
+		
+		if ( sGrade == "A" )
+			sTitle =  sBrowser+' will provide a first class (A) level of CSS support.';
+		else if ( sGrade == "C" )
+			sTitle = sBrowser+' will provide a core (C) level of CSS support.';
+		else if ( sGrade == "X" )
+			sTitle = sBrowser+' does not provide CSS support or has a broken implementation. Block CSS.';
+		else
+			sTitle = sBrowser+' will provide an undefined level of CSS support.';
+		
+		alert( sTitle )
 	} );
 } );</pre>
 			
