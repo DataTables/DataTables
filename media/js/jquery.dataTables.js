@@ -2525,7 +2525,8 @@
 				"fnGetData": null,
 				"fnSetData": null,
 				"sSortDataType": 'std',
-				"nTh": nTh ? nTh : document.createElement('th')
+				"nTh": nTh ? nTh : document.createElement('th'),
+				"nTf": null
 			};
 			oSettings.aoColumns.push( oCol );
 			
@@ -3024,6 +3025,19 @@
 			if ( oSettings.oClasses.sFooterTH !== "" )
 			{
 				$('>tr>th', oSettings.nTFoot).addClass( oSettings.oClasses.sFooterTH );
+			}
+			
+			/* Cache the footer elements */
+			if ( oSettings.nTFoot !== null )
+			{
+				var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
+				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+				{
+					if ( typeof anCells[i] != 'undefined' )
+					{
+						oSettings.aoColumns[i].nTf = anCells[i];
+					}
+				}
 			}
 		}
 
@@ -6306,15 +6320,19 @@
 		 * Returns:  array node:aReturn - list of unique ths
 		 * Inputs:   object:oSettings - dataTables settings object
 		 *           node:nHeader - automatically detect the layout from this node - optional
+		 *           array object:aLayout - thead/tfoot layout from _fnDetectHeader - optional
 		 */
-		function _fnGetUniqueThs ( oSettings, nHeader )
+		function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 		{
 			var aReturn = [];
-			var aLayout = oSettings.aoHeader;
-			if ( typeof nHeader != 'undefined' )
+			if ( typeof aLayout == 'undefined' )
 			{
-				aLayout = [];
-				_fnDetectHeader( aLayout, nHeader );
+				aLayout = oSettings.aoHeader;
+				if ( typeof nHeader != 'undefined' )
+				{
+					aLayout = [];
+					_fnDetectHeader( aLayout, nHeader );
+				}
 			}
 
 			for ( var i=0, iLen=aLayout.length ; i<iLen ; i++ )
