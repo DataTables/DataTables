@@ -6,7 +6,7 @@ $(document).ready( function () {
 	var oInit = {
 		"sAjaxSource": "../../../examples/ajax/sources/custom_prop.txt",
 		"bDeferRender": true,
-		"sAjaxDataProp": "test"
+		"sAjaxDataProp": "demo"
 	};
 	$('#example').dataTable( oInit );
 	
