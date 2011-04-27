@@ -2646,7 +2646,7 @@
 			/* Create the object for storing information about this new row */
 			var iRow = oSettings.aoData.length;
 			var oData = {
-				"nTr": null,//xxx document.createElement('tr'),
+				"nTr": null,
 				"_iId": oSettings.iNextId++,
 				"_aData": aDataIn,
 				"_anHidden": [],
