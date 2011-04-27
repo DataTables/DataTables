@@ -2087,10 +2087,10 @@
 			oSettings.aoColumns[iCol].bVisible = bShow;
 
 			/* Redraw the header and footer based on the new column visibility */
-			_fnDrawHead( oSettings, oSettings.aoHeader, oSettings.nTHead );
+			_fnDrawHead( oSettings, oSettings.aoHeader );
 			if ( oSettings.nTFoot )
 			{
-				_fnDrawHead( oSettings, oSettings.aoFooter, oSettings.nTFoot );
+				_fnDrawHead( oSettings, oSettings.aoFooter );
 			}
 			
 			/* If there are any 'open' rows, then we need to alter the colspan for this col change */
@@ -2344,10 +2344,10 @@
 			
 			/* Build and draw the header / footer for the table */
 			_fnBuildHead( oSettings );
-			_fnDrawHead( oSettings, oSettings.aoHeader, oSettings.nTHead );
+			_fnDrawHead( oSettings, oSettings.aoHeader );
 			if ( oSettings.nTFoot )
 			{
-				_fnDrawHead( oSettings, oSettings.aoFooter, oSettings.nTFoot );
+				_fnDrawHead( oSettings, oSettings.aoFooter );
 			}
 
 			/* Okay to show that something is going on now */
@@ -3058,15 +3058,21 @@
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
 		 *           array objects:aoSource - Layout array from _fnDetectHeader
-		 *           node:nTarget - The header or footer element to layout
+		 *           boolean:bIncludeHidden - If true then include the hidden columns in the calc, 
+		 *             - optional: default false
 		 */
-		function _fnDrawHead( oSettings, aoSource, nTarget )
+		function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 		{
 			var i, iLen, j, jLen, k, kLen;
 			var aoLocal = [];
 			var aApplied = [];
 			var iColumns = oSettings.aoColumns.length;
 			var iRowspan, iColspan;
+
+			if ( typeof bIncludeHidden == 'undefined' )
+			{
+				bIncludeHidden = false;
+			}
 
 			/* Make a copy of the master layout array, but without the visible columns in it */
 			for ( i=0, iLen=aoSource.length ; i<iLen ; i++ )
@@ -3077,7 +3083,7 @@
 				/* Remove any columns which are currently hidden */
 				for ( j=iColumns-1 ; j>=0 ; j-- )
 				{
-					if ( !oSettings.aoColumns[j].bVisible )
+					if ( !oSettings.aoColumns[j].bVisible && !bIncludeHidden )
 					{
 						aoLocal[i].splice( j, 1 );
 					}
