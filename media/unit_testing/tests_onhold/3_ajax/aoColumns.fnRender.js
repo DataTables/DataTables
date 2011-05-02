@@ -22,7 +22,7 @@ $(document).ready( function () {
 	oTest.fnWaitTest( 
 		"Single column - fnRender is called twice for each row",
 		null,
-		function () { return mTmp == 114; }
+		function () { return mTmp == 57; }
 	);
 	
 	oTest.fnWaitTest( 

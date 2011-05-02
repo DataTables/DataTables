@@ -21,9 +21,9 @@ $(document).ready( function () {
 	var oSettings = oTable.fnSettings();
 	
 	oTest.fnWaitTest( 
-		"Single column - fnRender is called once for each row, plus once for the node draw",
+		"Single column - fnRender is called once for each row",
 		null,
-		function () { return mTmp == 67; }
+		function () { return mTmp == 57; }
 	);
 	
 	oTest.fnWaitTest( 

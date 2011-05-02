@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.8.0.beta.1
+ * Version:     1.8.0.dev.2
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
  * Created:     28/3/2008
@@ -67,7 +67,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.8.0.beta.1";
+	_oExt.sVersion = "1.8.0.dev.2";
 	
 	/*
 	 * Variable: sErrMode
@@ -2733,8 +2733,10 @@
 					var oCol = oSettings.aoColumns[i];
 					nTd = document.createElement('td');
 
-					/* Render if needed */
-					if ( typeof oCol.fnRender == 'function' )
+					/* Render if needed - if bUseRendered is true then we already have the rendered
+					 * value in the data source - so can just use that
+					 */
+					if ( typeof oCol.fnRender == 'function' && !oCol.bUseRendered )
 					{
 						nTd.innerHTML = oCol.fnRender( {
 							"iDataRow": iRow,
