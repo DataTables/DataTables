@@ -1,4 +1,4 @@
-This DataTables plugin (v1.7.x) for jQuery was developed out of the desire to allow highly configurable access to HTML tables with advanced access features.
+This DataTables plugin (v1.8.x) for jQuery was developed out of the desire to allow highly configurable access to HTML tables with advanced access features.
 
 For detailed installation, usage and API instructions, please refer to the DataTables web-pages: http://www.datatables.net
 
