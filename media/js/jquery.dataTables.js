@@ -3098,9 +3098,12 @@
 			for ( i=0, iLen=aoLocal.length ; i<iLen ; i++ )
 			{
 				/* All cells are going to be replaced, so empty out the row */
-				for ( k=0, kLen=aoLocal[i].nTr.childNodes.length ; k<kLen ; k++ )
+				if ( aoLocal[i].nTr )
 				{
-					aoLocal[i].nTr.removeChild( aoLocal[i].nTr.childNodes[0] );
+					for ( k=0, kLen=aoLocal[i].nTr.childNodes.length ; k<kLen ; k++ )
+					{
+						aoLocal[i].nTr.removeChild( aoLocal[i].nTr.childNodes[0] );
+					}
 				}
 
 				for ( j=0, jLen=aoLocal[i].length ; j<jLen ; j++ )
