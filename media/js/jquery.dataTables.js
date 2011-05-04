@@ -606,6 +606,8 @@
 		 */
 		"string-asc": function ( a, b )
 		{
+			if ( typeof a != 'string' ) { a = ''; }
+			if ( typeof b != 'string' ) { b = ''; }
 			var x = a.toLowerCase();
 			var y = b.toLowerCase();
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -613,6 +615,8 @@
 		
 		"string-desc": function ( a, b )
 		{
+			if ( typeof a != 'string' ) { a = ''; }
+			if ( typeof b != 'string' ) { b = ''; }
 			var x = a.toLowerCase();
 			var y = b.toLowerCase();
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
@@ -717,9 +721,13 @@
 		function ( sData )
 		{
 			/* Allow zero length strings as a number */
-			if ( typeof sData == 'number' || sData.length === 0 )
+			if ( typeof sData == 'number' || sData == null )
 			{
 				return 'numeric';
+			}
+			else if ( typeof sData != 'string' )
+			{
+				return null;
 			}
 			
 			var sValidFirstChars = "0123456789-";
@@ -766,7 +774,7 @@
 		function ( sData )
 		{
 			var iParse = Date.parse(sData);
-			if ( (iParse !== null && !isNaN(iParse)) || sData.length === 0 )
+			if ( (iParse !== null && !isNaN(iParse)) || (typeof sData == 'string' && sData.length === 0) )
 			{
 				return 'date';
 			}
@@ -4413,7 +4421,10 @@
 		function _fnBuildSearchRow( oSettings, aData )
 		{
 			var sSearch = '';
-			var nTmp = document.createElement('div');
+			if ( typeof oSettings.__nTmpFilter == 'undefined' ) {
+				oSettings.__nTmpFilter = document.createElement('div');
+			}
+			var nTmp = oSettings.__nTmpFilter;
 			
 			for ( var j=0, jLen=oSettings.aoColumns.length ; j<jLen ; j++ )
 			{
@@ -4485,6 +4496,10 @@
 			else if ( typeof sData == "string" )
 			{
 				return sData.replace(/\n/g," ");
+			}
+			else if ( sData == null )
+			{
+				return '';
 			}
 			return sData;
 		}
@@ -5666,7 +5681,7 @@
 			for ( var i=0 ; i<oSettings.aoData.length ; i++ )
 			{
 				var s = _fnGetCellData( oSettings, i, iCol, '' );
-				if ( s.length > iMax )
+				if ( typeof s == 'string' && s.length > iMax )
 				{
 					iMax = s.length;
 					iMaxIndex = i;
