@@ -2781,7 +2781,7 @@
 		{
 			var iLoop, i, iLen, j, jLen, jInner,
 			 	nTds, nTrs, nTd, aLocalData, iThisIndex,
-				iRow, iRows, iColumn, iColumns;
+				iRow, iRows, iColumn, iColumns, sNodeName;
 			
 			/*
 			 * Process by row first
@@ -2810,7 +2810,8 @@
 						
 						for ( j=0, jLen=nTds.length ; j<jLen ; j++ )
 						{
-							if ( nTds[j].nodeName.toUpperCase() == "TD" )
+							sNodeName = nTds[j].nodeName.toUpperCase();
+							if ( sNodeName == "TD" || sNodeName == "TH" )
 							{
 								_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTds[j].innerHTML) );
 								jInner++;
@@ -2831,7 +2832,8 @@
 				for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
 				{
 					nTd = nTrs[i].childNodes[j];
-					if ( nTd.nodeName.toUpperCase() == "TD" )
+					sNodeName = nTd.nodeName.toUpperCase();
+					if ( sNodeName == "TD" || sNodeName == "TH" )
 					{
 						nTds.push( nTd );
 					}
@@ -5823,7 +5825,7 @@
 			var iCorrector;
 			var anTds;
 			var iRow, iRows=oSettings.aoData.length,
-				iColumn, iColumns, oData;
+				iColumn, iColumns, oData, sNodeName;
 
 			for ( iRow=0 ; iRow<iRows ; iRow++ )
 			{
@@ -5834,7 +5836,8 @@
 					anTds = [];
 					for ( iColumn=0, iColumns=oData.nTr.childNodes.length ; iColumn<iColumns ; iColumn++ )
 					{
-						if ( oData.nTr.childNodes[iColumn].nodeName.toLowerCase() == 'td' )
+						sNodeName = oData.nTr.childNodes[iColumn].nodeName.toLowerCase();
+						if ( sNodeName == 'td' || sNodeName == 'th' )
 						{
 							anTds.push( oData.nTr.childNodes[iColumn] );
 						}
