@@ -6896,11 +6896,8 @@
 						"sName": "server_side_sort_classes"
 					} );
 				}
-				else if ( oSettings.oFeatures.bDeferRender && oSettings.oFeatures.bSortClasses )
+				else if ( oSettings.oFeatures.bDeferRender )
 				{
-					/* Enable sort classes for server-side processing. Safe to do it here, since server-side
-					 * processing must be enabled by the developer
-					 */
 					oSettings.aoDrawCallback.push( {
 						"fn": _fnSortingClasses,
 						"sName": "defer_sort_classes"
