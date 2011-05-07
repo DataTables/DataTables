@@ -5542,7 +5542,7 @@
 						iCorrector++;
 					}
 				}
-				
+
 				/* Find the biggest td for each column and put it into the table */
 				for ( i=0 ; i<iColums ; i++ )
 				{
@@ -5663,7 +5663,7 @@
 				);
 				return n;
 			}
-			return oSettings.aoData[iMaxIndex].nTr.getElementsByTagName('td')[iVis];
+			return _fnGetTdNodes(oSettings, iMaxIndex)[iVis];
 		}
 		
 		/*
@@ -5830,19 +5830,33 @@
 		
 		/*
 		 * Function: _fnGetTdNodes
-		 * Purpose:  Return an flat array with all TD nodes for the table
+		 * Purpose:  Return an flat array with all TD nodes for the table, or row
 		 * Returns:  array: - TD array
 		 * Inputs:   object:oSettings - dataTables settings object
+		 *           int:iIndividualRow - aoData index to get the nodes for - optional if not
+		 *             given then the return array will contain all nodes for the table
 		 */
-		function _fnGetTdNodes ( oSettings )
+		function _fnGetTdNodes ( oSettings, iIndividualRow )
 		{
 			var anReturn = [];
 			var iCorrector;
 			var anTds;
 			var iRow, iRows=oSettings.aoData.length,
 				iColumn, iColumns, oData, sNodeName;
+			
+			/* Allow the collection to be limited to just one row */
+			if ( typeof iRow == 'undefined' )
+			{
+				iStart = iIndividualRow;
+				iEnd = iIndividualRow+1;
+			}
+			else
+			{
+				iStart = 0;
+				iEnd = iRows;
+			}
 
-			for ( iRow=0 ; iRow<iRows ; iRow++ )
+			for ( iRow=iStart ; iRow<iEnd ; iRow++ )
 			{
 				oData = oSettings.aoData[iRow];
 				if ( oData.nTr !== null )
