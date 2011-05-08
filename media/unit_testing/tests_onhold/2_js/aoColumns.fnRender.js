@@ -20,9 +20,9 @@ $(document).ready( function () {
 	var oSettings = oTable.fnSettings();
 	
 	oTest.fnTest( 
-		"Single column - fnRender is called twice for each row",
+		"Single column - fnRender is called once for each row",
 		null,
-		function () { return mTmp == 114; }
+		function () { return mTmp == 57; }
 	);
 	
 	oTest.fnTest( 
