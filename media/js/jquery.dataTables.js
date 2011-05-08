@@ -5590,10 +5590,10 @@
 				 * first of all try to use the elements in the body, but it is possible that there are
 				 * no elements there, under which circumstances we use the header elements
 				 */
-				var oNodes = $("tbody tr:eq(0)>td", nCalcTmp);
+				var oNodes = $("tbody tr:eq(0)", nCalcTmp).children();
 				if ( oNodes.length === 0 )
 				{
-					oNodes = $("thead tr:eq(0)>th", nCalcTmp);
+					oNodes = _fnGetUniqueThs( oSettings, $('thead', nCalcTmp)[0] );
 				}
 				
 				iCorrector = 0;
