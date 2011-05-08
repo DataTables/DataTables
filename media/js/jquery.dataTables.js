@@ -5842,18 +5842,13 @@
 			var iCorrector;
 			var anTds;
 			var iRow, iRows=oSettings.aoData.length,
-				iColumn, iColumns, oData, sNodeName;
+				iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 			
 			/* Allow the collection to be limited to just one row */
-			if ( typeof iRow == 'undefined' )
+			if ( typeof iIndividualRow != 'undefined' )
 			{
 				iStart = iIndividualRow;
 				iEnd = iIndividualRow+1;
-			}
-			else
-			{
-				iStart = 0;
-				iEnd = iRows;
 			}
 
 			for ( iRow=iStart ; iRow<iEnd ; iRow++ )
