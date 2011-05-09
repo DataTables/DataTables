@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.8.0.beta.2
+ * Version:     1.8.0.dev.3
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
  * Created:     28/3/2008
@@ -67,7 +67,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.8.0.beta.2";
+	_oExt.sVersion = "1.8.0.dev.3";
 	
 	/*
 	 * Variable: sErrMode
@@ -2755,7 +2755,7 @@
 					}
 					else
 					{
-						nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, '' );
+						nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 					}
 				
 					/* Add user defined class */
@@ -6503,7 +6503,7 @@
 		 * Inputs:   object:oSettings - dataTables settings object
 		 *           int:iRow - aoData row id
 		 *           int:iCol - Column index
-		 *           string:sSpecific - data get type ('type' 'filter' 'sort')
+		 *           string:sSpecific - data get type ('display', 'type' 'filter' 'sort')
 		 */
 		function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 		{
@@ -6522,6 +6522,9 @@
 				}
 			}
 
+			if ( sSpecific == 'display' ) {
+				return sData+'';
+			}
 			return sData;
 		}
 		
