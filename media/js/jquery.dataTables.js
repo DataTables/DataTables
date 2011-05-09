@@ -1931,18 +1931,18 @@
 					}
 				}
 				
-				iVisibleColumn = _fnColumnIndexToVisible( oSettings, iColumn );
-				if ( iVisibleColumn !== null )
+				if ( oSettings.aoData[iRow].nTr !== null )
 				{
-					if ( oSettings.aoData[iRow].nTr !== null )
+					iVisibleColumn = _fnColumnIndexToVisible( oSettings, iColumn );
+					if ( iVisibleColumn !== null )
 					{
 						oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
 							sDisplay;
 					}
-				}
-				else
-				{
-					oSettings.aoData[iRow]._anHidden[iColumn].innerHTML = sDisplay;
+					else
+					{
+						oSettings.aoData[iRow]._anHidden[iColumn].innerHTML = sDisplay;
+					}
 				}
 			}
 			else
@@ -1974,15 +1974,18 @@
 						}
 					}
 					
-					iVisibleColumn = _fnColumnIndexToVisible( oSettings, i );
-					if ( iVisibleColumn !== null )
+					if ( oSettings.aoData[iRow].nTr !== null )
 					{
-						oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
-							sDisplay;
-					}
-					else
-					{
-						oSettings.aoData[iRow]._anHidden[i].innerHTML = sDisplay;
+						iVisibleColumn = _fnColumnIndexToVisible( oSettings, i );
+						if ( iVisibleColumn !== null )
+						{
+							oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
+								sDisplay;
+						}
+						else
+						{
+							oSettings.aoData[iRow]._anHidden[i].innerHTML = sDisplay;
+						}
 					}
 				}
 			}
