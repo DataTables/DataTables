@@ -2539,6 +2539,7 @@
 				"fnGetData": null,
 				"fnSetData": null,
 				"sSortDataType": 'std',
+				"sDefaultContent": null,
 				"nTh": nTh ? nTh : document.createElement('th'),
 				"nTf": null
 			};
@@ -2607,6 +2608,7 @@
 				_fnMap( oCol, oOptions, "mDataProp" );
 				_fnMap( oCol, oOptions, "asSorting" );
 				_fnMap( oCol, oOptions, "sSortDataType" );
+				_fnMap( oCol, oOptions, "sDefaultContent" );
 			}
 
 			/* Cache the data get and set functions for speed */
@@ -6517,16 +6519,23 @@
 
 			if ( (sData=oCol.fnGetData( oData )) === undefined )
 			{
-				if ( oSettings.iDrawError != oSettings.iDraw )
+				if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 				{
 					_fnLog( oSettings, 0, "Requested unknown parameter '"+oCol.mDataProp+
 						"' from the data source for row "+iRow );
 					oSettings.iDrawError = oSettings.iDraw;
-					return '';
 				}
+				return oCol.sDefaultContent;
 			}
 
-			if ( sSpecific == 'display' && sData === null ) {
+			/* When the data source is null, we can use default column data */
+			if ( sData === null && oCol.sDefaultContent !== null )
+			{
+				sData = oCol.sDefaultContent;
+			}
+
+			if ( sSpecific == 'display' && sData === null )
+			{
 				return '';
 			}
 			return sData;
@@ -6562,7 +6571,7 @@
 			{
 				/* Give an empty string for rendering / sorting etc */
 				return function (data) {
-					return '';
+					return null;
 				};
 			}
 			else if ( typeof sSource == 'string' && sSource.indexOf('.') != -1 )
