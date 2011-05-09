@@ -1934,8 +1934,11 @@
 				iVisibleColumn = _fnColumnIndexToVisible( oSettings, iColumn );
 				if ( iVisibleColumn !== null )
 				{
-					oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
-						sDisplay;
+					if ( oSettings.aoData[iRow].nTr !== null )
+					{
+						oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
+							sDisplay;
+					}
 				}
 				else
 				{
