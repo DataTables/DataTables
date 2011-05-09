@@ -5658,9 +5658,7 @@
 			if ( oSettings.aoData[iMaxIndex].nTr === null )
 			{
 				var n = document.createElement('td');
-				n.appendChild( document.createTextNode(
-					_fnGetCellData( oSettings, iMaxIndex, iCol, '' ) )
-				);
+				n.innerHTML = _fnGetCellData( oSettings, iMaxIndex, iCol, '' );
 				return n;
 			}
 			return _fnGetTdNodes(oSettings, iMaxIndex)[iVis];
