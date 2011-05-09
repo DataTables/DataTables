@@ -6526,8 +6526,8 @@
 				}
 			}
 
-			if ( sSpecific == 'display' ) {
-				return sData+'';
+			if ( sSpecific == 'display' && sData === null ) {
+				return '';
 			}
 			return sData;
 		}
