@@ -2677,7 +2677,7 @@
 				oCol = oSettings.aoColumns[i];
 
 				/* Use rendered data for filtering/sorting */
-				if ( typeof oCol.fnRender == 'function' && oCol.bUseRendered )
+				if ( typeof oCol.fnRender == 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
 				{
 					_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
 						"iDataRow": iRow,
@@ -2752,7 +2752,7 @@
 					/* Render if needed - if bUseRendered is true then we already have the rendered
 					 * value in the data source - so can just use that
 					 */
-					if ( typeof oCol.fnRender == 'function' && !oCol.bUseRendered )
+					if ( typeof oCol.fnRender == 'function' && (!oCol.bUseRendered || oCol.mDataProp === null) )
 					{
 						nTd.innerHTML = oCol.fnRender( {
 							"iDataRow": iRow,
