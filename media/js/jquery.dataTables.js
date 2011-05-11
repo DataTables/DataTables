@@ -5686,7 +5686,7 @@
 			
 			for ( var i=0 ; i<oSettings.aoData.length ; i++ )
 			{
-				var s = _fnGetCellData( oSettings, i, iCol, '' );
+				var s = _fnGetCellData( oSettings, i, iCol, 'display' );
 				if ( typeof s == 'string' && s.length > iMax )
 				{
 					iMax = s.length;
