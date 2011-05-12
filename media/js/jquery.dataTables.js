@@ -721,7 +721,7 @@
 		function ( sData )
 		{
 			/* Allow zero length strings as a number */
-			if ( typeof sData == 'number' || sData == null )
+			if ( typeof sData == 'number' || sData === null )
 			{
 				return 'numeric';
 			}
@@ -4507,7 +4507,7 @@
 			{
 				return sData.replace(/\n/g," ");
 			}
-			else if ( sData == null )
+			else if ( sData === null )
 			{
 				return '';
 			}
@@ -5629,7 +5629,7 @@
 							}
 							else
 							{
-								iTotal += parseInt(oSettings.aoColumns[i].sWidth.replace('px','')) +
+								iTotal += parseInt(oSettings.aoColumns[i].sWidth.replace('px',''), 10) +
 									($(oNodes[iCorrector]).outerWidth() - $(oNodes[iCorrector]).width());
 							}
 							iCorrector++;
