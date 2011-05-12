@@ -1825,7 +1825,7 @@
 					return _fnGetCellData( oSettings, iRow, iCol, '' );
 				}
 				return (typeof oSettings.aoData[iRow] != 'undefined') ? 
-					_fnGetRowData( oSettings, iRow, '' ) : null;
+					oSettings.aoData[iRow]._aData : null;
 			}
 			return _fnGetDataMaster( oSettings );
 		};
