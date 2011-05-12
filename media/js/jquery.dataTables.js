@@ -2085,12 +2085,11 @@
 			else
 			{
 				/* Remove a column from display */
-				anTds = _fnGetTdNodes( oSettings );
 				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 				{
 					if ( oSettings.aoData[i].nTr !== null )
 					{
-						nTd = anTds[ ( i*oSettings.aoColumns.length) + (iCol*1) ];
+						nTd = _fnGetTdNodes( oSettings, i )[iCol];
 						oSettings.aoData[i]._anHidden[iCol] = nTd;
 						nTd.parentNode.removeChild( nTd );
 					}
