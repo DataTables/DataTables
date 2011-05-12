@@ -2540,6 +2540,7 @@
 				"fnSetData": null,
 				"sSortDataType": 'std',
 				"sDefaultContent": null,
+				"sContentPadding": "",
 				"nTh": nTh ? nTh : document.createElement('th'),
 				"nTf": null
 			};
@@ -2609,6 +2610,7 @@
 				_fnMap( oCol, oOptions, "asSorting" );
 				_fnMap( oCol, oOptions, "sSortDataType" );
 				_fnMap( oCol, oOptions, "sDefaultContent" );
+				_fnMap( oCol, oOptions, "sContentPadding" );
 			}
 
 			/* Cache the data get and set functions for speed */
@@ -5560,6 +5562,10 @@
 						if ( nTd !== null )
 						{
 							nTd = nTd.cloneNode(true);
+							if ( oSettings.aoColumns[i].sContentPadding !== "" )
+							{
+								nTd.innerHTML += oSettings.aoColumns[i].sContentPadding;
+							}
 							nTr.appendChild( nTd );
 						}
 					}
