@@ -5657,7 +5657,6 @@
 		function _fnGetWidestNode( oSettings, iCol )
 		{
 			var iMaxIndex = _fnGetMaxLenString( oSettings, iCol );
-			var iVis = _fnColumnIndexToVisible( oSettings, iCol);
 			if ( iMaxIndex < 0 )
 			{
 				return null;
@@ -5669,7 +5668,7 @@
 				n.innerHTML = _fnGetCellData( oSettings, iMaxIndex, iCol, '' );
 				return n;
 			}
-			return _fnGetTdNodes(oSettings, iMaxIndex)[iVis];
+			return _fnGetTdNodes(oSettings, iMaxIndex)[iCol];
 		}
 		
 		/*
