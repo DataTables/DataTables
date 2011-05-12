@@ -2025,7 +2025,7 @@
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
 			var i, iLen;
 			var iColumns = oSettings.aoColumns.length;
-			var nTd, anTds, nCell, anTrs, jqChildren;
+			var nTd, nCell, anTrs, jqChildren, bAppend;
 			
 			/* No point in doing anything if we are requesting what is already true */
 			if ( oSettings.aoColumns[iCol].bVisible == bShow )
@@ -2046,38 +2046,22 @@
 				}
 				
 				/* Need to decide if we should use appendChild or insertBefore */
-				if ( iInsert >= _fnVisbleColumns( oSettings ) )
+				bAppend = (iInsert >= _fnVisbleColumns( oSettings ));
+				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 				{
-					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+					if ( oSettings.aoData[i].nTr !== null )
 					{
-						if ( oSettings.aoData[i].nTr !== null )
+						if ( bAppend )
 						{
-							nTd = oSettings.aoData[i]._anHidden[iCol];
-							oSettings.aoData[i].nTr.appendChild( nTd );
+							oSettings.aoData[i].nTr.appendChild( 
+								oSettings.aoData[i]._anHidden[iCol]
+							);
 						}
-					}
-				}
-				else
-				{
-					/* Which coloumn should we be inserting before? */
-					var iBefore;
-					for ( i=iCol ; i<iColumns ; i++ )
-					{
-						iBefore = _fnColumnIndexToVisible( oSettings, i );
-						if ( iBefore !== null )
+						else
 						{
-							break;
-						}
-					}
-					
-					anTds = _fnGetTdNodes( oSettings );
-					for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-					{
-						if ( oSettings.aoData[i].nTr !== null )
-						{
-							nTd = oSettings.aoData[i]._anHidden[iCol];
-							oSettings.aoData[i].nTr.insertBefore( nTd, $('>td:eq('+iBefore+')', 
-								oSettings.aoData[i].nTr)[0] );
+							oSettings.aoData[i].nTr.insertBefore(
+								oSettings.aoData[i]._anHidden[iCol], 
+								_fnGetTdNodes( oSettings, i )[iCol+1] );
 						}
 					}
 				}
