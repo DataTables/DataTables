@@ -5437,7 +5437,7 @@
 			
 			var iWidth;
 			var nTmp = document.createElement( "div" );
-			nTmp.style.width = sWidth;
+			nTmp.style.width = _fnStringToCss( sWidth );
 			
 			nParent.appendChild( nTmp );
 			iWidth = nTmp.offsetWidth;
