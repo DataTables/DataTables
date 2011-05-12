@@ -5609,7 +5609,37 @@
 				{
 					oNodes = _fnGetUniqueThs( oSettings, $('thead', nCalcTmp)[0] );
 				}
+
+				/* Browsers need a bit of a hand when a width is assigned to any columns when 
+				 * x-scrolling as they tend to collapse the table to the min-width, even if
+				 * we sent the column widths. So we need to keep track of what the table width
+				 * should be by summing the user given values, and the automatic values
+				 */
+				if ( oSettings.oScroll.sX !== "" )
+				{
+					var iTotal = 0;
+					iCorrector = 0;
+					for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+					{
+						if ( oSettings.aoColumns[i].bVisible )
+						{
+							if ( oSettings.aoColumns[i].sWidthOrig === null )
+							{
+								iTotal += $(oNodes[iCorrector]).outerWidth();
+							}
+							else
+							{
+								iTotal += parseInt(oSettings.aoColumns[i].sWidth.replace('px','')) +
+									($(oNodes[iCorrector]).outerWidth() - $(oNodes[iCorrector]).width());
+							}
+							iCorrector++;
+						}
+					}
 				
+					nCalcTmp.style.width = _fnStringToCss( iTotal );
+					oSettings.nTable.style.width = _fnStringToCss( iTotal );
+				}
+
 				iCorrector = 0;
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
