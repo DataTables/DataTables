@@ -1136,6 +1136,14 @@
 			this.aoDrawCallback = [];
 			
 			/*
+			 * Variable: fnPreDrawCallback
+			 * Purpose:  Callback function for just before the table is redrawn. A return of false
+			 *           will be used to cancel the draw.
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.fnPreDrawCallback = null;
+			
+			/*
 			 * Variable: fnInitComplete
 			 * Purpose:  Callback function for when the table has been initalised
 			 * Scope:    jQuery.dataTable.classSettings
@@ -3187,6 +3195,13 @@
 			var bRowError = false;
 			var iStrips = oSettings.asStripClasses.length;
 			var iOpenRows = oSettings.aoOpenRows.length;
+			
+			/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
+			if ( oSettings.fnPreDrawCallback !== null &&
+			     oSettings.fnPreDrawCallback.call( oSettings.oInstance, oSettings ) === false )
+			{
+			     return;
+			}
 			
 			oSettings.bDrawing = true;
 			
@@ -6907,6 +6922,7 @@
 				_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 				_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
 				_fnMap( oSettings, oInit, "asStripClasses" );
+				_fnMap( oSettings, oInit, "fnPreDrawCallback" );
 				_fnMap( oSettings, oInit, "fnRowCallback" );
 				_fnMap( oSettings, oInit, "fnHeaderCallback" );
 				_fnMap( oSettings, oInit, "fnFooterCallback" );
