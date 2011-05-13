@@ -969,6 +969,7 @@
 				"sLengthMenu": "Show _MENU_ entries",
 				"sZeroRecords": "No matching records found",
 				"sEmptyTable": "No data available in table",
+				"sLoadingRecords": "Loading...",
 				"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
 				"sInfoEmpty": "Showing 0 to 0 of 0 entries",
 				"sInfoFiltered": "(filtered from _MAX_ total entries)",
@@ -2475,6 +2476,7 @@
 			_fnMap( oSettings.oLanguage, oLanguage, 'sProcessing' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sLengthMenu' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sEmptyTable' );
+			_fnMap( oSettings.oLanguage, oLanguage, 'sLoadingRecords' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sInfo' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sInfoEmpty' );
@@ -2497,6 +2499,13 @@
 			     typeof oLanguage.sZeroRecords != 'undefined' )
 			{
 				_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
+			}
+
+			/* Likewise with loading records */
+			if ( typeof oLanguage.sLoadingRecords == 'undefined' && 
+			     typeof oLanguage.sZeroRecords != 'undefined' )
+			{
+				_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
 			}
 			
 			if ( bInit )
@@ -3281,21 +3290,24 @@
 				{
 					anRows[ 0 ].className = oSettings.asStripClasses[0];
 				}
-				
+
+				var sZero = oSettings.oLanguage.sZeroRecords.replace(
+					'_MAX_', oSettings.fnFormatNumber(oSettings.fnRecordsTotal()) );
+				if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== "" )
+				{
+					sZero = oSettings.oLanguage.sLoadingRecords;
+				}
+				else if ( typeof oSettings.oLanguage.sEmptyTable != 'undefined' &&
+				     oSettings.fnRecordsTotal() === 0 )
+				{
+					sZero = oSettings.oLanguage.sEmptyTable;
+				}
+
 				var nTd = document.createElement( 'td' );
 				nTd.setAttribute( 'valign', "top" );
 				nTd.colSpan = _fnVisbleColumns( oSettings );
 				nTd.className = oSettings.oClasses.sRowEmpty;
-				if ( typeof oSettings.oLanguage.sEmptyTable != 'undefined' &&
-				     oSettings.fnRecordsTotal() === 0 )
-				{
-					nTd.innerHTML = oSettings.oLanguage.sEmptyTable;
-				}
-				else
-				{
-					nTd.innerHTML = oSettings.oLanguage.sZeroRecords.replace(
-						'_MAX_', oSettings.fnFormatNumber(oSettings.fnRecordsTotal()) );
-				}
+				nTd.innerHTML = sZero;
 				
 				anRows[ iRowCount ].appendChild( nTd );
 			}
@@ -7287,3 +7299,4 @@
 		});
 	};
 })(jQuery, window, document);
+
