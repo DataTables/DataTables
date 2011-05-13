@@ -2025,7 +2025,7 @@
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
 			var i, iLen;
 			var iColumns = oSettings.aoColumns.length;
-			var nTd, nCell, anTrs, jqChildren, bAppend;
+			var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
 			
 			/* No point in doing anything if we are requesting what is already true */
 			if ( oSettings.aoColumns[iCol].bVisible == bShow )
@@ -2047,6 +2047,20 @@
 				
 				/* Need to decide if we should use appendChild or insertBefore */
 				bAppend = (iInsert >= _fnVisbleColumns( oSettings ));
+
+				/* Which coloumn should we be inserting before? */
+				if ( !bAppend )
+				{
+					for ( i=iCol ; i<iColumns ; i++ )
+					{
+						if ( oSettings.aoColumns[i].bVisible )
+						{
+							iBefore = i;
+							break;
+						}
+					}
+				}
+
 				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
 				{
 					if ( oSettings.aoData[i].nTr !== null )
@@ -2061,7 +2075,7 @@
 						{
 							oSettings.aoData[i].nTr.insertBefore(
 								oSettings.aoData[i]._anHidden[iCol], 
-								_fnGetTdNodes( oSettings, i )[iCol+1] );
+								_fnGetTdNodes( oSettings, i )[iBefore] );
 						}
 					}
 				}
