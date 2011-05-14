@@ -1864,34 +1864,28 @@
 		 * Purpose:  Get the array indexes of a particular cell from it's DOM element
 		 * Returns:  int: - row index, or array[ int, int, int ]: - row index, column index (visible)
 		 *             and column index including hidden columns
-		 * Inputs:   node:nNode - this can either be a TR or a TD in the table, the return is
+		 * Inputs:   node:nNode - this can either be a TR, TD or TH in the table's body, the return is
 		 *             dependent on this input
 		 */
 		this.fnGetPosition = function( nNode )
 		{
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			var i;
+			var sNodeName = nNode.nodeName.toUpperCase();
 			
-			if ( nNode.nodeName.toUpperCase() == "TR" )
+			if ( sNodeName == "TR" )
 			{
 				return _fnNodeToDataIndex(oSettings, nNode);
 			}
-			else if ( nNode.nodeName.toUpperCase() == "TD" )
+			else if ( sNodeName == "TD" || sNodeName == "TH" )
 			{
 				var iDataIndex = _fnNodeToDataIndex(oSettings, nNode.parentNode);
-				var iCorrector = 0;
-				for ( var j=0 ; j<oSettings.aoColumns.length ; j++ )
+				var anCells = _fnGetTdNodes( oSettings, iDataIndex );
+
+				for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
-					if ( oSettings.aoColumns[j].bVisible )
+					if ( anCells[i] == nNode )
 					{
-						if ( oSettings.aoData[iDataIndex].nTr.getElementsByTagName('td')[j-iCorrector] == nNode )
-						{
-							return [ iDataIndex, j-iCorrector, j ];
-						}
-					}
-					else
-					{
-						iCorrector++;
+						return [ iDataIndex, _fnColumnIndexToVisible(oSettings, i ), i ];
 					}
 				}
 			}
