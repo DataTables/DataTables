@@ -1900,13 +1900,16 @@
 		
 		/*
 		 * Function: fnUpdate
-		 * Purpose:  Update a table cell or row
+		 * Purpose:  Update a table cell or row - this method will accept either a single value to
+		 *             update the cell with, an array of values with one element for each column or
+		 *             an object in the same format as the original data source. The function is
+		 *             self-referencing in order to make the multi column updates easier.
 		 * Returns:  int: 0 okay, 1 error
-		 * Inputs:   array string 'or' string:mData - data to update the cell/row with
+		 * Inputs:   object | array string | string:mData - data to update the cell/row with
 		 *           mixed:mRow - 
 		 *             int: - index of aoData to be updated, or
 		 *             node(TR): - TR element you want to update
-		 *           int:iColumn - the column to update - optional (not used of mData is 2D)
+		 *           int:iColumn - the column to update - optional (not used of mData is an array or object)
 		 *           bool:bRedraw - redraw the table or not - default true
 		 *           bool:bAction - perform predraw actions or not (you will want this as 'true' if
 		 *             you have bRedraw as true) - default true
@@ -1914,15 +1917,41 @@
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		{
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			var iVisibleColumn;
-			var sDisplay;
+			var iVisibleColumn, i, iLen, sDisplay;
 			var iRow = (typeof mRow == 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
 			
-			if ( typeof mData != 'object' )
+			if ( $.isArray(mData) && typeof mData == 'object' )
 			{
-				sDisplay = mData;
+				/* Array update - update the whole row */
+				if ( mData.length != oSettings.aoColumns.length )
+				{
+					_fnLog( oSettings, 0, 'An array passed to fnUpdate must have the same number of '+
+						'columns as the table in question - in this case '+oSettings.aoColumns.length );
+					return 1;
+				}
 
+				oSettings.aoData[iRow]._aData = mData.slice();
+
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
+				}
+			}
+			else if ( typeof mData == 'object' )
+			{
+				/* Object update - update the whole row - assume the developer gets the object right */
+				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
+
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
+				}
+			}
+			else
+			{
+				/* Individual cell update */
+				sDisplay = mData;
 				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
 				
 				if ( oSettings.aoColumns[iColumn].fnRender !== null )
@@ -1942,60 +1971,8 @@
 				
 				if ( oSettings.aoData[iRow].nTr !== null )
 				{
-					iVisibleColumn = _fnColumnIndexToVisible( oSettings, iColumn );
-					if ( iVisibleColumn !== null )
-					{
-						oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
-							sDisplay;
-					}
-					else
-					{
-						oSettings.aoData[iRow]._anHidden[iColumn].innerHTML = sDisplay;
-					}
-				}
-			}
-			else
-			{
-				if ( mData.length != oSettings.aoColumns.length )
-				{
-					_fnLog( oSettings, 0, 'An array passed to fnUpdate must have the same number of '+
-						'columns as the table in question - in this case '+oSettings.aoColumns.length );
-					return 1;
-				}
-				
-				for ( var i=0 ; i<mData.length ; i++ )
-				{
-					sDisplay = mData[i];
-					_fnSetCellData( oSettings, iRow, i, sDisplay );
-					
-					if ( oSettings.aoColumns[i].fnRender !== null )
-					{
-						sDisplay = oSettings.aoColumns[i].fnRender( {
-							"iDataRow": iRow,
-							"iDataColumn": i,
-							"aData": oSettings.aoData[iRow]._aData,
-							"oSettings": oSettings
-						} );
-						
-						if ( oSettings.aoColumns[i].bUseRendered )
-						{
-							_fnSetCellData( oSettings, iRow, i, sDisplay );
-						}
-					}
-					
-					if ( oSettings.aoData[iRow].nTr !== null )
-					{
-						iVisibleColumn = _fnColumnIndexToVisible( oSettings, i );
-						if ( iVisibleColumn !== null )
-						{
-							oSettings.aoData[iRow].nTr.getElementsByTagName('td')[iVisibleColumn].innerHTML = 
-								sDisplay;
-						}
-						else
-						{
-							oSettings.aoData[iRow]._anHidden[i].innerHTML = sDisplay;
-						}
-					}
+					/* Do the actual HTML update */
+					_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
 				}
 			}
 			
