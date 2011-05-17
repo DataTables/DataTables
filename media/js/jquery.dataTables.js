@@ -721,11 +721,11 @@
 		function ( sData )
 		{
 			/* Allow zero length strings as a number */
-			if ( typeof sData == 'number' || sData === null )
+			if ( typeof sData == 'number' )
 			{
 				return 'numeric';
 			}
-			else if ( typeof sData != 'string' )
+			else if ( sData === null || typeof sData != 'string' )
 			{
 				return null;
 			}
@@ -762,6 +762,7 @@
 				}
 			}
 			
+				console.log('numeric');
 			return 'numeric';
 		},
 		
@@ -776,6 +777,7 @@
 			var iParse = Date.parse(sData);
 			if ( (iParse !== null && !isNaN(iParse)) || (typeof sData == 'string' && sData.length === 0) )
 			{
+				console.log('date');
 				return 'date';
 			}
 			return null;
@@ -791,6 +793,7 @@
 		{
 			if ( typeof sData == 'string' && sData.indexOf('<') != -1 && sData.indexOf('>') != -1 )
 			{
+				console.log('html');
 				return 'html';
 			}
 			return null;
@@ -2682,15 +2685,19 @@
 				if ( oCol._bAutoType && oCol.sType != 'string' )
 				{
 					/* Attempt to auto detect the type - same as _fnGatherData() */
-					sThisType = _fnDetectType( _fnGetCellData( oSettings, iRow, i, 'type' ) );
-					if ( oCol.sType === null )
+					var sVarType = _fnGetCellData( oSettings, iRow, i, 'type' );
+					if ( sVarType != '' )
 					{
-						oCol.sType = sThisType;
-					}
-					else if ( oCol.sType != sThisType )
-					{
-						/* String is always the 'fallback' option */
-						oCol.sType = 'string';
+						sThisType = _fnDetectType( sVarType );
+						if ( oCol.sType === null )
+						{
+							oCol.sType = sThisType;
+						}
+						else if ( oCol.sType != sThisType )
+						{
+							/* String is always the 'fallback' option */
+							oCol.sType = 'string';
+						}
 					}
 				}
 			}
@@ -2880,11 +2887,12 @@
 						nCell = nTds[ (iRow*iColumns) + iColumn ];
 						
 						/* Type detection */
-						if ( bAutoType )
+						if ( bAutoType && oSettings.aoColumns[iColumn].sType != 'string' )
 						{
-							if ( oSettings.aoColumns[iColumn].sType != 'string' )
+							sValType = _fnGetCellData( oSettings, iRow, iColumn, 'type' );
+							if ( sValType != '' )
 							{
-								sThisType = _fnDetectType( _fnGetCellData( oSettings, iRow, iColumn, 'type' ) );
+								sThisType = _fnDetectType( sValType );
 								if ( oSettings.aoColumns[iColumn].sType === null )
 								{
 									oSettings.aoColumns[iColumn].sType = sThisType;
@@ -4598,12 +4606,12 @@
 				 */
 				var iSortLen = aaSort.length;
 				oSettings.aiDisplayMaster.sort( function ( a, b ) {
-					var iTest;
+					var iTest, iDataSort, sDataType;
 					for ( i=0 ; i<iSortLen ; i++ )
 					{
 						iDataSort = aoColumns[ aaSort[i][0] ].iDataSort;
-						iDataType = aoColumns[ iDataSort ].sType;
-						iTest = oSort[ iDataType+"-"+aaSort[i][1] ](
+						sDataType = aoColumns[ iDataSort ].sType;
+						iTest = oSort[ (sDataType?sDataType:'string')+"-"+aaSort[i][1] ](
 							_fnGetCellData( oSettings, a, iDataSort, 'sort' ),
 							_fnGetCellData( oSettings, b, iDataSort, 'sort' )
 						);
