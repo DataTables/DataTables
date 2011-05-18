@@ -762,7 +762,6 @@
 				}
 			}
 			
-				console.log('numeric');
 			return 'numeric';
 		},
 		
@@ -777,7 +776,6 @@
 			var iParse = Date.parse(sData);
 			if ( (iParse !== null && !isNaN(iParse)) || (typeof sData == 'string' && sData.length === 0) )
 			{
-				console.log('date');
 				return 'date';
 			}
 			return null;
@@ -793,7 +791,6 @@
 		{
 			if ( typeof sData == 'string' && sData.indexOf('<') != -1 && sData.indexOf('>') != -1 )
 			{
-				console.log('html');
 				return 'html';
 			}
 			return null;
