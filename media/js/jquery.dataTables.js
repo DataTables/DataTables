@@ -7245,23 +7245,28 @@
 			
 			/*
 			 * Final init
-			 * Sanity check that there is a thead and tbody. If not let's just create them
+			 * Cache the header, body and footer as required, creating them if needed
 			 */
-			if ( this.getElementsByTagName('thead').length === 0 )
+			var thead = $('>thead', this);
+			if ( thead.length === 0 )
 			{
-				this.appendChild( document.createElement( 'thead' ) );
+				thead = [ document.createElement( 'thead' ) ];
+				this.appendChild( thead[0] );
 			}
+			oSettings.nTHead = thead[0];
 			
-			if ( this.getElementsByTagName('tbody').length === 0 )
+			var tbody = $('>tbody', this);
+			if ( tbody.length === 0 )
 			{
-				this.appendChild( document.createElement( 'tbody' ) );
+				tbody = [ document.createElement( 'tbody' ) ];
+				this.appendChild( tbody[0] );
 			}
+			oSettings.nTBody = tbody[0];
 			
-			oSettings.nTHead = this.getElementsByTagName('thead')[0];
-			oSettings.nTBody = this.getElementsByTagName('tbody')[0];
-			if ( this.getElementsByTagName('tfoot').length > 0 )
+			var tfoot = $('>tfoot', this);
+			if ( tfoot.length > 0 )
 			{
-				oSettings.nTFoot = this.getElementsByTagName('tfoot')[0];
+				oSettings.nTFoot = tfoot[0];
 				_fnDetectHeader( oSettings.aoFooter, oSettings.nTFoot );
 			}
 			
