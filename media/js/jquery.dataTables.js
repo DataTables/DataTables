@@ -536,12 +536,12 @@
 				/* Loop over each instance of the pager */
 				var an = oSettings.aanFeatures.p;
 				var anButtons, anStatic, nPaginateList;
-				var fnClick = function() {
+				var fnClick = function(e) {
 					/* Use the information in the element to jump to the required page */
 					var iTarget = (this.innerHTML * 1) - 1;
 					oSettings._iDisplayStart = iTarget * oSettings._iDisplayLength;
 					fnCallbackDraw( oSettings );
-					return false;
+					e.preventDefault();
 				};
 				var fnFalse = function () { return false; };
 				
