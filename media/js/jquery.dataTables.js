@@ -1320,12 +1320,20 @@
 			this.bAjaxDataGet = true;
 			
 			/*
+			 * Variable: jqXHR
+			 * Purpose:  The last jQuery XHR object that was used for server-side data gathering. 
+			 *           This can be used for working with the XHR information in one of the callbacks
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.jqXHR = null;
+			
+			/*
 			 * Variable: fnServerData
 			 * Purpose:  Function to get the server-side data - can be overruled by the developer
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
-			this.fnServerData = function ( url, data, callback ) {
-				$.ajax( {
+			this.fnServerData = function ( url, data, callback, settings ) {
+				settings.jqXHR = $.ajax( {
 					"url": url,
 					"data": data,
 					"success": callback,
@@ -2412,7 +2420,7 @@
 					
 					_fnProcessingDisplay( oSettings, false );
 					_fnInitComplete( oSettings, json );
-				} );
+				}, oSettings );
 				return;
 			}
 			
@@ -3473,7 +3481,7 @@
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData,
 					function(json) {
 						_fnAjaxUpdateDraw( oSettings, json );
-					} );
+					}, oSettings );
 				return false;
 			}
 			else
