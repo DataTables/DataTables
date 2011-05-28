@@ -2691,7 +2691,7 @@
 				{
 					/* Attempt to auto detect the type - same as _fnGatherData() */
 					var sVarType = _fnGetCellData( oSettings, iRow, i, 'type' );
-					if ( sVarType != '' )
+					if ( sVarType !== '' )
 					{
 						sThisType = _fnDetectType( sVarType );
 						if ( oCol.sType === null )
@@ -2882,7 +2882,7 @@
 					bRender = typeof oSettings.aoColumns[iColumn].fnRender == 'function',
 					bClass = oSettings.aoColumns[iColumn].sClass !== null,
 					bVisible = oSettings.aoColumns[iColumn].bVisible,
-					nCell, sThisType, sRendered;
+					nCell, sThisType, sRendered, sValType;
 				
 				/* A single loop to rule them all (and be more efficient) */
 				if ( bAutoType || bRender || bClass || !bVisible )
@@ -2895,7 +2895,7 @@
 						if ( bAutoType && oSettings.aoColumns[iColumn].sType != 'string' )
 						{
 							sValType = _fnGetCellData( oSettings, iRow, iColumn, 'type' );
-							if ( sValType != '' )
+							if ( sValType !== '' )
 							{
 								sThisType = _fnDetectType( sValType );
 								if ( oSettings.aoColumns[iColumn].sType === null )
