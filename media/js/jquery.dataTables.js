@@ -725,7 +725,7 @@
 			{
 				return 'numeric';
 			}
-			else if ( sData === null || typeof sData != 'string' )
+			else if ( typeof sData != 'string' )
 			{
 				return null;
 			}
@@ -2691,7 +2691,7 @@
 				{
 					/* Attempt to auto detect the type - same as _fnGatherData() */
 					var sVarType = _fnGetCellData( oSettings, iRow, i, 'type' );
-					if ( sVarType !== '' )
+					if ( sVarType !== null && sVarType !== '' )
 					{
 						sThisType = _fnDetectType( sVarType );
 						if ( oCol.sType === null )
