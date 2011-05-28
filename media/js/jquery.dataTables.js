@@ -3296,7 +3296,7 @@
 
 				var sZero = oSettings.oLanguage.sZeroRecords.replace(
 					'_MAX_', oSettings.fnFormatNumber(oSettings.fnRecordsTotal()) );
-				if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null )
+				if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 				{
 					sZero = oSettings.oLanguage.sLoadingRecords;
 				}
