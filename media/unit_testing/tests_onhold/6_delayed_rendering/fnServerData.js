@@ -15,7 +15,7 @@ $(document).ready( function () {
 				}
 			} );
 		},
-		function () { return mPass == 3; }
+		function () { return mPass == 4; }
 	);
 	
 	oTest.fnTest( 
@@ -25,7 +25,7 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"bDeferRender": true,
-				"fnServerData": function (sUrl, aoData, fnCallback) {
+				"fnServerData": function (sUrl, aoData, fnCallback, oSettings) {
 					mPass = sUrl == "../../../examples/ajax/sources/arrays.txt";
 				}
 			} );
@@ -40,7 +40,7 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"bDeferRender": true,
-				"fnServerData": function (sUrl, aoData, fnCallback) {
+				"fnServerData": function (sUrl, aoData, fnCallback, oSettings) {
 					mPass = aoData.length==0;
 				}
 			} );
@@ -55,7 +55,7 @@ $(document).ready( function () {
 				"bDestroy": true,
 				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
 				"bDeferRender": true,
-				"fnServerData": function (sUrl, aoData, fnCallback) {
+				"fnServerData": function (sUrl, aoData, fnCallback, oSettings) {
 					mPass = typeof fnCallback == 'function';
 				}
 			} );
