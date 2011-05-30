@@ -6611,24 +6611,30 @@
 		 * Purpose:  Return a function that can be used to get data from a source object, taking
 		 *           into account the ability to use nested objects as a source
 		 * Returns:  function: - Data get function
-		 * Inputs:   string:sSource - The data source for the object
+		 * Inputs:   string|int|function:mSource - The data source for the object
 		 */
-		function _fnGetObjectDataFn( sSource )
+		function _fnGetObjectDataFn( mSource )
 		{
-			if ( sSource === null )
+			if ( mSource === null )
 			{
 				/* Give an empty string for rendering / sorting etc */
 				return function (data) {
 					return null;
 				};
 			}
-			else if ( typeof sSource == 'string' && sSource.indexOf('.') != -1 )
+			else if ( typeof mSource == 'function' )
+			{
+			    return function (data) {
+			        return mSource( data );
+			    };
+			}
+			else if ( typeof mSource == 'string' && mSource.indexOf('.') != -1 )
 			{
 				/* If there is a . in the source string then the data source is in a nested object
 				 * we provide two 'quick' functions for the look up to speed up the most common
 				 * operation, and a generalised one for when it is needed
 				 */
-				var a = sSource.split('.');
+				var a = mSource.split('.');
 				if ( a.length == 2 )
 				{
 					return function (data) {
@@ -6656,7 +6662,7 @@
 			{
 				/* Array or flat object mapping */
 				return function (data) {
-					return data[sSource];	
+					return data[mSource];	
 				};
 			}
 		}
@@ -6666,21 +6672,27 @@
 		 * Purpose:  Return a function that can be used to set data from a source object, taking
 		 *           into account the ability to use nested objects as a source
 		 * Returns:  function: - Data set function
-		 * Inputs:   string:sSource - The data source for the object
+		 * Inputs:   string|int|function:mSource - The data source for the object
 		 */
-		function _fnSetObjectDataFn( sSource )
+		function _fnSetObjectDataFn( mSource )
 		{
-			if ( sSource === null )
+			if ( mSource === null )
 			{
 				/* Nothing to do when the data source is null */
 				return function (data, val) {};
 			}
-			else if ( typeof sSource == 'string' && sSource.indexOf('.') != -1 )
+			else if ( typeof mSource == 'function' )
+			{
+			    return function (data, val) {
+			        return mSource( data, val );
+			    };
+			}
+			else if ( typeof mSource == 'string' && mSource.indexOf('.') != -1 )
 			{
 				/* Like the get, we need to get data from a nested object. Again two fast lookup
 				 * functions are provided, and a generalised one.
 				 */
-				var a = sSource.split('.');
+				var a = mSource.split('.');
 				if ( a.length == 2 )
 				{
 					return function (data, val) {
@@ -6708,7 +6720,7 @@
 			{
 				/* Array or flat object mapping */
 				return function (data, val) {
-					data[sSource] = val;	
+					data[mSource] = val;	
 				};
 			}
 		}
