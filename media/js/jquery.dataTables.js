@@ -4185,7 +4185,7 @@
 		 */
 		function _fnFeatureHtmlFilter ( oSettings )
 		{
-			var nFilter = document.createElement( 'div' );
+			var nFilter = document.createElement( 'label' );
 			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
 			{
 				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
