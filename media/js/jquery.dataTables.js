@@ -2227,7 +2227,10 @@
 			}
 			
 			/* Restore the width of the original table */
-			oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
+			if ( oSettings.bAutoWidth === true )
+			{
+			  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
+			}
 			
 			/* If the were originally odd/even type classes - then we add them back here. Note
 			 * this is not fool proof (for example if not all rows as odd/even classes - but 
