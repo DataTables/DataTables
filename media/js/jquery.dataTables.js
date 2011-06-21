@@ -1926,13 +1926,6 @@
 			if ( $.isArray(mData) && typeof mData == 'object' )
 			{
 				/* Array update - update the whole row */
-				if ( mData.length != oSettings.aoColumns.length )
-				{
-					_fnLog( oSettings, 0, 'An array passed to fnUpdate must have the same number of '+
-						'columns as the table in question - in this case '+oSettings.aoColumns.length );
-					return 1;
-				}
-
 				oSettings.aoData[iRow]._aData = mData.slice();
 
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
