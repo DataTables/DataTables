@@ -61,7 +61,7 @@
 		{
 			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
 			{
-				$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+				$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] )-1 ]."
 				 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
 			}
 		}
