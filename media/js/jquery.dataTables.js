@@ -4181,14 +4181,18 @@
 		 */
 		function _fnFeatureHtmlFilter ( oSettings )
 		{
+			var sSearchStr = oSettings.oLanguage.sSearch;
+			sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
+			  sSearchStr.replace('_INPUT_', '<input type="text" />') :
+			  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
+			
 			var nFilter = document.createElement( 'div' );
+			nFilter.className = oSettings.oClasses.sFilter;
+			nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
 			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
 			{
 				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
 			}
-			nFilter.className = oSettings.oClasses.sFilter;
-			var sSpace = oSettings.oLanguage.sSearch==="" ? "" : " ";
-			nFilter.innerHTML = oSettings.oLanguage.sSearch+sSpace+'<input type="text" />';
 			
 			var jqFilter = $("input", nFilter);
 			jqFilter.val( oSettings.oPreviousSearch.sSearch.replace('"','&quot;') );
@@ -5190,7 +5194,7 @@
 				nLength.setAttribute( 'id', oSettings.sTableId+'_length' );
 			}
 			nLength.className = oSettings.oClasses.sLength;
-			nLength.innerHTML = oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu );
+			nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
 			
 			/*
 			 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,
