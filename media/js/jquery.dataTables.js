@@ -2623,6 +2623,12 @@
 				oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 				oCol.sSortingClassJUI = "";
 			}
+			else if ( oCol.bSortable ||
+                ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+      {
+        oCol.sSortingClass = oSettings.oClasses.sSortable;
+        oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
+      }
 			else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) == -1 )
 			{
 				oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
