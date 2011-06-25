@@ -3431,7 +3431,7 @@
 			{
 				_fnProcessingDisplay( oSettings, true );
 				var iColumns = oSettings.aoColumns.length;
-				var aoData = [];
+				var aoData = [], mDataProp;
 				var i;
 				
 				/* Paging and general */
@@ -3442,6 +3442,12 @@
 				aoData.push( { "name": "iDisplayStart",  "value": oSettings._iDisplayStart } );
 				aoData.push( { "name": "iDisplayLength", "value": oSettings.oFeatures.bPaginate !== false ?
 					oSettings._iDisplayLength : -1 } );
+					
+				for ( i=0 ; i<iColumns ; i++ )
+				{
+				  mDataProp = oSettings.aoColumns[i].mDataProp;
+					aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)=="function" ? 'function' : mDataProp } );
+				}
 				
 				/* Filtering */
 				if ( oSettings.oFeatures.bFilter !== false )
