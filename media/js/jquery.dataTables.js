@@ -2138,9 +2138,6 @@
 			/* Flag to note that the table is currently being destoryed - no action should be taken */
 			oSettings.bDestroying = true;
 			
-			/* Blitz all DT events */
-			$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
-			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
@@ -2149,6 +2146,9 @@
 					this.fnSetColumnVis( i, true );
 				}
 			}
+			
+			/* Blitz all DT events */
+			$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
 			
 			/* If there is an 'empty' indicator row, remove it */
 			$('tbody>tr>td.'+oSettings.oClasses.sRowEmpty, oSettings.nTable).parent().remove();
