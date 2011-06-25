@@ -12,10 +12,16 @@ $(document).ready( function () {
 		function () { return oSettings.oLanguage.sSearch == "Search:"; }
 	);
 	
+	oTest.fnTest(
+		"A label input is used",
+		null,
+		function () { return $('label', oSettings.aanFeatures.f[0]).length == 1 }
+	);
+	
 	oTest.fnTest( 
 		"Search language default is in the DOM",
 		null,
-		function () { return document.getElementById('example_filter').childNodes[0].nodeValue
+		function () { return $('label', oSettings.aanFeatures.f[0]).text()
 		 	== "Search: "; }
 	);
 	
@@ -37,8 +43,7 @@ $(document).ready( function () {
 	oTest.fnTest( 
 		"Info language definition is in the DOM",
 		null,
-		function () { return document.getElementById('example_filter').childNodes[0].nodeValue
-		 	== "unit test "; }
+		function () { return $('label', oSettings.aanFeatures.f[0]).text().indexOf('unit test') !== -1; }
 	);
 	
 	

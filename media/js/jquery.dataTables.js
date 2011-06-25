@@ -2220,7 +2220,7 @@
 			}
 			
 			/* Restore the width of the original table */
-			if ( oSettings.bAutoWidth === true )
+			if ( oSettings.oFeatures.bAutoWidth === true )
 			{
 			  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
 			}
