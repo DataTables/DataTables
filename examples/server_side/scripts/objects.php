@@ -61,7 +61,8 @@
 		{
 			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
 			{
-				$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
+				$iColumnIndex = array_search( $_GET['mDataProp_'.$_GET['iSortCol_'.$i]], $aColumns );
+				$sOrder .= $aColumns[ $iColumnIndex ]."
 				 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
 			}
 		}
@@ -105,7 +106,8 @@
 			{
 				$sWhere .= " AND ";
 			}
-			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
+			$iColumnIndex = array_search( $_GET['mDataProp_'.$i], $aColumns );
+			$sWhere .= $aColumns[$iColumnIndex]." LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
 		}
 	}
 	
