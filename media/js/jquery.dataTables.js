@@ -1,6 +1,6 @@
 /*
  * File:        jquery.dataTables.js
- * Version:     1.8.1
+ * Version:     1.8.2.dev
  * Description: Paginate, search and sort HTML tables
  * Author:      Allan Jardine (www.sprymedia.co.uk)
  * Created:     28/3/2008
@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -67,7 +67,7 @@
 	 * Notes:    Allowed format is a.b.c.d.e where:
 	 *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
 	 */
-	_oExt.sVersion = "1.8.1";
+	_oExt.sVersion = "1.8.2.dev";
 	
 	/*
 	 * Variable: sErrMode
@@ -3429,62 +3429,10 @@
 		{
 			if ( oSettings.bAjaxDataGet )
 			{
+				oSettings.iDraw++;
 				_fnProcessingDisplay( oSettings, true );
 				var iColumns = oSettings.aoColumns.length;
-				var aoData = [], mDataProp;
-				var i;
-				
-				/* Paging and general */
-				oSettings.iDraw++;
-				aoData.push( { "name": "sEcho",          "value": oSettings.iDraw } );
-				aoData.push( { "name": "iColumns",       "value": iColumns } );
-				aoData.push( { "name": "sColumns",       "value": _fnColumnOrdering(oSettings) } );
-				aoData.push( { "name": "iDisplayStart",  "value": oSettings._iDisplayStart } );
-				aoData.push( { "name": "iDisplayLength", "value": oSettings.oFeatures.bPaginate !== false ?
-					oSettings._iDisplayLength : -1 } );
-					
-				for ( i=0 ; i<iColumns ; i++ )
-				{
-				  mDataProp = oSettings.aoColumns[i].mDataProp;
-					aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)=="function" ? 'function' : mDataProp } );
-				}
-				
-				/* Filtering */
-				if ( oSettings.oFeatures.bFilter !== false )
-				{
-					aoData.push( { "name": "sSearch", "value": oSettings.oPreviousSearch.sSearch } );
-					aoData.push( { "name": "bRegex",  "value": oSettings.oPreviousSearch.bRegex } );
-					for ( i=0 ; i<iColumns ; i++ )
-					{
-						aoData.push( { "name": "sSearch_"+i,     "value": oSettings.aoPreSearchCols[i].sSearch } );
-						aoData.push( { "name": "bRegex_"+i,      "value": oSettings.aoPreSearchCols[i].bRegex } );
-						aoData.push( { "name": "bSearchable_"+i, "value": oSettings.aoColumns[i].bSearchable } );
-					}
-				}
-				
-				/* Sorting */
-				if ( oSettings.oFeatures.bSort !== false )
-				{
-					var iFixed = oSettings.aaSortingFixed !== null ? oSettings.aaSortingFixed.length : 0;
-					var iUser = oSettings.aaSorting.length;
-					aoData.push( { "name": "iSortingCols",   "value": iFixed+iUser } );
-					for ( i=0 ; i<iFixed ; i++ )
-					{
-						aoData.push( { "name": "iSortCol_"+i,  "value": oSettings.aaSortingFixed[i][0] } );
-						aoData.push( { "name": "sSortDir_"+i,  "value": oSettings.aaSortingFixed[i][1] } );
-					}
-					
-					for ( i=0 ; i<iUser ; i++ )
-					{
-						aoData.push( { "name": "iSortCol_"+(i+iFixed),  "value": oSettings.aaSorting[i][0] } );
-						aoData.push( { "name": "sSortDir_"+(i+iFixed),  "value": oSettings.aaSorting[i][1] } );
-					}
-					
-					for ( i=0 ; i<iColumns ; i++ )
-					{
-						aoData.push( { "name": "bSortable_"+i,  "value": oSettings.aoColumns[i].bSortable } );
-					}
-				}
+				var aoData = _fnAjaxParameters( oSettings );
 				
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData,
 					function(json) {
@@ -3496,6 +3444,71 @@
 			{
 				return true;
 			}
+		}
+		
+		/*
+		 * Function: _fnAjaxParameters
+		 * Purpose:  Build up the parameters in an object needed for a server-side processing request
+		 * Returns:  bool: block the table drawing or not
+		 * Inputs:   object:oSettings - dataTables settings object
+		 */
+		function _fnAjaxParameters( oSettings )
+		{
+			var iColumns = oSettings.aoColumns.length;
+			var aoData = [], mDataProp;
+			var i;
+			
+			aoData.push( { "name": "sEcho",          "value": oSettings.iDraw } );
+			aoData.push( { "name": "iColumns",       "value": iColumns } );
+			aoData.push( { "name": "sColumns",       "value": _fnColumnOrdering(oSettings) } );
+			aoData.push( { "name": "iDisplayStart",  "value": oSettings._iDisplayStart } );
+			aoData.push( { "name": "iDisplayLength", "value": oSettings.oFeatures.bPaginate !== false ?
+				oSettings._iDisplayLength : -1 } );
+				
+			for ( i=0 ; i<iColumns ; i++ )
+			{
+			  mDataProp = oSettings.aoColumns[i].mDataProp;
+				aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)=="function" ? 'function' : mDataProp } );
+			}
+			
+			/* Filtering */
+			if ( oSettings.oFeatures.bFilter !== false )
+			{
+				aoData.push( { "name": "sSearch", "value": oSettings.oPreviousSearch.sSearch } );
+				aoData.push( { "name": "bRegex",  "value": oSettings.oPreviousSearch.bRegex } );
+				for ( i=0 ; i<iColumns ; i++ )
+				{
+					aoData.push( { "name": "sSearch_"+i,     "value": oSettings.aoPreSearchCols[i].sSearch } );
+					aoData.push( { "name": "bRegex_"+i,      "value": oSettings.aoPreSearchCols[i].bRegex } );
+					aoData.push( { "name": "bSearchable_"+i, "value": oSettings.aoColumns[i].bSearchable } );
+				}
+			}
+			
+			/* Sorting */
+			if ( oSettings.oFeatures.bSort !== false )
+			{
+				var iFixed = oSettings.aaSortingFixed !== null ? oSettings.aaSortingFixed.length : 0;
+				var iUser = oSettings.aaSorting.length;
+				aoData.push( { "name": "iSortingCols",   "value": iFixed+iUser } );
+				for ( i=0 ; i<iFixed ; i++ )
+				{
+					aoData.push( { "name": "iSortCol_"+i,  "value": oSettings.aaSortingFixed[i][0] } );
+					aoData.push( { "name": "sSortDir_"+i,  "value": oSettings.aaSortingFixed[i][1] } );
+				}
+				
+				for ( i=0 ; i<iUser ; i++ )
+				{
+					aoData.push( { "name": "iSortCol_"+(i+iFixed),  "value": oSettings.aaSorting[i][0] } );
+					aoData.push( { "name": "sSortDir_"+(i+iFixed),  "value": oSettings.aaSorting[i][1] } );
+				}
+				
+				for ( i=0 ; i<iColumns ; i++ )
+				{
+					aoData.push( { "name": "bSortable_"+i,  "value": oSettings.aoColumns[i].bSortable } );
+				}
+			}
+			
+			return aoData;
 		}
 		
 		/*
@@ -6769,6 +6782,7 @@
 		this.oApi._fnDraw = _fnDraw;
 		this.oApi._fnReDraw = _fnReDraw;
 		this.oApi._fnAjaxUpdate = _fnAjaxUpdate;
+		this.oApi._fnAjaxParameters = _fnAjaxParameters;
 		this.oApi._fnAjaxUpdateDraw = _fnAjaxUpdateDraw;
 		this.oApi._fnAddOptionsHtml = _fnAddOptionsHtml;
 		this.oApi._fnFeatureHtmlTable = _fnFeatureHtmlTable;
