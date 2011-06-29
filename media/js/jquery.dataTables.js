@@ -1,4 +1,4 @@
-/*
+﻿/*
  * File:        jquery.dataTables.js
  * Version:     1.8.2.dev
  * Description: Paginate, search and sort HTML tables
@@ -3938,7 +3938,9 @@
 				nScrollHeadTable = nScrollHeadInner.getElementsByTagName('table')[0],
 				nScrollBody = o.nTable.parentNode,
 				i, iLen, j, jLen, anHeadToSize, anHeadSizers, anFootSizers, anFootToSize, oStyle, iVis,
-				iWidth, aApplied=[], iSanityWidth;
+				iWidth, aApplied=[], iSanityWidth,
+				nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
+				nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null;
 			
 			/*
 			 * 1. Re-create the table inside the scrolling div
@@ -4048,8 +4050,15 @@
 			/* If x-scrolling is disabled, then the viewport cannot be less than the sanity width */
 			if ( o.oScroll.sX === "" )
 			{
-				nScrollBody.style.width = _fnStringToCss( iSanityWidth+o.oScroll.iBarWidth );
-				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iSanityWidth+o.oScroll.iBarWidth );
+				var iCorrection = (nScrollBody.scrollHeight > nScrollBody.offsetHeight) ?
+					iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
+				nScrollBody.style.width = _fnStringToCss( iCorrection );
+				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
+				
+				if ( o.nTFoot !== null )
+				{
+					nScrollFootInner.parentNode.style.width = _fnStringToCss( iCorrection );
+				}
 			}
 			
 			/* We want the hidden header to have zero height, so remove padding and borders. Then
@@ -4169,10 +4178,6 @@
 			
 			if ( o.nTFoot !== null )
 			{
-				var
-					nScrollFootInner = o.nScrollFoot.getElementsByTagName('div')[0],
-					nScrollFootTable = nScrollFootInner.getElementsByTagName('table')[0];
-				
 				nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+o.oScroll.iBarWidth );
 				nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
 			}
