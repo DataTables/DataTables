@@ -2246,7 +2246,7 @@
 		};
 		
 		/*
-		 * Function: fnAjustColumnSizing
+		 * Function: fnAdjustColumnSizing
 		 * Purpose:  Update tale sizing based on content. This would most likely be used for scrolling
 		 *   and will typically need a redraw after it.
 		 * Returns:  -
@@ -4191,7 +4191,7 @@
 		
 		/*
 		 * Function: _fnAdjustColumnSizing
-		 * Purpose:  Ajust the table column widths for new data
+		 * Purpose:  Adjust the table column widths for new data
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
 		 * Notes:    You would probably want to do a redraw after calling this function!
