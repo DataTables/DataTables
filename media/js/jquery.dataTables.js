@@ -52,7 +52,7 @@
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Section - DataTables extensible objects
 	 * 
-	 * The _oExt object is used to provide an area where user dfined plugins can be 
+	 * The _oExt object is used to provide an area where user defined plugins can be 
 	 * added to DataTables. The following properties of the object are used:
 	 *   oApi - Plug-in API functions
 	 *   aTypes - Auto-detection of types
