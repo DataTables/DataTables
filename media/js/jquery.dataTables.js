@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1981,7 +1981,7 @@
 			/* Perform pre-draw actions */
 			if ( typeof bAction == 'undefined' || bAction )
 			{
-				_fnAjustColumnSizing( oSettings );
+				_fnAdjustColumnSizing( oSettings );
 			}
 			
 			/* Redraw the table */
@@ -2096,7 +2096,7 @@
 			 */
 			if ( typeof bRedraw == 'undefined' || bRedraw )
 			{
-				_fnAjustColumnSizing( oSettings );
+				_fnAdjustColumnSizing( oSettings );
 				_fnDraw( oSettings );
 			}
 			
@@ -2246,8 +2246,8 @@
 		};
 		
 		/*
-		 * Function: fnAjustColumnSizing
-		 * Purpose:  Update tale sizing based on content. This would most likely be used for scrolling
+		 * Function: fnAdjustColumnSizing
+		 * Purpose:  Update table sizing based on content. This would most likely be used for scrolling
 		 *   and will typically need a redraw after it.
 		 * Returns:  -
 		 * Inputs:   bool:bRedraw - redraw the table or not, you will typically want to - default true
@@ -2255,7 +2255,7 @@
 		this.fnAdjustColumnSizing = function ( bRedraw )
 		{
 			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
-			_fnAjustColumnSizing( oSettings );
+			_fnAdjustColumnSizing( oSettings );
 			
 			if ( typeof bRedraw == 'undefined' || bRedraw )
 			{
@@ -4153,13 +4153,13 @@
 		}
 		
 		/*
-		 * Function: _fnAjustColumnSizing
-		 * Purpose:  Ajust the table column widths for new data
+		 * Function: _fnAdjustColumnSizing
+		 * Purpose:  Adjust the table column widths for new data
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
 		 * Notes:    You would probably want to do a redraw after calling this function!
 		 */
-		function _fnAjustColumnSizing ( oSettings )
+		function _fnAdjustColumnSizing ( oSettings )
 		{
 			/* Not interested in doing column width calculation if autowidth is disabled */
 			if ( oSettings.oFeatures.bAutoWidth === false )
@@ -6754,7 +6754,7 @@
 		this.oApi._fnAddOptionsHtml = _fnAddOptionsHtml;
 		this.oApi._fnFeatureHtmlTable = _fnFeatureHtmlTable;
 		this.oApi._fnScrollDraw = _fnScrollDraw;
-		this.oApi._fnAjustColumnSizing = _fnAjustColumnSizing;
+		this.oApi._fnAjustColumnSizing = this.oApi._fnAdjustColumnSizing = _fnAdjustColumnSizing;
 		this.oApi._fnFeatureHtmlFilter = _fnFeatureHtmlFilter;
 		this.oApi._fnFilterComplete = _fnFilterComplete;
 		this.oApi._fnFilterCustom = _fnFilterCustom;
