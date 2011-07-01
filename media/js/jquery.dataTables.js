@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitalise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -52,7 +52,7 @@
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Section - DataTables extensible objects
 	 * 
-	 * The _oExt object is used to provide an area where user dfined plugins can be 
+	 * The _oExt object is used to provide an area where user defined plugins can be 
 	 * added to DataTables. The following properties of the object are used:
 	 *   oApi - Plug-in API functions
 	 *   aTypes - Auto-detection of types
@@ -278,7 +278,7 @@
 		"two_button": {
 			/*
 			 * Function: oPagination.two_button.fnInit
-			 * Purpose:  Initalise dom elements required for pagination with forward/back buttons only
+			 * Purpose:  Initialise dom elements required for pagination with forward/back buttons only
 			 * Returns:  -
 			 * Inputs:   object:oSettings - dataTables settings object
 			 *           node:nPaging - the DIV which contains this pagination control
@@ -395,7 +395,7 @@
 		"full_numbers": {
 			/*
 			 * Function: oPagination.full_numbers.fnInit
-			 * Purpose:  Initalise dom elements required for pagination with a list of the pages
+			 * Purpose:  Initialise dom elements required for pagination with a list of the pages
 			 * Returns:  -
 			 * Inputs:   object:oSettings - dataTables settings object
 			 *           node:nPaging - the DIV which contains this pagination control
@@ -849,7 +849,7 @@
 	 * Function: dataTable
 	 * Purpose:  DataTables information
 	 * Returns:  -
-	 * Inputs:   object:oInit - initalisation options for the table
+	 * Inputs:   object:oInit - initialisation options for the table
 	 */
 	$.fn.dataTable = function( oInit )
 	{
@@ -1145,7 +1145,7 @@
 			
 			/*
 			 * Variable: fnInitComplete
-			 * Purpose:  Callback function for when the table has been initalised
+			 * Purpose:  Callback function for when the table has been initialised
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
 			this.fnInitComplete = null;
@@ -2247,7 +2247,7 @@
 		
 		/*
 		 * Function: fnAdjustColumnSizing
-		 * Purpose:  Update tale sizing based on content. This would most likely be used for scrolling
+		 * Purpose:  Update table sizing based on content. This would most likely be used for scrolling
 		 *   and will typically need a redraw after it.
 		 * Returns:  -
 		 * Inputs:   bool:bRedraw - redraw the table or not, you will typically want to - default true
@@ -2314,23 +2314,23 @@
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Initalisation
+		 * Section - Initialisation
 		 */
 		
 		/*
-		 * Function: _fnInitalise
+		 * Function: _fnInitialise
 		 * Purpose:  Draw the table for the first time, adding all required features
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
 		 */
-		function _fnInitalise ( oSettings )
+		function _fnInitialise ( oSettings )
 		{
 			var i, iLen, iAjaxStart=oSettings.iInitDisplayStart;
 			
 			/* Ensure that the table data is fully initialised */
 			if ( oSettings.bInitialised === false )
 			{
-				setTimeout( function(){ _fnInitalise( oSettings ); }, 200 );
+				setTimeout( function(){ _fnInitialise( oSettings ); }, 200 );
 				return;
 			}
 			
@@ -2429,7 +2429,7 @@
 		}
 		
 		/*
-		 * Function: _fnInitalise
+		 * Function: _fnInitComplete
 		 * Purpose:  Draw the table for the first time, adding all required features
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
@@ -2497,7 +2497,7 @@
 			
 			if ( bInit )
 			{
-				_fnInitalise( oSettings );
+				_fnInitialise( oSettings );
 			}
 		}
 		
@@ -6774,7 +6774,7 @@
 		 * I'm not happy with this solution... - To be fixed in 2.0
 		 */
 		this.oApi._fnExternApiFunc = _fnExternApiFunc;
-		this.oApi._fnInitalise = _fnInitalise;
+		this.oApi._fnInitialise = _fnInitialise;
 		this.oApi._fnInitComplete = _fnInitComplete;
 		this.oApi._fnLanguageProcess = _fnLanguageProcess;
 		this.oApi._fnAddColumn = _fnAddColumn;
@@ -6861,7 +6861,7 @@
 		{
 			var i=0, iLen, j, jLen, k, kLen;
 			
-			/* Check to see if we are re-initalising a table */
+			/* Check to see if we are re-initialising a table */
 			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
 			{
 				/* Base check on table node */
@@ -7359,7 +7359,7 @@
 			 */
 			if ( bInitHandedOff === false )
 			{
-				_fnInitalise( oSettings );
+				_fnInitialise( oSettings );
 			}
 		});
 	};
