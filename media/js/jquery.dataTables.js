@@ -4050,8 +4050,9 @@
 			/* If x-scrolling is disabled, then the viewport cannot be less than the sanity width */
 			if ( o.oScroll.sX === "" )
 			{
-				var iCorrection = (nScrollBody.scrollHeight > nScrollBody.offsetHeight) ?
-					iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
+				var iCorrection = (nScrollBody.scrollHeight > nScrollBody.offsetHeight || 
+					$(nScrollBody).css('overflow-y') == "scroll") ?
+						iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
 				nScrollBody.style.width = _fnStringToCss( iCorrection );
 				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
 				
