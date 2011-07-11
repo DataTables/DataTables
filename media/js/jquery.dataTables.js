@@ -4041,27 +4041,6 @@
 				}
 			}
 			
-			/* Recalculate the sanity width - now that we've applied the required width, before it was
-			 * a temporary variable. This is required because the column width calculation is done
-			 * before this table DOM is created.
-			 */
-			iSanityWidth = $(o.nTable).outerWidth();
-			
-			/* If x-scrolling is disabled, then the viewport cannot be less than the sanity width */
-			if ( o.oScroll.sX === "" )
-			{
-				var iCorrection = (nScrollBody.scrollHeight > nScrollBody.offsetHeight || 
-					$(nScrollBody).css('overflow-y') == "scroll") ?
-						iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
-				nScrollBody.style.width = _fnStringToCss( iCorrection );
-				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
-				
-				if ( o.nTFoot !== null )
-				{
-					nScrollFootInner.parentNode.style.width = _fnStringToCss( iCorrection );
-				}
-			}
-			
 			/* We want the hidden header to have zero height, so remove padding and borders. Then
 			 * set the width based on the real headers
 			 */
@@ -4121,6 +4100,28 @@
 					nSizer.innerHTML = "";
 					nSizer.style.width = _fnStringToCss( aApplied.shift() );
 				}, anFootSizers );
+			}
+			
+			
+			/* Recalculate the sanity width - now that we've applied the required width, before it was
+			 * a temporary variable. This is required because the column width calculation is done
+			 * before this table DOM is created.
+			 */
+			iSanityWidth = $(o.nTable).outerWidth();
+			
+			/* If x-scrolling is disabled, then the viewport cannot be less than the sanity width */
+			if ( o.oScroll.sX === "" )
+			{
+				var iCorrection = (nScrollBody.scrollHeight > nScrollBody.offsetHeight || 
+					$(nScrollBody).css('overflow-y') == "scroll") ?
+						iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
+				nScrollBody.style.width = _fnStringToCss( iCorrection );
+				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
+				
+				if ( o.nTFoot !== null )
+				{
+					nScrollFootInner.parentNode.style.width = _fnStringToCss( iCorrection );
+				}
 			}
 			
 			/* Sanity check that the table is of a sensible width. If not then we are going to get
