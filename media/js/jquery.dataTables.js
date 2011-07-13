@@ -1467,6 +1467,13 @@
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
 			this.oInit = null;
+			
+			/*
+			 * Variable: aoDestroyCallback
+			 * Purpose:  Destroy callback functions
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.aoDestroyCallback = [];
 		}
 		
 		/*
@@ -2137,6 +2144,11 @@
 			
 			/* Flag to note that the table is currently being destoryed - no action should be taken */
 			oSettings.bDestroying = true;
+			
+			/* Restore hidden columns */
+			for ( i=0, iLen=oSettings.aoDestroyCallback.length ; i<iLen ; i++ ) {
+				oSettings.aoDestroyCallback[i].fn();
+			}
 			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
