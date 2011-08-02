@@ -1940,7 +1940,7 @@
 					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 				}
 			}
-			else if ( typeof mData == 'object' )
+			else if ( mData !== null && typeof mData == 'object' )
 			{
 				/* Object update - update the whole row - assume the developer gets the object right */
 				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
