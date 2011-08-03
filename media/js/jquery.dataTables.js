@@ -3176,8 +3176,8 @@
 						}
 
 						/* Do the actual expansion in the DOM */
-						aoLocal[i][j].cell.setAttribute('rowspan', iRowspan);
-						aoLocal[i][j].cell.setAttribute('colspan', iColspan);
+						aoLocal[i][j].cell.rowSpan = iRowspan;
+						aoLocal[i][j].cell.colSpan = iColspan;
 					}
 				}
 			}
