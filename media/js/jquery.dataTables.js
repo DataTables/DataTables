@@ -4476,16 +4476,19 @@
 		 */
 		function _fnBuildSearchArray ( oSettings, iMaster )
 		{
-			/* Clear out the old data */
-			oSettings.asDataSearch.splice( 0, oSettings.asDataSearch.length );
-			
-			var aArray = (typeof iMaster != 'undefined' && iMaster == 1) ?
-			 	oSettings.aiDisplayMaster : oSettings.aiDisplay;
-			
-			for ( var i=0, iLen=aArray.length ; i<iLen ; i++ )
+			if ( !oSettings.oFeatures.bServerSide )
 			{
-				oSettings.asDataSearch[i] = _fnBuildSearchRow( oSettings,
-					_fnGetRowData( oSettings, aArray[i], 'filter' ) );
+				/* Clear out the old data */
+				oSettings.asDataSearch.splice( 0, oSettings.asDataSearch.length );
+				
+				var aArray = (typeof iMaster != 'undefined' && iMaster == 1) ?
+				 	oSettings.aiDisplayMaster : oSettings.aiDisplay;
+				
+				for ( var i=0, iLen=aArray.length ; i<iLen ; i++ )
+				{
+					oSettings.asDataSearch[i] = _fnBuildSearchRow( oSettings,
+						_fnGetRowData( oSettings, aArray[i], 'filter' ) );
+				}
 			}
 		}
 		
