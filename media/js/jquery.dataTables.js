@@ -1091,11 +1091,11 @@
 			this.asStripClasses = [];
 			
 			/*
-			 * Variable: asDestoryStrips
+			 * Variable: asDestroyStrips
 			 * Purpose:  If restoring a table - we should restore it's striping classes as well
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
-			this.asDestoryStrips = [];
+			this.asDestroyStrips = [];
 			
 			/*
 			 * Variable: sDestroyWidth
@@ -2241,8 +2241,8 @@
 			 * this is not fool proof (for example if not all rows as odd/even classes - but 
 			 * it's a good effort without getting carried away
 			 */
-			$('>tr:even', nBody).addClass( oSettings.asDestoryStrips[0] );
-			$('>tr:odd', nBody).addClass( oSettings.asDestoryStrips[1] );
+			$('>tr:even', nBody).addClass( oSettings.asDestroyStrips[0] );
+			$('>tr:odd', nBody).addClass( oSettings.asDestroyStrips[1] );
 			
 			/* Remove the settings object from the settings array */
 			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
@@ -7160,22 +7160,22 @@
 			if ( bStripeRemove )
 			{
 				/* Store the classes which we are about to remove so they can be readded on destory */
-				oSettings.asDestoryStrips = [ '', '' ];
+				oSettings.asDestroyStrips = [ '', '' ];
 				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripOdd) )
 				{
-					oSettings.asDestoryStrips[0] += oSettings.oClasses.sStripOdd+" ";
+					oSettings.asDestroyStrips[0] += oSettings.oClasses.sStripOdd+" ";
 				}
 				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripEven) )
 				{
-					oSettings.asDestoryStrips[0] += oSettings.oClasses.sStripEven;
+					oSettings.asDestroyStrips[0] += oSettings.oClasses.sStripEven;
 				}
 				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripOdd) )
 				{
-					oSettings.asDestoryStrips[1] += oSettings.oClasses.sStripOdd+" ";
+					oSettings.asDestroyStrips[1] += oSettings.oClasses.sStripOdd+" ";
 				}
 				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripEven) )
 				{
-					oSettings.asDestoryStrips[1] += oSettings.oClasses.sStripEven;
+					oSettings.asDestroyStrips[1] += oSettings.oClasses.sStripEven;
 				}
 				
 				anRows.removeClass( oSettings.asStripClasses.join(' ') );
