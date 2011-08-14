@@ -3952,7 +3952,8 @@
 				i, iLen, j, jLen, anHeadToSize, anHeadSizers, anFootSizers, anFootToSize, oStyle, iVis,
 				iWidth, aApplied=[], iSanityWidth,
 				nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
-				nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null;
+				nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
+				ie67 = $.browser.msie && $.browser.version <= 7;
 			
 			/*
 			 * 1. Re-create the table inside the scrolling div
@@ -4021,9 +4022,11 @@
 				o.nTable.style.width = "100%";
 				
 				/* I know this is rubbish - but IE7 will make the width of the table when 100% include
-				 * the scrollbar - which is shouldn't. This needs feature detection in future - to do
+				 * the scrollbar - which is shouldn't. When there is a scrollbar we need to take this
+				 * into account.
 				 */
-				if ( $.browser.msie && $.browser.version <= 7 )
+				if ( ie67 && (nScrollBody.scrollHeight > 
+					nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
 				{
 					o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth()-o.oScroll.iBarWidth );
 				}
@@ -4058,21 +4061,6 @@
 			 * before this table DOM is created.
 			 */
 			iSanityWidth = $(o.nTable).outerWidth();
-			
-			/* If x-scrolling is disabled, then the viewport cannot be less than the sanity width */
-			if ( o.oScroll.sX === "" )
-			{
-				var iCorrection = (nScrollBody.scrollHeight > nScrollBody.offsetHeight || 
-					$(nScrollBody).css('overflow-y') == "scroll") ?
-						iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
-				nScrollBody.style.width = _fnStringToCss( iCorrection );
-				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
-				
-				if ( o.nTFoot !== null )
-				{
-					nScrollFootInner.parentNode.style.width = _fnStringToCss( iCorrection );
-				}
-			}
 			
 			/* We want the hidden header to have zero height, so remove padding and borders. Then
 			 * set the width based on the real headers
@@ -4136,22 +4124,52 @@
 			}
 			
 			/* Sanity check that the table is of a sensible width. If not then we are going to get
-			 * misalignment
+			 * misalignment - try to prevent this by not allowing the table to shrink below its min width
 			 */
 			if ( $(o.nTable).outerWidth() < iSanityWidth )
 			{
+				/* The min width depends upon if we have a vertical scrollbar visible or not */
+				var iCorrection = ((nScrollBody.scrollHeight > nScrollBody.offsetHeight || 
+					$(nScrollBody).css('overflow-y') == "scroll")) ?
+						iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
+				
+				/* IE6/7 are a law unto themselves... */
+				if ( ie67 && (nScrollBody.scrollHeight > 
+					nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
+				{
+					o.nTable.style.width = _fnStringToCss( iCorrection-o.oScroll.iBarWidth );
+				}
+				
+				/* Apply the calculated minimum width to the table wrappers */
+				nScrollBody.style.width = _fnStringToCss( iCorrection );
+				nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
+				
+				if ( o.nTFoot !== null )
+				{
+					nScrollFootInner.parentNode.style.width = _fnStringToCss( iCorrection );
+				}
+				
+				/* And give the user a warning that we've stopped the table getting too small */
 				if ( o.oScroll.sX === "" )
 				{
 					_fnLog( o, 1, "The table cannot fit into the current element which will cause column"+
-						" misalignment. It is suggested that you enable x-scrolling or increase the width"+
-						" the table has in which to be drawn" );
+						" misalignment. The table has been drawn at its minimum possible width." );
 				}
 				else if ( o.oScroll.sXInner !== "" )
 				{
 					_fnLog( o, 1, "The table cannot fit into the current element which will cause column"+
-						" misalignment. It is suggested that you increase the sScrollXInner property to"+
-						" allow it to draw in a larger area, or simply remove that parameter to allow"+
-						" automatic calculation" );
+						" misalignment. Increase the sScrollXInner value or remove it to allow automatic"+
+						" calculation" );
+				}
+			}
+			else
+			{
+				nScrollBody.style.width = _fnStringToCss( '100%' );
+				nScrollHeadInner.parentNode.style.width = _fnStringToCss( '100%' );
+				
+				if ( o.nTFoot !== null )
+				{
+					nScrollFootInner.parentNode.style.width = _fnStringToCss( '100%' );
 				}
 			}
 			
@@ -4166,7 +4184,7 @@
 				 * the scrollbar height from the visible display, rather than adding it on. We need to
 				 * set the height in order to sort this. Don't want to do it in any other browsers.
 				 */
-				if ( $.browser.msie && $.browser.version <= 7 )
+				if ( ie67 )
 				{
 					nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+o.oScroll.iBarWidth );
 				}
