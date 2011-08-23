@@ -2668,7 +2668,7 @@
 			var oCol;
 			
 			/* Take an independent copy of the data source so we can bash it about as we wish */
-			var aDataIn = (typeof aDataSupplied.length == 'number') ?
+			var aDataIn = ($.isArray(aDataSupplied)) ?
 				aDataSupplied.slice() :
 				$.extend( true, {}, aDataSupplied );
 			
