@@ -974,6 +974,7 @@
 				"sInfoEmpty": "Showing 0 to 0 of 0 entries",
 				"sInfoFiltered": "(filtered from _MAX_ total entries)",
 				"sInfoPostFix": "",
+				"sInfoThousands": ",",
 				"sSearch": "Search:",
 				"sUrl": "",
 				"oPaginate": {
@@ -1368,7 +1369,7 @@
 					{
 						if ( i%3 === 0 && i !== 0 )
 						{
-							out = ','+out;
+							out = this.oLanguage.sInfoThousands+out;
 						}
 						out = a[iLen-i-1]+out;
 					}
@@ -2481,6 +2482,7 @@
 			_fnMap( oSettings.oLanguage, oLanguage, 'sInfoEmpty' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sInfoFiltered' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sInfoPostFix' );
+			_fnMap( oSettings.oLanguage, oLanguage, 'sInfoThousands' );
 			_fnMap( oSettings.oLanguage, oLanguage, 'sSearch' );
 			
 			if ( typeof oLanguage.oPaginate != 'undefined' )
