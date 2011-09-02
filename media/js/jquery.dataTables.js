@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
 
 (function($, window, document) {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1350,6 +1350,17 @@
 			};
 			
 			/*
+			 * Variable: aoServerParams
+			 * Purpose:  Functions which are called prior to sending an Ajax request so extra parameters
+			 *           can easily be sent to the server
+			 * Scope:    jQuery.dataTable.classSettings
+			 * Notes:    Each array element is an object with the following parameters:
+			 *   function:fn - function to call
+			 *   string:sName - name callback - useful for knowing where it came from (plugin etc)
+			 */
+			this.aoServerParams = [];
+			
+			/*
 			 * Variable: fnFormatNumber
 			 * Purpose:  Format numbers for display
 			 * Scope:    jQuery.dataTable.classSettings
@@ -2397,7 +2408,9 @@
 			/* if there is an ajax source load the data */
 			if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 			{
-				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, [], function(json) {
+				var aoData = [];
+				_fnServerParams( oSettings, aoData );
+				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData, function(json) {
 					var aData = json;
 					if ( oSettings.sAjaxDataProp !== "" )
 					{
@@ -3429,6 +3442,7 @@
 				_fnProcessingDisplay( oSettings, true );
 				var iColumns = oSettings.aoColumns.length;
 				var aoData = _fnAjaxParameters( oSettings );
+				_fnServerParams( oSettings, aoData );
 				
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData,
 					function(json) {
@@ -3505,6 +3519,21 @@
 			}
 			
 			return aoData;
+		}
+		
+		/*
+		 * Function: _fnServerParams
+		 * Purpose:  Add Ajax parameters from plugins
+		 * Returns:  -
+		 * Inputs:   object:oSettings - dataTables settings object
+		 *           array objects:aoData - name/value pairs to send to the server
+		 */
+		function _fnServerParams( oSettings, aoData )
+		{
+			for ( var i=0, iLen=oSettings.aoServerParams.length ; i<iLen ; i++ )
+			{
+				oSettings.aoServerParams[i].fn.call( oSettings.oInstance, aoData );
+			}
 		}
 		
 		/*
@@ -6809,6 +6838,7 @@
 		this.oApi._fnAjaxUpdate = _fnAjaxUpdate;
 		this.oApi._fnAjaxParameters = _fnAjaxParameters;
 		this.oApi._fnAjaxUpdateDraw = _fnAjaxUpdateDraw;
+		this.oApi._fnServerParams = _fnServerParams;
 		this.oApi._fnAddOptionsHtml = _fnAddOptionsHtml;
 		this.oApi._fnFeatureHtmlTable = _fnFeatureHtmlTable;
 		this.oApi._fnScrollDraw = _fnScrollDraw;
@@ -7015,6 +7045,15 @@
 				{
 					oSettings.aoDrawCallback.push( {
 						"fn": oInit.fnDrawCallback,
+						"sName": "user"
+					} );
+				}
+				
+				/* Ajax additional variables are array driven */
+				if ( typeof oInit.fnServerParams == 'function' )
+				{
+					oSettings.aoServerParams.push( {
+						"fn": oInit.fnServerParams,
 						"sName": "user"
 					} );
 				}
