@@ -7015,6 +7015,7 @@
 				_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
 				_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 				_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
+				_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 				_fnMap( oSettings, oInit, "asStripeClasses" );
 				_fnMap( oSettings, oInit, "fnPreDrawCallback" );
 				_fnMap( oSettings, oInit, "fnRowCallback" );
