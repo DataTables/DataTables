@@ -154,9 +154,9 @@
 		"sPageNext": "next",
 		"sPageLast": "last",
 		
-		/* Stripping classes */
-		"sStripOdd": "odd",
-		"sStripEven": "even",
+		/* Striping classes */
+		"sStripeOdd": "odd",
+		"sStripeEven": "even",
 		
 		/* Empty row */
 		"sRowEmpty": "dataTables_empty",
@@ -220,9 +220,9 @@
 		"sPageNext": "next",
 		"sPageLast": "last ui-corner-tr ui-corner-br",
 		
-		/* Stripping classes */
-		"sStripOdd": "odd",
-		"sStripEven": "even",
+		/* Striping classes */
+		"sStripeOdd": "odd",
+		"sStripeEven": "even",
 		
 		/* Empty row */
 		"sRowEmpty": "dataTables_empty",
@@ -1085,22 +1085,22 @@
 			this.aaSortingFixed = null;
 			
 			/*
-			 * Variable: asStripClasses
+			 * Variable: asStripeClasses
 			 * Purpose:  Classes to use for the striping of a table
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
-			this.asStripClasses = [];
+			this.asStripeClasses = [];
 			
 			/*
-			 * Variable: asDestroyStrips
-			 * Purpose:  If restoring a table - we should restore it's striping classes as well
+			 * Variable: asDestroyStripes
+			 * Purpose:  If restoring a table - we should restore its striping classes as well
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
-			this.asDestroyStrips = [];
+			this.asDestroyStripes = [];
 			
 			/*
 			 * Variable: sDestroyWidth
-			 * Purpose:  If restoring a table - we should restore it's width
+			 * Purpose:  If restoring a table - we should restore its width
 			 * Scope:    jQuery.dataTable.classSettings
 			 */
 			this.sDestroyWidth = 0;
@@ -2198,7 +2198,7 @@
 			oSettings.aaSortingFixed = [];
 			_fnSortingClasses( oSettings );
 			
-			$(_fnGetTrNodes( oSettings )).removeClass( oSettings.asStripClasses.join(' ') );
+			$(_fnGetTrNodes( oSettings )).removeClass( oSettings.asStripeClasses.join(' ') );
 			
 			if ( !oSettings.bJUI )
 			{
@@ -2253,8 +2253,8 @@
 			 * this is not fool proof (for example if not all rows as odd/even classes - but 
 			 * it's a good effort without getting carried away
 			 */
-			$('>tr:even', nBody).addClass( oSettings.asDestroyStrips[0] );
-			$('>tr:odd', nBody).addClass( oSettings.asDestroyStrips[1] );
+			$('>tr:even', nBody).addClass( oSettings.asDestroyStripes[0] );
+			$('>tr:odd', nBody).addClass( oSettings.asDestroyStripes[1] );
 			
 			/* Remove the settings object from the settings array */
 			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
@@ -3192,7 +3192,7 @@
 			var anRows = [];
 			var iRowCount = 0;
 			var bRowError = false;
-			var iStrips = oSettings.asStripClasses.length;
+			var iStripes = oSettings.asStripeClasses.length;
 			var iOpenRows = oSettings.aoOpenRows.length;
 			
 			/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
@@ -3256,14 +3256,14 @@
 
 					var nRow = aoData.nTr;
 					
-					/* Remove the old stripping classes and then add the new one */
-					if ( iStrips !== 0 )
+					/* Remove the old striping classes and then add the new one */
+					if ( iStripes !== 0 )
 					{
-						var sStrip = oSettings.asStripClasses[ iRowCount % iStrips ];
-						if ( aoData._sRowStripe != sStrip )
+						var sStripe = oSettings.asStripeClasses[ iRowCount % iStripes ];
+						if ( aoData._sRowStripe != sStripe )
 						{
-							$(nRow).removeClass( aoData._sRowStripe ).addClass( sStrip );
-							aoData._sRowStripe = sStrip;
+							$(nRow).removeClass( aoData._sRowStripe ).addClass( sStripe );
+							aoData._sRowStripe = sStripe;
 						}
 					}
 					
@@ -3300,9 +3300,9 @@
 				/* Table is empty - create a row with an empty message in it */
 				anRows[ 0 ] = document.createElement( 'tr' );
 				
-				if ( typeof oSettings.asStripClasses[0] != 'undefined' )
+				if ( typeof oSettings.asStripeClasses[0] != 'undefined' )
 				{
-					anRows[ 0 ].className = oSettings.asStripClasses[0];
+					anRows[ 0 ].className = oSettings.asStripeClasses[0];
 				}
 
 				var sZero = oSettings.oLanguage.sZeroRecords.replace(
@@ -7015,7 +7015,7 @@
 				_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
 				_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 				_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
-				_fnMap( oSettings, oInit, "asStripClasses" );
+				_fnMap( oSettings, oInit, "asStripeClasses" );
 				_fnMap( oSettings, oInit, "fnPreDrawCallback" );
 				_fnMap( oSettings, oInit, "fnRowCallback" );
 				_fnMap( oSettings, oInit, "fnHeaderCallback" );
@@ -7181,20 +7181,20 @@
 			
 			/*
 			 * Stripes
-			 * Add the strip classes now that we know which classes to apply - unless overruled
+			 * Add the stripe classes now that we know which classes to apply - unless overruled
 			 */
-			if ( typeof oInit.asStripClasses == 'undefined' )
+			if ( typeof oInit.asStripeClasses == 'undefined' )
 			{
-				oSettings.asStripClasses.push( oSettings.oClasses.sStripOdd );
-				oSettings.asStripClasses.push( oSettings.oClasses.sStripEven );
+				oSettings.asStripeClasses.push( oSettings.oClasses.sStripeOdd );
+				oSettings.asStripeClasses.push( oSettings.oClasses.sStripeEven );
 			}
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var bStripeRemove = false;
 			var anRows = $('>tbody>tr', this);
-			for ( i=0, iLen=oSettings.asStripClasses.length ; i<iLen ; i++ )
+			for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
 			{
-				if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripClasses[i]) )
+				if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripeClasses[i]) )
 				{
 					bStripeRemove = true;
 					break;
@@ -7204,25 +7204,25 @@
 			if ( bStripeRemove )
 			{
 				/* Store the classes which we are about to remove so they can be readded on destory */
-				oSettings.asDestroyStrips = [ '', '' ];
-				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripOdd) )
+				oSettings.asDestroyStripes = [ '', '' ];
+				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
 				{
-					oSettings.asDestroyStrips[0] += oSettings.oClasses.sStripOdd+" ";
+					oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeOdd+" ";
 				}
-				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripEven) )
+				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeEven) )
 				{
-					oSettings.asDestroyStrips[0] += oSettings.oClasses.sStripEven;
+					oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeEven;
 				}
-				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripOdd) )
+				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeOdd) )
 				{
-					oSettings.asDestroyStrips[1] += oSettings.oClasses.sStripOdd+" ";
+					oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeOdd+" ";
 				}
-				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripEven) )
+				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeEven) )
 				{
-					oSettings.asDestroyStrips[1] += oSettings.oClasses.sStripEven;
+					oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeEven;
 				}
 				
-				anRows.removeClass( oSettings.asStripClasses.join(' ') );
+				anRows.removeClass( oSettings.asStripeClasses.join(' ') );
 			}
 			
 			/*
