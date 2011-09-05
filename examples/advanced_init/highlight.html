@@ -459,10 +459,13 @@
 			
 			<h1>Initialisation code</h1>
 			<p>Javascript:</p>
-			<pre>
-$(document).ready(function() {
+			<pre class="brush: js;">$(document).ready(function() {
 	$('#example').dataTable();
 } );</pre>
+		<style type="text/css">
+			@import "../examples_support/syntax/css/shCore.css";
+		</style>
+    <script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
 
 			<p>CSS (note that for this example the selector ".ex_highlight" is used to limit the CSS here to just this example.</p>
 			<pre>.ex_highlight #example tbody tr.even:hover, #example tbody tr.even td.highlighted {
