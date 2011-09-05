@@ -45,6 +45,11 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 						'new null return super switch ' +
 						'this throw true try typeof var while with'
 						;
+		
+		var datatablesAPI =
+			'fnSettings fnDraw fnFilter fnSort fnAddData fnDeleteRow fnClearTable fnGetData '+
+			'fnGetPosition fnGetNodes fnOpen fnClose fnUpdate fnSetColumnVis fnVersionCheck '+
+			'fnPageChange fnSortListener fnDestroy fnAdjustColumnSizing';
 
 		var r = SyntaxHighlighter.regexLib;
 		
@@ -54,7 +59,8 @@ eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 			{ regex: r.singleLineCComments,							css: 'comments' },			// one line comments
 			{ regex: r.multiLineCComments,							css: 'comments' },			// multiline comments
 			{ regex: /\s*#.*/gm,									css: 'preprocessor' },		// preprocessor tags like #region and #endregion
-			{ regex: new RegExp(this.getKeywords(keywords), 'gm'),	css: 'keyword' }			// keywords
+			{ regex: new RegExp(this.getKeywords(keywords), 'gm'),	css: 'keyword' },			// keywords
+			{ regex: new RegExp(this.getKeywords(datatablesAPI), 'gm'),	css: 'dtapi' }			// DataTables API methods
 			];
 	
 		this.forHtmlScript(r.scriptScriptTags);
@@ -293,6 +299,12 @@ var dtLinks = [
 	/* Add a class to all the strings which are DataTables init options or API methods */
 	var dtList = '"'+ dtOptions.join( '" "' ) +'"';
 	$('code.string').each( function () {
+		if ( dtList.indexOf( this.innerHTML ) !== -1 ) {
+			$(this).addClass( 'datatables_ref' );
+		}
+	} );
+	
+	$('code.dtapi').each( function () {
 		if ( dtList.indexOf( this.innerHTML ) !== -1 ) {
 			$(this).addClass( 'datatables_ref' );
 		}

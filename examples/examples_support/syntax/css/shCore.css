@@ -362,3 +362,13 @@
 	*cursor: hand;
 }
 
+.syntaxhighlighter .dtapi {
+	color: #069;
+}
+
+.syntaxhighlighter .dtapi:hover {
+	text-decoration: underline;
+	cursor: pointer;
+	*cursor: hand;
+}
+
