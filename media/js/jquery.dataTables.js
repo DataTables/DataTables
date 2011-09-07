@@ -5396,6 +5396,7 @@
 			{
 				nProcessingModal.setAttribute( 'id', oSettings.sTableId+'_processing_modal' );
 			}
+			nProcessing.className = oSettings.oClasses.sProcessing + "_modal";
 			document.body.appendChild( nProcessingModal );
 			
 			return nProcessingModal;
