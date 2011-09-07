@@ -5377,7 +5377,7 @@
 
 				if ( oSettings.oFeatures.bProcessingModal )
 				{
-					_fnFeatureProcessingModalDisplay( oSettings );
+					_fnFeatureProcessingModalDisplay( oSettings, bShow );
 				}
 			}
 		}
