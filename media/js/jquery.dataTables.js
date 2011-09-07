@@ -5403,10 +5403,13 @@
 		}
 
 		/*
-		 * Function: _fnFeatureHtmlProcessingModal
-		 * Purpose:  Generate the modal window node that fills the entire screen
-		 * Returns:  node
+		 * Function: _fnFeatureProcessingDisplayModal
+		 * Purpose:  Display or hide the processing indicator modal div.
+		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
+     *           bool:
+		 *   true - show the processing indicator modal div.
+		 *   false - don't show
 		 */
 		function _fnFeatureProcessingDisplayModal( oSettings, bShow )
 		{
