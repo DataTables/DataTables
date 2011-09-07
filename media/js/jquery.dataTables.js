@@ -4271,11 +4271,11 @@
 			var sSearchStr = oSettings.oLanguage.sSearch;
 			sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
 			  sSearchStr.replace('_INPUT_', '<input type="text" />') :
-			  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
+			  sSearchStr==="" ? '<input type="text" />' : '<label>'+sSearchStr+'</label> <input type="text" />';
 			
 			var nFilter = document.createElement( 'div' );
 			nFilter.className = oSettings.oClasses.sFilter;
-			nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
+			nFilter.innerHTML = sSearchStr;
 			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
 			{
 				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
