@@ -5374,7 +5374,43 @@
 				{
 					an[i].style.visibility = bShow ? "visible" : "hidden";
 				}
+
+				if ( oSettings.oFeatures.bProcessingModal )
+				{
+					_fnFeatureProcessingModalDisplay( oSettings );
+				}
 			}
+		}
+
+		/*
+		 * Function: _fnFeatureHtmlProcessingModal
+		 * Purpose:  Generate the modal window node that fills the entire screen
+		 * Returns:  node
+		 * Inputs:   object:oSettings - dataTables settings object
+		 */
+		function _fnFeatureHtmlProcessingModal ( oSettings )
+		{
+			var nProcessingModal = document.createElement( 'div' );
+
+			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.r == "undefined" )
+			{
+				nProcessingModal.setAttribute( 'id', oSettings.sTableId+'_processing_modal' );
+			}
+			document.body.appendChild( nProcessingModal );
+			
+			return nProcessingModal;
+		}
+
+		/*
+		 * Function: _fnFeatureHtmlProcessingModal
+		 * Purpose:  Generate the modal window node that fills the entire screen
+		 * Returns:  node
+		 * Inputs:   object:oSettings - dataTables settings object
+		 */
+		function _fnFeatureProcessingModalDisplay( oSettings, bShow )
+		{
+			document.getElementById( oSettings.sTableId+'_processing_modal' )
+				.style.display = bShow ? "block", "none";
 		}
 		
 		
