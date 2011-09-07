@@ -5411,7 +5411,7 @@
 		function _fnFeatureProcessingModalDisplay( oSettings, bShow )
 		{
 			document.getElementById( oSettings.sTableId+'_processing_modal' )
-				.style.display = bShow ? "block", "none";
+				.style.display = bShow ? "block" : "none";
 		}
 		
 		
