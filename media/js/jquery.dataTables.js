@@ -5377,7 +5377,7 @@
 
 				if ( oSettings.oFeatures.bProcessingModal )
 				{
-					_fnFeatureProcessingDisplayModal( oSettings, bShow );
+					_fnProcessingDisplayModal( oSettings, bShow );
 				}
 			}
 		}
@@ -5403,7 +5403,7 @@
 		}
 
 		/*
-		 * Function: _fnFeatureProcessingDisplayModal
+		 * Function: _fnProcessingDisplayModal
 		 * Purpose:  Display or hide the processing indicator modal div.
 		 * Returns:  -
 		 * Inputs:   object:oSettings - dataTables settings object
@@ -5411,7 +5411,7 @@
 		 *   true - show the processing indicator modal div.
 		 *   false - don't show
 		 */
-		function _fnFeatureProcessingDisplayModal( oSettings, bShow )
+		function _fnProcessingDisplayModal( oSettings, bShow )
 		{
 			document.getElementById( oSettings.sTableId+'_processing_modal' )
 				.style.display = bShow ? "block" : "none";
