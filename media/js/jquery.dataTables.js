@@ -6898,7 +6898,9 @@
 		this.oApi._fnUpdateInfo = _fnUpdateInfo;
 		this.oApi._fnFeatureHtmlLength = _fnFeatureHtmlLength;
 		this.oApi._fnFeatureHtmlProcessing = _fnFeatureHtmlProcessing;
+		this.oApi._fnFeatureHtmlProcessingModal = _fnFeatureHtmlProcessingModal;
 		this.oApi._fnProcessingDisplay = _fnProcessingDisplay;
+		this.oApi._fnProcessingDisplayModal = _fnProcessingDisplayModal;
 		this.oApi._fnVisibleToColumnIndex = _fnVisibleToColumnIndex;
 		this.oApi._fnColumnIndexToVisible = _fnColumnIndexToVisible;
 		this.oApi._fnNodeToDataIndex = _fnNodeToDataIndex;
