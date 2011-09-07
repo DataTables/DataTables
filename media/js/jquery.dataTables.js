@@ -5377,7 +5377,7 @@
 
 				if ( oSettings.oFeatures.bProcessingModal )
 				{
-					_fnFeatureProcessingModalDisplay( oSettings, bShow );
+					_fnFeatureProcessingDisplayModal( oSettings, bShow );
 				}
 			}
 		}
@@ -5408,7 +5408,7 @@
 		 * Returns:  node
 		 * Inputs:   object:oSettings - dataTables settings object
 		 */
-		function _fnFeatureProcessingModalDisplay( oSettings, bShow )
+		function _fnFeatureProcessingDisplayModal( oSettings, bShow )
 		{
 			document.getElementById( oSettings.sTableId+'_processing_modal' )
 				.style.display = bShow ? "block" : "none";
