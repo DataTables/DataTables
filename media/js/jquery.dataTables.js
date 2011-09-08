@@ -6437,7 +6437,7 @@
 		 */
 		function _fnDetectHeader ( aLayout, nThead )
 		{
-			var nTrs = nThead.getElementsByTagName('tr');
+			var nTrs = $('>tr', nThead);
 			var nCell;
 			var i, j, k, l, iLen, jLen, iColShifted;
 			var fnShiftCol = function ( a, i, j ) {
