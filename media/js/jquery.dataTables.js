@@ -2180,13 +2180,13 @@
 			/* When scrolling we had to break the table up - restore it */
 			if ( oSettings.nTable != oSettings.nTHead.parentNode )
 			{
-				$('>thead', oSettings.nTable).remove();
+				$(oSettings.nTable).children('thead').remove();
 				oSettings.nTable.appendChild( oSettings.nTHead );
 			}
 			
 			if ( oSettings.nTFoot && oSettings.nTable != oSettings.nTFoot.parentNode )
 			{
-				$('>tfoot', oSettings.nTable).remove();
+				$(oSettings.nTable).children('tfoot').remove();
 				oSettings.nTable.appendChild( oSettings.nTFoot );
 			}
 			
@@ -2253,8 +2253,8 @@
 			 * this is not fool proof (for example if not all rows as odd/even classes - but 
 			 * it's a good effort without getting carried away
 			 */
-			$('>tr:even', nBody).addClass( oSettings.asDestroyStripes[0] );
-			$('>tr:odd', nBody).addClass( oSettings.asDestroyStripes[1] );
+			$(nBody).children('tr:even').addClass( oSettings.asDestroyStripes[0] );
+			$(nBody).children('tr:odd').addClass( oSettings.asDestroyStripes[1] );
 			
 			/* Remove the settings object from the settings array */
 			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
@@ -3059,7 +3059,7 @@
 			/* Deal with the footer - add classes if required */
 			if ( oSettings.oClasses.sFooterTH !== "" )
 			{
-				$('>tr>th', oSettings.nTFoot).addClass( oSettings.oClasses.sFooterTH );
+				$(oSettings.nTFoot).children('tr>th').addClass( oSettings.oClasses.sFooterTH );
 			}
 			
 			/* Cache the footer elements */
@@ -3329,14 +3329,14 @@
 			/* Callback the header and footer custom funcation if there is one */
 			if ( typeof oSettings.fnHeaderCallback == 'function' )
 			{
-				oSettings.fnHeaderCallback.call( oSettings.oInstance, $('>tr', oSettings.nTHead)[0], 
+				oSettings.fnHeaderCallback.call( oSettings.oInstance, $(oSettings.nTHead).children('tr')[0], 
 					_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
 					oSettings.aiDisplay );
 			}
 			
 			if ( typeof oSettings.fnFooterCallback == 'function' )
 			{
-				oSettings.fnFooterCallback.call( oSettings.oInstance, $('>tr', oSettings.nTFoot)[0], 
+				oSettings.fnFooterCallback.call( oSettings.oInstance, $(oSettings.nTFoot).children('tr')[0], 
 					_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
 					oSettings.aiDisplay );
 			}
@@ -3873,7 +3873,7 @@
 			}
 			
 			/* Move any caption elements from the body to the header */
-			var nCaptions = $('>caption', oSettings.nTable);
+			var nCaptions = $(oSettings.nTable).children('caption');
 			for ( var i=0, iLen=nCaptions.length ; i<iLen ; i++ )
 			{
 				nScrollHeadTable.appendChild( nCaptions[i] );
@@ -6437,7 +6437,7 @@
 		 */
 		function _fnDetectHeader ( aLayout, nThead )
 		{
-			var nTrs = $('>tr', nThead);
+			var nTrs = $(nThead).children('tr');
 			var nCell;
 			var i, j, k, l, iLen, jLen, iColShifted;
 			var fnShiftCol = function ( a, i, j ) {
@@ -7192,7 +7192,7 @@
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var bStripeRemove = false;
-			var anRows = $('>tbody>tr', this);
+			var anRows = $(this).children('tbody>tr');
 			for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
 			{
 				if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripeClasses[i]) )
@@ -7371,7 +7371,7 @@
 			 * Final init
 			 * Cache the header, body and footer as required, creating them if needed
 			 */
-			var thead = $('>thead', this);
+			var thead = $(this).children('thead');
 			if ( thead.length === 0 )
 			{
 				thead = [ document.createElement( 'thead' ) ];
@@ -7379,7 +7379,7 @@
 			}
 			oSettings.nTHead = thead[0];
 			
-			var tbody = $('>tbody', this);
+			var tbody = $(this).children('tbody');
 			if ( tbody.length === 0 )
 			{
 				tbody = [ document.createElement( 'tbody' ) ];
@@ -7387,7 +7387,7 @@
 			}
 			oSettings.nTBody = tbody[0];
 			
-			var tfoot = $('>tfoot', this);
+			var tfoot = $(this).children('tfoot');
 			if ( tfoot.length > 0 )
 			{
 				oSettings.nTFoot = tfoot[0];
