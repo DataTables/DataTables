@@ -7184,7 +7184,8 @@
 			 * Stripes
 			 * Add the stripe classes now that we know which classes to apply - unless overruled
 			 */
-			if ( typeof oInit.asStripeClasses == 'undefined' )
+			if ( typeof oInit.asStripClasses == 'undefined' && 
+			     typeof oInit.asStripeClasses == 'undefined' )
 			{
 				oSettings.asStripeClasses.push( oSettings.oClasses.sStripeOdd );
 				oSettings.asStripeClasses.push( oSettings.oClasses.sStripeEven );
