@@ -2627,17 +2627,17 @@
 			
 			/* Check that the class assignment is correct for sorting */
 			if ( !oCol.bSortable ||
-					 ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+				 ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
 			{
 				oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 				oCol.sSortingClassJUI = "";
 			}
 			else if ( oCol.bSortable ||
-                ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
-      {
-        oCol.sSortingClass = oSettings.oClasses.sSortable;
-        oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
-      }
+			          ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+			{
+			  oCol.sSortingClass = oSettings.oClasses.sSortable;
+			  oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
+			}
 			else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) == -1 )
 			{
 				oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
@@ -2709,7 +2709,7 @@
 						{
 							oCol.sType = sThisType;
 						}
-						else if ( oCol.sType != sThisType )
+						else if ( oCol.sType != sThisType && oCol.sType != "html" )
 						{
 							/* String is always the 'fallback' option */
 							oCol.sType = 'string';
@@ -2913,7 +2913,8 @@
 								{
 									oSettings.aoColumns[iColumn].sType = sThisType;
 								}
-								else if ( oSettings.aoColumns[iColumn].sType != sThisType )
+								else if ( oSettings.aoColumns[iColumn].sType != sThisType && 
+								          oSettings.aoColumns[iColumn].sType != "html" )
 								{
 									/* String is always the 'fallback' option */
 									oSettings.aoColumns[iColumn].sType = 'string';
