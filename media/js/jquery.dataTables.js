@@ -3059,7 +3059,7 @@
 			/* Deal with the footer - add classes if required */
 			if ( oSettings.oClasses.sFooterTH !== "" )
 			{
-				$(oSettings.nTFoot).children('tr>th').addClass( oSettings.oClasses.sFooterTH );
+				$(oSettings.nTFoot).children('tr').children('th').addClass( oSettings.oClasses.sFooterTH );
 			}
 			
 			/* Cache the footer elements */
@@ -7193,7 +7193,7 @@
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var bStripeRemove = false;
-			var anRows = $(this).children('tbody>tr');
+			var anRows = $(this).children('tbody').children('tr');
 			for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
 			{
 				if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripeClasses[i]) )
