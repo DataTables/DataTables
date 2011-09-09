@@ -1,4 +1,4 @@
-﻿/*
+/*
  * File:        jquery.dataTables.js
  * Version:     1.8.2.dev
  * Description: Paginate, search and sort HTML tables
