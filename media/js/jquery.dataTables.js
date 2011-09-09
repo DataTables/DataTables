@@ -4288,7 +4288,7 @@
 				var n = oSettings.aanFeatures.f;
 				for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 				{
-					if ( n[i] != this.parentNode )
+					if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
 					{
 						$('input', n[i]).val( this.value );
 					}
