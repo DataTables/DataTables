@@ -1337,7 +1337,10 @@
 				settings.jqXHR = $.ajax( {
 					"url": url,
 					"data": data,
-					"success": callback,
+					"success": function (json) {
+						$(settings.oInstance).trigger('xhr', json);
+						callback( json );
+					},
 					"dataType": "json",
 					"cache": false,
 					"error": function (xhr, error, thrown) {
@@ -3388,6 +3391,7 @@
 			{
 				oSettings.aoDrawCallback[i].fn.call( oSettings.oInstance, oSettings );
 			}
+			$(oSettings.oInstance).trigger('draw');
 			
 			/* Draw is complete, sorting and filtering must be as well */
 			oSettings.bSorted = false;
@@ -4345,6 +4349,7 @@
 			
 			/* Tell the draw function we have been filtering */
 			oSettings.bFiltered = true;
+			$(oSettings.oInstance).trigger('filter');
 			
 			/* Redraw the table */
 			oSettings._iDisplayStart = 0;
@@ -4730,6 +4735,7 @@
 			
 			/* Tell the draw function that we have sorted the data */
 			oSettings.bSorted = true;
+			$(oSettings.oInstance).trigger('sort');
 			
 			/* Copy the master data into the draw array and re-draw */
 			if ( oSettings.oFeatures.bFilter )
@@ -5123,6 +5129,7 @@
 			{
 				_fnLog( oSettings, 0, "Unknown paging action: "+sAction );
 			}
+			$(oSettings.oInstance).trigger('page');
 			
 			return iOldStart != oSettings._iDisplayStart;
 		}
