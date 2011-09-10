@@ -6681,6 +6681,11 @@
 			{
 				sData = oCol.sDefaultContent;
 			}
+			else if ( typeof sData == 'function' )
+			{
+				/* If the data source is a function, then we run it and use the return */
+				return sData();
+			}
 
 			if ( sSpecific == 'display' && sData === null )
 			{
