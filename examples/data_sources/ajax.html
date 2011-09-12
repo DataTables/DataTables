@@ -27,7 +27,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>Although DataTables is built from the principle of progressive enhancement, it is often useful to be able to construct a table from an AJAX source. This can be done in one of two ways - either using the <b>aData</b> initialisation parameter which takes an array of data, or using the <b>sAjaxSource</b> initialisation parameter which will have DataTables go to that source with an XHR call and load data from there. This example shows the latter method in action. DataTables expects an object with an array called "aaData" with the data source.</p>
+			<p>Although DataTables is built from the principle of progressive enhancement, it is often useful to be able to construct a table from an AJAX source. This can be done in one of two ways - either using the <b>aaData</b> initialisation parameter which takes an array of data, or using the <b>sAjaxSource</b> initialisation parameter which will have DataTables go to that source with an XHR call and load data from there. This example shows the latter method in action. DataTables expects an object with an array called "aaData" with the data source.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -59,12 +59,20 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>$(document).ready(function() {
+			<pre class="brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		"bProcessing": true,
 		"sAjaxSource": '../ajax/sources/arrays.txt'
 	} );
 } );</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
+
+			<h1>Server response</h1>
+			<p>The code below shows the latest JSON data that has been returned from the server in response to the Ajax request made by DataTables. This will update as further requests are made.</p>
+			<pre id="latest_xhr" class="brush: js;"></pre>
 			
 			
 			<h1>Other examples</h1>

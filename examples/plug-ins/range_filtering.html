@@ -499,7 +499,7 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>/* Custom filtering function which will filter data in column four between two values */
+			<pre class="brush: js;">/* Custom filtering function which will filter data in column four between two values */
 $.fn.dataTableExt.afnFiltering.push(
 	function( oSettings, aData, iDataIndex ) {
 		var iMin = document.getElementById('min').value * 1;
@@ -533,6 +533,10 @@ $(document).ready(function() {
 	$('#min').keyup( function() { oTable.fnDraw(); } );
 	$('#max').keyup( function() { oTable.fnDraw(); } );
 } );</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
 			
 			
 			<h1>Other examples</h1>

@@ -116,7 +116,7 @@ $(document).ready( function () {
 				}
 				
 				/* Only the two custom divs don't have class names */
-				if ( !jqNodes[i].getAttribute('class') )
+				if ( jqNodes[i].className == "" )
 				{
 					nCustomWrappers.push( jqNodes[i] );
 				}

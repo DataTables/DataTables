@@ -509,7 +509,7 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>/* Note 'unshift' does not work in IE6. A simply array concatenation would. This is used
+			<pre class="brush: js;">/* Note 'unshift' does not work in IE6. A simply array concatenation would. This is used
  * to give the custom type top priority
  */
 jQuery.fn.dataTableExt.aTypes.unshift(
@@ -562,6 +562,10 @@ jQuery.fn.dataTableExt.oSort['numeric-comma-desc'] = function(a,b) {
 $(document).ready(function() {
 	$('#example').dataTable();
 } );</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
 			
 			
 			<h1>Other examples</h1>

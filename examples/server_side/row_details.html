@@ -104,7 +104,7 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>var oTable;
+			<pre class="brush: js;">var oTable;
 
 /* Formating function for row details */
 function fnFormatDetails ( nTr )
@@ -151,6 +151,14 @@ $(document).ready(function() {
 		}
 	} );
 } );</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
+
+			<h1>Server response</h1>
+			<p>The code below shows the latest JSON data that has been returned from the server in response to the Ajax request made by DataTables. This will update as further requests are made.</p>
+			<pre id="latest_xhr" class="brush: js;"></pre>
 			
 			
 			<h1>Other examples</h1>

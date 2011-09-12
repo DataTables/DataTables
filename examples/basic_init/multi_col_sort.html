@@ -474,7 +474,7 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>/* Define two custom functions (asc and desc) for string sorting */
+			<pre class="brush: js;">/* Define two custom functions (asc and desc) for string sorting */
 jQuery.fn.dataTableExt.oSort['string-case-asc']  = function(x,y) {
 	return ((x &lt; y) ? -1 : ((x &gt; y) ?  1 : 0));
 };
@@ -496,6 +496,10 @@ $(document).ready(function() {
 		]
 	} );
 } );</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
 			
 			
 			<h1>Other examples</h1>

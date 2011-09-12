@@ -486,7 +486,7 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>$(document).ready(function() {
+			<pre class="brush: js;">$(document).ready(function() {
 	/* Add a click handler to the rows - this could be used as a callback */
 	$('#example tr').click( function() {
 		if ( $(this).hasClass('row_selected') )
@@ -517,6 +517,10 @@ function fnGetSelected( oTableLocal )
 	}
 	return aReturn;
 }</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
 			
 			
 			<h1>Other examples</h1>

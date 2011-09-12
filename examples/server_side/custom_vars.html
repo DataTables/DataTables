@@ -17,13 +17,8 @@
 					"bProcessing": true,
 					"bServerSide": true,
 					"sAjaxSource": "scripts/server_processing.php",
-					"fnServerData": function ( sSource, aoData, fnCallback ) {
-						/* Add some extra data to the sender */
-						aoData.push( { "name": "more_data", "value": "my_value" } );
-						$.getJSON( sSource, aoData, function (json) { 
-							/* Do whatever additional processing you want on the callback, then tell DataTables */
-							fnCallback(json);
-						} );
+					"fnServerParams": function ( aoData ) {
+					  aoData.push( { "name": "more_data", "value": "my_value" } );
 					}
 				} );
 			} );
@@ -36,7 +31,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>It can often be useful to send a little bit of extra information to the server when utilising DataTables' server-side processing option. This can be done by overriding the function used internally to get the JSON data from the server through the use of the "fnServerData" callback. This function takes three parameters (the same as <a href="http://docs.jquery.com/Ajax/jQuery.getJSON">$.getJSON()</a>, to be manipulated as you wish. This allows you to add extra data to the second parameter and then make the AJAX call, or you can call a Google Gears DB, or whatever you want. This example shows adding a single extra HTTP variable.</p>
+			<p>It can often be useful to send a little bit of extra information to the server when utilising DataTables' server-side processing option. This can be done by using the <a href="http://datatables.net/ref#fnServerParams">fnServerParams</a> callback function which is called whenever an XHR is sent to the server. fnServerParams Takes a single parameter, the array of name/value pairs of parameters that are to be sent to the server. You can manipulate this as you require - typically adding another parameter, as shown in this example.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -70,21 +65,24 @@
 			
 			
 			<h1>Initialisation code</h1>
-			<pre>$(document).ready(function() {
+			<pre class="brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		"bProcessing": true,
 		"bServerSide": true,
-		"sAjaxSource": "scripts/server_processing.php",
-		"fnServerData": function ( sSource, aoData, fnCallback ) {
-			/* Add some extra data to the sender */
-			aoData.push( { "name": "more_data", "value": "my_value" } );
-			$.getJSON( sSource, aoData, function (json) { 
-				/* Do whatever additional processing you want on the callback, then tell DataTables */
-				fnCallback(json)
-			} );
-		}
+		"sAjaxSource": "scripts/server_processing.php"
+    "fnServerParams": function ( aoData ) {
+      aoData.push( { "name": "more_data", "value": "my_value" } );
+    }
 	} );
 } );</pre>
+			<style type="text/css">
+				@import "../examples_support/syntax/css/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="../examples_support/syntax/js/shCore.js"></script>
+
+			<h1>Server response</h1>
+			<p>The code below shows the latest JSON data that has been returned from the server in response to the Ajax request made by DataTables. This will update as further requests are made.</p>
+			<pre id="latest_xhr" class="brush: js;"></pre>
 			
 			
 			<h1>Other examples</h1>
