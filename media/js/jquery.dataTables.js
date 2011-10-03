@@ -7365,7 +7365,6 @@
 						}
 					}
 				}
-
 				
 				var oColumn = oSettings.aoColumns[ oSettings.aaSorting[i][0] ];
 				
