@@ -7353,6 +7353,20 @@
 				{
 					oSettings.aaSorting[i][0] = 0;
 				}
+				
+				if( typeof oSettings.aaSorting[i][0] == 'string' ) 
+				{
+					for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
+					{
+						if ( oSettings.aoColumns[k].mDataProp == oSettings.aaSorting[i][0] )
+						{
+							oSettings.aaSorting[i][0] = k;
+							break;
+						}
+					}
+				}
+
+				
 				var oColumn = oSettings.aoColumns[ oSettings.aaSorting[i][0] ];
 				
 				/* Add a default sorting index */
