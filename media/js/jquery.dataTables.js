@@ -7323,7 +7323,8 @@
 							for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
 							{
 								if ( aTargets[j] == "_all" ||
-								     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
+								     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) ||
+								     aoColumnsInit[k].mDataProp == aTargets[j] )
 								{
 									_fnColumnOptions( oSettings, k, oInit.aoColumnDefs[i] );
 								}
