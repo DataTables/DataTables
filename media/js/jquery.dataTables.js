@@ -2016,7 +2016,7 @@
 		
 		
 		/*
-		 * Function: fnShowColoumn
+		 * Function: fnSetColumnVis
 		 * Purpose:  Show a particular column
 		 * Returns:  -
 		 * Inputs:   int:iCol - the column whose display should be changed
