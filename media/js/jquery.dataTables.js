@@ -4273,14 +4273,21 @@
 		 */
 		function _fnFeatureHtmlFilter ( oSettings )
 		{
-			var sSearchStr = oSettings.oLanguage.sSearch;
-			sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
-			  sSearchStr.replace('_INPUT_', '<input type="text" />') :
-			  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
-			
 			var nFilter = document.createElement( 'div' );
 			nFilter.className = oSettings.oClasses.sFilter;
-			nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
+			var sSearchHTML = oSettings.oLanguage.sSearchHtml;
+
+			if ( typeof sSearchHTML == 'undefined' )
+			{
+				var sSearchStr = oSettings.oLanguage.sSearch;
+				sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
+			  	  sSearchStr.replace('_INPUT_', '<input type="text" />') :
+			  	  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
+				sSearchHTML =  '<label>'+sSearchStr+'</label>';
+			}
+
+			nFilter.innerHTML = sSearchHTML;
+
 			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
 			{
 				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
