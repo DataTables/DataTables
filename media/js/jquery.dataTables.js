@@ -2190,14 +2190,15 @@
 			}
 			else
 			{
-				$('th', oSettings.nTHead).removeClass( [ _oExt.oStdClasses.sSortable,
+				$('th, td', oSettings.nTHead).removeClass( [ _oExt.oStdClasses.sSortable,
 					_oExt.oJUIClasses.sSortableAsc,
 					_oExt.oJUIClasses.sSortableDesc,
 					_oExt.oJUIClasses.sSortableNone ].join(' ')
 				);
-				$('th span.'+_oExt.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
+				$('th span.'+_oExt.oJUIClasses.sSortIcon
+					+ ', td span.'+_oExt.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
 
-				$('th', oSettings.nTHead).each( function () {
+				$('th, td', oSettings.nTHead).each( function () {
 					var jqWrapper = $('div.'+_oExt.oJUIClasses.sSortJUIWrapper, this);
 					var kids = jqWrapper.contents();
 					$(this).append( kids );
