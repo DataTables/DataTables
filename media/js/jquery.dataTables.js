@@ -286,6 +286,13 @@
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 			{
+				function fnClickHandler ( e ) {
+					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
+					{
+						fnCallbackDraw( oSettings );
+					}
+				}
+				
 				var nPrevious, nNext, nPreviousInner, nNextInner;
 				
 				/* Store the next and previous elements in the oSettings object as they can be very
@@ -319,24 +326,12 @@
 				nPaging.appendChild( nPrevious );
 				nPaging.appendChild( nNext );
 				
-				$(nPrevious).bind( 'click.DT', function() {
-					if ( oSettings.oApi._fnPageChange( oSettings, "previous" ) )
-					{
-						/* Only draw when the page has actually changed */
-						fnCallbackDraw( oSettings );
-					}
-				} );
-				
-				$(nNext).bind( 'click.DT', function() {
-					if ( oSettings.oApi._fnPageChange( oSettings, "next" ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				} );
-				
-				/* Take the brutal approach to cancelling text selection */
-				$(nPrevious).bind( 'selectstart.DT', function () { return false; } );
-				$(nNext).bind( 'selectstart.DT', function () { return false; } );
+				$(nPrevious)
+					.bind( 'click.DT', { action: "previous" }, fnClickHandler )
+					.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
+				$(nNext)
+					.bind( 'click.DT', { action: "next" }, fnClickHandler )
+					.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
 				
 				/* ID the first elements only */
 				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
@@ -403,6 +398,13 @@
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 			{
+				function fnClickHandler ( e ) {
+					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
+					{
+						fnCallbackDraw( oSettings );
+					}
+				}
+				
 				var nFirst = document.createElement( 'span' );
 				var nPrevious = document.createElement( 'span' );
 				var nList = document.createElement( 'span' );
@@ -426,33 +428,10 @@
 				nPaging.appendChild( nNext );
 				nPaging.appendChild( nLast );
 				
-				$(nFirst).bind( 'click.DT', function () {
-					if ( oSettings.oApi._fnPageChange( oSettings, "first" ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				} );
-				
-				$(nPrevious).bind( 'click.DT', function() {
-					if ( oSettings.oApi._fnPageChange( oSettings, "previous" ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				} );
-				
-				$(nNext).bind( 'click.DT', function() {
-					if ( oSettings.oApi._fnPageChange( oSettings, "next" ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				} );
-				
-				$(nLast).bind( 'click.DT', function() {
-					if ( oSettings.oApi._fnPageChange( oSettings, "last" ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				} );
+				$(nFirst).bind( 'click.DT', { action: "first" }, fnClickHandler );
+				$(nPrevious).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+				$(nNext).bind( 'click.DT', { action: "next" }, fnClickHandler );
+				$(nLast).bind( 'click.DT', { action: "last" }, fnClickHandler );
 				
 				/* Take the brutal approach to cancelling text selection */
 				$('span', nPaging)
