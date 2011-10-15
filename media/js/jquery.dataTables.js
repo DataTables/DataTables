@@ -2391,12 +2391,8 @@
 				var aoData = [];
 				_fnServerParams( oSettings, aoData );
 				oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData, function(json) {
-					var aData = json;
-					if ( oSettings.sAjaxDataProp !== "" )
-					{
-						var fnDataSrc = _fnGetObjectDataFn( oSettings.sAjaxDataProp );
-						aData = fnDataSrc( json );
-					}
+					var aData = (oSettings.sAjaxDataProp !== "") ?
+					 	_fnGetObjectDataFn( oSettings.sAjaxDataProp )(json) : json;
 
 					/* Got the data - add it to the table */
 					for ( i=0 ; i<aData.length ; i++ )
@@ -3561,10 +3557,8 @@
 			{
 				var aiIndex = _fnReOrderIndex( oSettings, json.sColumns );
 			}
-
-			var fnDataSrc = _fnGetObjectDataFn( oSettings.sAjaxDataProp );
-			var aData = fnDataSrc( json );
 			
+			var aData = _fnGetObjectDataFn( oSettings.sAjaxDataProp )( json );
 			for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 			{
 				if ( bReOrder )
