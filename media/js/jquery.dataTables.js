@@ -286,14 +286,13 @@
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 			{
-				function fnClickHandler ( e ) {
+				var nPrevious, nNext, nPreviousInner, nNextInner;
+				var fnClickHandler = function ( e ) {
 					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
 					{
 						fnCallbackDraw( oSettings );
 					}
-				}
-				
-				var nPrevious, nNext, nPreviousInner, nNextInner;
+				};
 				
 				/* Store the next and previous elements in the oSettings object as they can be very
 				 * usful for automation - particularly testing
@@ -331,7 +330,7 @@
 					.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
 				$(nNext)
 					.bind( 'click.DT', { action: "next" }, fnClickHandler )
-					.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
+					.bind( 'selectstart.DT', function () { return false; } );
 				
 				/* ID the first elements only */
 				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
@@ -398,18 +397,17 @@
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 			{
-				function fnClickHandler ( e ) {
-					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				}
-				
 				var nFirst = document.createElement( 'span' );
 				var nPrevious = document.createElement( 'span' );
 				var nList = document.createElement( 'span' );
 				var nNext = document.createElement( 'span' );
 				var nLast = document.createElement( 'span' );
+				var fnClickHandler = function ( e ) {
+					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
+					{
+						fnCallbackDraw( oSettings );
+					}
+				};
 				
 				nFirst.innerHTML = oSettings.oLanguage.oPaginate.sFirst;
 				nPrevious.innerHTML = oSettings.oLanguage.oPaginate.sPrevious;
