@@ -1910,7 +1910,7 @@
 		 *           mixed:mRow - 
 		 *             int: - index of aoData to be updated, or
 		 *             node(TR): - TR element you want to update
-		 *           int:iColumn - the column to update - optional (not used of mData is an array or object)
+		 *           int:iColumn - the column to update - optional
 		 *           bool:bRedraw - redraw the table or not - default true
 		 *           bool:bAction - perform predraw actions or not (you will want this as 'true' if
 		 *             you have bRedraw as true) - default true
@@ -1932,7 +1932,7 @@
 					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 				}
 			}
-			else if ( mData !== null && typeof mData == 'object' )
+			else if ( mData !== null && typeof mData == 'object' && iColumn==null )
 			{
 				/* Object update - update the whole row - assume the developer gets the object right */
 				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
