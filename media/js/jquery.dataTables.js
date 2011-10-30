@@ -1953,7 +1953,7 @@
 					sDisplay = oSettings.aoColumns[iColumn].fnRender( {
 						"iDataRow": iRow,
 						"iDataColumn": iColumn,
-						"aData": oSettings.aoData[iRow]._aData,
+						"aData": _fnApplyColumnsDefault(oSettings, oSettings.aoData[iRow]._aData),
 						"oSettings": oSettings
 					} );
 					
@@ -2488,6 +2488,21 @@
 		}
 		
 		/*
+		 * Function: _fnApplyColumnsDefault
+		 * Purpose:  Returns given data with applied default values from columns.
+		 * Returns:  object
+		 * Inputs:   object:oSettings - dataTables settings object
+		 *           object:aData - row data
+		 */
+		function _fnApplyColumnsDefault(oSettings, aData){
+			var defaults={};
+			jQuery.each(oSettings.aoColumns, function(index,column){
+				defaults[column.mDataProp?column.mDataProp:index] = column.sDefaultContent;
+			});
+			return jQuery.extend(defaults, aData);
+		}
+		
+		/*
 		 * Function: _fnAddColumn
 		 * Purpose:  Add a column to the list used for the table with default values
 		 * Returns:  -
@@ -2669,7 +2684,7 @@
 					_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
 						"iDataRow": iRow,
 						"iDataColumn": i,
-						"aData": oData._aData,
+						"aData": _fnApplyColumnsDefault(oSettings, oData._aData),
 						"oSettings": oSettings
 					} ) );
 				}
@@ -2748,7 +2763,7 @@
 						nTd.innerHTML = oCol.fnRender( {
 							"iDataRow": iRow,
 							"iDataColumn": i,
-							"aData": oData._aData,
+							"aData": _fnApplyColumnsDefault(oSettings, oData._aData),
 							"oSettings": oSettings
 						} );
 					}
@@ -6814,6 +6829,7 @@
 		this.oApi._fnInitComplete = _fnInitComplete;
 		this.oApi._fnLanguageProcess = _fnLanguageProcess;
 		this.oApi._fnAddColumn = _fnAddColumn;
+		this.oApi._fnApplyColumnsDefault = _fnApplyColumnsDefault;
 		this.oApi._fnColumnOptions = _fnColumnOptions;
 		this.oApi._fnAddData = _fnAddData;
 		this.oApi._fnCreateTr = _fnCreateTr;
