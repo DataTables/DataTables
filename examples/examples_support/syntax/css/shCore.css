@@ -135,8 +135,6 @@
   position: absolute !important;
   right: 1px !important;
   top: 1px !important;
-  width: 11px !important;
-  height: 11px !important;
   font-size: 10px !important;
   z-index: 10 !important;
 }
@@ -301,14 +299,19 @@
 }
 .syntaxhighlighter .toolbar {
   color: white !important;
-  background: #4E6CA3 !important;
   border: none !important;
 }
 .syntaxhighlighter .toolbar a {
+  font: 100%/1.45em "Lucida Grande", Verdana, Arial, Helvetica, sans-serif !important;
   color: white !important;
+  background: #4E6CA3 !important;
+  float: right !important;
+  padding: 2px 5px !important;
+  clear: both;
 }
 .syntaxhighlighter .toolbar a:hover {
-  color: black !important;
+  color: #b7c5df !important;
+  background: #39568b !important;
 }
 .syntaxhighlighter .plain, .syntaxhighlighter .plain a {
   color: black !important;
