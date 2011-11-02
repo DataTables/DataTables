@@ -1921,33 +1921,9 @@
 			var iVisibleColumn, i, iLen, sDisplay;
 			var iRow = (typeof mRow == 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
-			
-			if ( $.isArray(mData) && typeof mData == 'object' )
-			{
-				/* Array update - update the whole row */
-				oSettings.aoData[iRow]._aData = mData.slice();
 
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-			}
-			else if ( mData !== null && typeof mData == 'object' )
+			function _fnUpdateIndividualCell()
 			{
-				/* Object update - update the whole row - assume the developer gets the object right */
-				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
-
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-			}
-			else
-			{
-				/* Individual cell update */
-				sDisplay = mData;
-				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
-				
 				if ( oSettings.aoColumns[iColumn].fnRender !== null )
 				{
 					sDisplay = oSettings.aoColumns[iColumn].fnRender( {
@@ -1968,6 +1944,39 @@
 					/* Do the actual HTML update */
 					_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
 				}
+			}
+			
+			if ( $.isArray(mData) && typeof mData == 'object' )
+			{
+				/* Array update - update the whole row */
+				oSettings.aoData[iRow]._aData = mData.slice();
+
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					sDisplay = mData[i];
+					iColumn = i;
+					_fnUpdateIndividualCell();
+				}
+			}
+			else if ( mData !== null && typeof mData == 'object' )
+			{
+				/* Object update - update the whole row - assume the developer gets the object right */
+				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
+
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					sDisplay = mData[oSettings.aoColumns[i].mDataProp];
+					iColumn = i;
+					_fnUpdateIndividualCell();
+				}
+			}
+			else
+			{
+				/* Individual cell update */
+				sDisplay = mData;
+				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+				
+				_fnUpdateIndividualCell();
 			}
 			
 			/* Modify the search index for this row (strictly this is likely not needed, since fnReDraw
