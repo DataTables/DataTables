@@ -2134,7 +2134,7 @@
 			var nBody = oSettings.nTBody;
 			var i, iLen;
 			
-			/* Flag to note that the table is currently being destoryed - no action should be taken */
+			/* Flag to note that the table is currently being destroyed - no action should be taken */
 			oSettings.bDestroying = true;
 			
 			/* Restore hidden columns */
@@ -6918,7 +6918,7 @@
 					{
 						_fnLog( _aoSettings[i], 0, "Cannot reinitialise DataTable.\n\n"+
 							"To retrieve the DataTables object for this table, please pass either no arguments "+
-							"to the dataTable() function, or set bRetrieve to true. Alternatively, to destory "+
+							"to the dataTable() function, or set bRetrieve to true. Alternatively, to destroy "+
 							"the old table and create a new one, set bDestroy to true (note that a lot of "+
 							"changes to the configuration can be made through the API which is usually much "+
 							"faster)." );
@@ -6927,7 +6927,7 @@
 				}
 				
 				/* If the element we are initialising has the same ID as a table which was previously
-				 * initialised, but the table nodes don't match (from before) then we destory the old
+				 * initialised, but the table nodes don't match (from before) then we destroy the old
 				 * instance by simply deleting it. This is under the assumption that the table has been
 				 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 				 */
@@ -7192,7 +7192,7 @@
 					
 			if ( bStripeRemove )
 			{
-				/* Store the classes which we are about to remove so they can be readded on destory */
+				/* Store the classes which we are about to remove so they can be readded on destroy */
 				oSettings.asDestroyStripes = [ '', '' ];
 				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
 				{
