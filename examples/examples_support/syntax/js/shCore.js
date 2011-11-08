@@ -333,12 +333,14 @@ var dtLinks = [
 
 /* Show and syntax highlight XHR returns from the server */
 $(document).ready( function () {
-	$('#example').dataTable().bind('xhr', function ( e, oSettings ) {
-		var n = document.getElementById('latest_xhr');
-		n.innerHTML = JSON.stringify( 
-			JSON.parse(oSettings.jqXHR.responseText), null, 2
-		);
-		n.className = "brush: js;"
-		SyntaxHighlighter.highlight({}, n);
-	} );
+	if ( $.fn.dataTableSettings.length > 1 ) {
+		$('#example').dataTable().bind('xhr', function ( e, oSettings ) {
+			var n = document.getElementById('latest_xhr');
+			n.innerHTML = JSON.stringify( 
+				JSON.parse(oSettings.jqXHR.responseText), null, 2
+			);
+			n.className = "brush: js;"
+			SyntaxHighlighter.highlight({}, n);
+		} );
+	}
 } );
