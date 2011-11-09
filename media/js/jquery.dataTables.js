@@ -1320,6 +1320,7 @@
 					},
 					"dataType": "json",
 					"cache": false,
+					"type": settings.sServerMethod,
 					"error": function (xhr, error, thrown) {
 						if ( error == "parsererror" ) {
 							alert( "DataTables warning: JSON data from server could not be parsed. "+
@@ -1339,6 +1340,13 @@
 			 *   string:sName - name callback - useful for knowing where it came from (plugin etc)
 			 */
 			this.aoServerParams = [];
+			
+			/*
+			 * Variable: sServerType
+			 * Purpose:  Send the XHR HTTP method - GET or POST (could be PUT or DELETE if required)
+			 * Scope:    jQuery.dataTable.classSettings
+			 */
+			this.sServerMethod = "GET";
 			
 			/*
 			 * Variable: fnFormatNumber
@@ -7011,6 +7019,7 @@
 				_fnMap( oSettings, oInit, "fnCookieCallback" );
 				_fnMap( oSettings, oInit, "fnInitComplete" );
 				_fnMap( oSettings, oInit, "fnServerData" );
+				_fnMap( oSettings, oInit, "sServerMethod" );
 				_fnMap( oSettings, oInit, "fnFormatNumber" );
 				_fnMap( oSettings, oInit, "aaSorting" );
 				_fnMap( oSettings, oInit, "aaSortingFixed" );
