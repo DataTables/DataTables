@@ -2282,6 +2282,20 @@
 		};
 		
 		/*
+		 * Function: $
+		 * Purpose:  Do a jQuery selector action on the table's TR elements (from the tbody) and
+		 *   return the resulting expression
+		 * Returns:  jQuery object
+		 * Inputs:   string:sSelector - jQuery selector
+		 */
+		this.$ = function ( sSelector )
+		{
+			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
+			return $(this.oApi._fnGetTrNodes(oSettings)).filter(sSelector);
+		};
+		
+		
+		/*
 		 * Plugin API functions
 		 * 
 		 * This call will add the functions which are defined in _oExt.oApi to the
