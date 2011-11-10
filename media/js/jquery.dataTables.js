@@ -1930,25 +1930,30 @@
 			var iRow = (typeof mRow == 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
 			
-			if ( $.isArray(mData) && typeof mData == 'object' )
+			if ( typeof oSettings.__fnUpdateDeep == 'undefined' && $.isArray(mData) && typeof mData == 'object' )
 			{
 				/* Array update - update the whole row */
 				oSettings.aoData[iRow]._aData = mData.slice();
-
+				
+				/* Flag to the function that we are recursing */
+				oSettings.__fnUpdateDeep = true;
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
 					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 				}
+				oSettings.__fnUpdateDeep = undefined;
 			}
-			else if ( mData !== null && typeof mData == 'object' )
+			else if ( typeof oSettings.__fnUpdateDeep == 'undefined' && mData !== null && typeof mData == 'object' )
 			{
 				/* Object update - update the whole row - assume the developer gets the object right */
 				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
 
+				oSettings.__fnUpdateDeep = true;
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
 					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 				}
+				oSettings.__fnUpdateDeep = undefined;
 			}
 			else
 			{
@@ -2290,6 +2295,7 @@
 		 */
 		this.$ = function ( sSelector )
 		{
+			// xxx - filtering, sorting, column visibility options
 			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
 			return $(this.oApi._fnGetTrNodes(oSettings)).filter(sSelector);
 		};
