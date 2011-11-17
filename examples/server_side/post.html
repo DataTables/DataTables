@@ -17,15 +17,7 @@
 					"bProcessing": true,
 					"bServerSide": true,
 					"sAjaxSource": "scripts/post.php",
-					"fnServerData": function ( sSource, aoData, fnCallback ) {
-						$.ajax( {
-							"dataType": 'json', 
-							"type": "POST", 
-							"url": sSource, 
-							"data": aoData, 
-							"success": fnCallback
-						} );
-					}
+					"sServerMethod": "POST"
 				} );
 			} );
 		</script>
@@ -37,7 +29,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>The default HTTP method that DataTables uses to get data from the server-side if GET, however, there are times when you may wish to use POST. This is very easy using the fnServerData() initialisation parameter, as shown in this example.</p>
+			<p>The default HTTP method that DataTables uses to get data from the server-side if GET, however, there are times when you may wish to use POST. This is very easy using the sServerMethod initialisation parameter, which is simply set to the HTTP method that you want to use - the default is 'GET' and this example shows 'POST' being used.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -76,15 +68,7 @@
 		"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": "scripts/post.php",
-		"fnServerData": function ( sSource, aoData, fnCallback ) {
-			$.ajax( {
-				"dataType": 'json', 
-				"type": "POST", 
-				"url": sSource, 
-				"data": aoData, 
-				"success": fnCallback
-			} );
-		}
+		"sServerMethod": "POST"
 	} );
 } );</pre>
 			<style type="text/css">

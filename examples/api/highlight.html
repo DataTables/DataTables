@@ -18,7 +18,7 @@
 				} );
 				
 				$('td', oTable.fnGetNodes()).hover( function() {
-					var iCol = $('td').index(this) % 5;
+					var iCol = $('td', this.parentNode).index(this) % 5;
 					var nTrs = oTable.fnGetNodes();
 					$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
 				}, function() {
@@ -474,7 +474,7 @@
 	} );
 	
 	$('td', oTable.fnGetNodes()).hover( function() {
-		var iCol = $('td').index(this) % 5;
+		var iCol = $('td', this.parentNode).index(this) % 5;
 		var nTrs = oTable.fnGetNodes();
 		$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
 	}, function() {
