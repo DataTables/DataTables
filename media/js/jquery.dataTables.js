@@ -4220,14 +4220,20 @@
 				}
 			}
 			
+			var iBarWidthAdjustment = 0;
+			if ( o.nTable.offsetHeight > nScrollBody.offsetHeight )
+			{
+				iBarWidthAdjustment = o.oScroll.iBarWidth;
+			}
+
 			/* Finally set the width's of the header and footer tables */
 			var iOuterWidth = $(o.nTable).outerWidth();
 			nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
-			nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+o.oScroll.iBarWidth );
+			nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+iBarWidthAdjustment );
 			
 			if ( o.nTFoot !== null )
 			{
-				nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+o.oScroll.iBarWidth );
+				nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+iBarWidthAdjustment );
 				nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
 			}
 			
