@@ -6668,7 +6668,7 @@
 			var oCol = oSettings.aoColumns[iCol];
 			var oData = oSettings.aoData[iRow]._aData;
 
-			if ( (sData=oCol.fnGetData( oData )) === undefined )
+			if ( (sData=oCol.fnGetData( oData, sSpecific )) === undefined )
 			{
 				if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 				{
@@ -6732,8 +6732,8 @@
 			}
 			else if ( typeof mSource == 'function' )
 			{
-			    return function (data) {
-			        return mSource( data );
+			    return function (data, type) {
+			        return mSource( data, type );
 			    };
 			}
 			else if ( typeof mSource == 'string' && mSource.indexOf('.') != -1 )
