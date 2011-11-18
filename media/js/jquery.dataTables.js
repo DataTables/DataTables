@@ -6209,7 +6209,7 @@
 			for ( i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 			{
 				sValue += '["'+encodeURIComponent(oSettings.aoPreSearchCols[i].sSearch)+
-					'",'+!oSettings.aoPreSearchCols[i].bRegex+'],';
+					'",'+!oSettings.aoPreSearchCols[i].bRegex+','+!oSettings.aoPreSearchCols[i].bSmart+'],';
 			}
 			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "],";
@@ -6309,7 +6309,8 @@
 					{
 						oSettings.aoPreSearchCols[i] = {
 							"sSearch": decodeURIComponent(oData.aaSearchCols[i][0]),
-							"bRegex": !oData.aaSearchCols[i][1]
+							"bRegex": !oData.aaSearchCols[i][1],
+                            "bSmart": !oData.aaSearchCols[i][2]
 						};
 					}
 				}
