@@ -2541,7 +2541,7 @@
 				"sClass": null,
 				"fnRender": null,
 				"bUseRendered": true,
-				"iDataSort": iCol,
+				"aDataSort": [ iCol ],
 				"mDataProp": iCol,
 				"fnGetData": null,
 				"fnSetData": null,
@@ -2612,12 +2612,20 @@
 				_fnMap( oCol, oOptions, "sClass" );
 				_fnMap( oCol, oOptions, "fnRender" );
 				_fnMap( oCol, oOptions, "bUseRendered" );
-				_fnMap( oCol, oOptions, "iDataSort" );
 				_fnMap( oCol, oOptions, "mDataProp" );
 				_fnMap( oCol, oOptions, "asSorting" );
 				_fnMap( oCol, oOptions, "sSortDataType" );
 				_fnMap( oCol, oOptions, "sDefaultContent" );
 				_fnMap( oCol, oOptions, "sContentPadding" );
+
+				/* iDataSort to be applied (backwards compatibility), but aDataSort will take
+				 * priority if defined
+				 */
+				if ( typeof oOptions.iDataSort != 'undefined' )
+				{
+					oCol.aDataSort = [ oOptions.iDataSort ];
+				}
+				_fnMap( oCol, oOptions, "aDataSort" );
 			}
 
 			/* Cache the data get and set functions for speed */
@@ -4641,7 +4649,6 @@
 		function _fnSort ( oSettings, bApplyClasses )
 		{
 			var
-				iDataSort, iDataType,
 				i, iLen, j, jLen,
 				aaSort = [],
 			 	aiOrig = [],
@@ -4707,19 +4714,24 @@
 				 */
 				var iSortLen = aaSort.length;
 				oSettings.aiDisplayMaster.sort( function ( a, b ) {
-					var k, iTest, iDataSort, sDataType;
+					var k, l, lLen, iTest, aDataSort, sDataType;
 					for ( k=0 ; k<iSortLen ; k++ )
 					{
-						iDataSort = aoColumns[ aaSort[k][0] ].iDataSort;
-						sDataType = aoColumns[ iDataSort ].sType;
-						iTest = oSort[ (sDataType?sDataType:'string')+"-"+aaSort[k][1] ](
-							_fnGetCellData( oSettings, a, iDataSort, 'sort' ),
-							_fnGetCellData( oSettings, b, iDataSort, 'sort' )
-						);
-						
-						if ( iTest !== 0 )
+						aDataSort = aoColumns[ aaSort[k][0] ].aDataSort;
+
+						for ( l=0, lLen=aDataSort.length ; l<lLen ; l++ )
 						{
-							return iTest;
+							sDataType = aoColumns[ aDataSort[l] ].sType;
+							
+							iTest = oSort[ (sDataType ? sDataType : 'string')+"-"+aaSort[k][1] ](
+								_fnGetCellData( oSettings, a, aDataSort[l], 'sort' ),
+								_fnGetCellData( oSettings, b, aDataSort[l], 'sort' )
+							);
+						
+							if ( iTest !== 0 )
+							{
+								return iTest;
+							}
 						}
 					}
 					
