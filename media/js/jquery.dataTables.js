@@ -4707,12 +4707,12 @@
 				 */
 				var iSortLen = aaSort.length;
 				oSettings.aiDisplayMaster.sort( function ( a, b ) {
-					var iTest, iDataSort, sDataType;
-					for ( i=0 ; i<iSortLen ; i++ )
+					var k, iTest, iDataSort, sDataType;
+					for ( k=0 ; k<iSortLen ; k++ )
 					{
-						iDataSort = aoColumns[ aaSort[i][0] ].iDataSort;
+						iDataSort = aoColumns[ aaSort[k][0] ].iDataSort;
 						sDataType = aoColumns[ iDataSort ].sType;
-						iTest = oSort[ (sDataType?sDataType:'string')+"-"+aaSort[i][1] ](
+						iTest = oSort[ (sDataType?sDataType:'string')+"-"+aaSort[k][1] ](
 							_fnGetCellData( oSettings, a, iDataSort, 'sort' ),
 							_fnGetCellData( oSettings, b, iDataSort, 'sort' )
 						);
