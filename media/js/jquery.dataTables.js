@@ -581,21 +581,19 @@
 		/*
 		 * text sorting
 		 */
-		"string-asc": function ( a, b )
+		"string-pre": function ( a )
 		{
 			if ( typeof a != 'string' ) { a = ''; }
-			if ( typeof b != 'string' ) { b = ''; }
-			var x = a.toLowerCase();
-			var y = b.toLowerCase();
+			return a.toLowerCase();
+		},
+
+		"string-asc": function ( x, y )
+		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		},
 		
-		"string-desc": function ( a, b )
+		"string-desc": function ( x, y )
 		{
-			if ( typeof a != 'string' ) { a = ''; }
-			if ( typeof b != 'string' ) { b = ''; }
-			var x = a.toLowerCase();
-			var y = b.toLowerCase();
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 		},
 		
@@ -603,17 +601,18 @@
 		/*
 		 * html sorting (ignore html tags)
 		 */
-		"html-asc": function ( a, b )
+		"html-pre": function ( a )
 		{
-			var x = a.replace( /<.*?>/g, "" ).toLowerCase();
-			var y = b.replace( /<.*?>/g, "" ).toLowerCase();
+			return a.replace( /<.*?>/g, "" ).toLowerCase();
+		},
+		
+		"html-asc": function ( x, y )
+		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		},
 		
-		"html-desc": function ( a, b )
+		"html-desc": function ( x, y )
 		{
-			var x = a.replace( /<.*?>/g, "" ).toLowerCase();
-			var y = b.replace( /<.*?>/g, "" ).toLowerCase();
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 		},
 		
@@ -621,37 +620,24 @@
 		/*
 		 * date sorting
 		 */
-		"date-asc": function ( a, b )
+		"date-pre": function ( a )
 		{
 			var x = Date.parse( a );
-			var y = Date.parse( b );
 			
 			if ( isNaN(x) || x==="" )
 			{
-			x = Date.parse( "01/01/1970 00:00:00" );
+				x = Date.parse( "01/01/1970 00:00:00" );
 			}
-			if ( isNaN(y) || y==="" )
-			{
-				y =	Date.parse( "01/01/1970 00:00:00" );
-			}
-			
+			return x;
+		},
+
+		"date-asc": function ( x, y )
+		{
 			return x - y;
 		},
 		
-		"date-desc": function ( a, b )
+		"date-desc": function ( x, y )
 		{
-			var x = Date.parse( a );
-			var y = Date.parse( b );
-			
-			if ( isNaN(x) || x==="" )
-			{
-			x = Date.parse( "01/01/1970 00:00:00" );
-			}
-			if ( isNaN(y) || y==="" )
-			{
-				y =	Date.parse( "01/01/1970 00:00:00" );
-			}
-			
 			return y - x;
 		},
 		
@@ -659,17 +645,18 @@
 		/*
 		 * numerical sorting
 		 */
-		"numeric-asc": function ( a, b )
+		"numeric-asc": function ( a )
 		{
-			var x = (a=="-" || a==="") ? 0 : a*1;
-			var y = (b=="-" || b==="") ? 0 : b*1;
+			return (a=="-" || a==="") ? 0 : a*1;
+		},
+
+		"numeric-asc": function ( x, y )
+		{
 			return x - y;
 		},
 		
-		"numeric-desc": function ( a, b )
+		"numeric-desc": function ( x, y )
 		{
-			var x = (a=="-" || a==="") ? 0 : a*1;
-			var y = (b=="-" || b==="") ? 0 : b*1;
 			return y - x;
 		}
 	};
@@ -2688,6 +2675,7 @@
 				"nTr": null,
 				"_iId": oSettings.iNextId++,
 				"_aData": aDataIn,
+				"_aSortData": [],
 				"_anHidden": [],
 				"_sRowStripe": ""
 			};
@@ -2843,6 +2831,7 @@
 							"nTr": nTrs[i],
 							"_iId": oSettings.iNextId++,
 							"_aData": [],
+							"_aSortData": [],
 							"_anHidden": [],
 							"_sRowStripe": ''
 						} );
@@ -4649,7 +4638,7 @@
 		function _fnSort ( oSettings, bApplyClasses )
 		{
 			var
-				i, iLen, j, jLen,
+				i, iLen, j, jLen, k, kLen,
 				aaSort = [],
 			 	aiOrig = [],
 				oSort = _oExt.oSort,
@@ -4694,6 +4683,30 @@
 				{
 					aiOrig[ oSettings.aiDisplayMaster[i] ] = i;
 				}
+
+				/* Build an internal data array which is specific to the sort, so we can get and prep
+				 * the data to be sorted only once, rather than needing to do it every time the sorting
+				 * function runs. This make the sorting function a very simple comparison
+				 */
+				var iSortLen = aaSort.length;
+				var fnSortFormat;
+				for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
+				{
+					for ( j=0 ; j<iSortLen ; j++ )
+					{
+						aDataSort = aoColumns[ aaSort[j][0] ].aDataSort;
+
+						for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
+						{
+							sDataType = aoColumns[ aDataSort[k] ].sType;
+							fnSortFormat = oSort[ (sDataType ? sDataType : 'string')+"-pre" ];
+							
+							aoData[i]._aSortData[ aDataSort[k] ] = fnSortFormat ?
+								fnSortFormat( _fnGetCellData( oSettings, i, aDataSort[k], 'sort' ) ) :
+								_fnGetCellData( oSettings, i, aDataSort[k], 'sort' );
+						}
+					}
+				}
 				
 				/* Do the sort - here we want multi-column sorting based on a given data source (column)
 				 * and sorting function (from oSort) in a certain direction. It's reasonably complex to
@@ -4712,7 +4725,6 @@
 				 * test the next column. If all columns match, then we use a numeric sort on the row 
 				 * positions in the original data array to provide a stable sort.
 				 */
-				var iSortLen = aaSort.length;
 				oSettings.aiDisplayMaster.sort( function ( a, b ) {
 					var k, l, lLen, iTest, aDataSort, sDataType;
 					for ( k=0 ; k<iSortLen ; k++ )
@@ -4724,8 +4736,8 @@
 							sDataType = aoColumns[ aDataSort[l] ].sType;
 							
 							iTest = oSort[ (sDataType ? sDataType : 'string')+"-"+aaSort[k][1] ](
-								_fnGetCellData( oSettings, a, aDataSort[l], 'sort' ),
-								_fnGetCellData( oSettings, b, aDataSort[l], 'sort' )
+								aoData[a]._aSortData[ aDataSort[l] ],
+								aoData[b]._aSortData[ aDataSort[l] ]
 							);
 						
 							if ( iTest !== 0 )
