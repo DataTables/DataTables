@@ -4606,11 +4606,11 @@
 			}
 			else if ( sType == "html" )
 			{
-				return sData.replace(/\n/g," ").replace( /<.*?>/g, "" );
+				return sData.replace(/[\r\n]/g," ").replace( /<.*?>/g, "" );
 			}
 			else if ( typeof sData == "string" )
 			{
-				return sData.replace(/\n/g," ");
+				return sData.replace(/[\r\n]/g," ");
 			}
 			else if ( sData === null )
 			{
