@@ -13,7 +13,7 @@ var _aoSettings = [];
  * Returns:  -
  * Inputs:   -
  */
-var classSettings = {
+DataTable.models.oSettings = {
 	
 	/*
 	 * Variable: oFeatures

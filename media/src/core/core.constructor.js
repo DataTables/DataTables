@@ -42,9 +42,7 @@ for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
 }
 
 /* Make a complete and independent copy of the settings object */
-var oSettings = $.extend( true, classSettings, {
-	"oClasses": _oExt.oStdClasses
-} );
+var oSettings = $.extend( true, {}, DataTable.models.oSettings );
 
 _aoSettings.push( oSettings );
 
@@ -87,192 +85,200 @@ oSettings.oApi = _that.oApi;
 /* State the table's width for if a destroy is called at a later time */
 oSettings.sDestroyWidth = $(this).width();
 
-/* Store the features that we have available */
-if ( typeof oInit != 'undefined' && oInit !== null )
-{
-	oSettings.oInit = oInit;
-	_fnMap( oSettings.oFeatures, oInit, "bPaginate" );
-	_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
-	_fnMap( oSettings.oFeatures, oInit, "bFilter" );
-	_fnMap( oSettings.oFeatures, oInit, "bSort" );
-	_fnMap( oSettings.oFeatures, oInit, "bInfo" );
-	_fnMap( oSettings.oFeatures, oInit, "bProcessing" );
-	_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
-	_fnMap( oSettings.oFeatures, oInit, "bSortClasses" );
-	_fnMap( oSettings.oFeatures, oInit, "bServerSide" );
-	_fnMap( oSettings.oFeatures, oInit, "bDeferRender" );
-	_fnMap( oSettings.oScroll, oInit, "sScrollX", "sX" );
-	_fnMap( oSettings.oScroll, oInit, "sScrollXInner", "sXInner" );
-	_fnMap( oSettings.oScroll, oInit, "sScrollY", "sY" );
-	_fnMap( oSettings.oScroll, oInit, "bScrollCollapse", "bCollapse" );
-	_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
-	_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
-	_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
-	_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
-	_fnMap( oSettings, oInit, "asStripeClasses" );
-	_fnMap( oSettings, oInit, "fnPreDrawCallback" );
-	_fnMap( oSettings, oInit, "fnRowCallback" );
-	_fnMap( oSettings, oInit, "fnHeaderCallback" );
-	_fnMap( oSettings, oInit, "fnFooterCallback" );
-	_fnMap( oSettings, oInit, "fnCookieCallback" );
-	_fnMap( oSettings, oInit, "fnInitComplete" );
-	_fnMap( oSettings, oInit, "fnServerData" );
-	_fnMap( oSettings, oInit, "sServerMethod" );
-	_fnMap( oSettings, oInit, "fnFormatNumber" );
-	_fnMap( oSettings, oInit, "aaSorting" );
-	_fnMap( oSettings, oInit, "aaSortingFixed" );
-	_fnMap( oSettings, oInit, "aLengthMenu" );
-	_fnMap( oSettings, oInit, "sPaginationType" );
-	_fnMap( oSettings, oInit, "sAjaxSource" );
-	_fnMap( oSettings, oInit, "sAjaxDataProp" );
-	_fnMap( oSettings, oInit, "iCookieDuration" );
-	_fnMap( oSettings, oInit, "sCookiePrefix" );
-	_fnMap( oSettings, oInit, "sDom" );
-	_fnMap( oSettings, oInit, "bSortCellsTop" );
-	_fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
-	_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
-	_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
-	_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
-	_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
-	
-	/* Callback functions which are array driven */
-	if ( typeof oInit.fnDrawCallback == 'function' )
-	{
-		oSettings.aoDrawCallback.push( {
-			"fn": oInit.fnDrawCallback,
-			"sName": "user"
-		} );
-	}
-	
-	/* Ajax additional variables are array driven */
-	if ( typeof oInit.fnServerParams == 'function' )
-	{
-		oSettings.aoServerParams.push( {
-			"fn": oInit.fnServerParams,
-			"sName": "user"
-		} );
-	}
-	
-	if ( typeof oInit.fnStateSaveCallback == 'function' )
-	{
-		oSettings.aoStateSave.push( {
-			"fn": oInit.fnStateSaveCallback,
-			"sName": "user"
-		} );
-	}
-	
-	if ( typeof oInit.fnStateLoadCallback == 'function' )
-	{
-		oSettings.aoStateLoad.push( {
-			"fn": oInit.fnStateLoadCallback,
-			"sName": "user"
-		} );
-	}
-	
-	if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
-		   oSettings.oFeatures.bSortClasses )
-	{
-		/* Enable sort classes for server-side processing. Safe to do it here, since server-side
-		 * processing must be enabled by the developer
-		 */
-		oSettings.aoDrawCallback.push( {
-			"fn": _fnSortingClasses,
-			"sName": "server_side_sort_classes"
-		} );
-	}
-	else if ( oSettings.oFeatures.bDeferRender )
-	{
-		oSettings.aoDrawCallback.push( {
-			"fn": _fnSortingClasses,
-			"sName": "defer_sort_classes"
-		} );
-	}
-	
-	if ( typeof oInit.bJQueryUI != 'undefined' && oInit.bJQueryUI )
-	{
-		/* Use the JUI classes object for display. You could clone the oStdClasses object if 
-		 * you want to have multiple tables with multiple independent classes 
-		 */
-		oSettings.oClasses = _oExt.oJUIClasses;
-		
-		if ( typeof oInit.sDom == 'undefined' )
-		{
-			/* Set the DOM to use a layout suitable for jQuery UI's theming */
-			oSettings.sDom = '<"H"lfr>t<"F"ip>';
-		}
-	}
-	
-	/* Calculate the scroll bar width and cache it for use later on */
-	if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
-	{
-		oSettings.oScroll.iBarWidth = _fnScrollBarWidth();
-	}
-	
-	if ( typeof oInit.iDisplayStart != 'undefined' && 
-	     typeof oSettings.iInitDisplayStart == 'undefined' )
-	{
-		/* Display start point, taking into account the save saving */
-		oSettings.iInitDisplayStart = oInit.iDisplayStart;
-		oSettings._iDisplayStart = oInit.iDisplayStart;
-	}
-	
-	/* Must be done after everything which can be overridden by a cookie! */
-	if ( typeof oInit.bStateSave != 'undefined' )
-	{
-		oSettings.oFeatures.bStateSave = oInit.bStateSave;
-		_fnLoadState( oSettings, oInit );
-		oSettings.aoDrawCallback.push( {
-			"fn": _fnSaveState,
-			"sName": "state_save"
-		} );
-	}
 
-	if ( typeof oInit.iDeferLoading != 'undefined' )
-	{
-		oSettings.bDeferLoading = true;
-		oSettings._iRecordsTotal = oInit.iDeferLoading;
-		oSettings._iRecordsDisplay = oInit.iDeferLoading;
-	}
-	
-	if ( typeof oInit.aaData != 'undefined' )
-	{
-		bUsePassedData = true;
-	}
-	
-	/* Backwards compatability */
-	/* aoColumns / aoData - remove at some point... */
-	if ( typeof oInit != 'undefined' && typeof oInit.aoData != 'undefined' )
-	{
-		oInit.aoColumns = oInit.aoData;
-	}
-	
-	/* Language definitions */
-	if ( typeof oInit.oLanguage != 'undefined' )
-	{
-		if ( typeof oInit.oLanguage.sUrl != 'undefined' && oInit.oLanguage.sUrl !== "" )
-		{
-			/* Get the language definitions from a file */
-			oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
-			$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) { 
-				_fnLanguageProcess( oSettings, json, true ); } );
-			bInitHandedOff = true;
-		}
-		else
-		{
-			_fnLanguageProcess( oSettings, oInit.oLanguage, false );
-		}
-	}
-	/* Warning: The _fnLanguageProcess function is async to the remainder of this function due
-	 * to the XHR. We use _bInitialised in _fnLanguageProcess() to check this the processing 
-	 * below is complete. The reason for spliting it like this is optimisation - we can fire
-	 * off the XHR (if needed) and then continue processing the data.
+/* Store the initialisation object that was passed in, useful for debugging */
+oSettings.oInit = oInit;
+
+oInit = (typeof oInit === 'undefined' || oInit === null) ?
+	$( true, {}, DataTable.models.oInit ) :
+	$( true, {}, DataTable.models.oInit, oInit );
+
+
+_fnMap( oSettings.oFeatures, oInit, "bPaginate" );
+_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
+_fnMap( oSettings.oFeatures, oInit, "bFilter" );
+_fnMap( oSettings.oFeatures, oInit, "bSort" );
+_fnMap( oSettings.oFeatures, oInit, "bInfo" );
+_fnMap( oSettings.oFeatures, oInit, "bProcessing" );
+_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
+_fnMap( oSettings.oFeatures, oInit, "bSortClasses" );
+_fnMap( oSettings.oFeatures, oInit, "bServerSide" );
+_fnMap( oSettings.oFeatures, oInit, "bDeferRender" );
+_fnMap( oSettings.oScroll, oInit, "sScrollX", "sX" );
+_fnMap( oSettings.oScroll, oInit, "sScrollXInner", "sXInner" );
+_fnMap( oSettings.oScroll, oInit, "sScrollY", "sY" );
+_fnMap( oSettings.oScroll, oInit, "bScrollCollapse", "bCollapse" );
+_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
+_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
+_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
+_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
+_fnMap( oSettings, oInit, "asStripeClasses" );
+_fnMap( oSettings, oInit, "fnPreDrawCallback" );
+_fnMap( oSettings, oInit, "fnRowCallback" );
+_fnMap( oSettings, oInit, "fnHeaderCallback" );
+_fnMap( oSettings, oInit, "fnFooterCallback" );
+_fnMap( oSettings, oInit, "fnCookieCallback" );
+_fnMap( oSettings, oInit, "fnInitComplete" );
+_fnMap( oSettings, oInit, "fnServerData" );
+_fnMap( oSettings, oInit, "sServerMethod" );
+_fnMap( oSettings, oInit, "fnFormatNumber" );
+_fnMap( oSettings, oInit, "aaSorting" );
+_fnMap( oSettings, oInit, "aaSortingFixed" );
+_fnMap( oSettings, oInit, "aLengthMenu" );
+_fnMap( oSettings, oInit, "sPaginationType" );
+_fnMap( oSettings, oInit, "sAjaxSource" );
+_fnMap( oSettings, oInit, "sAjaxDataProp" );
+_fnMap( oSettings, oInit, "iCookieDuration" );
+_fnMap( oSettings, oInit, "sCookiePrefix" );
+_fnMap( oSettings, oInit, "sDom" );
+_fnMap( oSettings, oInit, "bSortCellsTop" );
+_fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
+_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
+_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
+_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
+_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
+
+/* Callback functions which are array driven */
+if ( typeof oInit.fnDrawCallback == 'function' )
+{
+	oSettings.aoDrawCallback.push( {
+		"fn": oInit.fnDrawCallback,
+		"sName": "user"
+	} );
+}
+
+/* Ajax additional variables are array driven */
+if ( typeof oInit.fnServerParams == 'function' )
+{
+	oSettings.aoServerParams.push( {
+		"fn": oInit.fnServerParams,
+		"sName": "user"
+	} );
+}
+
+if ( typeof oInit.fnStateSaveCallback == 'function' )
+{
+	oSettings.aoStateSave.push( {
+		"fn": oInit.fnStateSaveCallback,
+		"sName": "user"
+	} );
+}
+
+if ( typeof oInit.fnStateLoadCallback == 'function' )
+{
+	oSettings.aoStateLoad.push( {
+		"fn": oInit.fnStateLoadCallback,
+		"sName": "user"
+	} );
+}
+
+if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
+	   oSettings.oFeatures.bSortClasses )
+{
+	/* Enable sort classes for server-side processing. Safe to do it here, since server-side
+	 * processing must be enabled by the developer
 	 */
+	oSettings.aoDrawCallback.push( {
+		"fn": _fnSortingClasses,
+		"sName": "server_side_sort_classes"
+	} );
+}
+else if ( oSettings.oFeatures.bDeferRender )
+{
+	oSettings.aoDrawCallback.push( {
+		"fn": _fnSortingClasses,
+		"sName": "defer_sort_classes"
+	} );
+}
+
+if ( typeof oInit.bJQueryUI != 'undefined' && oInit.bJQueryUI )
+{
+	/* Use the JUI classes object for display. You could clone the oStdClasses object if 
+	 * you want to have multiple tables with multiple independent classes 
+	 */
+	oSettings.oClasses = _oExt.oJUIClasses;
+	
+	if ( typeof oInit.sDom == 'undefined' )
+	{
+		/* Set the DOM to use a layout suitable for jQuery UI's theming */
+		oSettings.sDom = '<"H"lfr>t<"F"ip>';
+	}
 }
 else
 {
-	/* Create a dummy object for quick manipulation later on. */
-	oInit = {};
+	oSettings.oClasses = _oExt.oStdClasses;
 }
+
+/* Calculate the scroll bar width and cache it for use later on */
+if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
+{
+	oSettings.oScroll.iBarWidth = _fnScrollBarWidth();
+}
+
+if ( typeof oInit.iDisplayStart != 'undefined' && 
+     typeof oSettings.iInitDisplayStart == 'undefined' )
+{
+	/* Display start point, taking into account the save saving */
+	oSettings.iInitDisplayStart = oInit.iDisplayStart;
+	oSettings._iDisplayStart = oInit.iDisplayStart;
+}
+
+/* Must be done after everything which can be overridden by a cookie! */
+if ( typeof oInit.bStateSave != 'undefined' )
+{
+	oSettings.oFeatures.bStateSave = oInit.bStateSave;
+	_fnLoadState( oSettings, oInit );
+	oSettings.aoDrawCallback.push( {
+		"fn": _fnSaveState,
+		"sName": "state_save"
+	} );
+}
+
+if ( typeof oInit.iDeferLoading != 'undefined' )
+{
+	oSettings.bDeferLoading = true;
+	oSettings._iRecordsTotal = oInit.iDeferLoading;
+	oSettings._iRecordsDisplay = oInit.iDeferLoading;
+}
+
+if ( typeof oInit.aaData != 'undefined' )
+{
+	bUsePassedData = true;
+}
+
+/* Backwards compatability */
+/* aoColumns / aoData - remove at some point... */
+if ( typeof oInit != 'undefined' && typeof oInit.aoData != 'undefined' )
+{
+	oInit.aoColumns = oInit.aoData;
+}
+
+/* Language definitions */
+if ( typeof oInit.oLanguage != 'undefined' )
+{
+	if ( typeof oInit.oLanguage.sUrl != 'undefined' && oInit.oLanguage.sUrl !== "" )
+	{
+		/* Get the language definitions from a file */
+		oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
+		$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) { 
+			_fnLanguageProcess( oSettings, json, true ); } );
+		bInitHandedOff = true;
+	}
+	else
+	{
+		_fnLanguageProcess( oSettings, oInit.oLanguage, false );
+	}
+}
+/* Warning: The _fnLanguageProcess function is async to the remainder of this function due
+ * to the XHR. We use _bInitialised in _fnLanguageProcess() to check this the processing 
+ * below is complete. The reason for spliting it like this is optimisation - we can fire
+ * off the XHR (if needed) and then continue processing the data.
+ */
+
+
+
+
+
 
 /*
  * Stripes
