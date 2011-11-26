@@ -21,14 +21,10 @@ function _fnAddData ( oSettings, aDataSupplied )
 	
 	/* Create the object for storing information about this new row */
 	var iRow = oSettings.aoData.length;
-	var oData = {
-		"nTr": null,
+	var oData = $.extend( true, {}, DataTable.models.oRow, {
 		"_iId": oSettings.iNextId++,
-		"_aData": aDataIn,
-		"_aSortData": [],
-		"_anHidden": [],
-		"_sRowStripe": ""
-	};
+		"_aData": aDataIn
+	} );
 	oSettings.aoData.push( oData );
 
 	/* Create the cells */
@@ -108,14 +104,10 @@ function _fnGatherData( oSettings )
 			if ( nTrs[i].nodeName.toUpperCase() == "TR" )
 			{
 				iThisIndex = oSettings.aoData.length;
-				oSettings.aoData.push( {
+				oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
 					"nTr": nTrs[i],
-					"_iId": oSettings.iNextId++,
-					"_aData": [],
-					"_aSortData": [],
-					"_anHidden": [],
-					"_sRowStripe": ''
-				} );
+					"_iId": oSettings.iNextId++
+				} ) );
 				
 				oSettings.aiDisplayMaster.push( iThisIndex );
 				nTds = nTrs[i].childNodes;
