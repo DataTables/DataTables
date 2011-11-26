@@ -1,7 +1,7 @@
 
 
 /**
- * Initilaisation options that can be given to DataTables at initialisation 
+ * Initialisation options that can be given to DataTables at initialisation 
  * time.
  *  @namespace
  */
@@ -864,7 +864,7 @@ DataTable.models.oInit = {
 	 *    pairs) that has been constructed by DataTables and will be sent to the
 	 *    server. In the case of Ajax sourced data with server-side processing
 	 *    this will be an empty array, for server-side processing there will be a
-	 *    significant number of parameters!.
+	 *    significant number of parameters!
 	 *  @returns {undefined} Ensure that you modify the aoData array passed in,
 	 *    as this is passed by reference.
 	 * 
@@ -1070,7 +1070,7 @@ DataTable.models.oInit = {
 
 	/**
 	 * All strings that DataTables uses in the user interface that it creates
-	 * are defined in this object, allowing you to modifed them individually or
+	 * are defined in this object, allowing you to modified them individually or
 	 * completely replace them all as required.
 	 *  @namespace
 	 */

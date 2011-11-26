@@ -3,7 +3,7 @@
 
 /**
  * Template object for the way in which DataTables holds information about
- * each indivudal row. This is the object format used for the settings 
+ * each individual row. This is the object format used for the settings 
  * aoData array.
  *  @namespace
  */
@@ -16,8 +16,8 @@ DataTable.models.oRow = {
 	"nTr": null,
 
 	/**
-	 * Data object from the original data sorce for the row. This is either
-	 * an array if using the tranditional form of DataTables, or an object if
+	 * Data object from the original data source for the row. This is either
+	 * an array if using the traditional form of DataTables, or an object if
 	 * using mDataProp options. The exact type will depend on the passed in
 	 * data from the data source, or will be an array if using DOM a data 
 	 * source.
@@ -27,7 +27,7 @@ DataTable.models.oRow = {
 	"_aData": [],
 
 	/**
-	 * Sorting data cache - this array is obstensibily the same length as the
+	 * Sorting data cache - this array is ostensibly the same length as the
 	 * number of columns (although each index is generated only as it is 
 	 * needed), and holds the data that is used for sorting each column in the
 	 * row. We do this cache generation at the start of the sort in order that
@@ -36,6 +36,7 @@ DataTable.models.oRow = {
 	 * other than the master sorting methods.
 	 *  @type array
 	 *  @default []
+	 *  @private
 	 */
 	"_aSortData": [],
 
@@ -47,6 +48,7 @@ DataTable.models.oRow = {
 	 * undefined or null.
 	 *  @type array nodes
 	 *  @default []
+	 *  @private
 	 */
 	"_anHidden": [],
 
@@ -56,6 +58,7 @@ DataTable.models.oRow = {
 	 * on className for the nTr property.
 	 *  @type string
 	 *  @default <i>Empty string</i>
+	 *  @private
 	 */
 	"_sRowStripe": ""
 };

@@ -364,7 +364,7 @@ function _fnGetObjectDataFn( mSource )
 	if ( mSource === null )
 	{
 		/* Give an empty string for rendering / sorting etc */
-		return function (data) {
+		return function (data, type) {
 			return null;
 		};
 	}
@@ -383,19 +383,19 @@ function _fnGetObjectDataFn( mSource )
 		var a = mSource.split('.');
 		if ( a.length == 2 )
 		{
-			return function (data) {
+			return function (data, type) {
 				return data[ a[0] ][ a[1] ];
 			};
 		}
 		else if ( a.length == 3 )
 		{
-			return function (data) {
+			return function (data, type) {
 				return data[ a[0] ][ a[1] ][ a[2] ];
 			};
 		}
 		else
 		{
-			return function (data) {
+			return function (data, type) {
 				for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 				{
 					data = data[ a[i] ];
@@ -407,7 +407,7 @@ function _fnGetObjectDataFn( mSource )
 	else
 	{
 		/* Array or flat object mapping */
-		return function (data) {
+		return function (data, type) {
 			return data[mSource];	
 		};
 	}

@@ -350,6 +350,37 @@ DataTable.models.oInitColumns = {
 	 *    } );
 	 */
 	"sClass": "",
+	
+	/**
+	 * When DataTables calculates the column widths to assign to each column,
+	 * it finds the longest string in each column and then constructs a
+	 * temporary table and reads the widths from that. The problem with this
+	 * is that "mmm" is much wider then "iiii", but the latter is a longer 
+	 * string - thus the calculation can go wrong (doing it properly and putting
+	 * it into an DOM object and measuring that is horribly(!) slow). Thus as
+	 * a "work around" we provide this option. It will append its value to the
+	 * text that is found to be the longest string for the column - i.e. padding.
+	 * Generally you shouldn't need this, and it is not documented on the 
+	 * general DataTables.net documentation
+	 *  @type string
+	 *  @default <i>Empty string<i>
+	 *    
+	 *  @example
+	 *    // Using aoColumns
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "aoColumns": [ 
+	 *          null,
+	 *          null,
+	 *          null,
+	 *          {
+	 *            "sContentPadding": "mmm"
+	 *          }
+	 *        ]
+	 *      } );
+	 *    } );
+	 */
+	"sContentPadding": "",
 
 
 	/**
