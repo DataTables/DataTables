@@ -8658,13 +8658,6 @@
 		aoFooter: [],
 		
 		/*
-		 * Variable: iNextId
-		 * Purpose:  Store the next unique id to be used for a new row
-		 * Scope:    jQuery.dataTable.classSettings 
-		 */
-		iNextId: 0,
-		
-		/*
 		 * Variable: asDataSearch
 		 * Purpose:  Search data array for regular expression searching
 		 * Scope:    jQuery.dataTable.classSettings
