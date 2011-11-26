@@ -6,6 +6,42 @@
  */
 DataTable.models.oInitColumns = {
 	/**
+	 * Allows a column's sorting to take multiple columns into account when 
+	 * doing a sort. For example first name / last name columns make sense to 
+	 * do a multi-column sort over the two columns.
+	 *  @type array
+	 *  @default [] <i>Takes the value of the column index automatically</i>
+	 * 
+	 *  @example
+	 *    // Using aoColumnDefs
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "aoColumnDefs": [
+	 *          { "aDataSort": [ 0, 1 ], "aTargets": [ 0 ] },
+	 *          { "aDataSort": [ 1, 0 ], "aTargets": [ 1 ] },
+	 *          { "aDataSort": [ 2, 3, 4 ], "aTargets": [ 2 ] }
+	 *        ]
+	 *      } );
+	 *    } );
+	 *    
+	 *  @example
+	 *    // Using aoColumns
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "aoColumns": [
+	 *          { "aDataSort": [ 0, 1 ] },
+	 *          { "aDataSort": [ 1, 0 ] },
+	 *          { "aDataSort": [ 2, 3, 4 ] },
+	 *          null,
+	 *          null
+	 *        ]
+	 *      } );
+	 *    } );
+	 */
+	"aDataSort": [],
+
+
+	/**
 	 * You can control the default sorting direction, and even alter the behaviour
 	 * of the sort handler (i.e. only allow ascending sorting etc) using this
 	 * parameter.

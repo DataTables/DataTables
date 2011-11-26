@@ -1644,6 +1644,7 @@ DataTable.models.oInit = {
 	 */
 	"sScrollXInner": "",
 
+
 	/**
 	 * Enable vertical scrolling. Vertical scrolling will constrain the DataTable
 	 * to the given height, an enable scrolling for any data which overflows the
@@ -1662,6 +1663,24 @@ DataTable.models.oInit = {
 	 *      } );
 	 *    } );
 	 */
-	"sScrollY": ""
+	"sScrollY": "",
+
+
+	/**
+	 * Set the HTTP method that is used to make the Ajax call for server-side
+	 * processing or Ajax sourced data.
+	 *  @type string
+	 *  @default GET
+	 * 
+	 *  @example
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "bServerSide": true,
+	 *        "sAjaxSource": "scripts/post.php",
+	 *        "sServerMethod": "POST"
+	 *      } );
+	 *    } );
+	 */
+	"sServerMethod": "GET"
 };
 
