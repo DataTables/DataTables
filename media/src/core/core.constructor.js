@@ -7,12 +7,11 @@ for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
 	/* Base check on table node */
 	if ( _aoSettings[i].nTable == this )
 	{
-		if ( typeof oInit == 'undefined' || 
-		   ( typeof oInit.bRetrieve != 'undefined' && oInit.bRetrieve === true ) )
+		if ( typeof oInit == 'undefined' || oInit.bRetrieve )
 		{
 			return _aoSettings[i].oInstance;
 		}
-		else if ( typeof oInit.bDestroy != 'undefined' && oInit.bDestroy === true )
+		else if ( oInit.bDestroy )
 		{
 			_aoSettings[i].oInstance.fnDestroy();
 			break;
@@ -43,7 +42,6 @@ for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
 
 /* Make a complete and independent copy of the settings object */
 var oSettings = $.extend( true, {}, DataTable.models.oSettings );
-
 _aoSettings.push( oSettings );
 
 var bInitHandedOff = false;
@@ -90,8 +88,8 @@ oSettings.sDestroyWidth = $(this).width();
 oSettings.oInit = oInit;
 
 oInit = (typeof oInit === 'undefined' || oInit === null) ?
-	$( true, {}, DataTable.models.oInit ) :
-	$( true, {}, DataTable.models.oInit, oInit );
+	$.extend( true, {}, DataTable.models.oInit ) :
+	$.extend( true, {}, DataTable.models.oInit, oInit );
 
 
 _fnMap( oSettings.oFeatures, oInit, "bPaginate" );
@@ -191,7 +189,7 @@ else if ( oSettings.oFeatures.bDeferRender )
 	} );
 }
 
-if ( typeof oInit.bJQueryUI != 'undefined' && oInit.bJQueryUI )
+if ( oInit.bJQueryUI )
 {
 	/* Use the JUI classes object for display. You could clone the oStdClasses object if 
 	 * you want to have multiple tables with multiple independent classes 
@@ -215,8 +213,7 @@ if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
 	oSettings.oScroll.iBarWidth = _fnScrollBarWidth();
 }
 
-if ( typeof oInit.iDisplayStart != 'undefined' && 
-     typeof oSettings.iInitDisplayStart == 'undefined' )
+if ( typeof oSettings.iInitDisplayStart == 'undefined' )
 {
 	/* Display start point, taking into account the save saving */
 	oSettings.iInitDisplayStart = oInit.iDisplayStart;
@@ -224,9 +221,9 @@ if ( typeof oInit.iDisplayStart != 'undefined' &&
 }
 
 /* Must be done after everything which can be overridden by a cookie! */
-if ( typeof oInit.bStateSave != 'undefined' )
+if ( oInit.bStateSave )
 {
-	oSettings.oFeatures.bStateSave = oInit.bStateSave;
+	oSettings.oFeatures.bStateSave = true;
 	_fnLoadState( oSettings, oInit );
 	oSettings.aoDrawCallback.push( {
 		"fn": _fnSaveState,
@@ -234,40 +231,30 @@ if ( typeof oInit.bStateSave != 'undefined' )
 	} );
 }
 
-if ( typeof oInit.iDeferLoading != 'undefined' )
+if ( oInit.iDeferLoading !== null )
 {
 	oSettings.bDeferLoading = true;
 	oSettings._iRecordsTotal = oInit.iDeferLoading;
 	oSettings._iRecordsDisplay = oInit.iDeferLoading;
 }
 
-if ( typeof oInit.aaData != 'undefined' )
+if ( oInit.aaData !== null )
 {
 	bUsePassedData = true;
 }
 
-/* Backwards compatability */
-/* aoColumns / aoData - remove at some point... */
-if ( typeof oInit != 'undefined' && typeof oInit.aoData != 'undefined' )
-{
-	oInit.aoColumns = oInit.aoData;
-}
-
 /* Language definitions */
-if ( typeof oInit.oLanguage != 'undefined' )
+if ( oInit.oLanguage.sUrl !== "" )
 {
-	if ( typeof oInit.oLanguage.sUrl != 'undefined' && oInit.oLanguage.sUrl !== "" )
-	{
-		/* Get the language definitions from a file */
-		oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
-		$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) { 
-			_fnLanguageProcess( oSettings, json, true ); } );
-		bInitHandedOff = true;
-	}
-	else
-	{
-		_fnLanguageProcess( oSettings, oInit.oLanguage, false );
-	}
+	/* Get the language definitions from a file */
+	oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
+	$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) { 
+		_fnLanguageProcess( oSettings, json, true ); } );
+	bInitHandedOff = true;
+}
+else
+{
+	_fnLanguageProcess( oSettings, oInit.oLanguage, false );
 }
 /* Warning: The _fnLanguageProcess function is async to the remainder of this function due
  * to the XHR. We use _bInitialised in _fnLanguageProcess() to check this the processing 
@@ -276,20 +263,9 @@ if ( typeof oInit.oLanguage != 'undefined' )
  */
 
 
-
-
-
-
 /*
  * Stripes
- * Add the stripe classes now that we know which classes to apply - unless overruled
  */
-if ( typeof oInit.asStripClasses == 'undefined' && 
-     typeof oInit.asStripeClasses == 'undefined' )
-{
-	oSettings.asStripeClasses.push( oSettings.oClasses.sStripeOdd );
-	oSettings.asStripeClasses.push( oSettings.oClasses.sStripeEven );
-}
 
 /* Remove row stripe classes if they are already on the table row */
 var bStripeRemove = false;
@@ -327,6 +303,7 @@ if ( bStripeRemove )
 	anRows.removeClass( oSettings.asStripeClasses.join(' ') );
 }
 
+
 /*
  * Columns
  * See if we should load columns automatically or use defined ones
@@ -341,7 +318,7 @@ if ( nThead.length !== 0 )
 }
 
 /* If not given a column array, generate one with nulls */
-if ( typeof oInit.aoColumns == 'undefined' )
+if ( oInit.aoColumns === null )
 {
 	aoColumnsInit = [];
 	for ( i=0, iLen=anThs.length ; i<iLen ; i++ )
@@ -371,7 +348,7 @@ for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 }
 
 /* Add options from column definations */
-if ( typeof oInit.aoColumnDefs != 'undefined' )
+if ( oInit.aoColumnDefs !== null )
 {
 	/* Loop over the column defs array - loop in reverse so first instace has priority */
 	for ( i=oInit.aoColumnDefs.length-1 ; i>=0 ; i-- )
@@ -427,6 +404,7 @@ if ( typeof aoColumnsInit != 'undefined' )
 	}
 }
 
+
 /*
  * Sorting
  * Check the aaSorting array
@@ -467,6 +445,7 @@ for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
  * account, and also will apply sorting disabled classes if disabled
  */
 _fnSortingClasses( oSettings );
+
 
 /*
  * Final init

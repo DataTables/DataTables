@@ -182,7 +182,7 @@ DataTable.models.oInit = {
 	 * "sSearch" and "bEscapeRegex" (the latter is optional). 'null' is also
 	 * accepted and the default will be used.
 	 *  @type array
-	 *  @default null
+	 *  @default []
 	 * 
 	 *  @example
 	 *    $(document).ready( function() {
@@ -196,7 +196,7 @@ DataTable.models.oInit = {
 	 *      } );
 	 *    } )
 	 */
-	"aoSearchCols": null,
+	"aoSearchCols": [],
 
 
 	/**
@@ -209,11 +209,11 @@ DataTable.models.oInit = {
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "asStripClasses": [ 'strip1', 'strip2', 'strip3' ]
+	 *        "asStripeClasses": [ 'strip1', 'strip2', 'strip3' ]
 	 *      } );
 	 *    } )
 	 */
-	"asStripClasses": [ 'odd', 'even' ],
+	"asStripeClasses": [ 'odd', 'even' ],
 
 
 	/**
