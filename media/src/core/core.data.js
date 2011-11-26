@@ -22,7 +22,6 @@ function _fnAddData ( oSettings, aDataSupplied )
 	/* Create the object for storing information about this new row */
 	var iRow = oSettings.aoData.length;
 	var oData = $.extend( true, {}, DataTable.models.oRow, {
-		"_iId": oSettings.iNextId++,
 		"_aData": aDataIn
 	} );
 	oSettings.aoData.push( oData );
@@ -105,8 +104,7 @@ function _fnGatherData( oSettings )
 			{
 				iThisIndex = oSettings.aoData.length;
 				oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
-					"nTr": nTrs[i],
-					"_iId": oSettings.iNextId++
+					"nTr": nTrs[i]
 				} ) );
 				
 				oSettings.aiDisplayMaster.push( iThisIndex );

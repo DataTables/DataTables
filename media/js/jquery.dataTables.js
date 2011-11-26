@@ -1174,7 +1174,6 @@
 			/* Create the object for storing information about this new row */
 			var iRow = oSettings.aoData.length;
 			var oData = $.extend( true, {}, DataTable.models.oRow, {
-				"_iId": oSettings.iNextId++,
 				"_aData": aDataIn
 			} );
 			oSettings.aoData.push( oData );
@@ -1257,8 +1256,7 @@
 					{
 						iThisIndex = oSettings.aoData.length;
 						oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
-							"nTr": nTrs[i],
-							"_iId": oSettings.iNextId++
+							"nTr": nTrs[i]
 						} ) );
 						
 						oSettings.aiDisplayMaster.push( iThisIndex );
@@ -8617,7 +8615,6 @@
 		 * Purpose:  Store data information
 		 * Scope:    jQuery.dataTable.classSettings 
 		 * Notes:    This is an array of objects with the following parameters:
-		 *   int: _iId - internal id for tracking
 		 *   array: _aData - internal data - used for sorting / filtering etc
 		 *   node: nTr - display node
 		 *   array node: _anHidden - hidden TD nodes
@@ -9189,13 +9186,6 @@
 		 *  @default null
 		 */
 		"nTr": null,
-	
-		/**
-		 * Redundant - drop
-		 *  @type node
-		 *  @default null
-		 */
-		"_iId": null,
 	
 		/**
 		 * Data object from the original data sorce for the row. This is either

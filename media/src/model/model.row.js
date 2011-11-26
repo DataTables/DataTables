@@ -16,13 +16,6 @@ DataTable.models.oRow = {
 	"nTr": null,
 
 	/**
-	 * Redundant - drop
-	 *  @type node
-	 *  @default null
-	 */
-	"_iId": null,
-
-	/**
 	 * Data object from the original data sorce for the row. This is either
 	 * an array if using the tranditional form of DataTables, or an object if
 	 * using mDataProp options. The exact type will depend on the passed in

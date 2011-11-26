@@ -98,7 +98,6 @@ DataTable.models.oSettings = {
 	 * Purpose:  Store data information
 	 * Scope:    jQuery.dataTable.classSettings 
 	 * Notes:    This is an array of objects with the following parameters:
-	 *   int: _iId - internal id for tracking
 	 *   array: _aData - internal data - used for sorting / filtering etc
 	 *   node: nTr - display node
 	 *   array node: _anHidden - hidden TD nodes
