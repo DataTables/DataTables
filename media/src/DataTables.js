@@ -93,6 +93,7 @@
 	require('model.settings.js');
 	require('model.row.js');
 	require('model.column.js');
+	require('model.search.js');
 
 	DataTable.ext = {};
 
