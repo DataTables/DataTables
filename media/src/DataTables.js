@@ -89,11 +89,11 @@
 	};
 
 	DataTable.models = {};
-	require('model.init.js');
-	require('model.settings.js');
+	require('model.search.js');
 	require('model.row.js');
 	require('model.column.js');
-	require('model.search.js');
+	require('model.init.js');
+	require('model.settings.js');
 
 	DataTable.ext = {};
 

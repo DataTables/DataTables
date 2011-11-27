@@ -865,11 +865,7 @@
 			if ( typeof oSettings.aoPreSearchCols[ iCol ] == 'undefined' ||
 			     oSettings.aoPreSearchCols[ iCol ] === null )
 			{
-				oSettings.aoPreSearchCols[ iCol ] = {
-					"sSearch": "",
-					"bRegex": false,
-					"bSmart": true
-				};
+				oSettings.aoPreSearchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch );
 			}
 			else
 			{
@@ -6831,6 +6827,346 @@
 	DataTable.models = {};
 	
 	
+	
+	/**
+	 * Template object for the way in which DataTables holds information about
+	 * search information for the global filter and individual column filters.
+	 *  @namespace
+	 */
+	DataTable.models.oSearch = {
+		/**
+		 * Applied search term
+		 *  @type string
+		 *  @default <i>Empty string</i>
+		 */
+		"sSearch": "",
+	
+		/**
+		 * Flag to indicate if the search term should be interpreted as a
+		 * regular expression (true) or not (false) and therefore and special
+		 * regex characters escaped.
+		 *  @type boolean
+		 *  @default false
+		 */
+		"bRegex": false,
+	
+		/**
+		 * Flag to indicate if DataTables is to use its smart filtering or not.
+		 *  @type boolean
+		 *  @default true
+		 */
+		"bSmart": true
+	};
+	
+	
+	
+	
+	/**
+	 * Template object for the way in which DataTables holds information about
+	 * each individual row. This is the object format used for the settings 
+	 * aoData array.
+	 *  @namespace
+	 */
+	DataTable.models.oRow = {
+		/**
+		 * TR element for the row
+		 *  @type node
+		 *  @default null
+		 */
+		"nTr": null,
+	
+		/**
+		 * Data object from the original data source for the row. This is either
+		 * an array if using the traditional form of DataTables, or an object if
+		 * using mDataProp options. The exact type will depend on the passed in
+		 * data from the data source, or will be an array if using DOM a data 
+		 * source.
+		 *  @type array|object
+		 *  @default []
+		 */
+		"_aData": [],
+	
+		/**
+		 * Sorting data cache - this array is ostensibly the same length as the
+		 * number of columns (although each index is generated only as it is 
+		 * needed), and holds the data that is used for sorting each column in the
+		 * row. We do this cache generation at the start of the sort in order that
+		 * the formatting of the sort data need be done only once for each cell
+		 * per sort. This array should not be read from or written to by anything
+		 * other than the master sorting methods.
+		 *  @type array
+		 *  @default []
+		 *  @private
+		 */
+		"_aSortData": [],
+	
+		/**
+		 * Array of TD elements that are cached for hidden rows, so they can be
+		 * reinserted into the table if a column is made visible again (or to act
+		 * as a store if a column is made hidden). Only hidden columns have a 
+		 * reference in the array. For non-hidden columns the value is either
+		 * undefined or null.
+		 *  @type array nodes
+		 *  @default []
+		 *  @private
+		 */
+		"_anHidden": [],
+	
+		/**
+		 * Cache of the class name that DataTables has applied to the row, so we
+		 * can quickly look at this variable rather than needing to do a DOM check
+		 * on className for the nTr property.
+		 *  @type string
+		 *  @default <i>Empty string</i>
+		 *  @private
+		 */
+		"_sRowStripe": ""
+	};
+	
+	
+	
+	/**
+	 * Template object for the column information object in DataTables. This object
+	 * is held in the settings aoColumns array and contains all the information that
+	 * DataTables needs about each individual column.
+	 * 
+	 * Note that this object is related to {@link DataTable.models.oInitColumns} 
+	 * but this one is the internal data store for DataTables's cache of columns.
+	 * It should NOT be manipulated outside of DataTables. Any configuration should
+	 * be done through the initialisation options.
+	 *  @namespace
+	 */
+	DataTable.models.oColumn = {
+		/**
+		 * A list of the columns that sorting should occur on when this column
+		 * is sorted. That this property is an array allows multi-column sorting
+		 * to be defined for a column (for example first name / last name columns
+		 * would benefit from this). The values are integers pointing to the
+		 * columns to be sorted on (typically it will be a single integer pointing
+		 * at itself, but that doesn't need to be the case).
+		 *  @type array
+		 *  @default []
+		 */
+		"aDataSort": [],
+	
+		/**
+		 * Define the sorting directions that are applied to the column, in sequence
+		 * as the column is repeatedly sorted upon - i.e. the first value is used
+		 * as the sorting direction when the column if first sorted (clicked on).
+		 * Sort it again (click again) and it will move on to the next index.
+		 * Repeat until loop.
+		 *  @type array
+		 *  @default ['asc', 'desc']
+		 */
+		"asSorting": ['asc', 'desc'],
+		
+		/**
+		 * Flag to indicate if the column is searchable, and thus should be included
+		 * in the filtering or not.
+		 *  @type boolean
+		 *  @default true
+		 */
+		"bSearchable": true,
+		
+		/**
+		 * Flag to indicate if the column is sortable or not.
+		 *  @type boolean
+		 *  @default true
+		 */
+		"bSortable": true,
+		
+		/**
+		 * When using fnRender, you have two options for what to do with the data,
+		 * and this property serves as the switch. Firstly, you can have the sorting
+		 * and filtering use the rendered value (true - default), or you can have
+		 * the sorting and filtering us the original value (false).
+		 * 
+		 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
+		 * use of the 'type' that it gives, allowing (potentially) different data to
+		 * be used for sorting, filtering, display and type detection.
+		 *  @type boolean
+		 *  @default true
+		 *  @deprecated
+		 */
+		"bUseRendered": true,
+		
+		/**
+		 * Flag to indicate if the column is currently visible in the table or not
+		 *  @type boolean
+		 *  @default true
+		 */
+		"bVisible": true,
+		
+		/**
+		 * Flag to indicate to the type detection method if the automatic type
+		 * detection should be used, or if a column type (sType) has been specified
+		 *  @type boolean
+		 *  @default true
+		 *  @private
+		 */
+		"_bAutoType": true,
+		
+		/**
+		 * Function to get data from a cell in a column. You should <b>never</b>
+		 * access data directly through _aData internally in DataTables - always use
+		 * the method attached to this property. It allows mDataProp to function as
+		 * required. This function is automatically assigned by the column 
+		 * initialisation method
+		 *  @type function
+		 *  @param {array|object} oData The data array/object for the array 
+		 *    (i.e. aoData[]._aData)
+		 *  @param {string} sSpecific The specific data type you want to get - 
+		 *    'display', 'type' 'filter' 'sort'
+		 *  @returns {*} The data for the cell from the given row's data
+		 *  @default null
+		 */
+		"fnGetData": null,
+		
+		/**
+		 * Custom display function that will be called for the display of each cell 
+		 * in this column.
+		 *  @type function
+		 *  @param {object} o Object with the following parameters:
+		 *  @param {int}    o.iDataRow The row in aoData
+		 *  @param {int}    o.iDataColumn The column in question
+		 *  @param {array   o.aData The data for the row in question
+		 *  @param {object} o.oSettings The settings object for this DataTables instance
+		 *  @returns {string} The string you which to use in the display
+		 *  @default null
+		 */
+		"fnRender": null,
+		
+		/**
+		 * Function to set data for a cell in the column. You should <b>never</b> 
+		 * set the data directly to _aData internally in DataTables - always use
+		 * this method. It allows mDataProp to function as required. This function
+		 * is automatically assigned by the column initialisation method
+		 *  @type function
+		 *  @param {array|object} oData The data array/object for the array 
+		 *    (i.e. aoData[]._aData)
+		 *  @param {*} sValue Value to set
+		 *  @default null
+		 */
+		"fnSetData": null,
+		
+		/**
+		 * Property to read the value for the cells in the column from the data 
+		 * source array / object. If null, then the default content is used, if a
+		 * function is given then the return from the function is used.
+		 *  @type function|int|string|null
+		 *  @default null
+		 */
+		"mDataProp": null,
+		
+		/**
+		 * Unique header TH/TD element for this column - this is what the sorting
+		 * listener is attached to (if sorting is enabled.)
+		 *  @type node
+		 *  @default null
+		 */
+		"nTh": null,
+		
+		/**
+		 * Unique footer TH/TD element for this column (if there is one). Not used 
+		 * in DataTables as such, but can be used for plug-ins to reference the 
+		 * footer for each column.
+		 *  @type node
+		 *  @default null
+		 */
+		"nTf": null,
+		
+		/**
+		 * The class to apply to all TD elements in the table's TBODY for the column
+		 *  @type string
+		 *  @default null
+		 */
+		"sClass": null,
+		
+		/**
+		 * When DataTables calculates the column widths to assign to each column,
+		 * it finds the longest string in each column and then constructs a
+		 * temporary table and reads the widths from that. The problem with this
+		 * is that "mmm" is much wider then "iiii", but the latter is a longer 
+		 * string - thus the calculation can go wrong (doing it properly and putting
+		 * it into an DOM object and measuring that is horribly(!) slow). Thus as
+		 * a "work around" we provide this option. It will append its value to the
+		 * text that is found to be the longest string for the column - i.e. padding.
+		 *  @type string
+		 *  @default <i>Empty string<i>
+		 */
+		"sContentPadding": "",
+		
+		/**
+		 * Allows a default value to be given for a column's data, and will be used
+		 * whenever a null data source is encountered (this can be because mDataProp
+		 * is set to null, or because the data source itself is null).
+		 *  @type string
+		 *  @default null
+		 */
+		"sDefaultContent": null,
+		
+		/**
+		 * Name for the column, allowing reference to the column by name as well as
+		 * by index (needs a lookup to work by name).
+		 *  @type string
+		 *  @default <i>Empty string<i>
+		 */
+		"sName": '',
+		
+		/**
+		 * Custom sorting data type - defines which of the available plug-ins in
+		 * afnSortData the custom sorting will use - if any is defined.
+		 *  @type string
+		 *  @default std
+		 */
+		"sSortDataType": 'std',
+		
+		/**
+		 * Class to be applied to the header element when sorting on this column
+		 *  @type string
+		 *  @default null
+		 */
+		"sSortingClass": null,
+		
+		/**
+		 * Class to be applied to the header element when sorting on this column -
+		 * when jQuery UI theming is used.
+		 *  @type string
+		 *  @default null
+		 */
+		"sSortingClassJUI": null,
+		
+		/**
+		 * Title of the column - what is seen in the TH element (nTh).
+		 *  @type string
+		 *  @default <i>Empty string - automatically detected<i>
+		 */
+		"sTitle": '',
+		
+		/**
+		 * Column sorting and filtering type
+		 *  @type string
+		 *  @default null
+		 */
+		"sType": null,
+		
+		/**
+		 * Width of the column
+		 *  @type string
+		 *  @default null
+		 */
+		"sWidth": null,
+		
+		/**
+		 * Width of the column when it was first "encountered"
+		 *  @type string
+		 *  @default null
+		 */
+		"sWidthOrig": null
+	};
+	
+	
+	
 	/**
 	 * Initialisation options that can be given to DataTables at initialisation 
 	 * time.
@@ -8269,8 +8605,8 @@
 		 * expression, when false (default) it will be treated as a straight string.
 		 * When "bSmart" DataTables will use it's smart filtering methods (to word
 		 * match at any point in the data), when false this will not be done.
-		 *  @type string
-		 *  @default { "sSearch": "", "bRegex": false, "bSmart": true }
+		 *  @type object
+		 *  @extends DataTable.models.oSearch
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8279,11 +8615,7 @@
 		 *      } );
 		 *    } )
 		 */
-		"oSearch": {
-			"sSearch": "",
-			"bRegex": false,
-			"bSmart": true
-		},
+		"oSearch": $.extend( {}, DataTable.models.oSearch ),
 	
 	
 		/**
@@ -9302,346 +9634,6 @@
 		 */
 		"sInstance": null
 	};
-	
-	
-	
-	/**
-	 * Template object for the way in which DataTables holds information about
-	 * each individual row. This is the object format used for the settings 
-	 * aoData array.
-	 *  @namespace
-	 */
-	DataTable.models.oRow = {
-		/**
-		 * TR element for the row
-		 *  @type node
-		 *  @default null
-		 */
-		"nTr": null,
-	
-		/**
-		 * Data object from the original data source for the row. This is either
-		 * an array if using the traditional form of DataTables, or an object if
-		 * using mDataProp options. The exact type will depend on the passed in
-		 * data from the data source, or will be an array if using DOM a data 
-		 * source.
-		 *  @type array|object
-		 *  @default []
-		 */
-		"_aData": [],
-	
-		/**
-		 * Sorting data cache - this array is ostensibly the same length as the
-		 * number of columns (although each index is generated only as it is 
-		 * needed), and holds the data that is used for sorting each column in the
-		 * row. We do this cache generation at the start of the sort in order that
-		 * the formatting of the sort data need be done only once for each cell
-		 * per sort. This array should not be read from or written to by anything
-		 * other than the master sorting methods.
-		 *  @type array
-		 *  @default []
-		 *  @private
-		 */
-		"_aSortData": [],
-	
-		/**
-		 * Array of TD elements that are cached for hidden rows, so they can be
-		 * reinserted into the table if a column is made visible again (or to act
-		 * as a store if a column is made hidden). Only hidden columns have a 
-		 * reference in the array. For non-hidden columns the value is either
-		 * undefined or null.
-		 *  @type array nodes
-		 *  @default []
-		 *  @private
-		 */
-		"_anHidden": [],
-	
-		/**
-		 * Cache of the class name that DataTables has applied to the row, so we
-		 * can quickly look at this variable rather than needing to do a DOM check
-		 * on className for the nTr property.
-		 *  @type string
-		 *  @default <i>Empty string</i>
-		 *  @private
-		 */
-		"_sRowStripe": ""
-	};
-	
-	
-	
-	/**
-	 * Template object for the column information object in DataTables. This object
-	 * is held in the settings aoColumns array and contains all the information that
-	 * DataTables needs about each individual column.
-	 * 
-	 * Note that this object is related to {@link DataTable.models.oInitColumns} 
-	 * but this one is the internal data store for DataTables's cache of columns.
-	 * It should NOT be manipulated outside of DataTables. Any configuration should
-	 * be done through the initialisation options.
-	 *  @namespace
-	 */
-	DataTable.models.oColumn = {
-		/**
-		 * A list of the columns that sorting should occur on when this column
-		 * is sorted. That this property is an array allows multi-column sorting
-		 * to be defined for a column (for example first name / last name columns
-		 * would benefit from this). The values are integers pointing to the
-		 * columns to be sorted on (typically it will be a single integer pointing
-		 * at itself, but that doesn't need to be the case).
-		 *  @type array
-		 *  @default []
-		 */
-		"aDataSort": [],
-	
-		/**
-		 * Define the sorting directions that are applied to the column, in sequence
-		 * as the column is repeatedly sorted upon - i.e. the first value is used
-		 * as the sorting direction when the column if first sorted (clicked on).
-		 * Sort it again (click again) and it will move on to the next index.
-		 * Repeat until loop.
-		 *  @type array
-		 *  @default ['asc', 'desc']
-		 */
-		"asSorting": ['asc', 'desc'],
-		
-		/**
-		 * Flag to indicate if the column is searchable, and thus should be included
-		 * in the filtering or not.
-		 *  @type boolean
-		 *  @default true
-		 */
-		"bSearchable": true,
-		
-		/**
-		 * Flag to indicate if the column is sortable or not.
-		 *  @type boolean
-		 *  @default true
-		 */
-		"bSortable": true,
-		
-		/**
-		 * When using fnRender, you have two options for what to do with the data,
-		 * and this property serves as the switch. Firstly, you can have the sorting
-		 * and filtering use the rendered value (true - default), or you can have
-		 * the sorting and filtering us the original value (false).
-		 * 
-		 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
-		 * use of the 'type' that it gives, allowing (potentially) different data to
-		 * be used for sorting, filtering, display and type detection.
-		 *  @type boolean
-		 *  @default true
-		 *  @deprecated
-		 */
-		"bUseRendered": true,
-		
-		/**
-		 * Flag to indicate if the column is currently visible in the table or not
-		 *  @type boolean
-		 *  @default true
-		 */
-		"bVisible": true,
-		
-		/**
-		 * Flag to indicate to the type detection method if the automatic type
-		 * detection should be used, or if a column type (sType) has been specified
-		 *  @type boolean
-		 *  @default true
-		 *  @private
-		 */
-		"_bAutoType": true,
-		
-		/**
-		 * Function to get data from a cell in a column. You should <b>never</b>
-		 * access data directly through _aData internally in DataTables - always use
-		 * the method attached to this property. It allows mDataProp to function as
-		 * required. This function is automatically assigned by the column 
-		 * initialisation method
-		 *  @type function
-		 *  @param {array|object} oData The data array/object for the array 
-		 *    (i.e. aoData[]._aData)
-		 *  @param {string} sSpecific The specific data type you want to get - 
-		 *    'display', 'type' 'filter' 'sort'
-		 *  @returns {*} The data for the cell from the given row's data
-		 *  @default null
-		 */
-		"fnGetData": null,
-		
-		/**
-		 * Custom display function that will be called for the display of each cell 
-		 * in this column.
-		 *  @type function
-		 *  @param {object} o Object with the following parameters:
-		 *  @param {int}    o.iDataRow The row in aoData
-		 *  @param {int}    o.iDataColumn The column in question
-		 *  @param {array   o.aData The data for the row in question
-		 *  @param {object} o.oSettings The settings object for this DataTables instance
-		 *  @returns {string} The string you which to use in the display
-		 *  @default null
-		 */
-		"fnRender": null,
-		
-		/**
-		 * Function to set data for a cell in the column. You should <b>never</b> 
-		 * set the data directly to _aData internally in DataTables - always use
-		 * this method. It allows mDataProp to function as required. This function
-		 * is automatically assigned by the column initialisation method
-		 *  @type function
-		 *  @param {array|object} oData The data array/object for the array 
-		 *    (i.e. aoData[]._aData)
-		 *  @param {*} sValue Value to set
-		 *  @default null
-		 */
-		"fnSetData": null,
-		
-		/**
-		 * Property to read the value for the cells in the column from the data 
-		 * source array / object. If null, then the default content is used, if a
-		 * function is given then the return from the function is used.
-		 *  @type function|int|string|null
-		 *  @default null
-		 */
-		"mDataProp": null,
-		
-		/**
-		 * Unique header TH/TD element for this column - this is what the sorting
-		 * listener is attached to (if sorting is enabled.)
-		 *  @type node
-		 *  @default null
-		 */
-		"nTh": null,
-		
-		/**
-		 * Unique footer TH/TD element for this column (if there is one). Not used 
-		 * in DataTables as such, but can be used for plug-ins to reference the 
-		 * footer for each column.
-		 *  @type node
-		 *  @default null
-		 */
-		"nTf": null,
-		
-		/**
-		 * The class to apply to all TD elements in the table's TBODY for the column
-		 *  @type string
-		 *  @default null
-		 */
-		"sClass": null,
-		
-		/**
-		 * When DataTables calculates the column widths to assign to each column,
-		 * it finds the longest string in each column and then constructs a
-		 * temporary table and reads the widths from that. The problem with this
-		 * is that "mmm" is much wider then "iiii", but the latter is a longer 
-		 * string - thus the calculation can go wrong (doing it properly and putting
-		 * it into an DOM object and measuring that is horribly(!) slow). Thus as
-		 * a "work around" we provide this option. It will append its value to the
-		 * text that is found to be the longest string for the column - i.e. padding.
-		 *  @type string
-		 *  @default <i>Empty string<i>
-		 */
-		"sContentPadding": "",
-		
-		/**
-		 * Allows a default value to be given for a column's data, and will be used
-		 * whenever a null data source is encountered (this can be because mDataProp
-		 * is set to null, or because the data source itself is null).
-		 *  @type string
-		 *  @default null
-		 */
-		"sDefaultContent": null,
-		
-		/**
-		 * Name for the column, allowing reference to the column by name as well as
-		 * by index (needs a lookup to work by name).
-		 *  @type string
-		 *  @default <i>Empty string<i>
-		 */
-		"sName": '',
-		
-		/**
-		 * Custom sorting data type - defines which of the available plug-ins in
-		 * afnSortData the custom sorting will use - if any is defined.
-		 *  @type string
-		 *  @default std
-		 */
-		"sSortDataType": 'std',
-		
-		/**
-		 * Class to be applied to the header element when sorting on this column
-		 *  @type string
-		 *  @default null
-		 */
-		"sSortingClass": null,
-		
-		/**
-		 * Class to be applied to the header element when sorting on this column -
-		 * when jQuery UI theming is used.
-		 *  @type string
-		 *  @default null
-		 */
-		"sSortingClassJUI": null,
-		
-		/**
-		 * Title of the column - what is seen in the TH element (nTh).
-		 *  @type string
-		 *  @default <i>Empty string - automatically detected<i>
-		 */
-		"sTitle": '',
-		
-		/**
-		 * Column sorting and filtering type
-		 *  @type string
-		 *  @default null
-		 */
-		"sType": null,
-		
-		/**
-		 * Width of the column
-		 *  @type string
-		 *  @default null
-		 */
-		"sWidth": null,
-		
-		/**
-		 * Width of the column when it was first "encountered"
-		 *  @type string
-		 *  @default null
-		 */
-		"sWidthOrig": null
-	};
-	
-	
-	
-	
-	/**
-	 * Template object for the way in which DataTables holds information about
-	 * search information for the global filter and individual column filters.
-	 *  @namespace
-	 */
-	DataTable.models.oSearch = {
-		/**
-		 * Applied search term
-		 *  @type string
-		 *  @default <i>Empty string</i>
-		 */
-		"sSearch": "",
-	
-		/**
-		 * Flag to indicate if the search term should be interpreted as a
-		 * regular expression (true) or not (false) and therefore and special
-		 * regex characters escaped.
-		 *  @type boolean
-		 *  @default false
-		 */
-		"bRegex": false,
-	
-		/**
-		 * Flag to indicate if DataTables is to use its smart filtering or not.
-		 *  @type boolean
-		 *  @default true
-		 */
-		"bSmart": true
-	};
-	
 
 	DataTable.ext = {};
 

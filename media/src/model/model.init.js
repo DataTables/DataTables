@@ -1438,8 +1438,8 @@ DataTable.models.oInit = {
 	 * expression, when false (default) it will be treated as a straight string.
 	 * When "bSmart" DataTables will use it's smart filtering methods (to word
 	 * match at any point in the data), when false this will not be done.
-	 *  @type string
-	 *  @default { "sSearch": "", "bRegex": false, "bSmart": true }
+	 *  @type object
+	 *  @extends DataTable.models.oSearch
 	 * 
 	 *  @example
 	 *    $(document).ready( function() {
@@ -1448,11 +1448,7 @@ DataTable.models.oInit = {
 	 *      } );
 	 *    } )
 	 */
-	"oSearch": {
-		"sSearch": "",
-		"bRegex": false,
-		"bSmart": true
-	},
+	"oSearch": $.extend( {}, DataTable.models.oSearch ),
 
 
 	/**

@@ -42,11 +42,7 @@ function _fnAddColumn( oSettings, nTh )
 	if ( typeof oSettings.aoPreSearchCols[ iCol ] == 'undefined' ||
 	     oSettings.aoPreSearchCols[ iCol ] === null )
 	{
-		oSettings.aoPreSearchCols[ iCol ] = {
-			"sSearch": "",
-			"bRegex": false,
-			"bSmart": true
-		};
+		oSettings.aoPreSearchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch );
 	}
 	else
 	{
