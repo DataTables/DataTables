@@ -37,13 +37,6 @@ _oExt.sErrMode = "alert";
 _oExt.iApiIndex = 0;
 
 /*
- * Variable: oApi
- * Purpose:  Container for plugin API functions
- * Scope:    jQuery.fn.dataTableExt
- */
-_oExt.oApi = { };
-
-/*
  * Variable: aFiltering
  * Purpose:  Container for plugin filtering functions
  * Scope:    jQuery.fn.dataTableExt
