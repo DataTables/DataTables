@@ -1,85 +1,93 @@
 
+/*
+ * This is really a good bit rubbish this method of exposing the internal methods
+ * publically... - To be fixed in 2.0 using methods on the prototype
+ */
 
 /*
- * This is really a good bit rubbish... - To be fixed in 2.0
+ * Variable: oApi
+ * Purpose:  Container for publicly exposed 'private' functions
+ * Scope:    jQuery.dataTable
  */
-this.oApi._fnExternApiFunc = _fnExternApiFunc;
-this.oApi._fnInitialise = _fnInitialise;
-this.oApi._fnInitComplete = _fnInitComplete;
-this.oApi._fnLanguageProcess = _fnLanguageProcess;
-this.oApi._fnAddColumn = _fnAddColumn;
-this.oApi._fnColumnOptions = _fnColumnOptions;
-this.oApi._fnAddData = _fnAddData;
-this.oApi._fnCreateTr = _fnCreateTr;
-this.oApi._fnGatherData = _fnGatherData;
-this.oApi._fnBuildHead = _fnBuildHead;
-this.oApi._fnDrawHead = _fnDrawHead;
-this.oApi._fnDraw = _fnDraw;
-this.oApi._fnReDraw = _fnReDraw;
-this.oApi._fnAjaxUpdate = _fnAjaxUpdate;
-this.oApi._fnAjaxParameters = _fnAjaxParameters;
-this.oApi._fnAjaxUpdateDraw = _fnAjaxUpdateDraw;
-this.oApi._fnServerParams = _fnServerParams;
-this.oApi._fnAddOptionsHtml = _fnAddOptionsHtml;
-this.oApi._fnFeatureHtmlTable = _fnFeatureHtmlTable;
-this.oApi._fnScrollDraw = _fnScrollDraw;
-this.oApi._fnAdjustColumnSizing = _fnAdjustColumnSizing;
-this.oApi._fnFeatureHtmlFilter = _fnFeatureHtmlFilter;
-this.oApi._fnFilterComplete = _fnFilterComplete;
-this.oApi._fnFilterCustom = _fnFilterCustom;
-this.oApi._fnFilterColumn = _fnFilterColumn;
-this.oApi._fnFilter = _fnFilter;
-this.oApi._fnBuildSearchArray = _fnBuildSearchArray;
-this.oApi._fnBuildSearchRow = _fnBuildSearchRow;
-this.oApi._fnFilterCreateSearch = _fnFilterCreateSearch;
-this.oApi._fnDataToSearch = _fnDataToSearch;
-this.oApi._fnSort = _fnSort;
-this.oApi._fnSortAttachListener = _fnSortAttachListener;
-this.oApi._fnSortingClasses = _fnSortingClasses;
-this.oApi._fnFeatureHtmlPaginate = _fnFeatureHtmlPaginate;
-this.oApi._fnPageChange = _fnPageChange;
-this.oApi._fnFeatureHtmlInfo = _fnFeatureHtmlInfo;
-this.oApi._fnUpdateInfo = _fnUpdateInfo;
-this.oApi._fnFeatureHtmlLength = _fnFeatureHtmlLength;
-this.oApi._fnFeatureHtmlProcessing = _fnFeatureHtmlProcessing;
-this.oApi._fnProcessingDisplay = _fnProcessingDisplay;
-this.oApi._fnVisibleToColumnIndex = _fnVisibleToColumnIndex;
-this.oApi._fnColumnIndexToVisible = _fnColumnIndexToVisible;
-this.oApi._fnNodeToDataIndex = _fnNodeToDataIndex;
-this.oApi._fnVisbleColumns = _fnVisbleColumns;
-this.oApi._fnCalculateEnd = _fnCalculateEnd;
-this.oApi._fnConvertToWidth = _fnConvertToWidth;
-this.oApi._fnCalculateColumnWidths = _fnCalculateColumnWidths;
-this.oApi._fnScrollingWidthAdjust = _fnScrollingWidthAdjust;
-this.oApi._fnGetWidestNode = _fnGetWidestNode;
-this.oApi._fnGetMaxLenString = _fnGetMaxLenString;
-this.oApi._fnStringToCss = _fnStringToCss;
-this.oApi._fnArrayCmp = _fnArrayCmp;
-this.oApi._fnDetectType = _fnDetectType;
-this.oApi._fnSettingsFromNode = _fnSettingsFromNode;
-this.oApi._fnGetDataMaster = _fnGetDataMaster;
-this.oApi._fnGetTrNodes = _fnGetTrNodes;
-this.oApi._fnGetTdNodes = _fnGetTdNodes;
-this.oApi._fnEscapeRegex = _fnEscapeRegex;
-this.oApi._fnDeleteIndex = _fnDeleteIndex;
-this.oApi._fnReOrderIndex = _fnReOrderIndex;
-this.oApi._fnColumnOrdering = _fnColumnOrdering;
-this.oApi._fnLog = _fnLog;
-this.oApi._fnClearTable = _fnClearTable;
-this.oApi._fnSaveState = _fnSaveState;
-this.oApi._fnLoadState = _fnLoadState;
-this.oApi._fnCreateCookie = _fnCreateCookie;
-this.oApi._fnReadCookie = _fnReadCookie;
-this.oApi._fnDetectHeader = _fnDetectHeader;
-this.oApi._fnGetUniqueThs = _fnGetUniqueThs;
-this.oApi._fnScrollBarWidth = _fnScrollBarWidth;
-this.oApi._fnApplyToChildren = _fnApplyToChildren;
-this.oApi._fnMap = _fnMap;
-this.oApi._fnGetRowData = _fnGetRowData;
-this.oApi._fnGetCellData = _fnGetCellData;
-this.oApi._fnSetCellData = _fnSetCellData;
-this.oApi._fnGetObjectDataFn = _fnGetObjectDataFn;
-this.oApi._fnSetObjectDataFn = _fnSetObjectDataFn;
+this.oApi = {
+	"_fnExternApiFunc": _fnExternApiFunc,
+	"_fnInitialise": _fnInitialise,
+	"_fnInitComplete": _fnInitComplete,
+	"_fnLanguageProcess": _fnLanguageProcess,
+	"_fnAddColumn": _fnAddColumn,
+	"_fnColumnOptions": _fnColumnOptions,
+	"_fnAddData": _fnAddData,
+	"_fnCreateTr": _fnCreateTr,
+	"_fnGatherData": _fnGatherData,
+	"_fnBuildHead": _fnBuildHead,
+	"_fnDrawHead": _fnDrawHead,
+	"_fnDraw": _fnDraw,
+	"_fnReDraw": _fnReDraw,
+	"_fnAjaxUpdate": _fnAjaxUpdate,
+	"_fnAjaxParameters": _fnAjaxParameters,
+	"_fnAjaxUpdateDraw": _fnAjaxUpdateDraw,
+	"_fnServerParams": _fnServerParams,
+	"_fnAddOptionsHtml": _fnAddOptionsHtml,
+	"_fnFeatureHtmlTable": _fnFeatureHtmlTable,
+	"_fnScrollDraw": _fnScrollDraw,
+	"_fnAdjustColumnSizing": _fnAdjustColumnSizing,
+	"_fnFeatureHtmlFilter": _fnFeatureHtmlFilter,
+	"_fnFilterComplete": _fnFilterComplete,
+	"_fnFilterCustom": _fnFilterCustom,
+	"_fnFilterColumn": _fnFilterColumn,
+	"_fnFilter": _fnFilter,
+	"_fnBuildSearchArray": _fnBuildSearchArray,
+	"_fnBuildSearchRow": _fnBuildSearchRow,
+	"_fnFilterCreateSearch": _fnFilterCreateSearch,
+	"_fnDataToSearch": _fnDataToSearch,
+	"_fnSort": _fnSort,
+	"_fnSortAttachListener": _fnSortAttachListener,
+	"_fnSortingClasses": _fnSortingClasses,
+	"_fnFeatureHtmlPaginate": _fnFeatureHtmlPaginate,
+	"_fnPageChange": _fnPageChange,
+	"_fnFeatureHtmlInfo": _fnFeatureHtmlInfo,
+	"_fnUpdateInfo": _fnUpdateInfo,
+	"_fnFeatureHtmlLength": _fnFeatureHtmlLength,
+	"_fnFeatureHtmlProcessing": _fnFeatureHtmlProcessing,
+	"_fnProcessingDisplay": _fnProcessingDisplay,
+	"_fnVisibleToColumnIndex": _fnVisibleToColumnIndex,
+	"_fnColumnIndexToVisible": _fnColumnIndexToVisible,
+	"_fnNodeToDataIndex": _fnNodeToDataIndex,
+	"_fnVisbleColumns": _fnVisbleColumns,
+	"_fnCalculateEnd": _fnCalculateEnd,
+	"_fnConvertToWidth": _fnConvertToWidth,
+	"_fnCalculateColumnWidths": _fnCalculateColumnWidths,
+	"_fnScrollingWidthAdjust": _fnScrollingWidthAdjust,
+	"_fnGetWidestNode": _fnGetWidestNode,
+	"_fnGetMaxLenString": _fnGetMaxLenString,
+	"_fnStringToCss": _fnStringToCss,
+	"_fnArrayCmp": _fnArrayCmp,
+	"_fnDetectType": _fnDetectType,
+	"_fnSettingsFromNode": _fnSettingsFromNode,
+	"_fnGetDataMaster": _fnGetDataMaster,
+	"_fnGetTrNodes": _fnGetTrNodes,
+	"_fnGetTdNodes": _fnGetTdNodes,
+	"_fnEscapeRegex": _fnEscapeRegex,
+	"_fnDeleteIndex": _fnDeleteIndex,
+	"_fnReOrderIndex": _fnReOrderIndex,
+	"_fnColumnOrdering": _fnColumnOrdering,
+	"_fnLog": _fnLog,
+	"_fnClearTable": _fnClearTable,
+	"_fnSaveState": _fnSaveState,
+	"_fnLoadState": _fnLoadState,
+	"_fnCreateCookie": _fnCreateCookie,
+	"_fnReadCookie": _fnReadCookie,
+	"_fnDetectHeader": _fnDetectHeader,
+	"_fnGetUniqueThs": _fnGetUniqueThs,
+	"_fnScrollBarWidth": _fnScrollBarWidth,
+	"_fnApplyToChildren": _fnApplyToChildren,
+	"_fnMap": _fnMap,
+	"_fnGetRowData": _fnGetRowData,
+	"_fnGetCellData": _fnGetCellData,
+	"_fnSetCellData": _fnSetCellData,
+	"_fnGetObjectDataFn": _fnGetObjectDataFn,
+	"_fnSetObjectDataFn": _fnSetObjectDataFn
+};
 
 
 /**

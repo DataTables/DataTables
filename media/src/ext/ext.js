@@ -87,15 +87,19 @@ _oExt.afnSortData = [ ];
 
 
 
-/*
- * Function: fnVersionCheck
- * Purpose:  Check a version string against this version of DataTables. Useful for plug-ins
- * Returns:  bool:true -this version of DataTables is greater or equal to the required version
- *                false -this version of DataTales is not suitable
- * Inputs:   string:sVersion - the version to check against. May be in the following formats:
- *             "a", "a.b" or "a.b.c"
- * Notes:    This function will only check the first three parts of a version string. It is
- *   assumed that beta and dev versions will meet the requirements. This might change in future
+/**
+ * Provide a common method for plug-ins to check the version of DataTables being used, in order
+ * to ensure compatibility.
+ *  @param {string} sVersion Version string to check for, in the format "X.Y.Z". Note that the
+ *    formats "X" and "X.Y" are also acceptable.
+ *  @returns {boolean} true if this version of DataTables is greater or equal to the required
+ *    version, or false if this version of DataTales is not suitable
+ *
+ *  @example
+ *    $(document).ready(function() {
+ *      var oTable = $('#example').dataTable();
+ *      alert( oTable.fnVersionCheck( '1.9.0' ) );
+ *    } );
  */
 _oExt.fnVersionCheck = function( sVersion )
 {

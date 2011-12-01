@@ -117,15 +117,19 @@
 	
 	
 	
-	/*
-	 * Function: fnVersionCheck
-	 * Purpose:  Check a version string against this version of DataTables. Useful for plug-ins
-	 * Returns:  bool:true -this version of DataTables is greater or equal to the required version
-	 *                false -this version of DataTales is not suitable
-	 * Inputs:   string:sVersion - the version to check against. May be in the following formats:
-	 *             "a", "a.b" or "a.b.c"
-	 * Notes:    This function will only check the first three parts of a version string. It is
-	 *   assumed that beta and dev versions will meet the requirements. This might change in future
+	/**
+	 * Provide a common method for plug-ins to check the version of DataTables being used, in order
+	 * to ensure compatibility.
+	 *  @param {string} sVersion Version string to check for, in the format "X.Y.Z". Note that the
+	 *    formats "X" and "X.Y" are also acceptable.
+	 *  @returns {boolean} true if this version of DataTables is greater or equal to the required
+	 *    version, or false if this version of DataTales is not suitable
+	 *
+	 *  @example
+	 *    $(document).ready(function() {
+	 *      var oTable = $('#example').dataTable();
+	 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
+	 *    } );
 	 */
 	_oExt.fnVersionCheck = function( sVersion )
 	{
@@ -5318,131 +5322,18 @@
 		
 
 		
-		/*
-		 * Variable: oApi
-		 * Purpose:  Container for publicly exposed 'private' functions
-		 * Scope:    jQuery.dataTable
-		 */
-		this.oApi = {};
-		
-		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - API functions
-		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		
 		/**
-		 * Redraw the table
-		 *  @param {bool} [bComplete=true] Refilter and resort (if enabled) the table before the draw.
+		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
+		 * return the resulting expression
+		 *  @param {string} sSelector jQuery selector
+		 *  @returns {object} jQuery object
 		 */
-		this.fnDraw = function( bComplete )
+		this.$ = function ( sSelector )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			if ( typeof bComplete != 'undefined' && bComplete === false )
-			{
-				_fnCalculateEnd( oSettings );
-				_fnDraw( oSettings );
-			}
-			else
-			{
-				_fnReDraw( oSettings );
-			}
-		};
-		
-		/**
-		 * Filter the input based on data
-		 *  @param {string} sInput string to filter the table on
-		 *  @param {int|null} [iColumn] column to limit filtering to
-		 *  @param {bool} [bRegex=false] treat as regular expression or not
-		 *  @param {bool} [bSmart=true] perform smart filtering or not
-		 *  @param {bool} [bShowGlobal=true] show the input global filter in it's input box(es)
-		 */
-		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			
-			if ( !oSettings.oFeatures.bFilter )
-			{
-				return;
-			}
-			
-			if ( typeof bRegex == 'undefined' )
-			{
-				bRegex = false;
-			}
-			
-			if ( typeof bSmart == 'undefined' )
-			{
-				bSmart = true;
-			}
-			
-			if ( typeof bShowGlobal == 'undefined' )
-			{
-				bShowGlobal = true;
-			}
-			
-			if ( typeof iColumn == "undefined" || iColumn === null )
-			{
-				/* Global filter */
-				_fnFilterComplete( oSettings, {
-					"sSearch":sInput,
-					"bRegex": bRegex,
-					"bSmart": bSmart
-				}, 1 );
-				
-				if ( bShowGlobal && typeof oSettings.aanFeatures.f != 'undefined' )
-				{
-					var n = oSettings.aanFeatures.f;
-					for ( var i=0, iLen=n.length ; i<iLen ; i++ )
-					{
-						$('input', n[i]).val( sInput );
-					}
-				}
-			}
-			else
-			{
-				/* Single column filter */
-				oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput;
-				oSettings.aoPreSearchCols[ iColumn ].bRegex = bRegex;
-				oSettings.aoPreSearchCols[ iColumn ].bSmart = bSmart;
-				_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
-			}
-		};
-		
-		/**
-		 * Get the settings for a particular table for external manipulation
-		 *  @returns {object} DataTables settings object. See 
-		 *    {@link DataTable.models.oSettings}
-		 */
-		this.fnSettings = function()
-		{
-			return _fnSettingsFromNode( this[_oExt.iApiIndex] );
-		};
-		
-		
-		// xxx
-		this.fnVersionCheck = _oExt.fnVersionCheck;
-		
-		/**
-		 * Sort the table by a particular row
-		 *  @param {int} iCol the data index to sort on. Note that this will not match the 'display index' if you have hidden data entries
-		 */
-		this.fnSort = function( aaSort )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			oSettings.aaSorting = aaSort;
-			_fnSort( oSettings );
-		};
-		
-		/**
-		 * Attach a sort listener to an element for a given column
-		 *  @param {node} nNode the element to attach the sort listener to
-		 *  @param {int} iColumn the column that a click on this node will sort on
-		 *  @param {function} [fnCallback] callback function when sort is run
-		 */
-		this.fnSortListener = function( nNode, iColumn, fnCallback )
-		{
-			_fnSortAttachListener( _fnSettingsFromNode( this[_oExt.iApiIndex] ), nNode, iColumn,
-			 	fnCallback );
+			// xxx - filtering, sorting, column visibility options
+			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
+			return $(this.oApi._fnGetTrNodes(oSettings)).filter(sSelector);
 		};
 		
 		
@@ -5462,6 +5353,25 @@
 		 *  @returns {array} An array of integers, representing the list of indexes in 
 		 *    <i>aoData</i> ({@link DataTable.models.oSettings}) that have been added to 
 		 *    the table.
+		 *
+		 *  @example
+		 *    // Global var for counter
+		 *    var giCount = 2;
+		 *    
+		 *    $(document).ready(function() {
+		 *      $('#example').dataTable();
+		 *    } );
+		 *    
+		 *    function fnClickAddRow() {
+		 *      $('#example').dataTable().fnAddData( [
+		 *        giCount+".1",
+		 *        giCount+".2",
+		 *        giCount+".3",
+		 *        giCount+".4" ]
+		 *      );
+		 *        
+		 *      giCount++;
+		 *    }
 		 */
 		this.fnAddData = function( mData, bRedraw )
 		{
@@ -5510,12 +5420,128 @@
 		
 		
 		/**
+		 * This function will make DataTables recalculate the column sizes, based on the data 
+		 * contained in the table and the sizes applied to the columns (in the DOM, CSS or 
+		 * through the sWidth parameter). This can be useful when the width of the table's 
+		 * parent element changes (for example a window resize).
+		 *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable( {
+		 *        "sScrollY": "200px",
+		 *        "bPaginate": false
+		 *      } );
+		 *      
+		 *      $(window).bind('resize', function () {
+		 *        oTable.fnAdjustColumnSizing();
+		 *      } );
+		 *    } );
+		 */
+		this.fnAdjustColumnSizing = function ( bRedraw )
+		{
+			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
+			_fnAdjustColumnSizing( oSettings );
+			
+			if ( typeof bRedraw == 'undefined' || bRedraw )
+			{
+				this.fnDraw( false );
+			}
+			else if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
+			{
+				/* If not redrawing, but scrolling, we want to apply the new column sizes anyway */
+				this.oApi._fnScrollDraw(oSettings);
+			}
+		};
+		
+		
+		/**
+		 * Quickly and simply clear a table
+		 *  @param {bool} [bRedraw=true] redraw the table or not
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Immediately 'nuke' the current rows (perhaps waiting for an Ajax callback...)
+		 *      oTable.fnClearTable();
+		 *    } );
+		 */
+		this.fnClearTable = function( bRedraw )
+		{
+			/* Find settings from table node */
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			_fnClearTable( oSettings );
+			
+			if ( typeof bRedraw == 'undefined' || bRedraw )
+			{
+				_fnDraw( oSettings );
+			}
+		};
+		
+		
+		/**
+		 * The exact opposite of 'opening' a row, this function will close any rows which 
+		 * are currently 'open'.
+		 *  @param {node} nTr the table row to 'close'
+		 *  @returns {int} 0 on success, or 1 if failed (can't find the row)
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable;
+		 *      
+		 *      // 'open' an information row when a row is clicked on
+		 *      $('#example tbody tr').click( function () {
+		 *        var that = this;
+		 *        oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *        
+		 *        // Then when the info row is clicked upon - close it
+		 *        $('#example .info_row').click( function () {
+		 *          oTable.fnClose(that);
+		 *        } );
+		 *      } );
+		 *      
+		 *      oTable = $('#example').dataTable();
+		 *    } );
+		 */
+		this.fnClose = function( nTr )
+		{
+			/* Find settings from table node */
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			
+			for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
+			{
+				if ( oSettings.aoOpenRows[i].nParent == nTr )
+				{
+					var nTrParent = oSettings.aoOpenRows[i].nTr.parentNode;
+					if ( nTrParent )
+					{
+						/* Remove it if it is currently on display */
+						nTrParent.removeChild( oSettings.aoOpenRows[i].nTr );
+					}
+					oSettings.aoOpenRows.splice( i, 1 );
+					return 0;
+				}
+			}
+			return 1;
+		};
+		
+		
+		/**
 		 * Remove a row for the table
 		 *  @param {mixed} mTarget The index of the row from aoData to be deleted, or
 		 *    the TR element you want to delete
 		 *  @param {function|null} [fnCallBack] Callback function
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 *  @returns {array} The row that was deleted
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Immediately remove the first row
+		 *      oTable.fnDeleteRow( 0 );
+		 *    } );
 		 */
 		this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 		{
@@ -5562,402 +5588,17 @@
 			return oData;
 		};
 		
-		/**
-		 * Quickly and simply clear a table
-		 *  @param {bool} [bRedraw=true] redraw the table or not
-		 */
-		this.fnClearTable = function( bRedraw )
-		{
-			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			_fnClearTable( oSettings );
-			
-			if ( typeof bRedraw == 'undefined' || bRedraw )
-			{
-				_fnDraw( oSettings );
-			}
-		};
-		
-		/**
-		 * This function will place a new row directly after a row which is currently 
-		 * on display on the page, with the HTML contents that is passed into the 
-		 * function. This can be used, for example, to ask for confirmation that a 
-		 * particular record should be deleted.
-		 *  @param {node} nTr The table row to 'open'
-		 *  @param {string|node|jQuery} mHtml The HTML to put into the row
-		 *  @param {string} sClass Class to give the new TD cell
-		 *  @returns {node} The row opened
-		 */
-		this.fnOpen = function( nTr, mHtml, sClass )
-		{
-			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			
-			/* the old open one if there is one */
-			this.fnClose( nTr );
-			
-			var nNewRow = document.createElement("tr");
-			var nNewCell = document.createElement("td");
-			nNewRow.appendChild( nNewCell );
-			nNewCell.className = sClass;
-			nNewCell.colSpan = _fnVisbleColumns( oSettings );
-		
-			if( typeof mHtml.jquery != 'undefined' || typeof mHtml == "object" )
-			{
-				nNewCell.appendChild( mHtml );
-			}
-			else
-			{
-				nNewCell.innerHTML = mHtml;
-			}
-		
-			/* If the nTr isn't on the page at the moment - then we don't insert at the moment */
-			var nTrs = $('tr', oSettings.nTBody);
-			if ( $.inArray(nTr, nTrs) != -1 )
-			{
-				$(nNewRow).insertAfter(nTr);
-			}
-			
-			oSettings.aoOpenRows.push( {
-				"nTr": nNewRow,
-				"nParent": nTr
-			} );
-			
-			return nNewRow;
-		};
-		
-		/**
-		 * The exact opposite of 'opening' a row, this function will close any rows which 
-		 * are currently 'open'.
-		 *  @param {node} nTr the table row to 'close'
-		 *  @returns {int} 0 on success, or 1 if failed (can't find the row)
-		 */
-		this.fnClose = function( nTr )
-		{
-			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			
-			for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
-			{
-				if ( oSettings.aoOpenRows[i].nParent == nTr )
-				{
-					var nTrParent = oSettings.aoOpenRows[i].nTr.parentNode;
-					if ( nTrParent )
-					{
-						/* Remove it if it is currently on display */
-						nTrParent.removeChild( oSettings.aoOpenRows[i].nTr );
-					}
-					oSettings.aoOpenRows.splice( i, 1 );
-					return 0;
-				}
-			}
-			return 1;
-		};
-		
-		/**
-		 * Return an array with the data which is used to make up the table
-		 * or string if both row and column are given
-		 *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
-		 *    internal index (mapped to the TR element)
-		 *  @param {int} [iCol] Optional column index that you want the data of
-		 *  @returns {array|string} If mRow is undefined, then the data for all rows is
-		 *    returned. If mRow is defined, just data for that row, and is iCol is
-		 *    defined, only data for the designated cell is returned.
-		 */
-		this.fnGetData = function( mRow, iCol )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			
-			if ( typeof mRow != 'undefined' )
-			{
-				var iRow = (typeof mRow == 'object') ? 
-					_fnNodeToDataIndex(oSettings, mRow) : mRow;
-				
-				if ( typeof iCol != 'undefined' )
-				{
-					return _fnGetCellData( oSettings, iRow, iCol, '' );
-				}
-				return (typeof oSettings.aoData[iRow] != 'undefined') ? 
-					oSettings.aoData[iRow]._aData : null;
-			}
-			return _fnGetDataMaster( oSettings );
-		};
-		
-		/**
-		 * The the TR nodes that are used in the table's body
-		 *  @param {int} [iRow] Optional row index for the TR element you want
-		 *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
-		 *    in the table's body, or iRow is defined, just the TR element requested.
-		 */
-		this.fnGetNodes = function( iRow )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			
-			if ( typeof iRow != 'undefined' )
-			{
-				return (typeof oSettings.aoData[iRow] != 'undefined') ? oSettings.aoData[iRow].nTr : null;
-			}
-			return _fnGetTrNodes( oSettings );
-		};
-		
-		/**
-		 * Get the array indexes of a particular cell from it's DOM element
-		 * and column index including hidden columns
-		 *  @param {node} nNode this can either be a TR, TD or TH in the table's body
-		 *  @returns {int} If nNode is given as a TR, then a single index is returned, or
-		 *    if given as a cell, an array of [row index, column index (visible)] is given.
-		 */
-		this.fnGetPosition = function( nNode )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			var sNodeName = nNode.nodeName.toUpperCase();
-			
-			if ( sNodeName == "TR" )
-			{
-				return _fnNodeToDataIndex(oSettings, nNode);
-			}
-			else if ( sNodeName == "TD" || sNodeName == "TH" )
-			{
-				var iDataIndex = _fnNodeToDataIndex(oSettings, nNode.parentNode);
-				var anCells = _fnGetTdNodes( oSettings, iDataIndex );
-		
-				for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					if ( anCells[i] == nNode )
-					{
-						return [ iDataIndex, _fnColumnIndexToVisible(oSettings, i ), i ];
-					}
-				}
-			}
-			return null;
-		};
-		
-		
-		/**
-		 * Update a table cell or row - this method will accept either a single value to
-		 * update the cell with, an array of values with one element for each column or
-		 * an object in the same format as the original data source. The function is
-		 * self-referencing in order to make the multi column updates easier.
-		 *  @param {object|array|string} mData Data to update the cell/row with
-		 *  @param {node|int} mRow TR element you want to update or the aoData index
-		 *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
-		 *  @param {bool} [bRedraw=true] Redraw the table or not
-		 *  @param {bool} [bAction=true] Perform predraw actions or not
-		 *  @returns {int} 0 on success, 1 on error
-		 */
-		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			var iVisibleColumn, i, iLen, sDisplay;
-			var iRow = (typeof mRow == 'object') ? 
-				_fnNodeToDataIndex(oSettings, mRow) : mRow;
-			
-			if ( typeof oSettings.__fnUpdateDeep == 'undefined' && $.isArray(mData) && typeof mData == 'object' )
-			{
-				/* Array update - update the whole row */
-				oSettings.aoData[iRow]._aData = mData.slice();
-				
-				/* Flag to the function that we are recursing */
-				oSettings.__fnUpdateDeep = true;
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-				oSettings.__fnUpdateDeep = undefined;
-			}
-			else if ( typeof oSettings.__fnUpdateDeep == 'undefined' && mData !== null && typeof mData == 'object' )
-			{
-				/* Object update - update the whole row - assume the developer gets the object right */
-				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
-		
-				oSettings.__fnUpdateDeep = true;
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-				oSettings.__fnUpdateDeep = undefined;
-			}
-			else
-			{
-				/* Individual cell update */
-				sDisplay = mData;
-				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
-				
-				if ( oSettings.aoColumns[iColumn].fnRender !== null )
-				{
-					sDisplay = oSettings.aoColumns[iColumn].fnRender( {
-						"iDataRow": iRow,
-						"iDataColumn": iColumn,
-						"aData": oSettings.aoData[iRow]._aData,
-						"oSettings": oSettings
-					} );
-					
-					if ( oSettings.aoColumns[iColumn].bUseRendered )
-					{
-						_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
-					}
-				}
-				
-				if ( oSettings.aoData[iRow].nTr !== null )
-				{
-					/* Do the actual HTML update */
-					_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
-				}
-			}
-			
-			/* Modify the search index for this row (strictly this is likely not needed, since fnReDraw
-			 * will rebuild the search array - however, the redraw might be disabled by the user)
-			 */
-			var iDisplayIndex = $.inArray( iRow, oSettings.aiDisplay );
-			oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow( oSettings, 
-				_fnGetRowData( oSettings, iRow, 'filter' ) );
-			
-			/* Perform pre-draw actions */
-			if ( typeof bAction == 'undefined' || bAction )
-			{
-				_fnAdjustColumnSizing( oSettings );
-			}
-			
-			/* Redraw the table */
-			if ( typeof bRedraw == 'undefined' || bRedraw )
-			{
-				_fnReDraw( oSettings );
-			}
-			return 0;
-		};
-		
-		
-		/**
-		 * Show a particular column
-		 *  @param {int} iCol The column whose display should be changed
-		 *  @param {bool} bShow Show (true) or hide (false) the column
-		 *  @param {bool} [bRedraw=true] Redraw the table or not
-		 */
-		this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			var i, iLen;
-			var iColumns = oSettings.aoColumns.length;
-			var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
-			
-			/* No point in doing anything if we are requesting what is already true */
-			if ( oSettings.aoColumns[iCol].bVisible == bShow )
-			{
-				return;
-			}
-			
-			/* Show the column */
-			if ( bShow )
-			{
-				var iInsert = 0;
-				for ( i=0 ; i<iCol ; i++ )
-				{
-					if ( oSettings.aoColumns[i].bVisible )
-					{
-						iInsert++;
-					}
-				}
-				
-				/* Need to decide if we should use appendChild or insertBefore */
-				bAppend = (iInsert >= _fnVisbleColumns( oSettings ));
-		
-				/* Which coloumn should we be inserting before? */
-				if ( !bAppend )
-				{
-					for ( i=iCol ; i<iColumns ; i++ )
-					{
-						if ( oSettings.aoColumns[i].bVisible )
-						{
-							iBefore = i;
-							break;
-						}
-					}
-				}
-		
-				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-				{
-					if ( oSettings.aoData[i].nTr !== null )
-					{
-						if ( bAppend )
-						{
-							oSettings.aoData[i].nTr.appendChild( 
-								oSettings.aoData[i]._anHidden[iCol]
-							);
-						}
-						else
-						{
-							oSettings.aoData[i].nTr.insertBefore(
-								oSettings.aoData[i]._anHidden[iCol], 
-								_fnGetTdNodes( oSettings, i )[iBefore] );
-						}
-					}
-				}
-			}
-			else
-			{
-				/* Remove a column from display */
-				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-				{
-					if ( oSettings.aoData[i].nTr !== null )
-					{
-						nTd = _fnGetTdNodes( oSettings, i )[iCol];
-						oSettings.aoData[i]._anHidden[iCol] = nTd;
-						nTd.parentNode.removeChild( nTd );
-					}
-				}
-			}
-		
-			/* Clear to set the visible flag */
-			oSettings.aoColumns[iCol].bVisible = bShow;
-		
-			/* Redraw the header and footer based on the new column visibility */
-			_fnDrawHead( oSettings, oSettings.aoHeader );
-			if ( oSettings.nTFoot )
-			{
-				_fnDrawHead( oSettings, oSettings.aoFooter );
-			}
-			
-			/* If there are any 'open' rows, then we need to alter the colspan for this col change */
-			for ( i=0, iLen=oSettings.aoOpenRows.length ; i<iLen ; i++ )
-			{
-				oSettings.aoOpenRows[i].nTr.colSpan = _fnVisbleColumns( oSettings );
-			}
-			
-			/* Do a redraw incase anything depending on the table columns needs it 
-			 * (built-in: scrolling) 
-			 */
-			if ( typeof bRedraw == 'undefined' || bRedraw )
-			{
-				_fnAdjustColumnSizing( oSettings );
-				_fnDraw( oSettings );
-			}
-			
-			_fnSaveState( oSettings );
-		};
-		
-		
-		/**
-		 * Change the pagination - provides the internal logic for pagination in a simple API 
-		 * function. With this function you can have a DataTables table go to the next, 
-		 * previous, first or last pages.
-		 *  @param {string} sAction Paging action to take: "first", "previous", "next" or "last"
-		 *  @param {bool} [bRedraw=true] Redraw the table or not
-		 */
-		this.fnPageChange = function ( sAction, bRedraw )
-		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
-			_fnPageChange( oSettings, sAction );
-			_fnCalculateEnd( oSettings );
-			
-			if ( typeof bRedraw == 'undefined' || bRedraw )
-			{
-				_fnDraw( oSettings );
-			}
-		};
 		
 		/**
 		 * Restore the table to it's original state in the DOM by removing all of DataTables 
 		 * enhancements, alterations to the DOM structure of the table and event listeners.
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      // This example is fairly pointless in reality, but shows how fnDestroy can be used
+		 *      var oTable = $('#example').dataTable();
+		 *      oTable.fnDestroy();
+		 *    } );
 		 */
 		this.fnDestroy = function ( )
 		{
@@ -6082,125 +5723,707 @@
 			oSettings = null;
 		};
 		
+		
 		/**
-		 * This function will make DataTables recalculate the column sizes, based on the data 
-		 * contained in the table and the sizes applied to the columns (in the DOM, CSS or 
-		 * through the sWidth parameter). This can be useful when the width of the table's 
-		 * parent element changes (for example a window resize).
-		 *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
+		 * Redraw the table
+		 *  @param {bool} [bComplete=true] Re-filter and resort (if enabled) the table before the draw.
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Re-draw the table - you wouldn't want to do it here, but it's an example :-)
+		 *      oTable.fnDraw();
+		 *    } );
 		 */
-		this.fnAdjustColumnSizing = function ( bRedraw )
+		this.fnDraw = function( bComplete )
 		{
-			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
-			_fnAdjustColumnSizing( oSettings );
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			if ( typeof bComplete != 'undefined' && bComplete === false )
+			{
+				_fnCalculateEnd( oSettings );
+				_fnDraw( oSettings );
+			}
+			else
+			{
+				_fnReDraw( oSettings );
+			}
+		};
+		
+		
+		/**
+		 * Filter the input based on data
+		 *  @param {string} sInput string to filter the table on
+		 *  @param {int|null} [iColumn] column to limit filtering to
+		 *  @param {bool} [bRegex=false] treat as regular expression or not
+		 *  @param {bool} [bSmart=true] perform smart filtering or not
+		 *  @param {bool} [bShowGlobal=true] show the input global filter in it's input box(es)
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Sometime later - filter...
+		 *      oTable.fnFilter( 'test string' );
+		 *    } );
+		 */
+		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			
+			if ( !oSettings.oFeatures.bFilter )
+			{
+				return;
+			}
+			
+			if ( typeof bRegex == 'undefined' )
+			{
+				bRegex = false;
+			}
+			
+			if ( typeof bSmart == 'undefined' )
+			{
+				bSmart = true;
+			}
+			
+			if ( typeof bShowGlobal == 'undefined' )
+			{
+				bShowGlobal = true;
+			}
+			
+			if ( typeof iColumn == "undefined" || iColumn === null )
+			{
+				/* Global filter */
+				_fnFilterComplete( oSettings, {
+					"sSearch":sInput,
+					"bRegex": bRegex,
+					"bSmart": bSmart
+				}, 1 );
+				
+				if ( bShowGlobal && typeof oSettings.aanFeatures.f != 'undefined' )
+				{
+					var n = oSettings.aanFeatures.f;
+					for ( var i=0, iLen=n.length ; i<iLen ; i++ )
+					{
+						$('input', n[i]).val( sInput );
+					}
+				}
+			}
+			else
+			{
+				/* Single column filter */
+				oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput;
+				oSettings.aoPreSearchCols[ iColumn ].bRegex = bRegex;
+				oSettings.aoPreSearchCols[ iColumn ].bSmart = bSmart;
+				_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
+			}
+		};
+		
+		
+		/**
+		 * Return an array with the data which is used to make up the table
+		 * or string if both row and column are given
+		 *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
+		 *    internal index (mapped to the TR element)
+		 *  @param {int} [iCol] Optional column index that you want the data of
+		 *  @returns {array|string} If mRow is undefined, then the data for all rows is
+		 *    returned. If mRow is defined, just data for that row, and is iCol is
+		 *    defined, only data for the designated cell is returned.
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      $('#example tbody td').click( function () {
+		 *        // Get the position of the current data from the node
+		 *        var aPos = oTable.fnGetPosition( this );
+		 *        
+		 *        // Get the data array for this row
+		 *        var aData = oTable.fnGetData( this.parentNode );
+		 *        
+		 *        // Update the data array and return the value
+		 *        aData[ aPos[1] ] = 'clicked';
+		 *        this.innerHTML = 'clicked';
+		 *      } );
+		 *      
+		 *      // Init DataTables
+		 *      oTable = $('#example').dataTable();
+		 *    } );
+		 */
+		this.fnGetData = function( mRow, iCol )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			
+			if ( typeof mRow != 'undefined' )
+			{
+				var iRow = (typeof mRow == 'object') ? 
+					_fnNodeToDataIndex(oSettings, mRow) : mRow;
+				
+				if ( typeof iCol != 'undefined' )
+				{
+					return _fnGetCellData( oSettings, iRow, iCol, '' );
+				}
+				return (typeof oSettings.aoData[iRow] != 'undefined') ? 
+					oSettings.aoData[iRow]._aData : null;
+			}
+			return _fnGetDataMaster( oSettings );
+		};
+		
+		
+		/**
+		 * The the TR nodes that are used in the table's body
+		 *  @param {int} [iRow] Optional row index for the TR element you want
+		 *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
+		 *    in the table's body, or iRow is defined, just the TR element requested.
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Get the nodes from the table
+		 *      var nNodes = oTable.fnGetNodes( );
+		 *    } );
+		 */
+		this.fnGetNodes = function( iRow )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			
+			if ( typeof iRow != 'undefined' )
+			{
+				return (typeof oSettings.aoData[iRow] != 'undefined') ? oSettings.aoData[iRow].nTr : null;
+			}
+			return _fnGetTrNodes( oSettings );
+		};
+		
+		
+		/**
+		 * Get the array indexes of a particular cell from it's DOM element
+		 * and column index including hidden columns
+		 *  @param {node} nNode this can either be a TR, TD or TH in the table's body
+		 *  @returns {int} If nNode is given as a TR, then a single index is returned, or
+		 *    if given as a cell, an array of [row index, column index (visible)] is given.
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      $('#example tbody td').click( function () {
+		 *        // Get the position of the current data from the node
+		 *        var aPos = oTable.fnGetPosition( this );
+		 *        
+		 *        // Get the data array for this row
+		 *        var aData = oTable.fnGetData( aPos[0] );
+		 *        
+		 *        // Update the data array and return the value
+		 *        aData[ aPos[1] ] = 'clicked';
+		 *        this.innerHTML = 'clicked';
+		 *      } );
+		 *      
+		 *      // Init DataTables
+		 *      oTable = $('#example').dataTable();
+		 *    } );
+		 */
+		this.fnGetPosition = function( nNode )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var sNodeName = nNode.nodeName.toUpperCase();
+			
+			if ( sNodeName == "TR" )
+			{
+				return _fnNodeToDataIndex(oSettings, nNode);
+			}
+			else if ( sNodeName == "TD" || sNodeName == "TH" )
+			{
+				var iDataIndex = _fnNodeToDataIndex(oSettings, nNode.parentNode);
+				var anCells = _fnGetTdNodes( oSettings, iDataIndex );
+		
+				for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					if ( anCells[i] == nNode )
+					{
+						return [ iDataIndex, _fnColumnIndexToVisible(oSettings, i ), i ];
+					}
+				}
+			}
+			return null;
+		};
+		
+		
+		/**
+		 * This function will place a new row directly after a row which is currently 
+		 * on display on the page, with the HTML contents that is passed into the 
+		 * function. This can be used, for example, to ask for confirmation that a 
+		 * particular record should be deleted.
+		 *  @param {node} nTr The table row to 'open'
+		 *  @param {string|node|jQuery} mHtml The HTML to put into the row
+		 *  @param {string} sClass Class to give the new TD cell
+		 *  @returns {node} The row opened
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable;
+		 *      
+		 *      // 'open' an information row when a row is clicked on
+		 *      $('#example tbody tr').click( function () {
+		 *        var that = this;
+		 *        oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *        
+		 *        // Then when the info row is clicked upon - close it
+		 *        $('#example .info_row').click( function () {
+		 *          oTable.fnClose(that);
+		 *        } );
+		 *      } );
+		 *      
+		 *      oTable = $('#example').dataTable();
+		 *    } );
+		 */
+		this.fnOpen = function( nTr, mHtml, sClass )
+		{
+			/* Find settings from table node */
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			
+			/* the old open one if there is one */
+			this.fnClose( nTr );
+			
+			var nNewRow = document.createElement("tr");
+			var nNewCell = document.createElement("td");
+			nNewRow.appendChild( nNewCell );
+			nNewCell.className = sClass;
+			nNewCell.colSpan = _fnVisbleColumns( oSettings );
+		
+			if( typeof mHtml.jquery != 'undefined' || typeof mHtml == "object" )
+			{
+				nNewCell.appendChild( mHtml );
+			}
+			else
+			{
+				nNewCell.innerHTML = mHtml;
+			}
+		
+			/* If the nTr isn't on the page at the moment - then we don't insert at the moment */
+			var nTrs = $('tr', oSettings.nTBody);
+			if ( $.inArray(nTr, nTrs) != -1 )
+			{
+				$(nNewRow).insertAfter(nTr);
+			}
+			
+			oSettings.aoOpenRows.push( {
+				"nTr": nNewRow,
+				"nParent": nTr
+			} );
+			
+			return nNewRow;
+		};
+		
+		
+		/**
+		 * Change the pagination - provides the internal logic for pagination in a simple API 
+		 * function. With this function you can have a DataTables table go to the next, 
+		 * previous, first or last pages.
+		 *  @param {string} sAction Paging action to take: "first", "previous", "next" or "last"
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      oTable.fnPageChange( 'next' );
+		 *    } );
+		 */
+		this.fnPageChange = function ( sAction, bRedraw )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			_fnPageChange( oSettings, sAction );
+			_fnCalculateEnd( oSettings );
 			
 			if ( typeof bRedraw == 'undefined' || bRedraw )
 			{
-				this.fnDraw( false );
-			}
-			else if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
-			{
-				/* If not redrawing, but scrolling, we want to apply the new column sizes anyway */
-				this.oApi._fnScrollDraw(oSettings);
+				_fnDraw( oSettings );
 			}
 		};
+		
 		
 		/**
-		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
-		 * return the resulting expression
-		 *  @param {string} sSelector jQuery selector
-		 *  @returns {object} jQuery object
+		 * Show a particular column
+		 *  @param {int} iCol The column whose display should be changed
+		 *  @param {bool} bShow Show (true) or hide (false) the column
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Hide the second column after initialisation
+		 *      oTable.fnSetColumnVis( 1, false );
+		 *    } );
 		 */
-		this.$ = function ( sSelector )
+		this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		{
-			// xxx - filtering, sorting, column visibility options
-			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
-			return $(this.oApi._fnGetTrNodes(oSettings)).filter(sSelector);
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var i, iLen;
+			var iColumns = oSettings.aoColumns.length;
+			var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
+			
+			/* No point in doing anything if we are requesting what is already true */
+			if ( oSettings.aoColumns[iCol].bVisible == bShow )
+			{
+				return;
+			}
+			
+			/* Show the column */
+			if ( bShow )
+			{
+				var iInsert = 0;
+				for ( i=0 ; i<iCol ; i++ )
+				{
+					if ( oSettings.aoColumns[i].bVisible )
+					{
+						iInsert++;
+					}
+				}
+				
+				/* Need to decide if we should use appendChild or insertBefore */
+				bAppend = (iInsert >= _fnVisbleColumns( oSettings ));
+		
+				/* Which coloumn should we be inserting before? */
+				if ( !bAppend )
+				{
+					for ( i=iCol ; i<iColumns ; i++ )
+					{
+						if ( oSettings.aoColumns[i].bVisible )
+						{
+							iBefore = i;
+							break;
+						}
+					}
+				}
+		
+				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+				{
+					if ( oSettings.aoData[i].nTr !== null )
+					{
+						if ( bAppend )
+						{
+							oSettings.aoData[i].nTr.appendChild( 
+								oSettings.aoData[i]._anHidden[iCol]
+							);
+						}
+						else
+						{
+							oSettings.aoData[i].nTr.insertBefore(
+								oSettings.aoData[i]._anHidden[iCol], 
+								_fnGetTdNodes( oSettings, i )[iBefore] );
+						}
+					}
+				}
+			}
+			else
+			{
+				/* Remove a column from display */
+				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+				{
+					if ( oSettings.aoData[i].nTr !== null )
+					{
+						nTd = _fnGetTdNodes( oSettings, i )[iCol];
+						oSettings.aoData[i]._anHidden[iCol] = nTd;
+						nTd.parentNode.removeChild( nTd );
+					}
+				}
+			}
+		
+			/* Clear to set the visible flag */
+			oSettings.aoColumns[iCol].bVisible = bShow;
+		
+			/* Redraw the header and footer based on the new column visibility */
+			_fnDrawHead( oSettings, oSettings.aoHeader );
+			if ( oSettings.nTFoot )
+			{
+				_fnDrawHead( oSettings, oSettings.aoFooter );
+			}
+			
+			/* If there are any 'open' rows, then we need to alter the colspan for this col change */
+			for ( i=0, iLen=oSettings.aoOpenRows.length ; i<iLen ; i++ )
+			{
+				oSettings.aoOpenRows[i].nTr.colSpan = _fnVisbleColumns( oSettings );
+			}
+			
+			/* Do a redraw incase anything depending on the table columns needs it 
+			 * (built-in: scrolling) 
+			 */
+			if ( typeof bRedraw == 'undefined' || bRedraw )
+			{
+				_fnAdjustColumnSizing( oSettings );
+				_fnDraw( oSettings );
+			}
+			
+			_fnSaveState( oSettings );
 		};
 		
 		
+		/**
+		 * Get the settings for a particular table for external manipulation
+		 *  @returns {object} DataTables settings object. See 
+		 *    {@link DataTable.models.oSettings}
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      var oSettings = oTable.fnSettings();
+		 *      
+		 *      // Show an example parameter from the settings
+		 *      alert( oSettings._iDisplayStart );
+		 *    } );
+		 */
+		this.fnSettings = function()
+		{
+			return _fnSettingsFromNode( this[_oExt.iApiIndex] );
+		};
+		
+		
+		/**
+		 * Sort the table by a particular row
+		 *  @param {int} iCol the data index to sort on. Note that this will not match the 
+		 *    'display index' if you have hidden data entries
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Sort immediately with columns 0 and 1
+		 *      oTable.fnSort( [ [0,'asc'], [1,'asc'] ] );
+		 *    } );
+		 */
+		this.fnSort = function( aaSort )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			oSettings.aaSorting = aaSort;
+			_fnSort( oSettings );
+		};
+		
+		
+		/**
+		 * Attach a sort listener to an element for a given column
+		 *  @param {node} nNode the element to attach the sort listener to
+		 *  @param {int} iColumn the column that a click on this node will sort on
+		 *  @param {function} [fnCallback] callback function when sort is run
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      
+		 *      // Sort on column 1, when 'sorter' is clicked on
+		 *      oTable.fnSortListener( document.getElementById('sorter'), 1 );
+		 *    } );
+		 */
+		this.fnSortListener = function( nNode, iColumn, fnCallback )
+		{
+			_fnSortAttachListener( _fnSettingsFromNode( this[_oExt.iApiIndex] ), nNode, iColumn,
+			 	fnCallback );
+		};
+		
+		
+		/**
+		 * Update a table cell or row - this method will accept either a single value to
+		 * update the cell with, an array of values with one element for each column or
+		 * an object in the same format as the original data source. The function is
+		 * self-referencing in order to make the multi column updates easier.
+		 *  @param {object|array|string} mData Data to update the cell/row with
+		 *  @param {node|int} mRow TR element you want to update or the aoData index
+		 *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *  @param {bool} [bAction=true] Perform predraw actions or not
+		 *  @returns {int} 0 on success, 1 on error
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      oTable.fnUpdate( 'Example update', 0, 0 ); // Single cell
+		 *      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
+		 *    } );
+		 */
+		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var iVisibleColumn, i, iLen, sDisplay;
+			var iRow = (typeof mRow == 'object') ? 
+				_fnNodeToDataIndex(oSettings, mRow) : mRow;
+			
+			if ( typeof oSettings.__fnUpdateDeep == 'undefined' && $.isArray(mData) && typeof mData == 'object' )
+			{
+				/* Array update - update the whole row */
+				oSettings.aoData[iRow]._aData = mData.slice();
+				
+				/* Flag to the function that we are recursing */
+				oSettings.__fnUpdateDeep = true;
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
+				}
+				oSettings.__fnUpdateDeep = undefined;
+			}
+			else if ( typeof oSettings.__fnUpdateDeep == 'undefined' && mData !== null && typeof mData == 'object' )
+			{
+				/* Object update - update the whole row - assume the developer gets the object right */
+				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
+		
+				oSettings.__fnUpdateDeep = true;
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
+				}
+				oSettings.__fnUpdateDeep = undefined;
+			}
+			else
+			{
+				/* Individual cell update */
+				sDisplay = mData;
+				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+				
+				if ( oSettings.aoColumns[iColumn].fnRender !== null )
+				{
+					sDisplay = oSettings.aoColumns[iColumn].fnRender( {
+						"iDataRow": iRow,
+						"iDataColumn": iColumn,
+						"aData": oSettings.aoData[iRow]._aData,
+						"oSettings": oSettings
+					} );
+					
+					if ( oSettings.aoColumns[iColumn].bUseRendered )
+					{
+						_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+					}
+				}
+				
+				if ( oSettings.aoData[iRow].nTr !== null )
+				{
+					/* Do the actual HTML update */
+					_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
+				}
+			}
+			
+			/* Modify the search index for this row (strictly this is likely not needed, since fnReDraw
+			 * will rebuild the search array - however, the redraw might be disabled by the user)
+			 */
+			var iDisplayIndex = $.inArray( iRow, oSettings.aiDisplay );
+			oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow( oSettings, 
+				_fnGetRowData( oSettings, iRow, 'filter' ) );
+			
+			/* Perform pre-draw actions */
+			if ( typeof bAction == 'undefined' || bAction )
+			{
+				_fnAdjustColumnSizing( oSettings );
+			}
+			
+			/* Redraw the table */
+			if ( typeof bRedraw == 'undefined' || bRedraw )
+			{
+				_fnReDraw( oSettings );
+			}
+			return 0;
+		};
+		
+		
+		/**
+		 * Provide a common method for plug-ins to check the version of DataTables being used, in order
+		 * to ensure compatibility.
+		 *  @param {string} sVersion Version string to check for, in the format "X.Y.Z". Note that the
+		 *    formats "X" and "X.Y" are also acceptable.
+		 *  @returns {boolean} true if this version of DataTables is greater or equal to the required
+		 *    version, or false if this version of DataTales is not suitable
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
+		 *    } );
+		 */
+		this.fnVersionCheck = _oExt.fnVersionCheck;
 		
 		
 		/*
-		 * This is really a good bit rubbish... - To be fixed in 2.0
+		 * This is really a good bit rubbish this method of exposing the internal methods
+		 * publically... - To be fixed in 2.0 using methods on the prototype
 		 */
-		this.oApi._fnExternApiFunc = _fnExternApiFunc;
-		this.oApi._fnInitialise = _fnInitialise;
-		this.oApi._fnInitComplete = _fnInitComplete;
-		this.oApi._fnLanguageProcess = _fnLanguageProcess;
-		this.oApi._fnAddColumn = _fnAddColumn;
-		this.oApi._fnColumnOptions = _fnColumnOptions;
-		this.oApi._fnAddData = _fnAddData;
-		this.oApi._fnCreateTr = _fnCreateTr;
-		this.oApi._fnGatherData = _fnGatherData;
-		this.oApi._fnBuildHead = _fnBuildHead;
-		this.oApi._fnDrawHead = _fnDrawHead;
-		this.oApi._fnDraw = _fnDraw;
-		this.oApi._fnReDraw = _fnReDraw;
-		this.oApi._fnAjaxUpdate = _fnAjaxUpdate;
-		this.oApi._fnAjaxParameters = _fnAjaxParameters;
-		this.oApi._fnAjaxUpdateDraw = _fnAjaxUpdateDraw;
-		this.oApi._fnServerParams = _fnServerParams;
-		this.oApi._fnAddOptionsHtml = _fnAddOptionsHtml;
-		this.oApi._fnFeatureHtmlTable = _fnFeatureHtmlTable;
-		this.oApi._fnScrollDraw = _fnScrollDraw;
-		this.oApi._fnAdjustColumnSizing = _fnAdjustColumnSizing;
-		this.oApi._fnFeatureHtmlFilter = _fnFeatureHtmlFilter;
-		this.oApi._fnFilterComplete = _fnFilterComplete;
-		this.oApi._fnFilterCustom = _fnFilterCustom;
-		this.oApi._fnFilterColumn = _fnFilterColumn;
-		this.oApi._fnFilter = _fnFilter;
-		this.oApi._fnBuildSearchArray = _fnBuildSearchArray;
-		this.oApi._fnBuildSearchRow = _fnBuildSearchRow;
-		this.oApi._fnFilterCreateSearch = _fnFilterCreateSearch;
-		this.oApi._fnDataToSearch = _fnDataToSearch;
-		this.oApi._fnSort = _fnSort;
-		this.oApi._fnSortAttachListener = _fnSortAttachListener;
-		this.oApi._fnSortingClasses = _fnSortingClasses;
-		this.oApi._fnFeatureHtmlPaginate = _fnFeatureHtmlPaginate;
-		this.oApi._fnPageChange = _fnPageChange;
-		this.oApi._fnFeatureHtmlInfo = _fnFeatureHtmlInfo;
-		this.oApi._fnUpdateInfo = _fnUpdateInfo;
-		this.oApi._fnFeatureHtmlLength = _fnFeatureHtmlLength;
-		this.oApi._fnFeatureHtmlProcessing = _fnFeatureHtmlProcessing;
-		this.oApi._fnProcessingDisplay = _fnProcessingDisplay;
-		this.oApi._fnVisibleToColumnIndex = _fnVisibleToColumnIndex;
-		this.oApi._fnColumnIndexToVisible = _fnColumnIndexToVisible;
-		this.oApi._fnNodeToDataIndex = _fnNodeToDataIndex;
-		this.oApi._fnVisbleColumns = _fnVisbleColumns;
-		this.oApi._fnCalculateEnd = _fnCalculateEnd;
-		this.oApi._fnConvertToWidth = _fnConvertToWidth;
-		this.oApi._fnCalculateColumnWidths = _fnCalculateColumnWidths;
-		this.oApi._fnScrollingWidthAdjust = _fnScrollingWidthAdjust;
-		this.oApi._fnGetWidestNode = _fnGetWidestNode;
-		this.oApi._fnGetMaxLenString = _fnGetMaxLenString;
-		this.oApi._fnStringToCss = _fnStringToCss;
-		this.oApi._fnArrayCmp = _fnArrayCmp;
-		this.oApi._fnDetectType = _fnDetectType;
-		this.oApi._fnSettingsFromNode = _fnSettingsFromNode;
-		this.oApi._fnGetDataMaster = _fnGetDataMaster;
-		this.oApi._fnGetTrNodes = _fnGetTrNodes;
-		this.oApi._fnGetTdNodes = _fnGetTdNodes;
-		this.oApi._fnEscapeRegex = _fnEscapeRegex;
-		this.oApi._fnDeleteIndex = _fnDeleteIndex;
-		this.oApi._fnReOrderIndex = _fnReOrderIndex;
-		this.oApi._fnColumnOrdering = _fnColumnOrdering;
-		this.oApi._fnLog = _fnLog;
-		this.oApi._fnClearTable = _fnClearTable;
-		this.oApi._fnSaveState = _fnSaveState;
-		this.oApi._fnLoadState = _fnLoadState;
-		this.oApi._fnCreateCookie = _fnCreateCookie;
-		this.oApi._fnReadCookie = _fnReadCookie;
-		this.oApi._fnDetectHeader = _fnDetectHeader;
-		this.oApi._fnGetUniqueThs = _fnGetUniqueThs;
-		this.oApi._fnScrollBarWidth = _fnScrollBarWidth;
-		this.oApi._fnApplyToChildren = _fnApplyToChildren;
-		this.oApi._fnMap = _fnMap;
-		this.oApi._fnGetRowData = _fnGetRowData;
-		this.oApi._fnGetCellData = _fnGetCellData;
-		this.oApi._fnSetCellData = _fnSetCellData;
-		this.oApi._fnGetObjectDataFn = _fnGetObjectDataFn;
-		this.oApi._fnSetObjectDataFn = _fnSetObjectDataFn;
+		
+		/*
+		 * Variable: oApi
+		 * Purpose:  Container for publicly exposed 'private' functions
+		 * Scope:    jQuery.dataTable
+		 */
+		this.oApi = {
+			"_fnExternApiFunc": _fnExternApiFunc,
+			"_fnInitialise": _fnInitialise,
+			"_fnInitComplete": _fnInitComplete,
+			"_fnLanguageProcess": _fnLanguageProcess,
+			"_fnAddColumn": _fnAddColumn,
+			"_fnColumnOptions": _fnColumnOptions,
+			"_fnAddData": _fnAddData,
+			"_fnCreateTr": _fnCreateTr,
+			"_fnGatherData": _fnGatherData,
+			"_fnBuildHead": _fnBuildHead,
+			"_fnDrawHead": _fnDrawHead,
+			"_fnDraw": _fnDraw,
+			"_fnReDraw": _fnReDraw,
+			"_fnAjaxUpdate": _fnAjaxUpdate,
+			"_fnAjaxParameters": _fnAjaxParameters,
+			"_fnAjaxUpdateDraw": _fnAjaxUpdateDraw,
+			"_fnServerParams": _fnServerParams,
+			"_fnAddOptionsHtml": _fnAddOptionsHtml,
+			"_fnFeatureHtmlTable": _fnFeatureHtmlTable,
+			"_fnScrollDraw": _fnScrollDraw,
+			"_fnAdjustColumnSizing": _fnAdjustColumnSizing,
+			"_fnFeatureHtmlFilter": _fnFeatureHtmlFilter,
+			"_fnFilterComplete": _fnFilterComplete,
+			"_fnFilterCustom": _fnFilterCustom,
+			"_fnFilterColumn": _fnFilterColumn,
+			"_fnFilter": _fnFilter,
+			"_fnBuildSearchArray": _fnBuildSearchArray,
+			"_fnBuildSearchRow": _fnBuildSearchRow,
+			"_fnFilterCreateSearch": _fnFilterCreateSearch,
+			"_fnDataToSearch": _fnDataToSearch,
+			"_fnSort": _fnSort,
+			"_fnSortAttachListener": _fnSortAttachListener,
+			"_fnSortingClasses": _fnSortingClasses,
+			"_fnFeatureHtmlPaginate": _fnFeatureHtmlPaginate,
+			"_fnPageChange": _fnPageChange,
+			"_fnFeatureHtmlInfo": _fnFeatureHtmlInfo,
+			"_fnUpdateInfo": _fnUpdateInfo,
+			"_fnFeatureHtmlLength": _fnFeatureHtmlLength,
+			"_fnFeatureHtmlProcessing": _fnFeatureHtmlProcessing,
+			"_fnProcessingDisplay": _fnProcessingDisplay,
+			"_fnVisibleToColumnIndex": _fnVisibleToColumnIndex,
+			"_fnColumnIndexToVisible": _fnColumnIndexToVisible,
+			"_fnNodeToDataIndex": _fnNodeToDataIndex,
+			"_fnVisbleColumns": _fnVisbleColumns,
+			"_fnCalculateEnd": _fnCalculateEnd,
+			"_fnConvertToWidth": _fnConvertToWidth,
+			"_fnCalculateColumnWidths": _fnCalculateColumnWidths,
+			"_fnScrollingWidthAdjust": _fnScrollingWidthAdjust,
+			"_fnGetWidestNode": _fnGetWidestNode,
+			"_fnGetMaxLenString": _fnGetMaxLenString,
+			"_fnStringToCss": _fnStringToCss,
+			"_fnArrayCmp": _fnArrayCmp,
+			"_fnDetectType": _fnDetectType,
+			"_fnSettingsFromNode": _fnSettingsFromNode,
+			"_fnGetDataMaster": _fnGetDataMaster,
+			"_fnGetTrNodes": _fnGetTrNodes,
+			"_fnGetTdNodes": _fnGetTdNodes,
+			"_fnEscapeRegex": _fnEscapeRegex,
+			"_fnDeleteIndex": _fnDeleteIndex,
+			"_fnReOrderIndex": _fnReOrderIndex,
+			"_fnColumnOrdering": _fnColumnOrdering,
+			"_fnLog": _fnLog,
+			"_fnClearTable": _fnClearTable,
+			"_fnSaveState": _fnSaveState,
+			"_fnLoadState": _fnLoadState,
+			"_fnCreateCookie": _fnCreateCookie,
+			"_fnReadCookie": _fnReadCookie,
+			"_fnDetectHeader": _fnDetectHeader,
+			"_fnGetUniqueThs": _fnGetUniqueThs,
+			"_fnScrollBarWidth": _fnScrollBarWidth,
+			"_fnApplyToChildren": _fnApplyToChildren,
+			"_fnMap": _fnMap,
+			"_fnGetRowData": _fnGetRowData,
+			"_fnGetCellData": _fnGetCellData,
+			"_fnSetCellData": _fnSetCellData,
+			"_fnGetObjectDataFn": _fnGetObjectDataFn,
+			"_fnSetObjectDataFn": _fnSetObjectDataFn
+		};
 		
 		
 		/**
