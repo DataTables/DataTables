@@ -20,7 +20,7 @@ var _oExt = {};
  * Notes:    Allowed format is a.b.c.d.e where:
  *   a:int, b:int, c:int, d:string(dev|beta), e:int. d and e are optional
  */
-_oExt.sVersion = "1.8.3.dev";
+_oExt.sVersion = "1.9.0.dev";
 
 /*
  * Variable: sErrMode
