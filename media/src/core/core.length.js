@@ -1,13 +1,10 @@
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: Length change
- */
 
-/*
- * Function: _fnFeatureHtmlLength
- * Purpose:  Generate the node required for user display length changing
- * Returns:  node
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Generate the node required for user display length changing
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {node} Display length feature node
+ *  @private
  */
 function _fnFeatureHtmlLength ( oSettings )
 {
@@ -93,11 +90,10 @@ function _fnFeatureHtmlLength ( oSettings )
 }
 
 
-/*
- * Function: _fnCalculateEnd
- * Purpose:  Rcalculate the end point based on the start point
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Rcalculate the end point based on the start point
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnCalculateEnd( oSettings )
 {
@@ -121,3 +117,4 @@ function _fnCalculateEnd( oSettings )
 		}
 	}
 }
+

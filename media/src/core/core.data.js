@@ -1,14 +1,13 @@
 
 
-/*
- * Function: _fnAddData
- * Purpose:  Add a data array to the table, creating DOM node etc
- * Returns:  int: - >=0 if successful (index of new aoData entry), -1 if failed
- * Inputs:   object:oSettings - dataTables settings object
- *           array:aData - data array to be added
- * Notes:    There are two basic methods for DataTables to get data to display - a JS array
- *   (which is dealt with by this function), and the DOM, which has it's own optimised
- *   function (_fnGatherData). Be careful to make the same changes here as there and vice-versa
+/**
+ * Add a data array to the table, creating DOM node etc. This is the parallel to 
+ * _fnGatherData, but for adding rows from a Javascript source, rather than a
+ * DOM source.
+ *  @param {object} oSettings dataTables settings object
+ *  @param {array} aData data array to be added
+ *  @returns {int} >=0 if successful (index of new aoData entry), -1 if failed
+ *  @private
  */
 function _fnAddData ( oSettings, aDataSupplied )
 {
@@ -76,13 +75,11 @@ function _fnAddData ( oSettings, aDataSupplied )
 	return iRow;
 }
 
-/*
- * Function: _fnGatherData
- * Purpose:  Read in the data from the target table from the DOM
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- * Notes:    This is a optimised version of _fnAddData (more or less) for reading information
- *   from the DOM. The basic actions must be identical in the two functions.
+
+/**
+ * Read in the data from the target table from the DOM
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnGatherData( oSettings )
 {
@@ -234,15 +231,12 @@ function _fnGatherData( oSettings )
 }
 
 
-
-
-
-/*
- * Function: _fnNodeToDataIndex
- * Purpose:  Take a TR element and convert it to an index in aoData
- * Returns:  int:i - index if found, null if not
- * Inputs:   object:s - dataTables settings object
- *           node:n - the TR element to find
+/**
+ * Take a TR element and convert it to an index in aoData
+ *  @param {object} s dataTables settings object
+ *  @param {node} n the TR element to find
+ *  @returns {int} index if found, null if not
+ *  @private
  */
 function _fnNodeToDataIndex( s, n )
 {
@@ -271,15 +265,13 @@ function _fnNodeToDataIndex( s, n )
 }
 
 
-
-
-/*
- * Function: _fnGetRowData
- * Purpose:  Get an array of data for a given row from the internal data cache
- * Returns:  array: - Data array
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iRow - aoData row id
- *           string:sSpecific - data get type ('type' 'filter' 'sort')
+/**
+ * Get an array of data for a given row from the internal data cache
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow aoData row id
+ *  @param {string} sSpecific data get type ('type' 'filter' 'sort')
+ *  @returns {array} Data array
+ *  @private
  */
 function _fnGetRowData( oSettings, iRow, sSpecific )
 {
@@ -291,14 +283,15 @@ function _fnGetRowData( oSettings, iRow, sSpecific )
 	return out;
 }
 
-/*
- * Function: _fnGetCellData
- * Purpose:  Get the data for a given cell from the internal cache, taking into account data mapping
- * Returns:  *: - Cell data
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iRow - aoData row id
- *           int:iCol - Column index
- *           string:sSpecific - data get type ('display', 'type' 'filter' 'sort')
+
+/**
+ * Get the data for a given cell from the internal cache, taking into account data mapping
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow aoData row id
+ *  @param {int} iCol Column index
+ *  @param {string} sSpecific data get type ('display', 'type' 'filter' 'sort')
+ *  @returns {*} Cell data
+ *  @private
  */
 function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 {
@@ -335,14 +328,14 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 	return sData;
 }
 
-/*
- * Function: _fnSetCellData
- * Purpose:  Set the value for a specific cell, into the internal data cache
- * Returns:  *: - Cell data
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iRow - aoData row id
- *           int:iCol - Column index
- *           *:val - Value to set
+
+/**
+ * Set the value for a specific cell, into the internal data cache
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow aoData row id
+ *  @param {int} iCol Column index
+ *  @param {*} val Value to set
+ *  @private
  */
 function _fnSetCellData( oSettings, iRow, iCol, val )
 {
@@ -352,12 +345,13 @@ function _fnSetCellData( oSettings, iRow, iCol, val )
 	oCol.fnSetData( oData, val );
 }
 
-/*
- * Function: _fnGetObjectDataFn
- * Purpose:  Return a function that can be used to get data from a source object, taking
- *           into account the ability to use nested objects as a source
- * Returns:  function: - Data get function
- * Inputs:   string|int|function:mSource - The data source for the object
+
+/**
+ * Return a function that can be used to get data from a source object, taking
+ * into account the ability to use nested objects as a source
+ *  @param {string|int|function} mSource The data source for the object
+ *  @returns {function} Data get function
+ *  @private
  */
 function _fnGetObjectDataFn( mSource )
 {
@@ -413,12 +407,13 @@ function _fnGetObjectDataFn( mSource )
 	}
 }
 
-/*
- * Function: _fnSetObjectDataFn
- * Purpose:  Return a function that can be used to set data from a source object, taking
- *           into account the ability to use nested objects as a source
- * Returns:  function: - Data set function
- * Inputs:   string|int|function:mSource - The data source for the object
+
+/**
+ * Return a function that can be used to set data from a source object, taking
+ * into account the ability to use nested objects as a source
+ *  @param {string|int|function} mSource The data source for the object
+ *  @returns {function} Data set function
+ *  @private
  */
 function _fnSetObjectDataFn( mSource )
 {
@@ -471,11 +466,12 @@ function _fnSetObjectDataFn( mSource )
 	}
 }
 
-/*
- * Function: _fnGetDataMaster
- * Purpose:  Return an array with the full table data
- * Returns:  array array:aData - Master data array
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Return an array with the full table data
+ *  @param {object} oSettings dataTables settings object
+ *  @returns array {array} aData Master data array
+ *  @private
  */
 function _fnGetDataMaster ( oSettings )
 {
@@ -489,11 +485,10 @@ function _fnGetDataMaster ( oSettings )
 }
 
 
-/*
- * Function: _fnClearTable
- * Purpose:  Nuke the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Nuke the table
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnClearTable( oSettings )
 {
@@ -504,13 +499,12 @@ function _fnClearTable( oSettings )
 }
 
 
-/*
- * Function: _fnDeleteIndex
- * Purpose:  Take an array of integers (index array) and remove a target integer (value - not 
- *             the key!)
- * Returns:  -
- * Inputs:   a:array int - Index array to target
- *           int:iTarget - value to find
+ /**
+ * Take an array of integers (index array) and remove a target integer (value - not 
+ * the key!)
+ *  @param {array} a Index array to target
+ *  @param {int} iTarget value to find
+ *  @private
  */
 function _fnDeleteIndex( a, iTarget )
 {
@@ -533,3 +527,4 @@ function _fnDeleteIndex( a, iTarget )
 		a.splice( iTargetIndex, 1 );
 	}
 }
+

@@ -1,14 +1,10 @@
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: HTML info
- */
-
-/*
- * Function: _fnFeatureHtmlInfo
- * Purpose:  Generate the node required for the info display
- * Returns:  node
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Generate the node required for the info display
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {node} Information element
+ *  @private
  */
 function _fnFeatureHtmlInfo ( oSettings )
 {
@@ -34,11 +30,11 @@ function _fnFeatureHtmlInfo ( oSettings )
 	return nInfo;
 }
 
-/*
- * Function: _fnUpdateInfo
- * Purpose:  Update the information elements in the display
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Update the information elements in the display
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnUpdateInfo ( oSettings )
 {
@@ -108,3 +104,4 @@ function _fnUpdateInfo ( oSettings )
 		$(n[i]).html( sOut );
 	}
 }
+

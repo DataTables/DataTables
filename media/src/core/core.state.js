@@ -1,10 +1,9 @@
 
 
-/*
- * Function: _fnSaveState
- * Purpose:  Save the state of a table in a cookie such that the page can be reloaded
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Save the state of a table in a cookie such that the page can be reloaded
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnSaveState ( oSettings )
 {
@@ -64,12 +63,12 @@ function _fnSaveState ( oSettings )
 		oSettings.iCookieDuration, oSettings.sCookiePrefix, oSettings.fnCookieCallback );
 }
 
-/*
- * Function: _fnLoadState
- * Purpose:  Attempt to load a saved table state from a cookie
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           object:oInit - DataTables init object so we can override settings
+
+/**
+ * Attempt to load a saved table state from a cookie
+ *  @param {object} oSettings dataTables settings object
+ *  @param {object} oInit DataTables init object so we can override settings
+ *  @private
  */
 function _fnLoadState ( oSettings, oInit )
 {
@@ -156,15 +155,15 @@ function _fnLoadState ( oSettings, oInit )
 	}
 }
 
-/*
- * Function: _fnCreateCookie
- * Purpose:  Create a new cookie with a value to store the state of a table
- * Returns:  -
- * Inputs:   string:sName - name of the cookie to create
- *           string:sValue - the value the cookie should take
- *           int:iSecs - duration of the cookie
- *           string:sBaseName - sName is made up of the base + file name - this is the base
- *           function:fnCallback - User definable function to modify the cookie
+
+/**
+ * Create a new cookie with a value to store the state of a table
+ *  @param {string} sName name of the cookie to create
+ *  @param {string} sValue the value the cookie should take
+ *  @param {int} iSecs duration of the cookie
+ *  @param {string} sBaseName sName is made up of the base + file name - this is the base
+ *  @param {function} fnCallback User definable function to modify the cookie
+ *  @private
  */
 function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 {
@@ -231,11 +230,12 @@ function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 	document.cookie = sFullCookie;
 }
 
-/*
- * Function: _fnReadCookie
- * Purpose:  Read an old cookie to get a cookie with an old table state
- * Returns:  string: - contents of the cookie - or null if no cookie with that name found
- * Inputs:   string:sName - name of the cookie to read
+
+/**
+ * Read an old cookie to get a cookie with an old table state
+ *  @param {string} sName name of the cookie to read
+ *  @returns {string} contents of the cookie - or null if no cookie with that name found
+ *  @private
  */
 function _fnReadCookie ( sName )
 {
@@ -260,3 +260,4 @@ function _fnReadCookie ( sName )
 	}
 	return null;
 }
+

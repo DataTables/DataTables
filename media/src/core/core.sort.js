@@ -1,19 +1,10 @@
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: Sorting
- */
-
-/*
- * Function: _fnSort
- * Purpose:  Change the order of the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           bool:bApplyClasses - optional - should we apply classes or not
- * Notes:    We always sort the master array and then apply a filter again
- *   if it is needed. This probably isn't optimal - but atm I can't think
- *   of any other way which is (each has disadvantages). we want to sort aiDisplayMaster - 
- *   but according to aoData[]._aData
+/**
+ * Change the order of the table
+ *  @param {object} oSettings dataTables settings object
+ *  @param {bool} bApplyClasses optional - should we apply classes or not
+ *  @private
  */
 function _fnSort ( oSettings, bApplyClasses )
 {
@@ -156,14 +147,14 @@ function _fnSort ( oSettings, bApplyClasses )
 	}
 }
 
-/*
- * Function: _fnSortAttachListener
- * Purpose:  Attach a sort handler (click) to a node
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           node:nNode - node to attach the handler to
- *           int:iDataIndex - column sorting index
- *           function:fnCallback - callback function - optional
+
+/**
+ * Attach a sort handler (click) to a node
+ *  @param {object} oSettings dataTables settings object
+ *  @param {node} nNode node to attach the handler to
+ *  @param {int} iDataIndex column sorting index
+ *  @param {function} [fnCallback] callback function
+ *  @private
  */
 function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 {
@@ -275,12 +266,12 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 	} );
 }
 
-/*
- * Function: _fnSortingClasses
- * Purpose:  Set the sortting classes on the header
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- * Notes:    It is safe to call this function when bSort and bSortClasses are false
+
+/**
+ * Set the sorting classes on the header, Note: it is safe to call this function 
+ * when bSort and bSortClasses are false
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnSortingClasses( oSettings )
 {
@@ -429,3 +420,4 @@ function _fnSortingClasses( oSettings )
 		}
 	}
 }
+

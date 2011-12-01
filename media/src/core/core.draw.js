@@ -1,11 +1,10 @@
 
 
-/*
- * Function: _fnCreateTr
- * Purpose:  Create a new TR element (and it's TD children) for a row
- * Returns:  void
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iRow - Row to consider
+/**
+ * Create a new TR element (and it's TD children) for a row
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow Row to consider
+ *  @private
  */
 function _fnCreateTr ( oSettings, iRow )
 {
@@ -70,13 +69,10 @@ function _fnCreateTr ( oSettings, iRow )
 }
 
 
-
-
-/*
- * Function: _fnBuildHead
- * Purpose:  Create the HTML header for the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Create the HTML header for the table
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnBuildHead( oSettings )
 {
@@ -190,24 +186,18 @@ function _fnBuildHead( oSettings )
 }
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Drawing functions
- */
-
-/*
- * Function: _fnDrawHead
- * Purpose:  Draw the header (or footer) element based on the column visibility states. The
- *           methodology here is to use the layout array from _fnDetectHeader, modified for
- *           the instantaneous column visibility, to construct the new layout. The grid is
- *           traversed over cell at a time in a rows x columns grid fashion, although each 
- *           cell insert can cover multiple elements in the grid - which is tracks using the
- *           aApplied array. Cell inserts in the grid will only occur where there isn't
- *           already a cell in that position.
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           array objects:aoSource - Layout array from _fnDetectHeader
- *           boolean:bIncludeHidden - If true then include the hidden columns in the calc, 
- *             - optional: default false
+/**
+ * Draw the header (or footer) element based on the column visibility states. The
+ * methodology here is to use the layout array from _fnDetectHeader, modified for
+ * the instantaneous column visibility, to construct the new layout. The grid is
+ * traversed over cell at a time in a rows x columns grid fashion, although each 
+ * cell insert can cover multiple elements in the grid - which is tracks using the
+ * aApplied array. Cell inserts in the grid will only occur where there isn't
+ * already a cell in that position.
+ *  @param {object} oSettings dataTables settings object
+ *  @param array {objects} aoSource Layout array from _fnDetectHeader
+ *  @param {boolean} [bIncludeHidden=false] If true then include the hidden columns in the calc, 
+ *  @private
  */
 function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 {
@@ -293,11 +283,11 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 	}
 }
 
-/*
- * Function: _fnDraw
- * Purpose:  Insert the required TR nodes into the table for display
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Insert the required TR nodes into the table for display
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnDraw( oSettings )
 {
@@ -517,11 +507,11 @@ function _fnDraw( oSettings )
 	}
 }
 
-/*
- * Function: _fnReDraw
- * Purpose:  Redraw the table - taking account of the various features which are enabled
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Redraw the table - taking account of the various features which are enabled
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnReDraw( oSettings )
 {
@@ -542,11 +532,12 @@ function _fnReDraw( oSettings )
 	}
 }
 
-/*
- * Function: _fnAjaxUpdate
- * Purpose:  Update the table using an Ajax call
- * Returns:  bool: block the table drawing or not
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Update the table using an Ajax call
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {boolean} Block the table drawing or not
+ *  @private
  */
 function _fnAjaxUpdate( oSettings )
 {
@@ -570,11 +561,12 @@ function _fnAjaxUpdate( oSettings )
 	}
 }
 
-/*
- * Function: _fnAjaxParameters
- * Purpose:  Build up the parameters in an object needed for a server-side processing request
- * Returns:  bool: block the table drawing or not
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Build up the parameters in an object needed for a server-side processing request
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {bool} block the table drawing or not
+ *  @private
  */
 function _fnAjaxParameters( oSettings )
 {
@@ -635,12 +627,12 @@ function _fnAjaxParameters( oSettings )
 	return aoData;
 }
 
-/*
- * Function: _fnServerParams
- * Purpose:  Add Ajax parameters from plugins
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           array objects:aoData - name/value pairs to send to the server
+
+/**
+ * Add Ajax parameters from plugins
+ *  @param {object} oSettings dataTables settings object
+ *  @param array {objects} aoData name/value pairs to send to the server
+ *  @private
  */
 function _fnServerParams( oSettings, aoData )
 {
@@ -650,16 +642,17 @@ function _fnServerParams( oSettings, aoData )
 	}
 }
 
-/*
- * Function: _fnAjaxUpdateDraw
- * Purpose:  Data the data from the server (nuking the old) and redraw the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           object:json - json data return from the server.
- *             The following must be defined:
- *               iTotalRecords, iTotalDisplayRecords, aaData
- *             The following may be defined:
- *               sColumns
+
+/**
+ * Data the data from the server (nuking the old) and redraw the table
+ *  @param {object} oSettings dataTables settings object
+ *  @param {object} json json data return from the server.
+ *  @param {object} json.sEcho Tracking flag for DataTables to match requests
+ *  @param {object} json.iTotalRecords Number of records in the data set, not accounting for filtering
+ *  @param {object} json.iTotalDisplayRecords Number of records in the data set, accounting for filtering
+ *  @param {object} json.aaData The data to display on this page
+ *  @param {object} [json.sColumns] Column ordering (sName, comma separated)
+ *  @private
  */
 function _fnAjaxUpdateDraw ( oSettings, json )
 {
@@ -722,17 +715,10 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 }
 
 
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Options (features) HTML
- */
-
-/*
- * Function: _fnAddOptionsHtml
- * Purpose:  Add the options to the page HTML for the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Add the options to the page HTML for the table
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnAddOptionsHtml ( oSettings )
 {
@@ -893,16 +879,14 @@ function _fnAddOptionsHtml ( oSettings )
 }
 
 
-
-/*
- * Function: _fnDetectHeader
- * Purpose:  Use the DOM source to create up an array of header cells. The idea here is to
- *           create a layout grid (array) of rows x columns, which contains a reference
- *           to the cell that that point in the grid (regardless of col/rowspan), such that
- *           any column / row could be removed and the new grid constructed
- * Returns:  void
- * Outputs:  array object:aLayout - Array to store the calculated layout in
- * Inputs:   node:nThead - The header/footer element for the table
+/**
+ * Use the DOM source to create up an array of header cells. The idea here is to
+ * create a layout grid (array) of rows x columns, which contains a reference
+ * to the cell that that point in the grid (regardless of col/rowspan), such that
+ * any column / row could be removed and the new grid constructed
+ *  @param array {object} aLayout Array to store the calculated layout in
+ *  @param {node} nThead The header/footer element for the table
+ *  @private
  */
 function _fnDetectHeader ( aLayout, nThead )
 {
@@ -965,13 +949,14 @@ function _fnDetectHeader ( aLayout, nThead )
 	}
 }
 
-/*
- * Function: _fnGetUniqueThs
- * Purpose:  Get an array of unique th elements, one for each column
- * Returns:  array node:aReturn - list of unique ths
- * Inputs:   object:oSettings - dataTables settings object
- *           node:nHeader - automatically detect the layout from this node - optional
- *           array object:aLayout - thead/tfoot layout from _fnDetectHeader - optional
+
+/**
+ * Get an array of unique th elements, one for each column
+ *  @param {object} oSettings dataTables settings object
+ *  @param {node} nHeader automatically detect the layout from this node - optional
+ *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
+ *  @returns array {node} aReturn list of unique ths
+ *  @private
  */
 function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 {
@@ -1000,3 +985,4 @@ function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 	
 	return aReturn;
 }
+

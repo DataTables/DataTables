@@ -1,14 +1,10 @@
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: Filtering
- */
-
-/*
- * Function: _fnFeatureHtmlFilter
- * Purpose:  Generate the node required for filtering text
- * Returns:  node
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Generate the node required for filtering text
+ *  @returns {node} Filter control element
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnFeatureHtmlFilter ( oSettings )
 {
@@ -60,13 +56,13 @@ function _fnFeatureHtmlFilter ( oSettings )
 	return nFilter;
 }
 
-/*
- * Function: _fnFilterComplete
- * Purpose:  Filter the table using both the global filter and column based filtering
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           object:oSearch: search information
- *           int:iForce - optional - force a research of the master array (1) or not (undefined or 0)
+
+/**
+ * Filter the table using both the global filter and column based filtering
+ *  @param {object} oSettings dataTables settings object
+ *  @param {object} oSearch search information
+ *  @param {int} [iForce] force a research of the master array (1) or not (undefined or 0)
+ *  @private
  */
 function _fnFilterComplete ( oSettings, oInput, iForce )
 {
@@ -99,11 +95,11 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 	_fnBuildSearchArray( oSettings, 0 );
 }
 
-/*
- * Function: _fnFilterCustom
- * Purpose:  Apply custom filtering functions
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Apply custom filtering functions
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnFilterCustom( oSettings )
 {
@@ -125,15 +121,15 @@ function _fnFilterCustom( oSettings )
 	}
 }
 
-/*
- * Function: _fnFilterColumn
- * Purpose:  Filter the table on a per-column basis
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           string:sInput - string to filter on
- *           int:iColumn - column to filter
- *           bool:bRegex - treat search string as a regular expression or not
- *           bool:bSmart - use smart filtering or not
+
+/**
+ * Filter the table on a per-column basis
+ *  @param {object} oSettings dataTables settings object
+ *  @param {string} sInput string to filter on
+ *  @param {int} iColumn column to filter
+ *  @param {bool} bRegex treat search string as a regular expression or not
+ *  @param {bool} bSmart use smart filtering or not
+ *  @private
  */
 function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
 {
@@ -157,15 +153,15 @@ function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
 	}
 }
 
-/*
- * Function: _fnFilter
- * Purpose:  Filter the data table based on user input and draw the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           string:sInput - string to filter on
- *           int:iForce - optional - force a research of the master array (1) or not (undefined or 0)
- *           bool:bRegex - treat as a regular expression or not
- *           bool:bSmart - perform smart filtering or not
+
+/**
+ * Filter the data table based on user input and draw the table
+ *  @param {object} oSettings dataTables settings object
+ *  @param {string} sInput string to filter on
+ *  @param {int} iForce optional - force a research of the master array (1) or not (undefined or 0)
+ *  @param {bool} bRegex treat as a regular expression or not
+ *  @param {bool} bSmart perform smart filtering or not
+ *  @private
  */
 function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
 {
@@ -243,12 +239,12 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
 	oSettings.oPreviousSearch.bSmart = bSmart;
 }
 
-/*
- * Function: _fnBuildSearchArray
- * Purpose:  Create an array which can be quickly search through
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iMaster - use the master data array - optional
+
+/**
+ * Create an array which can be quickly search through
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iMaster use the master data array - optional
+ *  @private
  */
 function _fnBuildSearchArray ( oSettings, iMaster )
 {
@@ -268,12 +264,12 @@ function _fnBuildSearchArray ( oSettings, iMaster )
 	}
 }
 
-/*
- * Function: _fnBuildSearchRow
- * Purpose:  Create a searchable string from a single data row
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           array:aData - Row data array to use for the data to search
+
+/**
+ * Create a searchable string from a single data row
+ *  @param {object} oSettings dataTables settings object
+ *  @param {array} aData Row data array to use for the data to search
+ *  @private
  */
 function _fnBuildSearchRow( oSettings, aData )
 {
@@ -305,13 +301,13 @@ function _fnBuildSearchRow( oSettings, aData )
 	return sSearch;
 }
 
-/*
- * Function: _fnFilterCreateSearch
- * Purpose:  Build a regular expression object suitable for searching a table
- * Returns:  RegExp: - constructed object
- * Inputs:   string:sSearch - string to search for
- *           bool:bRegex - treat as a regular expression or not
- *           bool:bSmart - perform smart filtering or not
+/**
+ * Build a regular expression object suitable for searching a table
+ *  @param {string} sSearch string to search for
+ *  @param {bool} bRegex treat as a regular expression or not
+ *  @param {bool} bSmart perform smart filtering or not
+ *  @returns {RegExp} constructed object
+ *  @private
  */
 function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
 {
@@ -333,12 +329,13 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
 	}
 }
 
-/*
- * Function: _fnDataToSearch
- * Purpose:  Convert raw data into something that the user can search on
- * Returns:  string: - search string
- * Inputs:   string:sData - data to be modified
- *           string:sType - data type
+
+/**
+ * Convert raw data into something that the user can search on
+ *  @param {string} sData data to be modified
+ *  @param {string} sType data type
+ *  @returns {string} search string
+ *  @private
  */
 function _fnDataToSearch ( sData, sType )
 {
@@ -362,11 +359,11 @@ function _fnDataToSearch ( sData, sType )
 }
 
 
-/*
- * Function: _fnEscapeRegex
- * Purpose:  scape a string stuch that it can be used in a regular expression
- * Returns:  string: - escaped string
- * Inputs:   string:sVal - string to escape
+/**
+ * scape a string stuch that it can be used in a regular expression
+ *  @param {string} sVal string to escape
+ *  @returns {string} escaped string
+ *  @private
  */
 function _fnEscapeRegex ( sVal )
 {
@@ -374,3 +371,4 @@ function _fnEscapeRegex ( sVal )
   var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
   return sVal.replace(reReplace, '\\$1');
 }
+

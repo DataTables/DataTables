@@ -1,11 +1,11 @@
 
 
-/*
- * Function: _fnArrayCmp
- * Purpose:  Compare two arrays
- * Returns:  0 if match, 1 if length is different, 2 if no match
- * Inputs:   array:aArray1 - first array
- *           array:aArray2 - second array
+/**
+ * Compare two arrays
+ *  @param {array} aArray1 first array
+ *  @param {array} aArray2 second array
+ *  @returns {int} 0 if match, 1 if length is different, 2 if no match
+ *  @private
  */
 function _fnArrayCmp( aArray1, aArray2 )
 {
@@ -25,11 +25,12 @@ function _fnArrayCmp( aArray1, aArray2 )
 	return 0;
 }
 
-/*
- * Function: _fnSettingsFromNode
- * Purpose:  Return the settings object for a particular table
- * Returns:  object: Settings object - or null if not found
- * Inputs:   node:nTable - table we are using as a dataTable
+
+/**
+ * Return the settings object for a particular table
+ *  @param {node} nTable table we are using as a dataTable
+ *  @returns {object} Settings object - or null if not found
+ *  @private
  */
 function _fnSettingsFromNode ( nTable )
 {
@@ -44,11 +45,12 @@ function _fnSettingsFromNode ( nTable )
 	return null;
 }
 
-/*
- * Function: _fnGetTrNodes
- * Purpose:  Return an array with the TR nodes for the table
- * Returns:  array: - TR array
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Return an array with the TR nodes for the table
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {array} TR array
+ *  @private
  */
 function _fnGetTrNodes ( oSettings )
 {
@@ -63,13 +65,14 @@ function _fnGetTrNodes ( oSettings )
 	return aNodes;
 }
 
-/*
- * Function: _fnGetTdNodes
- * Purpose:  Return an flat array with all TD nodes for the table, or row
- * Returns:  array: - TD array
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iIndividualRow - aoData index to get the nodes for - optional if not
- *             given then the return array will contain all nodes for the table
+
+/**
+ * Return an flat array with all TD nodes for the table, or row
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} [iIndividualRow] aoData index to get the nodes for - optional 
+ *    if not given then the return array will contain all nodes for the table
+ *  @returns {array} TD array
+ *  @private
  */
 function _fnGetTdNodes ( oSettings, iIndividualRow )
 {
@@ -121,12 +124,12 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 	return anReturn;
 }
 
-/*
- * Function: _fnLog
- * Purpose:  Log an error message
- * Returns:  -
- * Inputs:   int:iLevel - log error messages, or display them to the user
- *           string:sMesg - error message
+
+/**
+ * Log an error message
+ *  @param {int} iLevel log error messages, or display them to the user
+ *  @param {string} sMesg error message
+ *  @private
  */
 function _fnLog( oSettings, iLevel, sMesg )
 {
@@ -152,14 +155,14 @@ function _fnLog( oSettings, iLevel, sMesg )
 	}
 }
 
-/*
- * Function: _fnMap
- * Purpose:  See if a property is defined on one object, if so assign it to the other object
- * Returns:  - (done by reference)
- * Inputs:   object:oRet - target object
- *           object:oSrc - source object
- *           string:sName - property
- *           string:sMappedName - name to map too - optional, sName used if not given
+
+/**
+ * See if a property is defined on one object, if so assign it to the other object
+ *  @param {object} oRet target object
+ *  @param {object} oSrc source object
+ *  @param {string} sName property
+ *  @param {string} [sMappedName] name to map too - optional, sName used if not given
+ *  @private
  */
 function _fnMap( oRet, oSrc, sName, sMappedName )
 {
@@ -172,3 +175,4 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
 		oRet[sMappedName] = oSrc[sName];
 	}
 }
+

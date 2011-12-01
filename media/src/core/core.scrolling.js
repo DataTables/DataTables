@@ -1,18 +1,14 @@
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: Filtering
- */
-
-/*
- * Function: _fnFeatureHtmlTable
- * Purpose:  Add any control elements for the table - specifically scrolling
- * Returns:  node: - Node to add to the DOM
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Add any control elements for the table - specifically scrolling
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {node} Node to add to the DOM
+ *  @private
  */
 function _fnFeatureHtmlTable ( oSettings )
 {
-	/* Chack if scrolling is enabled or not - if not then leave the DOM unaltered */
+	/* Check if scrolling is enabled or not - if not then leave the DOM unaltered */
 	if ( oSettings.oScroll.sX === "" && oSettings.oScroll.sY === "" )
 	{
 		return oSettings.nTable;
@@ -166,16 +162,17 @@ function _fnFeatureHtmlTable ( oSettings )
 	return nScroller;
 }
 
-/*
- * Function: _fnScrollDraw
- * Purpose:  Update the various tables for resizing
- * Returns:  node: - Node to add to the DOM
- * Inputs:   object:o - dataTables settings object
- * Notes:    It's a bit of a pig this function, but basically the idea to:
+
+/**
+ * Update the various tables for resizing. It's a bit of a pig this function, but
+ * basically the idea to:
  *   1. Re-create the table inside the scrolling div
  *   2. Take live measurements from the DOM
  *   3. Apply the measurements
  *   4. Clean up
+ *  @param {object} o dataTables settings object
+ *  @returns {node} Node to add to the DOM
+ *  @private
  */
 function _fnScrollDraw ( o )
 {
@@ -447,7 +444,7 @@ function _fnScrollDraw ( o )
 		nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
 	}
 	
-	/* If sorting or filtering has occured, jump the scrolling back to the top */
+	/* If sorting or filtering has occurred, jump the scrolling back to the top */
 	if ( o.bSorted || o.bFiltered )
 	{
 		nScrollBody.scrollTop = 0;
@@ -455,15 +452,13 @@ function _fnScrollDraw ( o )
 }
 
 
-
-/*
- * Function: _fnApplyToChildren
- * Purpose:  Apply a given function to the display child nodes of an element array (typically
- *   TD children of TR rows
- * Returns:  - (done by reference)
- * Inputs:   function:fn - Method to apply to the objects
- *           array nodes:an1 - List of elements to look through for display children
- *           array nodes:an2 - Another list (identical structure to the first) - optional
+/**
+ * Apply a given function to the display child nodes of an element array (typically
+ * TD children of TR rows
+ *  @param {function} fn Method to apply to the objects
+ *  @param array {nodes} an1 List of elements to look through for display children
+ *  @param array {nodes} an2 Another list (identical structure to the first) - optional
+ *  @private
  */
 function _fnApplyToChildren( fn, an1, an2 )
 {
@@ -485,3 +480,4 @@ function _fnApplyToChildren( fn, an1, an2 )
 		}
 	}
 }
+

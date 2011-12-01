@@ -1,13 +1,9 @@
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Initialisation
- */
 
-/*
- * Function: _fnInitialise
- * Purpose:  Draw the table for the first time, adding all required features
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Draw the table for the first time, adding all required features
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnInitialise ( oSettings )
 {
@@ -112,11 +108,11 @@ function _fnInitialise ( oSettings )
 	}
 }
 
-/*
- * Function: _fnInitComplete
- * Purpose:  Draw the table for the first time, adding all required features
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Draw the table for the first time, adding all required features
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnInitComplete ( oSettings, json )
 {
@@ -134,13 +130,13 @@ function _fnInitComplete ( oSettings, json )
 	}
 }
 
-/*
- * Function: _fnLanguageProcess
- * Purpose:  Copy language variables from remote object to a local one
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           object:oLanguage - Language information
- *           bool:bInit - init once complete
+
+/**
+ * Copy language variables from remote object to a local one
+ *  @param {object} oSettings dataTables settings object
+ *  @param {object} oLanguage Language information
+ *  @param {bool} bInit init once complete
+ *  @private
  */
 function _fnLanguageProcess( oSettings, oLanguage, bInit )
 {
@@ -167,3 +163,4 @@ function _fnLanguageProcess( oSettings, oLanguage, bInit )
 		_fnInitialise( oSettings );
 	}
 }
+

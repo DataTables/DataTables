@@ -1,8 +1,7 @@
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - API
- * I'm not happy with this solution... - To be fixed in 2.0
+/*
+ * This is really a good bit rubbish... - To be fixed in 2.0
  */
 this.oApi._fnExternApiFunc = _fnExternApiFunc;
 this.oApi._fnInitialise = _fnInitialise;
@@ -81,3 +80,27 @@ this.oApi._fnGetCellData = _fnGetCellData;
 this.oApi._fnSetCellData = _fnSetCellData;
 this.oApi._fnGetObjectDataFn = _fnGetObjectDataFn;
 this.oApi._fnSetObjectDataFn = _fnSetObjectDataFn;
+
+
+/**
+ * Create a wrapper function for exporting an internal functions to an external API.
+ *  @param {string} sFunc API function name
+ *  @returns {function} wrapped function
+ *  @private
+ */
+function _fnExternApiFunc (sFunc)
+{
+	return function() {
+		var aArgs = [_fnSettingsFromNode(this[_oExt.iApiIndex])].concat( 
+			Array.prototype.slice.call(arguments) );
+		return _oExt.oApi[sFunc].apply( this, aArgs );
+	};
+}
+
+for ( var sFunc in _oExt.oApi )
+{
+	if ( sFunc )
+	{
+		this[sFunc] = _fnExternApiFunc(sFunc);
+	}
+}

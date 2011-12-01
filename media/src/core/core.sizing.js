@@ -1,13 +1,11 @@
 
 
-
-/*
- * Function: _fnConvertToWidth
- * Purpose:  Convert a CSS unit width to pixels (e.g. 2em)
- * Returns:  int:iWidth - width in pixels
- * Inputs:   string:sWidth - width to be converted
- *           node:nParent - parent to get the with for (required for
- *             relative widths) - optional
+/**
+ * Convert a CSS unit width to pixels (e.g. 2em)
+ *  @param {string} sWidth width to be converted
+ *  @param {node} nParent parent to get the with for (required for relative widths) - optional
+ *  @returns {int} iWidth width in pixels
+ *  @private
  */
 function _fnConvertToWidth ( sWidth, nParent )
 {
@@ -32,11 +30,11 @@ function _fnConvertToWidth ( sWidth, nParent )
 	return ( iWidth );
 }
 
-/*
- * Function: _fnCalculateColumnWidths
- * Purpose:  Calculate the width of columns for the table
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Calculate the width of columns for the table
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnCalculateColumnWidths ( oSettings )
 {
@@ -247,12 +245,12 @@ function _fnCalculateColumnWidths ( oSettings )
 	}
 }
 
-/*
- * Function: _fnScrollingWidthAdjust
- * Purpose:  Adjust a table's width to take account of scrolling
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           node:n - table node
+
+/**
+ * Adjust a table's width to take account of scrolling
+ *  @param {object} oSettings dataTables settings object
+ *  @param {node} n table node
+ *  @private
  */
 function _fnScrollingWidthAdjust ( oSettings, n )
 {
@@ -271,12 +269,13 @@ function _fnScrollingWidthAdjust ( oSettings, n )
 	}
 }
 
-/*
- * Function: _fnGetWidestNode
- * Purpose:  Get the widest node
- * Returns:  string: - max strlens for each column
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iCol - column of interest
+
+/**
+ * Get the widest node
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iCol column of interest
+ *  @returns {string} max strlens for each column
+ *  @private
  */
 function _fnGetWidestNode( oSettings, iCol )
 {
@@ -295,12 +294,13 @@ function _fnGetWidestNode( oSettings, iCol )
 	return _fnGetTdNodes(oSettings, iMaxIndex)[iCol];
 }
 
-/*
- * Function: _fnGetMaxLenString
- * Purpose:  Get the maximum strlen for each data column
- * Returns:  string: - max strlens for each column
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iCol - column of interest
+
+/**
+ * Get the maximum strlen for each data column
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iCol column of interest
+ *  @returns {string} max strlens for each column
+ *  @private
  */
 function _fnGetMaxLenString( oSettings, iCol )
 {
@@ -321,12 +321,13 @@ function _fnGetMaxLenString( oSettings, iCol )
 	return iMaxIndex;
 }
 
-/*
- * Function: _fnStringToCss
- * Purpose:  Append a CSS unit (only if required) to a string
- * Returns:  0 if match, 1 if length is different, 2 if no match
- * Inputs:   array:aArray1 - first array
- *           array:aArray2 - second array
+
+/**
+ * Append a CSS unit (only if required) to a string
+ *  @param {array} aArray1 first array
+ *  @param {array} aArray2 second array
+ *  @returns {int} 0 if match, 1 if length is different, 2 if no match
+ *  @private
  */
 function _fnStringToCss( s )
 {
@@ -354,14 +355,10 @@ function _fnStringToCss( s )
 }
 
 
-
-/*
- * Function: _fnScrollBarWidth
- * Purpose:  Get the width of a scroll bar in this browser being used
- * Returns:  int: - width in pixels
- * Inputs:   -
- * Notes:    All credit for this function belongs to Alexandre Gomes. Thanks for sharing!
- *   http://www.alexandre-gomes.com/?p=115
+/**
+ * Get the width of a scroll bar in this browser being used
+ *  @returns {int} width in pixels
+ *  @private
  */
 function _fnScrollBarWidth ()
 {  
@@ -395,3 +392,4 @@ function _fnScrollBarWidth ()
 	document.body.removeChild(outer);
 	return (w1 - w2);  
 }
+

@@ -823,12 +823,11 @@
 	{
 		
 		
-		/*
-		 * Function: _fnAddColumn
-		 * Purpose:  Add a column to the list used for the table with default values
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           node:nTh - the th element for this column
+		/**
+		 * Add a column to the list used for the table with default values
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {node} nTh The th element for this column
+		 *  @private
 		 */
 		function _fnAddColumn( oSettings, nTh )
 		{
@@ -885,13 +884,13 @@
 			_fnColumnOptions( oSettings, iCol, null );
 		}
 		
-		/*
-		 * Function: _fnColumnOptions
-		 * Purpose:  Apply options for a column
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iCol - column index to consider
-		 *           object:oOptions - object with sType, bVisible and bSearchable
+		
+		/**
+		 * Apply options for a column
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iCol column index to consider
+		 *  @param {object} oOptions object with sType, bVisible and bSearchable
+		 *  @private
 		 */
 		function _fnColumnOptions( oSettings, iCol, oOptions )
 		{
@@ -968,14 +967,11 @@
 		}
 		
 		
-		
-		
-		/*
-		 * Function: _fnAdjustColumnSizing
-		 * Purpose:  Adjust the table column widths for new data
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 * Notes:    You would probably want to do a redraw after calling this function!
+		/**
+		 * Adjust the table column widths for new data. Note: you would probably want to 
+		 * do a redraw after calling this function!
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnAdjustColumnSizing ( oSettings )
 		{
@@ -993,19 +989,13 @@
 		}
 		
 		
-		
-		
-		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Support functions
-		 */
-		
-		/*
-		 * Function: _fnVisibleToColumnIndex
-		 * Purpose:  Covert the index of a visible column to the index in the data array (take account
-		 *   of hidden columns)
-		 * Returns:  int:i - the data index
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Covert the index of a visible column to the index in the data array (take account
+		 * of hidden columns)
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iMatch Visible column index to lookup
+		 *  @returns {int} i the data index
+		 *  @private
 		 */
 		function _fnVisibleToColumnIndex( oSettings, iMatch )
 		{
@@ -1027,12 +1017,14 @@
 			return null;
 		}
 		
-		/*
-		 * Function: _fnColumnIndexToVisible
-		 * Purpose:  Covert the index of an index in the data array and convert it to the visible
+		
+		/**
+		 * Covert the index of an index in the data array and convert it to the visible
 		 *   column index (take account of hidden columns)
-		 * Returns:  int:i - the data index
-		 * Inputs:   object:oSettings - dataTables settings object
+		 *  @param {int} iMatch Column index to lookup
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {int} i the data index
+		 *  @private
 		 */
 		function _fnColumnIndexToVisible( oSettings, iMatch )
 		{
@@ -1054,12 +1046,11 @@
 		}
 		
 		
-		
-		/*
-		 * Function: _fnVisbleColumns
-		 * Purpose:  Get the number of visible columns
-		 * Returns:  int:i - the number of visible columns
-		 * Inputs:   object:oS - dataTables settings object
+		/**
+		 * Get the number of visible columns
+		 *  @returns {int} i the number of visible columns
+		 *  @param {object} oS dataTables settings object
+		 *  @private
 		 */
 		function _fnVisbleColumns( oS )
 		{
@@ -1075,13 +1066,11 @@
 		}
 		
 		
-		/*
-		 * Function: _fnDetectType
-		 * Purpose:  Get the sort type based on an input string
-		 * Returns:  string: - type (defaults to 'string' if no type can be detected)
-		 * Inputs:   string:sData - data we wish to know the type of
-		 * Notes:    This function makes use of the DataTables plugin objct _oExt 
-		 *   (.aTypes) such that new types can easily be added.
+		/**
+		 * Get the sort type based on an input string
+		 *  @param {string} sData data we wish to know the type of
+		 *  @returns {string} type (defaults to 'string' if no type can be detected)
+		 *  @private
 		 */
 		function _fnDetectType( sData )
 		{
@@ -1101,11 +1090,11 @@
 		}
 		
 		
-		/*
-		 * Function: _fnReOrderIndex
-		 * Purpose:  Figure out how to reorder a display list
-		 * Returns:  array int:aiReturn - index list for reordering
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Figure out how to reorder a display list
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns array {int} aiReturn index list for reordering
+		 *  @private
 		 */
 		function _fnReOrderIndex ( oSettings, sColumns )
 		{
@@ -1127,11 +1116,12 @@
 			return aiReturn;
 		}
 		
-		/*
-		 * Function: _fnColumnOrdering
-		 * Purpose:  Get the column ordering that DataTables expects
-		 * Returns:  string: - comma separated list of names
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Get the column ordering that DataTables expects
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {string} comma separated list of names
+		 *  @private
 		 */
 		function _fnColumnOrdering ( oSettings )
 		{
@@ -1148,15 +1138,15 @@
 		}
 		
 		
-		/*
-		 * Function: _fnAddData
-		 * Purpose:  Add a data array to the table, creating DOM node etc
-		 * Returns:  int: - >=0 if successful (index of new aoData entry), -1 if failed
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           array:aData - data array to be added
-		 * Notes:    There are two basic methods for DataTables to get data to display - a JS array
-		 *   (which is dealt with by this function), and the DOM, which has it's own optimised
-		 *   function (_fnGatherData). Be careful to make the same changes here as there and vice-versa
+		
+		/**
+		 * Add a data array to the table, creating DOM node etc. This is the parallel to 
+		 * _fnGatherData, but for adding rows from a Javascript source, rather than a
+		 * DOM source.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {array} aData data array to be added
+		 *  @returns {int} >=0 if successful (index of new aoData entry), -1 if failed
+		 *  @private
 		 */
 		function _fnAddData ( oSettings, aDataSupplied )
 		{
@@ -1224,13 +1214,11 @@
 			return iRow;
 		}
 		
-		/*
-		 * Function: _fnGatherData
-		 * Purpose:  Read in the data from the target table from the DOM
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 * Notes:    This is a optimised version of _fnAddData (more or less) for reading information
-		 *   from the DOM. The basic actions must be identical in the two functions.
+		
+		/**
+		 * Read in the data from the target table from the DOM
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnGatherData( oSettings )
 		{
@@ -1382,15 +1370,12 @@
 		}
 		
 		
-		
-		
-		
-		/*
-		 * Function: _fnNodeToDataIndex
-		 * Purpose:  Take a TR element and convert it to an index in aoData
-		 * Returns:  int:i - index if found, null if not
-		 * Inputs:   object:s - dataTables settings object
-		 *           node:n - the TR element to find
+		/**
+		 * Take a TR element and convert it to an index in aoData
+		 *  @param {object} s dataTables settings object
+		 *  @param {node} n the TR element to find
+		 *  @returns {int} index if found, null if not
+		 *  @private
 		 */
 		function _fnNodeToDataIndex( s, n )
 		{
@@ -1419,15 +1404,13 @@
 		}
 		
 		
-		
-		
-		/*
-		 * Function: _fnGetRowData
-		 * Purpose:  Get an array of data for a given row from the internal data cache
-		 * Returns:  array: - Data array
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iRow - aoData row id
-		 *           string:sSpecific - data get type ('type' 'filter' 'sort')
+		/**
+		 * Get an array of data for a given row from the internal data cache
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iRow aoData row id
+		 *  @param {string} sSpecific data get type ('type' 'filter' 'sort')
+		 *  @returns {array} Data array
+		 *  @private
 		 */
 		function _fnGetRowData( oSettings, iRow, sSpecific )
 		{
@@ -1439,14 +1422,15 @@
 			return out;
 		}
 		
-		/*
-		 * Function: _fnGetCellData
-		 * Purpose:  Get the data for a given cell from the internal cache, taking into account data mapping
-		 * Returns:  *: - Cell data
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iRow - aoData row id
-		 *           int:iCol - Column index
-		 *           string:sSpecific - data get type ('display', 'type' 'filter' 'sort')
+		
+		/**
+		 * Get the data for a given cell from the internal cache, taking into account data mapping
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iRow aoData row id
+		 *  @param {int} iCol Column index
+		 *  @param {string} sSpecific data get type ('display', 'type' 'filter' 'sort')
+		 *  @returns {*} Cell data
+		 *  @private
 		 */
 		function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 		{
@@ -1483,14 +1467,14 @@
 			return sData;
 		}
 		
-		/*
-		 * Function: _fnSetCellData
-		 * Purpose:  Set the value for a specific cell, into the internal data cache
-		 * Returns:  *: - Cell data
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iRow - aoData row id
-		 *           int:iCol - Column index
-		 *           *:val - Value to set
+		
+		/**
+		 * Set the value for a specific cell, into the internal data cache
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iRow aoData row id
+		 *  @param {int} iCol Column index
+		 *  @param {*} val Value to set
+		 *  @private
 		 */
 		function _fnSetCellData( oSettings, iRow, iCol, val )
 		{
@@ -1500,12 +1484,13 @@
 			oCol.fnSetData( oData, val );
 		}
 		
-		/*
-		 * Function: _fnGetObjectDataFn
-		 * Purpose:  Return a function that can be used to get data from a source object, taking
-		 *           into account the ability to use nested objects as a source
-		 * Returns:  function: - Data get function
-		 * Inputs:   string|int|function:mSource - The data source for the object
+		
+		/**
+		 * Return a function that can be used to get data from a source object, taking
+		 * into account the ability to use nested objects as a source
+		 *  @param {string|int|function} mSource The data source for the object
+		 *  @returns {function} Data get function
+		 *  @private
 		 */
 		function _fnGetObjectDataFn( mSource )
 		{
@@ -1561,12 +1546,13 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnSetObjectDataFn
-		 * Purpose:  Return a function that can be used to set data from a source object, taking
-		 *           into account the ability to use nested objects as a source
-		 * Returns:  function: - Data set function
-		 * Inputs:   string|int|function:mSource - The data source for the object
+		
+		/**
+		 * Return a function that can be used to set data from a source object, taking
+		 * into account the ability to use nested objects as a source
+		 *  @param {string|int|function} mSource The data source for the object
+		 *  @returns {function} Data set function
+		 *  @private
 		 */
 		function _fnSetObjectDataFn( mSource )
 		{
@@ -1619,11 +1605,12 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnGetDataMaster
-		 * Purpose:  Return an array with the full table data
-		 * Returns:  array array:aData - Master data array
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Return an array with the full table data
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns array {array} aData Master data array
+		 *  @private
 		 */
 		function _fnGetDataMaster ( oSettings )
 		{
@@ -1637,11 +1624,10 @@
 		}
 		
 		
-		/*
-		 * Function: _fnClearTable
-		 * Purpose:  Nuke the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Nuke the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnClearTable( oSettings )
 		{
@@ -1652,13 +1638,12 @@
 		}
 		
 		
-		/*
-		 * Function: _fnDeleteIndex
-		 * Purpose:  Take an array of integers (index array) and remove a target integer (value - not 
-		 *             the key!)
-		 * Returns:  -
-		 * Inputs:   a:array int - Index array to target
-		 *           int:iTarget - value to find
+		 /**
+		 * Take an array of integers (index array) and remove a target integer (value - not 
+		 * the key!)
+		 *  @param {array} a Index array to target
+		 *  @param {int} iTarget value to find
+		 *  @private
 		 */
 		function _fnDeleteIndex( a, iTarget )
 		{
@@ -1683,12 +1668,12 @@
 		}
 		
 		
-		/*
-		 * Function: _fnCreateTr
-		 * Purpose:  Create a new TR element (and it's TD children) for a row
-		 * Returns:  void
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iRow - Row to consider
+		
+		/**
+		 * Create a new TR element (and it's TD children) for a row
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iRow Row to consider
+		 *  @private
 		 */
 		function _fnCreateTr ( oSettings, iRow )
 		{
@@ -1753,13 +1738,10 @@
 		}
 		
 		
-		
-		
-		/*
-		 * Function: _fnBuildHead
-		 * Purpose:  Create the HTML header for the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Create the HTML header for the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnBuildHead( oSettings )
 		{
@@ -1873,24 +1855,18 @@
 		}
 		
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Drawing functions
-		 */
-		
-		/*
-		 * Function: _fnDrawHead
-		 * Purpose:  Draw the header (or footer) element based on the column visibility states. The
-		 *           methodology here is to use the layout array from _fnDetectHeader, modified for
-		 *           the instantaneous column visibility, to construct the new layout. The grid is
-		 *           traversed over cell at a time in a rows x columns grid fashion, although each 
-		 *           cell insert can cover multiple elements in the grid - which is tracks using the
-		 *           aApplied array. Cell inserts in the grid will only occur where there isn't
-		 *           already a cell in that position.
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           array objects:aoSource - Layout array from _fnDetectHeader
-		 *           boolean:bIncludeHidden - If true then include the hidden columns in the calc, 
-		 *             - optional: default false
+		/**
+		 * Draw the header (or footer) element based on the column visibility states. The
+		 * methodology here is to use the layout array from _fnDetectHeader, modified for
+		 * the instantaneous column visibility, to construct the new layout. The grid is
+		 * traversed over cell at a time in a rows x columns grid fashion, although each 
+		 * cell insert can cover multiple elements in the grid - which is tracks using the
+		 * aApplied array. Cell inserts in the grid will only occur where there isn't
+		 * already a cell in that position.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param array {objects} aoSource Layout array from _fnDetectHeader
+		 *  @param {boolean} [bIncludeHidden=false] If true then include the hidden columns in the calc, 
+		 *  @private
 		 */
 		function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 		{
@@ -1976,11 +1952,11 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnDraw
-		 * Purpose:  Insert the required TR nodes into the table for display
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Insert the required TR nodes into the table for display
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnDraw( oSettings )
 		{
@@ -2200,11 +2176,11 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnReDraw
-		 * Purpose:  Redraw the table - taking account of the various features which are enabled
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Redraw the table - taking account of the various features which are enabled
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnReDraw( oSettings )
 		{
@@ -2225,11 +2201,12 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnAjaxUpdate
-		 * Purpose:  Update the table using an Ajax call
-		 * Returns:  bool: block the table drawing or not
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Update the table using an Ajax call
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {boolean} Block the table drawing or not
+		 *  @private
 		 */
 		function _fnAjaxUpdate( oSettings )
 		{
@@ -2253,11 +2230,12 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnAjaxParameters
-		 * Purpose:  Build up the parameters in an object needed for a server-side processing request
-		 * Returns:  bool: block the table drawing or not
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Build up the parameters in an object needed for a server-side processing request
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {bool} block the table drawing or not
+		 *  @private
 		 */
 		function _fnAjaxParameters( oSettings )
 		{
@@ -2318,12 +2296,12 @@
 			return aoData;
 		}
 		
-		/*
-		 * Function: _fnServerParams
-		 * Purpose:  Add Ajax parameters from plugins
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           array objects:aoData - name/value pairs to send to the server
+		
+		/**
+		 * Add Ajax parameters from plugins
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param array {objects} aoData name/value pairs to send to the server
+		 *  @private
 		 */
 		function _fnServerParams( oSettings, aoData )
 		{
@@ -2333,16 +2311,17 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnAjaxUpdateDraw
-		 * Purpose:  Data the data from the server (nuking the old) and redraw the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           object:json - json data return from the server.
-		 *             The following must be defined:
-		 *               iTotalRecords, iTotalDisplayRecords, aaData
-		 *             The following may be defined:
-		 *               sColumns
+		
+		/**
+		 * Data the data from the server (nuking the old) and redraw the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {object} json json data return from the server.
+		 *  @param {object} json.sEcho Tracking flag for DataTables to match requests
+		 *  @param {object} json.iTotalRecords Number of records in the data set, not accounting for filtering
+		 *  @param {object} json.iTotalDisplayRecords Number of records in the data set, accounting for filtering
+		 *  @param {object} json.aaData The data to display on this page
+		 *  @param {object} [json.sColumns] Column ordering (sName, comma separated)
+		 *  @private
 		 */
 		function _fnAjaxUpdateDraw ( oSettings, json )
 		{
@@ -2405,17 +2384,10 @@
 		}
 		
 		
-		
-		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Options (features) HTML
-		 */
-		
-		/*
-		 * Function: _fnAddOptionsHtml
-		 * Purpose:  Add the options to the page HTML for the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Add the options to the page HTML for the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnAddOptionsHtml ( oSettings )
 		{
@@ -2576,16 +2548,14 @@
 		}
 		
 		
-		
-		/*
-		 * Function: _fnDetectHeader
-		 * Purpose:  Use the DOM source to create up an array of header cells. The idea here is to
-		 *           create a layout grid (array) of rows x columns, which contains a reference
-		 *           to the cell that that point in the grid (regardless of col/rowspan), such that
-		 *           any column / row could be removed and the new grid constructed
-		 * Returns:  void
-		 * Outputs:  array object:aLayout - Array to store the calculated layout in
-		 * Inputs:   node:nThead - The header/footer element for the table
+		/**
+		 * Use the DOM source to create up an array of header cells. The idea here is to
+		 * create a layout grid (array) of rows x columns, which contains a reference
+		 * to the cell that that point in the grid (regardless of col/rowspan), such that
+		 * any column / row could be removed and the new grid constructed
+		 *  @param array {object} aLayout Array to store the calculated layout in
+		 *  @param {node} nThead The header/footer element for the table
+		 *  @private
 		 */
 		function _fnDetectHeader ( aLayout, nThead )
 		{
@@ -2648,13 +2618,14 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnGetUniqueThs
-		 * Purpose:  Get an array of unique th elements, one for each column
-		 * Returns:  array node:aReturn - list of unique ths
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           node:nHeader - automatically detect the layout from this node - optional
-		 *           array object:aLayout - thead/tfoot layout from _fnDetectHeader - optional
+		
+		/**
+		 * Get an array of unique th elements, one for each column
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {node} nHeader automatically detect the layout from this node - optional
+		 *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
+		 *  @returns array {node} aReturn list of unique ths
+		 *  @private
 		 */
 		function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 		{
@@ -2685,15 +2656,12 @@
 		}
 		
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: Filtering
-		 */
 		
-		/*
-		 * Function: _fnFeatureHtmlFilter
-		 * Purpose:  Generate the node required for filtering text
-		 * Returns:  node
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Generate the node required for filtering text
+		 *  @returns {node} Filter control element
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnFeatureHtmlFilter ( oSettings )
 		{
@@ -2745,13 +2713,13 @@
 			return nFilter;
 		}
 		
-		/*
-		 * Function: _fnFilterComplete
-		 * Purpose:  Filter the table using both the global filter and column based filtering
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           object:oSearch: search information
-		 *           int:iForce - optional - force a research of the master array (1) or not (undefined or 0)
+		
+		/**
+		 * Filter the table using both the global filter and column based filtering
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {object} oSearch search information
+		 *  @param {int} [iForce] force a research of the master array (1) or not (undefined or 0)
+		 *  @private
 		 */
 		function _fnFilterComplete ( oSettings, oInput, iForce )
 		{
@@ -2784,11 +2752,11 @@
 			_fnBuildSearchArray( oSettings, 0 );
 		}
 		
-		/*
-		 * Function: _fnFilterCustom
-		 * Purpose:  Apply custom filtering functions
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Apply custom filtering functions
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnFilterCustom( oSettings )
 		{
@@ -2810,15 +2778,15 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnFilterColumn
-		 * Purpose:  Filter the table on a per-column basis
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           string:sInput - string to filter on
-		 *           int:iColumn - column to filter
-		 *           bool:bRegex - treat search string as a regular expression or not
-		 *           bool:bSmart - use smart filtering or not
+		
+		/**
+		 * Filter the table on a per-column basis
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {string} sInput string to filter on
+		 *  @param {int} iColumn column to filter
+		 *  @param {bool} bRegex treat search string as a regular expression or not
+		 *  @param {bool} bSmart use smart filtering or not
+		 *  @private
 		 */
 		function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
 		{
@@ -2842,15 +2810,15 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnFilter
-		 * Purpose:  Filter the data table based on user input and draw the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           string:sInput - string to filter on
-		 *           int:iForce - optional - force a research of the master array (1) or not (undefined or 0)
-		 *           bool:bRegex - treat as a regular expression or not
-		 *           bool:bSmart - perform smart filtering or not
+		
+		/**
+		 * Filter the data table based on user input and draw the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {string} sInput string to filter on
+		 *  @param {int} iForce optional - force a research of the master array (1) or not (undefined or 0)
+		 *  @param {bool} bRegex treat as a regular expression or not
+		 *  @param {bool} bSmart perform smart filtering or not
+		 *  @private
 		 */
 		function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
 		{
@@ -2928,12 +2896,12 @@
 			oSettings.oPreviousSearch.bSmart = bSmart;
 		}
 		
-		/*
-		 * Function: _fnBuildSearchArray
-		 * Purpose:  Create an array which can be quickly search through
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iMaster - use the master data array - optional
+		
+		/**
+		 * Create an array which can be quickly search through
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iMaster use the master data array - optional
+		 *  @private
 		 */
 		function _fnBuildSearchArray ( oSettings, iMaster )
 		{
@@ -2953,12 +2921,12 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnBuildSearchRow
-		 * Purpose:  Create a searchable string from a single data row
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           array:aData - Row data array to use for the data to search
+		
+		/**
+		 * Create a searchable string from a single data row
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {array} aData Row data array to use for the data to search
+		 *  @private
 		 */
 		function _fnBuildSearchRow( oSettings, aData )
 		{
@@ -2990,13 +2958,13 @@
 			return sSearch;
 		}
 		
-		/*
-		 * Function: _fnFilterCreateSearch
-		 * Purpose:  Build a regular expression object suitable for searching a table
-		 * Returns:  RegExp: - constructed object
-		 * Inputs:   string:sSearch - string to search for
-		 *           bool:bRegex - treat as a regular expression or not
-		 *           bool:bSmart - perform smart filtering or not
+		/**
+		 * Build a regular expression object suitable for searching a table
+		 *  @param {string} sSearch string to search for
+		 *  @param {bool} bRegex treat as a regular expression or not
+		 *  @param {bool} bSmart perform smart filtering or not
+		 *  @returns {RegExp} constructed object
+		 *  @private
 		 */
 		function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
 		{
@@ -3018,12 +2986,13 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnDataToSearch
-		 * Purpose:  Convert raw data into something that the user can search on
-		 * Returns:  string: - search string
-		 * Inputs:   string:sData - data to be modified
-		 *           string:sType - data type
+		
+		/**
+		 * Convert raw data into something that the user can search on
+		 *  @param {string} sData data to be modified
+		 *  @param {string} sType data type
+		 *  @returns {string} search string
+		 *  @private
 		 */
 		function _fnDataToSearch ( sData, sType )
 		{
@@ -3047,11 +3016,11 @@
 		}
 		
 		
-		/*
-		 * Function: _fnEscapeRegex
-		 * Purpose:  scape a string stuch that it can be used in a regular expression
-		 * Returns:  string: - escaped string
-		 * Inputs:   string:sVal - string to escape
+		/**
+		 * scape a string stuch that it can be used in a regular expression
+		 *  @param {string} sVal string to escape
+		 *  @returns {string} escaped string
+		 *  @private
 		 */
 		function _fnEscapeRegex ( sVal )
 		{
@@ -3061,15 +3030,12 @@
 		}
 		
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: HTML info
-		 */
 		
-		/*
-		 * Function: _fnFeatureHtmlInfo
-		 * Purpose:  Generate the node required for the info display
-		 * Returns:  node
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Generate the node required for the info display
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {node} Information element
+		 *  @private
 		 */
 		function _fnFeatureHtmlInfo ( oSettings )
 		{
@@ -3095,11 +3061,11 @@
 			return nInfo;
 		}
 		
-		/*
-		 * Function: _fnUpdateInfo
-		 * Purpose:  Update the information elements in the display
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Update the information elements in the display
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnUpdateInfo ( oSettings )
 		{
@@ -3170,15 +3136,12 @@
 			}
 		}
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Initialisation
-		 */
 		
-		/*
-		 * Function: _fnInitialise
-		 * Purpose:  Draw the table for the first time, adding all required features
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Draw the table for the first time, adding all required features
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnInitialise ( oSettings )
 		{
@@ -3283,11 +3246,11 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnInitComplete
-		 * Purpose:  Draw the table for the first time, adding all required features
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Draw the table for the first time, adding all required features
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnInitComplete ( oSettings, json )
 		{
@@ -3305,13 +3268,13 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnLanguageProcess
-		 * Purpose:  Copy language variables from remote object to a local one
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           object:oLanguage - Language information
-		 *           bool:bInit - init once complete
+		
+		/**
+		 * Copy language variables from remote object to a local one
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {object} oLanguage Language information
+		 *  @param {bool} bInit init once complete
+		 *  @private
 		 */
 		function _fnLanguageProcess( oSettings, oLanguage, bInit )
 		{
@@ -3339,15 +3302,13 @@
 			}
 		}
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: Length change
-		 */
 		
-		/*
-		 * Function: _fnFeatureHtmlLength
-		 * Purpose:  Generate the node required for user display length changing
-		 * Returns:  node
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Generate the node required for user display length changing
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {node} Display length feature node
+		 *  @private
 		 */
 		function _fnFeatureHtmlLength ( oSettings )
 		{
@@ -3433,11 +3394,10 @@
 		}
 		
 		
-		/*
-		 * Function: _fnCalculateEnd
-		 * Purpose:  Rcalculate the end point based on the start point
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Rcalculate the end point based on the start point
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnCalculateEnd( oSettings )
 		{
@@ -3463,16 +3423,17 @@
 		}
 		
 		
+		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: Pagination. Note that most of the paging logic is done in 
+		 * Note that most of the paging logic is done in 
 		 * _oExt.oPagination
 		 */
 		
-		/*
-		 * Function: _fnFeatureHtmlPaginate
-		 * Purpose:  Generate the node required for default pagination
-		 * Returns:  node
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Generate the node required for default pagination
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {node} Pagination feature node
+		 *  @private
 		 */
 		function _fnFeatureHtmlPaginate ( oSettings )
 		{
@@ -3507,12 +3468,13 @@
 			return nPaginate;
 		}
 		
-		/*
-		 * Function: _fnPageChange
-		 * Purpose:  Alter the display settings to change the page
-		 * Returns:  bool:true - page has changed, false - no change (no effect) eg 'first' on page 1
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           string:sAction - paging action to take: "first", "previous", "next" or "last"
+		
+		/**
+		 * Alter the display settings to change the page
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {string} sAction paging action to take: "first", "previous", "next" or "last"
+		 *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
+		 *  @private
 		 */
 		function _fnPageChange ( oSettings, sAction )
 		{
@@ -3571,15 +3533,12 @@
 		}
 		
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: Processing incidator
-		 */
 		
-		/*
-		 * Function: _fnFeatureHtmlProcessing
-		 * Purpose:  Generate the node required for the processing node
-		 * Returns:  node
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Generate the node required for the processing node
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {node} Processing element
+		 *  @private
 		 */
 		function _fnFeatureHtmlProcessing ( oSettings )
 		{
@@ -3596,14 +3555,12 @@
 			return nProcessing;
 		}
 		
-		/*
-		 * Function: _fnProcessingDisplay
-		 * Purpose:  Display or hide the processing indicator
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           bool:
-		 *   true - show the processing indicator
-		 *   false - don't show
+		
+		/**
+		 * Display or hide the processing indicator
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {bool} bShow Show the processing indicator (true) or not (false)
+		 *  @private
 		 */
 		function _fnProcessingDisplay ( oSettings, bShow )
 		{
@@ -3618,19 +3575,16 @@
 		}
 		
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: Filtering
-		 */
 		
-		/*
-		 * Function: _fnFeatureHtmlTable
-		 * Purpose:  Add any control elements for the table - specifically scrolling
-		 * Returns:  node: - Node to add to the DOM
-		 * Inputs:   object:oSettings - dataTables settings object
+		/**
+		 * Add any control elements for the table - specifically scrolling
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {node} Node to add to the DOM
+		 *  @private
 		 */
 		function _fnFeatureHtmlTable ( oSettings )
 		{
-			/* Chack if scrolling is enabled or not - if not then leave the DOM unaltered */
+			/* Check if scrolling is enabled or not - if not then leave the DOM unaltered */
 			if ( oSettings.oScroll.sX === "" && oSettings.oScroll.sY === "" )
 			{
 				return oSettings.nTable;
@@ -3784,16 +3738,17 @@
 			return nScroller;
 		}
 		
-		/*
-		 * Function: _fnScrollDraw
-		 * Purpose:  Update the various tables for resizing
-		 * Returns:  node: - Node to add to the DOM
-		 * Inputs:   object:o - dataTables settings object
-		 * Notes:    It's a bit of a pig this function, but basically the idea to:
+		
+		/**
+		 * Update the various tables for resizing. It's a bit of a pig this function, but
+		 * basically the idea to:
 		 *   1. Re-create the table inside the scrolling div
 		 *   2. Take live measurements from the DOM
 		 *   3. Apply the measurements
 		 *   4. Clean up
+		 *  @param {object} o dataTables settings object
+		 *  @returns {node} Node to add to the DOM
+		 *  @private
 		 */
 		function _fnScrollDraw ( o )
 		{
@@ -4065,7 +4020,7 @@
 				nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
 			}
 			
-			/* If sorting or filtering has occured, jump the scrolling back to the top */
+			/* If sorting or filtering has occurred, jump the scrolling back to the top */
 			if ( o.bSorted || o.bFiltered )
 			{
 				nScrollBody.scrollTop = 0;
@@ -4073,15 +4028,13 @@
 		}
 		
 		
-		
-		/*
-		 * Function: _fnApplyToChildren
-		 * Purpose:  Apply a given function to the display child nodes of an element array (typically
-		 *   TD children of TR rows
-		 * Returns:  - (done by reference)
-		 * Inputs:   function:fn - Method to apply to the objects
-		 *           array nodes:an1 - List of elements to look through for display children
-		 *           array nodes:an2 - Another list (identical structure to the first) - optional
+		/**
+		 * Apply a given function to the display child nodes of an element array (typically
+		 * TD children of TR rows
+		 *  @param {function} fn Method to apply to the objects
+		 *  @param array {nodes} an1 List of elements to look through for display children
+		 *  @param array {nodes} an2 Another list (identical structure to the first) - optional
+		 *  @private
 		 */
 		function _fnApplyToChildren( fn, an1, an2 )
 		{
@@ -4106,13 +4059,12 @@
 		
 		
 		
-		/*
-		 * Function: _fnConvertToWidth
-		 * Purpose:  Convert a CSS unit width to pixels (e.g. 2em)
-		 * Returns:  int:iWidth - width in pixels
-		 * Inputs:   string:sWidth - width to be converted
-		 *           node:nParent - parent to get the with for (required for
-		 *             relative widths) - optional
+		/**
+		 * Convert a CSS unit width to pixels (e.g. 2em)
+		 *  @param {string} sWidth width to be converted
+		 *  @param {node} nParent parent to get the with for (required for relative widths) - optional
+		 *  @returns {int} iWidth width in pixels
+		 *  @private
 		 */
 		function _fnConvertToWidth ( sWidth, nParent )
 		{
@@ -4137,11 +4089,11 @@
 			return ( iWidth );
 		}
 		
-		/*
-		 * Function: _fnCalculateColumnWidths
-		 * Purpose:  Calculate the width of columns for the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Calculate the width of columns for the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnCalculateColumnWidths ( oSettings )
 		{
@@ -4352,12 +4304,12 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnScrollingWidthAdjust
-		 * Purpose:  Adjust a table's width to take account of scrolling
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           node:n - table node
+		
+		/**
+		 * Adjust a table's width to take account of scrolling
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {node} n table node
+		 *  @private
 		 */
 		function _fnScrollingWidthAdjust ( oSettings, n )
 		{
@@ -4376,12 +4328,13 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnGetWidestNode
-		 * Purpose:  Get the widest node
-		 * Returns:  string: - max strlens for each column
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iCol - column of interest
+		
+		/**
+		 * Get the widest node
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iCol column of interest
+		 *  @returns {string} max strlens for each column
+		 *  @private
 		 */
 		function _fnGetWidestNode( oSettings, iCol )
 		{
@@ -4400,12 +4353,13 @@
 			return _fnGetTdNodes(oSettings, iMaxIndex)[iCol];
 		}
 		
-		/*
-		 * Function: _fnGetMaxLenString
-		 * Purpose:  Get the maximum strlen for each data column
-		 * Returns:  string: - max strlens for each column
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iCol - column of interest
+		
+		/**
+		 * Get the maximum strlen for each data column
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iCol column of interest
+		 *  @returns {string} max strlens for each column
+		 *  @private
 		 */
 		function _fnGetMaxLenString( oSettings, iCol )
 		{
@@ -4426,12 +4380,13 @@
 			return iMaxIndex;
 		}
 		
-		/*
-		 * Function: _fnStringToCss
-		 * Purpose:  Append a CSS unit (only if required) to a string
-		 * Returns:  0 if match, 1 if length is different, 2 if no match
-		 * Inputs:   array:aArray1 - first array
-		 *           array:aArray2 - second array
+		
+		/**
+		 * Append a CSS unit (only if required) to a string
+		 *  @param {array} aArray1 first array
+		 *  @param {array} aArray2 second array
+		 *  @returns {int} 0 if match, 1 if length is different, 2 if no match
+		 *  @private
 		 */
 		function _fnStringToCss( s )
 		{
@@ -4459,14 +4414,10 @@
 		}
 		
 		
-		
-		/*
-		 * Function: _fnScrollBarWidth
-		 * Purpose:  Get the width of a scroll bar in this browser being used
-		 * Returns:  int: - width in pixels
-		 * Inputs:   -
-		 * Notes:    All credit for this function belongs to Alexandre Gomes. Thanks for sharing!
-		 *   http://www.alexandre-gomes.com/?p=115
+		/**
+		 * Get the width of a scroll bar in this browser being used
+		 *  @returns {int} width in pixels
+		 *  @private
 		 */
 		function _fnScrollBarWidth ()
 		{  
@@ -4502,20 +4453,12 @@
 		}
 		
 		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - Feature: Sorting
-		 */
 		
-		/*
-		 * Function: _fnSort
-		 * Purpose:  Change the order of the table
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           bool:bApplyClasses - optional - should we apply classes or not
-		 * Notes:    We always sort the master array and then apply a filter again
-		 *   if it is needed. This probably isn't optimal - but atm I can't think
-		 *   of any other way which is (each has disadvantages). we want to sort aiDisplayMaster - 
-		 *   but according to aoData[]._aData
+		/**
+		 * Change the order of the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {bool} bApplyClasses optional - should we apply classes or not
+		 *  @private
 		 */
 		function _fnSort ( oSettings, bApplyClasses )
 		{
@@ -4658,14 +4601,14 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnSortAttachListener
-		 * Purpose:  Attach a sort handler (click) to a node
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           node:nNode - node to attach the handler to
-		 *           int:iDataIndex - column sorting index
-		 *           function:fnCallback - callback function - optional
+		
+		/**
+		 * Attach a sort handler (click) to a node
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {node} nNode node to attach the handler to
+		 *  @param {int} iDataIndex column sorting index
+		 *  @param {function} [fnCallback] callback function
+		 *  @private
 		 */
 		function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		{
@@ -4777,12 +4720,12 @@
 			} );
 		}
 		
-		/*
-		 * Function: _fnSortingClasses
-		 * Purpose:  Set the sortting classes on the header
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 * Notes:    It is safe to call this function when bSort and bSortClasses are false
+		
+		/**
+		 * Set the sorting classes on the header, Note: it is safe to call this function 
+		 * when bSort and bSortClasses are false
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnSortingClasses( oSettings )
 		{
@@ -4933,11 +4876,11 @@
 		}
 		
 		
-		/*
-		 * Function: _fnSaveState
-		 * Purpose:  Save the state of a table in a cookie such that the page can be reloaded
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Save the state of a table in a cookie such that the page can be reloaded
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
 		 */
 		function _fnSaveState ( oSettings )
 		{
@@ -4997,12 +4940,12 @@
 				oSettings.iCookieDuration, oSettings.sCookiePrefix, oSettings.fnCookieCallback );
 		}
 		
-		/*
-		 * Function: _fnLoadState
-		 * Purpose:  Attempt to load a saved table state from a cookie
-		 * Returns:  -
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           object:oInit - DataTables init object so we can override settings
+		
+		/**
+		 * Attempt to load a saved table state from a cookie
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {object} oInit DataTables init object so we can override settings
+		 *  @private
 		 */
 		function _fnLoadState ( oSettings, oInit )
 		{
@@ -5089,15 +5032,15 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnCreateCookie
-		 * Purpose:  Create a new cookie with a value to store the state of a table
-		 * Returns:  -
-		 * Inputs:   string:sName - name of the cookie to create
-		 *           string:sValue - the value the cookie should take
-		 *           int:iSecs - duration of the cookie
-		 *           string:sBaseName - sName is made up of the base + file name - this is the base
-		 *           function:fnCallback - User definable function to modify the cookie
+		
+		/**
+		 * Create a new cookie with a value to store the state of a table
+		 *  @param {string} sName name of the cookie to create
+		 *  @param {string} sValue the value the cookie should take
+		 *  @param {int} iSecs duration of the cookie
+		 *  @param {string} sBaseName sName is made up of the base + file name - this is the base
+		 *  @param {function} fnCallback User definable function to modify the cookie
+		 *  @private
 		 */
 		function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 		{
@@ -5164,11 +5107,12 @@
 			document.cookie = sFullCookie;
 		}
 		
-		/*
-		 * Function: _fnReadCookie
-		 * Purpose:  Read an old cookie to get a cookie with an old table state
-		 * Returns:  string: - contents of the cookie - or null if no cookie with that name found
-		 * Inputs:   string:sName - name of the cookie to read
+		
+		/**
+		 * Read an old cookie to get a cookie with an old table state
+		 *  @param {string} sName name of the cookie to read
+		 *  @returns {string} contents of the cookie - or null if no cookie with that name found
+		 *  @private
 		 */
 		function _fnReadCookie ( sName )
 		{
@@ -5195,12 +5139,13 @@
 		}
 		
 		
-		/*
-		 * Function: _fnArrayCmp
-		 * Purpose:  Compare two arrays
-		 * Returns:  0 if match, 1 if length is different, 2 if no match
-		 * Inputs:   array:aArray1 - first array
-		 *           array:aArray2 - second array
+		
+		/**
+		 * Compare two arrays
+		 *  @param {array} aArray1 first array
+		 *  @param {array} aArray2 second array
+		 *  @returns {int} 0 if match, 1 if length is different, 2 if no match
+		 *  @private
 		 */
 		function _fnArrayCmp( aArray1, aArray2 )
 		{
@@ -5220,11 +5165,12 @@
 			return 0;
 		}
 		
-		/*
-		 * Function: _fnSettingsFromNode
-		 * Purpose:  Return the settings object for a particular table
-		 * Returns:  object: Settings object - or null if not found
-		 * Inputs:   node:nTable - table we are using as a dataTable
+		
+		/**
+		 * Return the settings object for a particular table
+		 *  @param {node} nTable table we are using as a dataTable
+		 *  @returns {object} Settings object - or null if not found
+		 *  @private
 		 */
 		function _fnSettingsFromNode ( nTable )
 		{
@@ -5239,11 +5185,12 @@
 			return null;
 		}
 		
-		/*
-		 * Function: _fnGetTrNodes
-		 * Purpose:  Return an array with the TR nodes for the table
-		 * Returns:  array: - TR array
-		 * Inputs:   object:oSettings - dataTables settings object
+		
+		/**
+		 * Return an array with the TR nodes for the table
+		 *  @param {object} oSettings dataTables settings object
+		 *  @returns {array} TR array
+		 *  @private
 		 */
 		function _fnGetTrNodes ( oSettings )
 		{
@@ -5258,13 +5205,14 @@
 			return aNodes;
 		}
 		
-		/*
-		 * Function: _fnGetTdNodes
-		 * Purpose:  Return an flat array with all TD nodes for the table, or row
-		 * Returns:  array: - TD array
-		 * Inputs:   object:oSettings - dataTables settings object
-		 *           int:iIndividualRow - aoData index to get the nodes for - optional if not
-		 *             given then the return array will contain all nodes for the table
+		
+		/**
+		 * Return an flat array with all TD nodes for the table, or row
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} [iIndividualRow] aoData index to get the nodes for - optional 
+		 *    if not given then the return array will contain all nodes for the table
+		 *  @returns {array} TD array
+		 *  @private
 		 */
 		function _fnGetTdNodes ( oSettings, iIndividualRow )
 		{
@@ -5316,12 +5264,12 @@
 			return anReturn;
 		}
 		
-		/*
-		 * Function: _fnLog
-		 * Purpose:  Log an error message
-		 * Returns:  -
-		 * Inputs:   int:iLevel - log error messages, or display them to the user
-		 *           string:sMesg - error message
+		
+		/**
+		 * Log an error message
+		 *  @param {int} iLevel log error messages, or display them to the user
+		 *  @param {string} sMesg error message
+		 *  @private
 		 */
 		function _fnLog( oSettings, iLevel, sMesg )
 		{
@@ -5347,14 +5295,14 @@
 			}
 		}
 		
-		/*
-		 * Function: _fnMap
-		 * Purpose:  See if a property is defined on one object, if so assign it to the other object
-		 * Returns:  - (done by reference)
-		 * Inputs:   object:oRet - target object
-		 *           object:oSrc - source object
-		 *           string:sName - property
-		 *           string:sMappedName - name to map too - optional, sName used if not given
+		
+		/**
+		 * See if a property is defined on one object, if so assign it to the other object
+		 *  @param {object} oRet target object
+		 *  @param {object} oSrc source object
+		 *  @param {string} sName property
+		 *  @param {string} [sMappedName] name to map too - optional, sName used if not given
+		 *  @private
 		 */
 		function _fnMap( oRet, oSrc, sName, sMappedName )
 		{
@@ -5367,6 +5315,7 @@
 				oRet[sMappedName] = oSrc[sName];
 			}
 		}
+		
 
 		
 		/*
@@ -5381,12 +5330,9 @@
 		 * Section - API functions
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		
-		/*
-		 * Function: fnDraw
-		 * Purpose:  Redraw the table
-		 * Returns:  -
-		 * Inputs:   bool:bComplete - Refilter and resort (if enabled) the table before the draw.
-		 *             Optional: default - true
+		/**
+		 * Redraw the table
+		 *  @param {bool} [bComplete=true] Refilter and resort (if enabled) the table before the draw.
 		 */
 		this.fnDraw = function( bComplete )
 		{
@@ -5402,16 +5348,13 @@
 			}
 		};
 		
-		/*
-		 * Function: fnFilter
-		 * Purpose:  Filter the input based on data
-		 * Returns:  -
-		 * Inputs:   string:sInput - string to filter the table on
-		 *           int:iColumn - optional - column to limit filtering to
-		 *           bool:bRegex - optional - treat as regular expression or not - default false
-		 *           bool:bSmart - optional - perform smart filtering or not - default true
-		 *           bool:bShowGlobal - optional - show the input global filter in it's input box(es)
-		 *              - default true
+		/**
+		 * Filter the input based on data
+		 *  @param {string} sInput string to filter the table on
+		 *  @param {int|null} [iColumn] column to limit filtering to
+		 *  @param {bool} [bRegex=false] treat as regular expression or not
+		 *  @param {bool} [bSmart=true] perform smart filtering or not
+		 *  @param {bool} [bShowGlobal=true] show the input global filter in it's input box(es)
 		 */
 		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 		{
@@ -5465,29 +5408,23 @@
 			}
 		};
 		
-		/*
-		 * Function: fnSettings
-		 * Purpose:  Get the settings for a particular table for extern. manipulation
-		 * Returns:  -
-		 * Inputs:   -
+		/**
+		 * Get the settings for a particular table for external manipulation
+		 *  @returns {object} DataTables settings object. See 
+		 *    {@link DataTable.models.oSettings}
 		 */
-		this.fnSettings = function( nNode  )
+		this.fnSettings = function()
 		{
 			return _fnSettingsFromNode( this[_oExt.iApiIndex] );
 		};
 		
-		/*
-		 * Function: fnVersionCheck
-		 * Notes:    The function is the same as the 'static' function provided in the ext variable
-		 */
+		
+		// xxx
 		this.fnVersionCheck = _oExt.fnVersionCheck;
 		
-		/*
-		 * Function: fnSort
-		 * Purpose:  Sort the table by a particular row
-		 * Returns:  -
-		 * Inputs:   int:iCol - the data index to sort on. Note that this will
-		 *   not match the 'display index' if you have hidden data entries
+		/**
+		 * Sort the table by a particular row
+		 *  @param {int} iCol the data index to sort on. Note that this will not match the 'display index' if you have hidden data entries
 		 */
 		this.fnSort = function( aaSort )
 		{
@@ -5496,13 +5433,11 @@
 			_fnSort( oSettings );
 		};
 		
-		/*
-		 * Function: fnSortListener
-		 * Purpose:  Attach a sort listener to an element for a given column
-		 * Returns:  -
-		 * Inputs:   node:nNode - the element to attach the sort listener to
-		 *           int:iColumn - the column that a click on this node will sort on
-		 *           function:fnCallback - callback function when sort is run - optional
+		/**
+		 * Attach a sort listener to an element for a given column
+		 *  @param {node} nNode the element to attach the sort listener to
+		 *  @param {int} iColumn the column that a click on this node will sort on
+		 *  @param {function} [fnCallback] callback function when sort is run
 		 */
 		this.fnSortListener = function( nNode, iColumn, fnCallback )
 		{
@@ -5510,18 +5445,23 @@
 			 	fnCallback );
 		};
 		
-		/*
-		 * Function: fnAddData
-		 * Purpose:  Add new row(s) into the table
-		 * Returns:  array int: array of indexes (aoData) which have been added (zero length on error)
-		 * Inputs:   array:mData - the data to be added. The length must match
-		 *               the original data from the DOM
-		 *             or
-		 *             array array:mData - 2D array of data to be added
-		 *           bool:bRedraw - redraw the table or not - default true
-		 * Notes:    Warning - the refilter here will cause the table to redraw
-		 *             starting at zero
-		 * Notes:    Thanks to Yekimov Denis for contributing the basis for this function!
+		
+		/**
+		 * Add a single new row or multiple rows of data to the table. Please note
+		 * that this is suitable for client-side processing only - if you are using 
+		 * server-side processing (i.e. "bServerSide": true), then to add data, you
+		 * must add it to the data source, i.e. the server-side, through an Ajax call.
+		 *  @param {array|object} mData The data to be added to the table. This can be:
+		 *    <ul>
+		 *      <li>1D array of data - add a single row with the data provided</li>
+		 *      <li>2D array of arrays - add multiple rows in a single call</li>
+		 *      <li>object - data object when using <i>mDataProp</i></li>
+		 *      <li>array of objects - multiple data objects when using <i>mDataProp</i></li>
+		 *    </ul>
+		 *  @param {bool} [bRedraw=true] redraw the table or not
+		 *  @returns {array} An array of integers, representing the list of indexes in 
+		 *    <i>aoData</i> ({@link DataTable.models.oSettings}) that have been added to 
+		 *    the table.
 		 */
 		this.fnAddData = function( mData, bRedraw )
 		{
@@ -5568,15 +5508,14 @@
 			return aiReturn;
 		};
 		
-		/*
-		 * Function: fnDeleteRow
-		 * Purpose:  Remove a row for the table
-		 * Returns:  array:aReturn - the row that was deleted
-		 * Inputs:   mixed:mTarget - 
-		 *             int: - index of aoData to be deleted, or
-		 *             node(TR): - TR element you want to delete
-		 *           function:fnCallBack - callback function - default null
-		 *           bool:bRedraw - redraw the table or not - default true
+		
+		/**
+		 * Remove a row for the table
+		 *  @param {mixed} mTarget The index of the row from aoData to be deleted, or
+		 *    the TR element you want to delete
+		 *  @param {function|null} [fnCallBack] Callback function
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *  @returns {array} The row that was deleted
 		 */
 		this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 		{
@@ -5623,12 +5562,9 @@
 			return oData;
 		};
 		
-		/*
-		 * Function: fnClearTable
-		 * Purpose:  Quickly and simply clear a table
-		 * Returns:  -
-		 * Inputs:   bool:bRedraw - redraw the table or not - default true
-		 * Notes:    Thanks to Yekimov Denis for contributing the basis for this function!
+		/**
+		 * Quickly and simply clear a table
+		 *  @param {bool} [bRedraw=true] redraw the table or not
 		 */
 		this.fnClearTable = function( bRedraw )
 		{
@@ -5642,13 +5578,15 @@
 			}
 		};
 		
-		/*
-		 * Function: fnOpen
-		 * Purpose:  Open a display row (append a row after the row in question)
-		 * Returns:  node:nNewRow - the row opened
-		 * Inputs:   node:nTr - the table row to 'open'
-		 *           string|node|jQuery:mHtml - the HTML to put into the row
-		 *           string:sClass - class to give the new TD cell
+		/**
+		 * This function will place a new row directly after a row which is currently 
+		 * on display on the page, with the HTML contents that is passed into the 
+		 * function. This can be used, for example, to ask for confirmation that a 
+		 * particular record should be deleted.
+		 *  @param {node} nTr The table row to 'open'
+		 *  @param {string|node|jQuery} mHtml The HTML to put into the row
+		 *  @param {string} sClass Class to give the new TD cell
+		 *  @returns {node} The row opened
 		 */
 		this.fnOpen = function( nTr, mHtml, sClass )
 		{
@@ -5688,11 +5626,11 @@
 			return nNewRow;
 		};
 		
-		/*
-		 * Function: fnClose
-		 * Purpose:  Close a display row
-		 * Returns:  int: 0 (success) or 1 (failed)
-		 * Inputs:   node:nTr - the table row to 'close'
+		/**
+		 * The exact opposite of 'opening' a row, this function will close any rows which 
+		 * are currently 'open'.
+		 *  @param {node} nTr the table row to 'close'
+		 *  @returns {int} 0 on success, or 1 if failed (can't find the row)
 		 */
 		this.fnClose = function( nTr )
 		{
@@ -5716,17 +5654,15 @@
 			return 1;
 		};
 		
-		/*
-		 * Function: fnGetData
-		 * Purpose:  Return an array with the data which is used to make up the table
-		 * Returns:  array array string: 2d data array ([row][column]) or array string: 1d data array
-		 *           or string if both row and column are given
-		 * Inputs:   mixed:mRow - optional - if not present, then the full 2D array for the table 
-		 *             if given then:
-		 *               int: - return data object for aoData entry of this index
-		 *               node(TR): - return data object for this TR element
-		 *           int:iCol - optional - the column that you want the data of. This will take into
-		 *               account mDataProp and return the value DataTables uses for this column
+		/**
+		 * Return an array with the data which is used to make up the table
+		 * or string if both row and column are given
+		 *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
+		 *    internal index (mapped to the TR element)
+		 *  @param {int} [iCol] Optional column index that you want the data of
+		 *  @returns {array|string} If mRow is undefined, then the data for all rows is
+		 *    returned. If mRow is defined, just data for that row, and is iCol is
+		 *    defined, only data for the designated cell is returned.
 		 */
 		this.fnGetData = function( mRow, iCol )
 		{
@@ -5747,14 +5683,11 @@
 			return _fnGetDataMaster( oSettings );
 		};
 		
-		/*
-		 * Function: fnGetNodes
-		 * Purpose:  Return an array with the TR nodes used for drawing the table
-		 * Returns:  array node: TR elements
-		 *           or
-		 *           node (if iRow specified)
-		 * Inputs:   int:iRow - optional - if present then the array returned will be the node for
-		 *             the row with the index 'iRow'
+		/**
+		 * The the TR nodes that are used in the table's body
+		 *  @param {int} [iRow] Optional row index for the TR element you want
+		 *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
+		 *    in the table's body, or iRow is defined, just the TR element requested.
 		 */
 		this.fnGetNodes = function( iRow )
 		{
@@ -5767,13 +5700,12 @@
 			return _fnGetTrNodes( oSettings );
 		};
 		
-		/*
-		 * Function: fnGetPosition
-		 * Purpose:  Get the array indexes of a particular cell from it's DOM element
-		 * Returns:  int: - row index, or array[ int, int, int ]: - row index, column index (visible)
-		 *             and column index including hidden columns
-		 * Inputs:   node:nNode - this can either be a TR, TD or TH in the table's body, the return is
-		 *             dependent on this input
+		/**
+		 * Get the array indexes of a particular cell from it's DOM element
+		 * and column index including hidden columns
+		 *  @param {node} nNode this can either be a TR, TD or TH in the table's body
+		 *  @returns {int} If nNode is given as a TR, then a single index is returned, or
+		 *    if given as a cell, an array of [row index, column index (visible)] is given.
 		 */
 		this.fnGetPosition = function( nNode )
 		{
@@ -5800,21 +5732,18 @@
 			return null;
 		};
 		
-		/*
-		 * Function: fnUpdate
-		 * Purpose:  Update a table cell or row - this method will accept either a single value to
-		 *             update the cell with, an array of values with one element for each column or
-		 *             an object in the same format as the original data source. The function is
-		 *             self-referencing in order to make the multi column updates easier.
-		 * Returns:  int: 0 okay, 1 error
-		 * Inputs:   object | array string | string:mData - data to update the cell/row with
-		 *           mixed:mRow - 
-		 *             int: - index of aoData to be updated, or
-		 *             node(TR): - TR element you want to update
-		 *           int:iColumn - the column to update - optional (not used of mData is an array or object)
-		 *           bool:bRedraw - redraw the table or not - default true
-		 *           bool:bAction - perform predraw actions or not (you will want this as 'true' if
-		 *             you have bRedraw as true) - default true
+		
+		/**
+		 * Update a table cell or row - this method will accept either a single value to
+		 * update the cell with, an array of values with one element for each column or
+		 * an object in the same format as the original data source. The function is
+		 * self-referencing in order to make the multi column updates easier.
+		 *  @param {object|array|string} mData Data to update the cell/row with
+		 *  @param {node|int} mRow TR element you want to update or the aoData index
+		 *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *  @param {bool} [bAction=true] Perform predraw actions or not
+		 *  @returns {int} 0 on success, 1 on error
 		 */
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		{
@@ -5898,13 +5827,11 @@
 		};
 		
 		
-		/*
-		 * Function: fnSetColumnVis
-		 * Purpose:  Show a particular column
-		 * Returns:  -
-		 * Inputs:   int:iCol - the column whose display should be changed
-		 *           bool:bShow - show (true) or hide (false) the column
-		 *           bool:bRedraw - redraw the table or not - default true
+		/**
+		 * Show a particular column
+		 *  @param {int} iCol The column whose display should be changed
+		 *  @param {bool} bShow Show (true) or hide (false) the column
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 */
 		this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		{
@@ -6008,12 +5935,13 @@
 			_fnSaveState( oSettings );
 		};
 		
-		/*
-		 * Function: fnPageChange
-		 * Purpose:  Change the pagination
-		 * Returns:  -
-		 * Inputs:   string:sAction - paging action to take: "first", "previous", "next" or "last"
-		 *           bool:bRedraw - redraw the table or not - optional - default true
+		
+		/**
+		 * Change the pagination - provides the internal logic for pagination in a simple API 
+		 * function. With this function you can have a DataTables table go to the next, 
+		 * previous, first or last pages.
+		 *  @param {string} sAction Paging action to take: "first", "previous", "next" or "last"
+		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 */
 		this.fnPageChange = function ( sAction, bRedraw )
 		{
@@ -6027,11 +5955,9 @@
 			}
 		};
 		
-		/*
-		 * Function: fnDestroy
-		 * Purpose:  Destructor for the DataTable
-		 * Returns:  -
-		 * Inputs:   -
+		/**
+		 * Restore the table to it's original state in the DOM by removing all of DataTables 
+		 * enhancements, alterations to the DOM structure of the table and event listeners.
 		 */
 		this.fnDestroy = function ( )
 		{
@@ -6156,12 +6082,12 @@
 			oSettings = null;
 		};
 		
-		/*
-		 * Function: fnAdjustColumnSizing
-		 * Purpose:  Update table sizing based on content. This would most likely be used for scrolling
-		 *   and will typically need a redraw after it.
-		 * Returns:  -
-		 * Inputs:   bool:bRedraw - redraw the table or not, you will typically want to - default true
+		/**
+		 * This function will make DataTables recalculate the column sizes, based on the data 
+		 * contained in the table and the sizes applied to the columns (in the DOM, CSS or 
+		 * through the sWidth parameter). This can be useful when the width of the table's 
+		 * parent element changes (for example a window resize).
+		 *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
 		 */
 		this.fnAdjustColumnSizing = function ( bRedraw )
 		{
@@ -6179,12 +6105,11 @@
 			}
 		};
 		
-		/*
-		 * Function: $
-		 * Purpose:  Do a jQuery selector action on the table's TR elements (from the tbody) and
-		 *   return the resulting expression
-		 * Returns:  jQuery object
-		 * Inputs:   string:sSelector - jQuery selector
+		/**
+		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
+		 * return the resulting expression
+		 *  @param {string} sSelector jQuery selector
+		 *  @returns {object} jQuery object
 		 */
 		this.$ = function ( sSelector )
 		{
@@ -6194,49 +6119,10 @@
 		};
 		
 		
-		/*
-		 * Plugin API functions
-		 * 
-		 * This call will add the functions which are defined in _oExt.oApi to the
-		 * DataTables object, providing a rather nice way to allow plug-in API functions. Note that
-		 * this is done here, so that API function can actually override the built in API functions if
-		 * required for a particular purpose.
-		 */
+		
 		
 		/*
-		 * Function: _fnExternApiFunc
-		 * Purpose:  Create a wrapper function for exporting an internal func to an external API func
-		 * Returns:  function: - wrapped function
-		 * Inputs:   string:sFunc - API function name
-		 */
-		function _fnExternApiFunc (sFunc)
-		{
-			return function() {
-					var aArgs = [_fnSettingsFromNode(this[_oExt.iApiIndex])].concat( 
-						Array.prototype.slice.call(arguments) );
-					return _oExt.oApi[sFunc].apply( this, aArgs );
-				};
-		}
-		
-		for ( var sFunc in _oExt.oApi )
-		{
-			if ( sFunc )
-			{
-				/*
-				 * Function: anon
-				 * Purpose:  Wrap the plug-in API functions in order to provide the settings as 1st arg 
-				 *   and execute in this scope
-				 * Returns:  -
-				 * Inputs:   -
-				 */
-				this[sFunc] = _fnExternApiFunc(sFunc);
-			}
-		}
-		
-		
-		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 * Section - API
-		 * I'm not happy with this solution... - To be fixed in 2.0
+		 * This is really a good bit rubbish... - To be fixed in 2.0
 		 */
 		this.oApi._fnExternApiFunc = _fnExternApiFunc;
 		this.oApi._fnInitialise = _fnInitialise;
@@ -6315,6 +6201,30 @@
 		this.oApi._fnSetCellData = _fnSetCellData;
 		this.oApi._fnGetObjectDataFn = _fnGetObjectDataFn;
 		this.oApi._fnSetObjectDataFn = _fnSetObjectDataFn;
+		
+		
+		/**
+		 * Create a wrapper function for exporting an internal functions to an external API.
+		 *  @param {string} sFunc API function name
+		 *  @returns {function} wrapped function
+		 *  @private
+		 */
+		function _fnExternApiFunc (sFunc)
+		{
+			return function() {
+				var aArgs = [_fnSettingsFromNode(this[_oExt.iApiIndex])].concat( 
+					Array.prototype.slice.call(arguments) );
+				return _oExt.oApi[sFunc].apply( this, aArgs );
+			};
+		}
+		
+		for ( var sFunc in _oExt.oApi )
+		{
+			if ( sFunc )
+			{
+				this[sFunc] = _fnExternApiFunc(sFunc);
+			}
+		}
 		
 		var _that = this;
 		return this.each(function() {

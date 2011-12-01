@@ -1,14 +1,10 @@
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: Processing incidator
- */
-
-/*
- * Function: _fnFeatureHtmlProcessing
- * Purpose:  Generate the node required for the processing node
- * Returns:  node
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Generate the node required for the processing node
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {node} Processing element
+ *  @private
  */
 function _fnFeatureHtmlProcessing ( oSettings )
 {
@@ -25,14 +21,12 @@ function _fnFeatureHtmlProcessing ( oSettings )
 	return nProcessing;
 }
 
-/*
- * Function: _fnProcessingDisplay
- * Purpose:  Display or hide the processing indicator
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           bool:
- *   true - show the processing indicator
- *   false - don't show
+
+/**
+ * Display or hide the processing indicator
+ *  @param {object} oSettings dataTables settings object
+ *  @param {bool} bShow Show the processing indicator (true) or not (false)
+ *  @private
  */
 function _fnProcessingDisplay ( oSettings, bShow )
 {
@@ -45,3 +39,4 @@ function _fnProcessingDisplay ( oSettings, bShow )
 		}
 	}
 }
+

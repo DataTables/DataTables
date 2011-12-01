@@ -1,11 +1,10 @@
 
 
-/*
- * Function: _fnAddColumn
- * Purpose:  Add a column to the list used for the table with default values
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           node:nTh - the th element for this column
+/**
+ * Add a column to the list used for the table with default values
+ *  @param {object} oSettings dataTables settings object
+ *  @param {node} nTh The th element for this column
+ *  @private
  */
 function _fnAddColumn( oSettings, nTh )
 {
@@ -62,13 +61,13 @@ function _fnAddColumn( oSettings, nTh )
 	_fnColumnOptions( oSettings, iCol, null );
 }
 
-/*
- * Function: _fnColumnOptions
- * Purpose:  Apply options for a column
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- *           int:iCol - column index to consider
- *           object:oOptions - object with sType, bVisible and bSearchable
+
+/**
+ * Apply options for a column
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iCol column index to consider
+ *  @param {object} oOptions object with sType, bVisible and bSearchable
+ *  @private
  */
 function _fnColumnOptions( oSettings, iCol, oOptions )
 {
@@ -145,14 +144,11 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 }
 
 
-
-
-/*
- * Function: _fnAdjustColumnSizing
- * Purpose:  Adjust the table column widths for new data
- * Returns:  -
- * Inputs:   object:oSettings - dataTables settings object
- * Notes:    You would probably want to do a redraw after calling this function!
+/**
+ * Adjust the table column widths for new data. Note: you would probably want to 
+ * do a redraw after calling this function!
+ *  @param {object} oSettings dataTables settings object
+ *  @private
  */
 function _fnAdjustColumnSizing ( oSettings )
 {
@@ -170,19 +166,13 @@ function _fnAdjustColumnSizing ( oSettings )
 }
 
 
-
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Support functions
- */
-
-/*
- * Function: _fnVisibleToColumnIndex
- * Purpose:  Covert the index of a visible column to the index in the data array (take account
- *   of hidden columns)
- * Returns:  int:i - the data index
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Covert the index of a visible column to the index in the data array (take account
+ * of hidden columns)
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iMatch Visible column index to lookup
+ *  @returns {int} i the data index
+ *  @private
  */
 function _fnVisibleToColumnIndex( oSettings, iMatch )
 {
@@ -204,12 +194,14 @@ function _fnVisibleToColumnIndex( oSettings, iMatch )
 	return null;
 }
 
-/*
- * Function: _fnColumnIndexToVisible
- * Purpose:  Covert the index of an index in the data array and convert it to the visible
+
+/**
+ * Covert the index of an index in the data array and convert it to the visible
  *   column index (take account of hidden columns)
- * Returns:  int:i - the data index
- * Inputs:   object:oSettings - dataTables settings object
+ *  @param {int} iMatch Column index to lookup
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {int} i the data index
+ *  @private
  */
 function _fnColumnIndexToVisible( oSettings, iMatch )
 {
@@ -231,12 +223,11 @@ function _fnColumnIndexToVisible( oSettings, iMatch )
 }
 
 
-
-/*
- * Function: _fnVisbleColumns
- * Purpose:  Get the number of visible columns
- * Returns:  int:i - the number of visible columns
- * Inputs:   object:oS - dataTables settings object
+/**
+ * Get the number of visible columns
+ *  @returns {int} i the number of visible columns
+ *  @param {object} oS dataTables settings object
+ *  @private
  */
 function _fnVisbleColumns( oS )
 {
@@ -252,13 +243,11 @@ function _fnVisbleColumns( oS )
 }
 
 
-/*
- * Function: _fnDetectType
- * Purpose:  Get the sort type based on an input string
- * Returns:  string: - type (defaults to 'string' if no type can be detected)
- * Inputs:   string:sData - data we wish to know the type of
- * Notes:    This function makes use of the DataTables plugin objct _oExt 
- *   (.aTypes) such that new types can easily be added.
+/**
+ * Get the sort type based on an input string
+ *  @param {string} sData data we wish to know the type of
+ *  @returns {string} type (defaults to 'string' if no type can be detected)
+ *  @private
  */
 function _fnDetectType( sData )
 {
@@ -278,11 +267,11 @@ function _fnDetectType( sData )
 }
 
 
-/*
- * Function: _fnReOrderIndex
- * Purpose:  Figure out how to reorder a display list
- * Returns:  array int:aiReturn - index list for reordering
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Figure out how to reorder a display list
+ *  @param {object} oSettings dataTables settings object
+ *  @returns array {int} aiReturn index list for reordering
+ *  @private
  */
 function _fnReOrderIndex ( oSettings, sColumns )
 {
@@ -304,11 +293,12 @@ function _fnReOrderIndex ( oSettings, sColumns )
 	return aiReturn;
 }
 
-/*
- * Function: _fnColumnOrdering
- * Purpose:  Get the column ordering that DataTables expects
- * Returns:  string: - comma separated list of names
- * Inputs:   object:oSettings - dataTables settings object
+
+/**
+ * Get the column ordering that DataTables expects
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {string} comma separated list of names
+ *  @private
  */
 function _fnColumnOrdering ( oSettings )
 {
@@ -323,3 +313,4 @@ function _fnColumnOrdering ( oSettings )
 	}
 	return sNames.slice(0, -1);
 }
+

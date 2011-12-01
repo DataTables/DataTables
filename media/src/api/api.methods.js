@@ -11,12 +11,9 @@ this.oApi = {};
  * Section - API functions
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-/*
- * Function: fnDraw
- * Purpose:  Redraw the table
- * Returns:  -
- * Inputs:   bool:bComplete - Refilter and resort (if enabled) the table before the draw.
- *             Optional: default - true
+/**
+ * Redraw the table
+ *  @param {bool} [bComplete=true] Refilter and resort (if enabled) the table before the draw.
  */
 this.fnDraw = function( bComplete )
 {
@@ -32,16 +29,13 @@ this.fnDraw = function( bComplete )
 	}
 };
 
-/*
- * Function: fnFilter
- * Purpose:  Filter the input based on data
- * Returns:  -
- * Inputs:   string:sInput - string to filter the table on
- *           int:iColumn - optional - column to limit filtering to
- *           bool:bRegex - optional - treat as regular expression or not - default false
- *           bool:bSmart - optional - perform smart filtering or not - default true
- *           bool:bShowGlobal - optional - show the input global filter in it's input box(es)
- *              - default true
+/**
+ * Filter the input based on data
+ *  @param {string} sInput string to filter the table on
+ *  @param {int|null} [iColumn] column to limit filtering to
+ *  @param {bool} [bRegex=false] treat as regular expression or not
+ *  @param {bool} [bSmart=true] perform smart filtering or not
+ *  @param {bool} [bShowGlobal=true] show the input global filter in it's input box(es)
  */
 this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 {
@@ -95,29 +89,23 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 	}
 };
 
-/*
- * Function: fnSettings
- * Purpose:  Get the settings for a particular table for extern. manipulation
- * Returns:  -
- * Inputs:   -
+/**
+ * Get the settings for a particular table for external manipulation
+ *  @returns {object} DataTables settings object. See 
+ *    {@link DataTable.models.oSettings}
  */
-this.fnSettings = function( nNode  )
+this.fnSettings = function()
 {
 	return _fnSettingsFromNode( this[_oExt.iApiIndex] );
 };
 
-/*
- * Function: fnVersionCheck
- * Notes:    The function is the same as the 'static' function provided in the ext variable
- */
+
+// xxx
 this.fnVersionCheck = _oExt.fnVersionCheck;
 
-/*
- * Function: fnSort
- * Purpose:  Sort the table by a particular row
- * Returns:  -
- * Inputs:   int:iCol - the data index to sort on. Note that this will
- *   not match the 'display index' if you have hidden data entries
+/**
+ * Sort the table by a particular row
+ *  @param {int} iCol the data index to sort on. Note that this will not match the 'display index' if you have hidden data entries
  */
 this.fnSort = function( aaSort )
 {
@@ -126,13 +114,11 @@ this.fnSort = function( aaSort )
 	_fnSort( oSettings );
 };
 
-/*
- * Function: fnSortListener
- * Purpose:  Attach a sort listener to an element for a given column
- * Returns:  -
- * Inputs:   node:nNode - the element to attach the sort listener to
- *           int:iColumn - the column that a click on this node will sort on
- *           function:fnCallback - callback function when sort is run - optional
+/**
+ * Attach a sort listener to an element for a given column
+ *  @param {node} nNode the element to attach the sort listener to
+ *  @param {int} iColumn the column that a click on this node will sort on
+ *  @param {function} [fnCallback] callback function when sort is run
  */
 this.fnSortListener = function( nNode, iColumn, fnCallback )
 {
@@ -140,18 +126,23 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
 	 	fnCallback );
 };
 
-/*
- * Function: fnAddData
- * Purpose:  Add new row(s) into the table
- * Returns:  array int: array of indexes (aoData) which have been added (zero length on error)
- * Inputs:   array:mData - the data to be added. The length must match
- *               the original data from the DOM
- *             or
- *             array array:mData - 2D array of data to be added
- *           bool:bRedraw - redraw the table or not - default true
- * Notes:    Warning - the refilter here will cause the table to redraw
- *             starting at zero
- * Notes:    Thanks to Yekimov Denis for contributing the basis for this function!
+
+/**
+ * Add a single new row or multiple rows of data to the table. Please note
+ * that this is suitable for client-side processing only - if you are using 
+ * server-side processing (i.e. "bServerSide": true), then to add data, you
+ * must add it to the data source, i.e. the server-side, through an Ajax call.
+ *  @param {array|object} mData The data to be added to the table. This can be:
+ *    <ul>
+ *      <li>1D array of data - add a single row with the data provided</li>
+ *      <li>2D array of arrays - add multiple rows in a single call</li>
+ *      <li>object - data object when using <i>mDataProp</i></li>
+ *      <li>array of objects - multiple data objects when using <i>mDataProp</i></li>
+ *    </ul>
+ *  @param {bool} [bRedraw=true] redraw the table or not
+ *  @returns {array} An array of integers, representing the list of indexes in 
+ *    <i>aoData</i> ({@link DataTable.models.oSettings}) that have been added to 
+ *    the table.
  */
 this.fnAddData = function( mData, bRedraw )
 {
@@ -198,15 +189,14 @@ this.fnAddData = function( mData, bRedraw )
 	return aiReturn;
 };
 
-/*
- * Function: fnDeleteRow
- * Purpose:  Remove a row for the table
- * Returns:  array:aReturn - the row that was deleted
- * Inputs:   mixed:mTarget - 
- *             int: - index of aoData to be deleted, or
- *             node(TR): - TR element you want to delete
- *           function:fnCallBack - callback function - default null
- *           bool:bRedraw - redraw the table or not - default true
+
+/**
+ * Remove a row for the table
+ *  @param {mixed} mTarget The index of the row from aoData to be deleted, or
+ *    the TR element you want to delete
+ *  @param {function|null} [fnCallBack] Callback function
+ *  @param {bool} [bRedraw=true] Redraw the table or not
+ *  @returns {array} The row that was deleted
  */
 this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 {
@@ -253,12 +243,9 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 	return oData;
 };
 
-/*
- * Function: fnClearTable
- * Purpose:  Quickly and simply clear a table
- * Returns:  -
- * Inputs:   bool:bRedraw - redraw the table or not - default true
- * Notes:    Thanks to Yekimov Denis for contributing the basis for this function!
+/**
+ * Quickly and simply clear a table
+ *  @param {bool} [bRedraw=true] redraw the table or not
  */
 this.fnClearTable = function( bRedraw )
 {
@@ -272,13 +259,15 @@ this.fnClearTable = function( bRedraw )
 	}
 };
 
-/*
- * Function: fnOpen
- * Purpose:  Open a display row (append a row after the row in question)
- * Returns:  node:nNewRow - the row opened
- * Inputs:   node:nTr - the table row to 'open'
- *           string|node|jQuery:mHtml - the HTML to put into the row
- *           string:sClass - class to give the new TD cell
+/**
+ * This function will place a new row directly after a row which is currently 
+ * on display on the page, with the HTML contents that is passed into the 
+ * function. This can be used, for example, to ask for confirmation that a 
+ * particular record should be deleted.
+ *  @param {node} nTr The table row to 'open'
+ *  @param {string|node|jQuery} mHtml The HTML to put into the row
+ *  @param {string} sClass Class to give the new TD cell
+ *  @returns {node} The row opened
  */
 this.fnOpen = function( nTr, mHtml, sClass )
 {
@@ -318,11 +307,11 @@ this.fnOpen = function( nTr, mHtml, sClass )
 	return nNewRow;
 };
 
-/*
- * Function: fnClose
- * Purpose:  Close a display row
- * Returns:  int: 0 (success) or 1 (failed)
- * Inputs:   node:nTr - the table row to 'close'
+/**
+ * The exact opposite of 'opening' a row, this function will close any rows which 
+ * are currently 'open'.
+ *  @param {node} nTr the table row to 'close'
+ *  @returns {int} 0 on success, or 1 if failed (can't find the row)
  */
 this.fnClose = function( nTr )
 {
@@ -346,17 +335,15 @@ this.fnClose = function( nTr )
 	return 1;
 };
 
-/*
- * Function: fnGetData
- * Purpose:  Return an array with the data which is used to make up the table
- * Returns:  array array string: 2d data array ([row][column]) or array string: 1d data array
- *           or string if both row and column are given
- * Inputs:   mixed:mRow - optional - if not present, then the full 2D array for the table 
- *             if given then:
- *               int: - return data object for aoData entry of this index
- *               node(TR): - return data object for this TR element
- *           int:iCol - optional - the column that you want the data of. This will take into
- *               account mDataProp and return the value DataTables uses for this column
+/**
+ * Return an array with the data which is used to make up the table
+ * or string if both row and column are given
+ *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
+ *    internal index (mapped to the TR element)
+ *  @param {int} [iCol] Optional column index that you want the data of
+ *  @returns {array|string} If mRow is undefined, then the data for all rows is
+ *    returned. If mRow is defined, just data for that row, and is iCol is
+ *    defined, only data for the designated cell is returned.
  */
 this.fnGetData = function( mRow, iCol )
 {
@@ -377,14 +364,11 @@ this.fnGetData = function( mRow, iCol )
 	return _fnGetDataMaster( oSettings );
 };
 
-/*
- * Function: fnGetNodes
- * Purpose:  Return an array with the TR nodes used for drawing the table
- * Returns:  array node: TR elements
- *           or
- *           node (if iRow specified)
- * Inputs:   int:iRow - optional - if present then the array returned will be the node for
- *             the row with the index 'iRow'
+/**
+ * The the TR nodes that are used in the table's body
+ *  @param {int} [iRow] Optional row index for the TR element you want
+ *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
+ *    in the table's body, or iRow is defined, just the TR element requested.
  */
 this.fnGetNodes = function( iRow )
 {
@@ -397,13 +381,12 @@ this.fnGetNodes = function( iRow )
 	return _fnGetTrNodes( oSettings );
 };
 
-/*
- * Function: fnGetPosition
- * Purpose:  Get the array indexes of a particular cell from it's DOM element
- * Returns:  int: - row index, or array[ int, int, int ]: - row index, column index (visible)
- *             and column index including hidden columns
- * Inputs:   node:nNode - this can either be a TR, TD or TH in the table's body, the return is
- *             dependent on this input
+/**
+ * Get the array indexes of a particular cell from it's DOM element
+ * and column index including hidden columns
+ *  @param {node} nNode this can either be a TR, TD or TH in the table's body
+ *  @returns {int} If nNode is given as a TR, then a single index is returned, or
+ *    if given as a cell, an array of [row index, column index (visible)] is given.
  */
 this.fnGetPosition = function( nNode )
 {
@@ -430,21 +413,18 @@ this.fnGetPosition = function( nNode )
 	return null;
 };
 
-/*
- * Function: fnUpdate
- * Purpose:  Update a table cell or row - this method will accept either a single value to
- *             update the cell with, an array of values with one element for each column or
- *             an object in the same format as the original data source. The function is
- *             self-referencing in order to make the multi column updates easier.
- * Returns:  int: 0 okay, 1 error
- * Inputs:   object | array string | string:mData - data to update the cell/row with
- *           mixed:mRow - 
- *             int: - index of aoData to be updated, or
- *             node(TR): - TR element you want to update
- *           int:iColumn - the column to update - optional (not used of mData is an array or object)
- *           bool:bRedraw - redraw the table or not - default true
- *           bool:bAction - perform predraw actions or not (you will want this as 'true' if
- *             you have bRedraw as true) - default true
+
+/**
+ * Update a table cell or row - this method will accept either a single value to
+ * update the cell with, an array of values with one element for each column or
+ * an object in the same format as the original data source. The function is
+ * self-referencing in order to make the multi column updates easier.
+ *  @param {object|array|string} mData Data to update the cell/row with
+ *  @param {node|int} mRow TR element you want to update or the aoData index
+ *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
+ *  @param {bool} [bRedraw=true] Redraw the table or not
+ *  @param {bool} [bAction=true] Perform predraw actions or not
+ *  @returns {int} 0 on success, 1 on error
  */
 this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 {
@@ -528,13 +508,11 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 };
 
 
-/*
- * Function: fnSetColumnVis
- * Purpose:  Show a particular column
- * Returns:  -
- * Inputs:   int:iCol - the column whose display should be changed
- *           bool:bShow - show (true) or hide (false) the column
- *           bool:bRedraw - redraw the table or not - default true
+/**
+ * Show a particular column
+ *  @param {int} iCol The column whose display should be changed
+ *  @param {bool} bShow Show (true) or hide (false) the column
+ *  @param {bool} [bRedraw=true] Redraw the table or not
  */
 this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 {
@@ -638,12 +616,13 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	_fnSaveState( oSettings );
 };
 
-/*
- * Function: fnPageChange
- * Purpose:  Change the pagination
- * Returns:  -
- * Inputs:   string:sAction - paging action to take: "first", "previous", "next" or "last"
- *           bool:bRedraw - redraw the table or not - optional - default true
+
+/**
+ * Change the pagination - provides the internal logic for pagination in a simple API 
+ * function. With this function you can have a DataTables table go to the next, 
+ * previous, first or last pages.
+ *  @param {string} sAction Paging action to take: "first", "previous", "next" or "last"
+ *  @param {bool} [bRedraw=true] Redraw the table or not
  */
 this.fnPageChange = function ( sAction, bRedraw )
 {
@@ -657,11 +636,9 @@ this.fnPageChange = function ( sAction, bRedraw )
 	}
 };
 
-/*
- * Function: fnDestroy
- * Purpose:  Destructor for the DataTable
- * Returns:  -
- * Inputs:   -
+/**
+ * Restore the table to it's original state in the DOM by removing all of DataTables 
+ * enhancements, alterations to the DOM structure of the table and event listeners.
  */
 this.fnDestroy = function ( )
 {
@@ -786,12 +763,12 @@ this.fnDestroy = function ( )
 	oSettings = null;
 };
 
-/*
- * Function: fnAdjustColumnSizing
- * Purpose:  Update table sizing based on content. This would most likely be used for scrolling
- *   and will typically need a redraw after it.
- * Returns:  -
- * Inputs:   bool:bRedraw - redraw the table or not, you will typically want to - default true
+/**
+ * This function will make DataTables recalculate the column sizes, based on the data 
+ * contained in the table and the sizes applied to the columns (in the DOM, CSS or 
+ * through the sWidth parameter). This can be useful when the width of the table's 
+ * parent element changes (for example a window resize).
+ *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
  */
 this.fnAdjustColumnSizing = function ( bRedraw )
 {
@@ -809,12 +786,11 @@ this.fnAdjustColumnSizing = function ( bRedraw )
 	}
 };
 
-/*
- * Function: $
- * Purpose:  Do a jQuery selector action on the table's TR elements (from the tbody) and
- *   return the resulting expression
- * Returns:  jQuery object
- * Inputs:   string:sSelector - jQuery selector
+/**
+ * Perform a jQuery selector action on the table's TR elements (from the tbody) and
+ * return the resulting expression
+ *  @param {string} sSelector jQuery selector
+ *  @returns {object} jQuery object
  */
 this.$ = function ( sSelector )
 {
@@ -824,41 +800,3 @@ this.$ = function ( sSelector )
 };
 
 
-/*
- * Plugin API functions
- * 
- * This call will add the functions which are defined in _oExt.oApi to the
- * DataTables object, providing a rather nice way to allow plug-in API functions. Note that
- * this is done here, so that API function can actually override the built in API functions if
- * required for a particular purpose.
- */
-
-/*
- * Function: _fnExternApiFunc
- * Purpose:  Create a wrapper function for exporting an internal func to an external API func
- * Returns:  function: - wrapped function
- * Inputs:   string:sFunc - API function name
- */
-function _fnExternApiFunc (sFunc)
-{
-	return function() {
-			var aArgs = [_fnSettingsFromNode(this[_oExt.iApiIndex])].concat( 
-				Array.prototype.slice.call(arguments) );
-			return _oExt.oApi[sFunc].apply( this, aArgs );
-		};
-}
-
-for ( var sFunc in _oExt.oApi )
-{
-	if ( sFunc )
-	{
-		/*
-		 * Function: anon
-		 * Purpose:  Wrap the plug-in API functions in order to provide the settings as 1st arg 
-		 *   and execute in this scope
-		 * Returns:  -
-		 * Inputs:   -
-		 */
-		this[sFunc] = _fnExternApiFunc(sFunc);
-	}
-}

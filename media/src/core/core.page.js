@@ -1,15 +1,15 @@
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- * Section - Feature: Pagination. Note that most of the paging logic is done in 
+ * Note that most of the paging logic is done in 
  * _oExt.oPagination
  */
 
-/*
- * Function: _fnFeatureHtmlPaginate
- * Purpose:  Generate the node required for default pagination
- * Returns:  node
- * Inputs:   object:oSettings - dataTables settings object
+/**
+ * Generate the node required for default pagination
+ *  @param {object} oSettings dataTables settings object
+ *  @returns {node} Pagination feature node
+ *  @private
  */
 function _fnFeatureHtmlPaginate ( oSettings )
 {
@@ -44,12 +44,13 @@ function _fnFeatureHtmlPaginate ( oSettings )
 	return nPaginate;
 }
 
-/*
- * Function: _fnPageChange
- * Purpose:  Alter the display settings to change the page
- * Returns:  bool:true - page has changed, false - no change (no effect) eg 'first' on page 1
- * Inputs:   object:oSettings - dataTables settings object
- *           string:sAction - paging action to take: "first", "previous", "next" or "last"
+
+/**
+ * Alter the display settings to change the page
+ *  @param {object} oSettings dataTables settings object
+ *  @param {string} sAction paging action to take: "first", "previous", "next" or "last"
+ *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
+ *  @private
  */
 function _fnPageChange ( oSettings, sAction )
 {
@@ -106,3 +107,4 @@ function _fnPageChange ( oSettings, sAction )
 	
 	return iOldStart != oSettings._iDisplayStart;
 }
+
