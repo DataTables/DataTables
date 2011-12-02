@@ -1,10 +1,10 @@
 
 /*
  * Variable: oPagination
- * Purpose:  Container for the various type of pagination that dataTables supports
+ * Purpose:  
  * Scope:    jQuery.fn.dataTableExt
  */
-_oExt.oPagination = {
+$.extend( _oExt.oPagination, {
 	/*
 	 * Variable: two_button
 	 * Purpose:  Standard two button (forward/back) pagination
@@ -30,7 +30,7 @@ _oExt.oPagination = {
 			};
 			
 			/* Store the next and previous elements in the oSettings object as they can be very
-			 * usful for automation - particularly testing
+			 * useful for automation - particularly testing
 			 */
 			if ( !oSettings.bJUI )
 			{
@@ -301,4 +301,4 @@ _oExt.oPagination = {
 			}
 		}
 	}
-};
+} );

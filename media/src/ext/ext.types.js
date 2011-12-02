@@ -1,19 +1,6 @@
 
 
-/*
- * Variable: aTypes
- * Purpose:  Container for the various type of type detection that dataTables supports
- * Scope:    jQuery.fn.dataTableExt
- * Notes:    The functions in this array are expected to parse a string to see if it is a data
- *   type that it recognises. If so then the function should return the name of the type (a
- *   corresponding sort function should be defined!), if the type is not recognised then the
- *   function should return null such that the parser and move on to check the next type.
- *   Note that ordering is important in this array - the functions are processed linearly,
- *   starting at index 0.
- *   Note that the input for these functions is always a string! It cannot be any other data
- *   type
- */
-_oExt.aTypes = [
+$.extend( _oExt.aTypes, [
 	/*
 	 * Function: -
 	 * Purpose:  Check to see if a string is numeric
@@ -97,4 +84,5 @@ _oExt.aTypes = [
 		}
 		return null;
 	}
-];
+] );
+

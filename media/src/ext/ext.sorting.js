@@ -1,14 +1,5 @@
 
-/*
- * Variable: oSort
- * Purpose:  Wrapper for the sorting functions that can be used in DataTables
- * Scope:    jQuery.fn.dataTableExt
- * Notes:    The functions provided in this object are basically standard javascript sort
- *   functions - they expect two inputs which they then compare and then return a priority
- *   result. For each sort method added, two functions need to be defined, an ascending sort and
- *   a descending sort.
- */
-_oExt.oSort = {
+$.extend( _oExt.oSort, {
 	/*
 	 * text sorting
 	 */
@@ -90,4 +81,4 @@ _oExt.oSort = {
 	{
 		return y - x;
 	}
-};
+} );

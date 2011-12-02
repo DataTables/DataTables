@@ -1,10 +1,5 @@
 
-/*
- * Variable: oStdClasses
- * Purpose:  Storage for the various classes that DataTables uses
- * Scope:    jQuery.fn.dataTableExt
- */
-_oExt.oStdClasses = {
+$.extend( _oExt.oStdClasses, {
 	/* Two buttons buttons */
 	"sPagePrevEnabled": "paginate_enabled_previous",
 	"sPagePrevDisabled": "paginate_disabled_previous",
@@ -63,14 +58,10 @@ _oExt.oStdClasses = {
 	
 	/* Misc */
 	"sFooterTH": ""
-};
+} );
 
-/*
- * Variable: oJUIClasses
- * Purpose:  Storage for the various classes that DataTables uses - jQuery UI suitable
- * Scope:    jQuery.fn.dataTableExt
- */
-_oExt.oJUIClasses = {
+
+$.extend( _oExt.oJUIClasses, {
 	/* Two buttons buttons */
 	"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
 	"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",
@@ -130,4 +121,5 @@ _oExt.oJUIClasses = {
 	
 	/* Misc */
 	"sFooterTH": "ui-state-default"
-};
+} );
+

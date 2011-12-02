@@ -89,6 +89,8 @@ this.oApi = {
 	"_fnSetObjectDataFn": _fnSetObjectDataFn
 };
 
+_oExt.oApi = this.oApi;
+
 
 /**
  * Create a wrapper function for exporting an internal functions to an external API.
