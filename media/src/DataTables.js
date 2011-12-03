@@ -83,6 +83,15 @@
 		} );
 	};
 
+	/**
+	 * Version string for plug-ins to check compatibility. Allowed format is
+	 * a.b.c.d.e where: a:int, b:int, c:int, d:string(dev|beta), e:int. d and
+	 * e are optional
+	 *  @type string
+	 *  @default Version number
+	 */
+	DataTable.version = "1.9.0.dev";
+
 	DataTable.models = {};
 	require('model.ext.js');
 	require('model.search.js');
@@ -90,7 +99,7 @@
 	require('model.column.js');
 	require('model.init.js');
 	require('model.settings.js');
-	
+
 	require('ext.js');
 	require('ext.classes.js');
 	require('ext.paging.js');
