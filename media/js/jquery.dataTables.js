@@ -10062,7 +10062,7 @@
 		/*
 		 * numerical sorting
 		 */
-		"numeric-asc": function ( a )
+		"numeric-pre": function ( a )
 		{
 			return (a=="-" || a==="") ? 0 : a*1;
 		},
