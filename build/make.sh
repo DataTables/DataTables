@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd media/src
+cd ../media/src
 
 cp DataTables.js DataTables.js.build
 
