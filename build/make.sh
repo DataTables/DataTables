@@ -1,11 +1,16 @@
 #!/bin/sh
 
+echo ""
+echo "  DataTables build"
+echo ""
+
 cd ../media/src
 
 cp DataTables.js DataTables.js.build
 
 IFS='%'
 
+echo "  Importing files:"
 grep "require(" DataTables.js.build > /dev/null
 while [ $? -eq 0 ]; do
 	REQUIRE=$(grep "require(" DataTables.js.build | head -n 1)
@@ -14,7 +19,7 @@ while [ $? -eq 0 ]; do
 	FILE=$(echo ${REQUIRE} | sed -e "s#^.*require('##g" -e "s#');##")
 	DIR=$(echo ${FILE} | cut -d \. -f 1)
 
-	echo "  $FILE"
+	echo "    $FILE"
 
 	sed "s#^#${SPACER}#" < ${DIR}/${FILE} > ${DIR}/${FILE}.build
 
