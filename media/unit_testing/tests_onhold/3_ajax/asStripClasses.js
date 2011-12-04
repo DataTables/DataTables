@@ -1,5 +1,5 @@
 // DATA_TEMPLATE: empty_table
-oTest.fnStart( "asStripClasses" );
+oTest.fnStart( "asStripeClasses" );
 
 $(document).ready( function () {
 	/* Check the default */
@@ -36,7 +36,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
-				"asStripClasses": []
+				"asStripeClasses": []
 			} );
 		},
 		function () {
@@ -59,7 +59,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
-				"asStripClasses": [ 'test1', 'test2' ]
+				"asStripeClasses": [ 'test1', 'test2' ]
 			} );
 		},
 		function () {
@@ -78,7 +78,7 @@ $(document).ready( function () {
 			oSession.fnRestore();
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/arrays.txt",
-				"asStripClasses": [ 'test1', 'test2', 'test3', 'test4' ]
+				"asStripeClasses": [ 'test1', 'test2', 'test3', 'test4' ]
 			} );
 		},
 		function () {
