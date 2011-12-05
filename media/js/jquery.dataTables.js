@@ -2958,7 +2958,7 @@
 			{
 				$(nScrollBody).scroll( function() {
 					/* Use a blocker to stop scrolling from loading more data while other data is still loading */
-					if ( !oSettings.bDrawing )
+					if ( !oSettings.bDrawing && $(this).scrollTop() !== 0 )
 					{
 						/* Check if we should load the next data set */
 						if ( $(this).scrollTop() + $(this).height() > 
