@@ -131,7 +131,13 @@ function _fnInitComplete ( oSettings, json )
 }
 
 
-// xxx - needs to be called for Ajax as well
+/**
+ * Language compatibility - when certain options are given, and others aren't, we
+ * need to duplicate the values over, in order to provide backwards compatibility
+ * with older language files.
+ *  @param {object} oSettings dataTables settings object
+ *  @private
+ */
 function _fnLanguageCompat( oLanguage )
 {
 	/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
@@ -148,25 +154,6 @@ function _fnLanguageCompat( oLanguage )
 	     typeof oLanguage.sZeroRecords != 'undefined' )
 	{
 		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
-	}
-}
-
-
-/**
- * Copy language variables from remote object to a local one
- *  @param {object} oSettings dataTables settings object
- *  @param {object} oLanguage Language information
- *  @param {bool} bInit init once complete
- *  @private
- */
-function _fnLanguageProcess( oSettings, oLanguage, bInit )
-{
-	oSettings.oLanguage = $.extend( true, oSettings.oLanguage, oLanguage );
-	
-	
-	if ( bInit )
-	{
-		_fnInitialise( oSettings );
 	}
 }
 

@@ -13,7 +13,7 @@ this.oApi = {
 	"_fnExternApiFunc": _fnExternApiFunc,
 	"_fnInitialise": _fnInitialise,
 	"_fnInitComplete": _fnInitComplete,
-	"_fnLanguageProcess": _fnLanguageProcess,
+	"_fnLanguageCompat": _fnLanguageCompat,
 	"_fnAddColumn": _fnAddColumn,
 	"_fnColumnOptions": _fnColumnOptions,
 	"_fnAddData": _fnAddData,

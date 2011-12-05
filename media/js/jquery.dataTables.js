@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageProcess,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
 
 (function($, window, document) {
 
@@ -2507,7 +2507,13 @@
 		}
 		
 		
-		// xxx - needs to be called for Ajax as well
+		/**
+		 * Language compatibility - when certain options are given, and others aren't, we
+		 * need to duplicate the values over, in order to provide backwards compatibility
+		 * with older language files.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @private
+		 */
 		function _fnLanguageCompat( oLanguage )
 		{
 			/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
@@ -2524,25 +2530,6 @@
 			     typeof oLanguage.sZeroRecords != 'undefined' )
 			{
 				_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
-			}
-		}
-		
-		
-		/**
-		 * Copy language variables from remote object to a local one
-		 *  @param {object} oSettings dataTables settings object
-		 *  @param {object} oLanguage Language information
-		 *  @param {bool} bInit init once complete
-		 *  @private
-		 */
-		function _fnLanguageProcess( oSettings, oLanguage, bInit )
-		{
-			oSettings.oLanguage = $.extend( true, oSettings.oLanguage, oLanguage );
-			
-			
-			if ( bInit )
-			{
-				_fnInitialise( oSettings );
 			}
 		}
 		
@@ -4560,6 +4547,40 @@
 			}
 		}
 		
+		
+		/**
+		 * Extend objects - very similar to jQuery.extend, but deep copy objects, and shallow
+		 * copy arrays. The reason we need to do this, is that we don't want to deep copy array
+		 * init values (such as aaSorting) since the dev wouldn't be able to override them, but
+		 * we do want to deep copy arrays.
+		 *  @param {object} oOut Object to extend
+		 *  @param {object} oExtender Object from which the properties will be applied to oOut
+		 *  @returns {object} oOut Reference, just for convenience - oOut === the return.
+		 *  @private
+		 *  @todo This doesn't take account of arrays inside the deep copied objects.
+		 */
+		function _fnExtend( oOut, oExtender )
+		{
+			for ( var prop in oOut )
+			{
+				if ( oOut.hasOwnProperty(prop) && typeof oExtender[prop] != 'undefined' )
+				{
+					if ( typeof oInit[prop] == 'object' && $.isArray(oExtender[prop]) === false )
+					{
+						$.extend( true, oOut[prop], oExtender[prop] );
+					}
+					else
+					{
+						oOut[prop] = oExtender[prop];
+					}
+				}
+			}
+		
+			return oOut;
+		}
+		
+		
+		
 
 		
 		
@@ -5589,7 +5610,7 @@
 			"_fnExternApiFunc": _fnExternApiFunc,
 			"_fnInitialise": _fnInitialise,
 			"_fnInitComplete": _fnInitComplete,
-			"_fnLanguageProcess": _fnLanguageProcess,
+			"_fnLanguageCompat": _fnLanguageCompat,
 			"_fnAddColumn": _fnAddColumn,
 			"_fnColumnOptions": _fnColumnOptions,
 			"_fnAddData": _fnAddData,
@@ -5695,6 +5716,18 @@
 		return this.each(function() {
 			
 			var i=0, iLen, j, jLen, k, kLen;
+			var sId = this.getAttribute( 'id' );
+			var bInitHandedOff = false;
+			var bUsePassedData = false;
+			
+			
+			/* Sanity check */
+			if ( this.nodeName.toLowerCase() != 'table' )
+			{
+				_fnLog( oSettings, 0, "Attempted to initialise DataTables on a node which is not a "+
+					"table: "+this.nodeName );
+				return;
+			}
 			
 			/* Check to see if we are re-initialising a table */
 			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
@@ -5735,95 +5768,33 @@
 				}
 			}
 			
-			/* Make a complete and independent copy of the settings object */
-			var oSettings = $.extend( true, {}, DataTable.models.oSettings );
+			/* Create the settings object for this table and set some of the default parameters */
+			var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
+				"nTable":        this,
+				"oApi":          _that.oApi,
+				"oInit":         oInit,
+				"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
+				"sDestroyWidth": $(this).width(),
+				"sInstance":     (sId!==null) ? sId : _oExt._oExternConfig.iNextUnique++,
+				"sTableId":      sId
+			} );
 			_aoSettings.push( oSettings );
 			
-			var bInitHandedOff = false;
-			var bUsePassedData = false;
-			
-			/* Set the id */
-			var sId = this.getAttribute( 'id' );
-			if ( sId !== null )
-			{
-				oSettings.sTableId = sId;
-				oSettings.sInstance = sId;
-			}
-			else
-			{
-				oSettings.sInstance = _oExt._oExternConfig.iNextUnique ++;
-			}
-			
-			/* Sanity check */
-			if ( this.nodeName.toLowerCase() != 'table' )
-			{
-				_fnLog( oSettings, 0, "Attempted to initialise DataTables on a node which is not a "+
-					"table: "+this.nodeName );
-				return;
-			}
-			
-			/* Set the table node */
-			oSettings.nTable = this;
-			
-			/* Keep a reference to the 'this' instance for the table. Note that if this table is being
-			 * created with others, we retrieve a unique instance to ease API access.
-			 */
-			oSettings.oInstance = _that.length == 1 ? _that : $(this).dataTable();
-			
-			/* Bind the API functions to the settings, so we can perform actions whenever oSettings is
-			 * available
-			 */
-			oSettings.oApi = _that.oApi;
-			
-			/* State the table's width for if a destroy is called at a later time */
-			oSettings.sDestroyWidth = $(this).width();
-			
-			
+			/* Setting up the initialisation object */
 			if (typeof oInit === 'undefined' || oInit === null)
 			{
 				oInit = {};
-			};
+			}
 			
-			// Need a backwards compatibility function for mapping old parameters to the new - specifically
-			// the language records. Perhaps should have an event? Sounds sensible...
-			
-			if ( typeof oInit.oLanguage != 'undefined' ) {
+			// Backwards compatibility, before we apply all the defaults
+			if ( typeof oInit.oLanguage != 'undefined' )
+			{
 				_fnLanguageCompat( oInit.oLanguage );
 			}
 			
-			var oFullInit = $.extend( true, {}, DataTable.models.oInit );
+			oInit = _fnExtend( $.extend(true, {}, DataTable.models.oInit), oInit );
 			
-			for ( var initProp in oFullInit ) {
-				if ( oFullInit.hasOwnProperty(initProp) ) {
-					if ( typeof oInit[initProp] != 'undefined' ) {
-						if ( typeof oInit[initProp] == 'object' && $.isArray(oInit[initProp]) === false ) {
-							$.extend( true, oFullInit[initProp], oInit[initProp] );
-						} else {
-							oFullInit[initProp] = oInit[initProp];
-						}
-					}
-				}
-			}
-			
-			oInit = oFullInit;
-			
-			// Can't use deep extend as we don't want to copy the array values
-			// Can't use shallow extend as that copies object references (i.e. the default object IS the object in use)
-			
-			
-			
-			
-			/* Store the initialisation object that was passed in, useful for debugging */
-			//oSettings.oInit = oInit;
-			//
-			//console.log( DataTable.models.oInit.oSearch.sSearch );
-			//oInit = (typeof oInit === 'undefined' || oInit === null) ?
-			//	$.extend( {}, DataTable.models.oInit ) :
-			//	$.extend( {}, DataTable.models.oInit, oInit );
-			//console.log( oInit.oSearch === DataTable.models.oInit.oSearch );
-			//console.log( oInit.oSearch === DataTable.models.oSearch );
-			//console.log( DataTable.models.oSearch === DataTable.models.oInit.oSearch );
-			
+			// Map the initialisation options onto the settings object
 			_fnMap( oSettings.oFeatures, oInit, "bPaginate" );
 			_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
 			_fnMap( oSettings.oFeatures, oInit, "bFilter" );
@@ -5978,21 +5949,22 @@
 			/* Language definitions */
 			if ( oInit.oLanguage.sUrl !== "" )
 			{
-				/* Get the language definitions from a file */
+				/* Get the language definitions from a file - because this Ajax call makes the language
+				 * get async to the remainder of this function we use bInitHandedOff to indicate that 
+				 * _fnInitialise will be fired by the returned Ajax handler, rather than the constructor
+				 */
 				oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
-				$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) { 
-					_fnLanguageProcess( oSettings, json, true ); } );
+				$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) {
+					_fnLanguageCompat( json );
+					$.extend( true, oSettings.oLanguage, json );
+					_fnInitialise( oSettings );
+				} );
 				bInitHandedOff = true;
 			}
 			else
 			{
-				_fnLanguageProcess( oSettings, oInit.oLanguage, false );
+				$.extend( true, oSettings.oLanguage, oInit.oLanguage );
 			}
-			/* Warning: The _fnLanguageProcess function is async to the remainder of this function due
-			 * to the XHR. We use _bInitialised in _fnLanguageProcess() to check this the processing 
-			 * below is complete. The reason for spliting it like this is optimisation - we can fire
-			 * off the XHR (if needed) and then continue processing the data.
-			 */
 			
 			
 			/*

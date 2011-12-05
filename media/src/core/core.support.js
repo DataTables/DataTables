@@ -176,3 +176,37 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
 	}
 }
 
+
+/**
+ * Extend objects - very similar to jQuery.extend, but deep copy objects, and shallow
+ * copy arrays. The reason we need to do this, is that we don't want to deep copy array
+ * init values (such as aaSorting) since the dev wouldn't be able to override them, but
+ * we do want to deep copy arrays.
+ *  @param {object} oOut Object to extend
+ *  @param {object} oExtender Object from which the properties will be applied to oOut
+ *  @returns {object} oOut Reference, just for convenience - oOut === the return.
+ *  @private
+ *  @todo This doesn't take account of arrays inside the deep copied objects.
+ */
+function _fnExtend( oOut, oExtender )
+{
+	for ( var prop in oOut )
+	{
+		if ( oOut.hasOwnProperty(prop) && typeof oExtender[prop] != 'undefined' )
+		{
+			if ( typeof oInit[prop] == 'object' && $.isArray(oExtender[prop]) === false )
+			{
+				$.extend( true, oOut[prop], oExtender[prop] );
+			}
+			else
+			{
+				oOut[prop] = oExtender[prop];
+			}
+		}
+	}
+
+	return oOut;
+}
+
+
+
