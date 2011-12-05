@@ -472,7 +472,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 	{
 		/* Global filter */
 		_fnFilterComplete( oSettings, {
-			"sSearch":sInput,
+			"sSearch":sInput+"",
 			"bRegex": bRegex,
 			"bSmart": bSmart
 		}, 1 );
@@ -489,7 +489,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 	else
 	{
 		/* Single column filter */
-		oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput;
+		oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput+"";
 		oSettings.aoPreSearchCols[ iColumn ].bRegex = bRegex;
 		oSettings.aoPreSearchCols[ iColumn ].bSmart = bSmart;
 		_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );

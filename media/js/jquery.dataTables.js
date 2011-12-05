@@ -2263,8 +2263,8 @@
 		function _fnEscapeRegex ( sVal )
 		{
 			var acEscape = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^' ];
-		  var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
-		  return sVal.replace(reReplace, '\\$1');
+			var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
+			return sVal.replace(reReplace, '\\$1');
 		}
 		
 		
@@ -5056,7 +5056,7 @@
 			{
 				/* Global filter */
 				_fnFilterComplete( oSettings, {
-					"sSearch":sInput,
+					"sSearch":sInput+"",
 					"bRegex": bRegex,
 					"bSmart": bSmart
 				}, 1 );
@@ -5073,7 +5073,7 @@
 			else
 			{
 				/* Single column filter */
-				oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput;
+				oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput+"";
 				oSettings.aoPreSearchCols[ iColumn ].bRegex = bRegex;
 				oSettings.aoPreSearchCols[ iColumn ].bSmart = bSmart;
 				_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
