@@ -131,6 +131,27 @@ function _fnInitComplete ( oSettings, json )
 }
 
 
+// xxx - needs to be called for Ajax as well
+function _fnLanguageCompat( oLanguage )
+{
+	/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
+	 * sZeroRecords - assuming that is given.
+	 */
+	if ( typeof oLanguage.sEmptyTable == 'undefined' && 
+	     typeof oLanguage.sZeroRecords != 'undefined' )
+	{
+		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
+	}
+
+	/* Likewise with loading records */
+	if ( typeof oLanguage.sLoadingRecords == 'undefined' && 
+	     typeof oLanguage.sZeroRecords != 'undefined' )
+	{
+		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
+	}
+}
+
+
 /**
  * Copy language variables from remote object to a local one
  *  @param {object} oSettings dataTables settings object
@@ -142,21 +163,6 @@ function _fnLanguageProcess( oSettings, oLanguage, bInit )
 {
 	oSettings.oLanguage = $.extend( true, oSettings.oLanguage, oLanguage );
 	
-	/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-	 * sZeroRecords - assuming that is given.
-	 */
-	if ( typeof oLanguage.sEmptyTable == 'undefined' && 
-	     typeof oLanguage.sZeroRecords != 'undefined' )
-	{
-		_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
-	}
-
-	/* Likewise with loading records */
-	if ( typeof oLanguage.sLoadingRecords == 'undefined' && 
-	     typeof oLanguage.sZeroRecords != 'undefined' )
-	{
-		_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
-	}
 	
 	if ( bInit )
 	{

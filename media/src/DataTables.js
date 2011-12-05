@@ -57,7 +57,7 @@
 	 *      } );
 	 *    } );
 	 */
-	var DataTable = function( oInit )
+	window.DataTable = function( oInit )
 	{
 		require('core.columns.js');
 		require('core.data.js');

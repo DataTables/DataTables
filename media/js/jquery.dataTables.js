@@ -57,7 +57,7 @@
 	 *      } );
 	 *    } );
 	 */
-	var DataTable = function( oInit )
+	window.DataTable = function( oInit )
 	{
 		
 		
@@ -2507,6 +2507,27 @@
 		}
 		
 		
+		// xxx - needs to be called for Ajax as well
+		function _fnLanguageCompat( oLanguage )
+		{
+			/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
+			 * sZeroRecords - assuming that is given.
+			 */
+			if ( typeof oLanguage.sEmptyTable == 'undefined' && 
+			     typeof oLanguage.sZeroRecords != 'undefined' )
+			{
+				_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
+			}
+		
+			/* Likewise with loading records */
+			if ( typeof oLanguage.sLoadingRecords == 'undefined' && 
+			     typeof oLanguage.sZeroRecords != 'undefined' )
+			{
+				_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
+			}
+		}
+		
+		
 		/**
 		 * Copy language variables from remote object to a local one
 		 *  @param {object} oSettings dataTables settings object
@@ -2518,21 +2539,6 @@
 		{
 			oSettings.oLanguage = $.extend( true, oSettings.oLanguage, oLanguage );
 			
-			/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-			 * sZeroRecords - assuming that is given.
-			 */
-			if ( typeof oLanguage.sEmptyTable == 'undefined' && 
-			     typeof oLanguage.sZeroRecords != 'undefined' )
-			{
-				_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
-			}
-		
-			/* Likewise with loading records */
-			if ( typeof oLanguage.sLoadingRecords == 'undefined' && 
-			     typeof oLanguage.sZeroRecords != 'undefined' )
-			{
-				_fnMap( oSettings.oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
-			}
 			
 			if ( bInit )
 			{
@@ -5773,13 +5779,50 @@
 			oSettings.sDestroyWidth = $(this).width();
 			
 			
+			if (typeof oInit === 'undefined' || oInit === null)
+			{
+				oInit = {};
+			};
+			
+			// Need a backwards compatibility function for mapping old parameters to the new - specifically
+			// the language records. Perhaps should have an event? Sounds sensible...
+			
+			if ( typeof oInit.oLanguage != 'undefined' ) {
+				_fnLanguageCompat( oInit.oLanguage );
+			}
+			
+			var oFullInit = $.extend( true, {}, DataTable.models.oInit );
+			
+			for ( var initProp in oFullInit ) {
+				if ( oFullInit.hasOwnProperty(initProp) ) {
+					if ( typeof oInit[initProp] != 'undefined' ) {
+						if ( typeof oInit[initProp] == 'object' && $.isArray(oInit[initProp]) === false ) {
+							$.extend( true, oFullInit[initProp], oInit[initProp] );
+						} else {
+							oFullInit[initProp] = oInit[initProp];
+						}
+					}
+				}
+			}
+			
+			oInit = oFullInit;
+			
+			// Can't use deep extend as we don't want to copy the array values
+			// Can't use shallow extend as that copies object references (i.e. the default object IS the object in use)
+			
+			
+			
+			
 			/* Store the initialisation object that was passed in, useful for debugging */
-			oSettings.oInit = oInit;
-			
-			oInit = (typeof oInit === 'undefined' || oInit === null) ?
-				$.extend( true, {}, DataTable.models.oInit ) :
-				$.extend( true, {}, DataTable.models.oInit, oInit );
-			
+			//oSettings.oInit = oInit;
+			//
+			//console.log( DataTable.models.oInit.oSearch.sSearch );
+			//oInit = (typeof oInit === 'undefined' || oInit === null) ?
+			//	$.extend( {}, DataTable.models.oInit ) :
+			//	$.extend( {}, DataTable.models.oInit, oInit );
+			//console.log( oInit.oSearch === DataTable.models.oInit.oSearch );
+			//console.log( oInit.oSearch === DataTable.models.oSearch );
+			//console.log( DataTable.models.oSearch === DataTable.models.oInit.oSearch );
 			
 			_fnMap( oSettings.oFeatures, oInit, "bPaginate" );
 			_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
