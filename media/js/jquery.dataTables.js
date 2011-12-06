@@ -25,7 +25,7 @@
  * When considering jsLint, we need to allow eval() as it it is used for reading cookies
  */
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs*/
 
 (function($, window, document) {
 
@@ -374,6 +374,79 @@
 				return "";
 			}
 			return sNames.slice(0, -1);
+		}
+		
+		
+		/**
+		 * Take the column definitions and static columns arrays and calculate how
+		 * they relate to column indexes. The callback function will then apply the
+		 * definition found for a column to a suitable configuration object.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {array} aoColDefs The aoColumnDefs array that is to be applied
+		 *  @param {array} aoCols The aoColumns array that defines columns individually
+		 *  @param {function} fn Callback function - takes two parameters, the calculated
+		 *    column index and the definition for that column.
+		 *  @private
+		 */
+		function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
+		{
+			var i, iLen;
+		
+			// Column definitions with aTargets
+			if ( aoColDefs )
+			{
+				/* Loop over the definitions array - loop in reverse so first instance has priority */
+				for ( i=aoColDefs.length-1 ; i>=0 ; i-- )
+				{
+					/* Each definition can target multiple columns, as it is an array */
+					var aTargets = aoColDefs[i].aTargets;
+					if ( !$.isArray( aTargets ) )
+					{
+						_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
+					}
+		
+					for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
+					{
+						if ( typeof aTargets[j] == 'number' && aTargets[j] >= 0 )
+						{
+							/* Add columns that we don't yet know about */
+							while( oSettings.aoColumns.length <= aTargets[j] )
+							{
+								_fnAddColumn( oSettings );
+							}
+		
+							/* Integer, basic index */
+							fn( aTargets[j], aoColDefs[i] );
+						}
+						else if ( typeof aTargets[j] == 'number' && aTargets[j] < 0 )
+						{
+							/* Negative integer, right to left column counting */
+							fn( oSettings.aoColumns.length+aTargets[j], aoColDefs[i] );
+						}
+						else if ( typeof aTargets[j] == 'string' )
+						{
+							/* Class name matching on TH element */
+							for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
+							{
+								if ( aTargets[j] == "_all" ||
+								     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
+								{
+									fn( k, aoColDefs[i] );
+								}
+							}
+						}
+					}
+				}
+			}
+		
+			// Statically defined columns array
+			if ( aoCols )
+			{
+				for ( i=0, iLen=aoCols.length ; i<iLen ; i++ )
+				{
+					fn( i, aoCols[i] );
+				}
+			}
 		}
 		
 		
@@ -4602,8 +4675,6 @@
 			return oOut;
 		}
 		
-		
-		
 
 		
 		
@@ -5826,7 +5897,8 @@
 			"_fnGetCellData": _fnGetCellData,
 			"_fnSetCellData": _fnSetCellData,
 			"_fnGetObjectDataFn": _fnGetObjectDataFn,
-			"_fnSetObjectDataFn": _fnSetObjectDataFn
+			"_fnSetObjectDataFn": _fnSetObjectDataFn,
+			"_fnApplyColumnDefs": _fnApplyColumnDefs
 		};
 		
 		_oExt.oApi = this.oApi;
@@ -6181,7 +6253,7 @@
 			/* Add the columns */
 			for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 			{
-				/* Check if we have column visibilty state to restore */
+				/* Short cut - use the loop to check if we have column visibility state to restore */
 				if ( typeof oInit.saved_aoColumns != 'undefined' && oInit.saved_aoColumns.length == iLen )
 				{
 					if ( aoColumnsInit[i] === null )
@@ -6194,62 +6266,10 @@
 				_fnAddColumn( oSettings, anThs ? anThs[i] : null );
 			}
 			
-			/* Add options from column definations */
-			if ( oInit.aoColumnDefs !== null )
-			{
-				/* Loop over the column defs array - loop in reverse so first instace has priority */
-				for ( i=oInit.aoColumnDefs.length-1 ; i>=0 ; i-- )
-				{
-					/* Each column def can target multiple columns, as it is an array */
-					var aTargets = oInit.aoColumnDefs[i].aTargets;
-					if ( !$.isArray( aTargets ) )
-					{
-						_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
-					}
-					for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
-					{
-						if ( typeof aTargets[j] == 'number' && aTargets[j] >= 0 )
-						{
-							/* 0+ integer, left to right column counting. We add columns which are unknown
-							 * automatically. Is this the right behaviour for this? We should at least
-							 * log it in future. We cannot do this for the negative or class targets, only here.
-							 */
-							while( oSettings.aoColumns.length <= aTargets[j] )
-							{
-								_fnAddColumn( oSettings );
-							}
-							_fnColumnOptions( oSettings, aTargets[j], oInit.aoColumnDefs[i] );
-						}
-						else if ( typeof aTargets[j] == 'number' && aTargets[j] < 0 )
-						{
-							/* Negative integer, right to left column counting */
-							_fnColumnOptions( oSettings, oSettings.aoColumns.length+aTargets[j], 
-								oInit.aoColumnDefs[i] );
-						}
-						else if ( typeof aTargets[j] == 'string' )
-						{
-							/* Class name matching on TH element */
-							for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
-							{
-								if ( aTargets[j] == "_all" ||
-								     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
-								{
-									_fnColumnOptions( oSettings, k, oInit.aoColumnDefs[i] );
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			/* Add options from column array - after the defs array so this has priority */
-			if ( typeof aoColumnsInit != 'undefined' )
-			{
-				for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
-				{
-					_fnColumnOptions( oSettings, i, aoColumnsInit[i] );
-				}
-			}
+			/* Apply the column definitions */
+			_fnApplyColumnDefs( oSettings, oInit.aoColumnDefs, aoColumnsInit, function (iCol, oDef) {
+				_fnColumnOptions( oSettings, iCol, oDef );
+			} );
 			
 			
 			/*
@@ -7091,7 +7111,10 @@
 		"_bAutoType": true,
 		
 		/**
-		 * 
+		 * Developer definable function that is called whenever a cell is created (Ajax source,
+		 * etc) or processed for input (DOM source). This can be used as a compliment to fnRender
+		 * allowing you to modify the DOM element (add background colour for example) when the
+		 * element is available (since it is not when fnRender is called).
 		 *  @type function
 		 *  @param {element} nTd The TD node that has been created
 		 *  @param {*} sData The Data for the cell

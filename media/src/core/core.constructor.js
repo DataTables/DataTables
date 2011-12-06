@@ -322,7 +322,7 @@ else
 /* Add the columns */
 for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 {
-	/* Check if we have column visibilty state to restore */
+	/* Short cut - use the loop to check if we have column visibility state to restore */
 	if ( typeof oInit.saved_aoColumns != 'undefined' && oInit.saved_aoColumns.length == iLen )
 	{
 		if ( aoColumnsInit[i] === null )
@@ -335,62 +335,10 @@ for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 	_fnAddColumn( oSettings, anThs ? anThs[i] : null );
 }
 
-/* Add options from column definations */
-if ( oInit.aoColumnDefs !== null )
-{
-	/* Loop over the column defs array - loop in reverse so first instace has priority */
-	for ( i=oInit.aoColumnDefs.length-1 ; i>=0 ; i-- )
-	{
-		/* Each column def can target multiple columns, as it is an array */
-		var aTargets = oInit.aoColumnDefs[i].aTargets;
-		if ( !$.isArray( aTargets ) )
-		{
-			_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
-		}
-		for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
-		{
-			if ( typeof aTargets[j] == 'number' && aTargets[j] >= 0 )
-			{
-				/* 0+ integer, left to right column counting. We add columns which are unknown
-				 * automatically. Is this the right behaviour for this? We should at least
-				 * log it in future. We cannot do this for the negative or class targets, only here.
-				 */
-				while( oSettings.aoColumns.length <= aTargets[j] )
-				{
-					_fnAddColumn( oSettings );
-				}
-				_fnColumnOptions( oSettings, aTargets[j], oInit.aoColumnDefs[i] );
-			}
-			else if ( typeof aTargets[j] == 'number' && aTargets[j] < 0 )
-			{
-				/* Negative integer, right to left column counting */
-				_fnColumnOptions( oSettings, oSettings.aoColumns.length+aTargets[j], 
-					oInit.aoColumnDefs[i] );
-			}
-			else if ( typeof aTargets[j] == 'string' )
-			{
-				/* Class name matching on TH element */
-				for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
-				{
-					if ( aTargets[j] == "_all" ||
-					     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
-					{
-						_fnColumnOptions( oSettings, k, oInit.aoColumnDefs[i] );
-					}
-				}
-			}
-		}
-	}
-}
-
-/* Add options from column array - after the defs array so this has priority */
-if ( typeof aoColumnsInit != 'undefined' )
-{
-	for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
-	{
-		_fnColumnOptions( oSettings, i, aoColumnsInit[i] );
-	}
-}
+/* Apply the column definitions */
+_fnApplyColumnDefs( oSettings, oInit.aoColumnDefs, aoColumnsInit, function (iCol, oDef) {
+	_fnColumnOptions( oSettings, iCol, oDef );
+} );
 
 
 /*

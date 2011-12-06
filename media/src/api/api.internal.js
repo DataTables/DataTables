@@ -86,7 +86,8 @@ this.oApi = {
 	"_fnGetCellData": _fnGetCellData,
 	"_fnSetCellData": _fnSetCellData,
 	"_fnGetObjectDataFn": _fnGetObjectDataFn,
-	"_fnSetObjectDataFn": _fnSetObjectDataFn
+	"_fnSetObjectDataFn": _fnSetObjectDataFn,
+	"_fnApplyColumnDefs": _fnApplyColumnDefs
 };
 
 _oExt.oApi = this.oApi;

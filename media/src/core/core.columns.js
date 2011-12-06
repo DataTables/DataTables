@@ -315,3 +315,76 @@ function _fnColumnOrdering ( oSettings )
 	return sNames.slice(0, -1);
 }
 
+
+/**
+ * Take the column definitions and static columns arrays and calculate how
+ * they relate to column indexes. The callback function will then apply the
+ * definition found for a column to a suitable configuration object.
+ *  @param {object} oSettings dataTables settings object
+ *  @param {array} aoColDefs The aoColumnDefs array that is to be applied
+ *  @param {array} aoCols The aoColumns array that defines columns individually
+ *  @param {function} fn Callback function - takes two parameters, the calculated
+ *    column index and the definition for that column.
+ *  @private
+ */
+function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
+{
+	var i, iLen;
+
+	// Column definitions with aTargets
+	if ( aoColDefs )
+	{
+		/* Loop over the definitions array - loop in reverse so first instance has priority */
+		for ( i=aoColDefs.length-1 ; i>=0 ; i-- )
+		{
+			/* Each definition can target multiple columns, as it is an array */
+			var aTargets = aoColDefs[i].aTargets;
+			if ( !$.isArray( aTargets ) )
+			{
+				_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
+			}
+
+			for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
+			{
+				if ( typeof aTargets[j] == 'number' && aTargets[j] >= 0 )
+				{
+					/* Add columns that we don't yet know about */
+					while( oSettings.aoColumns.length <= aTargets[j] )
+					{
+						_fnAddColumn( oSettings );
+					}
+
+					/* Integer, basic index */
+					fn( aTargets[j], aoColDefs[i] );
+				}
+				else if ( typeof aTargets[j] == 'number' && aTargets[j] < 0 )
+				{
+					/* Negative integer, right to left column counting */
+					fn( oSettings.aoColumns.length+aTargets[j], aoColDefs[i] );
+				}
+				else if ( typeof aTargets[j] == 'string' )
+				{
+					/* Class name matching on TH element */
+					for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
+					{
+						if ( aTargets[j] == "_all" ||
+						     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
+						{
+							fn( k, aoColDefs[i] );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Statically defined columns array
+	if ( aoCols )
+	{
+		for ( i=0, iLen=aoCols.length ; i<iLen ; i++ )
+		{
+			fn( i, aoCols[i] );
+		}
+	}
+}
+
