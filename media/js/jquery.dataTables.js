@@ -1554,11 +1554,11 @@
 		 * Data the data from the server (nuking the old) and redraw the table
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {object} json json data return from the server.
-		 *  @param {object} json.sEcho Tracking flag for DataTables to match requests
-		 *  @param {object} json.iTotalRecords Number of records in the data set, not accounting for filtering
-		 *  @param {object} json.iTotalDisplayRecords Number of records in the data set, accounting for filtering
-		 *  @param {object} json.aaData The data to display on this page
-		 *  @param {object} [json.sColumns] Column ordering (sName, comma separated)
+		 *  @param {string} json.sEcho Tracking flag for DataTables to match requests
+		 *  @param {int} json.iTotalRecords Number of records in the data set, not accounting for filtering
+		 *  @param {int} json.iTotalDisplayRecords Number of records in the data set, accounting for filtering
+		 *  @param {array} json.aaData The data to display on this page
+		 *  @param {string} [json.sColumns] Column ordering (sName, comma separated)
 		 *  @private
 		 */
 		function _fnAjaxUpdateDraw ( oSettings, json )
@@ -1583,8 +1583,8 @@
 			{
 				_fnClearTable( oSettings );
 			}
-			oSettings._iRecordsTotal = json.iTotalRecords;
-			oSettings._iRecordsDisplay = json.iTotalDisplayRecords;
+			oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
+			oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
 			
 			/* Determine if reordering is required */
 			var sOrdering = _fnColumnOrdering(oSettings);
