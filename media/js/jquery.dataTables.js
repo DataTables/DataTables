@@ -4005,7 +4005,7 @@
 					if ( oSettings.bJUI )
 					{
 						/* jQuery UI uses extra markup */
-						var jqSpan = $("span", oSettings.aoColumns[i].nTh);
+						var jqSpan = $("span."+_oExt.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
 						jqSpan.removeClass(oClasses.sSortJUIAsc +" "+ oClasses.sSortJUIDesc +" "+ 
 							oClasses.sSortJUI +" "+ oClasses.sSortJUIAscAllowed +" "+ oClasses.sSortJUIDescAllowed );
 						
