@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# DEFAULTS
+CLOSURE="/usr/local/closure_compiler/compiler.jar"
+JSDOC3="/usr/local/jsdoc3/jsdoc.jar"
+
+
 echo ""
 echo "  DataTables build"
 echo ""
@@ -32,3 +37,8 @@ while [ $? -eq 0 ]; do
 done
 
 mv DataTables.js.build ../js/jquery.dataTables.js
+
+
+if [ "$1" = "compress" ]; then
+	java -jar $CLOSURE --js ../js/jquery.dataTables.js > ../js/jquery.dataTables.min.closure.js
+fi
