@@ -10342,6 +10342,7 @@
 	
 
 	// jQuery aliases
+	$.fn.DataTable = DataTable;
 	$.fn.dataTable = DataTable;
 	$.fn.dataTableSettings = DataTable.settings;
 	$.fn.dataTableExt = DataTable.ext;
