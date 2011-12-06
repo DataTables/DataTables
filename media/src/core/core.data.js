@@ -85,7 +85,8 @@ function _fnGatherData( oSettings )
 {
 	var iLoop, i, iLen, j, jLen, jInner,
 	 	nTds, nTrs, nTd, aLocalData, iThisIndex,
-		iRow, iRows, iColumn, iColumns, sNodeName;
+		iRow, iRows, iColumn, iColumns, sNodeName,
+		oCol, oData;
 	
 	/*
 	 * Process by row first
@@ -152,17 +153,19 @@ function _fnGatherData( oSettings )
 	/* Now process by column */
 	for ( iColumn=0, iColumns=oSettings.aoColumns.length ; iColumn<iColumns ; iColumn++ )
 	{
+		oCol = oSettings.aoColumns[iColumn];
+
 		/* Get the title of the column - unless there is a user set one */
-		if ( oSettings.aoColumns[iColumn].sTitle === null )
+		if ( oCol.sTitle === null )
 		{
-			oSettings.aoColumns[iColumn].sTitle = oSettings.aoColumns[iColumn].nTh.innerHTML;
+			oCol.sTitle = oCol.nTh.innerHTML;
 		}
 		
 		var
-			bAutoType = oSettings.aoColumns[iColumn]._bAutoType,
-			bRender = typeof oSettings.aoColumns[iColumn].fnRender == 'function',
-			bClass = oSettings.aoColumns[iColumn].sClass !== null,
-			bVisible = oSettings.aoColumns[iColumn].bVisible,
+			bAutoType = oCol._bAutoType,
+			bRender = typeof oCol.fnRender == 'function',
+			bClass = oCol.sClass !== null,
+			bVisible = oCol.bVisible,
 			nCell, sThisType, sRendered, sValType;
 		
 		/* A single loop to rule them all (and be more efficient) */
@@ -170,24 +173,25 @@ function _fnGatherData( oSettings )
 		{
 			for ( iRow=0, iRows=oSettings.aoData.length ; iRow<iRows ; iRow++ )
 			{
+				oData = oSettings.aoData[iRow];
 				nCell = nTds[ (iRow*iColumns) + iColumn ];
 				
 				/* Type detection */
-				if ( bAutoType && oSettings.aoColumns[iColumn].sType != 'string' )
+				if ( bAutoType && oCol.sType != 'string' )
 				{
 					sValType = _fnGetCellData( oSettings, iRow, iColumn, 'type' );
 					if ( sValType !== '' )
 					{
 						sThisType = _fnDetectType( sValType );
-						if ( oSettings.aoColumns[iColumn].sType === null )
+						if ( oCol.sType === null )
 						{
-							oSettings.aoColumns[iColumn].sType = sThisType;
+							oCol.sType = sThisType;
 						}
-						else if ( oSettings.aoColumns[iColumn].sType != sThisType && 
-						          oSettings.aoColumns[iColumn].sType != "html" )
+						else if ( oCol.sType != sThisType && 
+						          oCol.sType != "html" )
 						{
 							/* String is always the 'fallback' option */
-							oSettings.aoColumns[iColumn].sType = 'string';
+							oCol.sType = 'string';
 						}
 					}
 				}
@@ -195,14 +199,14 @@ function _fnGatherData( oSettings )
 				/* Rendering */
 				if ( bRender )
 				{
-					sRendered = oSettings.aoColumns[iColumn].fnRender( {
+					sRendered = oCol.fnRender( {
 							"iDataRow": iRow,
 							"iDataColumn": iColumn,
-							"aData": oSettings.aoData[iRow]._aData,
+							"aData": oData._aData,
 							"oSettings": oSettings
 						} );
 					nCell.innerHTML = sRendered;
-					if ( oSettings.aoColumns[iColumn].bUseRendered )
+					if ( oCol.bUseRendered )
 					{
 						/* Use the rendered data for filtering/sorting */
 						_fnSetCellData( oSettings, iRow, iColumn, sRendered );
@@ -212,18 +216,25 @@ function _fnGatherData( oSettings )
 				/* Classes */
 				if ( bClass )
 				{
-					nCell.className += ' '+oSettings.aoColumns[iColumn].sClass;
+					nCell.className += ' '+oCol.sClass;
 				}
 				
 				/* Column visability */
 				if ( !bVisible )
 				{
-					oSettings.aoData[iRow]._anHidden[iColumn] = nCell;
+					oData._anHidden[iColumn] = nCell;
 					nCell.parentNode.removeChild( nCell );
 				}
 				else
 				{
-					oSettings.aoData[iRow]._anHidden[iColumn] = null;
+					oData._anHidden[iColumn] = null;
+				}
+
+				if ( oCol.fnCreatedCell )
+				{
+					oCol.fnCreatedCell.call( oSettings.oInstance,
+						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow
+					);
 				}
 			}
 		}

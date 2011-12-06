@@ -210,6 +210,34 @@ DataTable.models.oInitColumns = {
 	 *    } );
 	 */
 	"bVisible": true,
+	
+	
+	/**
+	 * Developer definable function that is called whenever a cell is created (Ajax source,
+	 * etc) or processed for input (DOM source). This can be used as a compliment to fnRender
+	 * allowing you to modify the DOM element (add background colour for example) when the
+	 * element is available (since it is not when fnRender is called).
+	 *  @type function
+	 *  @param {element} nTd The TD node that has been created
+	 *  @param {*} sData The Data for the cell
+	 *  @param {array|object} oData The data for the whole row
+	 *  @param {int} iRow The row index for the aoData data store
+	 * 
+	 *  @example
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "aoColumnDefs": [ {
+	 *          "aTargets": [3],
+	 *          "fnCreatedCell": function (nTd, sData, oData, i) {
+	 *            if ( sData == "1.7" ) {
+	 *              $(nTd).css('color', 'blue')
+	 *            }
+	 *          }
+	 *        } ]
+	 *      });
+	 *    } );
+	 */
+	"fnCreatedCell": null,
 
 
 	/**

@@ -64,6 +64,13 @@ function _fnCreateTr ( oSettings, iRow )
 			{
 				oData._anHidden[i] = nTd;
 			}
+
+			if ( oCol.fnCreatedCell )
+			{
+				oCol.fnCreatedCell.call( oSettings.oInstance,
+						nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow
+				);
+			}
 		}
 	}
 }

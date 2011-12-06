@@ -83,6 +83,17 @@ DataTable.models.oColumn = {
 	"_bAutoType": true,
 	
 	/**
+	 * 
+	 *  @type function
+	 *  @param {element} nTd The TD node that has been created
+	 *  @param {*} sData The Data for the cell
+	 *  @param {array|object} oData The data for the whole row
+	 *  @param {int} iRow The row index for the aoData data store
+	 *  @default null
+	 */
+	"fnCreatedCell": null,
+	
+	/**
 	 * Function to get data from a cell in a column. You should <b>never</b>
 	 * access data directly through _aData internally in DataTables - always use
 	 * the method attached to this property. It allows mDataProp to function as

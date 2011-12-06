@@ -91,6 +91,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 		_fnMap( oCol, oOptions, "sWidth", "sWidthOrig" );
 		_fnMap( oCol, oOptions, "sClass" );
 		_fnMap( oCol, oOptions, "fnRender" );
+		_fnMap( oCol, oOptions, "fnCreatedCell" );
 		_fnMap( oCol, oOptions, "bUseRendered" );
 		_fnMap( oCol, oOptions, "mDataProp" );
 		_fnMap( oCol, oOptions, "asSorting" );
