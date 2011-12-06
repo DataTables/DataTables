@@ -37,7 +37,7 @@
 	 *  @class
 	 *  @constructor
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
-	 *    are defined by {@link FixedColumns.defaults}
+	 *    are defined by {@link DataTable.models.oInit}
 	 *  @requires jQuery 1.3+
 	 * 
 	 *  @example
