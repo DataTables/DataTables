@@ -28,7 +28,6 @@
 /*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs*/
 
 (function($, window, document) {
-
 	/** 
 	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
 	 * highly flexible tool, based upon the foundations of progressive 
@@ -57,7 +56,7 @@
 	 *      } );
 	 *    } );
 	 */
-	window.DataTable = function( oInit )
+	var DataTable = function( oInit )
 	{
 		
 		
@@ -295,7 +294,7 @@
 		 */
 		function _fnDetectType( sData )
 		{
-			var aTypes = _oExt.aTypes;
+			var aTypes = DataTable.ext.aTypes;
 			var iLen = aTypes.length;
 			
 			for ( var i=0 ; i<iLen ; i++ )
@@ -1829,10 +1828,10 @@
 					nTmp = _fnFeatureHtmlPaginate( oSettings );
 					iPushFeature = 1;
 				}
-				else if ( _oExt.aoFeatures.length !== 0 )
+				else if ( DataTable.ext.aoFeatures.length !== 0 )
 				{
 					/* Plug-in features */
-					var aoFeatures = _oExt.aoFeatures;
+					var aoFeatures = DataTable.ext.aoFeatures;
 					for ( var k=0, kLen=aoFeatures.length ; k<kLen ; k++ )
 					{
 						if ( cOption == aoFeatures[k].cFeature )
@@ -2050,7 +2049,7 @@
 			}
 			
 			/* Custom filtering */
-			if ( _oExt.afnFiltering.length !== 0 )
+			if ( DataTable.ext.afnFiltering.length !== 0 )
 			{
 				_fnFilterCustom( oSettings );
 			}
@@ -2076,7 +2075,7 @@
 		 */
 		function _fnFilterCustom( oSettings )
 		{
-			var afnFilters = _oExt.afnFiltering;
+			var afnFilters = DataTable.ext.afnFiltering;
 			for ( var i=0, iLen=afnFilters.length ; i<iLen ; i++ )
 			{
 				var iCorrector = 0;
@@ -2148,7 +2147,7 @@
 			}
 			
 			/* Need to take account of custom filtering functions - always filter */
-			if ( _oExt.afnFiltering.length !== 0 )
+			if ( DataTable.ext.afnFiltering.length !== 0 )
 			{
 				iForce = 1;
 			}
@@ -2312,9 +2311,9 @@
 		 */
 		function _fnDataToSearch ( sData, sType )
 		{
-			if ( typeof _oExt.ofnSearch[sType] == "function" )
+			if ( typeof DataTable.ext.ofnSearch[sType] == "function" )
 			{
-				return _oExt.ofnSearch[sType]( sData );
+				return DataTable.ext.ofnSearch[sType]( sData );
 			}
 			else if ( sType == "html" )
 			{
@@ -2735,7 +2734,7 @@
 		
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 * Note that most of the paging logic is done in 
-		 * _oExt.oPagination
+		 * DataTable.ext.oPagination
 		 */
 		
 		/**
@@ -2754,7 +2753,7 @@
 			var nPaginate = document.createElement( 'div' );
 			nPaginate.className = oSettings.oClasses.sPaging+oSettings.sPaginationType;
 			
-			_oExt.oPagination[ oSettings.sPaginationType ].fnInit( oSettings, nPaginate, 
+			DataTable.ext.oPagination[ oSettings.sPaginationType ].fnInit( oSettings, nPaginate, 
 				function( oSettings ) {
 					_fnCalculateEnd( oSettings );
 					_fnDraw( oSettings );
@@ -2766,7 +2765,7 @@
 			{
 				oSettings.aoDrawCallback.push( {
 					"fn": function( oSettings ) {
-						_oExt.oPagination[ oSettings.sPaginationType ].fnUpdate( oSettings, function( oSettings ) {
+						DataTable.ext.oPagination[ oSettings.sPaginationType ].fnUpdate( oSettings, function( oSettings ) {
 							_fnCalculateEnd( oSettings );
 							_fnDraw( oSettings );
 						} );
@@ -2927,8 +2926,7 @@
 				nThead = oSettings.nTable.getElementsByTagName('thead')[0],
 			 	nTfoot = oSettings.nTable.getElementsByTagName('tfoot').length === 0 ? null : 
 					oSettings.nTable.getElementsByTagName('tfoot')[0],
-				oClasses = (typeof oInit.bJQueryUI != 'undefined' && oInit.bJQueryUI) ?
-					_oExt.oJUIClasses : _oExt.oStdClasses;
+				oClasses = oSettings.oClasses;
 			
 			nScrollHead.appendChild( nScrollHeadInner );
 			nScrollFoot.appendChild( nScrollFootInner );
@@ -3775,7 +3773,7 @@
 				i, iLen, j, jLen, k, kLen,
 				aaSort = [],
 			 	aiOrig = [],
-				oSort = _oExt.oSort,
+				oSort = DataTable.ext.oSort,
 				aoData = oSettings.aoData,
 				aoColumns = oSettings.aoColumns;
 			
@@ -3800,9 +3798,9 @@
 					var iColumn = aaSort[i][0];
 					var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
 					var sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
-					if ( typeof _oExt.afnSortData[sDataType] != 'undefined' )
+					if ( typeof DataTable.ext.afnSortData[sDataType] != 'undefined' )
 					{
-						var aData = _oExt.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
+						var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
 						for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
 						{
 							_fnSetCellData( oSettings, j, iColumn, aData[j] );
@@ -4083,7 +4081,7 @@
 					if ( oSettings.bJUI )
 					{
 						/* jQuery UI uses extra markup */
-						var jqSpan = $("span."+_oExt.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
+						var jqSpan = $("span."+DataTable.ext.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
 						jqSpan.removeClass(oClasses.sSortJUIAsc +" "+ oClasses.sSortJUIDesc +" "+ 
 							oClasses.sSortJUI +" "+ oClasses.sSortJUIAscAllowed +" "+ oClasses.sSortJUIDescAllowed );
 						
@@ -4483,11 +4481,11 @@
 		 */
 		function _fnSettingsFromNode ( nTable )
 		{
-			for ( var i=0 ; i<_aoSettings.length ; i++ )
+			for ( var i=0 ; i<DataTable.settings.length ; i++ )
 			{
-				if ( _aoSettings[i].nTable == nTable )
+				if ( DataTable.settings[i].nTable == nTable )
 				{
-					return _aoSettings[i];
+					return DataTable.settings[i];
 				}
 			}
 			
@@ -4588,7 +4586,7 @@
 			
 			if ( iLevel === 0 )
 			{
-				if ( _oExt.sErrMode == 'alert' )
+				if ( DataTable.ext.sErrMode == 'alert' )
 				{
 					alert( sAlert );
 				}
@@ -4697,7 +4695,7 @@
 		this.$ = function ( sSelector, oOpts )
 		{
 			var i, iLen, a = [];
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 		
 			if (typeof oOpts=='undefined')
 			{
@@ -4806,7 +4804,7 @@
 			var iTest;
 			
 			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			/* Check if we want to add multiple rows or not */
 			if ( typeof mData[0] == "object" )
@@ -4862,7 +4860,7 @@
 		 */
 		this.fnAdjustColumnSizing = function ( bRedraw )
 		{
-			var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
+			var oSettings = _fnSettingsFromNode(this[DataTable.ext.iApiIndex]);
 			_fnAdjustColumnSizing( oSettings );
 			
 			if ( typeof bRedraw == 'undefined' || bRedraw )
@@ -4892,7 +4890,7 @@
 		this.fnClearTable = function( bRedraw )
 		{
 			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			_fnClearTable( oSettings );
 			
 			if ( typeof bRedraw == 'undefined' || bRedraw )
@@ -4927,7 +4925,7 @@
 		this.fnClose = function( nTr )
 		{
 			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
 			{
@@ -4966,7 +4964,7 @@
 		this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 		{
 			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			var i, iAODataIndex;
 			
 			iAODataIndex = (typeof mTarget == 'object') ? 
@@ -5023,7 +5021,7 @@
 		 */
 		this.fnDestroy = function ( bRemove )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			var nOrig = oSettings.nTableWrapper.parentNode;
 			var nBody = oSettings.nTBody;
 			var i, iLen;
@@ -5078,24 +5076,24 @@
 			
 			if ( !oSettings.bJUI )
 			{
-				$('th', oSettings.nTHead).removeClass( [ _oExt.oStdClasses.sSortable,
-					_oExt.oStdClasses.sSortableAsc,
-					_oExt.oStdClasses.sSortableDesc,
-					_oExt.oStdClasses.sSortableNone ].join(' ')
+				$('th', oSettings.nTHead).removeClass( [ DataTable.ext.oStdClasses.sSortable,
+					DataTable.ext.oStdClasses.sSortableAsc,
+					DataTable.ext.oStdClasses.sSortableDesc,
+					DataTable.ext.oStdClasses.sSortableNone ].join(' ')
 				);
 			}
 			else
 			{
-				$('th, td', oSettings.nTHead).removeClass( [ _oExt.oStdClasses.sSortable,
-					_oExt.oJUIClasses.sSortableAsc,
-					_oExt.oJUIClasses.sSortableDesc,
-					_oExt.oJUIClasses.sSortableNone ].join(' ')
+				$('th, td', oSettings.nTHead).removeClass( [ DataTable.ext.oStdClasses.sSortable,
+					DataTable.ext.oJUIClasses.sSortableAsc,
+					DataTable.ext.oJUIClasses.sSortableDesc,
+					DataTable.ext.oJUIClasses.sSortableNone ].join(' ')
 				);
-				$('th span.'+_oExt.oJUIClasses.sSortIcon
-					+ ', td span.'+_oExt.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
+				$('th span.'+DataTable.ext.oJUIClasses.sSortIcon
+					+ ', td span.'+DataTable.ext.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
 		
 				$('th, td', oSettings.nTHead).each( function () {
-					var jqWrapper = $('div.'+_oExt.oJUIClasses.sSortJUIWrapper, this);
+					var jqWrapper = $('div.'+DataTable.ext.oJUIClasses.sSortJUIWrapper, this);
 					var kids = jqWrapper.contents();
 					$(this).append( kids );
 					jqWrapper.remove();
@@ -5134,11 +5132,11 @@
 			$(nBody).children('tr:odd').addClass( oSettings.asDestroyStripes[1] );
 			
 			/* Remove the settings object from the settings array */
-			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
+			for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 			{
-				if ( _aoSettings[i] == oSettings )
+				if ( DataTable.settings[i] == oSettings )
 				{
-					_aoSettings.splice( i, 1 );
+					DataTable.settings.splice( i, 1 );
 				}
 			}
 			
@@ -5161,7 +5159,7 @@
 		 */
 		this.fnDraw = function( bComplete )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			if ( typeof bComplete != 'undefined' && bComplete === false )
 			{
 				_fnCalculateEnd( oSettings );
@@ -5192,7 +5190,7 @@
 		 */
 		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			if ( !oSettings.oFeatures.bFilter )
 			{
@@ -5273,7 +5271,7 @@
 		 */
 		this.fnGetData = function( mRow, iCol )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			if ( typeof mRow != 'undefined' )
 			{
@@ -5307,7 +5305,7 @@
 		 */
 		this.fnGetNodes = function( iRow )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			if ( typeof iRow != 'undefined' )
 			{
@@ -5344,7 +5342,7 @@
 		 */
 		this.fnGetPosition = function( nNode )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			var sNodeName = nNode.nodeName.toUpperCase();
 			
 			if ( sNodeName == "TR" )
@@ -5391,7 +5389,7 @@
 		 */
 		this.fnIsOpen = function( nTr )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
 			{
@@ -5433,7 +5431,7 @@
 		this.fnOpen = function( nTr, mHtml, sClass )
 		{
 			/* Find settings from table node */
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			/* the old open one if there is one */
 			this.fnClose( nTr );
@@ -5484,7 +5482,7 @@
 		 */
 		this.fnPageChange = function ( sAction, bRedraw )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			_fnPageChange( oSettings, sAction );
 			_fnCalculateEnd( oSettings );
 			
@@ -5511,7 +5509,7 @@
 		 */
 		this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			var i, iLen;
 			var iColumns = oSettings.aoColumns.length;
 			var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
@@ -5628,7 +5626,7 @@
 		 */
 		this.fnSettings = function()
 		{
-			return _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			return _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 		};
 		
 		
@@ -5647,7 +5645,7 @@
 		 */
 		this.fnSort = function( aaSort )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			oSettings.aaSorting = aaSort;
 			_fnSort( oSettings );
 		};
@@ -5669,7 +5667,7 @@
 		 */
 		this.fnSortListener = function( nNode, iColumn, fnCallback )
 		{
-			_fnSortAttachListener( _fnSettingsFromNode( this[_oExt.iApiIndex] ), nNode, iColumn,
+			_fnSortAttachListener( _fnSettingsFromNode( this[DataTable.ext.iApiIndex] ), nNode, iColumn,
 			 	fnCallback );
 		};
 		
@@ -5695,7 +5693,7 @@
 		 */
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		{
-			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			var iVisibleColumn, i, iLen, sDisplay;
 			var iRow = (typeof mRow == 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
@@ -5789,7 +5787,7 @@
 		 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
 		 *    } );
 		 */
-		this.fnVersionCheck = _oExt.fnVersionCheck;
+		this.fnVersionCheck = DataTable.ext.fnVersionCheck;
 		
 		
 		/*
@@ -5883,7 +5881,7 @@
 			"_fnApplyColumnDefs": _fnApplyColumnDefs
 		};
 		
-		_oExt.oApi = this.oApi;
+		DataTable.ext.oApi = this.oApi;
 		
 		
 		/**
@@ -5895,13 +5893,13 @@
 		function _fnExternApiFunc (sFunc)
 		{
 			return function() {
-				var aArgs = [_fnSettingsFromNode(this[_oExt.iApiIndex])].concat( 
+				var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
 					Array.prototype.slice.call(arguments) );
-				return _oExt.oApi[sFunc].apply( this, aArgs );
+				return DataTable.ext.oApi[sFunc].apply( this, aArgs );
 			};
 		}
 		
-		for ( var sFunc in _oExt.oApi )
+		for ( var sFunc in DataTable.ext.oApi )
 		{
 			if ( sFunc )
 			{
@@ -5927,23 +5925,23 @@
 			}
 			
 			/* Check to see if we are re-initialising a table */
-			for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
+			for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 			{
 				/* Base check on table node */
-				if ( _aoSettings[i].nTable == this )
+				if ( DataTable.settings[i].nTable == this )
 				{
 					if ( typeof oInit == 'undefined' || oInit.bRetrieve )
 					{
-						return _aoSettings[i].oInstance;
+						return DataTable.settings[i].oInstance;
 					}
 					else if ( oInit.bDestroy )
 					{
-						_aoSettings[i].oInstance.fnDestroy();
+						DataTable.settings[i].oInstance.fnDestroy();
 						break;
 					}
 					else
 					{
-						_fnLog( _aoSettings[i], 0, "Cannot reinitialise DataTable.\n\n"+
+						_fnLog( DataTable.settings[i], 0, "Cannot reinitialise DataTable.\n\n"+
 							"To retrieve the DataTables object for this table, please pass either no arguments "+
 							"to the dataTable() function, or set bRetrieve to true. Alternatively, to destroy "+
 							"the old table and create a new one, set bDestroy to true (note that a lot of "+
@@ -5958,9 +5956,9 @@
 				 * instance by simply deleting it. This is under the assumption that the table has been
 				 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 				 */
-				if ( _aoSettings[i].sTableId !== "" && _aoSettings[i].sTableId == this.getAttribute('id') )
+				if ( DataTable.settings[i].sTableId !== "" && DataTable.settings[i].sTableId == this.getAttribute('id') )
 				{
-					_aoSettings.splice( i, 1 );
+					DataTable.settings.splice( i, 1 );
 					break;
 				}
 			}
@@ -5972,10 +5970,10 @@
 				"oInit":         oInit,
 				"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
 				"sDestroyWidth": $(this).width(),
-				"sInstance":     (sId!==null) ? sId : _oExt._oExternConfig.iNextUnique++,
+				"sInstance":     (sId!==null) ? sId : DataTable.ext._oExternConfig.iNextUnique++,
 				"sTableId":      sId
 			} );
-			_aoSettings.push( oSettings );
+			DataTable.settings.push( oSettings );
 			
 			/* Setting up the initialisation object */
 			if (typeof oInit === 'undefined' || oInit === null)
@@ -6094,7 +6092,7 @@
 				/* Use the JUI classes object for display. You could clone the oStdClasses object if 
 				 * you want to have multiple tables with multiple independent classes 
 				 */
-				oSettings.oClasses = _oExt.oJUIClasses;
+				oSettings.oClasses = DataTable.ext.oJUIClasses;
 				
 				if ( typeof oInit.sDom == 'undefined' )
 				{
@@ -6104,7 +6102,7 @@
 			}
 			else
 			{
-				oSettings.oClasses = _oExt.oStdClasses;
+				oSettings.oClasses = DataTable.ext.oStdClasses;
 			}
 			
 			/* Calculate the scroll bar width and cache it for use later on */
@@ -6362,6 +6360,20 @@
 	 */
 	DataTable.version = "1.9.0.dev";
 
+	/**
+	 * Private data store, containing all of the settings objects that are created for the
+	 * tables on a given page.
+	 *  @type array
+	 *  @default []
+	 *  @private
+	 */
+	DataTable.settings = [];
+
+	/**
+	 * Object models container, for the various models that DataTables has available
+	 * to it.
+	 *  @namespace
+	 */
 	DataTable.models = {};
 	
 	
@@ -6598,7 +6610,7 @@
 				}
 				return Zpad;
 			};
-			var aThis = _oExt.sVersion.split('.');
+			var aThis = DataTable.ext.sVersion.split('.');
 			var aThat = sVersion.split('.');
 			var sThis = '', sThat = '';
 			
@@ -8948,13 +8960,6 @@
 	};
 	
 	
-	/*
-	 * Variable: dataTableSettings
-	 * Purpose:  Store the settings for each dataTables instance
-	 * Scope:    jQuery.fn
-	 */
-	var _aoSettings = [];
-	
 	
 	/**
 	 * DataTables settings object - this holds all the information needed for a
@@ -9735,11 +9740,13 @@
 		"sInstance": null
 	};
 
+	/**
+	 * Extension object for DataTables that is used to provide all extension options
+	 *  @namespace
+	 */
+	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
 	
-	var _oExt = $.extend( true, {}, DataTable.models.ext );
-	
-	
-	$.extend( _oExt.oStdClasses, {
+	$.extend( DataTable.ext.oStdClasses, {
 		/* Two buttons buttons */
 		"sPagePrevEnabled": "paginate_enabled_previous",
 		"sPagePrevDisabled": "paginate_disabled_previous",
@@ -9801,7 +9808,7 @@
 	} );
 	
 	
-	$.extend( _oExt.oJUIClasses, {
+	$.extend( DataTable.ext.oJUIClasses, {
 		/* Two buttons buttons */
 		"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
 		"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",
@@ -9869,7 +9876,7 @@
 	 * Purpose:  
 	 * Scope:    jQuery.fn.dataTableExt
 	 */
-	$.extend( _oExt.oPagination, {
+	$.extend( DataTable.ext.oPagination, {
 		/*
 		 * Variable: two_button
 		 * Purpose:  Standard two button (forward/back) pagination
@@ -10055,7 +10062,7 @@
 					return;
 				}
 				
-				var iPageCount = _oExt.oPagination.iFullNumbersShowPages;
+				var iPageCount = DataTable.ext.oPagination.iFullNumbersShowPages;
 				var iPageCountHalf = Math.floor(iPageCount / 2);
 				var iPages = Math.ceil((oSettings.fnRecordsDisplay()) / oSettings._iDisplayLength);
 				var iCurrentPage = Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength) + 1;
@@ -10162,7 +10169,7 @@
 		}
 	} );
 	
-	$.extend( _oExt.oSort, {
+	$.extend( DataTable.ext.oSort, {
 		/*
 		 * text sorting
 		 */
@@ -10247,7 +10254,7 @@
 	} );
 	
 	
-	$.extend( _oExt.aTypes, [
+	$.extend( DataTable.ext.aTypes, [
 		/*
 		 * Function: -
 		 * Purpose:  Check to see if a string is numeric
@@ -10334,11 +10341,9 @@
 	] );
 	
 
-	DataTable.ext = {};
-
 	// jQuery aliases
 	$.fn.dataTable = DataTable;
-	$.fn.dataTableSettings = _aoSettings;
-	$.fn.dataTableExt = _oExt;
+	$.fn.dataTableSettings = DataTable.settings;
+	$.fn.dataTableExt = DataTable.ext;
 
 })(jQuery, window, document);

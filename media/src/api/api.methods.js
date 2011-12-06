@@ -37,7 +37,7 @@
 this.$ = function ( sSelector, oOpts )
 {
 	var i, iLen, a = [];
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 
 	if (typeof oOpts=='undefined')
 	{
@@ -146,7 +146,7 @@ this.fnAddData = function( mData, bRedraw )
 	var iTest;
 	
 	/* Find settings from table node */
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	/* Check if we want to add multiple rows or not */
 	if ( typeof mData[0] == "object" )
@@ -202,7 +202,7 @@ this.fnAddData = function( mData, bRedraw )
  */
 this.fnAdjustColumnSizing = function ( bRedraw )
 {
-	var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
+	var oSettings = _fnSettingsFromNode(this[DataTable.ext.iApiIndex]);
 	_fnAdjustColumnSizing( oSettings );
 	
 	if ( typeof bRedraw == 'undefined' || bRedraw )
@@ -232,7 +232,7 @@ this.fnAdjustColumnSizing = function ( bRedraw )
 this.fnClearTable = function( bRedraw )
 {
 	/* Find settings from table node */
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	_fnClearTable( oSettings );
 	
 	if ( typeof bRedraw == 'undefined' || bRedraw )
@@ -267,7 +267,7 @@ this.fnClearTable = function( bRedraw )
 this.fnClose = function( nTr )
 {
 	/* Find settings from table node */
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
 	{
@@ -306,7 +306,7 @@ this.fnClose = function( nTr )
 this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 {
 	/* Find settings from table node */
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var i, iAODataIndex;
 	
 	iAODataIndex = (typeof mTarget == 'object') ? 
@@ -363,7 +363,7 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
  */
 this.fnDestroy = function ( bRemove )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var nOrig = oSettings.nTableWrapper.parentNode;
 	var nBody = oSettings.nTBody;
 	var i, iLen;
@@ -418,24 +418,24 @@ this.fnDestroy = function ( bRemove )
 	
 	if ( !oSettings.bJUI )
 	{
-		$('th', oSettings.nTHead).removeClass( [ _oExt.oStdClasses.sSortable,
-			_oExt.oStdClasses.sSortableAsc,
-			_oExt.oStdClasses.sSortableDesc,
-			_oExt.oStdClasses.sSortableNone ].join(' ')
+		$('th', oSettings.nTHead).removeClass( [ DataTable.ext.oStdClasses.sSortable,
+			DataTable.ext.oStdClasses.sSortableAsc,
+			DataTable.ext.oStdClasses.sSortableDesc,
+			DataTable.ext.oStdClasses.sSortableNone ].join(' ')
 		);
 	}
 	else
 	{
-		$('th, td', oSettings.nTHead).removeClass( [ _oExt.oStdClasses.sSortable,
-			_oExt.oJUIClasses.sSortableAsc,
-			_oExt.oJUIClasses.sSortableDesc,
-			_oExt.oJUIClasses.sSortableNone ].join(' ')
+		$('th, td', oSettings.nTHead).removeClass( [ DataTable.ext.oStdClasses.sSortable,
+			DataTable.ext.oJUIClasses.sSortableAsc,
+			DataTable.ext.oJUIClasses.sSortableDesc,
+			DataTable.ext.oJUIClasses.sSortableNone ].join(' ')
 		);
-		$('th span.'+_oExt.oJUIClasses.sSortIcon
-			+ ', td span.'+_oExt.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
+		$('th span.'+DataTable.ext.oJUIClasses.sSortIcon
+			+ ', td span.'+DataTable.ext.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
 
 		$('th, td', oSettings.nTHead).each( function () {
-			var jqWrapper = $('div.'+_oExt.oJUIClasses.sSortJUIWrapper, this);
+			var jqWrapper = $('div.'+DataTable.ext.oJUIClasses.sSortJUIWrapper, this);
 			var kids = jqWrapper.contents();
 			$(this).append( kids );
 			jqWrapper.remove();
@@ -474,11 +474,11 @@ this.fnDestroy = function ( bRemove )
 	$(nBody).children('tr:odd').addClass( oSettings.asDestroyStripes[1] );
 	
 	/* Remove the settings object from the settings array */
-	for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
+	for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 	{
-		if ( _aoSettings[i] == oSettings )
+		if ( DataTable.settings[i] == oSettings )
 		{
-			_aoSettings.splice( i, 1 );
+			DataTable.settings.splice( i, 1 );
 		}
 	}
 	
@@ -501,7 +501,7 @@ this.fnDestroy = function ( bRemove )
  */
 this.fnDraw = function( bComplete )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	if ( typeof bComplete != 'undefined' && bComplete === false )
 	{
 		_fnCalculateEnd( oSettings );
@@ -532,7 +532,7 @@ this.fnDraw = function( bComplete )
  */
 this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	if ( !oSettings.oFeatures.bFilter )
 	{
@@ -613,7 +613,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
  */
 this.fnGetData = function( mRow, iCol )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	if ( typeof mRow != 'undefined' )
 	{
@@ -647,7 +647,7 @@ this.fnGetData = function( mRow, iCol )
  */
 this.fnGetNodes = function( iRow )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	if ( typeof iRow != 'undefined' )
 	{
@@ -684,7 +684,7 @@ this.fnGetNodes = function( iRow )
  */
 this.fnGetPosition = function( nNode )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var sNodeName = nNode.nodeName.toUpperCase();
 	
 	if ( sNodeName == "TR" )
@@ -731,7 +731,7 @@ this.fnGetPosition = function( nNode )
  */
 this.fnIsOpen = function( nTr )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
 	{
@@ -773,7 +773,7 @@ this.fnIsOpen = function( nTr )
 this.fnOpen = function( nTr, mHtml, sClass )
 {
 	/* Find settings from table node */
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	/* the old open one if there is one */
 	this.fnClose( nTr );
@@ -824,7 +824,7 @@ this.fnOpen = function( nTr, mHtml, sClass )
  */
 this.fnPageChange = function ( sAction, bRedraw )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	_fnPageChange( oSettings, sAction );
 	_fnCalculateEnd( oSettings );
 	
@@ -851,7 +851,7 @@ this.fnPageChange = function ( sAction, bRedraw )
  */
 this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var i, iLen;
 	var iColumns = oSettings.aoColumns.length;
 	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
@@ -968,7 +968,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
  */
 this.fnSettings = function()
 {
-	return _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	return _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 };
 
 
@@ -987,7 +987,7 @@ this.fnSettings = function()
  */
 this.fnSort = function( aaSort )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	oSettings.aaSorting = aaSort;
 	_fnSort( oSettings );
 };
@@ -1009,7 +1009,7 @@ this.fnSort = function( aaSort )
  */
 this.fnSortListener = function( nNode, iColumn, fnCallback )
 {
-	_fnSortAttachListener( _fnSettingsFromNode( this[_oExt.iApiIndex] ), nNode, iColumn,
+	_fnSortAttachListener( _fnSettingsFromNode( this[DataTable.ext.iApiIndex] ), nNode, iColumn,
 	 	fnCallback );
 };
 
@@ -1035,7 +1035,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
  */
 this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 {
-	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var iVisibleColumn, i, iLen, sDisplay;
 	var iRow = (typeof mRow == 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
@@ -1129,5 +1129,5 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
  *      alert( oTable.fnVersionCheck( '1.9.0' ) );
  *    } );
  */
-this.fnVersionCheck = _oExt.fnVersionCheck;
+this.fnVersionCheck = DataTable.ext.fnVersionCheck;
 

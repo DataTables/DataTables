@@ -77,7 +77,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 	}
 	
 	/* Custom filtering */
-	if ( _oExt.afnFiltering.length !== 0 )
+	if ( DataTable.ext.afnFiltering.length !== 0 )
 	{
 		_fnFilterCustom( oSettings );
 	}
@@ -103,7 +103,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
  */
 function _fnFilterCustom( oSettings )
 {
-	var afnFilters = _oExt.afnFiltering;
+	var afnFilters = DataTable.ext.afnFiltering;
 	for ( var i=0, iLen=afnFilters.length ; i<iLen ; i++ )
 	{
 		var iCorrector = 0;
@@ -175,7 +175,7 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
 	}
 	
 	/* Need to take account of custom filtering functions - always filter */
-	if ( _oExt.afnFiltering.length !== 0 )
+	if ( DataTable.ext.afnFiltering.length !== 0 )
 	{
 		iForce = 1;
 	}
@@ -339,9 +339,9 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
  */
 function _fnDataToSearch ( sData, sType )
 {
-	if ( typeof _oExt.ofnSearch[sType] == "function" )
+	if ( typeof DataTable.ext.ofnSearch[sType] == "function" )
 	{
-		return _oExt.ofnSearch[sType]( sData );
+		return DataTable.ext.ofnSearch[sType]( sData );
 	}
 	else if ( sType == "html" )
 	{

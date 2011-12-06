@@ -1,5 +1,5 @@
 
-$.extend( _oExt.oSort, {
+$.extend( DataTable.ext.oSort, {
 	/*
 	 * text sorting
 	 */

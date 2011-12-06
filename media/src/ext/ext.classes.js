@@ -1,5 +1,5 @@
 
-$.extend( _oExt.oStdClasses, {
+$.extend( DataTable.ext.oStdClasses, {
 	/* Two buttons buttons */
 	"sPagePrevEnabled": "paginate_enabled_previous",
 	"sPagePrevDisabled": "paginate_disabled_previous",
@@ -61,7 +61,7 @@ $.extend( _oExt.oStdClasses, {
 } );
 
 
-$.extend( _oExt.oJUIClasses, {
+$.extend( DataTable.ext.oJUIClasses, {
 	/* Two buttons buttons */
 	"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
 	"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",

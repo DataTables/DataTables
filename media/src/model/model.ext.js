@@ -233,7 +233,7 @@ DataTable.models.ext = {
 			}
 			return Zpad;
 		};
-		var aThis = _oExt.sVersion.split('.');
+		var aThis = DataTable.ext.sVersion.split('.');
 		var aThat = sVersion.split('.');
 		var sThis = '', sThat = '';
 		

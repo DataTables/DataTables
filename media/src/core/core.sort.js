@@ -12,7 +12,7 @@ function _fnSort ( oSettings, bApplyClasses )
 		i, iLen, j, jLen, k, kLen,
 		aaSort = [],
 	 	aiOrig = [],
-		oSort = _oExt.oSort,
+		oSort = DataTable.ext.oSort,
 		aoData = oSettings.aoData,
 		aoColumns = oSettings.aoColumns;
 	
@@ -37,9 +37,9 @@ function _fnSort ( oSettings, bApplyClasses )
 			var iColumn = aaSort[i][0];
 			var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
 			var sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
-			if ( typeof _oExt.afnSortData[sDataType] != 'undefined' )
+			if ( typeof DataTable.ext.afnSortData[sDataType] != 'undefined' )
 			{
-				var aData = _oExt.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
+				var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
 				for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
 				{
 					_fnSetCellData( oSettings, j, iColumn, aData[j] );
@@ -320,7 +320,7 @@ function _fnSortingClasses( oSettings )
 			if ( oSettings.bJUI )
 			{
 				/* jQuery UI uses extra markup */
-				var jqSpan = $("span."+_oExt.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
+				var jqSpan = $("span."+DataTable.ext.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
 				jqSpan.removeClass(oClasses.sSortJUIAsc +" "+ oClasses.sSortJUIDesc +" "+ 
 					oClasses.sSortJUI +" "+ oClasses.sSortJUIAscAllowed +" "+ oClasses.sSortJUIDescAllowed );
 				

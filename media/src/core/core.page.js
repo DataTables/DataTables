@@ -2,7 +2,7 @@
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * Note that most of the paging logic is done in 
- * _oExt.oPagination
+ * DataTable.ext.oPagination
  */
 
 /**
@@ -21,7 +21,7 @@ function _fnFeatureHtmlPaginate ( oSettings )
 	var nPaginate = document.createElement( 'div' );
 	nPaginate.className = oSettings.oClasses.sPaging+oSettings.sPaginationType;
 	
-	_oExt.oPagination[ oSettings.sPaginationType ].fnInit( oSettings, nPaginate, 
+	DataTable.ext.oPagination[ oSettings.sPaginationType ].fnInit( oSettings, nPaginate, 
 		function( oSettings ) {
 			_fnCalculateEnd( oSettings );
 			_fnDraw( oSettings );
@@ -33,7 +33,7 @@ function _fnFeatureHtmlPaginate ( oSettings )
 	{
 		oSettings.aoDrawCallback.push( {
 			"fn": function( oSettings ) {
-				_oExt.oPagination[ oSettings.sPaginationType ].fnUpdate( oSettings, function( oSettings ) {
+				DataTable.ext.oPagination[ oSettings.sPaginationType ].fnUpdate( oSettings, function( oSettings ) {
 					_fnCalculateEnd( oSettings );
 					_fnDraw( oSettings );
 				} );

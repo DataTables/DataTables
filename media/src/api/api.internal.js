@@ -90,7 +90,7 @@ this.oApi = {
 	"_fnApplyColumnDefs": _fnApplyColumnDefs
 };
 
-_oExt.oApi = this.oApi;
+DataTable.ext.oApi = this.oApi;
 
 
 /**
@@ -102,13 +102,13 @@ _oExt.oApi = this.oApi;
 function _fnExternApiFunc (sFunc)
 {
 	return function() {
-		var aArgs = [_fnSettingsFromNode(this[_oExt.iApiIndex])].concat( 
+		var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
 			Array.prototype.slice.call(arguments) );
-		return _oExt.oApi[sFunc].apply( this, aArgs );
+		return DataTable.ext.oApi[sFunc].apply( this, aArgs );
 	};
 }
 
-for ( var sFunc in _oExt.oApi )
+for ( var sFunc in DataTable.ext.oApi )
 {
 	if ( sFunc )
 	{

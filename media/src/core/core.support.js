@@ -34,11 +34,11 @@ function _fnArrayCmp( aArray1, aArray2 )
  */
 function _fnSettingsFromNode ( nTable )
 {
-	for ( var i=0 ; i<_aoSettings.length ; i++ )
+	for ( var i=0 ; i<DataTable.settings.length ; i++ )
 	{
-		if ( _aoSettings[i].nTable == nTable )
+		if ( DataTable.settings[i].nTable == nTable )
 		{
-			return _aoSettings[i];
+			return DataTable.settings[i];
 		}
 	}
 	
@@ -139,7 +139,7 @@ function _fnLog( oSettings, iLevel, sMesg )
 	
 	if ( iLevel === 0 )
 	{
-		if ( _oExt.sErrMode == 'alert' )
+		if ( DataTable.ext.sErrMode == 'alert' )
 		{
 			alert( sAlert );
 		}

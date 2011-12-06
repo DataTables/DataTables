@@ -234,7 +234,7 @@ function _fnVisbleColumns( oS )
  */
 function _fnDetectType( sData )
 {
-	var aTypes = _oExt.aTypes;
+	var aTypes = DataTable.ext.aTypes;
 	var iLen = aTypes.length;
 	
 	for ( var i=0 ; i<iLen ; i++ )

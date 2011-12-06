@@ -1,11 +1,4 @@
 
-/*
- * Variable: dataTableSettings
- * Purpose:  Store the settings for each dataTables instance
- * Scope:    jQuery.fn
- */
-var _aoSettings = [];
-
 
 /**
  * DataTables settings object - this holds all the information needed for a

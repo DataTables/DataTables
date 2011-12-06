@@ -1,6 +1,6 @@
 
 
-$.extend( _oExt.aTypes, [
+$.extend( DataTable.ext.aTypes, [
 	/*
 	 * Function: -
 	 * Purpose:  Check to see if a string is numeric

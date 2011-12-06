@@ -14,23 +14,23 @@ if ( this.nodeName.toLowerCase() != 'table' )
 }
 
 /* Check to see if we are re-initialising a table */
-for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
+for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 {
 	/* Base check on table node */
-	if ( _aoSettings[i].nTable == this )
+	if ( DataTable.settings[i].nTable == this )
 	{
 		if ( typeof oInit == 'undefined' || oInit.bRetrieve )
 		{
-			return _aoSettings[i].oInstance;
+			return DataTable.settings[i].oInstance;
 		}
 		else if ( oInit.bDestroy )
 		{
-			_aoSettings[i].oInstance.fnDestroy();
+			DataTable.settings[i].oInstance.fnDestroy();
 			break;
 		}
 		else
 		{
-			_fnLog( _aoSettings[i], 0, "Cannot reinitialise DataTable.\n\n"+
+			_fnLog( DataTable.settings[i], 0, "Cannot reinitialise DataTable.\n\n"+
 				"To retrieve the DataTables object for this table, please pass either no arguments "+
 				"to the dataTable() function, or set bRetrieve to true. Alternatively, to destroy "+
 				"the old table and create a new one, set bDestroy to true (note that a lot of "+
@@ -45,9 +45,9 @@ for ( i=0, iLen=_aoSettings.length ; i<iLen ; i++ )
 	 * instance by simply deleting it. This is under the assumption that the table has been
 	 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 	 */
-	if ( _aoSettings[i].sTableId !== "" && _aoSettings[i].sTableId == this.getAttribute('id') )
+	if ( DataTable.settings[i].sTableId !== "" && DataTable.settings[i].sTableId == this.getAttribute('id') )
 	{
-		_aoSettings.splice( i, 1 );
+		DataTable.settings.splice( i, 1 );
 		break;
 	}
 }
@@ -59,10 +59,10 @@ var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
 	"oInit":         oInit,
 	"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
 	"sDestroyWidth": $(this).width(),
-	"sInstance":     (sId!==null) ? sId : _oExt._oExternConfig.iNextUnique++,
+	"sInstance":     (sId!==null) ? sId : DataTable.ext._oExternConfig.iNextUnique++,
 	"sTableId":      sId
 } );
-_aoSettings.push( oSettings );
+DataTable.settings.push( oSettings );
 
 /* Setting up the initialisation object */
 if (typeof oInit === 'undefined' || oInit === null)
@@ -181,7 +181,7 @@ if ( oInit.bJQueryUI )
 	/* Use the JUI classes object for display. You could clone the oStdClasses object if 
 	 * you want to have multiple tables with multiple independent classes 
 	 */
-	oSettings.oClasses = _oExt.oJUIClasses;
+	oSettings.oClasses = DataTable.ext.oJUIClasses;
 	
 	if ( typeof oInit.sDom == 'undefined' )
 	{
@@ -191,7 +191,7 @@ if ( oInit.bJQueryUI )
 }
 else
 {
-	oSettings.oClasses = _oExt.oStdClasses;
+	oSettings.oClasses = DataTable.ext.oStdClasses;
 }
 
 /* Calculate the scroll bar width and cache it for use later on */

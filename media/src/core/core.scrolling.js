@@ -42,8 +42,7 @@ function _fnFeatureHtmlTable ( oSettings )
 		nThead = oSettings.nTable.getElementsByTagName('thead')[0],
 	 	nTfoot = oSettings.nTable.getElementsByTagName('tfoot').length === 0 ? null : 
 			oSettings.nTable.getElementsByTagName('tfoot')[0],
-		oClasses = (typeof oInit.bJQueryUI != 'undefined' && oInit.bJQueryUI) ?
-			_oExt.oJUIClasses : _oExt.oStdClasses;
+		oClasses = oSettings.oClasses;
 	
 	nScrollHead.appendChild( nScrollHeadInner );
 	nScrollFoot.appendChild( nScrollFootInner );

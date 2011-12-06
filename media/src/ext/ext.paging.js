@@ -4,7 +4,7 @@
  * Purpose:  
  * Scope:    jQuery.fn.dataTableExt
  */
-$.extend( _oExt.oPagination, {
+$.extend( DataTable.ext.oPagination, {
 	/*
 	 * Variable: two_button
 	 * Purpose:  Standard two button (forward/back) pagination
@@ -190,7 +190,7 @@ $.extend( _oExt.oPagination, {
 				return;
 			}
 			
-			var iPageCount = _oExt.oPagination.iFullNumbersShowPages;
+			var iPageCount = DataTable.ext.oPagination.iFullNumbersShowPages;
 			var iPageCountHalf = Math.floor(iPageCount / 2);
 			var iPages = Math.ceil((oSettings.fnRecordsDisplay()) / oSettings._iDisplayLength);
 			var iCurrentPage = Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength) + 1;

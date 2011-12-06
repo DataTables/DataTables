@@ -28,7 +28,6 @@
 /*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs*/
 
 (function($, window, document) {
-
 	/** 
 	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
 	 * highly flexible tool, based upon the foundations of progressive 
@@ -57,7 +56,7 @@
 	 *      } );
 	 *    } );
 	 */
-	window.DataTable = function( oInit )
+	var DataTable = function( oInit )
 	{
 		require('core.columns.js');
 		require('core.data.js');
@@ -92,6 +91,20 @@
 	 */
 	DataTable.version = "1.9.0.dev";
 
+	/**
+	 * Private data store, containing all of the settings objects that are created for the
+	 * tables on a given page.
+	 *  @type array
+	 *  @default []
+	 *  @private
+	 */
+	DataTable.settings = [];
+
+	/**
+	 * Object models container, for the various models that DataTables has available
+	 * to it.
+	 *  @namespace
+	 */
 	DataTable.models = {};
 	require('model.ext.js');
 	require('model.search.js');
@@ -100,17 +113,19 @@
 	require('model.init.js');
 	require('model.settings.js');
 
-	require('ext.js');
+	/**
+	 * Extension object for DataTables that is used to provide all extension options
+	 *  @namespace
+	 */
+	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
 	require('ext.classes.js');
 	require('ext.paging.js');
 	require('ext.sorting.js');
 	require('ext.types.js');
 
-	DataTable.ext = {};
-
 	// jQuery aliases
 	$.fn.dataTable = DataTable;
-	$.fn.dataTableSettings = _aoSettings;
-	$.fn.dataTableExt = _oExt;
+	$.fn.dataTableSettings = DataTable.settings;
+	$.fn.dataTableExt = DataTable.ext;
 
 })(jQuery, window, document);
