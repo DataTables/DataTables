@@ -187,6 +187,10 @@ function _fnBuildHead( oSettings )
 			if ( typeof anCells[i] != 'undefined' )
 			{
 				oSettings.aoColumns[i].nTf = anCells[i];
+				if ( oSettings.aoColumns[i].sClass )
+				{
+					$(anCells[i]).addClass( oSettings.aoColumns[i].sClass );
+				}
 			}
 		}
 	}
