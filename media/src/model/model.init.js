@@ -1159,7 +1159,7 @@ DataTable.models.oInit = {
 			 *      } );
 			 *    } );
 			 */
-			"sPrevious": "Previous",
+			"sPrevious": "Previous"
 		},
 	
 		/**
@@ -1426,7 +1426,7 @@ DataTable.models.oInit = {
 		 *      } );
 		 *    } );
 		 */
-		"sZeroRecords": "No matching records found",
+		"sZeroRecords": "No matching records found"
 	},
 
 

@@ -47,7 +47,7 @@ this.$ = function ( sSelector, oOpts )
 	oOpts = $.extend( {}, {
 		"filter": "none", // applied
 		"order": "current", // "original"
-		"page": "all", // current
+		"page": "all" // current
 	}, oOpts );
 
 	// Current page implies that order=current and fitler=applied, since it is fairly

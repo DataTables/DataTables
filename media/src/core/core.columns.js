@@ -9,32 +9,14 @@
 function _fnAddColumn( oSettings, nTh )
 {
 	var iCol = oSettings.aoColumns.length;
-	var oCol = {
-		"sType": null,
-		"_bAutoType": true,
-		"bVisible": true,
-		"bSearchable": true,
-		"bSortable": true,
-		"asSorting": [ 'asc', 'desc' ],
+	var oCol = $.extend( {}, DataTable.models.oColumn, {
 		"sSortingClass": oSettings.oClasses.sSortable,
 		"sSortingClassJUI": oSettings.oClasses.sSortJUI,
 		"sTitle": nTh ? nTh.innerHTML : '',
-		"sName": '',
-		"sWidth": null,
-		"sWidthOrig": null,
-		"sClass": null,
-		"fnRender": null,
-		"bUseRendered": true,
 		"aDataSort": [ iCol ],
 		"mDataProp": iCol,
-		"fnGetData": null,
-		"fnSetData": null,
-		"sSortDataType": 'std',
-		"sDefaultContent": null,
-		"sContentPadding": "",
-		"nTh": nTh ? nTh : document.createElement('th'),
-		"nTf": null
-	};
+		"nTh": nTh ? nTh : document.createElement('th')
+	} );
 	oSettings.aoColumns.push( oCol );
 	
 	/* Add a column specific filter */
