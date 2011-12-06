@@ -4753,13 +4753,11 @@
 		 *      
 		 *      // 'open' an information row when a row is clicked on
 		 *      $('#example tbody tr').click( function () {
-		 *        var that = this;
-		 *        oTable.fnOpen( this, "Temporary row opened", "info_row" );
-		 *        
-		 *        // Then when the info row is clicked upon - close it
-		 *        $('#example .info_row').click( function () {
-		 *          oTable.fnClose(that);
-		 *        } );
+		 *        if ( oTable.fnIsOpen(this) ) {
+		 *          oTable.fnClose( this );
+		 *        } else {
+		 *          oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *        }
 		 *      } );
 		 *      
 		 *      oTable = $('#example').dataTable();
@@ -5210,6 +5208,42 @@
 		
 		
 		/**
+		 * Check to see if a row is 'open' or not.
+		 *  @param {node} nTr the table row to check
+		 *  @returns {boolean} true if the row is currently open, false otherwise
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable;
+		 *      
+		 *      // 'open' an information row when a row is clicked on
+		 *      $('#example tbody tr').click( function () {
+		 *        if ( oTable.fnIsOpen(this) ) {
+		 *          oTable.fnClose( this );
+		 *        } else {
+		 *          oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *        }
+		 *      } );
+		 *      
+		 *      oTable = $('#example').dataTable();
+		 *    } );
+		 */
+		this.fnIsOpen = function( nTr )
+		{
+			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+			
+			for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
+			{
+				if ( oSettings.aoOpenRows[i].nParent == nTr )
+				{
+					return true;
+				}
+			}
+			return false;
+		};
+		
+		
+		/**
 		 * This function will place a new row directly after a row which is currently 
 		 * on display on the page, with the HTML contents that is passed into the 
 		 * function. This can be used, for example, to ask for confirmation that a 
@@ -5225,13 +5259,11 @@
 		 *      
 		 *      // 'open' an information row when a row is clicked on
 		 *      $('#example tbody tr').click( function () {
-		 *        var that = this;
-		 *        oTable.fnOpen( this, "Temporary row opened", "info_row" );
-		 *        
-		 *        // Then when the info row is clicked upon - close it
-		 *        $('#example .info_row').click( function () {
-		 *          oTable.fnClose(that);
-		 *        } );
+		 *        if ( oTable.fnIsOpen(this) ) {
+		 *          oTable.fnClose( this );
+		 *        } else {
+		 *          oTable.fnOpen( this, "Temporary row opened", "info_row" );
+		 *        }
 		 *      } );
 		 *      
 		 *      oTable = $('#example').dataTable();
