@@ -2,15 +2,100 @@
 
 /**
  * Perform a jQuery selector action on the table's TR elements (from the tbody) and
- * return the resulting expression
+ * return the resulting jQuery object.
  *  @param {string} sSelector jQuery selector
- *  @returns {object} jQuery object
+ *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
+ *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
+ *    criterion ("applied") or all TR elements (i.e. no filter).
+ *  @param {string} [oOpts.order=current] Order of the TR elements in the processed array.
+ *    Can be either 'current', whereby the current sorting of the table is used, or
+ *    'original' whereby the original order the data was read into the table is used.
+ *  @param {string} [oOpts.page=all] Limit the selection to the currently displayed page
+ *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
+ *    'current' and filter is 'applied', regardless of what they might be given as.
+ *  @returns {object} jQuery object, filtered by the given selector.
+ *
+ *  @example
+ *    $(document).ready(function() {
+ *      var oTable = $('#example').dataTable();
+ *
+ *      // Highlight every second row
+ *      oTable.$('tr:odd').css('backgroundColor', 'blue');
+ *    } );
+ *
+ *  @example
+ *    $(document).ready(function() {
+ *      var oTable = $('#example').dataTable();
+ *
+ *      // Filter to rows with 'Webkit' in them, add a background colour and then
+ *      // remove the filter, thus highlighting the 'Webkit' rows only.
+ *      oTable.fnFilter('Webkit');
+ *      oTable.$('tr', {"filter": "applied"}).css('backgroundColor', 'blue');
+ *      oTable.fnFilter('');
+ *    } );
  */
-this.$ = function ( sSelector )
+this.$ = function ( sSelector, oOpts )
 {
-	// xxx - filtering, sorting, column visibility options
-	var oSettings = _fnSettingsFromNode(this[_oExt.iApiIndex]);
-	return $(this.oApi._fnGetTrNodes(oSettings)).filter(sSelector);
+	var i, iLen, a = [];
+	var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
+
+	if (typeof oOpts=='undefined')
+	{
+		oOpts = {};
+	};
+
+	oOpts = $.extend( {}, {
+		"filter": "none", // applied
+		"order": "current", // "original"
+		"page": "all", // current
+	}, oOpts );
+
+	// Current page implies that order=current and fitler=applied, since it is fairly
+	// senseless otherwise
+	if ( oOpts.page == 'current' )
+	{
+		for ( i=oSettings._iDisplayStart, iLen=oSettings.fnDisplayEnd() ; i<iLen ; i++ )
+		{
+			a.push( oSettings.aoData[ oSettings.aiDisplay[i] ].nTr );
+		}
+	}
+	else if ( oOpts.order == "current" && oOpts.filter == "none" )
+	{
+		for ( i=0, iLen=oSettings.aiDisplayMaster.length ; i<iLen ; i++ )
+		{
+			a.push( oSettings.aoData[ oSettings.aiDisplayMaster[i] ].nTr );
+		}
+	}
+	else if ( oOpts.order == "current" && oOpts.filter == "applied" )
+	{
+		for ( i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+		{
+			a.push( oSettings.aoData[ oSettings.aiDisplay[i] ].nTr );
+		}
+	}
+	else if ( oOpts.order == "original" && oOpts.filter == "none" )
+	{
+		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		{
+			a.push( oSettings.aoData[ i ].nTr );
+		}
+	}
+	else if ( oOpts.order == "original" && oOpts.filter == "applied" )
+	{
+		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		{
+			if ( $.inArray( i, oSettings.aiDisplay ) !== -1 )
+			{
+				a.push( oSettings.aoData[ i ].nTr );
+			}
+		}
+	}
+	else
+	{
+		_fnLog( oSettings, 1, "Unknown selection options" );
+	}
+
+	return $(a).filter(sSelector);
 };
 
 
