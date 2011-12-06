@@ -32,16 +32,10 @@ $.extend( _oExt.oPagination, {
 			/* Store the next and previous elements in the oSettings object as they can be very
 			 * useful for automation - particularly testing
 			 */
-			if ( !oSettings.bJUI )
+			nPrevious = document.createElement( 'a' );
+			nNext = document.createElement( 'a' );
+			if ( oSettings.bJUI )
 			{
-				nPrevious = document.createElement( 'div' );
-				nNext = document.createElement( 'div' );
-			}
-			else
-			{
-				nPrevious = document.createElement( 'a' );
-				nNext = document.createElement( 'a' );
-				
 				nNextInner = document.createElement('span');
 				nNextInner.className = oSettings.oClasses.sPageJUINext;
 				nNext.appendChild( nNextInner );
@@ -132,11 +126,11 @@ $.extend( _oExt.oPagination, {
 		 */
 		"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 		{
-			var nFirst = document.createElement( 'span' );
-			var nPrevious = document.createElement( 'span' );
+			var nFirst = document.createElement( 'a' );
+			var nPrevious = document.createElement( 'a' );
 			var nList = document.createElement( 'span' );
-			var nNext = document.createElement( 'span' );
-			var nLast = document.createElement( 'span' );
+			var nNext = document.createElement( 'a' );
+			var nLast = document.createElement( 'a' );
 			var fnClickHandler = function ( e ) {
 				if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
 				{
@@ -237,11 +231,11 @@ $.extend( _oExt.oPagination, {
 			{
 				if ( iCurrentPage != i )
 				{
-					sList += '<span class="'+oClasses.sPageButton+'">'+i+'</span>';
+					sList += '<a class="'+oClasses.sPageButton+'">'+i+'</a>';
 				}
 				else
 				{
-					sList += '<span class="'+oClasses.sPageButtonActive+'">'+i+'</span>';
+					sList += '<a class="'+oClasses.sPageButtonActive+'">'+i+'</a>';
 				}
 			}
 			
@@ -265,13 +259,13 @@ $.extend( _oExt.oPagination, {
 				}
 				
 				/* Build up the dynamic list forst - html and listeners */
-				var qjPaginateList = $('span:eq(2)', an[i]);
+				var qjPaginateList = $('span:eq(0)', an[i]);
 				qjPaginateList.html( sList );
-				$('span', qjPaginateList).bind( 'click.DT', fnClick ).bind( 'mousedown.DT', fnFalse )
+				$('a', qjPaginateList).bind( 'click.DT', fnClick ).bind( 'mousedown.DT', fnFalse )
 					.bind( 'selectstart.DT', fnFalse );
 				
 				/* Update the 'premanent botton's classes */
-				anButtons = an[i].getElementsByTagName('span');
+				anButtons = an[i].getElementsByTagName('a');
 				anStatic = [
 					anButtons[0], anButtons[1], 
 					anButtons[anButtons.length-2], anButtons[anButtons.length-1]
