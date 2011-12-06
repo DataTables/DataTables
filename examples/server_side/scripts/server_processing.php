@@ -61,8 +61,8 @@
 		{
 			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
 			{
-				$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-				 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+				$sOrder .= "`".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."` ".
+				 	mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
 			}
 		}
 		
@@ -86,7 +86,7 @@
 		$sWhere = "WHERE (";
 		for ( $i=0 ; $i<count($aColumns) ; $i++ )
 		{
-			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
 		}
 		$sWhere = substr_replace( $sWhere, "", -3 );
 		$sWhere .= ')';
@@ -105,7 +105,7 @@
 			{
 				$sWhere .= " AND ";
 			}
-			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
 		}
 	}
 	
@@ -115,12 +115,12 @@
 	 * Get data to display
 	 */
 	$sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+		SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
 		FROM   $sTable
 		$sWhere
 		$sOrder
 		$sLimit
-	";
+		";
 	$rResult = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
 	
 	/* Data set length after filtering */
@@ -133,7 +133,7 @@
 	
 	/* Total data set length */
 	$sQuery = "
-		SELECT COUNT(".$sIndexColumn.")
+		SELECT COUNT(`".$sIndexColumn."`)
 		FROM   $sTable
 	";
 	$rResultTotal = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
