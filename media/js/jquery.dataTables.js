@@ -4853,6 +4853,7 @@
 		/**
 		 * Restore the table to it's original state in the DOM by removing all of DataTables 
 		 * enhancements, alterations to the DOM structure of the table and event listeners.
+		 *  @param {boolean} [bRemove=false] Completely remove the table from the DOM
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -4861,12 +4862,14 @@
 		 *      oTable.fnDestroy();
 		 *    } );
 		 */
-		this.fnDestroy = function ( )
+		this.fnDestroy = function ( bRemove )
 		{
 			var oSettings = _fnSettingsFromNode( this[_oExt.iApiIndex] );
 			var nOrig = oSettings.nTableWrapper.parentNode;
 			var nBody = oSettings.nTBody;
 			var i, iLen;
+		
+			bRemove = (typeof bRemove=='undefined') ? false : true;
 			
 			/* Flag to note that the table is currently being destroyed - no action should be taken */
 			oSettings.bDestroying = true;
@@ -4941,11 +4944,11 @@
 			}
 			
 			/* Add the TR elements back into the table in their original order */
-			if ( oSettings.nTableReinsertBefore )
+			if ( !bRemove && oSettings.nTableReinsertBefore )
 			{
 				nOrig.insertBefore( oSettings.nTable, oSettings.nTableReinsertBefore );
 			}
-			else
+			else if ( !bRemove )
 			{
 				nOrig.appendChild( oSettings.nTable );
 			}
