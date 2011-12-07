@@ -240,14 +240,9 @@ $.extend( DataTable.ext.oPagination, {
 			/* Build the dynamic list */
 			for ( i=iStartButton ; i<=iEndButton ; i++ )
 			{
-				if ( iCurrentPage != i )
-				{
-					sList += '<a class="'+oClasses.sPageButton+'">'+i+'</a>';
-				}
-				else
-				{
-					sList += '<a class="'+oClasses.sPageButtonActive+'">'+i+'</a>';
-				}
+				sList += (iCurrentPage !== i) ?
+					'<a class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
+					'<a class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
 			}
 			
 			/* Loop over each instance of the pager */
