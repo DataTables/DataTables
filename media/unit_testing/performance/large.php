@@ -38,11 +38,10 @@
 				//}
 				
 				oTable.fnSort( [[ 1, 'asc' ]] );
-				oTable.fnFilter(1);
 				oTable.fnSort( [[ 1, 'asc' ]] );
-				//oTable.fnSort( [[ 2, 'asc' ]] );
-				//oTable.fnSort( [[ 1, 'asc' ]] );
-				//oTable.fnSort( [[ 2, 'asc' ]] );
+				oTable.fnSort( [[ 2, 'asc' ]] );
+				oTable.fnSort( [[ 1, 'asc' ]] );
+				oTable.fnSort( [[ 2, 'asc' ]] );
 				
 				var iEnd = new Date().getTime();
 				document.getElementById('output').innerHTML = "Test took "+(iEnd-iStart)+" mS";

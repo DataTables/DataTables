@@ -6,17 +6,17 @@ $.extend( DataTable.ext.oSort, {
 	"string-pre": function ( a )
 	{
 		if ( typeof a != 'string' ) { a = ''; }
-		return a.toLowerCase();
+		return a.toLocaleLowerCase();
 	},
 
 	"string-asc": function ( x, y )
 	{
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		return x.localeCompare(y);
 	},
 	
 	"string-desc": function ( x, y )
 	{
-		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+		return y.localeCompare(x);
 	},
 	
 	
@@ -25,17 +25,17 @@ $.extend( DataTable.ext.oSort, {
 	 */
 	"html-pre": function ( a )
 	{
-		return a.replace( /<.*?>/g, "" ).toLowerCase();
+		return a.replace( /<.*?>/g, "" ).toLocaleLowerCase();
 	},
 	
 	"html-asc": function ( x, y )
 	{
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		return x.localeCompare(y);
 	},
 	
 	"html-desc": function ( x, y )
 	{
-		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+		return y.localeCompare(x);
 	},
 	
 	
