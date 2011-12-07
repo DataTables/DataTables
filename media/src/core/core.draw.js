@@ -96,6 +96,7 @@ function _fnBuildHead( oSettings )
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			nTh = oSettings.aoColumns[i].nTh;
+			nTh.setAttribute('tabindex', '0');
 			
 			if ( oSettings.aoColumns[i].sClass !== null )
 			{
@@ -118,6 +119,7 @@ function _fnBuildHead( oSettings )
 		{
 			nTh = oSettings.aoColumns[i].nTh;
 			nTh.innerHTML = oSettings.aoColumns[i].sTitle;
+			nTh.setAttribute('tabindex', '0');
 			
 			if ( oSettings.aoColumns[i].sClass !== null )
 			{

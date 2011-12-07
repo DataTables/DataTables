@@ -35,7 +35,9 @@
 	 * HTML table. For a full list of features please refer to
 	 * <a href="http://datatables.net">DataTables.net</a>.
 	 *  @class
+	 *  @global
 	 *  @constructor
+	 *  @name DataTable
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
 	 *    are defined by {@link DataTable.models.oInit}
 	 *  @requires jQuery 1.3+
@@ -1069,6 +1071,7 @@
 				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
 					nTh = oSettings.aoColumns[i].nTh;
+					nTh.setAttribute('tabindex', '0');
 					
 					if ( oSettings.aoColumns[i].sClass !== null )
 					{
@@ -1091,6 +1094,7 @@
 				{
 					nTh = oSettings.aoColumns[i].nTh;
 					nTh.innerHTML = oSettings.aoColumns[i].sTitle;
+					nTh.setAttribute('tabindex', '0');
 					
 					if ( oSettings.aoColumns[i].sClass !== null )
 					{
@@ -3919,7 +3923,7 @@
 		 */
 		function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		{
-			$(nNode).bind( 'click.DT', function (e) {
+			var sortingFn = function (e) {
 				/* If the column is not sortable - don't to anything */
 				if ( oSettings.aoColumns[iDataIndex].bSortable === false )
 				{
@@ -4024,7 +4028,15 @@
 				{
 					fnCallback( oSettings );
 				}
-			} );
+			};
+		
+			$(nNode)
+				.bind( 'click.DT', sortingFn )
+				.bind( 'keypress.DT', function (e) {
+					if ( e.which === 13 ) {
+						sortingFn(e);
+					}
+				} );
 		}
 		
 		
@@ -9919,6 +9931,9 @@
 				
 				nPrevious.className = oSettings.oClasses.sPagePrevDisabled;
 				nNext.className = oSettings.oClasses.sPageNextDisabled;
+	
+				nPrevious.setAttribute('tabindex', '0');
+				nNext.setAttribute('tabindex', '0');
 				
 				nPrevious.title = oSettings.oLanguage.oPaginate.sPrevious;
 				nNext.title = oSettings.oLanguage.oPaginate.sNext;
@@ -9928,9 +9943,17 @@
 				
 				$(nPrevious)
 					.bind( 'click.DT', { action: "previous" }, fnClickHandler )
+					.bind( 'keypress.DT', { action: "previous" }, function (e){
+						if ( e.which === 13 ) {
+							fnClickHandler(e);
+						} } )
 					.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
 				$(nNext)
 					.bind( 'click.DT', { action: "next" }, fnClickHandler )
+					.bind( 'keypress.DT', { action: "next" }, function (e){
+						if ( e.which === 13 ) {
+							fnClickHandler(e);
+						} } )
 					.bind( 'selectstart.DT', function () { return false; } );
 				
 				/* ID the first elements only */
@@ -10347,4 +10370,51 @@
 	$.fn.dataTableSettings = DataTable.settings;
 	$.fn.dataTableExt = DataTable.ext;
 
+
+	// Information about events fired by DataTables - for documentation.
+	/**
+	 * Draw event, fired whenever the table is redrawn on the page, at the same point as
+	 * fnDrawCallback. This may be useful for binding events or performing calculations when
+	 * the table is altered at all.
+	 *  @name DataTable#draw
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Filter event, fired when the filtering applied to the table (using the build in global
+	 * global filter, or column filters) is altered.
+	 *  @name DataTable#filter
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Page change event, fired when the paging of the table is altered.
+	 *  @name DataTable#page
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Sort event, fired when the sorting applied to the table is altered.
+	 *  @name DataTable#sort
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
+	 * made to the server for new data (note that this trigger is called in fnServerData,
+	 * if you override fnServerData and which to use this event, you need to trigger it in
+	 * you success function).
+	 *  @name DataTable#xhr
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
 })(jQuery, window, document);

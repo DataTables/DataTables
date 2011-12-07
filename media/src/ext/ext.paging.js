@@ -47,6 +47,9 @@ $.extend( DataTable.ext.oPagination, {
 			
 			nPrevious.className = oSettings.oClasses.sPagePrevDisabled;
 			nNext.className = oSettings.oClasses.sPageNextDisabled;
+
+			nPrevious.setAttribute('tabindex', '0');
+			nNext.setAttribute('tabindex', '0');
 			
 			nPrevious.title = oSettings.oLanguage.oPaginate.sPrevious;
 			nNext.title = oSettings.oLanguage.oPaginate.sNext;
@@ -56,9 +59,17 @@ $.extend( DataTable.ext.oPagination, {
 			
 			$(nPrevious)
 				.bind( 'click.DT', { action: "previous" }, fnClickHandler )
+				.bind( 'keypress.DT', { action: "previous" }, function (e){
+					if ( e.which === 13 ) {
+						fnClickHandler(e);
+					} } )
 				.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
 			$(nNext)
 				.bind( 'click.DT', { action: "next" }, fnClickHandler )
+				.bind( 'keypress.DT', { action: "next" }, function (e){
+					if ( e.which === 13 ) {
+						fnClickHandler(e);
+					} } )
 				.bind( 'selectstart.DT', function () { return false; } );
 			
 			/* ID the first elements only */

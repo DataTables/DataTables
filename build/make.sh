@@ -2,7 +2,7 @@
 
 # DEFAULTS
 CLOSURE="/usr/local/closure_compiler/compiler.jar"
-JSDOC3="/usr/local/jsdoc3/jsdoc.jar"
+JSDOC="/usr/local/jsdoc/jsdoc"
 
 
 echo ""
@@ -40,5 +40,11 @@ mv DataTables.js.build ../js/jquery.dataTables.js
 
 
 if [ "$1" = "compress" ]; then
-	java -jar $CLOSURE --js ../js/jquery.dataTables.js > ../js/jquery.dataTables.min.closure.js
+	java -jar $CLOSURE --js ../js/jquery.dataTables.js > ../js/jquery.dataTables.min.js
+fi
+
+# Docs
+if [ "$1" = "docs" ]; then
+	echo "  Documentation"
+	$JSDOC -d ../../docs -t JSDoc-DataTables ../js/jquery.dataTables.js
 fi

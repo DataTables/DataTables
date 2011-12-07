@@ -35,7 +35,9 @@
 	 * HTML table. For a full list of features please refer to
 	 * <a href="http://datatables.net">DataTables.net</a>.
 	 *  @class
+	 *  @global
 	 *  @constructor
+	 *  @name DataTable
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
 	 *    are defined by {@link DataTable.models.oInit}
 	 *  @requires jQuery 1.3+
@@ -129,4 +131,51 @@
 	$.fn.dataTableSettings = DataTable.settings;
 	$.fn.dataTableExt = DataTable.ext;
 
+
+	// Information about events fired by DataTables - for documentation.
+	/**
+	 * Draw event, fired whenever the table is redrawn on the page, at the same point as
+	 * fnDrawCallback. This may be useful for binding events or performing calculations when
+	 * the table is altered at all.
+	 *  @name DataTable#draw
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Filter event, fired when the filtering applied to the table (using the build in global
+	 * global filter, or column filters) is altered.
+	 *  @name DataTable#filter
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Page change event, fired when the paging of the table is altered.
+	 *  @name DataTable#page
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Sort event, fired when the sorting applied to the table is altered.
+	 *  @name DataTable#sort
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
+	 * made to the server for new data (note that this trigger is called in fnServerData,
+	 * if you override fnServerData and which to use this event, you need to trigger it in
+	 * you success function).
+	 *  @name DataTable#xhr
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
 })(jQuery, window, document);

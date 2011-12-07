@@ -158,7 +158,7 @@ function _fnSort ( oSettings, bApplyClasses )
  */
 function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 {
-	$(nNode).bind( 'click.DT', function (e) {
+	var sortingFn = function (e) {
 		/* If the column is not sortable - don't to anything */
 		if ( oSettings.aoColumns[iDataIndex].bSortable === false )
 		{
@@ -263,7 +263,15 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		{
 			fnCallback( oSettings );
 		}
-	} );
+	};
+
+	$(nNode)
+		.bind( 'click.DT', sortingFn )
+		.bind( 'keypress.DT', function (e) {
+			if ( e.which === 13 ) {
+				sortingFn(e);
+			}
+		} );
 }
 
 
