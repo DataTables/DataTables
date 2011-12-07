@@ -9905,41 +9905,26 @@
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 			{
-				var nPrevious, nNext, nPreviousInner, nNextInner;
+				var oLang = oSettings.oLanguage.oPaginate;
+				var oClasses = oSettings.oClasses;
 				var fnClickHandler = function ( e ) {
 					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
 					{
 						fnCallbackDraw( oSettings );
 					}
 				};
-				
-				/* Store the next and previous elements in the oSettings object as they can be very
-				 * useful for automation - particularly testing
-				 */
-				nPrevious = document.createElement( 'a' );
-				nNext = document.createElement( 'a' );
-				if ( oSettings.bJUI )
-				{
-					nNextInner = document.createElement('span');
-					nNextInner.className = oSettings.oClasses.sPageJUINext;
-					nNext.appendChild( nNextInner );
-					
-					nPreviousInner = document.createElement('span');
-					nPreviousInner.className = oSettings.oClasses.sPageJUIPrev;
-					nPrevious.appendChild( nPreviousInner );
-				}
-				
-				nPrevious.className = oSettings.oClasses.sPagePrevDisabled;
-				nNext.className = oSettings.oClasses.sPageNextDisabled;
 	
-				nPrevious.setAttribute('tabindex', '0');
-				nNext.setAttribute('tabindex', '0');
+				var sAppend = (!oSettings.bJUI) ?
+					'<a tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"></a>'+
+					'<a tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"></a>'
+					:
+					'<a tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
+					'<a tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
+				$(nPaging).append( sAppend );
 				
-				nPrevious.title = oSettings.oLanguage.oPaginate.sPrevious;
-				nNext.title = oSettings.oLanguage.oPaginate.sNext;
-				
-				nPaging.appendChild( nPrevious );
-				nPaging.appendChild( nNext );
+				var els = $('a', nPaging);
+				var nPrevious = els[0],
+					nNext = els[1]
 				
 				$(nPrevious)
 					.bind( 'click.DT', { action: "previous" }, fnClickHandler )
@@ -9959,9 +9944,9 @@
 				/* ID the first elements only */
 				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
 				{
-					nPaging.setAttribute( 'id', oSettings.sTableId+'_paginate' );
-					nPrevious.setAttribute( 'id', oSettings.sTableId+'_previous' );
-					nNext.setAttribute( 'id', oSettings.sTableId+'_next' );
+					nPaging.id = oSettings.sTableId+'_paginate';
+					nPrevious.id = oSettings.sTableId+'_previous';
+					nNext.id = oSettings.sTableId+'_next';
 				}
 			},
 			
@@ -9979,19 +9964,19 @@
 					return;
 				}
 				
-				/* Loop over each instance of the pager */
+				var oClasses = oSettings.oClasses;
 				var an = oSettings.aanFeatures.p;
+				
+				/* Loop over each instance of the pager */
 				for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 				{
 					if ( an[i].childNodes.length !== 0 )
 					{
-						an[i].childNodes[0].className = 
-							( oSettings._iDisplayStart === 0 ) ? 
-							oSettings.oClasses.sPagePrevDisabled : oSettings.oClasses.sPagePrevEnabled;
+						an[i].childNodes[0].className = ( oSettings._iDisplayStart === 0 ) ? 
+							oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
 						
-						an[i].childNodes[1].className = 
-							( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ? 
-							oSettings.oClasses.sPageNextDisabled : oSettings.oClasses.sPageNextEnabled;
+						an[i].childNodes[1].className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ? 
+							oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
 					}
 				}
 			}
@@ -10021,37 +10006,30 @@
 			 */
 			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 			{
-				var nFirst = document.createElement( 'a' );
-				var nPrevious = document.createElement( 'a' );
-				var nList = document.createElement( 'span' );
-				var nNext = document.createElement( 'a' );
-				var nLast = document.createElement( 'a' );
+				var oLang = oSettings.oLanguage.oPaginate;
+				var oClasses = oSettings.oClasses;
 				var fnClickHandler = function ( e ) {
 					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
 					{
 						fnCallbackDraw( oSettings );
 					}
 				};
-				
-				nFirst.innerHTML = oSettings.oLanguage.oPaginate.sFirst;
-				nPrevious.innerHTML = oSettings.oLanguage.oPaginate.sPrevious;
-				nNext.innerHTML = oSettings.oLanguage.oPaginate.sNext;
-				nLast.innerHTML = oSettings.oLanguage.oPaginate.sLast;
-				
-				var oClasses = oSettings.oClasses;
-				nFirst.className = oClasses.sPageButton+" "+oClasses.sPageFirst;
-				nPrevious.className = oClasses.sPageButton+" "+oClasses.sPagePrevious;
-				nNext.className= oClasses.sPageButton+" "+oClasses.sPageNext;
-				nLast.className = oClasses.sPageButton+" "+oClasses.sPageLast;
-				
-				nPaging.appendChild( nFirst );
-				nPaging.appendChild( nPrevious );
-				nPaging.appendChild( nList );
-				nPaging.appendChild( nNext );
-				nPaging.appendChild( nLast );
+	
+				$(nPaging).append(
+					'<a class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
+					'<a class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
+					'<span></span>'+
+					'<a class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
+					'<a class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
+				);
+				var els = $('a', nPaging);
+				var nFirst = els[0],
+					nPrev = els[1],
+					nNext = els[2],
+					nLast = els[3];
 				
 				$(nFirst).bind( 'click.DT', { action: "first" }, fnClickHandler );
-				$(nPrevious).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+				$(nPrev).bind( 'click.DT', { action: "previous" }, fnClickHandler );
 				$(nNext).bind( 'click.DT', { action: "next" }, fnClickHandler );
 				$(nLast).bind( 'click.DT', { action: "last" }, fnClickHandler );
 				
@@ -10063,11 +10041,11 @@
 				/* ID the first elements only */
 				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
 				{
-					nPaging.setAttribute( 'id', oSettings.sTableId+'_paginate' );
-					nFirst.setAttribute( 'id', oSettings.sTableId+'_first' );
-					nPrevious.setAttribute( 'id', oSettings.sTableId+'_previous' );
-					nNext.setAttribute( 'id', oSettings.sTableId+'_next' );
-					nLast.setAttribute( 'id', oSettings.sTableId+'_last' );
+					nPaging.id = oSettings.sTableId+'_paginate';
+					nFirst.id =oSettings.sTableId+'_first';
+					nPrev.id =oSettings.sTableId+'_previous';
+					nNext.id =oSettings.sTableId+'_next';
+					nLast.id =oSettings.sTableId+'_last';
 				}
 			},
 			
