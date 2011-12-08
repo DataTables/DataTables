@@ -10079,26 +10079,20 @@
 					iStartButton = 1;
 					iEndButton = iPages;
 				}
+				else if (iCurrentPage <= iPageCountHalf)
+				{
+					iStartButton = 1;
+					iEndButton = iPageCount;
+				}
+				else if (iCurrentPage >= (iPages - iPageCountHalf))
+				{
+					iStartButton = iPages - iPageCount + 1;
+					iEndButton = iPages;
+				}
 				else
 				{
-					if (iCurrentPage <= iPageCountHalf)
-					{
-						iStartButton = 1;
-						iEndButton = iPageCount;
-					}
-					else
-					{
-						if (iCurrentPage >= (iPages - iPageCountHalf))
-						{
-							iStartButton = iPages - iPageCount + 1;
-							iEndButton = iPages;
-						}
-						else
-						{
-							iStartButton = iCurrentPage - Math.ceil(iPageCount / 2) + 1;
-							iEndButton = iStartButton + iPageCount - 1;
-						}
-					}
+					iStartButton = iCurrentPage - Math.ceil(iPageCount / 2) + 1;
+					iEndButton = iStartButton + iPageCount - 1;
 				}
 				
 				/* Build the dynamic list */
