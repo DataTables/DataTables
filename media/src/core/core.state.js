@@ -79,32 +79,33 @@ function _fnLoadState ( oSettings, oInit )
 	
 	var oData, i, iLen;
 	var sData = _fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
-	if ( sData !== null && sData !== '' )
+
+	/* Try/catch the JSON eval - if it is bad then we ignore it - note that 1.7.0 and before
+	 * incorrectly used single quotes for some strings - hence the replace below
+	 */
+	try
 	{
-		/* Try/catch the JSON eval - if it is bad then we ignore it - note that 1.7.0 and before
-		 * incorrectly used single quotes for some strings - hence the replace below
-		 */
-		try
-		{
-			oData = (typeof $.parseJSON == 'function') ? 
-				$.parseJSON( sData.replace(/'/g, '"') ) : eval( '('+sData+')' );
-		}
-		catch( e )
+		oData = (typeof $.parseJSON == 'function') ? 
+			$.parseJSON( sData.replace(/'/g, '"') ) : eval( '('+sData+')' );
+	}
+	catch( e )
+	{
+		oData = null;
+	}
+	
+	/* Allow custom and plug-in manipulation functions to alter the data set which was
+	 * saved, and also reject any saved state by returning false
+	 */
+	for ( i=0, iLen=oSettings.aoStateLoad.length ; i<iLen ; i++ )
+	{
+		if ( !oSettings.aoStateLoad[i].fn( oSettings, oData ) )
 		{
 			return;
 		}
+	}
 		
-		/* Allow custom and plug-in manipulation functions to alter the data set which was
-		 * saved, and also reject any saved state by returning false
-		 */
-		for ( i=0, iLen=oSettings.aoStateLoad.length ; i<iLen ; i++ )
-		{
-			if ( !oSettings.aoStateLoad[i].fn( oSettings, oData ) )
-			{
-				return;
-			}
-		}
-		
+	if ( oData !== null )
+	{
 		/* Store the saved state so it might be accessed at any time (particualrly a plug-in */
 		oSettings.oLoadedState = $.extend( true, {}, oData );
 		

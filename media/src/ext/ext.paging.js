@@ -82,7 +82,7 @@ $.extend( DataTable.ext.oPagination, {
 			
 			var oClasses = oSettings.oClasses;
 			var an = oSettings.aanFeatures.p;
-			
+
 			/* Loop over each instance of the pager */
 			for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 			{
@@ -245,7 +245,9 @@ $.extend( DataTable.ext.oPagination, {
 				/* Build up the dynamic list forst - html and listeners */
 				var qjPaginateList = $('span:eq(0)', an[i]);
 				qjPaginateList.html( sList );
-				$('a', qjPaginateList).bind( 'click.DT', fnClick ).bind( 'mousedown.DT', fnFalse )
+				$('a', qjPaginateList)
+					.bind( 'click.DT', fnClick )
+					.bind( 'mousedown.DT', fnFalse )
 					.bind( 'selectstart.DT', fnFalse );
 				
 				/* Update the 'premanent botton's classes */
