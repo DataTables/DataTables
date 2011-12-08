@@ -5894,7 +5894,7 @@
 			"_fnApplyColumnDefs": _fnApplyColumnDefs
 		};
 		
-		DataTable.ext.oApi = this.oApi;
+		$.extend( DataTable.ext.oApi, this.oApi );
 		
 		
 		/**
@@ -5919,6 +5919,7 @@
 				this[sFunc] = _fnExternApiFunc(sFunc);
 			}
 		}
+		
 		
 		var _that = this;
 		return this.each(function() {

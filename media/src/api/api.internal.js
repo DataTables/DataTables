@@ -90,7 +90,7 @@ this.oApi = {
 	"_fnApplyColumnDefs": _fnApplyColumnDefs
 };
 
-DataTable.ext.oApi = this.oApi;
+$.extend( DataTable.ext.oApi, this.oApi );
 
 
 /**
@@ -115,3 +115,4 @@ for ( var sFunc in DataTable.ext.oApi )
 		this[sFunc] = _fnExternApiFunc(sFunc);
 	}
 }
+
