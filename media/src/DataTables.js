@@ -27,17 +27,15 @@
 /*jslint evil: true, undef: true, browser: true */
 /*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnArrayCmp,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs*/
 
-(function($, window, document) {
+(/** @lends <global> */function($, window, document) {
 	/** 
 	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
 	 * highly flexible tool, based upon the foundations of progressive 
 	 * enhancement, which will add advanced interaction controls to any 
 	 * HTML table. For a full list of features please refer to
 	 * <a href="http://datatables.net">DataTables.net</a>.
+	 *
 	 *  @class
-	 *  @global
-	 *  @constructor
-	 *  @name DataTable
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
 	 *    are defined by {@link DataTable.models.oInit}
 	 *  @requires jQuery 1.3+
@@ -88,6 +86,7 @@
 	 * Version string for plug-ins to check compatibility. Allowed format is
 	 * a.b.c.d.e where: a:int, b:int, c:int, d:string(dev|beta), e:int. d and
 	 * e are optional
+	 *  @member
 	 *  @type string
 	 *  @default Version number
 	 */
@@ -96,6 +95,7 @@
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
 	 * tables on a given page.
+	 *  @member
 	 *  @type array
 	 *  @default []
 	 *  @private
@@ -116,7 +116,8 @@
 	require('model.settings.js');
 
 	/**
-	 * Extension object for DataTables that is used to provide all extension options
+	 * Extension object for DataTables that is used to provide all extension options.
+	 * See {@link DataTable.models.ext} for full information about the extension object.
 	 *  @namespace
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
