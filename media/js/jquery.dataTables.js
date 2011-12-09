@@ -6769,12 +6769,17 @@
 				if ( a.length == 2 )
 				{
 					return function (data) {
-						return data[ a[0] ][ a[1] ];
+						// Ensure we catch nulls in the chain
+						return (data[ a[0] ] == null) ? null : data[ a[0] ][ a[1] ];
 					};
 				}
 				else if ( a.length == 3 )
 				{
 					return function (data) {
+						// Ensure we catch nulls in the chain
+						if (data[ a[0] ] == null || data[ a[0] ][ a[1] ] == null){
+							return null;
+						}
 						return data[ a[0] ][ a[1] ][ a[2] ];
 					};
 				}
@@ -6784,6 +6789,10 @@
 						for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 						{
 							data = data[ a[i] ];
+							// Ensure we catch nulls in the chain
+							if (data == null) {
+								return null;
+							}
 						}
 						return data;
 					};
