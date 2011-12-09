@@ -6244,6 +6244,14 @@
 				sValue += oSettings.aoColumns[i].bVisible+",";
 			}
 			sValue = sValue.substring(0, sValue.length-1);
+			sValue += "],";
+			
+			sValue += '"abSearchCols":[ ';
+			for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+			{
+				sValue += oSettings.aoColumns[i].bSearchable+",";
+			}
+			sValue = sValue.substring(0, sValue.length-1);
 			sValue += "]";
 			
 			/* Save state from any plug-ins */
@@ -6351,6 +6359,21 @@
 						oInit.saved_aoColumns[i].bVisible = oData.abVisCols[i];
 					}
 				}
+
+				if ( typeof oData.abSearchCols != 'undefined' )
+				{
+					/* Pass back visibiliy settings to the init handler, but to do not here override
+					 * the init object that the user might have passed in
+					 */
+					for ( i=0 ; i<oData.abSearchCols.length ; i++ )
+					{
+						if ( typeof oInit.saved_aoColumns[i] == 'undefined' )
+							oInit.saved_aoColumns[i] = {};
+						
+						oInit.saved_aoColumns[i].bSearchable = oData.abSearchCols[i];
+					}
+				}
+								
 			}
 		}
 		
@@ -7305,6 +7328,7 @@
 						aoColumnsInit[i] = {};
 					}
 					aoColumnsInit[i].bVisible = oInit.saved_aoColumns[i].bVisible;
+					aoColumnsInit[i].bSearchable = oInit.saved_aoColumns[i].bSearchable;
 				}
 				
 				_fnAddColumn( oSettings, anThs ? anThs[i] : null );
