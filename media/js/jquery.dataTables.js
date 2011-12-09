@@ -3157,6 +3157,7 @@
 
 						/* Expand the cell to cover as many rows as needed */
 						while ( typeof aoLocal[i+iRowspan] != 'undefined' &&
+                                                        typeof aoLocal[i+iRowspan][j] != 'undefined' &&
 						        aoLocal[i][j].cell == aoLocal[i+iRowspan][j].cell )
 						{
 							aApplied[i+iRowspan][j] = 1;
