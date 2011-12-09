@@ -1916,38 +1916,9 @@
 			var iVisibleColumn, i, iLen, sDisplay;
 			var iRow = (typeof mRow == 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
-			
-			if ( typeof oSettings.__fnUpdateDeep == 'undefined' && $.isArray(mData) && typeof mData == 'object' )
-			{
-				/* Array update - update the whole row */
-				oSettings.aoData[iRow]._aData = mData.slice();
-				
-				/* Flag to the function that we are recursing */
-				oSettings.__fnUpdateDeep = true;
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-				oSettings.__fnUpdateDeep = undefined;
-			}
-			else if ( typeof oSettings.__fnUpdateDeep == 'undefined' && mData !== null && typeof mData == 'object' )
-			{
-				/* Object update - update the whole row - assume the developer gets the object right */
-				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
 
-				oSettings.__fnUpdateDeep = true;
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-				oSettings.__fnUpdateDeep = undefined;
-			}
-			else
+			function _fnUpdateIndividualCell()
 			{
-				/* Individual cell update */
-				sDisplay = mData;
-				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
-				
 				if ( oSettings.aoColumns[iColumn].fnRender !== null )
 				{
 					sDisplay = oSettings.aoColumns[iColumn].fnRender( {
@@ -1968,6 +1939,44 @@
 					/* Do the actual HTML update */
 					_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
 				}
+			}
+			
+			if ( typeof oSettings.__fnUpdateDeep == 'undefined' && $.isArray(mData) && typeof mData == 'object' )
+			{
+				/* Array update - update the whole row */
+				oSettings.aoData[iRow]._aData = mData.slice();
+				
+				/* Flag to the function that we are recursing */
+				oSettings.__fnUpdateDeep = true;
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					sDisplay = mData[i];
+					iColumn = i;
+					_fnUpdateIndividualCell();
+				}
+				oSettings.__fnUpdateDeep = undefined;
+			}
+			else if ( typeof oSettings.__fnUpdateDeep == 'undefined' && mData !== null && typeof mData == 'object' )
+			{
+				/* Object update - update the whole row - assume the developer gets the object right */
+				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
+
+				oSettings.__fnUpdateDeep = true;
+				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+				{
+					sDisplay = mData[oSettings.aoColumns[i].mDataProp];
+					iColumn = i;
+					_fnUpdateIndividualCell();
+				}
+				oSettings.__fnUpdateDeep = undefined;
+			}
+			else
+			{
+				/* Individual cell update */
+				sDisplay = mData;
+				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+				
+				_fnUpdateIndividualCell();
 			}
 			
 			/* Modify the search index for this row (strictly this is likely not needed, since fnReDraw
