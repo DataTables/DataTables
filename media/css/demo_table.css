@@ -52,6 +52,17 @@
 	color: #999;
 	font-size: 14px;
 	background-color: white;
+	z-index: 3;
+}
+
+.dataTables_processing_modal {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: rgba(0,0,0,.2);
+	z-index:2;
 }
 
 .dataTables_length {
