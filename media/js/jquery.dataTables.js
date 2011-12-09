@@ -882,6 +882,7 @@
 				"bLengthChange": true,
 				"bFilter": true,
 				"bSort": true,
+				"bSortMulti": true,
 				"bInfo": true,
 				"bAutoWidth": true,
 				"bProcessing": false,
@@ -4811,7 +4812,7 @@
 					var iColumn, iNextSort;
 					
 					/* If the shift key is pressed then we are multipe column sorting */
-					if ( e.shiftKey )
+					if ( e.shiftKey && oSettings.oFeatures.bSortMulti )
 					{
 						/* Are we already doing some kind of sort on this column? */
 						var bFound = false;
@@ -7041,6 +7042,7 @@
 				_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
 				_fnMap( oSettings.oFeatures, oInit, "bFilter" );
 				_fnMap( oSettings.oFeatures, oInit, "bSort" );
+				_fnMap( oSettings.oFeatures, oInit, "bSortMulti");
 				_fnMap( oSettings.oFeatures, oInit, "bInfo" );
 				_fnMap( oSettings.oFeatures, oInit, "bProcessing" );
 				_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
