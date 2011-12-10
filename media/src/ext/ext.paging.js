@@ -31,14 +31,14 @@ $.extend( DataTable.ext.oPagination, {
 			};
 
 			var sAppend = (!oSettings.bJUI) ?
-				'<a tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"></a>'+
-				'<a tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"></a>'
+				'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'">'+oLang.sPrevious+'</div>'+
+				'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'">'+oLang.sNext+'</div>'
 				:
-				'<a tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
-				'<a tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
+				'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></div>'+
+				'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></div>';
 			$(nPaging).append( sAppend );
 			
-			var els = $('a', nPaging);
+			var els = $('div', nPaging);
 			var nPrevious = els[0],
 				nNext = els[1]
 			
