@@ -1070,7 +1070,14 @@
 				{
 					nTh = oSettings.aoColumns[i].nTh;
 					nTh.setAttribute('tabindex', '0');
-					
+					nTh.setAttribute('role', 'columnheader');
+		
+					nTh.setAttribute('aria-label', 'Activate to sort column');
+					if ( oSettings.sTableId )
+					{
+						nTh.setAttribute('aria-controls', oSettings.sTableId);
+					}
+		
 					if ( oSettings.aoColumns[i].sClass !== null )
 					{
 						$(nTh).addClass( oSettings.aoColumns[i].sClass );
@@ -1720,6 +1727,7 @@
 			 */
 			oSettings.nTableWrapper = document.createElement( 'div' );
 			oSettings.nTableWrapper.className = oSettings.oClasses.sWrapper;
+			oSettings.nTableWrapper.setAttribute('role', 'grid');
 			if ( oSettings.sTableId !== '' )
 			{
 				oSettings.nTableWrapper.setAttribute( 'id', oSettings.sTableId+'_wrapper' );
@@ -2018,7 +2026,12 @@
 					} );
 				}
 			} );
-			
+		
+			if ( oSettings.sTableId )
+			{
+				jqFilter.attr('aria-controls', oSettings.sTableId);
+			}
+		
 			jqFilter.bind( 'keypress.DT', function(e) {
 				/* Prevent default */
 				if ( e.keyCode == 13 )
@@ -2372,6 +2385,7 @@
 				if ( oSettings.sTableId !== '' )
 				{
 					nInfo.setAttribute( 'id', oSettings.sTableId+'_info' );
+					oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
 				}
 			}
 			
@@ -2699,6 +2713,12 @@
 				
 				_fnDraw( oSettings );
 			} );
+		
+		
+			if ( oSettings.sTableId )
+			{
+				$('select', nLength).attr('aria-controls', oSettings.sTableId);
+			}
 			
 			return nLength;
 		}
@@ -3889,6 +3909,17 @@
 			if ( (typeof bApplyClasses == 'undefined' || bApplyClasses) && !oSettings.oFeatures.bDeferRender )
 			{
 				_fnSortingClasses( oSettings );
+			}
+		
+			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			{
+				oSettings.aoColumns[i].nTh.removeAttribute('aria-sort');
+			}
+			if ( aaSort.length > 0 )
+			{
+				var aAriaSort = aaSort[0]
+				oSettings.aoColumns[aAriaSort[0]].nTh.setAttribute('aria-sort', 
+					aAriaSort[1]=="asc" ? "ascending" : "descending" );
 			}
 			
 			/* Tell the draw function that we have sorted the data */
@@ -6325,6 +6356,8 @@
 				this.appendChild( tbody[0] );
 			}
 			oSettings.nTBody = tbody[0];
+			oSettings.nTBody.setAttribute( "aria-live", "polite" );
+			oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 			
 			var tfoot = $(this).children('tfoot');
 			if ( tfoot.length > 0 )
@@ -9918,8 +9951,8 @@
 				};
 	
 				var sAppend = (!oSettings.bJUI) ?
-					'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'">'+oLang.sPrevious+'</div>'+
-					'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'">'+oLang.sNext+'</div>'
+					'<div title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="0" role="button">'+oLang.sPrevious+'</div>'+
+					'<div title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="0" role="button">'+oLang.sNext+'</div>'
 					:
 					'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></div>'+
 					'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></div>';
@@ -9950,6 +9983,9 @@
 					nPaging.id = oSettings.sTableId+'_paginate';
 					nPrevious.id = oSettings.sTableId+'_previous';
 					nNext.id = oSettings.sTableId+'_next';
+	
+					nPrevious.setAttribute('aria-controls', oSettings.sTableId);
+					nNext.setAttribute('aria-controls', oSettings.sTableId);
 				}
 			},
 			

@@ -31,8 +31,8 @@ $.extend( DataTable.ext.oPagination, {
 			};
 
 			var sAppend = (!oSettings.bJUI) ?
-				'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'">'+oLang.sPrevious+'</div>'+
-				'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'">'+oLang.sNext+'</div>'
+				'<div title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="0" role="button">'+oLang.sPrevious+'</div>'+
+				'<div title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="0" role="button">'+oLang.sNext+'</div>'
 				:
 				'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></div>'+
 				'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></div>';
@@ -63,6 +63,9 @@ $.extend( DataTable.ext.oPagination, {
 				nPaging.id = oSettings.sTableId+'_paginate';
 				nPrevious.id = oSettings.sTableId+'_previous';
 				nNext.id = oSettings.sTableId+'_next';
+
+				nPrevious.setAttribute('aria-controls', oSettings.sTableId);
+				nNext.setAttribute('aria-controls', oSettings.sTableId);
 			}
 		},
 		

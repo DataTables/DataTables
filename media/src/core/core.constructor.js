@@ -402,6 +402,8 @@ if ( tbody.length === 0 )
 	this.appendChild( tbody[0] );
 }
 oSettings.nTBody = tbody[0];
+oSettings.nTBody.setAttribute( "aria-live", "polite" );
+oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 
 var tfoot = $(this).children('tfoot');
 if ( tfoot.length > 0 )

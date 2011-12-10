@@ -85,6 +85,12 @@ function _fnFeatureHtmlLength ( oSettings )
 		
 		_fnDraw( oSettings );
 	} );
+
+
+	if ( oSettings.sTableId )
+	{
+		$('select', nLength).attr('aria-controls', oSettings.sTableId);
+	}
 	
 	return nLength;
 }

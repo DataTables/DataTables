@@ -127,6 +127,17 @@ function _fnSort ( oSettings, bApplyClasses )
 	{
 		_fnSortingClasses( oSettings );
 	}
+
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	{
+		oSettings.aoColumns[i].nTh.removeAttribute('aria-sort');
+	}
+	if ( aaSort.length > 0 )
+	{
+		var aAriaSort = aaSort[0]
+		oSettings.aoColumns[aAriaSort[0]].nTh.setAttribute('aria-sort', 
+			aAriaSort[1]=="asc" ? "ascending" : "descending" );
+	}
 	
 	/* Tell the draw function that we have sorted the data */
 	oSettings.bSorted = true;

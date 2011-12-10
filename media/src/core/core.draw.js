@@ -97,7 +97,14 @@ function _fnBuildHead( oSettings )
 		{
 			nTh = oSettings.aoColumns[i].nTh;
 			nTh.setAttribute('tabindex', '0');
-			
+			nTh.setAttribute('role', 'columnheader');
+
+			nTh.setAttribute('aria-label', 'Activate to sort column');
+			if ( oSettings.sTableId )
+			{
+				nTh.setAttribute('aria-controls', oSettings.sTableId);
+			}
+
 			if ( oSettings.aoColumns[i].sClass !== null )
 			{
 				$(nTh).addClass( oSettings.aoColumns[i].sClass );
@@ -747,6 +754,7 @@ function _fnAddOptionsHtml ( oSettings )
 	 */
 	oSettings.nTableWrapper = document.createElement( 'div' );
 	oSettings.nTableWrapper.className = oSettings.oClasses.sWrapper;
+	oSettings.nTableWrapper.setAttribute('role', 'grid');
 	if ( oSettings.sTableId !== '' )
 	{
 		oSettings.nTableWrapper.setAttribute( 'id', oSettings.sTableId+'_wrapper' );

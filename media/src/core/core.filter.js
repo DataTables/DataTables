@@ -44,7 +44,12 @@ function _fnFeatureHtmlFilter ( oSettings )
 			} );
 		}
 	} );
-	
+
+	if ( oSettings.sTableId )
+	{
+		jqFilter.attr('aria-controls', oSettings.sTableId);
+	}
+
 	jqFilter.bind( 'keypress.DT', function(e) {
 		/* Prevent default */
 		if ( e.keyCode == 13 )

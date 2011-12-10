@@ -24,6 +24,7 @@ function _fnFeatureHtmlInfo ( oSettings )
 		if ( oSettings.sTableId !== '' )
 		{
 			nInfo.setAttribute( 'id', oSettings.sTableId+'_info' );
+			oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
 		}
 	}
 	
