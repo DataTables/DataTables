@@ -190,7 +190,7 @@ if ( oInit.bJQueryUI )
 	 */
 	oSettings.oClasses = DataTable.ext.oJUIClasses;
 	
-	if ( typeof oInit.sDom == 'undefined' )
+	if ( oInit.sDom == 'lfrtip' )
 	{
 		/* Set the DOM to use a layout suitable for jQuery UI's theming */
 		oSettings.sDom = '<"H"lfr>t<"F"ip>';
