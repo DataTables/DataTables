@@ -61,6 +61,7 @@
 		require('core.columns.js');
 		require('core.data.js');
 		require('core.draw.js');
+		require('core.ajax.js');
 		require('core.filter.js');
 		require('core.info.js');
 		require('core.init.js');
