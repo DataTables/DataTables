@@ -6139,7 +6139,7 @@
 				 */
 				oSettings.oClasses = DataTable.ext.oJUIClasses;
 				
-				if ( oInit.sDom == 'lfrtip' )
+				if ( oInit.sDom == DataTable.models.oInit.sDom )
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
 					oSettings.sDom = '<"H"lfr>t<"F"ip>';
