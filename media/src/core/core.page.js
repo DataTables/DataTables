@@ -48,19 +48,28 @@ function _fnFeatureHtmlPaginate ( oSettings )
 /**
  * Alter the display settings to change the page
  *  @param {object} oSettings dataTables settings object
- *  @param {string} sAction paging action to take: "first", "previous", "next" or "last"
+ *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
+ *    or page number to jump to (integer)
  *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
  *  @private
  */
-function _fnPageChange ( oSettings, sAction )
+function _fnPageChange ( oSettings, mAction )
 {
 	var iOldStart = oSettings._iDisplayStart;
 	
-	if ( sAction == "first" )
+	if ( typeof mAction == "number" )
+	{
+		oSettings._iDisplayStart = mAction * oSettings._iDisplayLength;
+		if ( oSettings._iDisplayStart > oSettings.fnRecordsDisplay() )
+		{
+			oSettings._iDisplayStart = 0;
+		}
+	}
+	else if ( mAction == "first" )
 	{
 		oSettings._iDisplayStart = 0;
 	}
-	else if ( sAction == "previous" )
+	else if ( mAction == "previous" )
 	{
 		oSettings._iDisplayStart = oSettings._iDisplayLength>=0 ?
 			oSettings._iDisplayStart - oSettings._iDisplayLength :
@@ -72,7 +81,7 @@ function _fnPageChange ( oSettings, sAction )
 		  oSettings._iDisplayStart = 0;
 		}
 	}
-	else if ( sAction == "next" )
+	else if ( mAction == "next" )
 	{
 		if ( oSettings._iDisplayLength >= 0 )
 		{
@@ -87,7 +96,7 @@ function _fnPageChange ( oSettings, sAction )
 			oSettings._iDisplayStart = 0;
 		}
 	}
-	else if ( sAction == "last" )
+	else if ( mAction == "last" )
 	{
 		if ( oSettings._iDisplayLength >= 0 )
 		{

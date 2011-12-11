@@ -813,7 +813,8 @@ this.fnOpen = function( nTr, mHtml, sClass )
  * Change the pagination - provides the internal logic for pagination in a simple API 
  * function. With this function you can have a DataTables table go to the next, 
  * previous, first or last pages.
- *  @param {string} sAction Paging action to take: "first", "previous", "next" or "last"
+ *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
+ *    or page number to jump to (integer), note that page 0 is the first page.
  *  @param {bool} [bRedraw=true] Redraw the table or not
  *
  *  @example
@@ -822,10 +823,10 @@ this.fnOpen = function( nTr, mHtml, sClass )
  *      oTable.fnPageChange( 'next' );
  *    } );
  */
-this.fnPageChange = function ( sAction, bRedraw )
+this.fnPageChange = function ( mAction, bRedraw )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	_fnPageChange( oSettings, sAction );
+	_fnPageChange( oSettings, mAction );
 	_fnCalculateEnd( oSettings );
 	
 	if ( typeof bRedraw == 'undefined' || bRedraw )

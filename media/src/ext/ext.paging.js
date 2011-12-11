@@ -225,8 +225,7 @@ $.extend( DataTable.ext.oPagination, {
 			var anButtons, anStatic, nPaginateList;
 			var fnClick = function(e) {
 				/* Use the information in the element to jump to the required page */
-				var iTarget = (this.innerHTML * 1) - 1;
-				oSettings._iDisplayStart = iTarget * oSettings._iDisplayLength;
+				oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 )
 				fnCallbackDraw( oSettings );
 				e.preventDefault();
 			};

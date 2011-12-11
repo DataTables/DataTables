@@ -2788,19 +2788,28 @@
 		/**
 		 * Alter the display settings to change the page
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {string} sAction paging action to take: "first", "previous", "next" or "last"
+		 *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
+		 *    or page number to jump to (integer)
 		 *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
 		 *  @private
 		 */
-		function _fnPageChange ( oSettings, sAction )
+		function _fnPageChange ( oSettings, mAction )
 		{
 			var iOldStart = oSettings._iDisplayStart;
 			
-			if ( sAction == "first" )
+			if ( typeof mAction == "number" )
+			{
+				oSettings._iDisplayStart = mAction * oSettings._iDisplayLength;
+				if ( oSettings._iDisplayStart > oSettings.fnRecordsDisplay() )
+				{
+					oSettings._iDisplayStart = 0;
+				}
+			}
+			else if ( mAction == "first" )
 			{
 				oSettings._iDisplayStart = 0;
 			}
-			else if ( sAction == "previous" )
+			else if ( mAction == "previous" )
 			{
 				oSettings._iDisplayStart = oSettings._iDisplayLength>=0 ?
 					oSettings._iDisplayStart - oSettings._iDisplayLength :
@@ -2812,7 +2821,7 @@
 				  oSettings._iDisplayStart = 0;
 				}
 			}
-			else if ( sAction == "next" )
+			else if ( mAction == "next" )
 			{
 				if ( oSettings._iDisplayLength >= 0 )
 				{
@@ -2827,7 +2836,7 @@
 					oSettings._iDisplayStart = 0;
 				}
 			}
-			else if ( sAction == "last" )
+			else if ( mAction == "last" )
 			{
 				if ( oSettings._iDisplayLength >= 0 )
 				{
@@ -5497,7 +5506,8 @@
 		 * Change the pagination - provides the internal logic for pagination in a simple API 
 		 * function. With this function you can have a DataTables table go to the next, 
 		 * previous, first or last pages.
-		 *  @param {string} sAction Paging action to take: "first", "previous", "next" or "last"
+		 *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
+		 *    or page number to jump to (integer), note that page 0 is the first page.
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 *
 		 *  @example
@@ -5506,10 +5516,10 @@
 		 *      oTable.fnPageChange( 'next' );
 		 *    } );
 		 */
-		this.fnPageChange = function ( sAction, bRedraw )
+		this.fnPageChange = function ( mAction, bRedraw )
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-			_fnPageChange( oSettings, sAction );
+			_fnPageChange( oSettings, mAction );
 			_fnCalculateEnd( oSettings );
 			
 			if ( typeof bRedraw == 'undefined' || bRedraw )
@@ -10141,8 +10151,7 @@
 				var anButtons, anStatic, nPaginateList;
 				var fnClick = function(e) {
 					/* Use the information in the element to jump to the required page */
-					var iTarget = (this.innerHTML * 1) - 1;
-					oSettings._iDisplayStart = iTarget * oSettings._iDisplayLength;
+					oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 )
 					fnCallbackDraw( oSettings );
 					e.preventDefault();
 				};
