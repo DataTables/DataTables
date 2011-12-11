@@ -9799,7 +9799,7 @@
 	
 	$.extend( DataTable.ext.oStdClasses, {
 		"sTable": "dataTable",
-		
+	
 		/* Two buttons buttons */
 		"sPagePrevEnabled": "paginate_enabled_previous",
 		"sPagePrevDisabled": "paginate_disabled_previous",
@@ -9861,9 +9861,7 @@
 	} );
 	
 	
-	$.extend( DataTable.ext.oJUIClasses, {
-		"sTable": "dataTable",
-		
+	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.oStdClasses, {
 		/* Two buttons buttons */
 		"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
 		"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",
@@ -9877,25 +9875,11 @@
 		"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-disabled",
 		"sPageButtonStaticDisabled": "fg-button ui-button ui-state-default ui-state-disabled",
 		"sPageFirst": "first ui-corner-tl ui-corner-bl",
-		"sPagePrevious": "previous",
-		"sPageNext": "next",
 		"sPageLast": "last ui-corner-tr ui-corner-br",
 		
-		/* Striping classes */
-		"sStripeOdd": "odd",
-		"sStripeEven": "even",
-		
-		/* Empty row */
-		"sRowEmpty": "dataTables_empty",
-		
 		/* Features */
-		"sWrapper": "dataTables_wrapper",
-		"sFilter": "dataTables_filter",
-		"sInfo": "dataTables_info",
 		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
 			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
-		"sLength": "dataTables_length",
-		"sProcessing": "dataTables_processing",
 		
 		/* Sorting */
 		"sSortAsc": "ui-state-default",
@@ -9904,7 +9888,6 @@
 		"sSortableAsc": "ui-state-default",
 		"sSortableDesc": "ui-state-default",
 		"sSortableNone": "ui-state-default",
-		"sSortColumn": "sorting_", /* Note that an int is postfixed for the sorting order */
 		"sSortJUIAsc": "css_right ui-icon ui-icon-triangle-1-n",
 		"sSortJUIDesc": "css_right ui-icon ui-icon-triangle-1-s",
 		"sSortJUI": "css_right ui-icon ui-icon-carat-2-n-s",
@@ -9914,12 +9897,8 @@
 		"sSortIcon": "DataTables_sort_icon",
 		
 		/* Scrolling */
-		"sScrollWrapper": "dataTables_scroll",
 		"sScrollHead": "dataTables_scrollHead ui-state-default",
-		"sScrollHeadInner": "dataTables_scrollHeadInner",
-		"sScrollBody": "dataTables_scrollBody",
 		"sScrollFoot": "dataTables_scrollFoot ui-state-default",
-		"sScrollFootInner": "dataTables_scrollFootInner",
 		
 		/* Misc */
 		"sFooterTH": "ui-state-default"
