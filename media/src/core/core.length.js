@@ -14,7 +14,7 @@ function _fnFeatureHtmlLength ( oSettings )
 	}
 	
 	/* This can be overruled by not using the _MENU_ var/macro in the language variable */
-	var sName = (oSettings.sTableId === "") ? "" : 'name="'+oSettings.sTableId+'_length"';
+	var sName = 'name="'+oSettings.sTableId+'_length"';
 	var sStdMenu = '<select size="1" '+sName+'>';
 	var i, iLen;
 	
@@ -38,9 +38,9 @@ function _fnFeatureHtmlLength ( oSettings )
 	sStdMenu += '</select>';
 	
 	var nLength = document.createElement( 'div' );
-	if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.l == "undefined" )
+	if ( typeof oSettings.aanFeatures.l == "undefined" )
 	{
-		nLength.setAttribute( 'id', oSettings.sTableId+'_length' );
+		nLength.id = oSettings.sTableId+'_length';
 	}
 	nLength.className = oSettings.oClasses.sLength;
 	nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
@@ -49,7 +49,7 @@ function _fnFeatureHtmlLength ( oSettings )
 	 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,
 	 * and Stefan Skopnik for fixing the fix!
 	 */
-	$('select option[value="'+oSettings._iDisplayLength+'"]',nLength).attr("selected",true);
+	$('select option[value="'+oSettings._iDisplayLength+'"]', nLength).attr("selected", true);
 	
 	$('select', nLength).bind( 'change.DT', function(e) {
 		var iVal = $(this).val();
@@ -87,10 +87,7 @@ function _fnFeatureHtmlLength ( oSettings )
 	} );
 
 
-	if ( oSettings.sTableId )
-	{
-		$('select', nLength).attr('aria-controls', oSettings.sTableId);
-	}
+	$('select', nLength).attr('aria-controls', oSettings.sTableId);
 	
 	return nLength;
 }

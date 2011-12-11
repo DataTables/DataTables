@@ -18,7 +18,7 @@ function _fnCreateTr ( oSettings, iRow )
 		/* Special parameters can be given by the data source to be used on the row */
 		if ( typeof oData._aData.DT_RowId != 'undefined' )
 		{
-			oData.nTr.setAttribute( 'id', oData._aData.DT_RowId );
+			oData.nTr.id = oData._aData.DT_RowId;
 		}
 
 		if ( typeof oData._aData.DT_RowClass != 'undefined' )
@@ -100,10 +100,7 @@ function _fnBuildHead( oSettings )
 			nTh.setAttribute('role', 'columnheader');
 
 			nTh.setAttribute('aria-label', 'Activate to sort column');
-			if ( oSettings.sTableId )
-			{
-				nTh.setAttribute('aria-controls', oSettings.sTableId);
-			}
+			nTh.setAttribute('aria-controls', oSettings.sTableId);
 
 			if ( oSettings.aoColumns[i].sClass !== null )
 			{
@@ -754,11 +751,8 @@ function _fnAddOptionsHtml ( oSettings )
 	 */
 	oSettings.nTableWrapper = document.createElement( 'div' );
 	oSettings.nTableWrapper.className = oSettings.oClasses.sWrapper;
+	oSettings.nTableWrapper.id = oSettings.sTableId+'_wrapper';
 	oSettings.nTableWrapper.setAttribute('role', 'grid');
-	if ( oSettings.sTableId !== '' )
-	{
-		oSettings.nTableWrapper.setAttribute( 'id', oSettings.sTableId+'_wrapper' );
-	}
 
 	oSettings.nTableReinsertBefore = oSettings.nTable.nextSibling;
 
@@ -806,12 +800,12 @@ function _fnAddOptionsHtml ( oSettings )
 				if ( sAttr.indexOf('.') != -1 )
 				{
 					var aSplit = sAttr.split('.');
-					nNewNode.setAttribute('id', aSplit[0].substr(1, aSplit[0].length-1) );
+					nNewNode.id = aSplit[0].substr(1, aSplit[0].length-1);
 					nNewNode.className = aSplit[1];
 				}
 				else if ( sAttr.charAt(0) == "#" )
 				{
-					nNewNode.setAttribute('id', sAttr.substr(1, sAttr.length-1) );
+					nNewNode.id = sAttr.substr(1, sAttr.length-1);
 				}
 				else
 				{

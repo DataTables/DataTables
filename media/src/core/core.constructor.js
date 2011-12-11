@@ -45,11 +45,18 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 	 * instance by simply deleting it. This is under the assumption that the table has been
 	 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 	 */
-	if ( DataTable.settings[i].sTableId !== "" && DataTable.settings[i].sTableId == this.getAttribute('id') )
+	if ( DataTable.settings[i].sTableId == this.id )
 	{
 		DataTable.settings.splice( i, 1 );
 		break;
 	}
+}
+
+/* Ensure the table has an ID - required for accessibility */
+if ( sId === null )
+{
+	sId = "DataTables_Table_"+(DataTable.ext._oExternConfig.iNextUnique++);
+	this.id = sId;
 }
 
 /* Create the settings object for this table and set some of the default parameters */
@@ -59,7 +66,7 @@ var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
 	"oInit":         oInit,
 	"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
 	"sDestroyWidth": $(this).width(),
-	"sInstance":     (sId!==null) ? sId : DataTable.ext._oExternConfig.iNextUnique++,
+	"sInstance":     sId,
 	"sTableId":      sId
 } );
 DataTable.settings.push( oSettings );
@@ -193,6 +200,7 @@ else
 {
 	oSettings.oClasses = DataTable.ext.oStdClasses;
 }
+$(this).addClass( oSettings.oClasses.sTable );
 
 /* Calculate the scroll bar width and cache it for use later on */
 if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )

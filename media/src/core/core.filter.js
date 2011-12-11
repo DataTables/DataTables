@@ -16,9 +16,9 @@ function _fnFeatureHtmlFilter ( oSettings )
 	var nFilter = document.createElement( 'div' );
 	nFilter.className = oSettings.oClasses.sFilter;
 	nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
-	if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
+	if ( typeof oSettings.aanFeatures.f == "undefined" )
 	{
-		nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
+		nFilter.id = oSettings.sTableId+'_filter';
 	}
 	
 	var jqFilter = $("input", nFilter);
@@ -45,18 +45,16 @@ function _fnFeatureHtmlFilter ( oSettings )
 		}
 	} );
 
-	if ( oSettings.sTableId )
-	{
-		jqFilter.attr('aria-controls', oSettings.sTableId);
-	}
-
-	jqFilter.bind( 'keypress.DT', function(e) {
-		/* Prevent default */
-		if ( e.keyCode == 13 )
-		{
-			return false;
+	jqFilter
+		.attr('aria-controls', oSettings.sTableId)
+		.bind( 'keypress.DT', function(e) {
+			/* Prevent form submission */
+			if ( e.keyCode == 13 )
+			{
+				return false;
+			}
 		}
-	} );
+	);
 	
 	return nFilter;
 }

@@ -10,9 +10,9 @@ function _fnFeatureHtmlProcessing ( oSettings )
 {
 	var nProcessing = document.createElement( 'div' );
 	
-	if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.r == "undefined" )
+	if ( typeof oSettings.aanFeatures.r == "undefined" )
 	{
-		nProcessing.setAttribute( 'id', oSettings.sTableId+'_processing' );
+		nProcessing.id = oSettings.sTableId+'_processing';
 	}
 	nProcessing.innerHTML = oSettings.oLanguage.sProcessing;
 	nProcessing.className = oSettings.oClasses.sProcessing;

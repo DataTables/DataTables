@@ -58,7 +58,7 @@ $.extend( DataTable.ext.oPagination, {
 				.bind( 'selectstart.DT', function () { return false; } );
 			
 			/* ID the first elements only */
-			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
+			if ( typeof oSettings.aanFeatures.p == "undefined" )
 			{
 				nPaging.id = oSettings.sTableId+'_paginate';
 				nPrevious.id = oSettings.sTableId+'_previous';
@@ -158,7 +158,7 @@ $.extend( DataTable.ext.oPagination, {
 				.bind( 'selectstart.DT', function () { return false; } );
 			
 			/* ID the first elements only */
-			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
+			if ( typeof oSettings.aanFeatures.p == "undefined" )
 			{
 				nPaging.id = oSettings.sTableId+'_paginate';
 				nFirst.id =oSettings.sTableId+'_first';

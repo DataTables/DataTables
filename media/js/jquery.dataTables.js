@@ -991,7 +991,7 @@
 				/* Special parameters can be given by the data source to be used on the row */
 				if ( typeof oData._aData.DT_RowId != 'undefined' )
 				{
-					oData.nTr.setAttribute( 'id', oData._aData.DT_RowId );
+					oData.nTr.id = oData._aData.DT_RowId;
 				}
 		
 				if ( typeof oData._aData.DT_RowClass != 'undefined' )
@@ -1073,10 +1073,7 @@
 					nTh.setAttribute('role', 'columnheader');
 		
 					nTh.setAttribute('aria-label', 'Activate to sort column');
-					if ( oSettings.sTableId )
-					{
-						nTh.setAttribute('aria-controls', oSettings.sTableId);
-					}
+					nTh.setAttribute('aria-controls', oSettings.sTableId);
 		
 					if ( oSettings.aoColumns[i].sClass !== null )
 					{
@@ -1727,11 +1724,8 @@
 			 */
 			oSettings.nTableWrapper = document.createElement( 'div' );
 			oSettings.nTableWrapper.className = oSettings.oClasses.sWrapper;
+			oSettings.nTableWrapper.id = oSettings.sTableId+'_wrapper';
 			oSettings.nTableWrapper.setAttribute('role', 'grid');
-			if ( oSettings.sTableId !== '' )
-			{
-				oSettings.nTableWrapper.setAttribute( 'id', oSettings.sTableId+'_wrapper' );
-			}
 		
 			oSettings.nTableReinsertBefore = oSettings.nTable.nextSibling;
 		
@@ -1779,12 +1773,12 @@
 						if ( sAttr.indexOf('.') != -1 )
 						{
 							var aSplit = sAttr.split('.');
-							nNewNode.setAttribute('id', aSplit[0].substr(1, aSplit[0].length-1) );
+							nNewNode.id = aSplit[0].substr(1, aSplit[0].length-1);
 							nNewNode.className = aSplit[1];
 						}
 						else if ( sAttr.charAt(0) == "#" )
 						{
-							nNewNode.setAttribute('id', sAttr.substr(1, sAttr.length-1) );
+							nNewNode.id = sAttr.substr(1, sAttr.length-1);
 						}
 						else
 						{
@@ -1998,9 +1992,9 @@
 			var nFilter = document.createElement( 'div' );
 			nFilter.className = oSettings.oClasses.sFilter;
 			nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
-			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.f == "undefined" )
+			if ( typeof oSettings.aanFeatures.f == "undefined" )
 			{
-				nFilter.setAttribute( 'id', oSettings.sTableId+'_filter' );
+				nFilter.id = oSettings.sTableId+'_filter';
 			}
 			
 			var jqFilter = $("input", nFilter);
@@ -2027,18 +2021,16 @@
 				}
 			} );
 		
-			if ( oSettings.sTableId )
-			{
-				jqFilter.attr('aria-controls', oSettings.sTableId);
-			}
-		
-			jqFilter.bind( 'keypress.DT', function(e) {
-				/* Prevent default */
-				if ( e.keyCode == 13 )
-				{
-					return false;
+			jqFilter
+				.attr('aria-controls', oSettings.sTableId)
+				.bind( 'keypress.DT', function(e) {
+					/* Prevent form submission */
+					if ( e.keyCode == 13 )
+					{
+						return false;
+					}
 				}
-			} );
+			);
 			
 			return nFilter;
 		}
@@ -2382,12 +2374,9 @@
 				} );
 				
 				/* Add id */
-				if ( oSettings.sTableId !== '' )
-				{
-					nInfo.setAttribute( 'id', oSettings.sTableId+'_info' );
-					oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
-				}
+				nInfo.id = oSettings.sTableId+'_info';
 			}
+			oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
 			
 			return nInfo;
 		}
@@ -2642,7 +2631,7 @@
 			}
 			
 			/* This can be overruled by not using the _MENU_ var/macro in the language variable */
-			var sName = (oSettings.sTableId === "") ? "" : 'name="'+oSettings.sTableId+'_length"';
+			var sName = 'name="'+oSettings.sTableId+'_length"';
 			var sStdMenu = '<select size="1" '+sName+'>';
 			var i, iLen;
 			
@@ -2666,9 +2655,9 @@
 			sStdMenu += '</select>';
 			
 			var nLength = document.createElement( 'div' );
-			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.l == "undefined" )
+			if ( typeof oSettings.aanFeatures.l == "undefined" )
 			{
-				nLength.setAttribute( 'id', oSettings.sTableId+'_length' );
+				nLength.id = oSettings.sTableId+'_length';
 			}
 			nLength.className = oSettings.oClasses.sLength;
 			nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
@@ -2677,7 +2666,7 @@
 			 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,
 			 * and Stefan Skopnik for fixing the fix!
 			 */
-			$('select option[value="'+oSettings._iDisplayLength+'"]',nLength).attr("selected",true);
+			$('select option[value="'+oSettings._iDisplayLength+'"]', nLength).attr("selected", true);
 			
 			$('select', nLength).bind( 'change.DT', function(e) {
 				var iVal = $(this).val();
@@ -2715,10 +2704,7 @@
 			} );
 		
 		
-			if ( oSettings.sTableId )
-			{
-				$('select', nLength).attr('aria-controls', oSettings.sTableId);
-			}
+			$('select', nLength).attr('aria-controls', oSettings.sTableId);
 			
 			return nLength;
 		}
@@ -2874,9 +2860,9 @@
 		{
 			var nProcessing = document.createElement( 'div' );
 			
-			if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.r == "undefined" )
+			if ( typeof oSettings.aanFeatures.r == "undefined" )
 			{
-				nProcessing.setAttribute( 'id', oSettings.sTableId+'_processing' );
+				nProcessing.id = oSettings.sTableId+'_processing';
 			}
 			nProcessing.innerHTML = oSettings.oLanguage.sProcessing;
 			nProcessing.className = oSettings.oClasses.sProcessing;
@@ -4622,9 +4608,7 @@
 		 */
 		function _fnLog( oSettings, iLevel, sMesg )
 		{
-			var sAlert = oSettings.sTableId === "" ?
-			 	"DataTables warning: " +sMesg :
-			 	"DataTables warning (table id = '"+oSettings.sTableId+"'): " +sMesg;
+			var sAlert = "DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
 			
 			if ( iLevel === 0 )
 			{
@@ -5999,11 +5983,18 @@
 				 * instance by simply deleting it. This is under the assumption that the table has been
 				 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 				 */
-				if ( DataTable.settings[i].sTableId !== "" && DataTable.settings[i].sTableId == this.getAttribute('id') )
+				if ( DataTable.settings[i].sTableId == this.id )
 				{
 					DataTable.settings.splice( i, 1 );
 					break;
 				}
+			}
+			
+			/* Ensure the table has an ID - required for accessibility */
+			if ( sId === null )
+			{
+				sId = "DataTables_Table_"+(DataTable.ext._oExternConfig.iNextUnique++);
+				this.id = sId;
 			}
 			
 			/* Create the settings object for this table and set some of the default parameters */
@@ -6013,7 +6004,7 @@
 				"oInit":         oInit,
 				"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
 				"sDestroyWidth": $(this).width(),
-				"sInstance":     (sId!==null) ? sId : DataTable.ext._oExternConfig.iNextUnique++,
+				"sInstance":     sId,
 				"sTableId":      sId
 			} );
 			DataTable.settings.push( oSettings );
@@ -6147,6 +6138,7 @@
 			{
 				oSettings.oClasses = DataTable.ext.oStdClasses;
 			}
+			$(this).addClass( oSettings.oClasses.sTable );
 			
 			/* Calculate the scroll bar width and cache it for use later on */
 			if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
@@ -9795,6 +9787,8 @@
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
 	
 	$.extend( DataTable.ext.oStdClasses, {
+		"sTable": "dataTable",
+		
 		/* Two buttons buttons */
 		"sPagePrevEnabled": "paginate_enabled_previous",
 		"sPagePrevDisabled": "paginate_disabled_previous",
@@ -9857,6 +9851,8 @@
 	
 	
 	$.extend( DataTable.ext.oJUIClasses, {
+		"sTable": "dataTable",
+		
 		/* Two buttons buttons */
 		"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
 		"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",
@@ -9978,7 +9974,7 @@
 					.bind( 'selectstart.DT', function () { return false; } );
 				
 				/* ID the first elements only */
-				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
+				if ( typeof oSettings.aanFeatures.p == "undefined" )
 				{
 					nPaging.id = oSettings.sTableId+'_paginate';
 					nPrevious.id = oSettings.sTableId+'_previous';
@@ -10078,7 +10074,7 @@
 					.bind( 'selectstart.DT', function () { return false; } );
 				
 				/* ID the first elements only */
-				if ( oSettings.sTableId !== '' && typeof oSettings.aanFeatures.p == "undefined" )
+				if ( typeof oSettings.aanFeatures.p == "undefined" )
 				{
 					nPaging.id = oSettings.sTableId+'_paginate';
 					nFirst.id =oSettings.sTableId+'_first';

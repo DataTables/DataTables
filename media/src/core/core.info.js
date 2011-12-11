@@ -21,12 +21,9 @@ function _fnFeatureHtmlInfo ( oSettings )
 		} );
 		
 		/* Add id */
-		if ( oSettings.sTableId !== '' )
-		{
-			nInfo.setAttribute( 'id', oSettings.sTableId+'_info' );
-			oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
-		}
+		nInfo.id = oSettings.sTableId+'_info';
 	}
+	oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
 	
 	return nInfo;
 }
