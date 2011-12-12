@@ -1,32 +1,6 @@
 
 
 /**
- * Compare two arrays
- *  @param {array} aArray1 first array
- *  @param {array} aArray2 second array
- *  @returns {int} 0 if match, 1 if length is different, 2 if no match
- *  @private
- */
-function _fnArrayCmp( aArray1, aArray2 )
-{
-	if ( aArray1.length != aArray2.length )
-	{
-		return 1;
-	}
-	
-	for ( var i=0 ; i<aArray1.length ; i++ )
-	{
-		if ( aArray1[i] != aArray2[i] )
-		{
-			return 2;
-		}
-	}
-	
-	return 0;
-}
-
-
-/**
  * Return the settings object for a particular table
  *  @param {node} nTable table we are using as a dataTable
  *  @returns {object} Settings object - or null if not found

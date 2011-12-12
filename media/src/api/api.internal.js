@@ -78,7 +78,6 @@ this.oApi = {
 	"_fnGetWidestNode": _fnGetWidestNode,
 	"_fnGetMaxLenString": _fnGetMaxLenString,
 	"_fnStringToCss": _fnStringToCss,
-	"_fnArrayCmp": _fnArrayCmp,
 	"_fnDetectType": _fnDetectType,
 	"_fnSettingsFromNode": _fnSettingsFromNode,
 	"_fnGetDataMaster": _fnGetDataMaster,
