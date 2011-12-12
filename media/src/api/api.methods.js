@@ -42,7 +42,7 @@ this.$ = function ( sSelector, oOpts )
 	if (typeof oOpts=='undefined')
 	{
 		oOpts = {};
-	};
+	}
 
 	oOpts = $.extend( {}, {
 		"filter": "none", // applied

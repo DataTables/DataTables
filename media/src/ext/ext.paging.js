@@ -40,7 +40,7 @@ $.extend( DataTable.ext.oPagination, {
 			
 			var els = $('div', nPaging);
 			var nPrevious = els[0],
-				nNext = els[1]
+				nNext = els[1];
 			
 			$(nPrevious)
 				.bind( 'click.DT', { action: "previous" }, fnClickHandler )
@@ -225,7 +225,7 @@ $.extend( DataTable.ext.oPagination, {
 			var anButtons, anStatic, nPaginateList;
 			var fnClick = function(e) {
 				/* Use the information in the element to jump to the required page */
-				oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 )
+				oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 );
 				fnCallbackDraw( oSettings );
 				e.preventDefault();
 			};

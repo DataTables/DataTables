@@ -4,6 +4,23 @@
  * publically... - To be fixed in 2.0 using methods on the prototype
  */
 
+
+/**
+ * Create a wrapper function for exporting an internal functions to an external API.
+ *  @param {string} sFunc API function name
+ *  @returns {function} wrapped function
+ *  @private
+ */
+function _fnExternApiFunc (sFunc)
+{
+	return function() {
+		var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
+			Array.prototype.slice.call(arguments) );
+		return DataTable.ext.oApi[sFunc].apply( this, aArgs );
+	};
+}
+
+
 /*
  * Variable: oApi
  * Purpose:  Container for publicly exposed 'private' functions
@@ -91,22 +108,6 @@ this.oApi = {
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );
-
-
-/**
- * Create a wrapper function for exporting an internal functions to an external API.
- *  @param {string} sFunc API function name
- *  @returns {function} wrapped function
- *  @private
- */
-function _fnExternApiFunc (sFunc)
-{
-	return function() {
-		var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
-			Array.prototype.slice.call(arguments) );
-		return DataTable.ext.oApi[sFunc].apply( this, aArgs );
-	};
-}
 
 for ( var sFunc in DataTable.ext.oApi )
 {

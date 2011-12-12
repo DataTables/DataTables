@@ -133,7 +133,9 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
  */
 function _fnLog( oSettings, iLevel, sMesg )
 {
-	var sAlert = "DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
+	var sAlert = (oSettings===null) ?
+		"DataTables warning: "+sMesg :
+		"DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
 	
 	if ( iLevel === 0 )
 	{

@@ -180,4 +180,4 @@
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
-})(jQuery, window, document);
+}(jQuery, window, document));

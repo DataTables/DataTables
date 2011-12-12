@@ -656,18 +656,16 @@ DataTable.models.oInit = {
 			// A small optimisation for what is likely to be the majority of use cases
 			return iIn;
 		}
-		else
+
+		var s=(iIn+""), a=s.split(""), out="", iLen=s.length;
+		
+		for ( var i=0 ; i<iLen ; i++ )
 		{
-			var s=(iIn+""), a=s.split(""), out="", iLen=s.length;
-			
-			for ( var i=0 ; i<iLen ; i++ )
+			if ( i%3 === 0 && i !== 0 )
 			{
-				if ( i%3 === 0 && i !== 0 )
-				{
-					out = this.oLanguage.sInfoThousands+out;
-				}
-				out = a[iLen-i-1]+out;
+				out = this.oLanguage.sInfoThousands+out;
 			}
+			out = a[iLen-i-1]+out;
 		}
 		return out;
 	},
@@ -1484,7 +1482,7 @@ DataTable.models.oInit = {
 	 * You can instruct DataTables to load data from an external source using this
 	 * parameter (use aData if you want to pass data in you already have). Simply
 	 * provide a url a JSON object can be obtained from. This object must include
-	 * the parameter 'aaData' which is a 2D array with the source data.
+	 * the parameter 'aaData' which is the data source for the table.
 	 *  @type string
 	 *  @default null
 	 * 
@@ -1494,24 +1492,6 @@ DataTable.models.oInit = {
 	 *        "sAjaxSource": "http://www.sprymedia.co.uk/dataTables/json.php"
 	 *      } );
 	 *    } )
-	 */
-	"sAjaxSource": null,
-
-
-	/**
-	 * Address from which DataTables should load the remote data from when using
-	 * server-side processing. Note that sAjaxSource can also be used without
-	 * server-side processing to indicate a "one time get" of JSON formatted data.
-	 *  @type string
-	 *  @default null
-	 * 
-	 *  @example
-	 *    $(document).ready( function () {
-	 *      $('#example').dataTable( {
-	 *        "bProcessing": false,
-	 *        "sAjaxSource": "xhr.php"
-	 *      } );
-	 *    } );
 	 */
 	"sAjaxSource": null,
 

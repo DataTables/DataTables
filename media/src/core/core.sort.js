@@ -10,6 +10,7 @@ function _fnSort ( oSettings, bApplyClasses )
 {
 	var
 		i, iLen, j, jLen, k, kLen,
+		sDataType,
 		aaSort = [],
 	 	aiOrig = [],
 		oSort = DataTable.ext.oSort,
@@ -36,7 +37,7 @@ function _fnSort ( oSettings, bApplyClasses )
 		{
 			var iColumn = aaSort[i][0];
 			var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
-			var sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
+			sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
 			if ( typeof DataTable.ext.afnSortData[sDataType] != 'undefined' )
 			{
 				var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
@@ -60,7 +61,7 @@ function _fnSort ( oSettings, bApplyClasses )
 		 * function runs. This make the sorting function a very simple comparison
 		 */
 		var iSortLen = aaSort.length;
-		var fnSortFormat;
+		var fnSortFormat, aDataSort;
 		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
 			for ( j=0 ; j<iSortLen ; j++ )
@@ -134,7 +135,7 @@ function _fnSort ( oSettings, bApplyClasses )
 	}
 	if ( aaSort.length > 0 )
 	{
-		var aAriaSort = aaSort[0]
+		var aAriaSort = aaSort[0];
 		oSettings.aoColumns[aAriaSort[0]].nTh.setAttribute('aria-sort', 
 			aAriaSort[1]=="asc" ? "ascending" : "descending" );
 	}

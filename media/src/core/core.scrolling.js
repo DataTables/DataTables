@@ -196,10 +196,11 @@ function _fnScrollDraw ( o )
 		o.nTable.removeChild( nTheadSize[0] );
 	}
 	
+	var nTfootSize;
 	if ( o.nTFoot !== null )
 	{
 		/* Remove the old minimised footer element in the cloned header */
-		var nTfootSize = o.nTable.getElementsByTagName('tfoot');
+		nTfootSize = o.nTable.getElementsByTagName('tfoot');
 		if ( nTfootSize.length > 0 )
 		{
 			o.nTable.removeChild( nTfootSize[0] );

@@ -8,7 +8,7 @@ var bUsePassedData = false;
 /* Sanity check */
 if ( this.nodeName.toLowerCase() != 'table' )
 {
-	_fnLog( oSettings, 0, "Attempted to initialise DataTables on a node which is not a "+
+	_fnLog( null, 0, "Attempted to initialise DataTables on a node which is not a "+
 		"table: "+this.nodeName );
 	return;
 }

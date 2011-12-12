@@ -110,7 +110,7 @@ function _fnPageChange ( oSettings, mAction )
 	}
 	else
 	{
-		_fnLog( oSettings, 0, "Unknown paging action: "+sAction );
+		_fnLog( oSettings, 0, "Unknown paging action: "+mAction );
 	}
 	$(oSettings.oInstance).trigger('page', oSettings);
 	

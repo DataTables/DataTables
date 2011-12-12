@@ -371,7 +371,7 @@
 		 */
 		function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 		{
-			var i, iLen;
+			var i, iLen, j, jLen, k, kLen;
 		
 			// Column definitions with aTargets
 			if ( aoColDefs )
@@ -1943,9 +1943,10 @@
 			/* Determine if reordering is required */
 			var sOrdering = _fnColumnOrdering(oSettings);
 			var bReOrder = (typeof json.sColumns != 'undefined' && sOrdering !== "" && json.sColumns != sOrdering );
+			var aiIndex;
 			if ( bReOrder )
 			{
-				var aiIndex = _fnReOrderIndex( oSettings, json.sColumns );
+				aiIndex = _fnReOrderIndex( oSettings, json.sColumns );
 			}
 			
 			var aData = _fnGetObjectDataFn( oSettings.sAjaxDataProp )( json );
@@ -2851,7 +2852,7 @@
 			}
 			else
 			{
-				_fnLog( oSettings, 0, "Unknown paging action: "+sAction );
+				_fnLog( oSettings, 0, "Unknown paging action: "+mAction );
 			}
 			$(oSettings.oInstance).trigger('page', oSettings);
 			
@@ -3098,10 +3099,11 @@
 				o.nTable.removeChild( nTheadSize[0] );
 			}
 			
+			var nTfootSize;
 			if ( o.nTFoot !== null )
 			{
 				/* Remove the old minimised footer element in the cloned header */
-				var nTfootSize = o.nTable.getElementsByTagName('tfoot');
+				nTfootSize = o.nTable.getElementsByTagName('tfoot');
 				if ( nTfootSize.length > 0 )
 				{
 					o.nTable.removeChild( nTfootSize[0] );
@@ -3789,6 +3791,7 @@
 		{
 			var
 				i, iLen, j, jLen, k, kLen,
+				sDataType,
 				aaSort = [],
 			 	aiOrig = [],
 				oSort = DataTable.ext.oSort,
@@ -3815,7 +3818,7 @@
 				{
 					var iColumn = aaSort[i][0];
 					var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
-					var sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
+					sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
 					if ( typeof DataTable.ext.afnSortData[sDataType] != 'undefined' )
 					{
 						var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
@@ -3839,7 +3842,7 @@
 				 * function runs. This make the sorting function a very simple comparison
 				 */
 				var iSortLen = aaSort.length;
-				var fnSortFormat;
+				var fnSortFormat, aDataSort;
 				for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 				{
 					for ( j=0 ; j<iSortLen ; j++ )
@@ -3913,7 +3916,7 @@
 			}
 			if ( aaSort.length > 0 )
 			{
-				var aAriaSort = aaSort[0]
+				var aAriaSort = aaSort[0];
 				oSettings.aoColumns[aAriaSort[0]].nTh.setAttribute('aria-sort', 
 					aAriaSort[1]=="asc" ? "ascending" : "descending" );
 			}
@@ -4618,7 +4621,9 @@
 		 */
 		function _fnLog( oSettings, iLevel, sMesg )
 		{
-			var sAlert = "DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
+			var sAlert = (oSettings===null) ?
+				"DataTables warning: "+sMesg :
+				"DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
 			
 			if ( iLevel === 0 )
 			{
@@ -4736,7 +4741,7 @@
 			if (typeof oOpts=='undefined')
 			{
 				oOpts = {};
-			};
+			}
 		
 			oOpts = $.extend( {}, {
 				"filter": "none", // applied
@@ -5832,6 +5837,23 @@
 		 * publically... - To be fixed in 2.0 using methods on the prototype
 		 */
 		
+		
+		/**
+		 * Create a wrapper function for exporting an internal functions to an external API.
+		 *  @param {string} sFunc API function name
+		 *  @returns {function} wrapped function
+		 *  @private
+		 */
+		function _fnExternApiFunc (sFunc)
+		{
+			return function() {
+				var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
+					Array.prototype.slice.call(arguments) );
+				return DataTable.ext.oApi[sFunc].apply( this, aArgs );
+			};
+		}
+		
+		
 		/*
 		 * Variable: oApi
 		 * Purpose:  Container for publicly exposed 'private' functions
@@ -5920,22 +5942,6 @@
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
 		
-		
-		/**
-		 * Create a wrapper function for exporting an internal functions to an external API.
-		 *  @param {string} sFunc API function name
-		 *  @returns {function} wrapped function
-		 *  @private
-		 */
-		function _fnExternApiFunc (sFunc)
-		{
-			return function() {
-				var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
-					Array.prototype.slice.call(arguments) );
-				return DataTable.ext.oApi[sFunc].apply( this, aArgs );
-			};
-		}
-		
 		for ( var sFunc in DataTable.ext.oApi )
 		{
 			if ( sFunc )
@@ -5957,7 +5963,7 @@
 			/* Sanity check */
 			if ( this.nodeName.toLowerCase() != 'table' )
 			{
-				_fnLog( oSettings, 0, "Attempted to initialise DataTables on a node which is not a "+
+				_fnLog( null, 0, "Attempted to initialise DataTables on a node which is not a "+
 					"table: "+this.nodeName );
 				return;
 			}
@@ -7985,18 +7991,16 @@
 				// A small optimisation for what is likely to be the majority of use cases
 				return iIn;
 			}
-			else
+	
+			var s=(iIn+""), a=s.split(""), out="", iLen=s.length;
+			
+			for ( var i=0 ; i<iLen ; i++ )
 			{
-				var s=(iIn+""), a=s.split(""), out="", iLen=s.length;
-				
-				for ( var i=0 ; i<iLen ; i++ )
+				if ( i%3 === 0 && i !== 0 )
 				{
-					if ( i%3 === 0 && i !== 0 )
-					{
-						out = this.oLanguage.sInfoThousands+out;
-					}
-					out = a[iLen-i-1]+out;
+					out = this.oLanguage.sInfoThousands+out;
 				}
+				out = a[iLen-i-1]+out;
 			}
 			return out;
 		},
@@ -8813,7 +8817,7 @@
 		 * You can instruct DataTables to load data from an external source using this
 		 * parameter (use aData if you want to pass data in you already have). Simply
 		 * provide a url a JSON object can be obtained from. This object must include
-		 * the parameter 'aaData' which is a 2D array with the source data.
+		 * the parameter 'aaData' which is the data source for the table.
 		 *  @type string
 		 *  @default null
 		 * 
@@ -8823,24 +8827,6 @@
 		 *        "sAjaxSource": "http://www.sprymedia.co.uk/dataTables/json.php"
 		 *      } );
 		 *    } )
-		 */
-		"sAjaxSource": null,
-	
-	
-		/**
-		 * Address from which DataTables should load the remote data from when using
-		 * server-side processing. Note that sAjaxSource can also be used without
-		 * server-side processing to indicate a "one time get" of JSON formatted data.
-		 *  @type string
-		 *  @default null
-		 * 
-		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
-		 *        "bProcessing": false,
-		 *        "sAjaxSource": "xhr.php"
-		 *      } );
-		 *    } );
 		 */
 		"sAjaxSource": null,
 	
@@ -9946,7 +9932,7 @@
 				
 				var els = $('div', nPaging);
 				var nPrevious = els[0],
-					nNext = els[1]
+					nNext = els[1];
 				
 				$(nPrevious)
 					.bind( 'click.DT', { action: "previous" }, fnClickHandler )
@@ -10131,7 +10117,7 @@
 				var anButtons, anStatic, nPaginateList;
 				var fnClick = function(e) {
 					/* Use the information in the element to jump to the required page */
-					oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 )
+					oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 );
 					fnCallbackDraw( oSettings );
 					e.preventDefault();
 				};
@@ -10410,4 +10396,4 @@
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
-})(jQuery, window, document);
+}(jQuery, window, document));

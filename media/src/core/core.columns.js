@@ -311,7 +311,7 @@ function _fnColumnOrdering ( oSettings )
  */
 function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 {
-	var i, iLen;
+	var i, iLen, j, jLen, k, kLen;
 
 	// Column definitions with aTargets
 	if ( aoColDefs )
