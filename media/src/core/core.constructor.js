@@ -410,6 +410,7 @@ if ( tbody.length === 0 )
 	this.appendChild( tbody[0] );
 }
 oSettings.nTBody = tbody[0];
+oSettings.nTBody.setAttribute( "role", "alert" );
 oSettings.nTBody.setAttribute( "aria-live", "polite" );
 oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 

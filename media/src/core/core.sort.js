@@ -131,13 +131,25 @@ function _fnSort ( oSettings, bApplyClasses )
 
 	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
-		oSettings.aoColumns[i].nTh.removeAttribute('aria-sort');
-	}
-	if ( aaSort.length > 0 )
-	{
-		var aAriaSort = aaSort[0];
-		oSettings.aoColumns[aAriaSort[0]].nTh.setAttribute('aria-sort', 
-			aAriaSort[1]=="asc" ? "ascending" : "descending" );
+		nTh = aoColumns[i].nTh;
+		nTh.removeAttribute('aria-sort');
+		nTh.removeAttribute('aria-label');
+		
+		/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
+		if ( aaSort.length > 0 && aaSort[0][0] == i )
+		{
+			nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+			
+			var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
+				aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
+			nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
+				(nextSort=="asc" ? "ascending" : "descending") );
+		}
+		else
+		{
+			nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
+				(aoColumns[i].asSorting[0]=="asc" ? "ascending" : "descending") );
+		}
 	}
 	
 	/* Tell the draw function that we have sorted the data */

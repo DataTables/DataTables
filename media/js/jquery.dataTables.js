@@ -1057,7 +1057,6 @@
 		function _fnBuildHead( oSettings )
 		{
 			var i, nTh, iLen, j, jLen;
-			var anTr = oSettings.nTHead.getElementsByTagName('tr');
 			var iThs = oSettings.nTHead.getElementsByTagName('th').length;
 			var iCorrector = 0;
 			var jqChildren;
@@ -1071,8 +1070,6 @@
 					nTh = oSettings.aoColumns[i].nTh;
 					nTh.setAttribute('tabindex', '0');
 					nTh.setAttribute('role', 'columnheader');
-		
-					nTh.setAttribute('aria-label', 'Activate to sort column');
 					nTh.setAttribute('aria-controls', oSettings.sTableId);
 		
 					if ( oSettings.aoColumns[i].sClass !== null )
@@ -1108,6 +1105,9 @@
 				$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
 				_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 			}
+			
+			/* ARIA role for the rows */	
+			$(oSettings.nTHead).children('tr').attr('role', 'row');
 			
 			/* Add the extra markup needed by jQuery UI's themes */
 			if ( oSettings.bJUI )
@@ -3912,13 +3912,25 @@
 		
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
-				oSettings.aoColumns[i].nTh.removeAttribute('aria-sort');
-			}
-			if ( aaSort.length > 0 )
-			{
-				var aAriaSort = aaSort[0];
-				oSettings.aoColumns[aAriaSort[0]].nTh.setAttribute('aria-sort', 
-					aAriaSort[1]=="asc" ? "ascending" : "descending" );
+				nTh = aoColumns[i].nTh;
+				nTh.removeAttribute('aria-sort');
+				nTh.removeAttribute('aria-label');
+				
+				/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
+				if ( aaSort.length > 0 && aaSort[0][0] == i )
+				{
+					nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+					
+					var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
+						aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
+					nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
+						(nextSort=="asc" ? "ascending" : "descending") );
+				}
+				else
+				{
+					nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
+						(aoColumns[i].asSorting[0]=="asc" ? "ascending" : "descending") );
+				}
 			}
 			
 			/* Tell the draw function that we have sorted the data */
@@ -6338,6 +6350,7 @@
 				this.appendChild( tbody[0] );
 			}
 			oSettings.nTBody = tbody[0];
+			oSettings.nTBody.setAttribute( "role", "alert" );
 			oSettings.nTBody.setAttribute( "aria-live", "polite" );
 			oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 			

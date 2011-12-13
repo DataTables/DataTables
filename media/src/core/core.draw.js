@@ -84,7 +84,6 @@ function _fnCreateTr ( oSettings, iRow )
 function _fnBuildHead( oSettings )
 {
 	var i, nTh, iLen, j, jLen;
-	var anTr = oSettings.nTHead.getElementsByTagName('tr');
 	var iThs = oSettings.nTHead.getElementsByTagName('th').length;
 	var iCorrector = 0;
 	var jqChildren;
@@ -98,8 +97,6 @@ function _fnBuildHead( oSettings )
 			nTh = oSettings.aoColumns[i].nTh;
 			nTh.setAttribute('tabindex', '0');
 			nTh.setAttribute('role', 'columnheader');
-
-			nTh.setAttribute('aria-label', 'Activate to sort column');
 			nTh.setAttribute('aria-controls', oSettings.sTableId);
 
 			if ( oSettings.aoColumns[i].sClass !== null )
@@ -135,6 +132,9 @@ function _fnBuildHead( oSettings )
 		$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
 		_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 	}
+	
+	/* ARIA role for the rows */	
+	$(oSettings.nTHead).children('tr').attr('role', 'row');
 	
 	/* Add the extra markup needed by jQuery UI's themes */
 	if ( oSettings.bJUI )
