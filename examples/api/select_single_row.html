@@ -13,15 +13,17 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			var oTable;
-			var giRedraw = false;
 			
 			$(document).ready(function() {
 				/* Add a click handler to the rows - this could be used as a callback */
-				$("#example tbody").click(function(event) {
-					$(oTable.fnSettings().aoData).each(function (){
-						$(this.nTr).removeClass('row_selected');
-					});
-					$(event.target.parentNode).addClass('row_selected');
+				$("#example tbody tr").click( function( e ) {
+					if ( $(this).hasClass('row_selected') ) {
+						$(this).removeClass('row_selected');
+					}
+					else {
+						oTable.$('tr.row_selected').removeClass('row_selected');
+						$(this).addClass('row_selected');
+					}
 				});
 				
 				/* Add a click handler for the delete row */
@@ -38,17 +40,7 @@
 			/* Get the rows which are currently selected */
 			function fnGetSelected( oTableLocal )
 			{
-				var aReturn = new Array();
-				var aTrs = oTableLocal.fnGetNodes();
-				
-				for ( var i=0 ; i<aTrs.length ; i++ )
-				{
-					if ( $(aTrs[i]).hasClass('row_selected') )
-					{
-						aReturn.push( aTrs[i] );
-					}
-				}
-				return aReturn;
+				return oTableLocal.$('tr.row_selected');
 			}
 		</script>
 	</head>
@@ -59,7 +51,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>It can be quite useful at times to provide the user with the option to select rows in a DataTable. This can be done using the API functions that DataTables provides. The example below uses the <b>fnRowCallback()</b> function to add a 'click' listener to each row, which will highlight the required row when selected. The indexes of the selected rows are then provided through the custom function <b>fnGetSelected()</b> for later processing.</p>
+			<p>It can be quite useful at times to provide the user with the option to select rows in a DataTable. In this example we use standard jQuery 'click' events to add a class to table rows to indicate that they have been selected. Note that we use <i>oTable.$()</i> when working with rows in the table to ensure that all rows are considered, regardless of paging and filtering.</p>
 			
 			<h1>Live example</h1>
 			<p><a href="javascript:void(0)" id="delete">Delete selected row</a></p>
@@ -495,15 +487,17 @@
 			
 			<h1>Initialisation code</h1>
 			<pre class="brush: js;">var oTable;
-var giRedraw = false;
 
 $(document).ready(function() {
 	/* Add a click handler to the rows - this could be used as a callback */
-	$("#example tbody").click(function(event) {
-		$(oTable.fnSettings().aoData).each(function (){
-			$(this.nTr).removeClass('row_selected');
-		});
-		$(event.target.parentNode).addClass('row_selected');
+	$("#example tbody tr").click( function( e ) {
+		if ( $(this).hasClass('row_selected') ) {
+			$(this).removeClass('row_selected');
+		}
+		else {
+			oTable.$('tr.row_selected').removeClass('row_selected');
+			$(this).addClass('row_selected');
+		}
 	});
 	
 	/* Add a click handler for the delete row */
@@ -520,17 +514,7 @@ $(document).ready(function() {
 /* Get the rows which are currently selected */
 function fnGetSelected( oTableLocal )
 {
-	var aReturn = new Array();
-	var aTrs = oTableLocal.fnGetNodes();
-	
-	for ( var i=0 ; i&lt;aTrs.length ; i++ )
-	{
-		if ( $(aTrs[i]).hasClass('row_selected') )
-		{
-			aReturn.push( aTrs[i] );
-		}
-	}
-	return aReturn;
+	return oTableLocal.$('tr.row_selected');
 }</pre>
 			<style type="text/css">
 				@import "../examples_support/syntax/css/shCore.css";

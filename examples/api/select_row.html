@@ -31,17 +31,7 @@
 			 */
 			function fnGetSelected( oTableLocal )
 			{
-				var aReturn = new Array();
-				var aTrs = oTableLocal.fnGetNodes();
-				
-				for ( var i=0 ; i<aTrs.length ; i++ )
-				{
-					if ( $(aTrs[i]).hasClass('row_selected') )
-					{
-						aReturn.push( aTrs[i] );
-					}
-				}
-				return aReturn;
+				return oTableLocal.$('tr.row_selected');
 			}
 		</script>
 	</head>
@@ -52,7 +42,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>It can be quite useful at times to provide the user with the option to select rows in a DataTable. This can be done using the API functions that DataTables provides. The example below uses the <b>fnRowCallback()</b> function to add a 'click' listener to each row, which will highlight the required row when selected. The indexes of the selected rows are then provided through the custom function <b>fnGetSelected()</b> for later processing.</p>
+			<p>It can be quite useful at times to provide the user with the option to select rows in a DataTable. This can be done by simply using a click event to add/remove a class on the table rows. The the selected rows are then provided through the custom function <b>fnGetSelected()</b> for later processing.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -505,17 +495,7 @@
  */
 function fnGetSelected( oTableLocal )
 {
-	var aReturn = new Array();
-	var aTrs = oTableLocal.fnGetNodes();
-	
-	for ( var i=0 ; i&lt;aTrs.length ; i++ )
-	{
-		if ( $(aTrs[i]).hasClass('row_selected') )
-		{
-			aReturn.push( aTrs[i] );
-		}
-	}
-	return aReturn;
+	return oTableLocal.$('tr.row_selected');
 }</pre>
 			<style type="text/css">
 				@import "../examples_support/syntax/css/shCore.css";
