@@ -9718,9 +9718,9 @@
 		/**
 		 * The classes to use for the table
 		 *  @type object
-		 *  @default null
+		 *  @default {}
 		 */
-		"oClasses": null,
+		"oClasses": {},
 		
 		/**
 		 * Flag attached to the settings object so you can check in the draw 
