@@ -3,19 +3,24 @@
 # DEFAULTS
 CLOSURE="/usr/local/closure_compiler/compiler.jar"
 JSDOC="/usr/local/jsdoc/jsdoc"
+CMD=$1
 
+MAIN_FILE="../js/jquery.dataTables.js"
+MIN_FILE="../js/jquery.dataTables.min.js"
 
-echo ""
-echo "  DataTables build"
-echo ""
 
 cd ../media/src
 
-cp DataTables.js DataTables.js.build
+echo ""
+echo "  DataTables build ($(grep " * Version:     " DataTables.js | awk -F" " '{ print $3 }'))"
+echo ""
+
 
 IFS='%'
 
-echo "  Importing files:"
+cp DataTables.js DataTables.js.build
+
+echo "  Building main script"
 grep "require(" DataTables.js.build > /dev/null
 while [ $? -eq 0 ]; do
 	REQUIRE=$(grep "require(" DataTables.js.build | head -n 1)
@@ -23,8 +28,6 @@ while [ $? -eq 0 ]; do
 	SPACER=$(echo ${REQUIRE} | cut -d r -f 1)
 	FILE=$(echo ${REQUIRE} | sed -e "s#^.*require('##g" -e "s#');##")
 	DIR=$(echo ${FILE} | cut -d \. -f 1)
-
-	echo "    $FILE"
 
 	sed "s#^#${SPACER}#" < ${DIR}/${FILE} > ${DIR}/${FILE}.build
 
@@ -36,15 +39,33 @@ while [ $? -eq 0 ]; do
 	grep "require(" DataTables.js.build > /dev/null
 done
 
-mv DataTables.js.build ../js/jquery.dataTables.js
+mv DataTables.js.build $MAIN_FILE
 
 
-if [ "$1" = "compress" ]; then
-	java -jar $CLOSURE --js ../js/jquery.dataTables.js > ../js/jquery.dataTables.min.js
+if [ "$CMD" != "debug" ]; then
+	if [ "$CMD" = "docs" -o "$CMD" = "" ]; then
+		echo "  JSHint"
+		jshint $MAIN_FILE --config ../../scripts/jshint.config
+		if [ $? -ne 0 ]; then
+			echo "    Errors occured - exiting"
+			exit 1
+		else
+			echo "    Pass" 
+		fi
+	fi
+
+	if [ "$CMD" = "compress" -o "$CMD" = "" ]; then
+		echo "  Minification"
+		java -jar $CLOSURE --js $MAIN_FILE > $MIN_FILE
+		echo "    Min JS file size: $(ls -l $MIN_FILE | awk -F" " '{ print $5 }')"
+	fi
+
+	if [ "$CMD" = "docs" -o "$CMD" = "" ]; then
+		echo "  Documentation"
+		$JSDOC -d ../../docs -t JSDoc-DataTables $MAIN_FILE
+	fi
 fi
 
-# Docs
-if [ "$1" = "docs" ]; then
-	echo "  Documentation"
-	$JSDOC -d ../../docs -t JSDoc-DataTables ../js/jquery.dataTables.js
-fi
+echo "  Done\n"
+
+
