@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd ../media/src
+
 # DEFAULTS
 CLOSURE="/usr/local/closure_compiler/compiler.jar"
 JSDOC="/usr/local/jsdoc/jsdoc"
@@ -7,12 +9,10 @@ CMD=$1
 
 MAIN_FILE="../js/jquery.dataTables.js"
 MIN_FILE="../js/jquery.dataTables.min.js"
-
-
-cd ../media/src
+VERSION=$(grep " * Version:     " DataTables.js | awk -F" " '{ print $3 }')
 
 echo ""
-echo "  DataTables build ($(grep " * Version:     " DataTables.js | awk -F" " '{ print $3 }'))"
+echo "  DataTables build ($VERSION)"
 echo ""
 
 
@@ -56,7 +56,25 @@ if [ "$CMD" != "debug" ]; then
 
 	if [ "$CMD" = "compress" -o "$CMD" = "" ]; then
 		echo "  Minification"
-		java -jar $CLOSURE --js $MAIN_FILE > $MIN_FILE
+		echo "/*
+ * File:        jquery.dataTables.min.js
+ * Version:     $VERSION
+ * Author:      Allan Jardine (www.sprymedia.co.uk)
+ * Info:        www.datatables.net
+ * 
+ * Copyright 2008-2011 Allan Jardine, all rights reserved.
+ *
+ * This source file is free software, under either the GPL v2 license or a
+ * BSD style license, available at:
+ *   http://datatables.net/license_gpl2
+ *   http://datatables.net/license_bsd
+ * 
+ * This source file is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+ */" > $MIN_FILE 
+
+		java -jar $CLOSURE --js $MAIN_FILE >> $MIN_FILE
 		echo "    Min JS file size: $(ls -l $MIN_FILE | awk -F" " '{ print $5 }')"
 	fi
 
