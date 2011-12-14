@@ -4791,7 +4791,15 @@
 				_fnLog( oSettings, 1, "Unknown selection options" );
 			}
 		
-			return $(a).filter(sSelector);
+			/* We need to filter on the TR elements and also 'find' in their descendants
+			 * to make the selector act like it would in a full table - so we need
+			 * to build both results and then combine them together
+			 */
+			var jqA = $(a);
+			var jqTRs = jqA.filter( sSelector );
+			var jqDescendants = jqA.find( sSelector );
+		
+			return $( [].concat($.makeArray(jqTRs), $.makeArray(jqDescendants)) );
 		};
 		
 		

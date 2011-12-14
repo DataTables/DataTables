@@ -15,10 +15,8 @@
 			$(document).ready(function() {
 				$('#example').dataTable( {
 					"fnInitComplete": function () {
-						var 
-							that = this,
-							nTrs = this.fnGetNodes();
-						$('td', nTrs).click( function () {
+						var that = this;
+						this.$('td').click( function () {
 							that.fnFilter( this.innerHTML );
 						} );
 					}
@@ -33,8 +31,8 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>There are times when you may wish to call API functions inside the DataTables callback functions (for example fnInitComplete, fnRowCallback etc). The complicating issue with this is that the object hasn't fully initialised, so you can't assign the result to something like oTable and then use oTable in the callback. However, this is catered for by the execution scope of the callback function. Here 'this' is the DataTables object that is created for the table.</p>
-			<p>In this example you will be able to see that this.fnGetNodes() is used, and also the value of this stored in the variable 'that' so it can be used inside the jQuery click function, where the execution scope has been changed to the td element!). The action here is to apply the filter with the value of what is in each cell.</p>
+			<p>There are times when you may wish to call API functions inside the DataTables callback functions (for example fnInitComplete, fnRowCallback etc). The complicating issue with this is that the object hasn't fully initialised, so you can't assign the result to something like oTable and then use oTable in the callback. However, this is catered for by the execution scope of the callback function. Here <i>this</i> is the DataTables object that is created for the table.</p>
+			<p>In this example you will be able to see that <i>this.$()</i> is used to get all nodes in the table's body and then act on them (in this case added a click event). Note also the value of <i>this</i> stored in the variable <i>that</i> so it can be used inside the jQuery click function, where the execution scope has been changed to the td element!). The action here is to apply the filter with the value of what is in each cell.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -471,10 +469,8 @@
 			<pre class="brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		"fnInitComplete": function () {
-			var 
-				that = this,
-				nTrs = this.fnGetNodes();
-			$('td', nTrs).click( function () {
+			var that = this;
+			this.$('td').click( function () {
 				that.fnFilter( this.innerHTML );
 			} );
 		}
