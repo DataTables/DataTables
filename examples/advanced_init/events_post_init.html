@@ -42,7 +42,7 @@
 				var oTable = $('#example').dataTable();
 				
 				/* Apply the tooltips */
-				$( oTable.fnGetNodes() ).tooltip( {
+				oTable.$('tr').tooltip( {
 					"delay": 0,
 					"track": true,
 					"fade": 250
@@ -57,7 +57,8 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>Events which are assigned to the table elements are retained by DataTables such that they will still work as you would expect, even after changing the sort order etc. (no need to reapply the event handlers). You can do this at any time, although if you apply the handlers after the table has been initialised there is an extra set. Rather then queriing the DOM to get all rows (since they aren't there) you need to use the <b>fnGetNodes()</b> API function. This is shown in this example.</p>
+			<p>Events which are assigned to the table elements are retained by DataTables such that they will still work as you would expect, even after changing the sort order etc. (no need to reapply the event handlers). You can do this at any time, although if you apply the handlers after the table has been initialised there is an extra set. Rather then querying the DOM to get all rows (since they aren't there) you can use the '$' API method that DataTables provides which does a jQuery selector on the whole table and returns a jQuery object.</p>
+			<p>This example shows the tooltip plug-in being applied to the table after initialisation.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -521,7 +522,7 @@
 	var oTable = $('#example').dataTable();
 	
 	/* Apply the tooltips */
-	$( oTable.fnGetNodes() ).tooltip( {
+	oTable.$('tr').tooltip( {
 		"delay": 0,
 		"track": true,
 		"fade": 250
