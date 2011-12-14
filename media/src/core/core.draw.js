@@ -555,17 +555,13 @@ function _fnAddOptionsHtml ( oSettings )
 	 * Create a temporary, empty, div which we can later on replace with what we have generated
 	 * we do it this way to rendering the 'options' html offline - speed :-)
 	 */
-	var nHolding = document.createElement( 'div' );
+	var nHolding = $('<div></div>')[0];
 	oSettings.nTable.parentNode.insertBefore( nHolding, oSettings.nTable );
 	
 	/* 
 	 * All DataTables are wrapped in a div
 	 */
-	oSettings.nTableWrapper = document.createElement( 'div' );
-	oSettings.nTableWrapper.className = oSettings.oClasses.sWrapper;
-	oSettings.nTableWrapper.id = oSettings.sTableId+'_wrapper';
-	oSettings.nTableWrapper.setAttribute('role', 'grid');
-
+	oSettings.nTableWrapper = $('<div id="'+oSettings.sTableId+'_wrapper" class="'+oSettings.oClasses.sWrapper+'" role="grid"></div>')[0];
 	oSettings.nTableReinsertBefore = oSettings.nTable.nextSibling;
 
 	/* Track where we want to insert the option */
@@ -582,7 +578,7 @@ function _fnAddOptionsHtml ( oSettings )
 		if ( cOption == '<' )
 		{
 			/* New container div */
-			nNewNode = document.createElement( 'div' );
+			nNewNode = $('<div></div>')[0];
 			
 			/* Check to see if we should append an id and/or a class name to the container */
 			cNext = aDom[i+1];
