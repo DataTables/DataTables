@@ -7887,6 +7887,7 @@
 		 * This function is called on every 'draw' event, and allows you to
 		 * dynamically modify any aspect you want about the created DOM.
 		 *  @type function
+		 *  @param {object} oSettings DataTables settings object
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
