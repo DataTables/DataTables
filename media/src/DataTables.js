@@ -41,7 +41,7 @@
 	 *
 	 *  @class
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
-	 *    are defined by {@link DataTable.models.oInit}
+	 *    are defined by {@link DataTable.defaults}
 	 *  @requires jQuery 1.3+
 	 * 
 	 *  @example
@@ -120,7 +120,7 @@
 	require('model.search.js');
 	require('model.row.js');
 	require('model.column.js');
-	require('model.init.js');
+	require('model.defaults.js');
 	require('model.settings.js');
 
 	/**

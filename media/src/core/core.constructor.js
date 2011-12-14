@@ -83,7 +83,7 @@ if ( oInit.oLanguage )
 	_fnLanguageCompat( oInit.oLanguage );
 }
 
-oInit = _fnExtend( $.extend(true, {}, DataTable.models.oInit), oInit );
+oInit = _fnExtend( $.extend(true, {}, DataTable.defaults), oInit );
 
 // Map the initialisation options onto the settings object
 _fnMap( oSettings.oFeatures, oInit, "bPaginate" );
@@ -191,7 +191,7 @@ if ( oInit.bJQueryUI )
 	 */
 	$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
 	
-	if ( oInit.sDom == DataTable.models.oInit.sDom )
+	if ( oInit.sDom == DataTable.defaults.sDom )
 	{
 		/* Set the DOM to use a layout suitable for jQuery UI's theming */
 		oSettings.sDom = '<"H"lfr>t<"F"ip>';

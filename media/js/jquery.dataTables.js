@@ -41,7 +41,7 @@
 	 *
 	 *  @class
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
-	 *    are defined by {@link DataTable.models.oInit}
+	 *    are defined by {@link DataTable.defaults}
 	 *  @requires jQuery 1.3+
 	 * 
 	 *  @example
@@ -6036,7 +6036,7 @@
 				_fnLanguageCompat( oInit.oLanguage );
 			}
 			
-			oInit = _fnExtend( $.extend(true, {}, DataTable.models.oInit), oInit );
+			oInit = _fnExtend( $.extend(true, {}, DataTable.defaults), oInit );
 			
 			// Map the initialisation options onto the settings object
 			_fnMap( oSettings.oFeatures, oInit, "bPaginate" );
@@ -6144,7 +6144,7 @@
 				 */
 				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
 				
-				if ( oInit.sDom == DataTable.models.oInit.sDom )
+				if ( oInit.sDom == DataTable.defaults.sDom )
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
 					oSettings.sDom = '<"H"lfr>t<"F"ip>';
@@ -7349,7 +7349,7 @@
 	 * time.
 	 *  @namespace
 	 */
-	DataTable.models.oInit = {
+	DataTable.defaults = {
 		/**
 		 * An array of data to use for the table, passed in at initialisation which 
 		 * will be used in preference to any data which is already in the DOM. This is
@@ -9101,7 +9101,7 @@
 	 * $().dataTable() call) and the settings object is then applied to that
 	 * instance.
 	 * 
-	 * Note that this object is related to {@link DataTable.models.oInit} but this 
+	 * Note that this object is related to {@link DataTable.defaults} but this 
 	 * one is the internal data store for DataTables's cache of columns. It should
 	 * NOT be manipulated outside of DataTables. Any configuration should be done
 	 * through the initialisation options.
@@ -9125,7 +9125,7 @@
 			 * Flag to say if DataTables should automatically try to calculate the
 			 * optimum table and columns widths (true) or not (false).
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bAutoWidth": null,
@@ -9136,7 +9136,7 @@
 			 * increase for Ajax source and Javascript source data, but makes no
 			 * difference at all fro DOM and server-side processing tables.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bDeferRender": null,
@@ -9146,7 +9146,7 @@
 			 * then there is no filtering at all on the table, including fnFilter.
 			 * To just remove the filtering input use sDom and remove the 'f' option.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bFilter": null,
@@ -9155,7 +9155,7 @@
 			 * Table information element (the 'Showing x of y records' div) enable
 			 * flag.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bInfo": null,
@@ -9164,7 +9164,7 @@
 			 * Present a user control allowing the end user to change the page size
 			 * when pagination is enabled.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bLengthChange": null,
@@ -9173,7 +9173,7 @@
 			 * Pagination enabled or not. Note that if this is disabled then length
 			 * changing must also be disabled.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bPaginate": null,
@@ -9182,7 +9182,7 @@
 			 * Processing indicator enable flag whenever DataTables is enacting a
 			 * user request - typically an Ajax request for server-side processing.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bProcessing": null,
@@ -9192,7 +9192,7 @@
 			 * get all data from the server for every draw - there is no filtering,
 			 * sorting or paging done on the client-side.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bServerSide": null,
@@ -9200,7 +9200,7 @@
 			/**
 			 * Sorting enablement flag.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bSort": null,
@@ -9210,7 +9210,7 @@
 			 * visual highlight or not. This can slow things down when enabled since
 			 * there is a lot of DOM interaction.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bSortClasses": null,
@@ -9218,7 +9218,7 @@
 			/**
 			 * State saving enablement flag.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bStateSave": null
@@ -9235,7 +9235,7 @@
 			 * etc for the scrolling header elements or not. Typically you will want
 			 * this.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bAutoCss": null,
@@ -9244,7 +9244,7 @@
 			 * When the table is shorter in height than sScrollY, collapse the
 			 * table container down to the height of the table (when true).
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bCollapse": null,
@@ -9253,7 +9253,7 @@
 			 * Infinite scrolling enablement flag. Now deprecated in favour of
 			 * using the Scroller plug-in.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
 			 */
 			"bInfinite": null,
@@ -9271,7 +9271,7 @@
 			 * the bottom of the scrolling viewport before the next page is loaded
 			 * when using infinite scrolling.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type int
 			 */
 			"iLoadGap": null,
@@ -9280,7 +9280,7 @@
 			 * Viewport width for horizontal scrolling. Horizontal scrolling is 
 			 * disabled if an empty string.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type string
 			 */
 			"sX": null,
@@ -9289,7 +9289,7 @@
 			 * Width to expand the table to when using x-scrolling. Typically you
 			 * should not need to use this.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type string
 			 *  @deprecated
 			 */
@@ -9299,7 +9299,7 @@
 			 * Viewport height for vertical scrolling. Vertical scrolling is disabled
 			 * if an empty string.
 			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.models.oInit}.
+			 * set a default use {@link DataTable.defaults}.
 			 *  @type string
 			 */
 			"sY": null
@@ -9308,12 +9308,12 @@
 		/**
 		 * Language information for the table.
 		 *  @namespace
-		 *  @extends DataTable.models.oInit.oLanguage
+		 *  @extends DataTable.defaults.oLanguage
 		 */
 		"oLanguage": {
 			/**
 			 * Information callback function. See 
-			 * {@link DataTable.models.oInit.fnInfoCallback}
+			 * {@link DataTable.defaults.fnInfoCallback}
 			 *  @type function
 			 *  @default 
 			 */
@@ -9390,7 +9390,7 @@
 		 * Store the applied global search information in case we want to force a 
 		 * research or compare the old search to a new one.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @namespace
 		 *  @extends DataTable.models.oSearch
 		 */
@@ -9414,7 +9414,7 @@
 		 *   <li>Index 2 - index of asSorting for this column</li>
 		 * </ul>
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type array
 		 *  @todo These inner arrays should really be objects
 		 */
@@ -9424,7 +9424,7 @@
 		 * Sorting that is always applied to the table (i.e. prefixed in front of
 		 * aaSorting).
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type array|null
 		 *  @default null
 		 */
@@ -9433,7 +9433,7 @@
 		/**
 		 * Classes to use for the striping of a table.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type array
 		 *  @default []
 		 */
@@ -9456,7 +9456,7 @@
 		/**
 		 * Call this function every time a row is inserted (draw).
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 *  @default null
 		 *  @todo Make into an array so plug-ins can hook in
@@ -9466,7 +9466,7 @@
 		/**
 		 * Callback function for the header on each draw.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 *  @default null
 		 *  @todo Make into an array so plug-ins can hook in
@@ -9476,7 +9476,7 @@
 		/**
 		 * Callback function for the footer on each draw.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 *  @default null
 		 *  @todo Make into an array so plug-ins can hook in
@@ -9494,7 +9494,7 @@
 		 * Callback function for just before the table is redrawn. A return of 
 		 * false will be used to cancel the draw.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 *  @default null
 		 *  @todo Make into an array so plug-ins can hook in
@@ -9504,7 +9504,7 @@
 		/**
 		 * Callback function for when the table has been initialised.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 *  @default null
 		 *  @todo Make into an array so plug-ins can hook in
@@ -9557,7 +9557,7 @@
 		 * Indicate if when using server-side processing the loading of data 
 		 * should be deferred until the second draw.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type boolean
 		 *  @default false
 		 */
@@ -9582,7 +9582,7 @@
 		 * Dictate the positioning of DataTables' control elements - see
 		 * {@link DataTable.model.oInit.sDom}.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type string
 		 *  @default null
 		 */
@@ -9591,7 +9591,7 @@
 		/**
 		 * Which type of pagination should be used.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type string 
 		 *  @default two_button
 		 */
@@ -9600,7 +9600,7 @@
 		/**
 		 * The cookie duration (for bStateSave) in seconds.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type int
 		 *  @default 0
 		 */
@@ -9609,7 +9609,7 @@
 		/**
 		 * The cookie name prefix.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type string
 		 *  @default <i>Empty string</i>
 		 */
@@ -9618,7 +9618,7 @@
 		/**
 		 * Callback function for cookie creation.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 *  @default null
 		 */
@@ -9662,7 +9662,7 @@
 		/**
 		 * Source url for AJAX data for the table.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type string
 		 *  @default null
 		 */
@@ -9673,7 +9673,7 @@
 		 * can be an empty string (when not server-side processing), in which case 
 		 * it is  assumed an an array is given directly.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type string
 		 */
 		"sAjaxDataProp": null,
@@ -9697,7 +9697,7 @@
 		/**
 		 * Function to get the server-side data.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 */
 		"fnServerData": null,
@@ -9714,7 +9714,7 @@
 		 * Send the XHR HTTP method - GET or POST (could be PUT or DELETE if 
 		 * required).
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type string
 		 */
 		"sServerMethod": null,
@@ -9722,7 +9722,7 @@
 		/**
 		 * Format numbers for display.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
 		 */
 		"fnFormatNumber": null,
@@ -9730,7 +9730,7 @@
 		/**
 		 * List of options that can be used for the user selectable length menu.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type array
 		 *  @default []
 		 */
@@ -9806,7 +9806,7 @@
 		/**
 		 * Flag to indicate if jQuery UI marking and classes should be used.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type boolean
 		 */
 		"bJUI": null,
@@ -9843,7 +9843,7 @@
 		 * one unique cell per column, if the top one (true) or bottom one (false) 
 		 * should be used for sorting / title by DataTables.
 		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.models.oInit}.
+		 * set a default use {@link DataTable.defaults}.
 		 *  @type boolean
 		 */
 		"bSortCellsTop": null,
