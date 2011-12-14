@@ -1067,6 +1067,26 @@ DataTable.models.oInit = {
 
 
 	/**
+	 * By default DataTables allows keyboard navigation of the table (sorting, paging,
+	 * and filtering) by adding a tabindex attribute to the required elements. This
+	 * allows you to tab through the controls and press the enter key to activate them.
+	 * The tabindex is default 0, meaning that the tab follows the flow of the document.
+	 * You can overrule this using this parameter if you wish. Use a value of -1 to
+	 * disable built-in keyboard navigation.
+	 *  @type int
+	 *  @default 0
+	 * 
+	 *  @example
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "iTabIndex": 1
+	 *      } );
+	 *    } );
+	 */
+	"iTabIndex": 0,
+
+
+	/**
 	 * All strings that DataTables uses in the user interface that it creates
 	 * are defined in this object, allowing you to modified them individually or
 	 * completely replace them all as required.
@@ -1074,15 +1094,62 @@ DataTable.models.oInit = {
 	 */
 	"oLanguage": {
 		/**
-		 * Pnagation string used by DataTables for the two built-in pagination
+		 * Strings that are used for WAI-ARIA labels and controls only (these are not
+		 * actually visible on the page, but will be read by screenreaders, and thus
+		 * must be internationalised as well).
+		 *  @namespace
+		 */
+		"oAria": {
+			/**
+			 * ARIA label that is added to the table headers when the column may be
+			 * sorted ascending by activing the column (click or return when focused).
+			 * Note that the column header is prefixed to this string.
+			 *  @type string
+			 *  @default : activate to sort column ascending
+			 * 
+			 *  @example
+			 *    $(document).ready(function() {
+			 *      $('#example').dataTable( {
+			 *        "oLanguage": {
+			 *          "oAria": {
+			 *            "sSortAscending": " - click/return to sort ascending"
+			 *          }
+			 *        }
+			 *      } );
+			 *    } );
+			 */
+			"sSortAscending": ": activate to sort column ascending",
+
+			/**
+			 * ARIA label that is added to the table headers when the column may be
+			 * sorted descending by activing the column (click or return when focused).
+			 * Note that the column header is prefixed to this string.
+			 *  @type string
+			 *  @default : activate to sort column ascending
+			 * 
+			 *  @example
+			 *    $(document).ready(function() {
+			 *      $('#example').dataTable( {
+			 *        "oLanguage": {
+			 *          "oAria": {
+			 *            "sSortDescending": " - click/return to sort descending"
+			 *          }
+			 *        }
+			 *      } );
+			 *    } );
+			 */
+			"sSortDescending": ": activate to sort column descending"
+		},
+
+		/**
+		 * Pagination string used by DataTables for the two built-in pagination
 		 * control types ("two_button" and "full_numbers")
 		 *  @namespace
 		 */
 		"oPaginate": {
 			/**
 			 * Text to use when using the 'full_numbers' type of pagination for the
-			 * button
-			 * to take the user to the first page.
+			 * button to take the user to the first page.
 			 *  @type string
 			 *  @default First
 			 * 

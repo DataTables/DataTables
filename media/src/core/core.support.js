@@ -182,3 +182,30 @@ function _fnExtend( oOut, oExtender )
 	return oOut;
 }
 
+
+/**
+ * Bind an event handers to allow a click or return key to activate the callback.
+ * This is good for accessability since a return on the keyboard will have the
+ * same effect as a click, if the element has focus.
+ *  @param {element} n Element to bind the action to
+ *  @param {object} oData Data object to pass to the triggered function
+ *  @param {function) fn Callback function for when the event is triggered
+ *  @private
+ */
+function _fnBindAction( n, oData, fn )
+{
+	$(n)
+		.bind( 'click.DT', oData, function (e) {
+				fn(e);
+				n.blur(); // Remove focus outline for mouse users
+			} )
+		.bind( 'keypress.DT', oData, function (e){
+			if ( e.which === 13 ) {
+				fn(e);
+			} } )
+		.bind( 'selectstart.DT', function () {
+			/* Take the brutal approach to cancelling text selection */
+			return false;
+			} );
+}
+

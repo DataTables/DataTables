@@ -82,6 +82,11 @@
 	float: left;
 	cursor: pointer;
 	*cursor: hand;
+	color: #111 !important;
+}
+.paginate_disabled_previous:hover, .paginate_enabled_previous:hover,
+.paginate_disabled_next:hover, .paginate_enabled_next:hover {
+	text-decoration: none !important;
 }
 .paginate_disabled_previous:active, .paginate_enabled_previous:active,
 .paginate_disabled_next:active, .paginate_enabled_next:active {
@@ -90,7 +95,7 @@
 
 .paginate_disabled_previous,
 .paginate_disabled_next {
-	color: #666;
+	color: #666 !important;
 }
 .paginate_disabled_previous, .paginate_enabled_previous {
 	padding-left: 23px;
@@ -197,7 +202,10 @@ table.display td.center {
 .sorting_desc_disabled {
 	background: url('../images/sort_desc_disabled.png') no-repeat center right;
 }
-
+ 
+th:active {
+	outline: none;
+}
 
 
 

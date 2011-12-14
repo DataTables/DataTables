@@ -15,7 +15,8 @@ function _fnSort ( oSettings, bApplyClasses )
 	 	aiOrig = [],
 		oSort = DataTable.ext.oSort,
 		aoData = oSettings.aoData,
-		aoColumns = oSettings.aoColumns;
+		aoColumns = oSettings.aoColumns,
+		oAria = oSettings.oLanguage.oAria;
 	
 	/* No sorting required if server-side or no sorting array */
 	if ( !oSettings.oFeatures.bServerSide && 
@@ -136,19 +137,26 @@ function _fnSort ( oSettings, bApplyClasses )
 		nTh.removeAttribute('aria-label');
 		
 		/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
-		if ( aaSort.length > 0 && aaSort[0][0] == i )
+		if ( aoColumns[i].bSortable )
 		{
-			nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
-			
-			var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
-				aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
-			nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
-				(nextSort=="asc" ? "ascending" : "descending") );
+			if ( aaSort.length > 0 && aaSort[0][0] == i )
+			{
+				nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+				
+				var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
+					aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
+				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+					(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
+			}
+			else
+			{
+				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+					(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
+			}
 		}
 		else
 		{
-			nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
-				(aoColumns[i].asSorting[0]=="asc" ? "ascending" : "descending") );
+			nTh.setAttribute('aria-label', aoColumns[i].sTitle);
 		}
 	}
 	
@@ -182,7 +190,7 @@ function _fnSort ( oSettings, bApplyClasses )
  */
 function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 {
-	var sortingFn = function (e) {
+	_fnBindAction( nNode, {}, function (e) {
 		/* If the column is not sortable - don't to anything */
 		if ( oSettings.aoColumns[iDataIndex].bSortable === false )
 		{
@@ -287,15 +295,7 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		{
 			fnCallback( oSettings );
 		}
-	};
-
-	$(nNode)
-		.bind( 'click.DT', sortingFn )
-		.bind( 'keypress.DT', function (e) {
-			if ( e.which === 13 ) {
-				sortingFn(e);
-			}
-		} );
+	} );
 }
 
 

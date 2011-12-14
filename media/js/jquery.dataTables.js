@@ -1068,9 +1068,12 @@
 				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
 					nTh = oSettings.aoColumns[i].nTh;
-					nTh.setAttribute('tabindex', '0');
 					nTh.setAttribute('role', 'columnheader');
-					nTh.setAttribute('aria-controls', oSettings.sTableId);
+					if ( oSettings.aoColumns[i].bSortable )
+					{
+						nTh.setAttribute('tabindex', oSettings.iTabIndex);
+						nTh.setAttribute('aria-controls', oSettings.sTableId);
+					}
 		
 					if ( oSettings.aoColumns[i].sClass !== null )
 					{
@@ -1127,12 +1130,6 @@
 				}
 			}
 			
-			/* Add sort listener */
-			var fnNoSelect = function (e) {
-				this.onselectstart = function() { return false; };
-				return false;
-			};
-			
 			if ( oSettings.oFeatures.bSort )
 			{
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
@@ -1140,9 +1137,6 @@
 					if ( oSettings.aoColumns[i].bSortable !== false )
 					{
 						_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
-						
-						/* Take the brutal approach to cancelling text selection in header */
-						$(oSettings.aoColumns[i].nTh).bind( 'mousedown.DT', fnNoSelect );
 					}
 					else
 					{
@@ -3796,7 +3790,8 @@
 			 	aiOrig = [],
 				oSort = DataTable.ext.oSort,
 				aoData = oSettings.aoData,
-				aoColumns = oSettings.aoColumns;
+				aoColumns = oSettings.aoColumns,
+				oAria = oSettings.oLanguage.oAria;
 			
 			/* No sorting required if server-side or no sorting array */
 			if ( !oSettings.oFeatures.bServerSide && 
@@ -3917,19 +3912,26 @@
 				nTh.removeAttribute('aria-label');
 				
 				/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
-				if ( aaSort.length > 0 && aaSort[0][0] == i )
+				if ( aoColumns[i].bSortable )
 				{
-					nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
-					
-					var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
-						aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
-					nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
-						(nextSort=="asc" ? "ascending" : "descending") );
+					if ( aaSort.length > 0 && aaSort[0][0] == i )
+					{
+						nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+						
+						var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
+							aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
+						nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+							(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
+					}
+					else
+					{
+						nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+							(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
+					}
 				}
 				else
 				{
-					nTh.setAttribute('aria-label', aoColumns[i].sTitle+': activate to sort column '+
-						(aoColumns[i].asSorting[0]=="asc" ? "ascending" : "descending") );
+					nTh.setAttribute('aria-label', aoColumns[i].sTitle);
 				}
 			}
 			
@@ -3963,7 +3965,7 @@
 		 */
 		function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		{
-			var sortingFn = function (e) {
+			_fnBindAction( nNode, {}, function (e) {
 				/* If the column is not sortable - don't to anything */
 				if ( oSettings.aoColumns[iDataIndex].bSortable === false )
 				{
@@ -4068,15 +4070,7 @@
 				{
 					fnCallback( oSettings );
 				}
-			};
-		
-			$(nNode)
-				.bind( 'click.DT', sortingFn )
-				.bind( 'keypress.DT', function (e) {
-					if ( e.which === 13 ) {
-						sortingFn(e);
-					}
-				} );
+			} );
 		}
 		
 		
@@ -4680,6 +4674,33 @@
 			}
 		
 			return oOut;
+		}
+		
+		
+		/**
+		 * Bind an event handers to allow a click or return key to activate the callback.
+		 * This is good for accessability since a return on the keyboard will have the
+		 * same effect as a click, if the element has focus.
+		 *  @param {element} n Element to bind the action to
+		 *  @param {object} oData Data object to pass to the triggered function
+		 *  @param {function) fn Callback function for when the event is triggered
+		 *  @private
+		 */
+		function _fnBindAction( n, oData, fn )
+		{
+			$(n)
+				.bind( 'click.DT', oData, function (e) {
+						fn(e);
+						n.blur(); // Remove focus outline for mouse users
+					} )
+				.bind( 'keypress.DT', oData, function (e){
+					if ( e.which === 13 ) {
+						fn(e);
+					} } )
+				.bind( 'selectstart.DT', function () {
+					/* Take the brutal approach to cancelling text selection */
+					return false;
+					} );
 		}
 		
 
@@ -5922,7 +5943,9 @@
 			"_fnSetCellData": _fnSetCellData,
 			"_fnGetObjectDataFn": _fnGetObjectDataFn,
 			"_fnSetObjectDataFn": _fnSetObjectDataFn,
-			"_fnApplyColumnDefs": _fnApplyColumnDefs
+			"_fnApplyColumnDefs": _fnApplyColumnDefs,
+			"_fnBindAction": _fnBindAction,
+			"_fnExtend": _fnExtend
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
@@ -6064,6 +6087,7 @@
 			_fnMap( oSettings, oInit, "sCookiePrefix" );
 			_fnMap( oSettings, oInit, "sDom" );
 			_fnMap( oSettings, oInit, "bSortCellsTop" );
+			_fnMap( oSettings, oInit, "iTabIndex" );
 			_fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
 			_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 			_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
@@ -8388,6 +8412,25 @@
 	
 	
 		/**
+		 * By default DataTables allows keyboard navigation of the table (sorting, paging,
+		 * and filtering) by adding a tabindex attribute to the required elements. This
+		 * allows you to tab through the controls and press the enter key to activate them.
+		 * The tabindex is default 0, meaning that the tab follows the flow of the document.
+		 * You can overrule this using this parameter if you wish.
+		 *  @type int
+		 *  @default 0
+		 * 
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      $('#example').dataTable( {
+		 *        "iTabIndex": 1
+		 *      } );
+		 *    } );
+		 */
+		"iTabIndex": 0,
+	
+	
+		/**
 		 * All strings that DataTables uses in the user interface that it creates
 		 * are defined in this object, allowing you to modified them individually or
 		 * completely replace them all as required.
@@ -8395,15 +8438,62 @@
 		 */
 		"oLanguage": {
 			/**
-			 * Pnagation string used by DataTables for the two built-in pagination
+			 * Strings that are used for WAI-ARIA labels and controls only (these are not
+			 * actually visible on the page, but will be read by screenreaders, and thus
+			 * must be internationalised as well).
+			 *  @namespace
+			 */
+			"oAria": {
+				/**
+				 * ARIA label that is added to the table headers when the column may be
+				 * sorted ascending by activing the column (click or return when focused).
+				 * Note that the column header is prefixed to this string.
+				 *  @type string
+				 *  @default : activate to sort column ascending
+				 * 
+				 *  @example
+				 *    $(document).ready(function() {
+				 *      $('#example').dataTable( {
+				 *        "oLanguage": {
+				 *          "oAria": {
+				 *            "sSortAscending": " - click/return to sort ascending"
+				 *          }
+				 *        }
+				 *      } );
+				 *    } );
+				 */
+				"sSortAscending": ": activate to sort column ascending",
+	
+				/**
+				 * ARIA label that is added to the table headers when the column may be
+				 * sorted descending by activing the column (click or return when focused).
+				 * Note that the column header is prefixed to this string.
+				 *  @type string
+				 *  @default : activate to sort column ascending
+				 * 
+				 *  @example
+				 *    $(document).ready(function() {
+				 *      $('#example').dataTable( {
+				 *        "oLanguage": {
+				 *          "oAria": {
+				 *            "sSortDescending": " - click/return to sort descending"
+				 *          }
+				 *        }
+				 *      } );
+				 *    } );
+				 */
+				"sSortDescending": ": activate to sort column descending"
+			},
+	
+			/**
+			 * Pagination string used by DataTables for the two built-in pagination
 			 * control types ("two_button" and "full_numbers")
 			 *  @namespace
 			 */
 			"oPaginate": {
 				/**
 				 * Text to use when using the 'full_numbers' type of pagination for the
-				 * button
-				 * to take the user to the first page.
+				 * button to take the user to the first page.
 				 *  @type string
 				 *  @default First
 				 * 
@@ -9759,7 +9849,13 @@
 		 *  @type string
 		 *  @default null
 		 */
-		"sInstance": null
+		"sInstance": null,
+	
+		/**
+		 * tabindex attribute value that is added to DataTables control elements, allowing
+		 * keyboard navigation of the table and its controls.
+		 */
+		"iTabIndex": 0
 	};
 
 	/**
@@ -9909,31 +10005,19 @@
 				};
 	
 				var sAppend = (!oSettings.bJUI) ?
-					'<div title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="0" role="button">'+oLang.sPrevious+'</div>'+
-					'<div title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="0" role="button">'+oLang.sNext+'</div>'
+					'<a title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sPrevious+'</a>'+
+					'<a title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sNext+'</a>'
 					:
-					'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></div>'+
-					'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></div>';
+					'<a tabindex="'+oSettings.iTabIndex+'" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
+					'<a tabindex="'+oSettings.iTabIndex+'" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
 				$(nPaging).append( sAppend );
 				
-				var els = $('div', nPaging);
+				var els = $('a', nPaging);
 				var nPrevious = els[0],
 					nNext = els[1];
 				
-				$(nPrevious)
-					.bind( 'click.DT', { action: "previous" }, fnClickHandler )
-					.bind( 'keypress.DT', { action: "previous" }, function (e){
-						if ( e.which === 13 ) {
-							fnClickHandler(e);
-						} } )
-					.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
-				$(nNext)
-					.bind( 'click.DT', { action: "next" }, fnClickHandler )
-					.bind( 'keypress.DT', { action: "next" }, function (e){
-						if ( e.which === 13 ) {
-							fnClickHandler(e);
-						} } )
-					.bind( 'selectstart.DT', function () { return false; } );
+				oSettings.oApi._fnBindAction( nPrevious, {action: "previous"}, fnClickHandler );
+				oSettings.oApi._fnBindAction( nNext,     {action: "next"},     fnClickHandler );
 				
 				/* ID the first elements only */
 				if ( typeof oSettings.aanFeatures.p == "undefined" )
@@ -10013,11 +10097,11 @@
 				};
 	
 				$(nPaging).append(
-					'<a class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
-					'<a class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
+					'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
+					'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
 					'<span></span>'+
-					'<a class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
-					'<a class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
+					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
+					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
 				);
 				var els = $('a', nPaging);
 				var nFirst = els[0],
@@ -10025,15 +10109,10 @@
 					nNext = els[2],
 					nLast = els[3];
 				
-				$(nFirst).bind( 'click.DT', { action: "first" }, fnClickHandler );
-				$(nPrev).bind( 'click.DT', { action: "previous" }, fnClickHandler );
-				$(nNext).bind( 'click.DT', { action: "next" }, fnClickHandler );
-				$(nLast).bind( 'click.DT', { action: "last" }, fnClickHandler );
-				
-				/* Take the brutal approach to cancelling text selection */
-				$('span', nPaging)
-					.bind( 'mousedown.DT', function () { return false; } )
-					.bind( 'selectstart.DT', function () { return false; } );
+				oSettings.oApi._fnBindAction( nFirst, {action: "first"},    fnClickHandler );
+				oSettings.oApi._fnBindAction( nPrev,  {action: "previous"}, fnClickHandler );
+				oSettings.oApi._fnBindAction( nNext,  {action: "next"},     fnClickHandler );
+				oSettings.oApi._fnBindAction( nLast,  {action: "last"},     fnClickHandler );
 				
 				/* ID the first elements only */
 				if ( typeof oSettings.aanFeatures.p == "undefined" )
@@ -10067,6 +10146,14 @@
 				var sList = "";
 				var iStartButton, iEndButton, i, iLen;
 				var oClasses = oSettings.oClasses;
+				var anButtons, anStatic, nPaginateList;
+				var an = oSettings.aanFeatures.p;
+				var fnClick = function(e) {
+					/* Use the information in the element to jump to the required page */
+					oSettings.oApi._fnPageChange( oSettings, e.data.page );
+					fnCallbackDraw( oSettings );
+					e.preventDefault();
+				};
 				
 				/* Pages calculation */
 				if (iPages < iPageCount)
@@ -10094,21 +10181,11 @@
 				for ( i=iStartButton ; i<=iEndButton ; i++ )
 				{
 					sList += (iCurrentPage !== i) ?
-						'<a class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
-						'<a class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
+						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
+						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
 				}
 				
 				/* Loop over each instance of the pager */
-				var an = oSettings.aanFeatures.p;
-				var anButtons, anStatic, nPaginateList;
-				var fnClick = function(e) {
-					/* Use the information in the element to jump to the required page */
-					oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 );
-					fnCallbackDraw( oSettings );
-					e.preventDefault();
-				};
-				var fnFalse = function () { return false; };
-				
 				for ( i=0, iLen=an.length ; i<iLen ; i++ )
 				{
 					if ( an[i].childNodes.length === 0 )
@@ -10117,41 +10194,30 @@
 					}
 					
 					/* Build up the dynamic list forst - html and listeners */
-					var qjPaginateList = $('span:eq(0)', an[i]);
-					qjPaginateList.html( sList );
-					$('a', qjPaginateList)
-						.bind( 'click.DT', fnClick )
-						.bind( 'mousedown.DT', fnFalse )
-						.bind( 'selectstart.DT', fnFalse );
+					$('span:eq(0)', an[i])
+						.html( sList )
+						.children('a').each( function (i) {
+							oSettings.oApi._fnBindAction( this, {"page": i+iStartButton-1}, fnClick );
+						} );
 					
-					/* Update the 'premanent botton's classes */
+					/* Update the premanent botton's classes */
 					anButtons = an[i].getElementsByTagName('a');
 					anStatic = [
 						anButtons[0], anButtons[1], 
 						anButtons[anButtons.length-2], anButtons[anButtons.length-1]
 					];
+	
 					$(anStatic).removeClass( oClasses.sPageButton+" "+oClasses.sPageButtonActive+" "+oClasses.sPageButtonStaticDisabled );
-					if ( iCurrentPage == 1 )
-					{
-						anStatic[0].className += " "+oClasses.sPageButtonStaticDisabled;
-						anStatic[1].className += " "+oClasses.sPageButtonStaticDisabled;
-					}
-					else
-					{
-						anStatic[0].className += " "+oClasses.sPageButton;
-						anStatic[1].className += " "+oClasses.sPageButton;
-					}
-					
-					if ( iPages === 0 || iCurrentPage == iPages || oSettings._iDisplayLength == -1 )
-					{
-						anStatic[2].className += " "+oClasses.sPageButtonStaticDisabled;
-						anStatic[3].className += " "+oClasses.sPageButtonStaticDisabled;
-					}
-					else
-					{
-						anStatic[2].className += " "+oClasses.sPageButton;
-						anStatic[3].className += " "+oClasses.sPageButton;
-					}
+					$([anStatic[0], anStatic[1]]).addClass( 
+						(iCurrentPage==1) ?
+							oClasses.sPageButtonStaticDisabled :
+							oClasses.sPageButton
+					);
+					$([anStatic[2], anStatic[3]]).addClass(
+						(iPages===0 || iCurrentPage===iPages || oSettings._iDisplayLength===-1) ?
+							oClasses.sPageButtonStaticDisabled :
+							oClasses.sPageButton
+					);
 				}
 			}
 		}

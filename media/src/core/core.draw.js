@@ -95,9 +95,12 @@ function _fnBuildHead( oSettings )
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			nTh = oSettings.aoColumns[i].nTh;
-			nTh.setAttribute('tabindex', '0');
 			nTh.setAttribute('role', 'columnheader');
-			nTh.setAttribute('aria-controls', oSettings.sTableId);
+			if ( oSettings.aoColumns[i].bSortable )
+			{
+				nTh.setAttribute('tabindex', oSettings.iTabIndex);
+				nTh.setAttribute('aria-controls', oSettings.sTableId);
+			}
 
 			if ( oSettings.aoColumns[i].sClass !== null )
 			{
@@ -154,12 +157,6 @@ function _fnBuildHead( oSettings )
 		}
 	}
 	
-	/* Add sort listener */
-	var fnNoSelect = function (e) {
-		this.onselectstart = function() { return false; };
-		return false;
-	};
-	
 	if ( oSettings.oFeatures.bSort )
 	{
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
@@ -167,9 +164,6 @@ function _fnBuildHead( oSettings )
 			if ( oSettings.aoColumns[i].bSortable !== false )
 			{
 				_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
-				
-				/* Take the brutal approach to cancelling text selection in header */
-				$(oSettings.aoColumns[i].nTh).bind( 'mousedown.DT', fnNoSelect );
 			}
 			else
 			{

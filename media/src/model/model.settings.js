@@ -776,5 +776,11 @@ DataTable.models.oSettings = {
 	 *  @type string
 	 *  @default null
 	 */
-	"sInstance": null
+	"sInstance": null,
+
+	/**
+	 * tabindex attribute value that is added to DataTables control elements, allowing
+	 * keyboard navigation of the table and its controls.
+	 */
+	"iTabIndex": 0
 };

@@ -124,6 +124,7 @@ _fnMap( oSettings, oInit, "iCookieDuration" );
 _fnMap( oSettings, oInit, "sCookiePrefix" );
 _fnMap( oSettings, oInit, "sDom" );
 _fnMap( oSettings, oInit, "bSortCellsTop" );
+_fnMap( oSettings, oInit, "iTabIndex" );
 _fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
 _fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 _fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );

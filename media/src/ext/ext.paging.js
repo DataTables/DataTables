@@ -31,31 +31,19 @@ $.extend( DataTable.ext.oPagination, {
 			};
 
 			var sAppend = (!oSettings.bJUI) ?
-				'<div title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="0" role="button">'+oLang.sPrevious+'</div>'+
-				'<div title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="0" role="button">'+oLang.sNext+'</div>'
+				'<a title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sPrevious+'</a>'+
+				'<a title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sNext+'</a>'
 				:
-				'<div tabindex="0" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></div>'+
-				'<div tabindex="0" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></div>';
+				'<a tabindex="'+oSettings.iTabIndex+'" title="'+oLang.sPrevious+'" class="'+oSettings.oClasses.sPagePrevDisabled+'"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
+				'<a tabindex="'+oSettings.iTabIndex+'" title="'+oLang.sNext+'"     class="'+oSettings.oClasses.sPageNextDisabled+'"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
 			$(nPaging).append( sAppend );
 			
-			var els = $('div', nPaging);
+			var els = $('a', nPaging);
 			var nPrevious = els[0],
 				nNext = els[1];
 			
-			$(nPrevious)
-				.bind( 'click.DT', { action: "previous" }, fnClickHandler )
-				.bind( 'keypress.DT', { action: "previous" }, function (e){
-					if ( e.which === 13 ) {
-						fnClickHandler(e);
-					} } )
-				.bind( 'selectstart.DT', function () { return false; } ); /* Take the brutal approach to cancelling text selection */
-			$(nNext)
-				.bind( 'click.DT', { action: "next" }, fnClickHandler )
-				.bind( 'keypress.DT', { action: "next" }, function (e){
-					if ( e.which === 13 ) {
-						fnClickHandler(e);
-					} } )
-				.bind( 'selectstart.DT', function () { return false; } );
+			oSettings.oApi._fnBindAction( nPrevious, {action: "previous"}, fnClickHandler );
+			oSettings.oApi._fnBindAction( nNext,     {action: "next"},     fnClickHandler );
 			
 			/* ID the first elements only */
 			if ( typeof oSettings.aanFeatures.p == "undefined" )
@@ -135,11 +123,11 @@ $.extend( DataTable.ext.oPagination, {
 			};
 
 			$(nPaging).append(
-				'<a class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
-				'<a class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
+				'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
+				'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
 				'<span></span>'+
-				'<a class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
-				'<a class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
+				'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
+				'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
 			);
 			var els = $('a', nPaging);
 			var nFirst = els[0],
@@ -147,15 +135,10 @@ $.extend( DataTable.ext.oPagination, {
 				nNext = els[2],
 				nLast = els[3];
 			
-			$(nFirst).bind( 'click.DT', { action: "first" }, fnClickHandler );
-			$(nPrev).bind( 'click.DT', { action: "previous" }, fnClickHandler );
-			$(nNext).bind( 'click.DT', { action: "next" }, fnClickHandler );
-			$(nLast).bind( 'click.DT', { action: "last" }, fnClickHandler );
-			
-			/* Take the brutal approach to cancelling text selection */
-			$('span', nPaging)
-				.bind( 'mousedown.DT', function () { return false; } )
-				.bind( 'selectstart.DT', function () { return false; } );
+			oSettings.oApi._fnBindAction( nFirst, {action: "first"},    fnClickHandler );
+			oSettings.oApi._fnBindAction( nPrev,  {action: "previous"}, fnClickHandler );
+			oSettings.oApi._fnBindAction( nNext,  {action: "next"},     fnClickHandler );
+			oSettings.oApi._fnBindAction( nLast,  {action: "last"},     fnClickHandler );
 			
 			/* ID the first elements only */
 			if ( typeof oSettings.aanFeatures.p == "undefined" )
@@ -189,6 +172,14 @@ $.extend( DataTable.ext.oPagination, {
 			var sList = "";
 			var iStartButton, iEndButton, i, iLen;
 			var oClasses = oSettings.oClasses;
+			var anButtons, anStatic, nPaginateList;
+			var an = oSettings.aanFeatures.p;
+			var fnClick = function(e) {
+				/* Use the information in the element to jump to the required page */
+				oSettings.oApi._fnPageChange( oSettings, e.data.page );
+				fnCallbackDraw( oSettings );
+				e.preventDefault();
+			};
 			
 			/* Pages calculation */
 			if (iPages < iPageCount)
@@ -216,21 +207,11 @@ $.extend( DataTable.ext.oPagination, {
 			for ( i=iStartButton ; i<=iEndButton ; i++ )
 			{
 				sList += (iCurrentPage !== i) ?
-					'<a class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
-					'<a class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
+					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
+					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
 			}
 			
 			/* Loop over each instance of the pager */
-			var an = oSettings.aanFeatures.p;
-			var anButtons, anStatic, nPaginateList;
-			var fnClick = function(e) {
-				/* Use the information in the element to jump to the required page */
-				oSettings.oApi._fnPageChange( oSettings, parseInt(this.innerHTML,10) - 1 );
-				fnCallbackDraw( oSettings );
-				e.preventDefault();
-			};
-			var fnFalse = function () { return false; };
-			
 			for ( i=0, iLen=an.length ; i<iLen ; i++ )
 			{
 				if ( an[i].childNodes.length === 0 )
@@ -239,41 +220,30 @@ $.extend( DataTable.ext.oPagination, {
 				}
 				
 				/* Build up the dynamic list forst - html and listeners */
-				var qjPaginateList = $('span:eq(0)', an[i]);
-				qjPaginateList.html( sList );
-				$('a', qjPaginateList)
-					.bind( 'click.DT', fnClick )
-					.bind( 'mousedown.DT', fnFalse )
-					.bind( 'selectstart.DT', fnFalse );
+				$('span:eq(0)', an[i])
+					.html( sList )
+					.children('a').each( function (i) {
+						oSettings.oApi._fnBindAction( this, {"page": i+iStartButton-1}, fnClick );
+					} );
 				
-				/* Update the 'premanent botton's classes */
+				/* Update the premanent botton's classes */
 				anButtons = an[i].getElementsByTagName('a');
 				anStatic = [
 					anButtons[0], anButtons[1], 
 					anButtons[anButtons.length-2], anButtons[anButtons.length-1]
 				];
+
 				$(anStatic).removeClass( oClasses.sPageButton+" "+oClasses.sPageButtonActive+" "+oClasses.sPageButtonStaticDisabled );
-				if ( iCurrentPage == 1 )
-				{
-					anStatic[0].className += " "+oClasses.sPageButtonStaticDisabled;
-					anStatic[1].className += " "+oClasses.sPageButtonStaticDisabled;
-				}
-				else
-				{
-					anStatic[0].className += " "+oClasses.sPageButton;
-					anStatic[1].className += " "+oClasses.sPageButton;
-				}
-				
-				if ( iPages === 0 || iCurrentPage == iPages || oSettings._iDisplayLength == -1 )
-				{
-					anStatic[2].className += " "+oClasses.sPageButtonStaticDisabled;
-					anStatic[3].className += " "+oClasses.sPageButtonStaticDisabled;
-				}
-				else
-				{
-					anStatic[2].className += " "+oClasses.sPageButton;
-					anStatic[3].className += " "+oClasses.sPageButton;
-				}
+				$([anStatic[0], anStatic[1]]).addClass( 
+					(iCurrentPage==1) ?
+						oClasses.sPageButtonStaticDisabled :
+						oClasses.sPageButton
+				);
+				$([anStatic[2], anStatic[3]]).addClass(
+					(iPages===0 || iCurrentPage===iPages || oSettings._iDisplayLength===-1) ?
+						oClasses.sPageButtonStaticDisabled :
+						oClasses.sPageButton
+				);
 			}
 		}
 	}

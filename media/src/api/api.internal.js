@@ -103,7 +103,9 @@ this.oApi = {
 	"_fnSetCellData": _fnSetCellData,
 	"_fnGetObjectDataFn": _fnGetObjectDataFn,
 	"_fnSetObjectDataFn": _fnSetObjectDataFn,
-	"_fnApplyColumnDefs": _fnApplyColumnDefs
+	"_fnApplyColumnDefs": _fnApplyColumnDefs,
+	"_fnBindAction": _fnBindAction,
+	"_fnExtend": _fnExtend
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );
