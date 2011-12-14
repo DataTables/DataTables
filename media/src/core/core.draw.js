@@ -16,12 +16,12 @@ function _fnCreateTr ( oSettings, iRow )
 		oData.nTr = document.createElement('tr');
 
 		/* Special parameters can be given by the data source to be used on the row */
-		if ( typeof oData._aData.DT_RowId != 'undefined' )
+		if ( oData._aData.DT_RowId )
 		{
 			oData.nTr.id = oData._aData.DT_RowId;
 		}
 
-		if ( typeof oData._aData.DT_RowClass != 'undefined' )
+		if ( oData._aData.DT_RowClass )
 		{
 			$(oData.nTr).addClass( oData._aData.DT_RowClass );
 		}
@@ -35,7 +35,7 @@ function _fnCreateTr ( oSettings, iRow )
 			/* Render if needed - if bUseRendered is true then we already have the rendered
 			 * value in the data source - so can just use that
 			 */
-			if ( typeof oCol.fnRender == 'function' && (!oCol.bUseRendered || oCol.mDataProp === null) )
+			if ( typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null) )
 			{
 				nTd.innerHTML = oCol.fnRender( {
 					"iDataRow": iRow,
@@ -184,7 +184,7 @@ function _fnBuildHead( oSettings )
 		var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
-			if ( typeof anCells[i] != 'undefined' )
+			if ( anCells[i] )
 			{
 				oSettings.aoColumns[i].nTf = anCells[i];
 				if ( oSettings.aoColumns[i].sClass )
@@ -218,7 +218,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 	var iColumns = oSettings.aoColumns.length;
 	var iRowspan, iColspan;
 
-	if ( typeof bIncludeHidden == 'undefined' )
+	if (  bIncludeHidden === undefined )
 	{
 		bIncludeHidden = false;
 	}
@@ -261,13 +261,13 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 			/* Check to see if there is already a cell (row/colspan) covering our target
 			 * insert point. If there is, then there is nothing to do.
 			 */
-			if ( typeof aApplied[i][j] == 'undefined' )
+			if ( aApplied[i][j] === undefined )
 			{
 				aoLocal[i].nTr.appendChild( aoLocal[i][j].cell );
 				aApplied[i][j] = 1;
 
 				/* Expand the cell to cover as many rows as needed */
-				while ( typeof aoLocal[i+iRowspan] != 'undefined' &&
+				while ( aoLocal[i+iRowspan] !== undefined &&
 				        aoLocal[i][j].cell == aoLocal[i+iRowspan][j].cell )
 				{
 					aApplied[i+iRowspan][j] = 1;
@@ -275,7 +275,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 				}
 
 				/* Expand the cell to cover as many columns as needed */
-				while ( typeof aoLocal[i][j+iColspan] != 'undefined' &&
+				while ( aoLocal[i][j+iColspan] !== undefined &&
 				        aoLocal[i][j].cell == aoLocal[i][j+iColspan].cell )
 				{
 					/* Must update the applied array over the rows for the columns */
@@ -319,7 +319,7 @@ function _fnDraw( oSettings )
 	oSettings.bDrawing = true;
 	
 	/* Check and see if we have an initial draw position from state saving */
-	if ( typeof oSettings.iInitDisplayStart != 'undefined' && oSettings.iInitDisplayStart != -1 )
+	if ( oSettings.iInitDisplayStart && oSettings.iInitDisplayStart != -1 )
 	{
 		if ( oSettings.oFeatures.bServerSide )
 		{
@@ -382,7 +382,7 @@ function _fnDraw( oSettings )
 			}
 			
 			/* Custom row callback function - might want to manipule the row */
-			if ( typeof oSettings.fnRowCallback == "function" )
+			if ( oSettings.fnRowCallback )
 			{
 				nRow = oSettings.fnRowCallback.call( oSettings.oInstance, nRow, 
 					oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j );
@@ -414,7 +414,7 @@ function _fnDraw( oSettings )
 		/* Table is empty - create a row with an empty message in it */
 		anRows[ 0 ] = document.createElement( 'tr' );
 		
-		if ( typeof oSettings.asStripeClasses[0] != 'undefined' )
+		if ( oSettings.asStripeClasses[0] )
 		{
 			anRows[ 0 ].className = oSettings.asStripeClasses[0];
 		}
@@ -425,8 +425,7 @@ function _fnDraw( oSettings )
 		{
 			sZero = oSettings.oLanguage.sLoadingRecords;
 		}
-		else if ( typeof oSettings.oLanguage.sEmptyTable != 'undefined' &&
-		     oSettings.fnRecordsTotal() === 0 )
+		else if ( oSettings.oLanguage.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
 		{
 			sZero = oSettings.oLanguage.sEmptyTable;
 		}
@@ -441,14 +440,14 @@ function _fnDraw( oSettings )
 	}
 	
 	/* Callback the header and footer custom funcation if there is one */
-	if ( typeof oSettings.fnHeaderCallback == 'function' )
+	if ( oSettings.fnHeaderCallback )
 	{
 		oSettings.fnHeaderCallback.call( oSettings.oInstance, $(oSettings.nTHead).children('tr')[0], 
 			_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
 			oSettings.aiDisplay );
 	}
 	
-	if ( typeof oSettings.fnFooterCallback == 'function' )
+	if ( oSettings.fnFooterCallback )
 	{
 		oSettings.fnFooterCallback.call( oSettings.oInstance, $(oSettings.nTFoot).children('tr')[0], 
 			_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
@@ -511,7 +510,7 @@ function _fnDraw( oSettings )
 	if ( oSettings.oFeatures.bServerSide )
 	{
 		_fnProcessingDisplay( oSettings, false );
-		if ( typeof oSettings._bInitComplete == 'undefined' )
+		if ( !oSettings._bInitComplete )
 		{
 			_fnInitComplete( oSettings );
 		}
@@ -688,7 +687,7 @@ function _fnAddOptionsHtml ( oSettings )
 		/* Add to the 2D features array */
 		if ( iPushFeature == 1 && nTmp !== null )
 		{
-			if ( typeof oSettings.aanFeatures[cOption] != 'object' )
+			if ( typeof oSettings.aanFeatures[cOption] !== 'object' )
 			{
 				oSettings.aanFeatures[cOption] = [];
 			}
@@ -717,7 +716,7 @@ function _fnDetectHeader ( aLayout, nThead )
 	var nCell;
 	var i, j, k, l, iLen, jLen, iColShifted;
 	var fnShiftCol = function ( a, i, j ) {
-		while ( typeof a[i][j] != 'undefined' ) {
+		while ( a[i][j] ) {
 			j++;
 		}
 		return j;
@@ -784,10 +783,10 @@ function _fnDetectHeader ( aLayout, nThead )
 function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 {
 	var aReturn = [];
-	if ( typeof aLayout == 'undefined' )
+	if ( !aLayout )
 	{
 		aLayout = oSettings.aoHeader;
-		if ( typeof nHeader != 'undefined' )
+		if ( nHeader )
 		{
 			aLayout = [];
 			_fnDetectHeader( aLayout, nHeader );
@@ -799,7 +798,7 @@ function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 		for ( var j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
 		{
 			if ( aLayout[i][j].unique && 
-				 (typeof aReturn[j] == 'undefined' || !oSettings.bSortCellsTop) )
+				 (!aReturn[j] || !oSettings.bSortCellsTop) )
 			{
 				aReturn[j] = aLayout[i][j].cell;
 			}

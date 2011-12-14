@@ -16,7 +16,7 @@ function _fnFeatureHtmlFilter ( oSettings )
 	var nFilter = document.createElement( 'div' );
 	nFilter.className = oSettings.oClasses.sFilter;
 	nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
-	if ( typeof oSettings.aanFeatures.f == "undefined" )
+	if ( !oSettings.aanFeatures.f )
 	{
 		nFilter.id = oSettings.sTableId+'_filter';
 	}
@@ -172,7 +172,7 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
 	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart );
 	
 	/* Check if we are forcing or not - optional parameter */
-	if ( typeof iForce == 'undefined' || iForce === null )
+	if ( !iForce )
 	{
 		iForce = 0;
 	}
@@ -256,7 +256,7 @@ function _fnBuildSearchArray ( oSettings, iMaster )
 		/* Clear out the old data */
 		oSettings.asDataSearch.splice( 0, oSettings.asDataSearch.length );
 		
-		var aArray = (typeof iMaster != 'undefined' && iMaster == 1) ?
+		var aArray = (iMaster && iMaster===1) ?
 		 	oSettings.aiDisplayMaster : oSettings.aiDisplay;
 		
 		for ( var i=0, iLen=aArray.length ; i<iLen ; i++ )
@@ -277,7 +277,8 @@ function _fnBuildSearchArray ( oSettings, iMaster )
 function _fnBuildSearchRow( oSettings, aData )
 {
 	var sSearch = '';
-	if ( typeof oSettings.__nTmpFilter == 'undefined' ) {
+	if ( oSettings.__nTmpFilter === undefined )
+	{
 		oSettings.__nTmpFilter = document.createElement('div');
 	}
 	var nTmp = oSettings.__nTmpFilter;
@@ -342,7 +343,7 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
  */
 function _fnDataToSearch ( sData, sType )
 {
-	if ( typeof DataTable.ext.ofnSearch[sType] == "function" )
+	if ( typeof DataTable.ext.ofnSearch[sType] === "function" )
 	{
 		return DataTable.ext.ofnSearch[sType]( sData );
 	}
@@ -350,7 +351,7 @@ function _fnDataToSearch ( sData, sType )
 	{
 		return sData.replace(/[\r\n]/g," ").replace( /<.*?>/g, "" );
 	}
-	else if ( typeof sData == "string" )
+	else if ( typeof sData === "string" )
 	{
 		return sData.replace(/[\r\n]/g," ");
 	}

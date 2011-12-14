@@ -7,7 +7,7 @@
  */
 function _fnSaveState ( oSettings )
 {
-	if ( !oSettings.oFeatures.bStateSave || typeof oSettings.bDestroying != 'undefined' )
+	if ( !oSettings.oFeatures.bStateSave || oSettings.bDestroying )
 	{
 		return;
 	}
@@ -85,7 +85,7 @@ function _fnLoadState ( oSettings, oInit )
 	 */
 	try
 	{
-		oData = (typeof $.parseJSON == 'function') ? 
+		oData = (typeof $.parseJSON === 'function') ? 
 			$.parseJSON( sData.replace(/'/g, '"') ) : eval( '('+sData+')' );
 	}
 	catch( e )
@@ -123,13 +123,13 @@ function _fnLoadState ( oSettings, oInit )
 		 * Note that we use a 'not' for the value of the regular expression indicator to maintain
 		 * compatibility with pre 1.7 versions, where this was basically inverted. Added in 1.7.0
 		 */
-		if ( typeof oData.sFilterEsc != 'undefined' )
+		if ( oData.sFilterEsc )
 		{
 			oSettings.oPreviousSearch.bRegex = !oData.sFilterEsc;
 		}
 		
 		/* Column filtering - added in 1.5.0 beta 6 */
-		if ( typeof oData.aaSearchCols != 'undefined' )
+		if ( oData.aaSearchCols )
 		{
 			for ( i=0 ; i<oData.aaSearchCols.length ; i++ )
 			{
@@ -141,7 +141,7 @@ function _fnLoadState ( oSettings, oInit )
 		}
 		
 		/* Column visibility state - added in 1.5.0 beta 10 */
-		if ( typeof oData.abVisCols != 'undefined' )
+		if ( oData.abVisCols )
 		{
 			/* Pass back visibiliy settings to the init handler, but to do not here override
 			 * the init object that the user might have passed in
@@ -183,7 +183,7 @@ function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 	
 	if ( fnCallback !== null )
 	{
-		oData = (typeof $.parseJSON == 'function') ? 
+		oData = (typeof $.parseJSON === 'function') ? 
 			$.parseJSON( sValue ) : eval( '('+sValue+')' );
 		sFullCookie = fnCallback( sNameFile, oData, date.toGMTString(),
 			aParts.join('/')+"/" );
@@ -213,7 +213,7 @@ function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 				try { oData = eval( '('+decodeURIComponent(aSplitCookie[1])+')' ); }
 				catch( e ) { continue; }
 				
-				if ( typeof oData.iCreate != 'undefined' && oData.iCreate < iOldTime )
+				if ( oData.iCreate && oData.iCreate < iOldTime )
 				{
 					sOldName = aSplitCookie[0];
 					iOldTime = oData.iCreate;

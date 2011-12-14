@@ -10,7 +10,7 @@ function _fnFeatureHtmlProcessing ( oSettings )
 {
 	var nProcessing = document.createElement( 'div' );
 	
-	if ( typeof oSettings.aanFeatures.r == "undefined" )
+	if ( !oSettings.aanFeatures.r )
 	{
 		nProcessing.id = oSettings.sTableId+'_processing';
 	}

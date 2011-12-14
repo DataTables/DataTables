@@ -20,20 +20,19 @@ function _fnAddColumn( oSettings, nTh )
 	oSettings.aoColumns.push( oCol );
 	
 	/* Add a column specific filter */
-	if ( typeof oSettings.aoPreSearchCols[ iCol ] == 'undefined' ||
-	     oSettings.aoPreSearchCols[ iCol ] === null )
+	if ( !oSettings.aoPreSearchCols[ iCol ] )
 	{
 		oSettings.aoPreSearchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch );
 	}
 	else
 	{
 		/* Don't require that the user must specify bRegex and / or bSmart */
-		if ( typeof oSettings.aoPreSearchCols[ iCol ].bRegex == 'undefined' )
+		if ( oSettings.aoPreSearchCols[ iCol ].bRegex === undefined )
 		{
 			oSettings.aoPreSearchCols[ iCol ].bRegex = true;
 		}
 		
-		if ( typeof oSettings.aoPreSearchCols[ iCol ].bSmart == 'undefined' )
+		if ( oSettings.aoPreSearchCols[ iCol ].bSmart === undefined )
 		{
 			oSettings.aoPreSearchCols[ iCol ].bSmart = true;
 		}
@@ -56,9 +55,9 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	var oCol = oSettings.aoColumns[ iCol ];
 	
 	/* User specified column options */
-	if ( typeof oOptions != 'undefined' && oOptions !== null )
+	if ( oOptions !== undefined && oOptions !== null )
 	{
-		if ( typeof oOptions.sType != 'undefined' )
+		if ( oOptions.sType !== undefined )
 		{
 			oCol.sType = oOptions.sType;
 			oCol._bAutoType = false;
@@ -70,7 +69,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 		/* iDataSort to be applied (backwards compatibility), but aDataSort will take
 		 * priority if defined
 		 */
-		if ( typeof oOptions.iDataSort != 'undefined' )
+		if ( oOptions.iDataSort !== undefined )
 		{
 			oCol.aDataSort = [ oOptions.iDataSort ];
 		}
@@ -314,7 +313,7 @@ function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 
 			for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
 			{
-				if ( typeof aTargets[j] == 'number' && aTargets[j] >= 0 )
+				if ( typeof aTargets[j] === 'number' && aTargets[j] >= 0 )
 				{
 					/* Add columns that we don't yet know about */
 					while( oSettings.aoColumns.length <= aTargets[j] )
@@ -325,12 +324,12 @@ function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 					/* Integer, basic index */
 					fn( aTargets[j], aoColDefs[i] );
 				}
-				else if ( typeof aTargets[j] == 'number' && aTargets[j] < 0 )
+				else if ( typeof aTargets[j] === 'number' && aTargets[j] < 0 )
 				{
 					/* Negative integer, right to left column counting */
 					fn( oSettings.aoColumns.length+aTargets[j], aoColDefs[i] );
 				}
-				else if ( typeof aTargets[j] == 'string' )
+				else if ( typeof aTargets[j] === 'string' )
 				{
 					/* Class name matching on TH element */
 					for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )

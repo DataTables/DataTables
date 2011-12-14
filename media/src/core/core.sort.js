@@ -10,7 +10,7 @@ function _fnSort ( oSettings, bApplyClasses )
 {
 	var
 		i, iLen, j, jLen, k, kLen,
-		sDataType,
+		sDataType, nTh,
 		aaSort = [],
 	 	aiOrig = [],
 		oSort = DataTable.ext.oSort,
@@ -39,7 +39,7 @@ function _fnSort ( oSettings, bApplyClasses )
 			var iColumn = aaSort[i][0];
 			var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
 			sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
-			if ( typeof DataTable.ext.afnSortData[sDataType] != 'undefined' )
+			if ( DataTable.ext.afnSortData[sDataType] )
 			{
 				var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
 				for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
@@ -125,7 +125,7 @@ function _fnSort ( oSettings, bApplyClasses )
 	}
 	
 	/* Alter the sorting classes to take account of the changes */
-	if ( (typeof bApplyClasses == 'undefined' || bApplyClasses) && !oSettings.oFeatures.bDeferRender )
+	if ( (bApplyClasses === undefined || bApplyClasses) && !oSettings.oFeatures.bDeferRender )
 	{
 		_fnSortingClasses( oSettings );
 	}
@@ -143,7 +143,7 @@ function _fnSort ( oSettings, bApplyClasses )
 			{
 				nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
 				
-				var nextSort = (typeof aoColumns[i].asSorting[ aaSort[0][2]+1 ] !== 'undefined') ? 
+				var nextSort = (aoColumns[i].asSorting[ aaSort[0][2]+1 ]) ? 
 					aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
 				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
 					(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
@@ -226,7 +226,7 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 						iColumn = oSettings.aaSorting[i][0];
 						iNextSort = oSettings.aaSorting[i][2]+1;
 						
-						if ( typeof oSettings.aoColumns[iColumn].asSorting[iNextSort] == 'undefined' )
+						if ( !oSettings.aoColumns[iColumn].asSorting[iNextSort] )
 						{
 							/* Reached the end of the sorting options, remove from multi-col sort */
 							oSettings.aaSorting.splice( i, 1 );
@@ -255,7 +255,7 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 				{
 					iColumn = oSettings.aaSorting[0][0];
 					iNextSort = oSettings.aaSorting[0][2]+1;
-					if ( typeof oSettings.aoColumns[iColumn].asSorting[iNextSort] == 'undefined' )
+					if ( !oSettings.aoColumns[iColumn].asSorting[iNextSort] )
 					{
 						iNextSort = 0;
 					}

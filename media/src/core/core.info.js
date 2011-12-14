@@ -12,7 +12,7 @@ function _fnFeatureHtmlInfo ( oSettings )
 	nInfo.className = oSettings.oClasses.sInfo;
 	
 	/* Actions that are to be taken once only for this feature */
-	if ( typeof oSettings.aanFeatures.i == "undefined" )
+	if ( !oSettings.aanFeatures.i )
 	{
 		/* Add draw callback */
 		oSettings.aoDrawCallback.push( {

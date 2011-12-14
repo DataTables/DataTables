@@ -112,21 +112,16 @@ function _fnInitialise ( oSettings )
 /**
  * Draw the table for the first time, adding all required features
  *  @param {object} oSettings dataTables settings object
+ *  @param {object} [json] JSON from the server that completed the table, if using Ajax source
+ *    with client-side processing (optional)
  *  @private
  */
 function _fnInitComplete ( oSettings, json )
 {
 	oSettings._bInitComplete = true;
-	if ( typeof oSettings.fnInitComplete == 'function' )
+	if ( oSettings.fnInitComplete )
 	{
-		if ( typeof json != 'undefined' )
-		{
-			oSettings.fnInitComplete.call( oSettings.oInstance, oSettings, json );
-		}
-		else
-		{
-			oSettings.fnInitComplete.call( oSettings.oInstance, oSettings );
-		}
+		oSettings.fnInitComplete.call( oSettings.oInstance, oSettings, json );
 	}
 }
 
@@ -143,15 +138,13 @@ function _fnLanguageCompat( oLanguage )
 	/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
 	 * sZeroRecords - assuming that is given.
 	 */
-	if ( typeof oLanguage.sEmptyTable == 'undefined' && 
-	     typeof oLanguage.sZeroRecords != 'undefined' )
+	if ( !oLanguage.sEmptyTable && oLanguage.sZeroRecords )
 	{
 		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
 	}
 
 	/* Likewise with loading records */
-	if ( typeof oLanguage.sLoadingRecords == 'undefined' && 
-	     typeof oLanguage.sZeroRecords != 'undefined' )
+	if ( !oLanguage.sLoadingRecords && oLanguage.sZeroRecords )
 	{
 		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
 	}

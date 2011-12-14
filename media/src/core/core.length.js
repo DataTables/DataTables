@@ -18,8 +18,8 @@ function _fnFeatureHtmlLength ( oSettings )
 	var sStdMenu = '<select size="1" '+sName+'>';
 	var i, iLen;
 	
-	if ( oSettings.aLengthMenu.length == 2 && typeof oSettings.aLengthMenu[0] == 'object' && 
-			typeof oSettings.aLengthMenu[1] == 'object' )
+	if ( oSettings.aLengthMenu.length == 2 && typeof oSettings.aLengthMenu[0] === 'object' && 
+			typeof oSettings.aLengthMenu[1] === 'object' )
 	{
 		for ( i=0, iLen=oSettings.aLengthMenu[0].length ; i<iLen ; i++ )
 		{
@@ -38,7 +38,7 @@ function _fnFeatureHtmlLength ( oSettings )
 	sStdMenu += '</select>';
 	
 	var nLength = document.createElement( 'div' );
-	if ( typeof oSettings.aanFeatures.l == "undefined" )
+	if ( !oSettings.aanFeatures.l )
 	{
 		nLength.id = oSettings.sTableId+'_length';
 	}

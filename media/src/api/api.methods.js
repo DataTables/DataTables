@@ -39,7 +39,7 @@ this.$ = function ( sSelector, oOpts )
 	var i, iLen, a = [];
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 
-	if (typeof oOpts=='undefined')
+	if ( !oOpts )
 	{
 		oOpts = {};
 	}
@@ -149,7 +149,7 @@ this.fnAddData = function( mData, bRedraw )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	/* Check if we want to add multiple rows or not */
-	if ( typeof mData[0] == "object" )
+	if ( typeof mData[0] === "object" )
 	{
 		for ( var i=0 ; i<mData.length ; i++ )
 		{
@@ -173,7 +173,7 @@ this.fnAddData = function( mData, bRedraw )
 	
 	oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw )
 	{
 		_fnReDraw( oSettings );
 	}
@@ -205,7 +205,7 @@ this.fnAdjustColumnSizing = function ( bRedraw )
 	var oSettings = _fnSettingsFromNode(this[DataTable.ext.iApiIndex]);
 	_fnAdjustColumnSizing( oSettings );
 	
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		this.fnDraw( false );
 	}
@@ -235,7 +235,7 @@ this.fnClearTable = function( bRedraw )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	_fnClearTable( oSettings );
 	
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnDraw( oSettings );
 	}
@@ -309,7 +309,7 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var i, iAODataIndex;
 	
-	iAODataIndex = (typeof mTarget == 'object') ? 
+	iAODataIndex = (typeof mTarget === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mTarget) : mTarget;
 	
 	/* Return the data array from this row */
@@ -324,7 +324,7 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 	_fnDeleteIndex( oSettings.aiDisplay, iAODataIndex );
 	
 	/* If there is a user callback function - call it */
-	if ( typeof fnCallBack == "function" )
+	if ( typeof fnCallBack === "function" )
 	{
 		fnCallBack.call( this, oSettings, oData );
 	}
@@ -339,7 +339,7 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 		}
 	}
 	
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
@@ -368,7 +368,7 @@ this.fnDestroy = function ( bRemove )
 	var nBody = oSettings.nTBody;
 	var i, iLen;
 
-	bRemove = (typeof bRemove=='undefined') ? false : true;
+	bRemove = (bRemove===undefined) ? false : true;
 	
 	/* Flag to note that the table is currently being destroyed - no action should be taken */
 	oSettings.bDestroying = true;
@@ -495,7 +495,7 @@ this.fnDestroy = function ( bRemove )
 this.fnDraw = function( bComplete )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	if ( typeof bComplete != 'undefined' && bComplete === false )
+	if ( bComplete )
 	{
 		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
@@ -532,22 +532,22 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 		return;
 	}
 	
-	if ( typeof bRegex == 'undefined' )
+	if ( bRegex === undefined )
 	{
 		bRegex = false;
 	}
 	
-	if ( typeof bSmart == 'undefined' )
+	if ( bSmart === undefined )
 	{
 		bSmart = true;
 	}
 	
-	if ( typeof bShowGlobal == 'undefined' )
+	if ( bShowGlobal === undefined )
 	{
 		bShowGlobal = true;
 	}
 	
-	if ( typeof iColumn == "undefined" || iColumn === null )
+	if ( !iColumn )
 	{
 		/* Global filter */
 		_fnFilterComplete( oSettings, {
@@ -556,7 +556,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 			"bSmart": bSmart
 		}, 1 );
 		
-		if ( bShowGlobal && typeof oSettings.aanFeatures.f != 'undefined' )
+		if ( bShowGlobal && oSettings.aanFeatures.f )
 		{
 			var n = oSettings.aanFeatures.f;
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
@@ -610,17 +610,16 @@ this.fnGetData = function( mRow, iCol )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
-	if ( typeof mRow != 'undefined' )
+	if ( mRow )
 	{
-		var iRow = (typeof mRow == 'object') ? 
+		var iRow = (typeof mRow === 'object') ? 
 			_fnNodeToDataIndex(oSettings, mRow) : mRow;
 		
-		if ( typeof iCol != 'undefined' )
+		if ( iCol )
 		{
 			return _fnGetCellData( oSettings, iRow, iCol, '' );
 		}
-		return (typeof oSettings.aoData[iRow] != 'undefined') ? 
-			oSettings.aoData[iRow]._aData : null;
+		return oSettings.aoData[iRow]._aData;
 	}
 	return _fnGetDataMaster( oSettings );
 };
@@ -644,11 +643,9 @@ this.fnGetNodes = function( iRow )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
-	if ( typeof iRow != 'undefined' )
-	{
-		return (typeof oSettings.aoData[iRow] != 'undefined') ? oSettings.aoData[iRow].nTr : null;
-	}
-	return _fnGetTrNodes( oSettings );
+	return (iRow) ?
+		oSettings.aoData[iRow].nTr :
+		_fnGetTrNodes( oSettings );
 };
 
 
@@ -779,7 +776,7 @@ this.fnOpen = function( nTr, mHtml, sClass )
 	nNewCell.className = sClass;
 	nNewCell.colSpan = _fnVisbleColumns( oSettings );
 
-	if( typeof mHtml.jquery != 'undefined' || typeof mHtml == "object" )
+	if( mHtml.jquery !== undefined || typeof mHtml === "object" )
 	{
 		nNewCell.appendChild( mHtml );
 	}
@@ -824,7 +821,7 @@ this.fnPageChange = function ( mAction, bRedraw )
 	_fnPageChange( oSettings, mAction );
 	_fnCalculateEnd( oSettings );
 	
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnDraw( oSettings );
 	}
@@ -938,7 +935,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	/* Do a redraw incase anything depending on the table columns needs it 
 	 * (built-in: scrolling) 
 	 */
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnAdjustColumnSizing( oSettings );
 		_fnDraw( oSettings );
@@ -1033,10 +1030,10 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var iVisibleColumn, i, iLen, sDisplay;
-	var iRow = (typeof mRow == 'object') ? 
+	var iRow = (typeof mRow === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
 	
-	if ( typeof oSettings.__fnUpdateDeep == 'undefined' && $.isArray(mData) && typeof mData == 'object' )
+	if ( oSettings.__fnUpdateDeep === undefined && $.isArray(mData) && typeof mData === 'object' )
 	{
 		/* Array update - update the whole row */
 		oSettings.aoData[iRow]._aData = mData.slice();
@@ -1049,7 +1046,7 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		}
 		oSettings.__fnUpdateDeep = undefined;
 	}
-	else if ( typeof oSettings.__fnUpdateDeep == 'undefined' && mData !== null && typeof mData == 'object' )
+	else if ( oSettings.__fnUpdateDeep === undefined && mData !== null && typeof mData === 'object' )
 	{
 		/* Object update - update the whole row - assume the developer gets the object right */
 		oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
@@ -1097,13 +1094,13 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		_fnGetRowData( oSettings, iRow, 'filter' ) );
 	
 	/* Perform pre-draw actions */
-	if ( typeof bAction == 'undefined' || bAction )
+	if ( bAction === undefined || bAction )
 	{
 		_fnAdjustColumnSizing( oSettings );
 	}
 	
 	/* Redraw the table */
-	if ( typeof bRedraw == 'undefined' || bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnReDraw( oSettings );
 	}

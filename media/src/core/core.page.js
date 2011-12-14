@@ -29,7 +29,7 @@ function _fnFeatureHtmlPaginate ( oSettings )
 	);
 	
 	/* Add a draw callback for the pagination on first instance, to update the paging display */
-	if ( typeof oSettings.aanFeatures.p == "undefined" )
+	if ( !oSettings.aanFeatures.p )
 	{
 		oSettings.aoDrawCallback.push( {
 			"fn": function( oSettings ) {
@@ -57,7 +57,7 @@ function _fnPageChange ( oSettings, mAction )
 {
 	var iOldStart = oSettings._iDisplayStart;
 	
-	if ( typeof mAction == "number" )
+	if ( typeof mAction === "number" )
 	{
 		oSettings._iDisplayStart = mAction * oSettings._iDisplayLength;
 		if ( oSettings._iDisplayStart > oSettings.fnRecordsDisplay() )

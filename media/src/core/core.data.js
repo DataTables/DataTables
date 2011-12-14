@@ -32,7 +32,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 		oCol = oSettings.aoColumns[i];
 
 		/* Use rendered data for filtering/sorting */
-		if ( typeof oCol.fnRender == 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
+		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
 		{
 			_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
 				"iDataRow": iRow,
@@ -162,7 +162,7 @@ function _fnGatherData( oSettings )
 		
 		var
 			bAutoType = oCol._bAutoType,
-			bRender = typeof oCol.fnRender == 'function',
+			bRender = typeof oCol.fnRender === 'function',
 			bClass = oCol.sClass !== null,
 			bVisible = oCol.bVisible,
 			nCell, sThisType, sRendered, sValType;
@@ -325,7 +325,7 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 	{
 		sData = oCol.sDefaultContent;
 	}
-	else if ( typeof sData == 'function' )
+	else if ( typeof sData === 'function' )
 	{
 		/* If the data source is a function, then we run it and use the return */
 		return sData();
@@ -372,13 +372,13 @@ function _fnGetObjectDataFn( mSource )
 			return null;
 		};
 	}
-	else if ( typeof mSource == 'function' )
+	else if ( typeof mSource === 'function' )
 	{
 	    return function (data, type) {
 	        return mSource( data, type );
 	    };
 	}
-	else if ( typeof mSource == 'string' && mSource.indexOf('.') != -1 )
+	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
 		/* If there is a . in the source string then the data source is in a nested object
 		 * we provide two 'quick' functions for the look up to speed up the most common
@@ -432,13 +432,13 @@ function _fnSetObjectDataFn( mSource )
 		/* Nothing to do when the data source is null */
 		return function (data, val) {};
 	}
-	else if ( typeof mSource == 'function' )
+	else if ( typeof mSource === 'function' )
 	{
 	    return function (data, val) {
 	        return mSource( data, val );
 	    };
 	}
-	else if ( typeof mSource == 'string' && mSource.indexOf('.') != -1 )
+	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
 		/* Like the get, we need to get data from a nested object. Again two fast lookup
 		 * functions are provided, and a generalised one.

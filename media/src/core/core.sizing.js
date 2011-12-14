@@ -14,7 +14,7 @@ function _fnConvertToWidth ( sWidth, nParent )
 		return 0;
 	}
 	
-	if ( typeof nParent == "undefined" )
+	if ( !nParent )
 	{
 		nParent = document.getElementsByTagName('body')[0];
 	}

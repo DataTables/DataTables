@@ -468,7 +468,7 @@ function _fnApplyToChildren( fn, an1, an2 )
 		{
 			if ( an1[i].childNodes[j].nodeType == 1 )
 			{
-				if ( typeof an2 != 'undefined' )
+				if ( an2 )
 				{
 					fn( an1[i].childNodes[j], an2[i].childNodes[j] );
 				}

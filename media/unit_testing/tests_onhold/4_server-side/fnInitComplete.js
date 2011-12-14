@@ -20,7 +20,7 @@ $(document).ready( function () {
 	
 	
 	oTest.fnWaitTest( 
-		"One argument passed",
+		"Two arguments passed",
 		function () {
 			oSession.fnRestore();
 			
@@ -29,11 +29,11 @@ $(document).ready( function () {
 				"bServerSide": true,
 		"sAjaxSource": "../../../examples/server_side/scripts/server_processing.php",
 				"fnInitComplete": function ( ) {
-					mPass = arguments.length;
+					mPass = arguments.length===2 && arguments[1]===undefined;
 				}
 			} );
 		},
-		function () { return mPass == 1; }
+		function () { return mPass; }
 	);
 	
 	

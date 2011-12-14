@@ -46,7 +46,7 @@ $.extend( DataTable.ext.oPagination, {
 			oSettings.oApi._fnBindAction( nNext,     {action: "next"},     fnClickHandler );
 			
 			/* ID the first elements only */
-			if ( typeof oSettings.aanFeatures.p == "undefined" )
+			if ( !oSettings.aanFeatures.p )
 			{
 				nPaging.id = oSettings.sTableId+'_paginate';
 				nPrevious.id = oSettings.sTableId+'_previous';
@@ -141,7 +141,7 @@ $.extend( DataTable.ext.oPagination, {
 			oSettings.oApi._fnBindAction( nLast,  {action: "last"},     fnClickHandler );
 			
 			/* ID the first elements only */
-			if ( typeof oSettings.aanFeatures.p == "undefined" )
+			if ( !oSettings.aanFeatures.p )
 			{
 				nPaging.id = oSettings.sTableId+'_paginate';
 				nFirst.id =oSettings.sTableId+'_first';
@@ -174,11 +174,13 @@ $.extend( DataTable.ext.oPagination, {
 			var oClasses = oSettings.oClasses;
 			var anButtons, anStatic, nPaginateList;
 			var an = oSettings.aanFeatures.p;
-			var fnClick = function(e) {
-				/* Use the information in the element to jump to the required page */
-				oSettings.oApi._fnPageChange( oSettings, e.data.page );
-				fnCallbackDraw( oSettings );
-				e.preventDefault();
+			var fnBind = function (j) {
+				oSettings.oApi._fnBindAction( this, {"page": j+iStartButton-1}, function(e) {
+					/* Use the information in the element to jump to the required page */
+					oSettings.oApi._fnPageChange( oSettings, e.data.page );
+					fnCallbackDraw( oSettings );
+					e.preventDefault();
+				} );
 			};
 			
 			/* Pages calculation */
@@ -222,9 +224,7 @@ $.extend( DataTable.ext.oPagination, {
 				/* Build up the dynamic list forst - html and listeners */
 				$('span:eq(0)', an[i])
 					.html( sList )
-					.children('a').each( function (i) {
-						oSettings.oApi._fnBindAction( this, {"page": i+iStartButton-1}, fnClick );
-					} );
+					.children('a').each( fnBind );
 				
 				/* Update the premanent botton's classes */
 				anButtons = an[i].getElementsByTagName('a');

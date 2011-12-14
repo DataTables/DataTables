@@ -57,7 +57,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 		iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 	
 	/* Allow the collection to be limited to just one row */
-	if ( typeof iIndividualRow != 'undefined' )
+	if ( iIndividualRow )
 	{
 		iStart = iIndividualRow;
 		iEnd = iIndividualRow+1;
@@ -123,7 +123,7 @@ function _fnLog( oSettings, iLevel, sMesg )
 		}
 		return;
 	}
-	else if ( typeof console != 'undefined' && typeof console.log != 'undefined' )
+	else if ( console !== undefined && console.log )
 	{
 		console.log( sAlert );
 	}
@@ -140,11 +140,11 @@ function _fnLog( oSettings, iLevel, sMesg )
  */
 function _fnMap( oRet, oSrc, sName, sMappedName )
 {
-	if ( typeof sMappedName == 'undefined' )
+	if ( sMappedName === undefined )
 	{
 		sMappedName = sName;
 	}
-	if ( typeof oSrc[sName] != 'undefined' )
+	if ( oSrc[sName] !== undefined )
 	{
 		oRet[sMappedName] = oSrc[sName];
 	}
@@ -166,9 +166,9 @@ function _fnExtend( oOut, oExtender )
 {
 	for ( var prop in oOut )
 	{
-		if ( oOut.hasOwnProperty(prop) && typeof oExtender[prop] != 'undefined' )
+		if ( oOut.hasOwnProperty(prop) && oExtender[prop] !== undefined )
 		{
-			if ( typeof oInit[prop] == 'object' && $.isArray(oExtender[prop]) === false )
+			if ( typeof oInit[prop] === 'object' && $.isArray(oExtender[prop]) === false )
 			{
 				$.extend( true, oOut[prop], oExtender[prop] );
 			}

@@ -19,7 +19,7 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 	/* Base check on table node */
 	if ( DataTable.settings[i].nTable == this )
 	{
-		if ( typeof oInit == 'undefined' || oInit.bRetrieve )
+		if ( oInit === undefined || oInit.bRetrieve )
 		{
 			return DataTable.settings[i].oInstance;
 		}
@@ -72,13 +72,13 @@ var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
 DataTable.settings.push( oSettings );
 
 /* Setting up the initialisation object */
-if (typeof oInit === 'undefined' || oInit === null)
+if ( !oInit )
 {
 	oInit = {};
 }
 
 // Backwards compatibility, before we apply all the defaults
-if ( typeof oInit.oLanguage != 'undefined' )
+if ( oInit.oLanguage )
 {
 	_fnLanguageCompat( oInit.oLanguage );
 }
@@ -132,7 +132,7 @@ _fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
 _fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 
 /* Callback functions which are array driven */
-if ( typeof oInit.fnDrawCallback == 'function' )
+if ( oInit.fnDrawCallback )
 {
 	oSettings.aoDrawCallback.push( {
 		"fn": oInit.fnDrawCallback,
@@ -141,7 +141,7 @@ if ( typeof oInit.fnDrawCallback == 'function' )
 }
 
 /* Ajax additional variables are array driven */
-if ( typeof oInit.fnServerParams == 'function' )
+if ( oInit.fnServerParams )
 {
 	oSettings.aoServerParams.push( {
 		"fn": oInit.fnServerParams,
@@ -149,7 +149,7 @@ if ( typeof oInit.fnServerParams == 'function' )
 	} );
 }
 
-if ( typeof oInit.fnStateSaveCallback == 'function' )
+if ( oInit.fnStateSaveCallback )
 {
 	oSettings.aoStateSave.push( {
 		"fn": oInit.fnStateSaveCallback,
@@ -157,7 +157,7 @@ if ( typeof oInit.fnStateSaveCallback == 'function' )
 	} );
 }
 
-if ( typeof oInit.fnStateLoadCallback == 'function' )
+if ( oInit.fnStateLoadCallback )
 {
 	oSettings.aoStateLoad.push( {
 		"fn": oInit.fnStateLoadCallback,
@@ -209,7 +209,7 @@ if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
 	oSettings.oScroll.iBarWidth = _fnScrollBarWidth();
 }
 
-if ( typeof oSettings.iInitDisplayStart == 'undefined' )
+if ( oSettings.iInitDisplayStart === undefined )
 {
 	/* Display start point, taking into account the save saving */
 	oSettings.iInitDisplayStart = oInit.iDisplayStart;
@@ -250,6 +250,7 @@ if ( oInit.oLanguage.sUrl !== "" )
 	$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) {
 		_fnLanguageCompat( json );
 		$.extend( true, oSettings.oLanguage, json );
+		console.log( oSettings.oLanguage);
 		_fnInitialise( oSettings );
 	} );
 	bInitHandedOff = true;
@@ -332,7 +333,7 @@ else
 for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 {
 	/* Short cut - use the loop to check if we have column visibility state to restore */
-	if ( typeof oInit.saved_aoColumns != 'undefined' && oInit.saved_aoColumns.length == iLen )
+	if ( oInit.saved_aoColumns !== undefined && oInit.saved_aoColumns.length == iLen )
 	{
 		if ( aoColumnsInit[i] === null )
 		{
@@ -363,14 +364,13 @@ for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
 	var oColumn = oSettings.aoColumns[ oSettings.aaSorting[i][0] ];
 	
 	/* Add a default sorting index */
-	if ( typeof oSettings.aaSorting[i][2] == 'undefined' )
+	if ( oSettings.aaSorting[i][2] === undefined )
 	{
 		oSettings.aaSorting[i][2] = 0;
 	}
 	
 	/* If aaSorting is not defined, then we use the first indicator in asSorting */
-	if ( typeof oInit.aaSorting == "undefined" && 
-			 typeof oSettings.saved_aaSorting == "undefined" )
+	if ( oInit.aaSorting === undefined && oSettings.saved_aaSorting === undefined )
 	{
 		oSettings.aaSorting[i][1] = oColumn.asSorting[0];
 	}

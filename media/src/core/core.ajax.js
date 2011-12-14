@@ -51,7 +51,7 @@ function _fnAjaxParameters( oSettings )
 	for ( i=0 ; i<iColumns ; i++ )
 	{
 	  mDataProp = oSettings.aoColumns[i].mDataProp;
-		aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)=="function" ? 'function' : mDataProp } );
+		aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)==="function" ? 'function' : mDataProp } );
 	}
 	
 	/* Filtering */
@@ -123,7 +123,7 @@ function _fnServerParams( oSettings, aoData )
  */
 function _fnAjaxUpdateDraw ( oSettings, json )
 {
-	if ( typeof json.sEcho != 'undefined' )
+	if ( json.sEcho !== undefined )
 	{
 		/* Protect against old returns over-writing a new one. Possible when you get
 		 * very fast interaction, and later queires are completed much faster
@@ -148,7 +148,7 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	
 	/* Determine if reordering is required */
 	var sOrdering = _fnColumnOrdering(oSettings);
-	var bReOrder = (typeof json.sColumns != 'undefined' && sOrdering !== "" && json.sColumns != sOrdering );
+	var bReOrder = (json.sColumns !== undefined && sOrdering !== "" && json.sColumns != sOrdering );
 	var aiIndex;
 	if ( bReOrder )
 	{

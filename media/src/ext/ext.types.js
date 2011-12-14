@@ -10,11 +10,11 @@ $.extend( DataTable.ext.aTypes, [
 	function ( sData )
 	{
 		/* Allow zero length strings as a number */
-		if ( typeof sData == 'number' )
+		if ( typeof sData === 'number' )
 		{
 			return 'numeric';
 		}
-		else if ( typeof sData != 'string' )
+		else if ( typeof sData !== 'string' )
 		{
 			return null;
 		}
@@ -63,7 +63,7 @@ $.extend( DataTable.ext.aTypes, [
 	function ( sData )
 	{
 		var iParse = Date.parse(sData);
-		if ( (iParse !== null && !isNaN(iParse)) || (typeof sData == 'string' && sData.length === 0) )
+		if ( (iParse !== null && !isNaN(iParse)) || (typeof sData === 'string' && sData.length === 0) )
 		{
 			return 'date';
 		}
@@ -78,7 +78,7 @@ $.extend( DataTable.ext.aTypes, [
 	 */
 	function ( sData )
 	{
-		if ( typeof sData == 'string' && sData.indexOf('<') != -1 && sData.indexOf('>') != -1 )
+		if ( typeof sData === 'string' && sData.indexOf('<') != -1 && sData.indexOf('>') != -1 )
 		{
 			return 'html';
 		}
