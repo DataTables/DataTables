@@ -189,7 +189,7 @@ if ( oInit.bJQueryUI )
 	/* Use the JUI classes object for display. You could clone the oStdClasses object if 
 	 * you want to have multiple tables with multiple independent classes 
 	 */
-	oSettings.oClasses = DataTable.ext.oJUIClasses;
+	$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
 	
 	if ( oInit.sDom == DataTable.models.oInit.sDom )
 	{
@@ -199,7 +199,7 @@ if ( oInit.bJQueryUI )
 }
 else
 {
-	oSettings.oClasses = DataTable.ext.oStdClasses;
+	$.extend( oSettings.oClasses, DataTable.ext.oStdClasses );
 }
 $(this).addClass( oSettings.oClasses.sTable );
 

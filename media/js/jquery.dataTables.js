@@ -4126,7 +4126,7 @@
 					if ( oSettings.bJUI )
 					{
 						/* jQuery UI uses extra markup */
-						var jqSpan = $("span."+DataTable.ext.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
+						var jqSpan = $("span."+oClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
 						jqSpan.removeClass(oClasses.sSortJUIAsc +" "+ oClasses.sSortJUIDesc +" "+ 
 							oClasses.sSortJUI +" "+ oClasses.sSortJUIAscAllowed +" "+ oClasses.sSortJUIDescAllowed );
 						
@@ -5129,11 +5129,11 @@
 			);
 			if ( oSettings.bJUI )
 			{
-				$('th span.'+DataTable.ext.oJUIClasses.sSortIcon
-					+ ', td span.'+DataTable.ext.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
+				$('th span.'+oSettings.oClasses.sSortIcon
+					+ ', td span.'+oSettings.oClasses.sSortIcon, oSettings.nTHead).remove();
 		
 				$('th, td', oSettings.nTHead).each( function () {
-					var jqWrapper = $('div.'+DataTable.ext.oJUIClasses.sSortJUIWrapper, this);
+					var jqWrapper = $('div.'+oSettings.oClasses.sSortJUIWrapper, this);
 					var kids = jqWrapper.contents();
 					$(this).append( kids );
 					jqWrapper.remove();
@@ -6146,7 +6146,7 @@
 				/* Use the JUI classes object for display. You could clone the oStdClasses object if 
 				 * you want to have multiple tables with multiple independent classes 
 				 */
-				oSettings.oClasses = DataTable.ext.oJUIClasses;
+				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
 				
 				if ( oInit.sDom == DataTable.models.oInit.sDom )
 				{
@@ -6156,7 +6156,7 @@
 			}
 			else
 			{
-				oSettings.oClasses = DataTable.ext.oStdClasses;
+				$.extend( oSettings.oClasses, DataTable.ext.oStdClasses );
 			}
 			$(this).addClass( oSettings.oClasses.sTable );
 			

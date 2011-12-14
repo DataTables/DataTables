@@ -352,7 +352,7 @@ function _fnSortingClasses( oSettings )
 			if ( oSettings.bJUI )
 			{
 				/* jQuery UI uses extra markup */
-				var jqSpan = $("span."+DataTable.ext.oJUIClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
+				var jqSpan = $("span."+oClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
 				jqSpan.removeClass(oClasses.sSortJUIAsc +" "+ oClasses.sSortJUIDesc +" "+ 
 					oClasses.sSortJUI +" "+ oClasses.sSortJUIAscAllowed +" "+ oClasses.sSortJUIDescAllowed );
 				

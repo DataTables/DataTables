@@ -424,11 +424,11 @@ this.fnDestroy = function ( bRemove )
 	);
 	if ( oSettings.bJUI )
 	{
-		$('th span.'+DataTable.ext.oJUIClasses.sSortIcon
-			+ ', td span.'+DataTable.ext.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
+		$('th span.'+oSettings.oClasses.sSortIcon
+			+ ', td span.'+oSettings.oClasses.sSortIcon, oSettings.nTHead).remove();
 
 		$('th, td', oSettings.nTHead).each( function () {
-			var jqWrapper = $('div.'+DataTable.ext.oJUIClasses.sSortJUIWrapper, this);
+			var jqWrapper = $('div.'+oSettings.oClasses.sSortJUIWrapper, this);
 			var kids = jqWrapper.contents();
 			$(this).append( kids );
 			jqWrapper.remove();
