@@ -16,7 +16,7 @@
 			
 			$(document).ready(function() {
 				$('#form').submit( function() {
-					var sData = $('input', oTable.fnGetNodes()).serialize();
+					var sData = oTable.$('input').serialize();
 					alert( "The following data would have been submitted to the server: \n\n"+sData );
 					return false;
 				} );
@@ -534,7 +534,7 @@
 
 $(document).ready(function() {
 	$('#form').submit( function() {
-		var sData = $('input', oTable.fnGetNodes()).serialize();
+		var sData = oTable.$('input').serialize();
 		alert( "The following data would have been submitted to the server: \n\n"+sData );
 		return false;
 	} );
