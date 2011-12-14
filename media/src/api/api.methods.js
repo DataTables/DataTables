@@ -416,21 +416,14 @@ this.fnDestroy = function ( bRemove )
 	
 	$(_fnGetTrNodes( oSettings )).removeClass( oSettings.asStripeClasses.join(' ') );
 	
-	if ( !oSettings.bJUI )
+	$('th', oSettings.nTHead).removeClass( [
+		oSettings.oClasses.sSortable,
+		oSettings.oClasses.sSortableAsc,
+		oSettings.oClasses.sSortableDesc,
+		oSettings.oClasses.sSortableNone ].join(' ')
+	);
+	if ( oSettings.bJUI )
 	{
-		$('th', oSettings.nTHead).removeClass( [ DataTable.ext.oStdClasses.sSortable,
-			DataTable.ext.oStdClasses.sSortableAsc,
-			DataTable.ext.oStdClasses.sSortableDesc,
-			DataTable.ext.oStdClasses.sSortableNone ].join(' ')
-		);
-	}
-	else
-	{
-		$('th, td', oSettings.nTHead).removeClass( [ DataTable.ext.oStdClasses.sSortable,
-			DataTable.ext.oJUIClasses.sSortableAsc,
-			DataTable.ext.oJUIClasses.sSortableDesc,
-			DataTable.ext.oJUIClasses.sSortableNone ].join(' ')
-		);
 		$('th span.'+DataTable.ext.oJUIClasses.sSortIcon
 			+ ', td span.'+DataTable.ext.oJUIClasses.sSortIcon, oSettings.nTHead).remove();
 
