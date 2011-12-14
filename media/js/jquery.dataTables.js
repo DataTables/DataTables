@@ -6177,8 +6177,7 @@
 				oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
 				$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) {
 					_fnLanguageCompat( json );
-					$.extend( true, oSettings.oLanguage, json );
-					console.log( oSettings.oLanguage);
+					$.extend( true, oSettings.oLanguage, oInit.oLanguage, json );
 					_fnInitialise( oSettings );
 				} );
 				bInitHandedOff = true;
