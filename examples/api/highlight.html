@@ -17,12 +17,11 @@
 					"bSortClasses": false
 				} );
 				
-				$('td', oTable.fnGetNodes()).hover( function() {
+				oTable.$('td').hover( function() {
 					var iCol = $('td', this.parentNode).index(this) % 5;
-					var nTrs = oTable.fnGetNodes();
-					$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
+					$('td:nth-child('+(iCol+1)+')', oTable.$('tr')).addClass( 'highlighted' );
 				}, function() {
-					$('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
+					oTable.$('td.highlighted').removeClass('highlighted');
 				} );
 			} );
 		</script>
@@ -473,12 +472,11 @@
 		"bSortClasses": false
 	} );
 	
-	$('td', oTable.fnGetNodes()).hover( function() {
+	oTable.$('td').hover( function() {
 		var iCol = $('td', this.parentNode).index(this) % 5;
-		var nTrs = oTable.fnGetNodes();
-		$('td:nth-child('+(iCol+1)+')', nTrs).addClass( 'highlighted' );
+		$('td:nth-child('+(iCol+1)+')', oTable.$('tr')).addClass( 'highlighted' );
 	}, function() {
-		$('td.highlighted', oTable.fnGetNodes()).removeClass('highlighted');
+		oTable.$('td.highlighted').removeClass('highlighted');
 	} );
 } );</pre>
 			<style type="text/css">
