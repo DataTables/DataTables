@@ -578,8 +578,7 @@
 			{
 				_fnLog( oSettings, 1, "Unexpected number of TD elements. Expected "+
 					(nTrs.length * oSettings.aoColumns.length)+" and got "+nTds.length+". DataTables does "+
-					"not support rowspan / colspan in the table body, and there must be one cell for each "+
-					"row/column combination." );
+					"not support rowspan / colspan in the table body." );
 			}
 			
 			/* Now process by column */
