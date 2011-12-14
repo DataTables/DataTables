@@ -418,6 +418,24 @@ DataTable.models.oInit = {
 
 
 	/**
+	 * Indicate if DataTables should be allowed to set the padding / margin
+	 * etc for the scrolling header elements or not. Typically you will want
+	 * this.
+	 *  @type boolean
+	 *  @default true
+	 * 
+	 *  @example
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "bScrollAutoCss": false,
+	 *        "sScrollY": "200px"
+	 *      } );
+	 *    } );
+	 */
+	"bScrollAutoCss": true,
+
+
+	/**
 	 * When vertical (y) scrolling is enabled, DataTables will force the height of
 	 * the table's viewport to the given height at all times (useful for layout).
 	 * However, this can look odd when filtering data down to a small data set,

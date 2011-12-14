@@ -39,8 +39,9 @@ function _fnFeatureHtmlFilter ( oSettings )
 		{
 			_fnFilterComplete( oSettings, { 
 				"sSearch": this.value, 
-				"bRegex":  oSettings.oPreviousSearch.bRegex,
-				"bSmart":  oSettings.oPreviousSearch.bSmart 
+				"bRegex": oSettings.oPreviousSearch.bRegex,
+				"bSmart": oSettings.oPreviousSearch.bSmart ,
+				"bCaseInsensitive": oSettings.oPreviousSearch.bCaseInsensitive 
 			} );
 		}
 	} );
