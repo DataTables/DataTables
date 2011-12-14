@@ -90,15 +90,22 @@
 			}
 			else
 			{
-				/* Don't require that the user must specify bRegex and / or bSmart */
-				if ( oSettings.aoPreSearchCols[ iCol ].bRegex === undefined )
+				var oPre = oSettings.aoPreSearchCols[ iCol ];
+				
+				/* Don't require that the user must specify bRegex, bSmart or bCaseInsensitive */
+				if ( oPre.bRegex === undefined )
 				{
-					oSettings.aoPreSearchCols[ iCol ].bRegex = true;
+					oPre.bRegex = true;
 				}
 				
-				if ( oSettings.aoPreSearchCols[ iCol ].bSmart === undefined )
+				if ( oPre.bSmart === undefined )
 				{
-					oSettings.aoPreSearchCols[ iCol ].bSmart = true;
+					oPre.bSmart = true;
+				}
+				
+				if ( oPre.bCaseInsensitive === undefined )
+				{
+					oPre.bCaseInsensitive = true;
 				}
 			}
 			
@@ -2025,13 +2032,14 @@
 		function _fnFilterComplete ( oSettings, oInput, iForce )
 		{
 			/* Filter on everything */
-			_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart );
+			_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart, oInput.bCaseInsensitive );
 			
 			/* Now do the individual column filter */
 			for ( var i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 			{
 				_fnFilterColumn( oSettings, oSettings.aoPreSearchCols[i].sSearch, i, 
-					oSettings.aoPreSearchCols[i].bRegex, oSettings.aoPreSearchCols[i].bSmart );
+					oSettings.aoPreSearchCols[i].bRegex, oSettings.aoPreSearchCols[i].bSmart, 
+					oSettings.aoPreSearchCols[i].bCaseInsensitive );
 			}
 			
 			/* Custom filtering */
@@ -2087,9 +2095,10 @@
 		 *  @param {int} iColumn column to filter
 		 *  @param {bool} bRegex treat search string as a regular expression or not
 		 *  @param {bool} bSmart use smart filtering or not
+		 *  @param {bool} bCaseInsensitive Do case insenstive matching or not
 		 *  @private
 		 */
-		function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
+		function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart, bCaseInsensitive )
 		{
 			if ( sInput === "" )
 			{
@@ -2097,7 +2106,7 @@
 			}
 			
 			var iIndexCorrector = 0;
-			var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart );
+			var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
 			
 			for ( var i=oSettings.aiDisplay.length-1 ; i>=0 ; i-- )
 			{
@@ -2119,12 +2128,13 @@
 		 *  @param {int} iForce optional - force a research of the master array (1) or not (undefined or 0)
 		 *  @param {bool} bRegex treat as a regular expression or not
 		 *  @param {bool} bSmart perform smart filtering or not
+		 *  @param {bool} bCaseInsensitive Do case insenstive matching or not
 		 *  @private
 		 */
-		function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
+		function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive )
 		{
 			var i;
-			var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart );
+			var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
 			
 			/* Check if we are forcing or not - optional parameter */
 			if ( !iForce )
@@ -2195,6 +2205,7 @@
 			oSettings.oPreviousSearch.sSearch = sInput;
 			oSettings.oPreviousSearch.bRegex = bRegex;
 			oSettings.oPreviousSearch.bSmart = bSmart;
+			oSettings.oPreviousSearch.bCaseInsensitive = bCaseInsensitive;
 		}
 		
 		
@@ -2265,10 +2276,11 @@
 		 *  @param {string} sSearch string to search for
 		 *  @param {bool} bRegex treat as a regular expression or not
 		 *  @param {bool} bSmart perform smart filtering or not
+		 *  @param {bool} bCaseInsensitive Do case insenstive matching or not
 		 *  @returns {RegExp} constructed object
 		 *  @private
 		 */
-		function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
+		function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 		{
 			var asSearch, sRegExpString;
 			
@@ -2279,12 +2291,12 @@
 				 */
 				asSearch = bRegex ? sSearch.split( ' ' ) : _fnEscapeRegex( sSearch ).split( ' ' );
 				sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
-				return new RegExp( sRegExpString, "i" );
+				return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 			}
 			else
 			{
 				sSearch = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-				return new RegExp( sSearch, "i" );
+				return new RegExp( sSearch, bCaseInsensitive ? "i" : "" );
 			}
 		}
 		
@@ -5192,11 +5204,12 @@
 		
 		/**
 		 * Filter the input based on data
-		 *  @param {string} sInput string to filter the table on
-		 *  @param {int|null} [iColumn] column to limit filtering to
-		 *  @param {bool} [bRegex=false] treat as regular expression or not
-		 *  @param {bool} [bSmart=true] perform smart filtering or not
-		 *  @param {bool} [bShowGlobal=true] show the input global filter in it's input box(es)
+		 *  @param {string} sInput String to filter the table on
+		 *  @param {int|null} [iColumn] Column to limit filtering to
+		 *  @param {bool} [bRegex=false] Treat as regular expression or not
+		 *  @param {bool} [bSmart=true] Perform smart filtering or not
+		 *  @param {bool} [bShowGlobal=true] Show the input global filter in it's input box(es)
+		 *  @param {bool} [bCaseInsensitive=true] Do case-insensitive matching (true) or not (false)
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5206,7 +5219,7 @@
 		 *      oTable.fnFilter( 'test string' );
 		 *    } );
 		 */
-		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
+		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseInsensitive )
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
@@ -5215,19 +5228,24 @@
 				return;
 			}
 			
-			if ( bRegex === undefined )
+			if ( bRegex === undefined || bRegex === null )
 			{
 				bRegex = false;
 			}
 			
-			if ( bSmart === undefined )
+			if ( bSmart === undefined || bSmart === null )
 			{
 				bSmart = true;
 			}
 			
-			if ( bShowGlobal === undefined )
+			if ( bShowGlobal === undefined || bShowGlobal === null )
 			{
 				bShowGlobal = true;
+			}
+			
+			if ( bCaseInsensitive === undefined || bCaseInsensitive === null )
+			{
+				bCaseInsensitive = true;
 			}
 			
 			if ( !iColumn )
@@ -5236,7 +5254,8 @@
 				_fnFilterComplete( oSettings, {
 					"sSearch":sInput+"",
 					"bRegex": bRegex,
-					"bSmart": bSmart
+					"bSmart": bSmart,
+					"bCaseInsensitive": bCaseInsensitive
 				}, 1 );
 				
 				if ( bShowGlobal && oSettings.aanFeatures.f )
@@ -5254,7 +5273,8 @@
 				$.extend( oSettings.aoPreSearchCols[ iColumn ], {
 					"sSearch": sInput+"",
 					"bRegex": bRegex,
-					"bSmart": bSmart
+					"bSmart": bSmart,
+					"bCaseInsensitive": bCaseInsensitive
 				} );
 				_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
 			}
@@ -6969,6 +6989,13 @@
 	 *  @namespace
 	 */
 	DataTable.models.oSearch = {
+		/**
+		 * Flag to indicate if the filtering should be case insensitive or not
+		 *  @type boolean
+		 *  @default true
+		 */
+		"bCaseInsensitive": true,
+	
 		/**
 		 * Applied search term
 		 *  @type string
@@ -8815,11 +8842,11 @@
 		/**
 		 * This parameter allows you to have define the global filtering state at
 		 * initialisation time. As an object the "sSearch" parameter must be
-		 * defined, but the "bRegex" and "bSmart" parameters are optional. When
-		 * "bRegex" is true, the search string will be treated as a regular
-		 * expression, when false (default) it will be treated as a straight string.
-		 * When "bSmart" DataTables will use it's smart filtering methods (to word
-		 * match at any point in the data), when false this will not be done.
+		 * defined, but all other parameters are optional. When "bRegex" is true,
+		 * the search string will be treated as a regular expression, when false
+		 * (default) it will be treated as a straight string. When "bSmart"
+		 * DataTables will use it's smart filtering methods (to word match at
+		 * any point in the data), when false this will not be done.
 		 *  @type object
 		 *  @extends DataTable.models.oSearch
 		 * 

@@ -8,6 +8,13 @@
  */
 DataTable.models.oSearch = {
 	/**
+	 * Flag to indicate if the filtering should be case insensitive or not
+	 *  @type boolean
+	 *  @default true
+	 */
+	"bCaseInsensitive": true,
+
+	/**
 	 * Applied search term
 	 *  @type string
 	 *  @default <i>Empty string</i>

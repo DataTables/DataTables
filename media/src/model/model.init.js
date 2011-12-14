@@ -1499,11 +1499,11 @@ DataTable.models.oInit = {
 	/**
 	 * This parameter allows you to have define the global filtering state at
 	 * initialisation time. As an object the "sSearch" parameter must be
-	 * defined, but the "bRegex" and "bSmart" parameters are optional. When
-	 * "bRegex" is true, the search string will be treated as a regular
-	 * expression, when false (default) it will be treated as a straight string.
-	 * When "bSmart" DataTables will use it's smart filtering methods (to word
-	 * match at any point in the data), when false this will not be done.
+	 * defined, but all other parameters are optional. When "bRegex" is true,
+	 * the search string will be treated as a regular expression, when false
+	 * (default) it will be treated as a straight string. When "bSmart"
+	 * DataTables will use it's smart filtering methods (to word match at
+	 * any point in the data), when false this will not be done.
 	 *  @type object
 	 *  @extends DataTable.models.oSearch
 	 * 

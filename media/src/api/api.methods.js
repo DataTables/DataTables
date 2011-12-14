@@ -509,11 +509,12 @@ this.fnDraw = function( bComplete )
 
 /**
  * Filter the input based on data
- *  @param {string} sInput string to filter the table on
- *  @param {int|null} [iColumn] column to limit filtering to
- *  @param {bool} [bRegex=false] treat as regular expression or not
- *  @param {bool} [bSmart=true] perform smart filtering or not
- *  @param {bool} [bShowGlobal=true] show the input global filter in it's input box(es)
+ *  @param {string} sInput String to filter the table on
+ *  @param {int|null} [iColumn] Column to limit filtering to
+ *  @param {bool} [bRegex=false] Treat as regular expression or not
+ *  @param {bool} [bSmart=true] Perform smart filtering or not
+ *  @param {bool} [bShowGlobal=true] Show the input global filter in it's input box(es)
+ *  @param {bool} [bCaseInsensitive=true] Do case-insensitive matching (true) or not (false)
  *
  *  @example
  *    $(document).ready(function() {
@@ -523,7 +524,7 @@ this.fnDraw = function( bComplete )
  *      oTable.fnFilter( 'test string' );
  *    } );
  */
-this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
+this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseInsensitive )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
@@ -532,19 +533,24 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 		return;
 	}
 	
-	if ( bRegex === undefined )
+	if ( bRegex === undefined || bRegex === null )
 	{
 		bRegex = false;
 	}
 	
-	if ( bSmart === undefined )
+	if ( bSmart === undefined || bSmart === null )
 	{
 		bSmart = true;
 	}
 	
-	if ( bShowGlobal === undefined )
+	if ( bShowGlobal === undefined || bShowGlobal === null )
 	{
 		bShowGlobal = true;
+	}
+	
+	if ( bCaseInsensitive === undefined || bCaseInsensitive === null )
+	{
+		bCaseInsensitive = true;
 	}
 	
 	if ( !iColumn )
@@ -553,7 +559,8 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 		_fnFilterComplete( oSettings, {
 			"sSearch":sInput+"",
 			"bRegex": bRegex,
-			"bSmart": bSmart
+			"bSmart": bSmart,
+			"bCaseInsensitive": bCaseInsensitive
 		}, 1 );
 		
 		if ( bShowGlobal && oSettings.aanFeatures.f )
@@ -571,7 +578,8 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal )
 		$.extend( oSettings.aoPreSearchCols[ iColumn ], {
 			"sSearch": sInput+"",
 			"bRegex": bRegex,
-			"bSmart": bSmart
+			"bSmart": bSmart,
+			"bCaseInsensitive": bCaseInsensitive
 		} );
 		_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
 	}

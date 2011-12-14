@@ -26,15 +26,22 @@ function _fnAddColumn( oSettings, nTh )
 	}
 	else
 	{
-		/* Don't require that the user must specify bRegex and / or bSmart */
-		if ( oSettings.aoPreSearchCols[ iCol ].bRegex === undefined )
+		var oPre = oSettings.aoPreSearchCols[ iCol ];
+		
+		/* Don't require that the user must specify bRegex, bSmart or bCaseInsensitive */
+		if ( oPre.bRegex === undefined )
 		{
-			oSettings.aoPreSearchCols[ iCol ].bRegex = true;
+			oPre.bRegex = true;
 		}
 		
-		if ( oSettings.aoPreSearchCols[ iCol ].bSmart === undefined )
+		if ( oPre.bSmart === undefined )
 		{
-			oSettings.aoPreSearchCols[ iCol ].bSmart = true;
+			oPre.bSmart = true;
+		}
+		
+		if ( oPre.bCaseInsensitive === undefined )
+		{
+			oPre.bCaseInsensitive = true;
 		}
 	}
 	

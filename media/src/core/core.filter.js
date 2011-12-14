@@ -70,13 +70,14 @@ function _fnFeatureHtmlFilter ( oSettings )
 function _fnFilterComplete ( oSettings, oInput, iForce )
 {
 	/* Filter on everything */
-	_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart );
+	_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart, oInput.bCaseInsensitive );
 	
 	/* Now do the individual column filter */
 	for ( var i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
 	{
 		_fnFilterColumn( oSettings, oSettings.aoPreSearchCols[i].sSearch, i, 
-			oSettings.aoPreSearchCols[i].bRegex, oSettings.aoPreSearchCols[i].bSmart );
+			oSettings.aoPreSearchCols[i].bRegex, oSettings.aoPreSearchCols[i].bSmart, 
+			oSettings.aoPreSearchCols[i].bCaseInsensitive );
 	}
 	
 	/* Custom filtering */
@@ -132,9 +133,10 @@ function _fnFilterCustom( oSettings )
  *  @param {int} iColumn column to filter
  *  @param {bool} bRegex treat search string as a regular expression or not
  *  @param {bool} bSmart use smart filtering or not
+ *  @param {bool} bCaseInsensitive Do case insenstive matching or not
  *  @private
  */
-function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
+function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart, bCaseInsensitive )
 {
 	if ( sInput === "" )
 	{
@@ -142,7 +144,7 @@ function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
 	}
 	
 	var iIndexCorrector = 0;
-	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart );
+	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
 	
 	for ( var i=oSettings.aiDisplay.length-1 ; i>=0 ; i-- )
 	{
@@ -164,12 +166,13 @@ function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart )
  *  @param {int} iForce optional - force a research of the master array (1) or not (undefined or 0)
  *  @param {bool} bRegex treat as a regular expression or not
  *  @param {bool} bSmart perform smart filtering or not
+ *  @param {bool} bCaseInsensitive Do case insenstive matching or not
  *  @private
  */
-function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
+function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive )
 {
 	var i;
-	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart );
+	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
 	
 	/* Check if we are forcing or not - optional parameter */
 	if ( !iForce )
@@ -240,6 +243,7 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart )
 	oSettings.oPreviousSearch.sSearch = sInput;
 	oSettings.oPreviousSearch.bRegex = bRegex;
 	oSettings.oPreviousSearch.bSmart = bSmart;
+	oSettings.oPreviousSearch.bCaseInsensitive = bCaseInsensitive;
 }
 
 
@@ -310,10 +314,11 @@ function _fnBuildSearchRow( oSettings, aData )
  *  @param {string} sSearch string to search for
  *  @param {bool} bRegex treat as a regular expression or not
  *  @param {bool} bSmart perform smart filtering or not
+ *  @param {bool} bCaseInsensitive Do case insenstive matching or not
  *  @returns {RegExp} constructed object
  *  @private
  */
-function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
+function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 {
 	var asSearch, sRegExpString;
 	
@@ -324,12 +329,12 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart )
 		 */
 		asSearch = bRegex ? sSearch.split( ' ' ) : _fnEscapeRegex( sSearch ).split( ' ' );
 		sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
-		return new RegExp( sRegExpString, "i" );
+		return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 	}
 	else
 	{
 		sSearch = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-		return new RegExp( sSearch, "i" );
+		return new RegExp( sSearch, bCaseInsensitive ? "i" : "" );
 	}
 }
 
