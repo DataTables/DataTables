@@ -35,6 +35,10 @@
 	 * HTML table. For a full list of features please refer to
 	 * <a href="http://datatables.net">DataTables.net</a>.
 	 *
+	 * Note that the <i>DataTable</i> object is not a global variable but is
+	 * aliased to <i>jQuery.fn.DataTable</i> and <i>jQuery.fn.dataTable</i> through which 
+	 * it may be  accessed.
+	 *
 	 *  @class
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
 	 *    are defined by {@link DataTable.models.oInit}
@@ -6392,6 +6396,9 @@
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
 	 * tables on a given page.
+	 * 
+	 * Note that the <i>DataTable.settings</i> object is aliased to <i>jQuery.fn.dataTableExt</i> 
+	 * through which is may be accessed and manipulated, or <i>jQuery.fn.dataTable.settings</i>.
 	 *  @member
 	 *  @type array
 	 *  @default []
@@ -9827,6 +9834,9 @@
 	/**
 	 * Extension object for DataTables that is used to provide all extension options.
 	 * See {@link DataTable.models.ext} for full information about the extension object.
+	 * 
+	 * Note that the <i>DataTable.ext</i> object is aliased to <i>jQuery.fn.dataTableExt</i> 
+	 * through which is may be accessed and manipulated, or <i>jQuery.fn.dataTable.ext</i>.
 	 *  @namespace
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
