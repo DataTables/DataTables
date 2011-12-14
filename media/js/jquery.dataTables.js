@@ -5274,9 +5274,11 @@
 			else
 			{
 				/* Single column filter */
-				oSettings.aoPreSearchCols[ iColumn ].sSearch = sInput+"";
-				oSettings.aoPreSearchCols[ iColumn ].bRegex = bRegex;
-				oSettings.aoPreSearchCols[ iColumn ].bSmart = bSmart;
+				$.extend( oSettings.aoPreSearchCols[ iColumn ], {
+					"sSearch": sInput+"",
+					"bRegex": bRegex,
+					"bSmart": bSmart
+				} );
 				_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
 			}
 		};
