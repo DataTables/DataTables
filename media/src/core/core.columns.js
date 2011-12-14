@@ -64,22 +64,8 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 			oCol._bAutoType = false;
 		}
 		
-		_fnMap( oCol, oOptions, "bVisible" );
-		_fnMap( oCol, oOptions, "bSearchable" );
-		_fnMap( oCol, oOptions, "bSortable" );
-		_fnMap( oCol, oOptions, "sTitle" );
-		_fnMap( oCol, oOptions, "sName" );
-		_fnMap( oCol, oOptions, "sWidth" );
+		$.extend( oCol, oOptions );
 		_fnMap( oCol, oOptions, "sWidth", "sWidthOrig" );
-		_fnMap( oCol, oOptions, "sClass" );
-		_fnMap( oCol, oOptions, "fnRender" );
-		_fnMap( oCol, oOptions, "fnCreatedCell" );
-		_fnMap( oCol, oOptions, "bUseRendered" );
-		_fnMap( oCol, oOptions, "mDataProp" );
-		_fnMap( oCol, oOptions, "asSorting" );
-		_fnMap( oCol, oOptions, "sSortDataType" );
-		_fnMap( oCol, oOptions, "sDefaultContent" );
-		_fnMap( oCol, oOptions, "sContentPadding" );
 
 		/* iDataSort to be applied (backwards compatibility), but aDataSort will take
 		 * priority if defined
