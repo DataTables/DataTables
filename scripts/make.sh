@@ -9,7 +9,7 @@ CMD=$1
 
 MAIN_FILE="../js/jquery.dataTables.js"
 MIN_FILE="../js/jquery.dataTables.min.js"
-VERSION=$(grep " * Version:     " DataTables.js | awk -F" " '{ print $3 }')
+VERSION=$(grep " * @version     " DataTables.js | awk -F" " '{ print $3 }')
 
 echo ""
 echo "  DataTables build ($VERSION)"
