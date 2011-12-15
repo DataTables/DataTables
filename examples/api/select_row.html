@@ -13,12 +13,9 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				/* Add a click handler to the rows - this could be used as a callback */
+				/* Add/remove class to a row when clicked on */
 				$('#example tr').click( function() {
-					if ( $(this).hasClass('row_selected') )
-						$(this).removeClass('row_selected');
-					else
-						$(this).addClass('row_selected');
+					$(this).toggleClass('row_selected');
 				} );
 				
 				/* Init the table */
@@ -477,12 +474,9 @@
 			
 			<h1>Initialisation code</h1>
 			<pre class="brush: js;">$(document).ready(function() {
-	/* Add a click handler to the rows - this could be used as a callback */
+	/* Add/remove class to a row when clicked on */
 	$('#example tr').click( function() {
-		if ( $(this).hasClass('row_selected') )
-			$(this).removeClass('row_selected');
-		else
-			$(this).addClass('row_selected');
+		$(this).toggleClass('row_selected');
 	} );
 	
 	/* Init the table */
