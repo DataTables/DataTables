@@ -6004,11 +6004,8 @@
 					else
 					{
 						_fnLog( DataTable.settings[i], 0, "Cannot reinitialise DataTable.\n\n"+
-							"To retrieve the DataTables object for this table, please pass either no arguments "+
-							"to the dataTable() function, or set bRetrieve to true. Alternatively, to destroy "+
-							"the old table and create a new one, set bDestroy to true (note that a lot of "+
-							"changes to the configuration can be made through the API which is usually much "+
-							"faster)." );
+							"To retrieve the DataTables object for this table, pass no arguments or see "+
+							"the docs for bRetrieve and bDestroy" );
 						return;
 					}
 				}
