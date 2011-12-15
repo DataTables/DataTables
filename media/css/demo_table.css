@@ -319,6 +319,14 @@ td.details {
 	line-height: 22px;
 }
 
+.paging_full_numbers a:active {
+	outline: none
+}
+
+.paging_full_numbers a:hover {
+	text-decoration: none;
+}
+
 .paging_full_numbers a.paginate_button,
  	.paging_full_numbers a.paginate_active {
 	border: 1px solid #aaa;
