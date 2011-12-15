@@ -13,12 +13,9 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				/* Add a click handler to the rows - this could be used as a callback */
+				/* Add/remove class to a row when clicked on */
 				$('#example tr').click( function() {
-					if ( $(this).hasClass('row_selected') )
-						$(this).removeClass('row_selected');
-					else
-						$(this).addClass('row_selected');
+					$(this).toggleClass('row_selected');
 				} );
 				
 				/* Init the table */
@@ -31,17 +28,7 @@
 			 */
 			function fnGetSelected( oTableLocal )
 			{
-				var aReturn = new Array();
-				var aTrs = oTableLocal.fnGetNodes();
-				
-				for ( var i=0 ; i<aTrs.length ; i++ )
-				{
-					if ( $(aTrs[i]).hasClass('row_selected') )
-					{
-						aReturn.push( aTrs[i] );
-					}
-				}
-				return aReturn;
+				return oTableLocal.$('tr.row_selected');
 			}
 		</script>
 	</head>
@@ -52,7 +39,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>It can be quite useful at times to provide the user with the option to select rows in a DataTable. This can be done using the API functions that DataTables provides. The example below uses the <b>fnRowCallback()</b> function to add a 'click' listener to each row, which will highlight the required row when selected. The indexes of the selected rows are then provided through the custom function <b>fnGetSelected()</b> for later processing.</p>
+			<p>It can be quite useful at times to provide the user with the option to select rows in a DataTable. This can be done by simply using a click event to add/remove a class on the table rows. The the selected rows are then provided through the custom function <b>fnGetSelected()</b> for later processing.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -487,12 +474,9 @@
 			
 			<h1>Initialisation code</h1>
 			<pre class="brush: js;">$(document).ready(function() {
-	/* Add a click handler to the rows - this could be used as a callback */
+	/* Add/remove class to a row when clicked on */
 	$('#example tr').click( function() {
-		if ( $(this).hasClass('row_selected') )
-			$(this).removeClass('row_selected');
-		else
-			$(this).addClass('row_selected');
+		$(this).toggleClass('row_selected');
 	} );
 	
 	/* Init the table */
@@ -505,17 +489,7 @@
  */
 function fnGetSelected( oTableLocal )
 {
-	var aReturn = new Array();
-	var aTrs = oTableLocal.fnGetNodes();
-	
-	for ( var i=0 ; i&lt;aTrs.length ; i++ )
-	{
-		if ( $(aTrs[i]).hasClass('row_selected') )
-		{
-			aReturn.push( aTrs[i] );
-		}
-	}
-	return aReturn;
+	return oTableLocal.$('tr.row_selected');
 }</pre>
 			<style type="text/css">
 				@import "../examples_support/syntax/css/shCore.css";
@@ -535,6 +509,7 @@ function fnGetSelected( oTableLocal )
 					<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 					<li><a href="../basic_init/complex_header.html">Complex headers - grouping with colspan</a></li>
 					<li><a href="../basic_init/dom.html">DOM positioning</a></li>
+					<li><a href="../basic_init/flexible_width.html">Flexible table width</a></li>
 					<li><a href="../basic_init/state_save.html">State saving</a></li>
 					<li><a href="../basic_init/alt_pagination.html">Alternative pagination styles</a></li>
 					<li>Scrolling: <br>
@@ -553,7 +528,7 @@ function fnGetSelected( oTableLocal )
 					<li>Events: <br>
 						<a href="../advanced_init/events_live.html">Live events</a> / 
 						<a href="../advanced_init/events_pre_init.html">Pre-init</a> / 
-						<a href="../advanced_init/events_post_init.html">Post-init with fnGetNodes</a>
+						<a href="../advanced_init/events_post_init.html">Post-init</a>
 					</li>
 					<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 					<li><a href="../advanced_init/html_sort.html">Sorting without HTML tags</a></li>
@@ -567,6 +542,7 @@ function fnGetSelected( oTableLocal )
 					<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 					<li><a href="../advanced_init/sorting_control.html">Control sorting direction of columns</a></li>
 					<li><a href="../advanced_init/language_file.html">Change language information from a file (internationalisation)</a></li>
+					<li><a href="../advanced_init/defaults.html">Setting defaults</a></li>
 				</ul>
 				
 				<h2>API</h2>

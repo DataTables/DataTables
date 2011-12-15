@@ -333,7 +333,7 @@ var dtLinks = [
 
 /* Show and syntax highlight XHR returns from the server */
 $(document).ready( function () {
-	if ( $.fn.dataTableSettings.length > 1 ) {
+	if ( $.fn.dataTableSettings.length >= 1 ) {
 		$('#example').dataTable().bind('xhr', function ( e, oSettings ) {
 			var n = document.getElementById('latest_xhr');
 			n.innerHTML = JSON.stringify( 

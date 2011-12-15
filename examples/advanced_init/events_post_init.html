@@ -42,7 +42,7 @@
 				var oTable = $('#example').dataTable();
 				
 				/* Apply the tooltips */
-				$( oTable.fnGetNodes() ).tooltip( {
+				oTable.$('tr').tooltip( {
 					"delay": 0,
 					"track": true,
 					"fade": 250
@@ -57,7 +57,8 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>Events which are assigned to the table elements are retained by DataTables such that they will still work as you would expect, even after changing the sort order etc. (no need to reapply the event handlers). You can do this at any time, although if you apply the handlers after the table has been initialised there is an extra set. Rather then queriing the DOM to get all rows (since they aren't there) you need to use the <b>fnGetNodes()</b> API function. This is shown in this example.</p>
+			<p>Events which are assigned to the table elements are retained by DataTables such that they will still work as you would expect, even after changing the sort order etc. (no need to reapply the event handlers). You can do this at any time, although if you apply the handlers after the table has been initialised there is an extra set. Rather then querying the DOM to get all rows (since they aren't there) you can use the '$' API method that DataTables provides which does a jQuery selector on the whole table and returns a jQuery object.</p>
+			<p>This example shows the tooltip plug-in being applied to the table after initialisation.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -521,7 +522,7 @@
 	var oTable = $('#example').dataTable();
 	
 	/* Apply the tooltips */
-	$( oTable.fnGetNodes() ).tooltip( {
+	oTable.$('tr').tooltip( {
 		"delay": 0,
 		"track": true,
 		"fade": 250
@@ -545,6 +546,7 @@
 					<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 					<li><a href="../basic_init/complex_header.html">Complex headers - grouping with colspan</a></li>
 					<li><a href="../basic_init/dom.html">DOM positioning</a></li>
+					<li><a href="../basic_init/flexible_width.html">Flexible table width</a></li>
 					<li><a href="../basic_init/state_save.html">State saving</a></li>
 					<li><a href="../basic_init/alt_pagination.html">Alternative pagination styles</a></li>
 					<li>Scrolling: <br>
@@ -563,7 +565,7 @@
 					<li>Events: <br>
 						<a href="../advanced_init/events_live.html">Live events</a> / 
 						<a href="../advanced_init/events_pre_init.html">Pre-init</a> / 
-						<a href="../advanced_init/events_post_init.html">Post-init with fnGetNodes</a>
+						<a href="../advanced_init/events_post_init.html">Post-init</a>
 					</li>
 					<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 					<li><a href="../advanced_init/html_sort.html">Sorting without HTML tags</a></li>
@@ -577,6 +579,7 @@
 					<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 					<li><a href="../advanced_init/sorting_control.html">Control sorting direction of columns</a></li>
 					<li><a href="../advanced_init/language_file.html">Change language information from a file (internationalisation)</a></li>
+					<li><a href="../advanced_init/defaults.html">Setting defaults</a></li>
 				</ul>
 				
 				<h2>API</h2>

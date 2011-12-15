@@ -19,9 +19,9 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
-		"Two div elements are in the wrapper",
+		"Two A elements are in the wrapper",
 		null,
-		function () { return $('#example_paginate div').length == 2; }
+		function () { return $('#example_paginate a').length == 2; }
 	);
 	
 	oTest.fnTest( 
@@ -75,10 +75,10 @@ $(document).ready( function () {
 	oTest.fnTest( 
 		"Jump to last page",
 		function () {
-			nFirst = $('div.dataTables_paginate span.first');
-			nPrevious = $('div.dataTables_paginate span.previous');
-			nNext = $('div.dataTables_paginate span.next');
-			nLast = $('div.dataTables_paginate span.last');
+			nFirst = $('div.dataTables_paginate a.first');
+			nPrevious = $('div.dataTables_paginate a.previous');
+			nNext = $('div.dataTables_paginate a.next');
+			nLast = $('div.dataTables_paginate a.last');
 			nLast.click();
 		},
 		function () {

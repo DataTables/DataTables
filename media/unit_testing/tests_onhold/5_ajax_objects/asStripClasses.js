@@ -1,5 +1,5 @@
 // DATA_TEMPLATE: empty_table
-oTest.fnStart( "asStripClasses" );
+oTest.fnStart( "asStripeClasses" );
 
 $(document).ready( function () {
 	/* Check the default */
@@ -50,7 +50,7 @@ $(document).ready( function () {
 					{ "mDataProp": "version", "aTargets": [3] },
 					{ "mDataProp": "grade", "aTargets": [4] }
 				],
-				"asStripClasses": []
+				"asStripeClasses": []
 			} );
 		},
 		function () {
@@ -80,7 +80,7 @@ $(document).ready( function () {
 					{ "mDataProp": "version", "aTargets": [3] },
 					{ "mDataProp": "grade", "aTargets": [4] }
 				],
-				"asStripClasses": [ 'test1', 'test2' ]
+				"asStripeClasses": [ 'test1', 'test2' ]
 			} );
 		},
 		function () {
@@ -106,7 +106,7 @@ $(document).ready( function () {
 					{ "mDataProp": "version", "aTargets": [3] },
 					{ "mDataProp": "grade", "aTargets": [4] }
 				],
-				"asStripClasses": [ 'test1', 'test2', 'test3', 'test4' ]
+				"asStripeClasses": [ 'test1', 'test2', 'test3', 'test4' ]
 			} );
 		},
 		function () {

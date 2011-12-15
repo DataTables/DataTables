@@ -38,6 +38,7 @@
 				//}
 				
 				oTable.fnSort( [[ 1, 'asc' ]] );
+				oTable.fnSort( [[ 1, 'asc' ]] );
 				oTable.fnSort( [[ 2, 'asc' ]] );
 				oTable.fnSort( [[ 1, 'asc' ]] );
 				oTable.fnSort( [[ 2, 'asc' ]] );
