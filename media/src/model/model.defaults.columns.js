@@ -4,13 +4,13 @@
  * Column options that can be given to DataTables at initialisation time.
  *  @namespace
  */
-DataTable.models.oInitColumns = {
+DataTable.defaults.columns = {
 	/**
 	 * Allows a column's sorting to take multiple columns into account when 
 	 * doing a sort. For example first name / last name columns make sense to 
 	 * do a multi-column sort over the two columns.
 	 *  @type array
-	 *  @default [] <i>Takes the value of the column index automatically</i>
+	 *  @default null <i>Takes the value of the column index automatically</i>
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -38,7 +38,7 @@ DataTable.models.oInitColumns = {
 	 *      } );
 	 *    } );
 	 */
-	"aDataSort": [],
+	"aDataSort": null,
 
 
 	/**
@@ -329,7 +329,7 @@ DataTable.models.oInitColumns = {
 	 * treated as empty. For more information see
 	 * http://datatables.net/blog/Extended_data_source_options_with_DataTables
 	 *  @type string|int|function|null
-	 *  @default -1 <i>Use automatically calculated column index</i>
+	 *  @default null <i>Use automatically calculated column index</i>
 	 * 
 	 *  @example
 	 *    $(document).ready(function() {
@@ -345,7 +345,7 @@ DataTable.models.oInitColumns = {
 	 *      } );
 	 *    } );
 	 */
-	"mDataProp": -1,
+	"mDataProp": null,
 
 
 	/**

@@ -8,14 +8,15 @@
  */
 function _fnAddColumn( oSettings, nTh )
 {
+	var oDefaults = DataTable.defaults.columns;
 	var iCol = oSettings.aoColumns.length;
-	var oCol = $.extend( {}, DataTable.models.oColumn, {
+	var oCol = $.extend( {}, DataTable.models.oColumn, oDefaults, {
 		"sSortingClass": oSettings.oClasses.sSortable,
 		"sSortingClassJUI": oSettings.oClasses.sSortJUI,
-		"sTitle": nTh ? nTh.innerHTML : '',
-		"aDataSort": [ iCol ],
-		"mDataProp": iCol,
-		"nTh": nTh ? nTh : document.createElement('th')
+		"nTh": nTh ? nTh : document.createElement('th'),
+		"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
+		"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
+		"mDataProp": oDefaults.mDataProp ? oDefaults.oDefaults : iCol
 	} );
 	oSettings.aoColumns.push( oCol );
 	

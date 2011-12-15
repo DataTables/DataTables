@@ -37,7 +37,7 @@
 	 *
 	 * Note that the <i>DataTable</i> object is not a global variable but is
 	 * aliased to <i>jQuery.fn.DataTable</i> and <i>jQuery.fn.dataTable</i> through which 
-	 * it may be  accessed.
+	 * it may be  accessed. {@link DataTable.models.oInitColumns}
 	 *
 	 *  @class
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
@@ -121,6 +121,7 @@
 	require('model.row.js');
 	require('model.column.js');
 	require('model.defaults.js');
+	require('model.defaults.columns.js');
 	require('model.settings.js');
 
 	/**
