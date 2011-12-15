@@ -21,9 +21,8 @@ DataTable.models.oColumn = {
 	 * columns to be sorted on (typically it will be a single integer pointing
 	 * at itself, but that doesn't need to be the case).
 	 *  @type array
-	 *  @default []
 	 */
-	"aDataSort": [],
+	"aDataSort": null,
 
 	/**
 	 * Define the sorting directions that are applied to the column, in sequence
@@ -32,24 +31,21 @@ DataTable.models.oColumn = {
 	 * Sort it again (click again) and it will move on to the next index.
 	 * Repeat until loop.
 	 *  @type array
-	 *  @default ['asc', 'desc']
 	 */
-	"asSorting": ['asc', 'desc'],
+	"asSorting": null,
 	
 	/**
 	 * Flag to indicate if the column is searchable, and thus should be included
 	 * in the filtering or not.
 	 *  @type boolean
-	 *  @default true
 	 */
-	"bSearchable": true,
+	"bSearchable": null,
 	
 	/**
 	 * Flag to indicate if the column is sortable or not.
 	 *  @type boolean
-	 *  @default true
 	 */
-	"bSortable": true,
+	"bSortable": null,
 	
 	/**
 	 * When using fnRender, you have two options for what to do with the data,
@@ -61,17 +57,15 @@ DataTable.models.oColumn = {
 	 * use of the 'type' that it gives, allowing (potentially) different data to
 	 * be used for sorting, filtering, display and type detection.
 	 *  @type boolean
-	 *  @default true
 	 *  @deprecated
 	 */
-	"bUseRendered": true,
+	"bUseRendered": null,
 	
 	/**
 	 * Flag to indicate if the column is currently visible in the table or not
 	 *  @type boolean
-	 *  @default true
 	 */
-	"bVisible": true,
+	"bVisible": null,
 	
 	/**
 	 * Flag to indicate to the type detection method if the automatic type
@@ -182,9 +176,8 @@ DataTable.models.oColumn = {
 	 * a "work around" we provide this option. It will append its value to the
 	 * text that is found to be the longest string for the column - i.e. padding.
 	 *  @type string
-	 *  @default <i>Empty string<i>
 	 */
-	"sContentPadding": "",
+	"sContentPadding": null,
 	
 	/**
 	 * Allows a default value to be given for a column's data, and will be used
@@ -199,9 +192,8 @@ DataTable.models.oColumn = {
 	 * Name for the column, allowing reference to the column by name as well as
 	 * by index (needs a lookup to work by name).
 	 *  @type string
-	 *  @default <i>Empty string<i>
 	 */
-	"sName": '',
+	"sName": null,
 	
 	/**
 	 * Custom sorting data type - defines which of the available plug-ins in
@@ -229,9 +221,8 @@ DataTable.models.oColumn = {
 	/**
 	 * Title of the column - what is seen in the TH element (nTh).
 	 *  @type string
-	 *  @default <i>Empty string - automatically detected<i>
 	 */
-	"sTitle": '',
+	"sTitle": null,
 	
 	/**
 	 * Column sorting and filtering type
