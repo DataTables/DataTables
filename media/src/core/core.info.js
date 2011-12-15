@@ -93,7 +93,8 @@ function _fnUpdateInfo ( oSettings )
 	
 	if ( oSettings.oLanguage.fnInfoCallback !== null )
 	{
-		sOut = oSettings.oLanguage.fnInfoCallback( oSettings, iStart, iEnd, iMax, iTotal, sOut );
+		sOut = oSettings.oLanguage.fnInfoCallback.call( oSettings.oInstance, 
+			oSettings, iStart, iEnd, iMax, iTotal, sOut );
 	}
 	
 	var n = oSettings.aanFeatures.i;
