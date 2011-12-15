@@ -57,8 +57,8 @@
 				 * rather it is done here
 				 */
 				$('#example tbody td img').live('click', function () {
-					var nTr = this.parentNode.parentNode;
-					if ( this.src.match('details_close') )
+					var nTr = $(this).parents('tr')[0];
+					if ( oTable.fnIsOpen(nTr) )
 					{
 						/* This row is already open - close it */
 						this.src = "../examples_support/details_open.png";
@@ -551,8 +551,8 @@ $(document).ready(function() {
 	 * rather it is done here
 	 */
 	$('#example tbody td img').live('click', function () {
-		var nTr = this.parentNode.parentNode;
-		if ( this.src.match('details_close') )
+		var nTr = $(this).parents('tr')[0];
+		if ( oTable.fnIsOpen(nTr) )
 		{
 			/* This row is already open - close it */
 			this.src = "../examples_support/details_open.png";

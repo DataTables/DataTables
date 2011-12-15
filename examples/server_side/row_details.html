@@ -44,8 +44,8 @@
 				} );
 				
 				$('#example tbody td img').live( 'click', function () {
-					var nTr = this.parentNode.parentNode;
-					if ( this.src.match('details_close') )
+					var nTr = $(this).parents('tr')[0];
+					if ( oTable.fnIsOpen(nTr) )
 					{
 						/* This row is already open - close it */
 						this.src = "../examples_support/details_open.png";
@@ -68,7 +68,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>This example shows how you might modify the client-side show/hide details rows example for use with DataTables 1.5's server-side processing option.</p>
+			<p>This example shows how you might modify the client-side show/hide details rows example for use with DataTables server-side processing option.</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -136,8 +136,8 @@ $(document).ready(function() {
 	} );
 	
 	$('#example tbody td img').live( 'click', function () {
-		var nTr = this.parentNode.parentNode;
-		if ( this.src.match('details_close') )
+		var nTr = $(this).parents('tr')[0];
+		if ( oTable.fnIsOpen(nTr) )
 		{
 			/* This row is already open - close it */
 			this.src = "../examples_support/details_open.png";
