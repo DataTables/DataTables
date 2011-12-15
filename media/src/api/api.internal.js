@@ -9,7 +9,7 @@
  * Create a wrapper function for exporting an internal functions to an external API.
  *  @param {string} sFunc API function name
  *  @returns {function} wrapped function
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnExternApiFunc (sFunc)
 {
@@ -21,10 +21,12 @@ function _fnExternApiFunc (sFunc)
 }
 
 
-/*
- * Variable: oApi
- * Purpose:  Container for publicly exposed 'private' functions
- * Scope:    jQuery.dataTable
+/**
+ * Reference to internal functions for use by plug-in developers. Note that these
+ * methods are references to internal functions and are considered to be private.
+ * If you use these methods, be aware that they are liable to change between versions
+ * (check the upgrade notes).
+ *  @namespace
  */
 this.oApi = {
 	"_fnExternApiFunc": _fnExternApiFunc,

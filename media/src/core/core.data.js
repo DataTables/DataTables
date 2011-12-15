@@ -7,7 +7,7 @@
  *  @param {object} oSettings dataTables settings object
  *  @param {array} aData data array to be added
  *  @returns {int} >=0 if successful (index of new aoData entry), -1 if failed
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAddData ( oSettings, aDataSupplied )
 {
@@ -79,7 +79,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 /**
  * Read in the data from the target table from the DOM
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGatherData( oSettings )
 {
@@ -246,7 +246,7 @@ function _fnGatherData( oSettings )
  *  @param {object} s dataTables settings object
  *  @param {node} n the TR element to find
  *  @returns {int} index if found, null if not
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnNodeToDataIndex( s, n )
 {
@@ -281,7 +281,7 @@ function _fnNodeToDataIndex( s, n )
  *  @param {int} iRow aoData row id
  *  @param {string} sSpecific data get type ('type' 'filter' 'sort')
  *  @returns {array} Data array
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetRowData( oSettings, iRow, sSpecific )
 {
@@ -301,7 +301,7 @@ function _fnGetRowData( oSettings, iRow, sSpecific )
  *  @param {int} iCol Column index
  *  @param {string} sSpecific data get type ('display', 'type' 'filter' 'sort')
  *  @returns {*} Cell data
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 {
@@ -345,7 +345,7 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
  *  @param {int} iRow aoData row id
  *  @param {int} iCol Column index
  *  @param {*} val Value to set
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSetCellData( oSettings, iRow, iCol, val )
 {
@@ -361,7 +361,7 @@ function _fnSetCellData( oSettings, iRow, iCol, val )
  * into account the ability to use nested objects as a source
  *  @param {string|int|function} mSource The data source for the object
  *  @returns {function} Data get function
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetObjectDataFn( mSource )
 {
@@ -423,7 +423,7 @@ function _fnGetObjectDataFn( mSource )
  * into account the ability to use nested objects as a source
  *  @param {string|int|function} mSource The data source for the object
  *  @returns {function} Data set function
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSetObjectDataFn( mSource )
 {
@@ -481,7 +481,7 @@ function _fnSetObjectDataFn( mSource )
  * Return an array with the full table data
  *  @param {object} oSettings dataTables settings object
  *  @returns array {array} aData Master data array
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetDataMaster ( oSettings )
 {
@@ -498,7 +498,7 @@ function _fnGetDataMaster ( oSettings )
 /**
  * Nuke the table
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnClearTable( oSettings )
 {
@@ -514,7 +514,7 @@ function _fnClearTable( oSettings )
  * the key!)
  *  @param {array} a Index array to target
  *  @param {int} iTarget value to find
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnDeleteIndex( a, iTarget )
 {

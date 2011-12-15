@@ -1131,6 +1131,7 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
  *    formats "X" and "X.Y" are also acceptable.
  *  @returns {boolean} true if this version of DataTables is greater or equal to the required
  *    version, or false if this version of DataTales is not suitable
+ *  @method
  *
  *  @example
  *    $(document).ready(function() {

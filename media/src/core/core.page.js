@@ -9,7 +9,7 @@
  * Generate the node required for default pagination
  *  @param {object} oSettings dataTables settings object
  *  @returns {node} Pagination feature node
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFeatureHtmlPaginate ( oSettings )
 {
@@ -51,7 +51,7 @@ function _fnFeatureHtmlPaginate ( oSettings )
  *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
  *    or page number to jump to (integer)
  *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnPageChange ( oSettings, mAction )
 {

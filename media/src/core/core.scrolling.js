@@ -4,7 +4,7 @@
  * Add any control elements for the table - specifically scrolling
  *  @param {object} oSettings dataTables settings object
  *  @returns {node} Node to add to the DOM
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFeatureHtmlTable ( oSettings )
 {
@@ -171,7 +171,7 @@ function _fnFeatureHtmlTable ( oSettings )
  *   4. Clean up
  *  @param {object} o dataTables settings object
  *  @returns {node} Node to add to the DOM
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnScrollDraw ( o )
 {
@@ -458,7 +458,7 @@ function _fnScrollDraw ( o )
  *  @param {function} fn Method to apply to the objects
  *  @param array {nodes} an1 List of elements to look through for display children
  *  @param array {nodes} an2 Another list (identical structure to the first) - optional
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnApplyToChildren( fn, an1, an2 )
 {

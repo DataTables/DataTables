@@ -4,7 +4,7 @@
  * Return the settings object for a particular table
  *  @param {node} nTable table we are using as a dataTable
  *  @returns {object} Settings object - or null if not found
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSettingsFromNode ( nTable )
 {
@@ -24,7 +24,7 @@ function _fnSettingsFromNode ( nTable )
  * Return an array with the TR nodes for the table
  *  @param {object} oSettings dataTables settings object
  *  @returns {array} TR array
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetTrNodes ( oSettings )
 {
@@ -46,7 +46,7 @@ function _fnGetTrNodes ( oSettings )
  *  @param {int} [iIndividualRow] aoData index to get the nodes for - optional 
  *    if not given then the return array will contain all nodes for the table
  *  @returns {array} TD array
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetTdNodes ( oSettings, iIndividualRow )
 {
@@ -103,7 +103,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
  * Log an error message
  *  @param {int} iLevel log error messages, or display them to the user
  *  @param {string} sMesg error message
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnLog( oSettings, iLevel, sMesg )
 {
@@ -136,7 +136,7 @@ function _fnLog( oSettings, iLevel, sMesg )
  *  @param {object} oSrc source object
  *  @param {string} sName property
  *  @param {string} [sMappedName] name to map too - optional, sName used if not given
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnMap( oRet, oSrc, sName, sMappedName )
 {
@@ -159,7 +159,7 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
  *  @param {object} oOut Object to extend
  *  @param {object} oExtender Object from which the properties will be applied to oOut
  *  @returns {object} oOut Reference, just for convenience - oOut === the return.
- *  @private
+ *  @memberof DataTable#oApi
  *  @todo This doesn't take account of arrays inside the deep copied objects.
  */
 function _fnExtend( oOut, oExtender )
@@ -190,7 +190,7 @@ function _fnExtend( oOut, oExtender )
  *  @param {element} n Element to bind the action to
  *  @param {object} oData Data object to pass to the triggered function
  *  @param {function) fn Callback function for when the event is triggered
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnBindAction( n, oData, fn )
 {

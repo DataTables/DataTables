@@ -4,7 +4,7 @@
  * Change the order of the table
  *  @param {object} oSettings dataTables settings object
  *  @param {bool} bApplyClasses optional - should we apply classes or not
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSort ( oSettings, bApplyClasses )
 {
@@ -186,7 +186,7 @@ function _fnSort ( oSettings, bApplyClasses )
  *  @param {node} nNode node to attach the handler to
  *  @param {int} iDataIndex column sorting index
  *  @param {function} [fnCallback] callback function
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 {
@@ -303,7 +303,7 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
  * Set the sorting classes on the header, Note: it is safe to call this function 
  * when bSort and bSortClasses are false
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSortingClasses( oSettings )
 {

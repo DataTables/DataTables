@@ -5,7 +5,7 @@
  *  @param {string} sWidth width to be converted
  *  @param {node} nParent parent to get the with for (required for relative widths) - optional
  *  @returns {int} iWidth width in pixels
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnConvertToWidth ( sWidth, nParent )
 {
@@ -34,7 +34,7 @@ function _fnConvertToWidth ( sWidth, nParent )
 /**
  * Calculate the width of columns for the table
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnCalculateColumnWidths ( oSettings )
 {
@@ -260,7 +260,7 @@ function _fnCalculateColumnWidths ( oSettings )
  * Adjust a table's width to take account of scrolling
  *  @param {object} oSettings dataTables settings object
  *  @param {node} n table node
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnScrollingWidthAdjust ( oSettings, n )
 {
@@ -285,7 +285,7 @@ function _fnScrollingWidthAdjust ( oSettings, n )
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
  *  @returns {string} max strlens for each column
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetWidestNode( oSettings, iCol )
 {
@@ -310,7 +310,7 @@ function _fnGetWidestNode( oSettings, iCol )
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
  *  @returns {string} max strlens for each column
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetMaxLenString( oSettings, iCol )
 {
@@ -337,7 +337,7 @@ function _fnGetMaxLenString( oSettings, iCol )
  *  @param {array} aArray1 first array
  *  @param {array} aArray2 second array
  *  @returns {int} 0 if match, 1 if length is different, 2 if no match
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnStringToCss( s )
 {
@@ -368,7 +368,7 @@ function _fnStringToCss( s )
 /**
  * Get the width of a scroll bar in this browser being used
  *  @returns {int} width in pixels
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnScrollBarWidth ()
 {  

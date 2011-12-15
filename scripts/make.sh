@@ -43,7 +43,7 @@ mv DataTables.js.build $MAIN_FILE
 
 
 if [ "$CMD" != "debug" ]; then
-	if [ "$CMD" = "docs" -o "$CMD" = "" ]; then
+	if [ "$CMD" = "jshint" -o "$CMD" = "" ]; then
 		echo "  JSHint"
 		jshint $MAIN_FILE --config ../../scripts/jshint.config
 		if [ $? -ne 0 ]; then

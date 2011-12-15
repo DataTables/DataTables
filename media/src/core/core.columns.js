@@ -4,7 +4,7 @@
  * Add a column to the list used for the table with default values
  *  @param {object} oSettings dataTables settings object
  *  @param {node} nTh The th element for this column
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAddColumn( oSettings, nTh )
 {
@@ -56,7 +56,7 @@ function _fnAddColumn( oSettings, nTh )
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column index to consider
  *  @param {object} oOptions object with sType, bVisible and bSearchable
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnColumnOptions( oSettings, iCol, oOptions )
 {
@@ -124,7 +124,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
  * Adjust the table column widths for new data. Note: you would probably want to 
  * do a redraw after calling this function!
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAdjustColumnSizing ( oSettings )
 {
@@ -148,7 +148,7 @@ function _fnAdjustColumnSizing ( oSettings )
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iMatch Visible column index to lookup
  *  @returns {int} i the data index
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnVisibleToColumnIndex( oSettings, iMatch )
 {
@@ -177,7 +177,7 @@ function _fnVisibleToColumnIndex( oSettings, iMatch )
  *  @param {int} iMatch Column index to lookup
  *  @param {object} oSettings dataTables settings object
  *  @returns {int} i the data index
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnColumnIndexToVisible( oSettings, iMatch )
 {
@@ -203,7 +203,7 @@ function _fnColumnIndexToVisible( oSettings, iMatch )
  * Get the number of visible columns
  *  @returns {int} i the number of visible columns
  *  @param {object} oS dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnVisbleColumns( oS )
 {
@@ -223,7 +223,7 @@ function _fnVisbleColumns( oS )
  * Get the sort type based on an input string
  *  @param {string} sData data we wish to know the type of
  *  @returns {string} type (defaults to 'string' if no type can be detected)
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnDetectType( sData )
 {
@@ -247,7 +247,7 @@ function _fnDetectType( sData )
  * Figure out how to reorder a display list
  *  @param {object} oSettings dataTables settings object
  *  @returns array {int} aiReturn index list for reordering
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnReOrderIndex ( oSettings, sColumns )
 {
@@ -274,7 +274,7 @@ function _fnReOrderIndex ( oSettings, sColumns )
  * Get the column ordering that DataTables expects
  *  @param {object} oSettings dataTables settings object
  *  @returns {string} comma separated list of names
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnColumnOrdering ( oSettings )
 {
@@ -300,7 +300,7 @@ function _fnColumnOrdering ( oSettings )
  *  @param {array} aoCols The aoColumns array that defines columns individually
  *  @param {function} fn Callback function - takes two parameters, the calculated
  *    column index and the definition for that column.
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 {

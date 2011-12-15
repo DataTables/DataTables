@@ -4,7 +4,7 @@
  * Generate the node required for the info display
  *  @param {object} oSettings dataTables settings object
  *  @returns {node} Information element
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFeatureHtmlInfo ( oSettings )
 {
@@ -32,7 +32,7 @@ function _fnFeatureHtmlInfo ( oSettings )
 /**
  * Update the information elements in the display
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnUpdateInfo ( oSettings )
 {

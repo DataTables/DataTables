@@ -4,7 +4,7 @@
  * Generate the node required for user display length changing
  *  @param {object} oSettings dataTables settings object
  *  @returns {node} Display length feature node
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFeatureHtmlLength ( oSettings )
 {
@@ -96,7 +96,7 @@ function _fnFeatureHtmlLength ( oSettings )
 /**
  * Rcalculate the end point based on the start point
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnCalculateEnd( oSettings )
 {

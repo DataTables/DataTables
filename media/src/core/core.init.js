@@ -3,7 +3,7 @@
 /**
  * Draw the table for the first time, adding all required features
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnInitialise ( oSettings )
 {
@@ -114,7 +114,7 @@ function _fnInitialise ( oSettings )
  *  @param {object} oSettings dataTables settings object
  *  @param {object} [json] JSON from the server that completed the table, if using Ajax source
  *    with client-side processing (optional)
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnInitComplete ( oSettings, json )
 {
@@ -131,7 +131,7 @@ function _fnInitComplete ( oSettings, json )
  * need to duplicate the values over, in order to provide backwards compatibility
  * with older language files.
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnLanguageCompat( oLanguage )
 {

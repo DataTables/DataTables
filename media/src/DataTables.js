@@ -112,7 +112,8 @@
 
 	/**
 	 * Object models container, for the various models that DataTables has available
-	 * to it.
+	 * to it. These models define the objects that are used to hold the active state 
+	 * and configuration of the table.
 	 *  @namespace
 	 */
 	DataTable.models = {};

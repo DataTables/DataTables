@@ -4,7 +4,7 @@
  * Generate the node required for the processing node
  *  @param {object} oSettings dataTables settings object
  *  @returns {node} Processing element
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFeatureHtmlProcessing ( oSettings )
 {
@@ -26,7 +26,7 @@ function _fnFeatureHtmlProcessing ( oSettings )
  * Display or hide the processing indicator
  *  @param {object} oSettings dataTables settings object
  *  @param {bool} bShow Show the processing indicator (true) or not (false)
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnProcessingDisplay ( oSettings, bShow )
 {

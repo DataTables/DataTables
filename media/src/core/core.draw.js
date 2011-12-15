@@ -4,7 +4,7 @@
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iRow Row to consider
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnCreateTr ( oSettings, iRow )
 {
@@ -79,7 +79,7 @@ function _fnCreateTr ( oSettings, iRow )
 /**
  * Create the HTML header for the table
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnBuildHead( oSettings )
 {
@@ -208,7 +208,7 @@ function _fnBuildHead( oSettings )
  *  @param {object} oSettings dataTables settings object
  *  @param array {objects} aoSource Layout array from _fnDetectHeader
  *  @param {boolean} [bIncludeHidden=false] If true then include the hidden columns in the calc, 
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 {
@@ -298,7 +298,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 /**
  * Insert the required TR nodes into the table for display
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnDraw( oSettings )
 {
@@ -521,7 +521,7 @@ function _fnDraw( oSettings )
 /**
  * Redraw the table - taking account of the various features which are enabled
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnReDraw( oSettings )
 {
@@ -546,7 +546,7 @@ function _fnReDraw( oSettings )
 /**
  * Add the options to the page HTML for the table
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAddOptionsHtml ( oSettings )
 {
@@ -708,7 +708,7 @@ function _fnAddOptionsHtml ( oSettings )
  * any column / row could be removed and the new grid constructed
  *  @param array {object} aLayout Array to store the calculated layout in
  *  @param {node} nThead The header/footer element for the table
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnDetectHeader ( aLayout, nThead )
 {
@@ -778,7 +778,7 @@ function _fnDetectHeader ( aLayout, nThead )
  *  @param {node} nHeader automatically detect the layout from this node - optional
  *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
  *  @returns array {node} aReturn list of unique ths
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 {

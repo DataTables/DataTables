@@ -4,7 +4,7 @@
  * Update the table using an Ajax call
  *  @param {object} oSettings dataTables settings object
  *  @returns {boolean} Block the table drawing or not
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAjaxUpdate( oSettings )
 {
@@ -33,7 +33,7 @@ function _fnAjaxUpdate( oSettings )
  * Build up the parameters in an object needed for a server-side processing request
  *  @param {object} oSettings dataTables settings object
  *  @returns {bool} block the table drawing or not
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAjaxParameters( oSettings )
 {
@@ -99,7 +99,7 @@ function _fnAjaxParameters( oSettings )
  * Add Ajax parameters from plugins
  *  @param {object} oSettings dataTables settings object
  *  @param array {objects} aoData name/value pairs to send to the server
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnServerParams( oSettings, aoData )
 {
@@ -119,7 +119,7 @@ function _fnServerParams( oSettings, aoData )
  *  @param {int} json.iTotalDisplayRecords Number of records in the data set, accounting for filtering
  *  @param {array} json.aaData The data to display on this page
  *  @param {string} [json.sColumns] Column ordering (sName, comma separated)
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnAjaxUpdateDraw ( oSettings, json )
 {

@@ -3,7 +3,7 @@
 /**
  * Save the state of a table in a cookie such that the page can be reloaded
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnSaveState ( oSettings )
 {
@@ -68,7 +68,7 @@ function _fnSaveState ( oSettings )
  * Attempt to load a saved table state from a cookie
  *  @param {object} oSettings dataTables settings object
  *  @param {object} oInit DataTables init object so we can override settings
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnLoadState ( oSettings, oInit )
 {
@@ -164,7 +164,7 @@ function _fnLoadState ( oSettings, oInit )
  *  @param {int} iSecs duration of the cookie
  *  @param {string} sBaseName sName is made up of the base + file name - this is the base
  *  @param {function} fnCallback User definable function to modify the cookie
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 {
@@ -236,7 +236,7 @@ function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
  * Read an old cookie to get a cookie with an old table state
  *  @param {string} sName name of the cookie to read
  *  @returns {string} contents of the cookie - or null if no cookie with that name found
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnReadCookie ( sName )
 {

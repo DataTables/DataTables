@@ -4,7 +4,7 @@
  * Generate the node required for filtering text
  *  @returns {node} Filter control element
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFeatureHtmlFilter ( oSettings )
 {
@@ -66,7 +66,7 @@ function _fnFeatureHtmlFilter ( oSettings )
  *  @param {object} oSettings dataTables settings object
  *  @param {object} oSearch search information
  *  @param {int} [iForce] force a research of the master array (1) or not (undefined or 0)
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFilterComplete ( oSettings, oInput, iForce )
 {
@@ -104,7 +104,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 /**
  * Apply custom filtering functions
  *  @param {object} oSettings dataTables settings object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFilterCustom( oSettings )
 {
@@ -135,7 +135,7 @@ function _fnFilterCustom( oSettings )
  *  @param {bool} bRegex treat search string as a regular expression or not
  *  @param {bool} bSmart use smart filtering or not
  *  @param {bool} bCaseInsensitive Do case insenstive matching or not
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart, bCaseInsensitive )
 {
@@ -168,7 +168,7 @@ function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart, bCaseInse
  *  @param {bool} bRegex treat as a regular expression or not
  *  @param {bool} bSmart perform smart filtering or not
  *  @param {bool} bCaseInsensitive Do case insenstive matching or not
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive )
 {
@@ -252,7 +252,7 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
  * Create an array which can be quickly search through
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iMaster use the master data array - optional
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnBuildSearchArray ( oSettings, iMaster )
 {
@@ -277,7 +277,7 @@ function _fnBuildSearchArray ( oSettings, iMaster )
  * Create a searchable string from a single data row
  *  @param {object} oSettings dataTables settings object
  *  @param {array} aData Row data array to use for the data to search
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnBuildSearchRow( oSettings, aData )
 {
@@ -317,7 +317,7 @@ function _fnBuildSearchRow( oSettings, aData )
  *  @param {bool} bSmart perform smart filtering or not
  *  @param {bool} bCaseInsensitive Do case insenstive matching or not
  *  @returns {RegExp} constructed object
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 {
@@ -345,7 +345,7 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
  *  @param {string} sData data to be modified
  *  @param {string} sType data type
  *  @returns {string} search string
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnDataToSearch ( sData, sType )
 {
@@ -373,7 +373,7 @@ function _fnDataToSearch ( sData, sType )
  * scape a string stuch that it can be used in a regular expression
  *  @param {string} sVal string to escape
  *  @returns {string} escaped string
- *  @private
+ *  @memberof DataTable#oApi
  */
 function _fnEscapeRegex ( sVal )
 {
