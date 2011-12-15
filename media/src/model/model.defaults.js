@@ -1109,7 +1109,7 @@ DataTable.defaults = {
 	 * All strings that DataTables uses in the user interface that it creates
 	 * are defined in this object, allowing you to modified them individually or
 	 * completely replace them all as required.
-	 *  @member
+	 *  @namespace
 	 */
 	"oLanguage": {
 		/**
