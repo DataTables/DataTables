@@ -5346,7 +5346,9 @@
 		
 		
 		/**
-		 * The the TR nodes that are used in the table's body
+		 * Get an array of the TR nodes that are used in the table's body. Note that you will 
+		 * typically want to use the '$' API method in preference to this as it is more 
+		 * flexible.
 		 *  @param {int} [iRow] Optional row index for the TR element you want
 		 *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
 		 *    in the table's body, or iRow is defined, just the TR element requested.
