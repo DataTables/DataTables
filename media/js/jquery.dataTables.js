@@ -37,7 +37,7 @@
 	 *
 	 * Note that the <i>DataTable</i> object is not a global variable but is
 	 * aliased to <i>jQuery.fn.DataTable</i> and <i>jQuery.fn.dataTable</i> through which 
-	 * it may be  accessed. {@link DataTable.models.oInitColumns}
+	 * it may be  accessed.
 	 *
 	 *  @class
 	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
@@ -7113,7 +7113,7 @@
 	 * is held in the settings aoColumns array and contains all the information that
 	 * DataTables needs about each individual column.
 	 * 
-	 * Note that this object is related to {@link DataTable.models.oInitColumns} 
+	 * Note that this object is related to {@link DataTable.defaults.columns} 
 	 * but this one is the internal data store for DataTables's cache of columns.
 	 * It should NOT be manipulated outside of DataTables. Any configuration should
 	 * be done through the initialisation options.
@@ -7511,11 +7511,11 @@
 		 * The aoColumns option in the initialisation parameter allows you to define
 		 * details about the way individual columns behave. For a full list of
 		 * column options that can be set, please see 
-		 * {@link DataTable.models.oInitColumns}. Note that if you use aoColumns to
+		 * {@link DataTable.defaults.columns}. Note that if you use aoColumns to
 		 * define your columns, you must have an entry in the array for every single
 		 * column that you have in your table (these can be null if you don't which
 		 * to specify any options).
-		 *  @namespace
+		 *  @member
 		 */
 		"aoColumns": null,
 	
@@ -7525,7 +7525,7 @@
 		 * each object in the array. This allows great flexibility when creating 
 		 * tables, as the aoColumnDefs arrays can be of any length, targeting the 
 		 * columns you specifically want. aoColumnDefs may use any of the column 
-		 * options available: {@link DataTable.models.oInitColumns}, but it _must_
+		 * options available: {@link DataTable.defaults.columns}, but it _must_
 		 * have aTargets defined in each object in the array. Values in the aTargets
 		 * array may be:
 		 *   <ul>
@@ -7534,7 +7534,7 @@
 		 *     <li>a negative integer - column index counting from the right</li>
 		 *     <li>the string "_all" - all columns (i.e. assign a default)</li>
 		 *   </ul>
-		 *  @namespace
+		 *  @member
 		 */
 		"aoColumnDefs": null,
 	
@@ -8473,7 +8473,7 @@
 		 * All strings that DataTables uses in the user interface that it creates
 		 * are defined in this object, allowing you to modified them individually or
 		 * completely replace them all as required.
-		 *  @namespace
+		 *  @member
 		 */
 		"oLanguage": {
 			/**
