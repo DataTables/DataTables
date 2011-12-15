@@ -3416,6 +3416,7 @@
 			var iColums = oSettings.aoColumns.length;
 			var i, iIndex, iCorrector, iWidth;
 			var oHeaders = $('th', oSettings.nTHead);
+			var widthAttr = oSettings.nTable.getAttribute('width');
 			
 			/* Convert any user input sizes into pixel sizes */
 			for ( i=0 ; i<iColums ; i++ )
@@ -3550,6 +3551,10 @@
 				{
 					nCalcTmp.style.width = _fnStringToCss( nWrapper.offsetWidth );
 				}
+				else if ( widthAttr )
+				{
+					nCalcTmp.style.width = _fnStringToCss( widthAttr );
+				}
 				nCalcTmp.style.visibility = "hidden";
 				
 				/* Scrolling considerations */
@@ -3590,7 +3595,7 @@
 							iCorrector++;
 						}
 					}
-				
+					
 					nCalcTmp.style.width = _fnStringToCss( iTotal );
 					oSettings.nTable.style.width = _fnStringToCss( iTotal );
 				}
@@ -3608,11 +3613,16 @@
 						iCorrector++;
 					}
 				}
-				
+		
 				var cssWidth = $(nCalcTmp).css('width');
 				oSettings.nTable.style.width = (cssWidth.indexOf('%') !== -1) ?
 				    cssWidth : _fnStringToCss( $(nCalcTmp).outerWidth() );
 				nCalcTmp.parentNode.removeChild( nCalcTmp );
+			}
+		
+			if ( widthAttr )
+			{
+				oSettings.nTable.style.width = _fnStringToCss( widthAttr );
 			}
 		}
 		
