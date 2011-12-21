@@ -70,21 +70,39 @@ function _fnFeatureHtmlFilter ( oSettings )
  */
 function _fnFilterComplete ( oSettings, oInput, iForce )
 {
-	/* Filter on everything */
-	_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart, oInput.bCaseInsensitive );
-	
-	/* Now do the individual column filter */
-	for ( var i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
+	var oPrevSearch = oSettings.oPreviousSearch;
+	var aoPrevSearch = oSettings.aoPreSearchCols;
+	var fnSaveFilter = function ( oFilter ) {
+		/* Save the filtering values */
+		oPrevSearch.sSearch = oFilter.sSearch;
+		oPrevSearch.bRegex = oFilter.bRegex;
+		oPrevSearch.bSmart = oFilter.bSmart;
+		oPrevSearch.bCaseInsensitive = oFilter.bCaseInsensitive;
+	};
+
+	/* In server-side processing all filtering is done by the server, so no point hanging around here */
+	if ( !oSettings.oFeatures.bServerSide )
 	{
-		_fnFilterColumn( oSettings, oSettings.aoPreSearchCols[i].sSearch, i, 
-			oSettings.aoPreSearchCols[i].bRegex, oSettings.aoPreSearchCols[i].bSmart, 
-			oSettings.aoPreSearchCols[i].bCaseInsensitive );
+		/* Global filter */
+		_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart, oInput.bCaseInsensitive );
+		fnSaveFilter( oInput );
+
+		/* Now do the individual column filter */
+		for ( var i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
+		{
+			_fnFilterColumn( oSettings, aoPrevSearch[i].sSearch, i, aoPrevSearch[i].bRegex, 
+				aoPrevSearch[i].bSmart, aoPrevSearch[i].bCaseInsensitive );
+		}
+		
+		/* Custom filtering */
+		if ( DataTable.ext.afnFiltering.length !== 0 )
+		{
+			_fnFilterCustom( oSettings );
+		}
 	}
-	
-	/* Custom filtering */
-	if ( DataTable.ext.afnFiltering.length !== 0 )
+	else
 	{
-		_fnFilterCustom( oSettings );
+		fnSaveFilter( oInput );
 	}
 	
 	/* Tell the draw function we have been filtering */
@@ -174,6 +192,7 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 {
 	var i;
 	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
+	var oPrevSearch = oSettings.oPreviousSearch;
 	
 	/* Check if we are forcing or not - optional parameter */
 	if ( !iForce )
@@ -202,8 +221,8 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 		 * then the old one (i.e. delete). Search from the master array
 	 	 */
 		if ( oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
-			   oSettings.oPreviousSearch.sSearch.length > sInput.length || iForce == 1 ||
-			   sInput.indexOf(oSettings.oPreviousSearch.sSearch) !== 0 )
+			   oPrevSearch.sSearch.length > sInput.length || iForce == 1 ||
+			   sInput.indexOf(oPrevSearch.sSearch) !== 0 )
 		{
 			/* Nuke the old display array - we are going to rebuild it */
 			oSettings.aiDisplay.splice( 0, oSettings.aiDisplay.length);
@@ -241,10 +260,6 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 	  	}
 	  }
 	}
-	oSettings.oPreviousSearch.sSearch = sInput;
-	oSettings.oPreviousSearch.bRegex = bRegex;
-	oSettings.oPreviousSearch.bSmart = bSmart;
-	oSettings.oPreviousSearch.bCaseInsensitive = bCaseInsensitive;
 }
 
 
