@@ -2054,10 +2054,7 @@
 				}
 				
 				/* Custom filtering */
-				if ( DataTable.ext.afnFiltering.length !== 0 )
-				{
-					_fnFilterCustom( oSettings );
-				}
+				_fnFilterCustom( oSettings );
 			}
 			else
 			{
