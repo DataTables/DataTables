@@ -5140,7 +5140,7 @@
 			
 			$(_fnGetTrNodes( oSettings )).removeClass( oSettings.asStripeClasses.join(' ') );
 			
-			$('th', oSettings.nTHead).removeClass( [
+			$('th, td', oSettings.nTHead).removeClass( [
 				oSettings.oClasses.sSortable,
 				oSettings.oClasses.sSortableAsc,
 				oSettings.oClasses.sSortableDesc,
