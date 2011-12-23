@@ -1082,16 +1082,18 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		sDisplay = mData;
 		_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
 		
-		if ( oSettings.aoColumns[iColumn].fnRender !== null )
+		var oCol = oSettings.aoColumns[iColumn];
+		if ( oCol.fnRender !== null )
 		{
-			sDisplay = oSettings.aoColumns[iColumn].fnRender( {
+			sDisplay = oCol.fnRender( {
 				"iDataRow": iRow,
 				"iDataColumn": iColumn,
 				"aData": oSettings.aoData[iRow]._aData,
-				"oSettings": oSettings
-			} );
+				"oSettings": oSettings,
+				"mDataProp": oCol.mDataProp
+			}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
 			
-			if ( oSettings.aoColumns[iColumn].bUseRendered )
+			if ( oCol.bUseRendered )
 			{
 				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
 			}

@@ -16,8 +16,8 @@
 				$('#example').dataTable( {
 					"aoColumnDefs": [ 
 						{
-							"fnRender": function ( oObj ) {
-								return oObj.aData[0] +' '+ oObj.aData[3];
+							"fnRender": function ( oObj, sVal ) {
+								return sVal +' '+ oObj.aData[3];
 							},
 							"aTargets": [ 0 ]
 						},
@@ -469,8 +469,8 @@
 	$('#example').dataTable( {
 		"aoColumnDefs": [ 
 			{
-				"fnRender": function ( oObj ) {
-					return oObj.aData[0] +' '+ oObj.aData[3];
+				"fnRender": function ( oObj, sVal ) {
+					return sVal +' '+ oObj.aData[3];
 				},
 				"aTargets": [ 0 ]
 			},

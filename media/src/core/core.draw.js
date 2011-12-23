@@ -41,8 +41,9 @@ function _fnCreateTr ( oSettings, iRow )
 					"iDataRow": iRow,
 					"iDataColumn": i,
 					"aData": oData._aData,
-					"oSettings": oSettings
-				} );
+					"oSettings": oSettings,
+					"mDataProp": oCol.mDataProp
+				}, _fnGetCellData(oSettings, iRow, i, 'display') );
 			}
 			else
 			{

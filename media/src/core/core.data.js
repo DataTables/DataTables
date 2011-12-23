@@ -38,8 +38,9 @@ function _fnAddData ( oSettings, aDataSupplied )
 				"iDataRow": iRow,
 				"iDataColumn": i,
 				"aData": oData._aData,
-				"oSettings": oSettings
-			} ) );
+				"oSettings": oSettings,
+				"mDataProp": oCol.mDataProp
+			}, _fnGetCellData(oSettings, iRow, i, 'display') ) );
 		}
 		
 		/* See if we should auto-detect the column type */
@@ -202,8 +203,9 @@ function _fnGatherData( oSettings )
 							"iDataRow": iRow,
 							"iDataColumn": iColumn,
 							"aData": oData._aData,
-							"oSettings": oSettings
-						} );
+							"oSettings": oSettings,
+							"mDataProp": oCol.mDataProp
+						}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
 					nCell.innerHTML = sRendered;
 					if ( oCol.bUseRendered )
 					{

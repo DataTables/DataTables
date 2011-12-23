@@ -249,6 +249,8 @@ DataTable.defaults.columns = {
 	 *  @param {int}    o.iDataColumn The column in question
 	 *  @param {array   o.aData The data for the row in question
 	 *  @param {object} o.oSettings The settings object for this DataTables instance
+	 *  @param {object} o.mDataProp The data property used for this column
+	 *  @param {*}      val The current cell value
 	 *  @returns {string} The string you which to use in the display
 	 * 
 	 *  @example
@@ -257,7 +259,7 @@ DataTable.defaults.columns = {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          {
-	 *            "fnRender": function ( o ) {
+	 *            "fnRender": function ( o, val ) {
 	 *              return o.aData[0] +' '+ o.aData[3];
 	 *            },
 	 *            "aTargets": [ 0 ]
@@ -271,7 +273,7 @@ DataTable.defaults.columns = {
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
-	 *          { "fnRender": function ( o ) {
+	 *          { "fnRender": function ( o, val ) {
 	 *            return o.aData[0] +' '+ o.aData[3];
 	 *          } },
 	 *          null,

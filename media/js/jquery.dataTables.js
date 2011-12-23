@@ -463,8 +463,9 @@
 						"iDataRow": iRow,
 						"iDataColumn": i,
 						"aData": oData._aData,
-						"oSettings": oSettings
-					} ) );
+						"oSettings": oSettings,
+						"mDataProp": oCol.mDataProp
+					}, _fnGetCellData(oSettings, iRow, i, 'display') ) );
 				}
 				
 				/* See if we should auto-detect the column type */
@@ -627,8 +628,9 @@
 									"iDataRow": iRow,
 									"iDataColumn": iColumn,
 									"aData": oData._aData,
-									"oSettings": oSettings
-								} );
+									"oSettings": oSettings,
+									"mDataProp": oCol.mDataProp
+								}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
 							nCell.innerHTML = sRendered;
 							if ( oCol.bUseRendered )
 							{
@@ -1006,8 +1008,9 @@
 							"iDataRow": iRow,
 							"iDataColumn": i,
 							"aData": oData._aData,
-							"oSettings": oSettings
-						} );
+							"oSettings": oSettings,
+							"mDataProp": oCol.mDataProp
+						}, _fnGetCellData(oSettings, iRow, i, 'display') );
 					}
 					else
 					{
@@ -5798,16 +5801,18 @@
 				sDisplay = mData;
 				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
 				
-				if ( oSettings.aoColumns[iColumn].fnRender !== null )
+				var oCol = oSettings.aoColumns[iColumn];
+				if ( oCol.fnRender !== null )
 				{
-					sDisplay = oSettings.aoColumns[iColumn].fnRender( {
+					sDisplay = oCol.fnRender( {
 						"iDataRow": iRow,
 						"iDataColumn": iColumn,
 						"aData": oSettings.aoData[iRow]._aData,
-						"oSettings": oSettings
-					} );
+						"oSettings": oSettings,
+						"mDataProp": oCol.mDataProp
+					}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
 					
-					if ( oSettings.aoColumns[iColumn].bUseRendered )
+					if ( oCol.bUseRendered )
 					{
 						_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
 					}
@@ -9363,6 +9368,8 @@
 		 *  @param {int}    o.iDataColumn The column in question
 		 *  @param {array   o.aData The data for the row in question
 		 *  @param {object} o.oSettings The settings object for this DataTables instance
+		 *  @param {object} o.mDataProp The data property used for this column
+		 *  @param {*}      val The current cell value
 		 *  @returns {string} The string you which to use in the display
 		 * 
 		 *  @example
@@ -9371,7 +9378,7 @@
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          {
-		 *            "fnRender": function ( o ) {
+		 *            "fnRender": function ( o, val ) {
 		 *              return o.aData[0] +' '+ o.aData[3];
 		 *            },
 		 *            "aTargets": [ 0 ]
@@ -9385,7 +9392,7 @@
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
-		 *          { "fnRender": function ( o ) {
+		 *          { "fnRender": function ( o, val ) {
 		 *            return o.aData[0] +' '+ o.aData[3];
 		 *          } },
 		 *          null,
