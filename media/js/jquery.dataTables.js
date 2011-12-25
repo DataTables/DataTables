@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -1464,11 +1464,7 @@
 			}
 			
 			/* Call all required callback functions for the end of a draw */
-			for ( i=oSettings.aoDrawCallback.length-1 ; i>=0 ; i-- )
-			{
-				oSettings.aoDrawCallback[i].fn.call( oSettings.oInstance, oSettings );
-			}
-			$(oSettings.oInstance).trigger('draw', oSettings);
+			_fnCallbackFire( oSettings, 'aoDrawCallback', 'draw', [oSettings] );
 			
 			/* Draw is complete, sorting and filtering must be as well */
 			oSettings.bSorted = false;
@@ -1881,10 +1877,7 @@
 		 */
 		function _fnServerParams( oSettings, aoData )
 		{
-			for ( var i=0, iLen=oSettings.aoServerParams.length ; i<iLen ; i++ )
-			{
-				oSettings.aoServerParams[i].fn.call( oSettings.oInstance, aoData );
-			}
+			_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [aoData] );
 		}
 		
 		
@@ -4608,6 +4601,7 @@
 		
 		/**
 		 * Log an error message
+		 *  @param {object} oSettings dataTables settings object
 		 *  @param {int} iLevel log error messages, or display them to the user
 		 *  @param {string} sMesg error message
 		 *  @memberof DataTable#oApi
@@ -4714,6 +4708,48 @@
 					/* Take the brutal approach to cancelling text selection */
 					return false;
 					} );
+		}
+		
+		
+		/**
+		 * Register a callback function. Easily allows a callback function to be added to
+		 * an array store of callback functions that can then all be called together.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+		 *  @param {function} fn Function to be called back
+		 *  @param {string) sName Identifying name for the callback (i.e. a label)
+		 *  @memberof DataTable#oApi
+		 */
+		function _fnCallbackReg( oSettings, sStore, fn, sName )
+		{
+			if ( fn )
+			{
+				oSettings[sStore].push( {
+					"fn": fn,
+					"sName": sName
+				} );
+			}
+		}
+		
+		
+		/**
+		 * Fire callback functions and trigger events. Note that the loop over the callback
+		 * array store is done backwards!
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+		 *  @param {string} sTrigger Name of the jQuery customer event to trigger
+		 *  @param {array) aArgs Array of arguments to pass to the callback function / trigger
+		 *  @memberof DataTable#oApi
+		 */
+		function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
+		{
+			var aoStore = oSettings[sStore];
+			for ( var i=aoStore.length-1 ; i>=0 ; i-- )
+			{
+				aoStore[i].fn.apply( oSettings.oInstance, aArgs );
+			}
+		
+			$(oSettings.oInstance).trigger(sTrigger, aArgs);
 		}
 		
 
@@ -5973,7 +6009,9 @@
 			"_fnSetObjectDataFn": _fnSetObjectDataFn,
 			"_fnApplyColumnDefs": _fnApplyColumnDefs,
 			"_fnBindAction": _fnBindAction,
-			"_fnExtend": _fnExtend
+			"_fnExtend": _fnExtend,
+			"_fnCallbackReg": _fnCallbackReg,
+			"_fnCallbackFire": _fnCallbackFire
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
@@ -6120,38 +6158,10 @@
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
 			/* Callback functions which are array driven */
-			if ( oInit.fnDrawCallback )
-			{
-				oSettings.aoDrawCallback.push( {
-					"fn": oInit.fnDrawCallback,
-					"sName": "user"
-				} );
-			}
-			
-			/* Ajax additional variables are array driven */
-			if ( oInit.fnServerParams )
-			{
-				oSettings.aoServerParams.push( {
-					"fn": oInit.fnServerParams,
-					"sName": "user"
-				} );
-			}
-			
-			if ( oInit.fnStateSaveCallback )
-			{
-				oSettings.aoStateSave.push( {
-					"fn": oInit.fnStateSaveCallback,
-					"sName": "user"
-				} );
-			}
-			
-			if ( oInit.fnStateLoadCallback )
-			{
-				oSettings.aoStateLoad.push( {
-					"fn": oInit.fnStateLoadCallback,
-					"sName": "user"
-				} );
-			}
+			_fnCallbackReg( oSettings, 'aoDrawCallback', oInit.fnDrawCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoServerParams', oInit.fnServerParams, 'user' );
+			_fnCallbackReg( oSettings, 'aoStateSave', oInit.fnStateSaveCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoStateLoad', oInit.fnStateLoadCallback, 'user' );
 			
 			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 				   oSettings.oFeatures.bSortClasses )
@@ -6159,17 +6169,11 @@
 				/* Enable sort classes for server-side processing. Safe to do it here, since server-side
 				 * processing must be enabled by the developer
 				 */
-				oSettings.aoDrawCallback.push( {
-					"fn": _fnSortingClasses,
-					"sName": "server_side_sort_classes"
-				} );
+				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'server_side_sort_classes' );
 			}
 			else if ( oSettings.oFeatures.bDeferRender )
 			{
-				oSettings.aoDrawCallback.push( {
-					"fn": _fnSortingClasses,
-					"sName": "defer_sort_classes"
-				} );
+				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'defer_sort_classes' );
 			}
 			
 			if ( oInit.bJQueryUI )
@@ -6209,10 +6213,7 @@
 			{
 				oSettings.oFeatures.bStateSave = true;
 				_fnLoadState( oSettings, oInit );
-				oSettings.aoDrawCallback.push( {
-					"fn": _fnSaveState,
-					"sName": "state_save"
-				} );
+				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
 			}
 			
 			if ( oInit.iDeferLoading !== null )

@@ -101,6 +101,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 
 /**
  * Log an error message
+ *  @param {object} oSettings dataTables settings object
  *  @param {int} iLevel log error messages, or display them to the user
  *  @param {string} sMesg error message
  *  @memberof DataTable#oApi
@@ -207,5 +208,47 @@ function _fnBindAction( n, oData, fn )
 			/* Take the brutal approach to cancelling text selection */
 			return false;
 			} );
+}
+
+
+/**
+ * Register a callback function. Easily allows a callback function to be added to
+ * an array store of callback functions that can then all be called together.
+ *  @param {object} oSettings dataTables settings object
+ *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+ *  @param {function} fn Function to be called back
+ *  @param {string) sName Identifying name for the callback (i.e. a label)
+ *  @memberof DataTable#oApi
+ */
+function _fnCallbackReg( oSettings, sStore, fn, sName )
+{
+	if ( fn )
+	{
+		oSettings[sStore].push( {
+			"fn": fn,
+			"sName": sName
+		} );
+	}
+}
+
+
+/**
+ * Fire callback functions and trigger events. Note that the loop over the callback
+ * array store is done backwards!
+ *  @param {object} oSettings dataTables settings object
+ *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+ *  @param {string} sTrigger Name of the jQuery customer event to trigger
+ *  @param {array) aArgs Array of arguments to pass to the callback function / trigger
+ *  @memberof DataTable#oApi
+ */
+function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
+{
+	var aoStore = oSettings[sStore];
+	for ( var i=aoStore.length-1 ; i>=0 ; i-- )
+	{
+		aoStore[i].fn.apply( oSettings.oInstance, aArgs );
+	}
+
+	$(oSettings.oInstance).trigger(sTrigger, aArgs);
 }
 

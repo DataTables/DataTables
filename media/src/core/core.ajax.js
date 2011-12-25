@@ -103,10 +103,7 @@ function _fnAjaxParameters( oSettings )
  */
 function _fnServerParams( oSettings, aoData )
 {
-	for ( var i=0, iLen=oSettings.aoServerParams.length ; i<iLen ; i++ )
-	{
-		oSettings.aoServerParams[i].fn.call( oSettings.oInstance, aoData );
-	}
+	_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [aoData] );
 }
 
 

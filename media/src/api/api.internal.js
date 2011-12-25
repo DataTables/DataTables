@@ -107,7 +107,9 @@ this.oApi = {
 	"_fnSetObjectDataFn": _fnSetObjectDataFn,
 	"_fnApplyColumnDefs": _fnApplyColumnDefs,
 	"_fnBindAction": _fnBindAction,
-	"_fnExtend": _fnExtend
+	"_fnExtend": _fnExtend,
+	"_fnCallbackReg": _fnCallbackReg,
+	"_fnCallbackFire": _fnCallbackFire
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );

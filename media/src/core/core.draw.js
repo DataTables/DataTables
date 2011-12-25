@@ -497,11 +497,7 @@ function _fnDraw( oSettings )
 	}
 	
 	/* Call all required callback functions for the end of a draw */
-	for ( i=oSettings.aoDrawCallback.length-1 ; i>=0 ; i-- )
-	{
-		oSettings.aoDrawCallback[i].fn.call( oSettings.oInstance, oSettings );
-	}
-	$(oSettings.oInstance).trigger('draw', oSettings);
+	_fnCallbackFire( oSettings, 'aoDrawCallback', 'draw', [oSettings] );
 	
 	/* Draw is complete, sorting and filtering must be as well */
 	oSettings.bSorted = false;

@@ -129,38 +129,10 @@ _fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
 _fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 
 /* Callback functions which are array driven */
-if ( oInit.fnDrawCallback )
-{
-	oSettings.aoDrawCallback.push( {
-		"fn": oInit.fnDrawCallback,
-		"sName": "user"
-	} );
-}
-
-/* Ajax additional variables are array driven */
-if ( oInit.fnServerParams )
-{
-	oSettings.aoServerParams.push( {
-		"fn": oInit.fnServerParams,
-		"sName": "user"
-	} );
-}
-
-if ( oInit.fnStateSaveCallback )
-{
-	oSettings.aoStateSave.push( {
-		"fn": oInit.fnStateSaveCallback,
-		"sName": "user"
-	} );
-}
-
-if ( oInit.fnStateLoadCallback )
-{
-	oSettings.aoStateLoad.push( {
-		"fn": oInit.fnStateLoadCallback,
-		"sName": "user"
-	} );
-}
+_fnCallbackReg( oSettings, 'aoDrawCallback', oInit.fnDrawCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoServerParams', oInit.fnServerParams, 'user' );
+_fnCallbackReg( oSettings, 'aoStateSave', oInit.fnStateSaveCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoStateLoad', oInit.fnStateLoadCallback, 'user' );
 
 if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 	   oSettings.oFeatures.bSortClasses )
@@ -168,17 +140,11 @@ if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 	/* Enable sort classes for server-side processing. Safe to do it here, since server-side
 	 * processing must be enabled by the developer
 	 */
-	oSettings.aoDrawCallback.push( {
-		"fn": _fnSortingClasses,
-		"sName": "server_side_sort_classes"
-	} );
+	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'server_side_sort_classes' );
 }
 else if ( oSettings.oFeatures.bDeferRender )
 {
-	oSettings.aoDrawCallback.push( {
-		"fn": _fnSortingClasses,
-		"sName": "defer_sort_classes"
-	} );
+	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'defer_sort_classes' );
 }
 
 if ( oInit.bJQueryUI )
@@ -218,10 +184,7 @@ if ( oInit.bStateSave )
 {
 	oSettings.oFeatures.bStateSave = true;
 	_fnLoadState( oSettings, oInit );
-	oSettings.aoDrawCallback.push( {
-		"fn": _fnSaveState,
-		"sName": "state_save"
-	} );
+	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
 }
 
 if ( oInit.iDeferLoading !== null )
