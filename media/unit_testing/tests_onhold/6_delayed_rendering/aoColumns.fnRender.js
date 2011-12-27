@@ -27,7 +27,7 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnWaitTest( 
-		"Confirm that fnRender passes one argument (an object) with three parameters",
+		"Confirm that fnRender passes two arguments with four parameters",
 		function () {
 			mTmp = true;
 			oSession.fnRestore();
@@ -37,8 +37,9 @@ $(document).ready( function () {
 				"aoColumns": [
 					null,
 					{ "fnRender": function (a) {
-						if ( arguments.length != 1 || typeof a.iDataRow=='undefined' ||
-						 	typeof a.iDataColumn=='undefined' || typeof a.aData=='undefined' )
+						if ( arguments.length != 2 || typeof a.iDataRow=='undefined' ||
+						 	typeof a.iDataColumn=='undefined' || typeof a.aData=='undefined' ||
+						 	typeof a.mDataProp=='undefined' )
 						{
 							mTmp = false;
 						}

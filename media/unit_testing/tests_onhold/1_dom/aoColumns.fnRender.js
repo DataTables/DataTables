@@ -25,16 +25,17 @@ $(document).ready( function () {
 	);
 	
 	oTest.fnTest( 
-		"Confirm that fnRender passes one argument (an object) with three parameters",
+		"Confirm that fnRender passes two arguments with four parameters",
 		function () {
 			mTmp = true;
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
 				"aoColumns": [
 					null,
-					{ "fnRender": function (a) {
-						if ( arguments.length != 1 || typeof a.iDataRow=='undefined' ||
-						 	typeof a.iDataColumn=='undefined' || typeof a.aData=='undefined' )
+					{ "fnRender": function (a, v) {
+						if ( arguments.length != 2 || typeof a.iDataRow=='undefined' ||
+						 	typeof a.iDataColumn=='undefined' || typeof a.aData=='undefined' ||
+						 	typeof a.mDataProp=='undefined' )
 						{
 							mTmp = false;
 						}
