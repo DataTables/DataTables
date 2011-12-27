@@ -20,7 +20,6 @@
 						{
 							$('td:eq(4)', nRow).html( '<b>A</b>' );
 						}
-						return nRow;
 					},
 					"aoColumnDefs": [ {
 							"sClass": "center",
@@ -37,7 +36,7 @@
 			</div>
 			
 			<h1>Preamble</h1>
-			<p>The following example shows how a callback function can be used to format a particular row at draw time. For each row that is generated for display, the <b>fnRowCallback()</b> function is called. It is passed the row node which can then be modified and returned. In this case a trivial example of making the 'grade' column bold if the grade is 'A' is shown (note that this could also be performed using the <b>fnRender()</b> function, but this is just for example).</p>
+			<p>The following example shows how a callback function can be used to format a particular row at draw time. For each row that is generated for display, the <b>fnRowCallback()</b> function is called. It is passed the row node which can then be modified. In this case a trivial example of making the 'grade' column bold if the grade is 'A' is shown (note that this could also be performed using the <b>fnRender()</b> function, but this is just for example).</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -479,7 +478,6 @@
 			{
 				$('td:eq(4)', nRow).html( '&lt;b&gt;A&lt;/b&gt;' );
 			}
-			return nRow;
 		},
 		"aoColumnDefs": [ {
 				"sClass": "center",

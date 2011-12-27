@@ -362,34 +362,25 @@ DataTable.models.oSettings = {
 	"sDestroyWidth": 0,
 	
 	/**
-	 * Call this function every time a row is inserted (draw).
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type function
-	 *  @default null
-	 *  @todo Make into an array so plug-ins can hook in
+	 * Callback functions array for every time a row is inserted (i.e. on a draw).
+	 *  @type array
+	 *  @default []
 	 */
-	"fnRowCallback": null,
+	"aoRowCallback": [],
 	
 	/**
-	 * Callback function for the header on each draw.
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type function
-	 *  @default null
-	 *  @todo Make into an array so plug-ins can hook in
+	 * Callback functions for the header on each draw.
+	 *  @type array
+	 *  @default []
 	 */
-	"fnHeaderCallback": null,
+	"aoHeaderCallback": [],
 	
 	/**
 	 * Callback function for the footer on each draw.
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type function
-	 *  @default null
-	 *  @todo Make into an array so plug-ins can hook in
+	 *  @type array
+	 *  @default []
 	 */
-	"fnFooterCallback": null,
+	"aoFooterCallback": [],
 	
 	/**
 	 * Array of callback functions for draw callback functions
@@ -399,25 +390,19 @@ DataTable.models.oSettings = {
 	"aoDrawCallback": [],
 	
 	/**
-	 * Callback function for just before the table is redrawn. A return of 
+	 * Callback functions for just before the table is redrawn. A return of 
 	 * false will be used to cancel the draw.
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type function
-	 *  @default null
-	 *  @todo Make into an array so plug-ins can hook in
+	 *  @type array
+	 *  @default []
 	 */
-	"fnPreDrawCallback": null,
+	"aoPreDrawCallback": [],
 	
 	/**
-	 * Callback function for when the table has been initialised.
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type function
-	 *  @default null
-	 *  @todo Make into an array so plug-ins can hook in
+	 * Callback functions for when the table has been initialised.
+	 *  @type array
+	 *  @default []
 	 */
-	"fnInitComplete": null,
+	"aoInitComplete": [],
 	
 	/**
 	 * Cache the table ID for quick access

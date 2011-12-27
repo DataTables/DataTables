@@ -306,15 +306,14 @@ function _fnDraw( oSettings )
 	var i, iLen;
 	var anRows = [];
 	var iRowCount = 0;
-	var bRowError = false;
 	var iStripes = oSettings.asStripeClasses.length;
 	var iOpenRows = oSettings.aoOpenRows.length;
 	
 	/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
-	if ( oSettings.fnPreDrawCallback !== null &&
-	     oSettings.fnPreDrawCallback.call( oSettings.oInstance, oSettings ) === false )
+	var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
+	if ( $.inArray( false, aPreDraw ) !== -1 )
 	{
-	     return;
+		return;
 	}
 	
 	oSettings.bDrawing = true;
@@ -382,17 +381,9 @@ function _fnDraw( oSettings )
 				}
 			}
 			
-			/* Custom row callback function - might want to manipule the row */
-			if ( oSettings.fnRowCallback )
-			{
-				nRow = oSettings.fnRowCallback.call( oSettings.oInstance, nRow, 
-					oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j );
-				if ( !nRow && !bRowError )
-				{
-					_fnLog( oSettings, 0, "A node was not returned by fnRowCallback" );
-					bRowError = true;
-				}
-			}
+			/* Row callback functions - might want to manipule the row */
+			_fnCallbackFire( oSettings, 'aoRowCallback', 'row', 
+				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 			
 			anRows.push( nRow );
 			iRowCount++;
@@ -440,20 +431,12 @@ function _fnDraw( oSettings )
 		anRows[ iRowCount ].appendChild( nTd );
 	}
 	
-	/* Callback the header and footer custom funcation if there is one */
-	if ( oSettings.fnHeaderCallback )
-	{
-		oSettings.fnHeaderCallback.call( oSettings.oInstance, $(oSettings.nTHead).children('tr')[0], 
-			_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
-			oSettings.aiDisplay );
-	}
+	/* Header and footer callbacks */
+	_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0], 
+		_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 	
-	if ( oSettings.fnFooterCallback )
-	{
-		oSettings.fnFooterCallback.call( oSettings.oInstance, $(oSettings.nTFoot).children('tr')[0], 
-			_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
-			oSettings.aiDisplay );
-	}
+	_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0], 
+		_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 	
 	/* 
 	 * Need to remove any old row from the display - note we can't just empty the tbody using

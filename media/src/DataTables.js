@@ -179,6 +179,39 @@
 	 */
 
 	/**
+	 * Row draw event, fired when a row is included in a draw
+	 *  @name DataTable#row
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {node} nRow "TR" element for the current row
+	 *  @param {array} aData Raw data array for this row
+	 *  @param {int} iDisplayIndex The display index for the current table draw
+	 *  @param {int} iDisplayIndexFull The index of the data in the full list of
+	 *    rows (after filtering)
+	 */
+
+	/**
+	 * DataTables initialisation complete event, fired when the table is fully drawn,
+	 * including Ajax data loaded, if Ajax data is required.
+	 *  @name DataTable#init
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The JSON object request from the server - only
+	 *    present if client-side Ajax sourced data is used</li></ol>
+	 */
+
+	/**
+	 * State load event, fired when DataTables loads the saved table state. Can be used
+	 * to add, remove or override saved information
+	 *  @name DataTable#stateLoad
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The saved infromation from the local cookie
+	 */
+
+	/**
 	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
 	 * made to the server for new data (note that this trigger is called in fnServerData,
 	 * if you override fnServerData and which to use this event, you need to trigger it in

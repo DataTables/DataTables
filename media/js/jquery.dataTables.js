@@ -1273,15 +1273,14 @@
 			var i, iLen;
 			var anRows = [];
 			var iRowCount = 0;
-			var bRowError = false;
 			var iStripes = oSettings.asStripeClasses.length;
 			var iOpenRows = oSettings.aoOpenRows.length;
 			
 			/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
-			if ( oSettings.fnPreDrawCallback !== null &&
-			     oSettings.fnPreDrawCallback.call( oSettings.oInstance, oSettings ) === false )
+			var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
+			if ( $.inArray( false, aPreDraw ) !== -1 )
 			{
-			     return;
+				return;
 			}
 			
 			oSettings.bDrawing = true;
@@ -1349,17 +1348,9 @@
 						}
 					}
 					
-					/* Custom row callback function - might want to manipule the row */
-					if ( oSettings.fnRowCallback )
-					{
-						nRow = oSettings.fnRowCallback.call( oSettings.oInstance, nRow, 
-							oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j );
-						if ( !nRow && !bRowError )
-						{
-							_fnLog( oSettings, 0, "A node was not returned by fnRowCallback" );
-							bRowError = true;
-						}
-					}
+					/* Row callback functions - might want to manipule the row */
+					_fnCallbackFire( oSettings, 'aoRowCallback', 'row', 
+						[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 					
 					anRows.push( nRow );
 					iRowCount++;
@@ -1407,20 +1398,12 @@
 				anRows[ iRowCount ].appendChild( nTd );
 			}
 			
-			/* Callback the header and footer custom funcation if there is one */
-			if ( oSettings.fnHeaderCallback )
-			{
-				oSettings.fnHeaderCallback.call( oSettings.oInstance, $(oSettings.nTHead).children('tr')[0], 
-					_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
-					oSettings.aiDisplay );
-			}
+			/* Header and footer callbacks */
+			_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0], 
+				_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 			
-			if ( oSettings.fnFooterCallback )
-			{
-				oSettings.fnFooterCallback.call( oSettings.oInstance, $(oSettings.nTFoot).children('tr')[0], 
-					_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(),
-					oSettings.aiDisplay );
-			}
+			_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0], 
+				_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 			
 			/* 
 			 * Need to remove any old row from the display - note we can't just empty the tbody using
@@ -2576,10 +2559,7 @@
 		function _fnInitComplete ( oSettings, json )
 		{
 			oSettings._bInitComplete = true;
-			if ( oSettings.fnInitComplete )
-			{
-				oSettings.fnInitComplete.call( oSettings.oInstance, oSettings, json );
-			}
+			_fnCallbackFire( oSettings, 'aoInitComplete', 'init', [oSettings, json] );
 		}
 		
 		
@@ -4247,6 +4227,11 @@
 			{
 				return;
 			}
+		
+			/* xxx - This is horrible! What we really want to do is use a proper object and
+			 * pass that around - but jQuery doesn't have a toJson option. Either need to use
+			 * $.param or JSON.stringify or something else
+			 */
 			
 			/* Store the interesting variables */
 			var i, iLen, sTmp;
@@ -4332,12 +4317,10 @@
 			/* Allow custom and plug-in manipulation functions to alter the data set which was
 			 * saved, and also reject any saved state by returning false
 			 */
-			for ( i=0, iLen=oSettings.aoStateLoad.length ; i<iLen ; i++ )
+			var aCallbacks = _fnCallbackFire( oSettings, 'aoStateLoad', 'stateLoad', [oSettings, oData] );
+			if ( $.inArray( false, aCallbacks ) !== -1 )
 			{
-				if ( !oSettings.aoStateLoad[i].fn( oSettings, oData ) )
-				{
-					return;
-				}
+				return;
 			}
 				
 			if ( oData !== null )
@@ -4744,12 +4727,16 @@
 		function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 		{
 			var aoStore = oSettings[sStore];
+			var aRet =[];
+		
 			for ( var i=aoStore.length-1 ; i>=0 ; i-- )
 			{
-				aoStore[i].fn.apply( oSettings.oInstance, aArgs );
+				aRet.push( aoStore[i].fn.apply( oSettings.oInstance, aArgs ) );
 			}
 		
 			$(oSettings.oInstance).trigger(sTrigger, aArgs);
+		
+			return aRet;
 		}
 		
 
@@ -6131,15 +6118,9 @@
 			_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
 			_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 			_fnMap( oSettings, oInit, "asStripeClasses" );
-			_fnMap( oSettings, oInit, "fnPreDrawCallback" );
-			_fnMap( oSettings, oInit, "fnRowCallback" );
-			_fnMap( oSettings, oInit, "fnHeaderCallback" );
-			_fnMap( oSettings, oInit, "fnFooterCallback" );
-			_fnMap( oSettings, oInit, "fnCookieCallback" );
-			_fnMap( oSettings, oInit, "fnInitComplete" );
 			_fnMap( oSettings, oInit, "fnServerData" );
-			_fnMap( oSettings, oInit, "sServerMethod" );
 			_fnMap( oSettings, oInit, "fnFormatNumber" );
+			_fnMap( oSettings, oInit, "sServerMethod" );
 			_fnMap( oSettings, oInit, "aaSorting" );
 			_fnMap( oSettings, oInit, "aaSortingFixed" );
 			_fnMap( oSettings, oInit, "aLengthMenu" );
@@ -6155,6 +6136,7 @@
 			_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 			_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 			_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
+			_fnMap( oSettings, oInit, "fnCookieCallback" );
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
 			/* Callback functions which are array driven */
@@ -6162,6 +6144,11 @@
 			_fnCallbackReg( oSettings, 'aoServerParams', oInit.fnServerParams, 'user' );
 			_fnCallbackReg( oSettings, 'aoStateSave', oInit.fnStateSaveCallback, 'user' );
 			_fnCallbackReg( oSettings, 'aoStateLoad', oInit.fnStateLoadCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoRowCallback', oInit.fnRowCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoHeaderCallback', oInit.fnHeaderCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoFooterCallback', oInit.fnFooterCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoInitComplete', oInit.fnInitComplete, 'user' );
+			_fnCallbackReg( oSettings, 'aoPreDrawCallback', oInit.fnPreDrawCallback, 'user' );
 			
 			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 				   oSettings.oFeatures.bSortClasses )
@@ -10123,34 +10110,25 @@
 		"sDestroyWidth": 0,
 		
 		/**
-		 * Call this function every time a row is inserted (draw).
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type function
-		 *  @default null
-		 *  @todo Make into an array so plug-ins can hook in
+		 * Callback functions array for every time a row is inserted (i.e. on a draw).
+		 *  @type array
+		 *  @default []
 		 */
-		"fnRowCallback": null,
+		"aoRowCallback": [],
 		
 		/**
-		 * Callback function for the header on each draw.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type function
-		 *  @default null
-		 *  @todo Make into an array so plug-ins can hook in
+		 * Callback functions for the header on each draw.
+		 *  @type array
+		 *  @default []
 		 */
-		"fnHeaderCallback": null,
+		"aoHeaderCallback": [],
 		
 		/**
 		 * Callback function for the footer on each draw.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type function
-		 *  @default null
-		 *  @todo Make into an array so plug-ins can hook in
+		 *  @type array
+		 *  @default []
 		 */
-		"fnFooterCallback": null,
+		"aoFooterCallback": [],
 		
 		/**
 		 * Array of callback functions for draw callback functions
@@ -10160,25 +10138,19 @@
 		"aoDrawCallback": [],
 		
 		/**
-		 * Callback function for just before the table is redrawn. A return of 
+		 * Callback functions for just before the table is redrawn. A return of 
 		 * false will be used to cancel the draw.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type function
-		 *  @default null
-		 *  @todo Make into an array so plug-ins can hook in
+		 *  @type array
+		 *  @default []
 		 */
-		"fnPreDrawCallback": null,
+		"aoPreDrawCallback": [],
 		
 		/**
-		 * Callback function for when the table has been initialised.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type function
-		 *  @default null
-		 *  @todo Make into an array so plug-ins can hook in
+		 * Callback functions for when the table has been initialised.
+		 *  @type array
+		 *  @default []
 		 */
-		"fnInitComplete": null,
+		"aoInitComplete": [],
 		
 		/**
 		 * Cache the table ID for quick access
@@ -11182,6 +11154,39 @@
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Row draw event, fired when a row is included in a draw
+	 *  @name DataTable#row
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {node} nRow "TR" element for the current row
+	 *  @param {array} aData Raw data array for this row
+	 *  @param {int} iDisplayIndex The display index for the current table draw
+	 *  @param {int} iDisplayIndexFull The index of the data in the full list of
+	 *    rows (after filtering)
+	 */
+
+	/**
+	 * DataTables initialisation complete event, fired when the table is fully drawn,
+	 * including Ajax data loaded, if Ajax data is required.
+	 *  @name DataTable#init
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The JSON object request from the server - only
+	 *    present if client-side Ajax sourced data is used</li></ol>
+	 */
+
+	/**
+	 * State load event, fired when DataTables loads the saved table state. Can be used
+	 * to add, remove or override saved information
+	 *  @name DataTable#stateLoad
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The saved infromation from the local cookie
 	 */
 
 	/**

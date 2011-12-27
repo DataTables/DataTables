@@ -102,15 +102,9 @@ _fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 _fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
 _fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 _fnMap( oSettings, oInit, "asStripeClasses" );
-_fnMap( oSettings, oInit, "fnPreDrawCallback" );
-_fnMap( oSettings, oInit, "fnRowCallback" );
-_fnMap( oSettings, oInit, "fnHeaderCallback" );
-_fnMap( oSettings, oInit, "fnFooterCallback" );
-_fnMap( oSettings, oInit, "fnCookieCallback" );
-_fnMap( oSettings, oInit, "fnInitComplete" );
 _fnMap( oSettings, oInit, "fnServerData" );
-_fnMap( oSettings, oInit, "sServerMethod" );
 _fnMap( oSettings, oInit, "fnFormatNumber" );
+_fnMap( oSettings, oInit, "sServerMethod" );
 _fnMap( oSettings, oInit, "aaSorting" );
 _fnMap( oSettings, oInit, "aaSortingFixed" );
 _fnMap( oSettings, oInit, "aLengthMenu" );
@@ -126,6 +120,7 @@ _fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
 _fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 _fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 _fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
+_fnMap( oSettings, oInit, "fnCookieCallback" );
 _fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 
 /* Callback functions which are array driven */
@@ -133,6 +128,11 @@ _fnCallbackReg( oSettings, 'aoDrawCallback', oInit.fnDrawCallback, 'user' );
 _fnCallbackReg( oSettings, 'aoServerParams', oInit.fnServerParams, 'user' );
 _fnCallbackReg( oSettings, 'aoStateSave', oInit.fnStateSaveCallback, 'user' );
 _fnCallbackReg( oSettings, 'aoStateLoad', oInit.fnStateLoadCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoRowCallback', oInit.fnRowCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoHeaderCallback', oInit.fnHeaderCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoFooterCallback', oInit.fnFooterCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoInitComplete', oInit.fnInitComplete, 'user' );
+_fnCallbackReg( oSettings, 'aoPreDrawCallback', oInit.fnPreDrawCallback, 'user' );
 
 if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 	   oSettings.oFeatures.bSortClasses )

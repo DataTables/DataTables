@@ -244,11 +244,15 @@ function _fnCallbackReg( oSettings, sStore, fn, sName )
 function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 {
 	var aoStore = oSettings[sStore];
+	var aRet =[];
+
 	for ( var i=aoStore.length-1 ; i>=0 ; i-- )
 	{
-		aoStore[i].fn.apply( oSettings.oInstance, aArgs );
+		aRet.push( aoStore[i].fn.apply( oSettings.oInstance, aArgs ) );
 	}
 
 	$(oSettings.oInstance).trigger(sTrigger, aArgs);
+
+	return aRet;
 }
 

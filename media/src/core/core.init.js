@@ -119,10 +119,7 @@ function _fnInitialise ( oSettings )
 function _fnInitComplete ( oSettings, json )
 {
 	oSettings._bInitComplete = true;
-	if ( oSettings.fnInitComplete )
-	{
-		oSettings.fnInitComplete.call( oSettings.oInstance, oSettings, json );
-	}
+	_fnCallbackFire( oSettings, 'aoInitComplete', 'init', [oSettings, json] );
 }
 
 

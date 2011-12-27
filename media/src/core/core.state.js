@@ -11,6 +11,11 @@ function _fnSaveState ( oSettings )
 	{
 		return;
 	}
+
+	/* xxx - This is horrible! What we really want to do is use a proper object and
+	 * pass that around - but jQuery doesn't have a toJson option. Either need to use
+	 * $.param or JSON.stringify or something else
+	 */
 	
 	/* Store the interesting variables */
 	var i, iLen, sTmp;
@@ -96,12 +101,10 @@ function _fnLoadState ( oSettings, oInit )
 	/* Allow custom and plug-in manipulation functions to alter the data set which was
 	 * saved, and also reject any saved state by returning false
 	 */
-	for ( i=0, iLen=oSettings.aoStateLoad.length ; i<iLen ; i++ )
+	var aCallbacks = _fnCallbackFire( oSettings, 'aoStateLoad', 'stateLoad', [oSettings, oData] );
+	if ( $.inArray( false, aCallbacks ) !== -1 )
 	{
-		if ( !oSettings.aoStateLoad[i].fn( oSettings, oData ) )
-		{
-			return;
-		}
+		return;
 	}
 		
 	if ( oData !== null )
