@@ -2869,6 +2869,8 @@
 					an[i].style.visibility = bShow ? "visible" : "hidden";
 				}
 			}
+		
+			$(oSettings.oInstance).trigger('processing', [oSettings, bShow]);
 		}
 		
 		
@@ -11187,6 +11189,17 @@
 	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {object} json The saved infromation from the local cookie
+	 */
+
+	/**
+	 * Processing event, fired when DataTables is doing some kind of processing (be it,
+	 * sort, filter or anything else). Can be used to indicate to the end user that
+	 * there is something happening, or that something has finished.
+	 *  @name DataTable#processing
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {boolean} bShow Flag for if DataTables is doing processing or not
 	 */
 
 	/**

@@ -212,6 +212,17 @@
 	 */
 
 	/**
+	 * Processing event, fired when DataTables is doing some kind of processing (be it,
+	 * sort, filter or anything else). Can be used to indicate to the end user that
+	 * there is something happening, or that something has finished.
+	 *  @name DataTable#processing
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {boolean} bShow Flag for if DataTables is doing processing or not
+	 */
+
+	/**
 	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
 	 * made to the server for new data (note that this trigger is called in fnServerData,
 	 * if you override fnServerData and which to use this event, you need to trigger it in

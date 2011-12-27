@@ -38,5 +38,7 @@ function _fnProcessingDisplay ( oSettings, bShow )
 			an[i].style.visibility = bShow ? "visible" : "hidden";
 		}
 	}
+
+	$(oSettings.oInstance).trigger('processing', [oSettings, bShow]);
 }
 
