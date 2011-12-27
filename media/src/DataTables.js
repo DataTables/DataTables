@@ -179,18 +179,6 @@
 	 */
 
 	/**
-	 * Row draw event, fired when a row is included in a draw
-	 *  @name DataTable#row
-	 *  @event
-	 *  @param {event} e jQuery event object
-	 *  @param {node} nRow "TR" element for the current row
-	 *  @param {array} aData Raw data array for this row
-	 *  @param {int} iDisplayIndex The display index for the current table draw
-	 *  @param {int} iDisplayIndexFull The index of the data in the full list of
-	 *    rows (after filtering)
-	 */
-
-	/**
 	 * DataTables initialisation complete event, fired when the table is fully drawn,
 	 * including Ajax data loaded, if Ajax data is required.
 	 *  @name DataTable#init

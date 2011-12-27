@@ -234,10 +234,12 @@ function _fnCallbackReg( oSettings, sStore, fn, sName )
 
 /**
  * Fire callback functions and trigger events. Note that the loop over the callback
- * array store is done backwards!
+ * array store is done backwards! Further note that you do not want to fire off triggers
+ * in time sensitive applications (for example cell creation) as its slow.
  *  @param {object} oSettings dataTables settings object
  *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
- *  @param {string} sTrigger Name of the jQuery customer event to trigger
+ *  @param {string} sTrigger Name of the jQuery custom event to trigger. If null no trigger
+ *    is fired
  *  @param {array) aArgs Array of arguments to pass to the callback function / trigger
  *  @memberof DataTable#oApi
  */
@@ -251,7 +253,10 @@ function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 		aRet.push( aoStore[i].fn.apply( oSettings.oInstance, aArgs ) );
 	}
 
-	$(oSettings.oInstance).trigger(sTrigger, aArgs);
+	if ( sTrigger !== null )
+	{
+		$(oSettings.oInstance).trigger(sTrigger, aArgs);
+	}
 
 	return aRet;
 }

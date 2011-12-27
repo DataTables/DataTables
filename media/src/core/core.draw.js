@@ -74,6 +74,7 @@ function _fnCreateTr ( oSettings, iRow )
 			}
 		}
 	}
+
 }
 
 
@@ -382,7 +383,7 @@ function _fnDraw( oSettings )
 			}
 			
 			/* Row callback functions - might want to manipule the row */
-			_fnCallbackFire( oSettings, 'aoRowCallback', 'row', 
+			_fnCallbackFire( oSettings, 'aoRowCallback', null, 
 				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 			
 			anRows.push( nRow );

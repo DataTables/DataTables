@@ -29,19 +29,19 @@
 				//if ( typeof console != 'undefined' ) {
 				//	console.profile();
 				//}
-				//for ( var i=0 ; i<1 ; i++ )
-				//{
-				//	var oTable = $('#example').dataTable({"bDestroy": true});
-				//}
+				for ( var i=0 ; i<10 ; i++ )
+				{
+					var oTable = $('#example').dataTable({"bDestroy": true});
+				}
 				//if ( typeof console != 'undefined' ) {
 				//	console.profileEnd();
 				//}
 				
-				oTable.fnSort( [[ 1, 'asc' ]] );
-				oTable.fnSort( [[ 1, 'asc' ]] );
-				oTable.fnSort( [[ 2, 'asc' ]] );
-				oTable.fnSort( [[ 1, 'asc' ]] );
-				oTable.fnSort( [[ 2, 'asc' ]] );
+				//oTable.fnSort( [[ 1, 'asc' ]] );
+				//oTable.fnSort( [[ 1, 'asc' ]] );
+				//oTable.fnSort( [[ 2, 'asc' ]] );
+				//oTable.fnSort( [[ 1, 'asc' ]] );
+				//oTable.fnSort( [[ 2, 'asc' ]] );
 				
 				var iEnd = new Date().getTime();
 				document.getElementById('output').innerHTML = "Test took "+(iEnd-iStart)+" mS";

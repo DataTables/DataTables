@@ -1041,6 +1041,7 @@
 					}
 				}
 			}
+		
 		}
 		
 		
@@ -1349,7 +1350,7 @@
 					}
 					
 					/* Row callback functions - might want to manipule the row */
-					_fnCallbackFire( oSettings, 'aoRowCallback', 'row', 
+					_fnCallbackFire( oSettings, 'aoRowCallback', null, 
 						[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 					
 					anRows.push( nRow );
@@ -4719,10 +4720,12 @@
 		
 		/**
 		 * Fire callback functions and trigger events. Note that the loop over the callback
-		 * array store is done backwards!
+		 * array store is done backwards! Further note that you do not want to fire off triggers
+		 * in time sensitive applications (for example cell creation) as its slow.
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
-		 *  @param {string} sTrigger Name of the jQuery customer event to trigger
+		 *  @param {string} sTrigger Name of the jQuery custom event to trigger. If null no trigger
+		 *    is fired
 		 *  @param {array) aArgs Array of arguments to pass to the callback function / trigger
 		 *  @memberof DataTable#oApi
 		 */
@@ -4736,7 +4739,10 @@
 				aRet.push( aoStore[i].fn.apply( oSettings.oInstance, aArgs ) );
 			}
 		
-			$(oSettings.oInstance).trigger(sTrigger, aArgs);
+			if ( sTrigger !== null )
+			{
+				$(oSettings.oInstance).trigger(sTrigger, aArgs);
+			}
 		
 			return aRet;
 		}
@@ -11156,18 +11162,6 @@
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
-	 */
-
-	/**
-	 * Row draw event, fired when a row is included in a draw
-	 *  @name DataTable#row
-	 *  @event
-	 *  @param {event} e jQuery event object
-	 *  @param {node} nRow "TR" element for the current row
-	 *  @param {array} aData Raw data array for this row
-	 *  @param {int} iDisplayIndex The display index for the current table draw
-	 *  @param {int} iDisplayIndexFull The index of the data in the full list of
-	 *    rows (after filtering)
 	 */
 
 	/**
