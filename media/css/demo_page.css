@@ -97,3 +97,11 @@
 	width: 50%;
 	margin-bottom: 1em;
 }
+
+#demo_info {
+	padding: 5px;
+	border: 1px solid #B0BED9;
+	height: 100px;
+	width: 100%;
+	overflow: auto;
+}
