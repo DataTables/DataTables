@@ -567,14 +567,6 @@
 				}
 			}
 			
-			/* Sanity check */
-			if ( nTds.length != nTrs.length * oSettings.aoColumns.length )
-			{
-				_fnLog( oSettings, 1, "Unexpected number of TD elements. Expected "+
-					(nTrs.length * oSettings.aoColumns.length)+" and got "+nTds.length+". DataTables does "+
-					"not support rowspan / colspan in the table body." );
-			}
-			
 			/* Now process by column */
 			for ( iColumn=0, iColumns=oSettings.aoColumns.length ; iColumn<iColumns ; iColumn++ )
 			{
