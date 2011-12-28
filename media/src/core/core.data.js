@@ -234,10 +234,20 @@ function _fnGatherData( oSettings )
 				if ( oCol.fnCreatedCell )
 				{
 					oCol.fnCreatedCell.call( oSettings.oInstance,
-						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow
+						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
 					);
 				}
 			}
+		}
+	}
+
+	/* Row created callbacks */
+	if ( oSettings.aoRowCreatedCallback.length !== 0 )
+	{
+		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		{
+			oData = oSettings.aoData[i];
+			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, i] );
 		}
 	}
 }

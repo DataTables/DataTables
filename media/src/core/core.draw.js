@@ -69,12 +69,13 @@ function _fnCreateTr ( oSettings, iRow )
 			if ( oCol.fnCreatedCell )
 			{
 				oCol.fnCreatedCell.call( oSettings.oInstance,
-						nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow
+					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
 				);
 			}
 		}
-	}
 
+		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, iRow] );
+	}
 }
 
 

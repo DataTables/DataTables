@@ -222,13 +222,14 @@ DataTable.defaults.columns = {
 	 *  @param {*} sData The Data for the cell
 	 *  @param {array|object} oData The data for the whole row
 	 *  @param {int} iRow The row index for the aoData data store
+	 *  @param {int} iCol The column index for aoColumns
 	 * 
 	 *  @example
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [3],
-	 *          "fnCreatedCell": function (nTd, sData, oData, i) {
+	 *          "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
 	 *            if ( sData == "1.7" ) {
 	 *              $(nTd).css('color', 'blue')
 	 *            }

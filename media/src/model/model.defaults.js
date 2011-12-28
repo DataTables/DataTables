@@ -593,6 +593,31 @@ DataTable.defaults = {
 
 
 	/**
+	 * This function is called when a TR element is created (and all TD child
+	 * elements have been inserted), or registered if using a DOM source, allowing
+	 * manipulation of the TR element (adding classes etc).
+	 *  @type function
+	 *  @param {node} nRow "TR" element for the current row
+	 *  @param {array} aData Raw data array for this row
+	 *  @param {int} iDataIndex The index of this row in aoData
+	 * 
+	 *  @example
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+	 *          // Bold the grade for all 'A' grade browsers
+	 *          if ( aData[4] == "A" )
+	 *          {
+	 *            $('td:eq(4)', nRow).html( '<b>A</b>' );
+	 *          }
+	 *        }
+	 *      } );
+	 *    } );
+	 */
+	"fnCreatedRow": null,
+
+
+	/**
 	 * This function is called on every 'draw' event, and allows you to
 	 * dynamically modify any aspect you want about the created DOM.
 	 *  @type function
@@ -798,7 +823,6 @@ DataTable.defaults = {
 	 *  @param {int} iDisplayIndex The display index for the current table draw
 	 *  @param {int} iDisplayIndexFull The index of the data in the full list of
 	 *    rows (after filtering)
-	 *  @returns {node} "TR" element for the current row
 	 * 
 	 *  @example
 	 *    $(document).ready(function() {
@@ -809,7 +833,6 @@ DataTable.defaults = {
 	 *          {
 	 *            $('td:eq(4)', nRow).html( '<b>A</b>' );
 	 *          }
-	 *          return nRow;
 	 *        }
 	 *      } );
 	 *    } );

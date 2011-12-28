@@ -659,10 +659,20 @@
 						if ( oCol.fnCreatedCell )
 						{
 							oCol.fnCreatedCell.call( oSettings.oInstance,
-								nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow
+								nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
 							);
 						}
 					}
+				}
+			}
+		
+			/* Row created callbacks */
+			if ( oSettings.aoRowCreatedCallback.length !== 0 )
+			{
+				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+				{
+					oData = oSettings.aoData[i];
+					_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, i] );
 				}
 			}
 		}
@@ -1036,12 +1046,13 @@
 					if ( oCol.fnCreatedCell )
 					{
 						oCol.fnCreatedCell.call( oSettings.oInstance,
-								nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow
+							nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
 						);
 					}
 				}
-			}
 		
+				_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, iRow] );
+			}
 		}
 		
 		
@@ -6148,15 +6159,16 @@
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
 			/* Callback functions which are array driven */
-			_fnCallbackReg( oSettings, 'aoDrawCallback', oInit.fnDrawCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoServerParams', oInit.fnServerParams, 'user' );
-			_fnCallbackReg( oSettings, 'aoStateSave', oInit.fnStateSaveCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoStateLoad', oInit.fnStateLoadCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoRowCallback', oInit.fnRowCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoHeaderCallback', oInit.fnHeaderCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoFooterCallback', oInit.fnFooterCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoInitComplete', oInit.fnInitComplete, 'user' );
-			_fnCallbackReg( oSettings, 'aoPreDrawCallback', oInit.fnPreDrawCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoDrawCallback',       oInit.fnDrawCallback,      'user' );
+			_fnCallbackReg( oSettings, 'aoServerParams',       oInit.fnServerParams,      'user' );
+			_fnCallbackReg( oSettings, 'aoStateSave',          oInit.fnStateSaveCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoStateLoad',          oInit.fnStateLoadCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoRowCallback',        oInit.fnRowCallback,       'user' );
+			_fnCallbackReg( oSettings, 'aoRowCreatedCallback', oInit.fnCreatedRow,        'user' );
+			_fnCallbackReg( oSettings, 'aoHeaderCallback',     oInit.fnHeaderCallback,    'user' );
+			_fnCallbackReg( oSettings, 'aoFooterCallback',     oInit.fnFooterCallback,    'user' );
+			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
+			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
 			
 			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 				   oSettings.oFeatures.bSortClasses )
@@ -7960,6 +7972,31 @@
 	
 	
 		/**
+		 * This function is called when a TR element is created (and all TD child
+		 * elements have been inserted), or registered if using a DOM source, allowing
+		 * manipulation of the TR element (adding classes etc).
+		 *  @type function
+		 *  @param {node} nRow "TR" element for the current row
+		 *  @param {array} aData Raw data array for this row
+		 *  @param {int} iDataIndex The index of this row in aoData
+		 * 
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      $('#example').dataTable( {
+		 *        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+		 *          // Bold the grade for all 'A' grade browsers
+		 *          if ( aData[4] == "A" )
+		 *          {
+		 *            $('td:eq(4)', nRow).html( '<b>A</b>' );
+		 *          }
+		 *        }
+		 *      } );
+		 *    } );
+		 */
+		"fnCreatedRow": null,
+	
+	
+		/**
 		 * This function is called on every 'draw' event, and allows you to
 		 * dynamically modify any aspect you want about the created DOM.
 		 *  @type function
@@ -8165,7 +8202,6 @@
 		 *  @param {int} iDisplayIndex The display index for the current table draw
 		 *  @param {int} iDisplayIndexFull The index of the data in the full list of
 		 *    rows (after filtering)
-		 *  @returns {node} "TR" element for the current row
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8176,7 +8212,6 @@
 		 *          {
 		 *            $('td:eq(4)', nRow).html( '<b>A</b>' );
 		 *          }
-		 *          return nRow;
 		 *        }
 		 *      } );
 		 *    } );
@@ -9337,13 +9372,14 @@
 		 *  @param {*} sData The Data for the cell
 		 *  @param {array|object} oData The data for the whole row
 		 *  @param {int} iRow The row index for the aoData data store
+		 *  @param {int} iCol The column index for aoColumns
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ {
 		 *          "aTargets": [3],
-		 *          "fnCreatedCell": function (nTd, sData, oData, i) {
+		 *          "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
 		 *            if ( sData == "1.7" ) {
 		 *              $(nTd).css('color', 'blue')
 		 *            }
@@ -10144,6 +10180,13 @@
 		 *  @default []
 		 */
 		"aoDrawCallback": [],
+		
+		/**
+		 * Array of callback functions for row created function
+		 *  @type array
+		 *  @default []
+		 */
+		"aoRowCreatedCallback": [],
 		
 		/**
 		 * Callback functions for just before the table is redrawn. A return of 
