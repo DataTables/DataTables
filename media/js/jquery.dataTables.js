@@ -4499,7 +4499,7 @@
 		{
 			for ( var i=0 ; i<DataTable.settings.length ; i++ )
 			{
-				if ( DataTable.settings[i].nTable == nTable )
+				if ( DataTable.settings[i].nTable === nTable )
 				{
 					return DataTable.settings[i];
 				}
