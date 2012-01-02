@@ -190,13 +190,36 @@
 	 */
 
 	/**
-	 * State load event, fired when DataTables loads the saved table state. Can be used
-	 * to add, remove or override saved information
-	 *  @name DataTable#stateLoad
+	 * State save event, fired when the table has changed state a new state save is required.
+	 * This method allows modification of the state saving object prior to actually doing the
+	 * save, including addition or other state properties (for plug-ins) or modification
+	 * of a DataTables core property.
+	 *  @name DataTable#stateSaveParams
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
-	 *  @param {object} json The saved infromation from the local cookie
+	 *  @param {object} json The state information to be saved
+	 */
+
+	/**
+	 * State load event, fired when the table is loading state from the stored data, but
+	 * prior to the settings object being modified by the saved state - allowing modification
+	 * of the saved state is required or loading of state for a plug-in.
+	 *  @name DataTable#stateLoadParams
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The saved state information
+	 */
+
+	/**
+	 * State loaded event, fired when state has been loaded from stored data and the settings
+	 * object has been modified by the loaded data.
+	 *  @name DataTable#stateLoaded
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The saved state information
 	 */
 
 	/**

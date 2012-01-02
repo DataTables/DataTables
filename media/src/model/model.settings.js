@@ -411,8 +411,29 @@ DataTable.models.oSettings = {
 	 */
 	"aoInitComplete": [],
 
+	
+	/**
+	 * Callbacks for modifying the settings to be stored for state saving, prior to
+	 * saving state.
+	 *  @type array
+	 *  @default []
+	 */
 	"aoStateSaveParams": [],
+	
+	/**
+	 * Callbacks for modifying the settings that have been stored for state saving
+	 * prior to using the stored values to restore the state.
+	 *  @type array
+	 *  @default []
+	 */
 	"aoStateLoadParams": [],
+	
+	/**
+	 * Callbacks for operating on the settings object once the saved state has been
+	 * loaded
+	 *  @type array
+	 *  @default []
+	 */
 	"aoStateLoaded": [],
 	
 	/**

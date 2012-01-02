@@ -262,35 +262,54 @@ function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 }
 
 
-function _fnJsonString( obj )
+/**
+ * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
+ * library, then we use that as it is fast, safe and accurate. If the function isn't 
+ * available then we need to built it ourselves - the insperation for this function comes
+ * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
+ * not perfect and absolutely should not be used as a replacement to json2.js - but it does
+ * do what we need, without requiring a dependency for DataTables.
+ *  @param {object} o JSON object to be converted
+ *  @returns {string} JSON string
+ *  @memberof DataTable#oApi
+ */
+var _fnJsonString = (JSON.stringify) ? JSON.stringify : function( o )
 {
-	if ( JSON.stringify )
+	/* Not an object or array */
+	var sType = typeof o;
+	if (sType !== "object" || o === null)
 	{
-		return JSON.stringify( obj );
-	}
-	
-	var t = typeof (obj);
-	if (t != "object" || obj === null) {
 		// simple data type
-		if (t == "string") {
-			obj = '"'+obj+'"';
+		if (sType === "string")
+		{
+			o = '"'+o+'"';
 		}
-		return String(obj);
+		return o+"";
 	}
-	else {
-		// recurse array or object
-		var n, v, json = [], arr = (obj && obj.constructor == Array);
-		for (n in obj) {
-			v = obj[n]; t = typeof(v);
-			if (t == "string") {
-				v = '"'+v+'"';
-			}
-			else if (t == "object" && v !== null) {
-				v = _fnJsonString(v);
-			}
-			json.push((arr ? "" : '"' + n + '":') + String(v));
+
+	/* If object or array, need to recurse over it */
+	var
+		sProp, mValue,
+		json = [],
+		bArr = $.isArray(o);
+	
+	for (sProp in o)
+	{
+		mValue = o[sProp];
+		sType = typeof mValue;
+
+		if (sType === "string")
+		{
+			mValue = '"'+mValue+'"';
 		}
-		return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+		else if (sType === "object" && mValue !== null)
+		{
+			mValue = _fnJsonString(mValue);
+		}
+
+		json.push((bArr ? "" : '"'+sProp+'":') + mValue);
 	}
-}
+
+	return (bArr ? "[" : "{") + json + (bArr ? "]" : "}");
+};
 

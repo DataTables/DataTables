@@ -4679,37 +4679,56 @@
 		}
 		
 		
-		function _fnJsonString( obj )
+		/**
+		 * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
+		 * library, then we use that as it is fast, safe and accurate. If the function isn't 
+		 * available then we need to built it ourselves - the insperation for this function comes
+		 * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
+		 * not perfect and absolutely should not be used as a replacement to json2.js - but it does
+		 * do what we need, without requiring a dependency for DataTables.
+		 *  @param {object} o JSON object to be converted
+		 *  @returns {string} JSON string
+		 *  @memberof DataTable#oApi
+		 */
+		var _fnJsonString = (JSON.stringify) ? JSON.stringify : function( o )
 		{
-			if ( JSON.stringify )
+			/* Not an object or array */
+			var sType = typeof o;
+			if (sType !== "object" || o === null)
 			{
-				return JSON.stringify( obj );
-			}
-			
-			var t = typeof (obj);
-			if (t != "object" || obj === null) {
 				// simple data type
-				if (t == "string") {
-					obj = '"'+obj+'"';
+				if (sType === "string")
+				{
+					o = '"'+o+'"';
 				}
-				return String(obj);
+				return o+"";
 			}
-			else {
-				// recurse array or object
-				var n, v, json = [], arr = (obj && obj.constructor == Array);
-				for (n in obj) {
-					v = obj[n]; t = typeof(v);
-					if (t == "string") {
-						v = '"'+v+'"';
-					}
-					else if (t == "object" && v !== null) {
-						v = _fnJsonString(v);
-					}
-					json.push((arr ? "" : '"' + n + '":') + String(v));
+		
+			/* If object or array, need to recurse over it */
+			var
+				sProp, mValue,
+				json = [],
+				bArr = $.isArray(o);
+			
+			for (sProp in o)
+			{
+				mValue = o[sProp];
+				sType = typeof mValue;
+		
+				if (sType === "string")
+				{
+					mValue = '"'+mValue+'"';
 				}
-				return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+				else if (sType === "object" && mValue !== null)
+				{
+					mValue = _fnJsonString(mValue);
+				}
+		
+				json.push((bArr ? "" : '"'+sProp+'":') + mValue);
 			}
-		}
+		
+			return (bArr ? "[" : "{") + json + (bArr ? "]" : "}");
+		};
 		
 
 		
@@ -8260,94 +8279,151 @@
 	
 	
 		/**
-		 * State saving in DataTables is very useful, but it does a blanket save on
-		 * all properties that the user can modify, so the table is restored. This
-		 * callback method can be used to modify the saved properties as you require,
-		 * just prior to them being loaded. This method can also be used to override
-		 * the state loading altogether by returning false.
+		 * Load the table state. With this function you can define from where, and how, the
+		 * state of a table is loaded. By default DataTables will load from its state saving
+		 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
-		 *  @param {object} oData Object containing information retrieved from the
-		 *    state saving cookie which should be restored. For the exact properties
-		 *    please refer to the DataTables code.
-		 *  @returns {boolean} false if the state should not be loaded, true otherwise
+		 *  @param {object} oData The state object to be saved
 		 * 
 		 *  @example
-		 *    // Remove a previously saved filter
-		 *    $(document).ready( function () {
+		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
-		 *        "fnStateLoadCallback": function ( oSettings, oData ) {
-		 *          oData.sFilter = "";
-		 *          return true;
-		 *        }
-		 *      } );
-		 *    } );
-		 *    
-		 *  @example
-		 *    // Override state loading
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
-		 *        "bStateSave": true,
-		 *        "fnStateLoadCallback": function ( oSettings, oData ) {
-		 *          return false;
+		 *        "fnStateSave": function (oSettings, oData) {
+		 *          var o;
+		 *          
+		 *          // Send an Ajax request to the server to get the data. Note that
+		 *          // this is a synchronous request.
+		 *          $.ajax( {
+		 *            "url": "/state_load",
+		 *            "async": false,
+		 *            "dataType": "json",
+		 *            "success": function (json) {
+		 *              o = json;
+		 *            }
+		 *          } );
+		 *          
+		 *          return o;
 		 *        }
 		 *      } );
 		 *    } );
 		 */
-		"fnStateLoadCallback": null,
+		"fnStateLoad": function ( oSettings ) {
+			var sData = this.oApi._fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
+			var oData;
+	
+			try {
+				oData = (typeof $.parseJSON === 'function') ? 
+					$.parseJSON(sData) : eval( '('+sData+')' );
+			} catch (e) {
+				oData = null;
+			}
+	
+			return oData;
+		},
 	
 	
 		/**
-		 * When using state saving it can be useful to store your own custom
-		 * parameters in the state saving cookie that DataTables uses, or to modify
-		 * the settings that DataTables uses. Note that this function can be quite
-		 * involved to use since it uses JSON notation in a string, given that jQuery
-		 * does not provide a "stringify" option for JSON objects.
+		 * Callback which allows modification of the saved state prior to loading that state.
+		 * This callback is called when the table is loading state from the stored data, but
+		 * prior to the settings object being modified by the saved state. Note that for 
+		 * plug-in authors, you should use the 'stateLoadParams' event to load parameters for 
+		 * a plug-in.
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
-		 *  @param {string} sValue a JSON string (without the final closing brace)
-		 *    which should be stored in the state saving cookie.
-		 *  @returns {string} The full string that should be used to save the state
+		 *  @param {object} oData The state object that is to be loaded
 		 * 
 		 *  @example
-		 *    // Add a custom parameter
-		 *    $(document).ready( function () {
+		 *    // Remove a saved filter, so filtering is never loaded
+		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
-		 *        "fnStateSaveCallback": function ( oSettings, sValue ) {
-		 *          sValue += ',"myCustomParameter": "myValue"';
-		 *          return sValue;
-		 *        }
+		 *        "fnStateLoadParams": function (oSettings, oData) {
+		 *          oData.oFilter.sSearch = "";
 		 *      } );
 		 *    } );
-		 *    
+		 */
+		"fnStateLoadParams": null,
+	
+	
+		/**
+		 * Callback that is called when the state has been loaded from the state saving method
+		 * and the DataTables settings object has been modified as a result of the loaded state.
+		 *  @type function
+		 *  @param {object} oSettings DataTables settings object
+		 *  @param {object} oData The state object that was loaded
+		 * 
 		 *  @example
-		 *    // Modify saved filter to be blank
-		 *    $(document).ready( function () {
+		 *    // Show an alert with the filtering value that was saved
+		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
-		 *        "fnStateSaveCallback": function ( oSettings, sValue ) {
-		 *          sValue = sValue.replace( /"sFilter":".*?"/, '"sFilter":""' );
-		 *          return sValue;
-		 *        }
+		 *        "fnStateLoaded": function (oSettings, oData) {
+		 *          alert( 'Saved filter was: '+oData.oFilter.sSearch );
 		 *      } );
 		 *    } );
-		 *    
+		 */
+		"fnStateLoaded": null,
+	
+	
+		/**
+		 * Save the table state. This function allows you to define where and how the state
+		 * information for the table is stored - by default it will use a cookie, but you
+		 * might want to use local storage (HTML5) or a server-side database.
+		 *  @type function
+		 *  @param {object} oSettings DataTables settings object
+		 *  @param {object} oData The state object to be saved
+		 * 
 		 *  @example
-		 *    // Modify saved filter to be blank - using JSON2.js
-		 *    $(document).ready( function () {
+		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
-		 *        "fnStateSaveCallback": function ( oSettings, sValue ) {
-		 *          var oData = JSON.parse( sValue+"}" );
-		 *          oData.sFilter = "";
-		 *          return JSON.stringify( oData ).slice( 0, -1 );
+		 *        "fnStateSave": function (oSettings, oData) {
+		 *          // Send an Ajax request to the server with the state object
+		 *          $.ajax( {
+		 *            "url": "/state_save",
+		 *            "data": oData,
+		 *            "dataType": "json",
+		 *            "method": "POST"
+		 *            "success": function () {}
+		 *          } );
 		 *        }
 		 *      } );
 		 *    } );
 		 */
-		"fnStateSaveCallback": null,
+		"fnStateSave": function ( oSettings, oData ) {
+			this.oApi._fnCreateCookie( 
+				oSettings.sCookiePrefix+oSettings.sInstance, 
+				this.oApi._fnJsonString(oData), 
+				oSettings.iCookieDuration, 
+				oSettings.sCookiePrefix, 
+				oSettings.fnCookieCallback
+			);
+		},
+	
+	
+		/**
+		 * Callback which allows modification of the state to be saved. Called when the table 
+		 * has changed state a new state save is required. This method allows modification of
+		 * the state saving object prior to actually doing the save, including addition or 
+		 * other state properties or modification. Note that for plug-in authors, you should 
+		 * use the 'stateSaveParams' event to save parameters for a plug-in.
+		 *  @type function
+		 *  @param {object} oSettings DataTables settings object
+		 *  @param {object} oData The state object to be saved
+		 * 
+		 *  @example
+		 *    // Remove a saved filter, so filtering is never saved
+		 *    $(document).ready(function() {
+		 *      $('#example').dataTable( {
+		 *        "bStateSave": true,
+		 *        "fnStateLoadParams": function (oSettings, oData) {
+		 *          oData.oFilter.sSearch = "";
+		 *      } );
+		 *    } );
+		 */
+		"fnStateSaveParams": null,
 	
 	
 		/**
@@ -9102,36 +9178,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"sServerMethod": "GET",
-	
-	
-		"fnStateSave": function ( oSettings, oData ) {
-			this.oApi._fnCreateCookie( 
-				oSettings.sCookiePrefix+oSettings.sInstance, 
-				this.oApi._fnJsonString(oData), 
-				oSettings.iCookieDuration, 
-				oSettings.sCookiePrefix, 
-				oSettings.fnCookieCallback
-			);
-		},
-	
-		"fnStateLoad": function ( oSettings ) {
-			var sData = this.oApi._fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
-			var oData;
-	
-			try {
-				oData = (typeof $.parseJSON === 'function') ? 
-					$.parseJSON(sData) : eval( '('+sData+')' );
-			} catch (e) {
-				oData = null;
-			}
-	
-			return oData;
-		},
-	
-		"fnStateSaveParams": null,
-		"fnStateLoadParams": null,
-		"fnStateLoaded": null
+		"sServerMethod": "GET"
 	};
 	
 	
@@ -10189,8 +10236,29 @@
 		 */
 		"aoInitComplete": [],
 	
+		
+		/**
+		 * Callbacks for modifying the settings to be stored for state saving, prior to
+		 * saving state.
+		 *  @type array
+		 *  @default []
+		 */
 		"aoStateSaveParams": [],
+		
+		/**
+		 * Callbacks for modifying the settings that have been stored for state saving
+		 * prior to using the stored values to restore the state.
+		 *  @type array
+		 *  @default []
+		 */
 		"aoStateLoadParams": [],
+		
+		/**
+		 * Callbacks for operating on the settings object once the saved state has been
+		 * loaded
+		 *  @type array
+		 *  @default []
+		 */
 		"aoStateLoaded": [],
 		
 		/**
@@ -11209,13 +11277,36 @@
 	 */
 
 	/**
-	 * State load event, fired when DataTables loads the saved table state. Can be used
-	 * to add, remove or override saved information
-	 *  @name DataTable#stateLoad
+	 * State save event, fired when the table has changed state a new state save is required.
+	 * This method allows modification of the state saving object prior to actually doing the
+	 * save, including addition or other state properties (for plug-ins) or modification
+	 * of a DataTables core property.
+	 *  @name DataTable#stateSaveParams
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
-	 *  @param {object} json The saved infromation from the local cookie
+	 *  @param {object} json The state information to be saved
+	 */
+
+	/**
+	 * State load event, fired when the table is loading state from the stored data, but
+	 * prior to the settings object being modified by the saved state - allowing modification
+	 * of the saved state is required or loading of state for a plug-in.
+	 *  @name DataTable#stateLoadParams
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The saved state information
+	 */
+
+	/**
+	 * State loaded event, fired when state has been loaded from stored data and the settings
+	 * object has been modified by the loaded data.
+	 *  @name DataTable#stateLoaded
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} oSettings DataTables settings object
+	 *  @param {object} json The saved state information
 	 */
 
 	/**
