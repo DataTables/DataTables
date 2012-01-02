@@ -988,6 +988,16 @@ DataTable.defaults = {
 	 *          oData.oFilter.sSearch = "";
 	 *      } );
 	 *    } );
+	 * 
+	 *  @example
+	 *    // Disallow state loading by returning false
+	 *    $(document).ready(function() {
+	 *      $('#example').dataTable( {
+	 *        "bStateSave": true,
+	 *        "fnStateLoadParams": function (oSettings, oData) {
+	 *          return false;
+	 *      } );
+	 *    } );
 	 */
 	"fnStateLoadParams": null,
 

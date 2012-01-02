@@ -4277,8 +4277,14 @@
 				return;
 			}
 			
-			/* Allow custom and plug-in manipulation functions to alter the saved data set */
-			_fnCallbackFire( oSettings, 'aoStateLoadParams', 'stateLoadParams', [oSettings, oData] );
+			/* Allow custom and plug-in manipulation functions to alter the saved data set and
+			 * cancelling of loading by returning false
+			 */
+			var abStateLoad = _fnCallbackFire( oSettings, 'aoStateLoadParams', 'stateLoadParams', [oSettings, oData] );
+			if ( $.inArray( false, abStateLoad ) !== -1 )
+			{
+				return;
+			}
 			
 			/* Store the saved state so it might be accessed at any time */
 			oSettings.oLoadedState = $.extend( true, {}, oData );
@@ -8341,6 +8347,16 @@
 		 *        "bStateSave": true,
 		 *        "fnStateLoadParams": function (oSettings, oData) {
 		 *          oData.oFilter.sSearch = "";
+		 *      } );
+		 *    } );
+		 * 
+		 *  @example
+		 *    // Disallow state loading by returning false
+		 *    $(document).ready(function() {
+		 *      $('#example').dataTable( {
+		 *        "bStateSave": true,
+		 *        "fnStateLoadParams": function (oSettings, oData) {
+		 *          return false;
 		 *      } );
 		 *    } );
 		 */
