@@ -1766,6 +1766,35 @@ DataTable.defaults = {
 	 *      } );
 	 *    } );
 	 */
-	"sServerMethod": "GET"
+	"sServerMethod": "GET",
+
+
+	"fnStateSave": function ( oSettings, oData ) {
+		this.oApi._fnCreateCookie( 
+			oSettings.sCookiePrefix+oSettings.sInstance, 
+			this.oApi._fnJsonString(oData), 
+			oSettings.iCookieDuration, 
+			oSettings.sCookiePrefix, 
+			oSettings.fnCookieCallback
+		);
+	},
+
+	"fnStateLoad": function ( oSettings ) {
+		var sData = this.oApi._fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
+		var oData;
+
+		try {
+			oData = (typeof $.parseJSON === 'function') ? 
+				$.parseJSON(sData) : eval( '('+sData+')' );
+		} catch (e) {
+			oData = null;
+		}
+
+		return oData;
+	},
+
+	"fnStateSaveParams": null,
+	"fnStateLoadParams": null,
+	"fnStateLoaded": null
 };
 

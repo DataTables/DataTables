@@ -410,6 +410,10 @@ DataTable.models.oSettings = {
 	 *  @default []
 	 */
 	"aoInitComplete": [],
+
+	"aoStateSaveParams": [],
+	"aoStateLoadParams": [],
+	"aoStateLoaded": [],
 	
 	/**
 	 * Cache the table ID for quick access

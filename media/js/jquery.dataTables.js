@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -4234,60 +4234,27 @@
 				return;
 			}
 		
-			/* xxx - This is horrible! What we really want to do is use a proper object and
-			 * pass that around - but jQuery doesn't have a toJson option. Either need to use
-			 * $.param or JSON.stringify or something else
-			 */
-			
 			/* Store the interesting variables */
-			var i, iLen, sTmp;
-			var sValue = "{";
-			sValue += '"iCreate":'+ new Date().getTime()+',';
-			sValue += '"iStart":'+ (oSettings.oScroll.bInfinite ? 0 : oSettings._iDisplayStart)+',';
-			sValue += '"iEnd":'+ (oSettings.oScroll.bInfinite ? oSettings._iDisplayLength : oSettings._iDisplayEnd)+',';
-			sValue += '"iLength":'+ oSettings._iDisplayLength+',';
-			sValue += '"sFilter":"'+ encodeURIComponent(oSettings.oPreviousSearch.sSearch)+'",';
-			sValue += '"sFilterEsc":'+ !oSettings.oPreviousSearch.bRegex+',';
-			
-			sValue += '"aaSorting":[ ';
-			for ( i=0 ; i<oSettings.aaSorting.length ; i++ )
+			var i, iLen;
+			var oState = {
+				"iCreate":      new Date().getTime(),
+				"iStart":       (oSettings.oScroll.bInfinite ? 0 : oSettings._iDisplayStart),
+				"iEnd":         (oSettings.oScroll.bInfinite ? oSettings._iDisplayLength : oSettings._iDisplayEnd),
+				"iLength":      oSettings._iDisplayLength,
+				"aaSorting":    oSettings.aaSorting.slice(),
+				"oSearch":      oSettings.oPreviousSearch.sSearch,
+				"aoSearchCols": oSettings.aoPreSearchCols.slice(),
+				"abVisCols":    []
+			};
+		
+			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
-				sValue += '['+oSettings.aaSorting[i][0]+',"'+oSettings.aaSorting[i][1]+'"],';
+				oState.abVisCols.push( oSettings.aoColumns[i].bVisible );
 			}
-			sValue = sValue.substring(0, sValue.length-1);
-			sValue += "],";
+		
+			_fnCallbackFire( oSettings, "aoStateSaveParams", 'stateSaveParams', [oSettings, oState] );
 			
-			sValue += '"aaSearchCols":[ ';
-			for ( i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
-			{
-				sValue += '["'+encodeURIComponent(oSettings.aoPreSearchCols[i].sSearch)+
-					'",'+!oSettings.aoPreSearchCols[i].bRegex+'],';
-			}
-			sValue = sValue.substring(0, sValue.length-1);
-			sValue += "],";
-			
-			sValue += '"abVisCols":[ ';
-			for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-			{
-				sValue += oSettings.aoColumns[i].bVisible+",";
-			}
-			sValue = sValue.substring(0, sValue.length-1);
-			sValue += "]";
-			
-			/* Save state from any plug-ins */
-			for ( i=0, iLen=oSettings.aoStateSave.length ; i<iLen ; i++ )
-			{
-				sTmp = oSettings.aoStateSave[i].fn( oSettings, sValue );
-				if ( sTmp !== "" )
-				{
-					sValue = sTmp;
-				}
-			}
-			
-			sValue += "}";
-			
-			_fnCreateCookie( oSettings.sCookiePrefix+oSettings.sInstance, sValue, 
-				oSettings.iCookieDuration, oSettings.sCookiePrefix, oSettings.fnCookieCallback );
+			oSettings.fnStateSave.call( oSettings.oInstance, oSettings, oState );
 		}
 		
 		
@@ -4303,82 +4270,43 @@
 			{
 				return;
 			}
-			
-			var oData, i, iLen;
-			var sData = _fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
 		
-			/* Try/catch the JSON eval - if it is bad then we ignore it - note that 1.7.0 and before
-			 * incorrectly used single quotes for some strings - hence the replace below
-			 */
-			try
-			{
-				oData = (typeof $.parseJSON === 'function') ? 
-					$.parseJSON( sData.replace(/'/g, '"') ) : eval( '('+sData+')' );
-			}
-			catch( e )
-			{
-				oData = null;
-			}
-			
-			/* Allow custom and plug-in manipulation functions to alter the data set which was
-			 * saved, and also reject any saved state by returning false
-			 */
-			var aCallbacks = _fnCallbackFire( oSettings, 'aoStateLoad', 'stateLoad', [oSettings, oData] );
-			if ( $.inArray( false, aCallbacks ) !== -1 )
+			var oData = oSettings.fnStateLoad.call( oSettings.oInstance, oSettings );
+			if ( !oData )
 			{
 				return;
 			}
-				
-			if ( oData !== null )
+			
+			/* Allow custom and plug-in manipulation functions to alter the saved data set */
+			_fnCallbackFire( oSettings, 'aoStateLoadParams', 'stateLoadParams', [oSettings, oData] );
+			
+			/* Store the saved state so it might be accessed at any time */
+			oSettings.oLoadedState = $.extend( true, {}, oData );
+			
+			/* Restore key features */
+			oSettings._iDisplayStart    = oData.iStart;
+			oSettings.iInitDisplayStart = oData.iStart;
+			oSettings._iDisplayEnd      = oData.iEnd;
+			oSettings._iDisplayLength   = oData.iLength;
+			oSettings.aaSorting         = oData.aaSorting.slice();
+			oSettings.saved_aaSorting   = oData.aaSorting.slice();
+			
+			/* Search filtering  */
+			$.extend( oSettings.oPreviousSearch, oData.oSearch );
+			$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
+			
+			/* Column visibility state
+			 * Pass back visibiliy settings to the init handler, but to do not here override
+			 * the init object that the user might have passed in
+			 */
+			oInit.saved_aoColumns = [];
+			for ( var i=0 ; i<oData.abVisCols.length ; i++ )
 			{
-				/* Store the saved state so it might be accessed at any time (particualrly a plug-in */
-				oSettings.oLoadedState = $.extend( true, {}, oData );
-				
-				/* Restore key features */
-				oSettings._iDisplayStart = oData.iStart;
-				oSettings.iInitDisplayStart = oData.iStart;
-				oSettings._iDisplayEnd = oData.iEnd;
-				oSettings._iDisplayLength = oData.iLength;
-				oSettings.oPreviousSearch.sSearch = decodeURIComponent(oData.sFilter);
-				oSettings.aaSorting = oData.aaSorting.slice();
-				oSettings.saved_aaSorting = oData.aaSorting.slice();
-				
-				/*
-				 * Search filtering - global reference added in 1.4.1
-				 * Note that we use a 'not' for the value of the regular expression indicator to maintain
-				 * compatibility with pre 1.7 versions, where this was basically inverted. Added in 1.7.0
-				 */
-				if ( oData.sFilterEsc )
-				{
-					oSettings.oPreviousSearch.bRegex = !oData.sFilterEsc;
-				}
-				
-				/* Column filtering - added in 1.5.0 beta 6 */
-				if ( oData.aaSearchCols )
-				{
-					for ( i=0 ; i<oData.aaSearchCols.length ; i++ )
-					{
-						oSettings.aoPreSearchCols[i] = {
-							"sSearch": decodeURIComponent(oData.aaSearchCols[i][0]),
-							"bRegex": !oData.aaSearchCols[i][1]
-						};
-					}
-				}
-				
-				/* Column visibility state - added in 1.5.0 beta 10 */
-				if ( oData.abVisCols )
-				{
-					/* Pass back visibiliy settings to the init handler, but to do not here override
-					 * the init object that the user might have passed in
-					 */
-					oInit.saved_aoColumns = [];
-					for ( i=0 ; i<oData.abVisCols.length ; i++ )
-					{
-						oInit.saved_aoColumns[i] = {};
-						oInit.saved_aoColumns[i].bVisible = oData.abVisCols[i];
-					}
-				}
+				oInit.saved_aoColumns[i] = {};
+				oInit.saved_aoColumns[i].bVisible = oData.abVisCols[i];
 			}
+		
+			_fnCallbackFire( oSettings, 'aoStateLoaded', 'stateLoaded', [oSettings, oData] );
 		}
 		
 		
@@ -4748,6 +4676,39 @@
 			}
 		
 			return aRet;
+		}
+		
+		
+		function _fnJsonString( obj )
+		{
+			if ( JSON.stringify )
+			{
+				return JSON.stringify( obj );
+			}
+			
+			var t = typeof (obj);
+			if (t != "object" || obj === null) {
+				// simple data type
+				if (t == "string") {
+					obj = '"'+obj+'"';
+				}
+				return String(obj);
+			}
+			else {
+				// recurse array or object
+				var n, v, json = [], arr = (obj && obj.constructor == Array);
+				for (n in obj) {
+					v = obj[n]; t = typeof(v);
+					if (t == "string") {
+						v = '"'+v+'"';
+					}
+					else if (t == "object" && v !== null) {
+						v = _fnJsonString(v);
+					}
+					json.push((arr ? "" : '"' + n + '":') + String(v));
+				}
+				return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+			}
 		}
 		
 
@@ -6009,7 +5970,8 @@
 			"_fnBindAction": _fnBindAction,
 			"_fnExtend": _fnExtend,
 			"_fnCallbackReg": _fnCallbackReg,
-			"_fnCallbackFire": _fnCallbackFire
+			"_fnCallbackFire": _fnCallbackFire,
+			"_fnJsonString": _fnJsonString
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
@@ -6148,13 +6110,16 @@
 			_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 			_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
 			_fnMap( oSettings, oInit, "fnCookieCallback" );
+			_fnMap( oSettings, oInit, "fnStateLoad" );
+			_fnMap( oSettings, oInit, "fnStateSave" );
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
 			/* Callback functions which are array driven */
 			_fnCallbackReg( oSettings, 'aoDrawCallback',       oInit.fnDrawCallback,      'user' );
 			_fnCallbackReg( oSettings, 'aoServerParams',       oInit.fnServerParams,      'user' );
-			_fnCallbackReg( oSettings, 'aoStateSave',          oInit.fnStateSaveCallback, 'user' );
-			_fnCallbackReg( oSettings, 'aoStateLoad',          oInit.fnStateLoadCallback, 'user' );
+			_fnCallbackReg( oSettings, 'aoStateSaveParams',    oInit.fnStateSaveParams,   'user' );
+			_fnCallbackReg( oSettings, 'aoStateLoadParams',    oInit.fnStateLoadParams,   'user' );
+			_fnCallbackReg( oSettings, 'aoStateLoaded',        oInit.fnStateLoaded,       'user' );
 			_fnCallbackReg( oSettings, 'aoRowCallback',        oInit.fnRowCallback,       'user' );
 			_fnCallbackReg( oSettings, 'aoRowCreatedCallback', oInit.fnCreatedRow,        'user' );
 			_fnCallbackReg( oSettings, 'aoHeaderCallback',     oInit.fnHeaderCallback,    'user' );
@@ -9137,7 +9102,36 @@
 		 *      } );
 		 *    } );
 		 */
-		"sServerMethod": "GET"
+		"sServerMethod": "GET",
+	
+	
+		"fnStateSave": function ( oSettings, oData ) {
+			this.oApi._fnCreateCookie( 
+				oSettings.sCookiePrefix+oSettings.sInstance, 
+				this.oApi._fnJsonString(oData), 
+				oSettings.iCookieDuration, 
+				oSettings.sCookiePrefix, 
+				oSettings.fnCookieCallback
+			);
+		},
+	
+		"fnStateLoad": function ( oSettings ) {
+			var sData = this.oApi._fnReadCookie( oSettings.sCookiePrefix+oSettings.sInstance );
+			var oData;
+	
+			try {
+				oData = (typeof $.parseJSON === 'function') ? 
+					$.parseJSON(sData) : eval( '('+sData+')' );
+			} catch (e) {
+				oData = null;
+			}
+	
+			return oData;
+		},
+	
+		"fnStateSaveParams": null,
+		"fnStateLoadParams": null,
+		"fnStateLoaded": null
 	};
 	
 	
@@ -10194,6 +10188,10 @@
 		 *  @default []
 		 */
 		"aoInitComplete": [],
+	
+		"aoStateSaveParams": [],
+		"aoStateLoadParams": [],
+		"aoStateLoaded": [],
 		
 		/**
 		 * Cache the table ID for quick access

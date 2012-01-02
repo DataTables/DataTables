@@ -121,13 +121,16 @@ _fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 _fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 _fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
 _fnMap( oSettings, oInit, "fnCookieCallback" );
+_fnMap( oSettings, oInit, "fnStateLoad" );
+_fnMap( oSettings, oInit, "fnStateSave" );
 _fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 
 /* Callback functions which are array driven */
 _fnCallbackReg( oSettings, 'aoDrawCallback',       oInit.fnDrawCallback,      'user' );
 _fnCallbackReg( oSettings, 'aoServerParams',       oInit.fnServerParams,      'user' );
-_fnCallbackReg( oSettings, 'aoStateSave',          oInit.fnStateSaveCallback, 'user' );
-_fnCallbackReg( oSettings, 'aoStateLoad',          oInit.fnStateLoadCallback, 'user' );
+_fnCallbackReg( oSettings, 'aoStateSaveParams',    oInit.fnStateSaveParams,   'user' );
+_fnCallbackReg( oSettings, 'aoStateLoadParams',    oInit.fnStateLoadParams,   'user' );
+_fnCallbackReg( oSettings, 'aoStateLoaded',        oInit.fnStateLoaded,       'user' );
 _fnCallbackReg( oSettings, 'aoRowCallback',        oInit.fnRowCallback,       'user' );
 _fnCallbackReg( oSettings, 'aoRowCreatedCallback', oInit.fnCreatedRow,        'user' );
 _fnCallbackReg( oSettings, 'aoHeaderCallback',     oInit.fnHeaderCallback,    'user' );
