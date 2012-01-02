@@ -62,7 +62,7 @@ if [ "$CMD" != "debug" ]; then
  * Author:      Allan Jardine (www.sprymedia.co.uk)
  * Info:        www.datatables.net
  * 
- * Copyright 2008-2011 Allan Jardine, all rights reserved.
+ * Copyright 2008-2012 Allan Jardine, all rights reserved.
  *
  * This source file is free software, under either the GPL v2 license or a
  * BSD style license, available at:
