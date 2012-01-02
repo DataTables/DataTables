@@ -4235,15 +4235,15 @@
 			}
 		
 			/* Store the interesting variables */
-			var i, iLen;
+			var i, iLen, bInfinite=oSettings.oScroll.bInfinite;
 			var oState = {
 				"iCreate":      new Date().getTime(),
-				"iStart":       (oSettings.oScroll.bInfinite ? 0 : oSettings._iDisplayStart),
-				"iEnd":         (oSettings.oScroll.bInfinite ? oSettings._iDisplayLength : oSettings._iDisplayEnd),
+				"iStart":       (bInfinite ? 0 : oSettings._iDisplayStart),
+				"iEnd":         (bInfinite ? oSettings._iDisplayLength : oSettings._iDisplayEnd),
 				"iLength":      oSettings._iDisplayLength,
-				"aaSorting":    oSettings.aaSorting.slice(),
-				"oSearch":      oSettings.oPreviousSearch.sSearch,
-				"aoSearchCols": oSettings.aoPreSearchCols.slice(),
+				"aaSorting":    $.extend( true, [], oSettings.aaSorting ),
+				"oSearch":      $.extend( true, {}, oSettings.oPreviousSearch ),
+				"aoSearchCols": $.extend( true, [], oSettings.aoPreSearchCols ),
 				"abVisCols":    []
 			};
 		
