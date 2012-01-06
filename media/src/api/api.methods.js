@@ -181,7 +181,7 @@ this.fnAddData = function( mData, bRedraw )
 	
 	oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	
-	if ( bRedraw )
+	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnReDraw( oSettings );
 	}
