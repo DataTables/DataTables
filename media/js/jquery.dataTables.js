@@ -4696,7 +4696,7 @@
 		 *  @returns {string} JSON string
 		 *  @memberof DataTable#oApi
 		 */
-		var _fnJsonString = (JSON.stringify) ? JSON.stringify : function( o )
+		var _fnJsonString = (window.JSON) ? JSON.stringify : function( o )
 		{
 			/* Not an object or array */
 			var sType = typeof o;
