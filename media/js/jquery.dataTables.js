@@ -6172,7 +6172,7 @@
 				 */
 				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
 				
-				if ( oInit.sDom == DataTable.defaults.sDom )
+				if ( oInit.sDom === DataTable.defaults.sDom && DataTable.defaults.sDom === "lfrtip" )
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
 					oSettings.sDom = '<"H"lfr>t<"F"ip>';
