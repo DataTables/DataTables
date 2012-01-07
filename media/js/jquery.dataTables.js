@@ -4920,7 +4920,7 @@
 			
 			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 			
-			if ( bRedraw )
+			if ( bRedraw === undefined || bRedraw )
 			{
 				_fnReDraw( oSettings );
 			}
@@ -5300,7 +5300,7 @@
 				bCaseInsensitive = true;
 			}
 			
-			if ( !iColumn )
+			if ( iColumn === undefined || iColumn === null )
 			{
 				/* Global filter */
 				_fnFilterComplete( oSettings, {
@@ -5370,7 +5370,7 @@
 				var iRow = (typeof mRow === 'object') ? 
 					_fnNodeToDataIndex(oSettings, mRow) : mRow;
 				
-				if ( iCol )
+				if ( iCol !== undefined )
 				{
 					return _fnGetCellData( oSettings, iRow, iCol, '' );
 				}
@@ -5400,7 +5400,7 @@
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
-			return (iRow) ?
+			return (iRow !== undefined) ?
 				oSettings.aoData[iRow].nTr :
 				_fnGetTrNodes( oSettings );
 		};

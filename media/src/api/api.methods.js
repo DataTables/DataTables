@@ -561,7 +561,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 		bCaseInsensitive = true;
 	}
 	
-	if ( !iColumn )
+	if ( iColumn === undefined || iColumn === null )
 	{
 		/* Global filter */
 		_fnFilterComplete( oSettings, {
@@ -631,7 +631,7 @@ this.fnGetData = function( mRow, iCol )
 		var iRow = (typeof mRow === 'object') ? 
 			_fnNodeToDataIndex(oSettings, mRow) : mRow;
 		
-		if ( iCol )
+		if ( iCol !== undefined )
 		{
 			return _fnGetCellData( oSettings, iRow, iCol, '' );
 		}
@@ -661,7 +661,7 @@ this.fnGetNodes = function( iRow )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
-	return (iRow) ?
+	return (iRow !== undefined) ?
 		oSettings.aoData[iRow].nTr :
 		_fnGetTrNodes( oSettings );
 };
