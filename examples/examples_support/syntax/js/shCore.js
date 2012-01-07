@@ -14,8 +14,2367 @@
  * @license
  * Dual licensed under the MIT and GPL licenses.
  */
-var XRegExp;if(XRegExp){throw Error("can't load XRegExp twice in the same frame")}(function(){function o(a,b,c){if(Array.prototype.indexOf){return a.indexOf(b,c)}for(var d=c||0;d<a.length;d++){if(a[d]===b){return d}}return-1}function n(a,b,c,f){var g=e.length,h,i,j;d=true;try{while(g--){j=e[g];if(c&j.scope&&(!j.trigger||j.trigger.call(f))){j.pattern.lastIndex=b;i=j.pattern.exec(a);if(i&&i.index===b){h={output:j.handler.call(f,i,c),match:i};break}}}}catch(k){throw k}finally{d=false}return h}function m(a){return(a.global?"g":"")+(a.ignoreCase?"i":"")+(a.multiline?"m":"")+(a.extended?"x":"")+(a.sticky?"y":"")}function l(a,b){if(!XRegExp.isRegExp(a)){throw TypeError("type RegExp expected")}var c=a._xregexp;a=XRegExp(a.source,m(a)+(b||""));if(c){a._xregexp={source:c.source,captureNames:c.captureNames?c.captureNames.slice(0):null}}return a}XRegExp=function(a,c){var e=[],g=XRegExp.OUTSIDE_CLASS,h=0,i,j,m,o,p;if(XRegExp.isRegExp(a)){if(c!==undefined){throw TypeError("can't supply flags when constructing one RegExp from another")}return l(a)}if(d){throw Error("can't call the XRegExp constructor within token definition functions")}c=c||"";i={hasNamedCapture:false,captureNames:[],hasFlag:function(a){return c.indexOf(a)>-1},setFlag:function(a){c+=a}};while(h<a.length){j=n(a,h,g,i);if(j){e.push(j.output);h+=j.match[0].length||1}else{if(m=f.exec.call(k[g],a.slice(h))){e.push(m[0]);h+=m[0].length}else{o=a.charAt(h);if(o==="["){g=XRegExp.INSIDE_CLASS}else{if(o==="]"){g=XRegExp.OUTSIDE_CLASS}}e.push(o);h++}}}p=RegExp(e.join(""),f.replace.call(c,b,""));p._xregexp={source:a,captureNames:i.hasNamedCapture?i.captureNames:null};return p};XRegExp.version="1.5.0";XRegExp.INSIDE_CLASS=1;XRegExp.OUTSIDE_CLASS=2;var a=/\$(?:(\d\d?|[$&`'])|{([$\w]+)})/g,b=/[^gimy]+|([\s\S])(?=[\s\S]*\1)/g,c=/^(?:[?*+]|{\d+(?:,\d*)?})\??/,d=false,e=[],f={exec:RegExp.prototype.exec,test:RegExp.prototype.test,match:String.prototype.match,replace:String.prototype.replace,split:String.prototype.split},g=f.exec.call(/()??/,"")[1]===undefined,h=function(){var a=/^/g;f.test.call(a,"");return!a.lastIndex}(),i=function(){var a=/x/g;f.replace.call("x",a,"");return!a.lastIndex}(),j=RegExp.prototype.sticky!==undefined,k={};k[XRegExp.INSIDE_CLASS]=/^(?:\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S]))/;k[XRegExp.OUTSIDE_CLASS]=/^(?:\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9]\d*|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S])|\(\?[:=!]|[?*+]\?|{\d+(?:,\d*)?}\??)/;XRegExp.addToken=function(a,b,c,d){e.push({pattern:l(a,"g"+(j?"y":"")),handler:b,scope:c||XRegExp.OUTSIDE_CLASS,trigger:d||null})};XRegExp.cache=function(a,b){var c=a+"/"+(b||"");return XRegExp.cache[c]||(XRegExp.cache[c]=XRegExp(a,b))};XRegExp.copyAsGlobal=function(a){return l(a,"g")};XRegExp.escape=function(a){return a.replace(/[-[\]{}()*+?.,\\^$|#\s]/g,"\\$&")};XRegExp.execAt=function(a,b,c,d){b=l(b,"g"+(d&&j?"y":""));b.lastIndex=c=c||0;var e=b.exec(a);if(d){return e&&e.index===c?e:null}else{return e}};XRegExp.freezeTokens=function(){XRegExp.addToken=function(){throw Error("can't run addToken after freezeTokens")}};XRegExp.isRegExp=function(a){return Object.prototype.toString.call(a)==="[object RegExp]"};XRegExp.iterate=function(a,b,c,d){var e=l(b,"g"),f=-1,g;while(g=e.exec(a)){c.call(d,g,++f,a,e);if(e.lastIndex===g.index){e.lastIndex++}}if(b.global){b.lastIndex=0}};XRegExp.matchChain=function(a,b){return function c(a,d){var e=b[d].regex?b[d]:{regex:b[d]},f=l(e.regex,"g"),g=[],h;for(h=0;h<a.length;h++){XRegExp.iterate(a[h],f,function(a){g.push(e.backref?a[e.backref]||"":a[0])})}return d===b.length-1||!g.length?g:c(g,d+1)}([a],0)};RegExp.prototype.apply=function(a,b){return this.exec(b[0])};RegExp.prototype.call=function(a,b){return this.exec(b)};RegExp.prototype.exec=function(a){var b=f.exec.apply(this,arguments),c,d;if(b){if(!g&&b.length>1&&o(b,"")>-1){d=RegExp(this.source,f.replace.call(m(this),"g",""));f.replace.call(a.slice(b.index),d,function(){for(var a=1;a<arguments.length-2;a++){if(arguments[a]===undefined){b[a]=undefined}}})}if(this._xregexp&&this._xregexp.captureNames){for(var e=1;e<b.length;e++){c=this._xregexp.captureNames[e-1];if(c){b[c]=b[e]}}}if(!h&&this.global&&!b[0].length&&this.lastIndex>b.index){this.lastIndex--}}return b};if(!h){RegExp.prototype.test=function(a){var b=f.exec.call(this,a);if(b&&this.global&&!b[0].length&&this.lastIndex>b.index){this.lastIndex--}return!!b}}String.prototype.match=function(a){if(!XRegExp.isRegExp(a)){a=RegExp(a)}if(a.global){var b=f.match.apply(this,arguments);a.lastIndex=0;return b}return a.exec(this)};String.prototype.replace=function(b,c){var d=XRegExp.isRegExp(b),e,g,h;if(d&&typeof c.valueOf()==="string"&&c.indexOf("${")===-1&&i){return f.replace.apply(this,arguments)}if(!d){b=b+""}else{if(b._xregexp){e=b._xregexp.captureNames}}if(typeof c==="function"){g=f.replace.call(this,b,function(){if(e){arguments[0]=new String(arguments[0]);for(var a=0;a<e.length;a++){if(e[a]){arguments[0][e[a]]=arguments[a+1]}}}if(d&&b.global){b.lastIndex=arguments[arguments.length-2]+arguments[0].length}return c.apply(null,arguments)})}else{h=this+"";g=f.replace.call(h,b,function(){var b=arguments;return f.replace.call(c,a,function(a,c,d){if(c){switch(c){case"$":return"$";case"&":return b[0];case"`":return b[b.length-1].slice(0,b[b.length-2]);case"'":return b[b.length-1].slice(b[b.length-2]+b[0].length);default:var f="";c=+c;if(!c){return a}while(c>b.length-3){f=String.prototype.slice.call(c,-1)+f;c=Math.floor(c/10)}return(c?b[c]||"":"$")+f}}else{var g=+d;if(g<=b.length-3){return b[g]}g=e?o(e,d):-1;return g>-1?b[g+1]:a}})})}if(d&&b.global){b.lastIndex=0}return g};String.prototype.split=function(a,b){if(!XRegExp.isRegExp(a)){return f.split.apply(this,arguments)}var c=this+"",d=[],e=0,g,h;if(b===undefined||+b<0){b=Infinity}else{b=Math.floor(+b);if(!b){return[]}}a=XRegExp.copyAsGlobal(a);while(g=a.exec(c)){if(a.lastIndex>e){d.push(c.slice(e,g.index));if(g.length>1&&g.index<c.length){Array.prototype.push.apply(d,g.slice(1))}h=g[0].length;e=a.lastIndex;if(d.length>=b){break}}if(a.lastIndex===g.index){a.lastIndex++}}if(e===c.length){if(!f.test.call(a,"")||h){d.push("")}}else{d.push(c.slice(e))}return d.length>b?d.slice(0,b):d};XRegExp.addToken(/\(\?#[^)]*\)/,function(a){return f.test.call(c,a.input.slice(a.index+a[0].length))?"":"(?:)"});XRegExp.addToken(/\((?!\?)/,function(){this.captureNames.push(null);return"("});XRegExp.addToken(/\(\?<([$\w]+)>/,function(a){this.captureNames.push(a[1]);this.hasNamedCapture=true;return"("});XRegExp.addToken(/\\k<([\w$]+)>/,function(a){var b=o(this.captureNames,a[1]);return b>-1?"\\"+(b+1)+(isNaN(a.input.charAt(a.index+a[0].length))?"":"(?:)"):a[0]});XRegExp.addToken(/\[\^?]/,function(a){return a[0]==="[]"?"\\b\\B":"[\\s\\S]"});XRegExp.addToken(/^\(\?([imsx]+)\)/,function(a){this.setFlag(a[1]);return""});XRegExp.addToken(/(?:\s+|#.*)+/,function(a){return f.test.call(c,a.input.slice(a.index+a[0].length))?"":"(?:)"},XRegExp.OUTSIDE_CLASS,function(){return this.hasFlag("x")});XRegExp.addToken(/\./,function(){return"[\\s\\S]"},XRegExp.OUTSIDE_CLASS,function(){return this.hasFlag("s")})})();var SyntaxHighlighter=function(){function J(a){var b=a.target,e=l(b,".syntaxhighlighter"),f=l(b,".container"),g=document.createElement("textarea"),i;if(!f||!e||k(f,"textarea"))return;i=h(e.id);c(e,"source");var j=f.childNodes,m=[];for(var n=0;n<j.length;n++)m.push(j[n].innerText||j[n].textContent);m=m.join("\r");g.appendChild(document.createTextNode(m));f.appendChild(g);g.focus();g.select();r(g,"blur",function(a){g.parentNode.removeChild(g);d(e,"source")})}function I(a){var b="<![CDATA[",c="]]>",d=C(a),e=false,f=b.length,g=c.length;if(d.indexOf(b)==0){d=d.substring(f);e=true}var h=d.length;if(d.indexOf(c)==h-g){d=d.substring(0,h-g);e=true}return e?d:a}function H(){var a=document.getElementsByTagName("script"),b=[];for(var c=0;c<a.length;c++)if(a[c].type=="syntaxhighlighter")b.push(a[c]);return b}function G(b){var c=/(.*)((>|<).*)/;return b.replace(a.regexLib.url,function(a){var b="",d=null;if(d=c.exec(a)){a=d[1];b=d[2]}return'<a href="'+a+'">'+a+"</a>"+b})}function F(b,c){function d(a,b){return a[0]}var e=0,f=null,g=[],h=c.func?c.func:d;while((f=c.regex.exec(b))!=null){var i=h(f,c);if(typeof i=="string")i=[new a.Match(i,f.index,c.css)];g=g.concat(i)}return g}function E(a,b){if(a.index<b.index)return-1;else if(a.index>b.index)return 1;else{if(a.length<b.length)return-1;else if(a.length>b.length)return 1}return 0}function D(a){var b=f(B(a)),c=new Array,d=/^\s*/,e=1e3;for(var g=0;g<b.length&&e>0;g++){var h=b[g];if(C(h).length==0)continue;var i=d.exec(h);if(i==null)return a;e=Math.min(i[0].length,e)}if(e>0)for(var g=0;g<b.length;g++)b[g]=b[g].substr(e);return b.join("\n")}function C(a){return a.replace(/^\s+|\s+$/g,"")}function B(b){var c=/<br\s*\/?>|<br\s*\/?>/gi;if(a.config.bloggerMode==true)b=b.replace(c,"\n");if(a.config.stripBrs==true)b=b.replace(c,"");return b}function A(a,b){function h(a,b,c){return a.substr(0,b)+e.substr(0,c)+a.substr(b+1,a.length)}var c=f(a),d="\t",e="";for(var g=0;g<50;g++)e+="                    ";a=u(a,function(a){if(a.indexOf(d)==-1)return a;var c=0;while((c=a.indexOf(d))!=-1){var e=b-c%b;a=h(a,c,e)}return a});return a}function z(a,b){var c="";for(var d=0;d<b;d++)c+=" ";return a.replace(/\t/g,c)}function y(a,b){var c=a.toString();while(c.length<b)c="0"+c;return c}function x(b,c){if(b==null||b.length==0||b=="\n")return b;b=b.replace(/</g,"<");b=b.replace(/ {2,}/g,function(b){var c="";for(var d=0;d<b.length-1;d++)c+=a.config.space;return c+" "});if(c!=null)b=u(b,function(a){if(a.length==0)return"";var b="";a=a.replace(/^( | )+/,function(a){b=a;return""});if(a.length==0)return b;return b+'<code class="'+c+'">'+a+"</code>"});return b}function w(a){var b,c={},d=new XRegExp("^\\[(?<values>(.*?))\\]$"),e=new XRegExp("(?<name>[\\w-]+)"+"\\s*:\\s*"+"(?<value>"+"[\\w-%#]+|"+"\\[.*?\\]|"+'".*?"|'+"'.*?'"+")\\s*;?","g");while((b=e.exec(a))!=null){var f=b.value.replace(/^['"]|['"]$/g,"");if(f!=null&&d.test(f)){var g=d.exec(f);f=g.values.length>0?g.values.split(/\s*,\s*/):[]}c[b.name]=f}return c}function v(a){return a.replace(/^[ ]*[\n]+|[\n]*[ ]*$/g,"")}function u(a,b){var c=f(a);for(var d=0;d<c.length;d++)c[d]=b(c[d],d);return c.join("\n")}function t(b,c){var d=a.vars.discoveredBrushes,e=null;if(d==null){d={};for(var f in a.brushes){var g=a.brushes[f],h=g.aliases;if(h==null)continue;g.brushName=f.toLowerCase();for(var i=0;i<h.length;i++)d[h[i]]=f}a.vars.discoveredBrushes=d}e=a.brushes[d[b]];if(e==null&&c!=false)s(a.config.strings.noBrush+b);return e}function s(b){window.alert(a.config.strings.alert+b)}function r(a,b,c,d){function e(a){a=a||window.event;if(!a.target){a.target=a.srcElement;a.preventDefault=function(){this.returnValue=false}}c.call(d||window,a)}if(a.attachEvent){a.attachEvent("on"+b,e)}else{a.addEventListener(b,e,false)}}function q(a,b,c,d,e){var f=(screen.width-c)/2,g=(screen.height-d)/2;e+=", left="+f+", top="+g+", width="+c+", height="+d;e=e.replace(/^,/,"");var h=window.open(a,b,e);h.focus();return h}function p(a){var b={"true":true,"false":false}[a];return b==null?a:b}function o(a,b){var c={},d;for(d in a)c[d]=a[d];for(d in b)c[d]=b[d];return c}function n(a){return(a||"")+Math.round(Math.random()*1e6).toString()}function m(a,b,c){c=Math.max(c||0,0);for(var d=c;d<a.length;d++)if(a[d]==b)return d;return-1}function l(a,b){return k(a,b,true)}function k(a,b,c){if(a==null)return null;var d=c!=true?a.childNodes:[a.parentNode],e={"#":"id",".":"className"}[b.substr(0,1)]||"nodeName",f,g;f=e!="nodeName"?b.substr(1):b.toUpperCase();if((a[e]||"").indexOf(f)!=-1)return a;for(var h=0;d&&h<d.length&&g==null;h++)g=k(d[h],b,c);return g}function j(b){a.vars.highlighters[g(b.id)]=b}function i(a){return document.getElementById(g(a))}function h(b){return a.vars.highlighters[g(b)]}function g(a){var b="highlighter_";return a.indexOf(b)==0?a:b+a}function f(a){return a.split("\n")}function e(a){var b=[];for(var c=0;c<a.length;c++)b.push(a[c]);return b}function d(a,b){a.className=a.className.replace(b,"")}function c(a,c){if(!b(a,c))a.className+=" "+c}function b(a,b){return a.className.indexOf(b)!=-1}if(typeof require!="undefined"&&typeof XRegExp=="undefined"){XRegExp=require("XRegExp").XRegExp}var a={defaults:{"class-name":"","first-line":1,"pad-line-numbers":false,highlight:null,title:null,"smart-tabs":true,"tab-size":4,gutter:true,toolbar:true,"quick-code":true,collapse:false,"auto-links":true,light:false,"html-script":false},config:{space:" ",useScriptTags:true,bloggerMode:false,stripBrs:false,tagName:"pre",strings:{expandSource:"expand source",help:"?",jsbin:"Run in JS Bin",alert:"SyntaxHighlighter\n\n",noBrush:"Can't find brush for: ",brushNotHtmlScript:"Brush wasn't configured for html-script option: ",aboutDialog:'<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>About SyntaxHighlighter</title></head><body style="font-family:Geneva,Arial,Helvetica,sans-serif;background-color:#fff;color:#000;font-size:1em;text-align:center;"><div style="text-align:center;margin-top:1.5em;"><div style="font-size:xx-large;">SyntaxHighlighter</div><div style="font-size:.75em;margin-bottom:3em;"><div>version 3.0.83 (July 02 2010)</div><div><a href="http://alexgorbatchev.com/SyntaxHighlighter" target="_blank" style="color:#005896">http://alexgorbatchev.com/SyntaxHighlighter</a></div><div>JavaScript code syntax highlighter.</div><div>Copyright 2004-2010 Alex Gorbatchev.</div></div><div>If you like this script, please <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2930402" style="color:#005896">donate</a> to <br/>keep development active!</div></div></body></html>'}},vars:{discoveredBrushes:null,highlighters:{}},brushes:{},regexLib:{multiLineCComments:/\/\*[\s\S]*?\*\//gm,singleLineCComments:/\/\/.*$/gm,singleLinePerlComments:/#.*$/gm,doubleQuotedString:/"([^\\"\n]|\\.)*"/g,singleQuotedString:/'([^\\'\n]|\\.)*'/g,multiLineDoubleQuotedString:new XRegExp('"([^\\\\"]|\\\\.)*"',"gs"),multiLineSingleQuotedString:new XRegExp("'([^\\\\']|\\\\.)*'","gs"),xmlComments:/(<|<)!--[\s\S]*?--(>|>)/gm,url:/\w+:\/\/[\w-.\/?%&=:@;]*/g,phpScriptTags:{left:/(<|<)\?=?/g,right:/\?(>|>)/g},aspScriptTags:{left:/(<|<)%=?/g,right:/%(>|>)/g},scriptScriptTags:{left:/(<|<)\s*script.*?(>|>)/gi,right:/(<|<)\/\s*script\s*(>|>)/gi}},toolbar:{getHtml:function(b){function f(b,c){return a.toolbar.getButtonHtml(b,c,a.config.strings[c])}var c='<div class="toolbar">',d=a.toolbar.items,e=d.list;for(var g=0;g<e.length;g++)c+=(d[e[g]].getHtml||f)(b,e[g]);c+="</div>";return c},getButtonHtml:function(a,b,c){return'<span><a href="#" class="toolbar_item'+" command_"+b+" "+b+'">'+c+"</a></span>"},handler:function(b){function e(a){var b=new RegExp(a+"_(\\w+)"),c=b.exec(d);return c?c[1]:null}var c=b.target,d=c.className||"";var f=h(l(c,".syntaxhighlighter").id),g=e("command");if(f&&g)a.toolbar.items[g].execute(f);b.preventDefault()},items:{list:["expandSource","jsbin","help"],expandSource:{getHtml:function(b){if(b.getParam("collapse")!=true)return"";var c=b.getParam("title");return a.toolbar.getButtonHtml(b,"expandSource",c?c:a.config.strings.expandSource)},execute:function(a){var b=i(a.id);d(b,"collapsed")}},help:{execute:function(b){var c=q("","_blank",500,250,"scrollbars=0"),d=c.document;d.write(a.config.strings.aboutDialog);d.close();c.focus()}},jsbin:{execute:function(a){var b=document.createElement("form");b.method="POST";b.action="http://live.datatables.net";b.style.display="none";var c=document.createElement("textarea");c.name="js";c.value=a.code;b.appendChild(c);document.body.appendChild(b);b.submit()}}}},findElements:function(b,c){var d=c?[c]:e(document.getElementsByTagName(a.config.tagName)),f=a.config,g=[];if(f.useScriptTags)d=d.concat(H());if(d.length===0)return g;for(var h=0;h<d.length;h++){var i={target:d[h],params:o(b,w(d[h].className))};if(i.params["brush"]==null)continue;g.push(i)}return g},highlight:function(b,c){var d=this.findElements(b,c),e="innerHTML",f=null,g=a.config;if(d.length===0)return;for(var h=0;h<d.length;h++){var c=d[h],i=c.target,j=c.params,k=j.brush,l;if(k==null)continue;if(j["html-script"]=="true"||a.defaults["html-script"]==true){f=new a.HtmlScript(k);k="htmlscript"}else{var m=t(k);if(m)f=new m;else continue}l=i[e];if(g.useScriptTags)l=I(l);if((i.title||"")!="")j.title=i.title;j["brush"]=k;f.init(j);c=f.getDiv(l);if((i.id||"")!="")c.id=i.id;i.parentNode.replaceChild(c,i)}},all:function(b){r(window,"load",function(){a.highlight(b)})}};a["all"]=a.all;a["highlight"]=a.highlight;a.Match=function(a,b,c){this.value=a;this.index=b;this.length=a.length;this.css=c;this.brushName=null};a.Match.prototype.toString=function(){return this.value};a.HtmlScript=function(b){function k(a,b){var e=a.code,f=[],g=d.regexList,h=a.index+a.left.length,i=d.htmlScript,k;for(var l=0;l<g.length;l++){k=F(e,g[l]);j(k,h);f=f.concat(k)}if(i.left!=null&&a.left!=null){k=F(a.left,i.left);j(k,a.index);f=f.concat(k)}if(i.right!=null&&a.right!=null){k=F(a.right,i.right);j(k,a.index+a[0].lastIndexOf(a.right));f=f.concat(k)}for(var m=0;m<f.length;m++)f[m].brushName=c.brushName;return f}function j(a,b){for(var c=0;c<a.length;c++)a[c].index+=b}var c=t(b),d,e=new a.brushes.Xml,f=null,g=this,h="getDiv getHtml init".split(" ");if(c==null)return;d=new c;for(var i=0;i<h.length;i++)(function(){var a=h[i];g[a]=function(){return e[a].apply(e,arguments)}})();if(d.htmlScript==null){s(a.config.strings.brushNotHtmlScript+b);return}e.regexList.push({regex:d.htmlScript.code,func:k})};a.Highlighter=function(){};a.Highlighter.prototype={getParam:function(a,b){var c=this.params[a];return p(c==null?b:c)},create:function(a){return document.createElement(a)},findMatches:function(a,b){var c=[];if(a!=null)for(var d=0;d<a.length;d++)if(typeof a[d]=="object")c=c.concat(F(b,a[d]));return this.removeNestedMatches(c.sort(E))},removeNestedMatches:function(a){for(var b=0;b<a.length;b++){if(a[b]===null)continue;var c=a[b],d=c.index+c.length;for(var e=b+1;e<a.length&&a[b]!==null;e++){var f=a[e];if(f===null)continue;else if(f.index>d)break;else if(f.index==c.index&&f.length>c.length)a[b]=null;else if(f.index>=c.index&&f.index<d)a[e]=null}}return a},figureOutLineNumbers:function(a){var b=[],c=parseInt(this.getParam("first-line"));u(a,function(a,d){b.push(d+c)});return b},isLineHighlighted:function(a){var b=this.getParam("highlight",[]);if(typeof b!="object"&&b.push==null)b=[b];return m(b,a.toString())!=-1},getLineHtml:function(a,b,c){var d=["line","number"+b,"index"+a,"alt"+(b%2==0?1:2).toString()];if(this.isLineHighlighted(b))d.push("highlighted");if(b==0)d.push("break");return'<div class="'+d.join(" ")+'">'+c+"</div>"},getLineNumbersHtml:function(b,c){var d="",e=f(b).length,g=parseInt(this.getParam("first-line")),h=this.getParam("pad-line-numbers");if(h==true)h=(g+e-1).toString().length;else if(isNaN(h)==true)h=0;for(var i=0;i<e;i++){var j=c?c[i]:g+i,b=j==0?a.config.space:y(j,h);d+=this.getLineHtml(i,j,b)}return d},getCodeLinesHtml:function(b,c){b=C(b);var d=f(b),e=this.getParam("pad-line-numbers"),g=parseInt(this.getParam("first-line")),b="",h=this.getParam("brush");for(var i=0;i<d.length;i++){var j=d[i],k=/^( |\s)+/.exec(j),l=null,m=c?c[i]:g+i;if(k!=null){l=k[0].toString();j=j.substr(l.length);l=l.replace(" ",a.config.space)}j=C(j);if(j.length==0)j=a.config.space;b+=this.getLineHtml(i,m,(l!=null?'<code class="'+h+' spaces">'+l+"</code>":"")+j)}return b},getTitleHtml:function(a){return a?"<caption>"+a+"</caption>":""},getMatchesHtml:function(a,b){function f(a){var b=a?a.brushName||e:e;return b?b+" ":""}var c=0,d="",e=this.getParam("brush","");for(var g=0;g<b.length;g++){var h=b[g],i;if(h===null||h.length===0)continue;i=f(h);d+=x(a.substr(c,h.index-c),i+"plain")+x(h.value,i+h.css);c=h.index+h.length+(h.offset||0)}d+=x(a.substr(c),f()+"plain");return d},getHtml:function(b){var c="",d=["syntaxhighlighter"],e,f,h;if(this.getParam("light")==true)this.params.toolbar=this.params.gutter=false;className="syntaxhighlighter";if(this.getParam("collapse")==true)d.push("collapsed");if((gutter=this.getParam("gutter"))==false)d.push("nogutter");d.push(this.getParam("class-name"));d.push(this.getParam("brush"));b=v(b).replace(/\r/g," ");e=this.getParam("tab-size");b=this.getParam("smart-tabs")==true?A(b,e):z(b,e);b=D(b);if(gutter)h=this.figureOutLineNumbers(b);f=this.findMatches(this.regexList,b);c=this.getMatchesHtml(b,f);c=this.getCodeLinesHtml(c,h);if(this.getParam("auto-links"))c=G(c);if(typeof navigator!="undefined"&&navigator.userAgent&&navigator.userAgent.match(/MSIE/))d.push("ie");c='<div id="'+g(this.id)+'" class="'+d.join(" ")+'">'+(this.getParam("toolbar")?a.toolbar.getHtml(this):"")+'<table border="0" cellpadding="0" cellspacing="0">'+this.getTitleHtml(this.getParam("title"))+"<tbody>"+"<tr>"+(gutter?'<td class="gutter">'+this.getLineNumbersHtml(b)+"</td>":"")+'<td class="code">'+'<div class="container">'+c+"</div>"+"</td>"+"</tr>"+"</tbody>"+"</table>"+"</div>";return c},getDiv:function(b){if(b===null)b="";this.code=b;var c=this.create("div");c.innerHTML=this.getHtml(b);if(this.getParam("toolbar"))r(k(c,".toolbar"),"click",a.toolbar.handler);if(this.getParam("quick-code"))r(k(c,".code"),"dblclick",J);return c},init:function(b){this.id=n();j(this);this.params=o(a.defaults,b||{});if(this.getParam("light")==true)this.params.toolbar=this.params.gutter=false},getKeywords:function(a){a=a.replace(/^\s+|\s+$/g,"").replace(/\s+/g,"|");return"\\b(?:"+a+")\\b"},forHtmlScript:function(a){this.htmlScript={left:{regex:a.left,css:"script"},right:{regex:a.right,css:"script"},code:new XRegExp("(?<left>"+a.left.source+")"+"(?<code>.*?)"+"(?<right>"+a.right.source+")","sgi")}}};return a}();typeof exports!="undefined"?exports["SyntaxHighlighter"]=SyntaxHighlighter:null
+// XRegExp 1.5.0
+// (c) 2007-2010 Steven Levithan
+// MIT License
+// <http://xregexp.com>
+// Provides an augmented, extensible, cross-browser implementation of regular expressions,
+// including support for additional syntax, flags, and methods
+
+var XRegExp;
+
+if (XRegExp) {
+    // Avoid running twice, since that would break references to native globals
+    throw Error("can't load XRegExp twice in the same frame");
+}
+
+// Run within an anonymous function to protect variables and avoid new globals
+(function () {
+
+    //---------------------------------
+    //  Constructor
+    //---------------------------------
+
+    // Accepts a pattern and flags; returns a new, extended `RegExp` object. Differs from a native
+    // regular expression in that additional syntax and flags are supported and cross-browser
+    // syntax inconsistencies are ameliorated. `XRegExp(/regex/)` clones an existing regex and
+    // converts to type XRegExp
+    XRegExp = function (pattern, flags) {
+        var output = [],
+            currScope = XRegExp.OUTSIDE_CLASS,
+            pos = 0,
+            context, tokenResult, match, chr, regex;
+
+        if (XRegExp.isRegExp(pattern)) {
+            if (flags !== undefined)
+                throw TypeError("can't supply flags when constructing one RegExp from another");
+            return clone(pattern);
+        }
+        // Tokens become part of the regex construction process, so protect against infinite
+        // recursion when an XRegExp is constructed within a token handler or trigger
+        if (isInsideConstructor)
+            throw Error("can't call the XRegExp constructor within token definition functions");
+
+        flags = flags || "";
+        context = { // `this` object for custom tokens
+            hasNamedCapture: false,
+            captureNames: [],
+            hasFlag: function (flag) {return flags.indexOf(flag) > -1;},
+            setFlag: function (flag) {flags += flag;}
+        };
+
+        while (pos < pattern.length) {
+            // Check for custom tokens at the current position
+            tokenResult = runTokens(pattern, pos, currScope, context);
+
+            if (tokenResult) {
+                output.push(tokenResult.output);
+                pos += (tokenResult.match[0].length || 1);
+            } else {
+                // Check for native multicharacter metasequences (excluding character classes) at
+                // the current position
+                if (match = real.exec.call(nativeTokens[currScope], pattern.slice(pos))) {
+                    output.push(match[0]);
+                    pos += match[0].length;
+                } else {
+                    chr = pattern.charAt(pos);
+                    if (chr === "[")
+                        currScope = XRegExp.INSIDE_CLASS;
+                    else if (chr === "]")
+                        currScope = XRegExp.OUTSIDE_CLASS;
+                    // Advance position one character
+                    output.push(chr);
+                    pos++;
+                }
+            }
+        }
+
+        regex = RegExp(output.join(""), real.replace.call(flags, flagClip, ""));
+        regex._xregexp = {
+            source: pattern,
+            captureNames: context.hasNamedCapture ? context.captureNames : null
+        };
+        return regex;
+    };
+
+
+    //---------------------------------
+    //  Public properties
+    //---------------------------------
+
+    XRegExp.version = "1.5.0";
+
+    // Token scope bitflags
+    XRegExp.INSIDE_CLASS = 1;
+    XRegExp.OUTSIDE_CLASS = 2;
+
+
+    //---------------------------------
+    //  Private variables
+    //---------------------------------
+
+    var replacementToken = /\$(?:(\d\d?|[$&`'])|{([$\w]+)})/g,
+        flagClip = /[^gimy]+|([\s\S])(?=[\s\S]*\1)/g, // Nonnative and duplicate flags
+        quantifier = /^(?:[?*+]|{\d+(?:,\d*)?})\??/,
+        isInsideConstructor = false,
+        tokens = [],
+        // Copy native globals for reference ("native" is an ES3 reserved keyword)
+        real = {
+            exec: RegExp.prototype.exec,
+            test: RegExp.prototype.test,
+            match: String.prototype.match,
+            replace: String.prototype.replace,
+            split: String.prototype.split
+        },
+        compliantExecNpcg = real.exec.call(/()??/, "")[1] === undefined, // check `exec` handling of nonparticipating capturing groups
+        compliantLastIndexIncrement = function () {
+            var x = /^/g;
+            real.test.call(x, "");
+            return !x.lastIndex;
+        }(),
+        compliantLastIndexReset = function () {
+            var x = /x/g;
+            real.replace.call("x", x, "");
+            return !x.lastIndex;
+        }(),
+        hasNativeY = RegExp.prototype.sticky !== undefined,
+        nativeTokens = {};
+
+    // `nativeTokens` match native multicharacter metasequences only (including deprecated octals,
+    // excluding character classes)
+    nativeTokens[XRegExp.INSIDE_CLASS] = /^(?:\\(?:[0-3][0-7]{0,2}|[4-7][0-7]?|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S]))/;
+    nativeTokens[XRegExp.OUTSIDE_CLASS] = /^(?:\\(?:0(?:[0-3][0-7]{0,2}|[4-7][0-7]?)?|[1-9]\d*|x[\dA-Fa-f]{2}|u[\dA-Fa-f]{4}|c[A-Za-z]|[\s\S])|\(\?[:=!]|[?*+]\?|{\d+(?:,\d*)?}\??)/;
+
+
+    //---------------------------------
+    //  Public methods
+    //---------------------------------
+
+    // Lets you extend or change XRegExp syntax and create custom flags. This is used internally by
+    // the XRegExp library and can be used to create XRegExp plugins. This function is intended for
+    // users with advanced knowledge of JavaScript's regular expression syntax and behavior. It can
+    // be disabled by `XRegExp.freezeTokens`
+    XRegExp.addToken = function (regex, handler, scope, trigger) {
+        tokens.push({
+            pattern: clone(regex, "g" + (hasNativeY ? "y" : "")),
+            handler: handler,
+            scope: scope || XRegExp.OUTSIDE_CLASS,
+            trigger: trigger || null
+        });
+    };
+
+    // Accepts a pattern and flags; returns an extended `RegExp` object. If the pattern and flag
+    // combination has previously been cached, the cached copy is returned; otherwise the newly
+    // created regex is cached
+    XRegExp.cache = function (pattern, flags) {
+        var key = pattern + "/" + (flags || "");
+        return XRegExp.cache[key] || (XRegExp.cache[key] = XRegExp(pattern, flags));
+    };
+
+    // Accepts a `RegExp` instance; returns a copy with the `/g` flag set. The copy has a fresh
+    // `lastIndex` (set to zero). If you want to copy a regex without forcing the `global`
+    // property, use `XRegExp(regex)`. Do not use `RegExp(regex)` because it will not preserve
+    // special properties required for named capture
+    XRegExp.copyAsGlobal = function (regex) {
+        return clone(regex, "g");
+    };
+
+    // Accepts a string; returns the string with regex metacharacters escaped. The returned string
+    // can safely be used at any point within a regex to match the provided literal string. Escaped
+    // characters are [ ] { } ( ) * + ? - . , \ ^ $ | # and whitespace
+    XRegExp.escape = function (str) {
+        return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    };
+
+    // Accepts a string to search, regex to search with, position to start the search within the
+    // string (default: 0), and an optional Boolean indicating whether matches must start at-or-
+    // after the position or at the specified position only. This function ignores the `lastIndex`
+    // property of the provided regex
+    XRegExp.execAt = function (str, regex, pos, anchored) {
+        regex = clone(regex, "g" + ((anchored && hasNativeY) ? "y" : ""));
+        regex.lastIndex = pos = pos || 0;
+        var match = regex.exec(str);
+        if (anchored)
+            return (match && match.index === pos) ? match : null;
+        else
+            return match;
+    };
+
+    // Breaks the unrestorable link to XRegExp's private list of tokens, thereby preventing
+    // syntax and flag changes. Should be run after XRegExp and any plugins are loaded
+    XRegExp.freezeTokens = function () {
+        XRegExp.addToken = function () {
+            throw Error("can't run addToken after freezeTokens");
+        };
+    };
+
+    // Accepts any value; returns a Boolean indicating whether the argument is a `RegExp` object.
+    // Note that this is also `true` for regex literals and regexes created by the `XRegExp`
+    // constructor. This works correctly for variables created in another frame, when `instanceof`
+    // and `constructor` checks would fail to work as intended
+    XRegExp.isRegExp = function (o) {
+        return Object.prototype.toString.call(o) === "[object RegExp]";
+    };
+
+    // Executes `callback` once per match within `str`. Provides a simpler and cleaner way to
+    // iterate over regex matches compared to the traditional approaches of subverting
+    // `String.prototype.replace` or repeatedly calling `exec` within a `while` loop
+    XRegExp.iterate = function (str, origRegex, callback, context) {
+        var regex = clone(origRegex, "g"),
+            i = -1, match;
+        while (match = regex.exec(str)) {
+            callback.call(context, match, ++i, str, regex);
+            if (regex.lastIndex === match.index)
+                regex.lastIndex++;
+        }
+        if (origRegex.global)
+            origRegex.lastIndex = 0;
+    };
+
+    // Accepts a string and an array of regexes; returns the result of using each successive regex
+    // to search within the matches of the previous regex. The array of regexes can also contain
+    // objects with `regex` and `backref` properties, in which case the named or numbered back-
+    // references specified are passed forward to the next regex or returned. E.g.:
+    // var xregexpImgFileNames = XRegExp.matchChain(html, [
+    //     {regex: /<img\b([^>]+)>/i, backref: 1}, // <img> tag attributes
+    //     {regex: XRegExp('(?ix) \\s src=" (?<src> [^"]+ )'), backref: "src"}, // src attribute values
+    //     {regex: XRegExp("^http://xregexp\\.com(/[^#?]+)", "i"), backref: 1}, // xregexp.com paths
+    //     /[^\/]+$/ // filenames (strip directory paths)
+    // ]);
+    XRegExp.matchChain = function (str, chain) {
+        return function recurseChain (values, level) {
+            var item = chain[level].regex ? chain[level] : {regex: chain[level]},
+                regex = clone(item.regex, "g"),
+                matches = [], i;
+            for (i = 0; i < values.length; i++) {
+                XRegExp.iterate(values[i], regex, function (match) {
+                    matches.push(item.backref ? (match[item.backref] || "") : match[0]);
+                });
+            }
+            return ((level === chain.length - 1) || !matches.length) ?
+                matches : recurseChain(matches, level + 1);
+        }([str], 0);
+    };
+
+
+    //---------------------------------
+    //  New RegExp prototype methods
+    //---------------------------------
+
+    // Accepts a context object and arguments array; returns the result of calling `exec` with the
+    // first value in the arguments array. the context is ignored but is accepted for congruity
+    // with `Function.prototype.apply`
+    RegExp.prototype.apply = function (context, args) {
+        return this.exec(args[0]);
+    };
+
+    // Accepts a context object and string; returns the result of calling `exec` with the provided
+    // string. the context is ignored but is accepted for congruity with `Function.prototype.call`
+    RegExp.prototype.call = function (context, str) {
+        return this.exec(str);
+    };
+
+
+    //---------------------------------
+    //  Overriden native methods
+    //---------------------------------
+
+    // Adds named capture support (with backreferences returned as `result.name`), and fixes two
+    // cross-browser issues per ES3:
+    // - Captured values for nonparticipating capturing groups should be returned as `undefined`,
+    //   rather than the empty string.
+    // - `lastIndex` should not be incremented after zero-length matches.
+    RegExp.prototype.exec = function (str) {
+        var match = real.exec.apply(this, arguments),
+            name, r2;
+        if (match && str) {
+            // Fix browsers whose `exec` methods don't consistently return `undefined` for
+            // nonparticipating capturing groups
+            if (!compliantExecNpcg && match.length > 1 && indexOf(match, "") > -1) {
+                r2 = RegExp(this.source, real.replace.call(getNativeFlags(this), "g", ""));
+                // Using `str.slice(match.index)` rather than `match[0]` in case lookahead allowed
+                // matching due to characters outside the match
+                real.replace.call(str.slice(match.index), r2, function () {
+                    for (var i = 1; i < arguments.length - 2; i++) {
+                        if (arguments[i] === undefined)
+                            match[i] = undefined;
+                    }
+                });
+            }
+            // Attach named capture properties
+            if (this._xregexp && this._xregexp.captureNames) {
+                for (var i = 1; i < match.length; i++) {
+                    name = this._xregexp.captureNames[i - 1];
+                    if (name)
+                       match[name] = match[i];
+                }
+            }
+            // Fix browsers that increment `lastIndex` after zero-length matches
+            if (!compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
+                this.lastIndex--;
+        }
+        return match;
+    };
+
+    // Don't override `test` if it won't change anything
+    if (!compliantLastIndexIncrement) {
+        // Fix browser bug in native method
+        RegExp.prototype.test = function (str) {
+            // Use the native `exec` to skip some processing overhead, even though the overriden
+            // `exec` would take care of the `lastIndex` fix
+            var match = real.exec.call(this, str);
+            // Fix browsers that increment `lastIndex` after zero-length matches
+            if (match && this.global && !match[0].length && (this.lastIndex > match.index))
+                this.lastIndex--;
+            return !!match;
+        };
+    }
+
+    // Adds named capture support and fixes browser bugs in native method
+    String.prototype.match = function (regex) {
+        if (!XRegExp.isRegExp(regex))
+            regex = RegExp(regex); // Native `RegExp`
+        if (regex.global) {
+            var result = real.match.apply(this, arguments);
+            regex.lastIndex = 0; // Fix IE bug
+            return result;
+        }
+        return regex.exec(this); // Run the altered `exec`
+    };
+
+    // Adds support for `${n}` tokens for named and numbered backreferences in replacement text,
+    // and provides named backreferences to replacement functions as `arguments[0].name`. Also
+    // fixes cross-browser differences in replacement text syntax when performing a replacement
+    // using a nonregex search value, and the value of replacement regexes' `lastIndex` property
+    // during replacement iterations. Note that this doesn't support SpiderMonkey's proprietary
+    // third (`flags`) parameter
+    String.prototype.replace = function (search, replacement) {
+        var isRegex = XRegExp.isRegExp(search),
+            captureNames, result, str;
+
+        // There are many combinations of search/replacement types/values and browser bugs that
+        // preclude passing to native `replace`, so just keep this check relatively simple
+        if (isRegex && typeof replacement.valueOf() === "string" && replacement.indexOf("${") === -1 && compliantLastIndexReset)
+            return real.replace.apply(this, arguments);
+
+        if (!isRegex)
+            search = search + ""; // Type conversion
+        else if (search._xregexp)
+            captureNames = search._xregexp.captureNames; // Array or `null`
+
+        if (typeof replacement === "function") {
+            result = real.replace.call(this, search, function () {
+                if (captureNames) {
+                    // Change the `arguments[0]` string primitive to a String object which can store properties
+                    arguments[0] = new String(arguments[0]);
+                    // Store named backreferences on `arguments[0]`
+                    for (var i = 0; i < captureNames.length; i++) {
+                        if (captureNames[i])
+                            arguments[0][captureNames[i]] = arguments[i + 1];
+                    }
+                }
+                // Update `lastIndex` before calling `replacement`
+                if (isRegex && search.global)
+                    search.lastIndex = arguments[arguments.length - 2] + arguments[0].length;
+                return replacement.apply(null, arguments);
+            });
+        } else {
+            str = this + ""; // Type conversion, so `args[args.length - 1]` will be a string (given nonstring `this`)
+            result = real.replace.call(str, search, function () {
+                var args = arguments; // Keep this function's `arguments` available through closure
+                return real.replace.call(replacement, replacementToken, function ($0, $1, $2) {
+                    // Numbered backreference (without delimiters) or special variable
+                    if ($1) {
+                        switch ($1) {
+                            case "$": return "$";
+                            case "&": return args[0];
+                            case "`": return args[args.length - 1].slice(0, args[args.length - 2]);
+                            case "'": return args[args.length - 1].slice(args[args.length - 2] + args[0].length);
+                            // Numbered backreference
+                            default:
+                                // What does "$10" mean?
+                                // - Backreference 10, if 10 or more capturing groups exist
+                                // - Backreference 1 followed by "0", if 1-9 capturing groups exist
+                                // - Otherwise, it's the string "$10"
+                                // Also note:
+                                // - Backreferences cannot be more than two digits (enforced by `replacementToken`)
+                                // - "$01" is equivalent to "$1" if a capturing group exists, otherwise it's the string "$01"
+                                // - There is no "$0" token ("$&" is the entire match)
+                                var literalNumbers = "";
+                                $1 = +$1; // Type conversion; drop leading zero
+                                if (!$1) // `$1` was "0" or "00"
+                                    return $0;
+                                while ($1 > args.length - 3) {
+                                    literalNumbers = String.prototype.slice.call($1, -1) + literalNumbers;
+                                    $1 = Math.floor($1 / 10); // Drop the last digit
+                                }
+                                return ($1 ? args[$1] || "" : "$") + literalNumbers;
+                        }
+                    // Named backreference or delimited numbered backreference
+                    } else {
+                        // What does "${n}" mean?
+                        // - Backreference to numbered capture n. Two differences from "$n":
+                        //   - n can be more than two digits
+                        //   - Backreference 0 is allowed, and is the entire match
+                        // - Backreference to named capture n, if it exists and is not a number overridden by numbered capture
+                        // - Otherwise, it's the string "${n}"
+                        var n = +$2; // Type conversion; drop leading zeros
+                        if (n <= args.length - 3)
+                            return args[n];
+                        n = captureNames ? indexOf(captureNames, $2) : -1;
+                        return n > -1 ? args[n + 1] : $0;
+                    }
+                });
+            });
+        }
+
+        if (isRegex && search.global)
+            search.lastIndex = 0; // Fix IE bug
+
+        return result;
+    };
+
+    // A consistent cross-browser, ES3 compliant `split`
+    String.prototype.split = function (s /* separator */, limit) {
+        // If separator `s` is not a regex, use the native `split`
+        if (!XRegExp.isRegExp(s))
+            return real.split.apply(this, arguments);
+
+        var str = this + "", // Type conversion
+            output = [],
+            lastLastIndex = 0,
+            match, lastLength;
+
+        // Behavior for `limit`: if it's...
+        // - `undefined`: No limit
+        // - `NaN` or zero: Return an empty array
+        // - A positive number: Use `Math.floor(limit)`
+        // - A negative number: No limit
+        // - Other: Type-convert, then use the above rules
+        if (limit === undefined || +limit < 0) {
+            limit = Infinity;
+        } else {
+            limit = Math.floor(+limit);
+            if (!limit)
+                return [];
+        }
+
+        // This is required if not `s.global`, and it avoids needing to set `s.lastIndex` to zero
+        // and restore it to its original value when we're done using the regex
+        s = XRegExp.copyAsGlobal(s);
+
+        while (match = s.exec(str)) { // Run the altered `exec` (required for `lastIndex` fix, etc.)
+            if (s.lastIndex > lastLastIndex) {
+                output.push(str.slice(lastLastIndex, match.index));
+
+                if (match.length > 1 && match.index < str.length)
+                    Array.prototype.push.apply(output, match.slice(1));
+
+                lastLength = match[0].length;
+                lastLastIndex = s.lastIndex;
+
+                if (output.length >= limit)
+                    break;
+            }
+
+            if (s.lastIndex === match.index)
+                s.lastIndex++;
+        }
+
+        if (lastLastIndex === str.length) {
+            if (!real.test.call(s, "") || lastLength)
+                output.push("");
+        } else {
+            output.push(str.slice(lastLastIndex));
+        }
+
+        return output.length > limit ? output.slice(0, limit) : output;
+    };
+
+
+    //---------------------------------
+    //  Private helper functions
+    //---------------------------------
+
+    // Supporting function for `XRegExp`, `XRegExp.copyAsGlobal`, etc. Returns a copy of a `RegExp`
+    // instance with a fresh `lastIndex` (set to zero), preserving properties required for named
+    // capture. Also allows adding new flags in the process of copying the regex
+    function clone (regex, additionalFlags) {
+        if (!XRegExp.isRegExp(regex))
+            throw TypeError("type RegExp expected");
+        var x = regex._xregexp;
+        regex = XRegExp(regex.source, getNativeFlags(regex) + (additionalFlags || ""));
+        if (x) {
+            regex._xregexp = {
+                source: x.source,
+                captureNames: x.captureNames ? x.captureNames.slice(0) : null
+            };
+        }
+        return regex;
+    };
+
+    function getNativeFlags (regex) {
+        return (regex.global     ? "g" : "") +
+               (regex.ignoreCase ? "i" : "") +
+               (regex.multiline  ? "m" : "") +
+               (regex.extended   ? "x" : "") + // Proposed for ES4; included in AS3
+               (regex.sticky     ? "y" : "");
+    };
+
+    function runTokens (pattern, index, scope, context) {
+        var i = tokens.length,
+            result, match, t;
+        // Protect against constructing XRegExps within token handler and trigger functions
+        isInsideConstructor = true;
+        // Must reset `isInsideConstructor`, even if a `trigger` or `handler` throws
+        try {
+            while (i--) { // Run in reverse order
+                t = tokens[i];
+                if ((scope & t.scope) && (!t.trigger || t.trigger.call(context))) {
+                    t.pattern.lastIndex = index;
+                    match = t.pattern.exec(pattern); // Running the altered `exec` here allows use of named backreferences, etc.
+                    if (match && match.index === index) {
+                        result = {
+                            output: t.handler.call(context, match, scope),
+                            match: match
+                        };
+                        break;
+                    }
+                }
+            }
+        } catch (err) {
+            throw err;
+        } finally {
+            isInsideConstructor = false;
+        }
+        return result;
+    };
+
+    function indexOf (array, item, from) {
+        if (Array.prototype.indexOf) // Use the native array method if available
+            return array.indexOf(item, from);
+        for (var i = from || 0; i < array.length; i++) {
+            if (array[i] === item)
+                return i;
+        }
+        return -1;
+    };
+
+
+    //---------------------------------
+    //  Built-in tokens
+    //---------------------------------
+
+    // Augment XRegExp's regular expression syntax and flags. Note that when adding tokens, the
+    // third (`scope`) argument defaults to `XRegExp.OUTSIDE_CLASS`
+
+    // Comment pattern: (?# )
+    XRegExp.addToken(
+        /\(\?#[^)]*\)/,
+        function (match) {
+            // Keep tokens separated unless the following token is a quantifier
+            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
+        }
+    );
+
+    // Capturing group (match the opening parenthesis only).
+    // Required for support of named capturing groups
+    XRegExp.addToken(
+        /\((?!\?)/,
+        function () {
+            this.captureNames.push(null);
+            return "(";
+        }
+    );
+
+    // Named capturing group (match the opening delimiter only): (?<name>
+    XRegExp.addToken(
+        /\(\?<([$\w]+)>/,
+        function (match) {
+            this.captureNames.push(match[1]);
+            this.hasNamedCapture = true;
+            return "(";
+        }
+    );
+
+    // Named backreference: \k<name>
+    XRegExp.addToken(
+        /\\k<([\w$]+)>/,
+        function (match) {
+            var index = indexOf(this.captureNames, match[1]);
+            // Keep backreferences separate from subsequent literal numbers. Preserve back-
+            // references to named groups that are undefined at this point as literal strings
+            return index > -1 ?
+                "\\" + (index + 1) + (isNaN(match.input.charAt(match.index + match[0].length)) ? "" : "(?:)") :
+                match[0];
+        }
+    );
+
+    // Empty character class: [] or [^]
+    XRegExp.addToken(
+        /\[\^?]/,
+        function (match) {
+            // For cross-browser compatibility with ES3, convert [] to \b\B and [^] to [\s\S].
+            // (?!) should work like \b\B, but is unreliable in Firefox
+            return match[0] === "[]" ? "\\b\\B" : "[\\s\\S]";
+        }
+    );
+
+    // Mode modifier at the start of the pattern only, with any combination of flags imsx: (?imsx)
+    // Does not support x(?i), (?-i), (?i-m), (?i: ), (?i)(?m), etc.
+    XRegExp.addToken(
+        /^\(\?([imsx]+)\)/,
+        function (match) {
+            this.setFlag(match[1]);
+            return "";
+        }
+    );
+
+    // Whitespace and comments, in free-spacing (aka extended) mode only
+    XRegExp.addToken(
+        /(?:\s+|#.*)+/,
+        function (match) {
+            // Keep tokens separated unless the following token is a quantifier
+            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
+        },
+        XRegExp.OUTSIDE_CLASS,
+        function () {return this.hasFlag("x");}
+    );
+
+    // Dot, in dotall (aka singleline) mode only
+    XRegExp.addToken(
+        /\./,
+        function () {return "[\\s\\S]";},
+        XRegExp.OUTSIDE_CLASS,
+        function () {return this.hasFlag("s");}
+    );
+
+
+    //---------------------------------
+    //  Backward compatibility
+    //---------------------------------
+
+    // Uncomment the following block for compatibility with XRegExp 1.0-1.2:
+    /*
+    XRegExp.matchWithinChain = XRegExp.matchChain;
+    RegExp.prototype.addFlags = function (s) {return clone(this, s);};
+    RegExp.prototype.execAll = function (s) {var r = []; XRegExp.iterate(s, this, function (m) {r.push(m);}); return r;};
+    RegExp.prototype.forEachExec = function (s, f, c) {return XRegExp.iterate(s, this, f, c);};
+    RegExp.prototype.validate = function (s) {var r = RegExp("^(?:" + this.source + ")$(?!\\s)", getNativeFlags(this)); if (this.global) this.lastIndex = 0; return s.search(r) === 0;};
+    */
+
+})();
+//
+// Begin anonymous function. This is used to contain local scope variables without polutting global scope.
+//
+if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function() { 
+
+// CommonJS
+if (typeof(require) != 'undefined' && typeof(XRegExp) == 'undefined')
+{
+	XRegExp = require('XRegExp').XRegExp;
+}
+
+// Shortcut object which will be assigned to the SyntaxHighlighter variable.
+// This is a shorthand for local reference in order to avoid long namespace 
+// references to SyntaxHighlighter.whatever...
+var sh = {
+	defaults : {
+		/** Additional CSS class names to be added to highlighter elements. */
+		'class-name' : '',
+		
+		/** First line number. */
+		'first-line' : 1,
+		
+		/**
+		 * Pads line numbers. Possible values are:
+		 *
+		 *   false - don't pad line numbers.
+		 *   true  - automaticaly pad numbers with minimum required number of leading zeroes.
+		 *   [int] - length up to which pad line numbers.
+		 */
+		'pad-line-numbers' : false,
+		
+		/** Lines to highlight. */
+		'highlight' : null,
+		
+		/** Title to be displayed above the code block. */
+		'title' : null,
+		
+		/** Enables or disables smart tabs. */
+		'smart-tabs' : true,
+		
+		/** Gets or sets tab size. */
+		'tab-size' : 4,
+		
+		/** Enables or disables gutter. */
+		'gutter' : true,
+		
+		/** Enables or disables toolbar. */
+		'toolbar' : true,
+		
+		/** Enables quick code copy and paste from double click. */
+		'quick-code' : true,
+		
+		/** Forces code view to be collapsed. */
+		'collapse' : false,
+		
+		/** Enables or disables automatic links. */
+		'auto-links' : true,
+		
+		/** Gets or sets light mode. Equavalent to turning off gutter and toolbar. */
+		'light' : false,
+
+		'unindent' : true,
+		
+		'html-script' : false
+	},
+	
+	config : {
+		space : '&nbsp;',
+		
+		/** Enables use of <SCRIPT type="syntaxhighlighter" /> tags. */
+		useScriptTags : true,
+		
+		/** Blogger mode flag. */
+		bloggerMode : false,
+		
+		stripBrs : false,
+		
+		/** Name of the tag that SyntaxHighlighter will automatically look for. */
+		tagName : 'pre',
+		
+		strings : {
+			expandSource : 'expand source',
+			help : '?',
+			alert: 'SyntaxHighlighter\n\n',
+			noBrush : 'Can\'t find brush for: ',
+			brushNotHtmlScript : 'Brush wasn\'t configured for html-script option: ',
+			
+			// this is populated by the build script
+			aboutDialog : '@ABOUT@'
+		}
+	},
+	
+	/** Internal 'global' variables. */
+	vars : {
+		discoveredBrushes : null,
+		highlighters : {}
+	},
+	
+	/** This object is populated by user included external brush files. */
+	brushes : {},
+
+	/** Common regular expressions. */
+	regexLib : {
+		multiLineCComments			: /\/\*[\s\S]*?\*\//gm,
+		singleLineCComments			: /\/\/.*$/gm,
+		singleLinePerlComments		: /#.*$/gm,
+		doubleQuotedString			: /"([^\\"\n]|\\.)*"/g,
+		singleQuotedString			: /'([^\\'\n]|\\.)*'/g,
+		multiLineDoubleQuotedString	: new XRegExp('"([^\\\\"]|\\\\.)*"', 'gs'),
+		multiLineSingleQuotedString	: new XRegExp("'([^\\\\']|\\\\.)*'", 'gs'),
+		xmlComments					: /(&lt;|<)!--[\s\S]*?--(&gt;|>)/gm,
+		url							: /\w+:\/\/[\w-.\/?%&=:@;#]*/g,
+		
+		/** <?= ?> tags. */
+		phpScriptTags 				: { left: /(&lt;|<)\?(?:=|php)?/g, right: /\?(&gt;|>)/g, 'eof' : true },
+		
+		/** <%= %> tags. */
+		aspScriptTags				: { left: /(&lt;|<)%=?/g, right: /%(&gt;|>)/g },
+		
+		/** <script> tags. */
+		scriptScriptTags			: { left: /(&lt;|<)\s*script.*?(&gt;|>)/gi, right: /(&lt;|<)\/\s*script\s*(&gt;|>)/gi }
+	},
+
+	toolbar: {
+		/**
+		 * Generates HTML markup for the toolbar.
+		 * @param {Highlighter} highlighter Highlighter instance.
+		 * @return {String} Returns HTML markup.
+		 */
+		getHtml: function(highlighter)
+		{
+			var html = '<div class="toolbar">',
+				items = sh.toolbar.items,
+				list = items.list
+				;
+			
+			function defaultGetHtml(highlighter, name)
+			{
+				return sh.toolbar.getButtonHtml(highlighter, name, sh.config.strings[name]);
+			};
+			
+			for (var i = 0; i < list.length; i++)
+				html += (items[list[i]].getHtml || defaultGetHtml)(highlighter, list[i]);
+			
+			html += '</div>';
+			
+			return html;
+		},
+		
+		/**
+		 * Generates HTML markup for a regular button in the toolbar.
+		 * @param {Highlighter} highlighter Highlighter instance.
+		 * @param {String} commandName		Command name that would be executed.
+		 * @param {String} label			Label text to display.
+		 * @return {String}					Returns HTML markup.
+		 */
+		getButtonHtml: function(highlighter, commandName, label)
+		{
+			return '<span><a href="#" class="toolbar_item'
+				+ ' command_' + commandName
+				+ ' ' + commandName
+				+ '">' + label + '</a></span>'
+				;
+		},
+		
+		/**
+		 * Event handler for a toolbar anchor.
+		 */
+		handler: function(e)
+		{
+			var target = e.target,
+				className = target.className || ''
+				;
+
+			function getValue(name)
+			{
+				var r = new RegExp(name + '_(\\w+)'),
+					match = r.exec(className)
+					;
+
+				return match ? match[1] : null;
+			};
+			
+			var highlighter = getHighlighterById(findParentElement(target, '.syntaxhighlighter').id),
+				commandName = getValue('command')
+				;
+			
+			// execute the toolbar command
+			if (highlighter && commandName)
+				sh.toolbar.items[commandName].execute(highlighter);
+
+			// disable default A click behaviour
+			e.preventDefault();
+		},
+		
+		/** Collection of toolbar items. */
+		items : {
+			// Ordered lis of items in the toolbar. Can't expect `for (var n in items)` to be consistent.
+			list: ['expandSource', 'help'],
+
+			expandSource: {
+				getHtml: function(highlighter)
+				{
+					if (highlighter.getParam('collapse') != true)
+						return '';
+						
+					var title = highlighter.getParam('title');
+					return sh.toolbar.getButtonHtml(highlighter, 'expandSource', title ? title : sh.config.strings.expandSource);
+				},
+			
+				execute: function(highlighter)
+				{
+					var div = getHighlighterDivById(highlighter.id);
+					removeClass(div, 'collapsed');
+				}
+			},
+
+			/** Command to display the about dialog window. */
+			help: {
+				execute: function(highlighter)
+				{	
+					var wnd = popup('', '_blank', 500, 250, 'scrollbars=0'),
+						doc = wnd.document
+						;
+					
+					doc.write(sh.config.strings.aboutDialog);
+					doc.close();
+					wnd.focus();
+				}
+			}
+		}
+	},
+
+	/**
+	 * Finds all elements on the page which should be processes by SyntaxHighlighter.
+	 *
+	 * @param {Object} globalParams		Optional parameters which override element's 
+	 * 									parameters. Only used if element is specified.
+	 * 
+	 * @param {Object} element	Optional element to highlight. If none is
+	 * 							provided, all elements in the current document 
+	 * 							are returned which qualify.
+	 *
+	 * @return {Array}	Returns list of <code>{ target: DOMElement, params: Object }</code> objects.
+	 */
+	findElements: function(globalParams, element)
+	{
+		var elements = element ? [element] : toArray(document.getElementsByTagName(sh.config.tagName)), 
+			conf = sh.config,
+			result = []
+			;
+
+		// support for <SCRIPT TYPE="syntaxhighlighter" /> feature
+		if (conf.useScriptTags)
+			elements = elements.concat(getSyntaxHighlighterScriptTags());
+
+		if (elements.length === 0) 
+			return result;
+	
+		for (var i = 0; i < elements.length; i++) 
+		{
+			var item = {
+				target: elements[i], 
+				// local params take precedence over globals
+				params: merge(globalParams, parseParams(elements[i].className))
+			};
+
+			if (item.params['brush'] == null)
+				continue;
+				
+			result.push(item);
+		}
+		
+		return result;
+	},
+
+	/**
+	 * Shorthand to highlight all elements on the page that are marked as 
+	 * SyntaxHighlighter source code.
+	 * 
+	 * @param {Object} globalParams		Optional parameters which override element's 
+	 * 									parameters. Only used if element is specified.
+	 * 
+	 * @param {Object} element	Optional element to highlight. If none is
+	 * 							provided, all elements in the current document 
+	 * 							are highlighted.
+	 */ 
+	highlight: function(globalParams, element)
+	{
+		var elements = this.findElements(globalParams, element),
+			propertyName = 'innerHTML', 
+			highlighter = null,
+			conf = sh.config
+			;
+
+		if (elements.length === 0) 
+			return;
+	
+		for (var i = 0; i < elements.length; i++) 
+		{
+			var element = elements[i],
+				target = element.target,
+				params = element.params,
+				brushName = params.brush,
+				code
+				;
+
+			if (brushName == null)
+				continue;
+
+			// Instantiate a brush
+			if (params['html-script'] == 'true' || sh.defaults['html-script'] == true) 
+			{
+				highlighter = new sh.HtmlScript(brushName);
+				brushName = 'htmlscript';
+			}
+			else
+			{
+				var brush = findBrush(brushName);
+				
+				if (brush)
+					highlighter = new brush();
+				else
+					continue;
+			}
+			
+			code = target[propertyName];
+			
+			// remove CDATA from <SCRIPT/> tags if it's present
+			if (conf.useScriptTags)
+				code = stripCData(code);
+				
+			// Inject title if the attribute is present
+			if ((target.title || '') != '')
+				params.title = target.title;
+				
+			params['brush'] = brushName;
+			highlighter.init(params);
+			element = highlighter.getDiv(code);
+			
+			// carry over ID
+			if ((target.id || '') != '')
+				element.id = target.id;
+			
+			target.parentNode.replaceChild(element, target);
+		}
+	},
+
+	/**
+	 * Main entry point for the SyntaxHighlighter.
+	 * @param {Object} params Optional params to apply to all highlighted elements.
+	 */
+	all: function(params)
+	{
+		attachEvent(
+			window,
+			'load',
+			function() { sh.highlight(params); }
+		);
+	}
+}; // end of sh
+
 /**
+ * Checks if target DOM elements has specified CSS class.
+ * @param {DOMElement} target Target DOM element to check.
+ * @param {String} className Name of the CSS class to check for.
+ * @return {Boolean} Returns true if class name is present, false otherwise.
+ */
+function hasClass(target, className)
+{
+	return target.className.indexOf(className) != -1;
+};
+
+/**
+ * Adds CSS class name to the target DOM element.
+ * @param {DOMElement} target Target DOM element.
+ * @param {String} className New CSS class to add.
+ */
+function addClass(target, className)
+{
+	if (!hasClass(target, className))
+		target.className += ' ' + className;
+};
+
+/**
+ * Removes CSS class name from the target DOM element.
+ * @param {DOMElement} target Target DOM element.
+ * @param {String} className CSS class to remove.
+ */
+function removeClass(target, className)
+{
+	target.className = target.className.replace(className, '');
+};
+
+/**
+ * Converts the source to array object. Mostly used for function arguments and 
+ * lists returned by getElementsByTagName() which aren't Array objects.
+ * @param {List} source Source list.
+ * @return {Array} Returns array.
+ */
+function toArray(source)
+{
+	var result = [];
+	
+	for (var i = 0; i < source.length; i++) 
+		result.push(source[i]);
+		
+	return result;
+};
+
+/**
+ * Splits block of text into lines.
+ * @param {String} block Block of text.
+ * @return {Array} Returns array of lines.
+ */
+function splitLines(block)
+{
+	return block.split(/\r?\n/);
+}
+
+/**
+ * Generates HTML ID for the highlighter.
+ * @param {String} highlighterId Highlighter ID.
+ * @return {String} Returns HTML ID.
+ */
+function getHighlighterId(id)
+{
+	var prefix = 'highlighter_';
+	return id.indexOf(prefix) == 0 ? id : prefix + id;
+};
+
+/**
+ * Finds Highlighter instance by ID.
+ * @param {String} highlighterId Highlighter ID.
+ * @return {Highlighter} Returns instance of the highlighter.
+ */
+function getHighlighterById(id)
+{
+	return sh.vars.highlighters[getHighlighterId(id)];
+};
+
+/**
+ * Finds highlighter's DIV container.
+ * @param {String} highlighterId Highlighter ID.
+ * @return {Element} Returns highlighter's DIV element.
+ */
+function getHighlighterDivById(id)
+{
+	return document.getElementById(getHighlighterId(id));
+};
+
+/**
+ * Stores highlighter so that getHighlighterById() can do its thing. Each
+ * highlighter must call this method to preserve itself.
+ * @param {Highilghter} highlighter Highlighter instance.
+ */
+function storeHighlighter(highlighter)
+{
+	sh.vars.highlighters[getHighlighterId(highlighter.id)] = highlighter;
+};
+
+/**
+ * Looks for a child or parent node which has specified classname.
+ * Equivalent to jQuery's $(container).find(".className")
+ * @param {Element} target Target element.
+ * @param {String} search Class name or node name to look for.
+ * @param {Boolean} reverse If set to true, will go up the node tree instead of down.
+ * @return {Element} Returns found child or parent element on null.
+ */
+function findElement(target, search, reverse /* optional */)
+{
+	if (target == null)
+		return null;
+		
+	var nodes			= reverse != true ? target.childNodes : [ target.parentNode ],
+		propertyToFind	= { '#' : 'id', '.' : 'className' }[search.substr(0, 1)] || 'nodeName',
+		expectedValue,
+		found
+		;
+
+	expectedValue = propertyToFind != 'nodeName'
+		? search.substr(1)
+		: search.toUpperCase()
+		;
+		
+	// main return of the found node
+	if ((target[propertyToFind] || '').indexOf(expectedValue) != -1)
+		return target;
+	
+	for (var i = 0; nodes && i < nodes.length && found == null; i++)
+		found = findElement(nodes[i], search, reverse);
+	
+	return found;
+};
+
+/**
+ * Looks for a parent node which has specified classname.
+ * This is an alias to <code>findElement(container, className, true)</code>.
+ * @param {Element} target Target element.
+ * @param {String} className Class name to look for.
+ * @return {Element} Returns found parent element on null.
+ */
+function findParentElement(target, className)
+{
+	return findElement(target, className, true);
+};
+
+/**
+ * Finds an index of element in the array.
+ * @ignore
+ * @param {Object} searchElement
+ * @param {Number} fromIndex
+ * @return {Number} Returns index of element if found; -1 otherwise.
+ */
+function indexOf(array, searchElement, fromIndex)
+{
+	fromIndex = Math.max(fromIndex || 0, 0);
+
+	for (var i = fromIndex; i < array.length; i++)
+		if(array[i] == searchElement)
+			return i;
+	
+	return -1;
+};
+
+/**
+ * Generates a unique element ID.
+ */
+function guid(prefix)
+{
+	return (prefix || '') + Math.round(Math.random() * 1000000).toString();
+};
+
+/**
+ * Merges two objects. Values from obj2 override values in obj1.
+ * Function is NOT recursive and works only for one dimensional objects.
+ * @param {Object} obj1 First object.
+ * @param {Object} obj2 Second object.
+ * @return {Object} Returns combination of both objects.
+ */
+function merge(obj1, obj2)
+{
+	var result = {}, name;
+
+	for (name in obj1) 
+		result[name] = obj1[name];
+	
+	for (name in obj2) 
+		result[name] = obj2[name];
+		
+	return result;
+};
+
+/**
+ * Attempts to convert string to boolean.
+ * @param {String} value Input string.
+ * @return {Boolean} Returns true if input was "true", false if input was "false" and value otherwise.
+ */
+function toBoolean(value)
+{
+	var result = { "true" : true, "false" : false }[value];
+	return result == null ? value : result;
+};
+
+/**
+ * Opens up a centered popup window.
+ * @param {String} url		URL to open in the window.
+ * @param {String} name		Popup name.
+ * @param {int} width		Popup width.
+ * @param {int} height		Popup height.
+ * @param {String} options	window.open() options.
+ * @return {Window}			Returns window instance.
+ */
+function popup(url, name, width, height, options)
+{
+	var x = (screen.width - width) / 2,
+		y = (screen.height - height) / 2
+		;
+		
+	options +=	', left=' + x + 
+				', top=' + y +
+				', width=' + width +
+				', height=' + height
+		;
+	options = options.replace(/^,/, '');
+
+	var win = window.open(url, name, options);
+	win.focus();
+	return win;
+};
+
+/**
+ * Adds event handler to the target object.
+ * @param {Object} obj		Target object.
+ * @param {String} type		Name of the event.
+ * @param {Function} func	Handling function.
+ */
+function attachEvent(obj, type, func, scope)
+{
+	function handler(e)
+	{
+		e = e || window.event;
+		
+		if (!e.target)
+		{
+			e.target = e.srcElement;
+			e.preventDefault = function()
+			{
+				this.returnValue = false;
+			};
+		}
+			
+		func.call(scope || window, e);
+	};
+	
+	if (obj.attachEvent) 
+	{
+		obj.attachEvent('on' + type, handler);
+	}
+	else 
+	{
+		obj.addEventListener(type, handler, false);
+	}
+};
+
+/**
+ * Displays an alert.
+ * @param {String} str String to display.
+ */
+function alert(str)
+{
+	window.alert(sh.config.strings.alert + str);
+};
+
+/**
+ * Finds a brush by its alias.
+ *
+ * @param {String} alias		Brush alias.
+ * @param {Boolean} showAlert	Suppresses the alert if false.
+ * @return {Brush}				Returns bursh constructor if found, null otherwise.
+ */
+function findBrush(alias, showAlert)
+{
+	var brushes = sh.vars.discoveredBrushes,
+		result = null
+		;
+	
+	if (brushes == null) 
+	{
+		brushes = {};
+		
+		// Find all brushes
+		for (var brush in sh.brushes) 
+		{
+			var info = sh.brushes[brush],
+				aliases = info.aliases
+				;
+			
+			if (aliases == null) 
+				continue;
+			
+			// keep the brush name
+			info.brushName = brush.toLowerCase();
+			
+			for (var i = 0; i < aliases.length; i++) 
+				brushes[aliases[i]] = brush;
+		}
+		
+		sh.vars.discoveredBrushes = brushes;
+	}
+	
+	result = sh.brushes[brushes[alias]];
+
+	if (result == null && showAlert)
+		alert(sh.config.strings.noBrush + alias);
+	
+	return result;
+};
+
+/**
+ * Executes a callback on each line and replaces each line with result from the callback.
+ * @param {Object} str			Input string.
+ * @param {Object} callback		Callback function taking one string argument and returning a string.
+ */
+function eachLine(str, callback)
+{
+	var lines = splitLines(str);
+	
+	for (var i = 0; i < lines.length; i++)
+		lines[i] = callback(lines[i], i);
+		
+	// include \r to enable copy-paste on windows (ie8) without getting everything on one line
+	return lines.join('\r\n');
+};
+
+/**
+ * This is a special trim which only removes first and last empty lines
+ * and doesn't affect valid leading space on the first line.
+ * 
+ * @param {String} str   Input string
+ * @return {String}      Returns string without empty first and last lines.
+ */
+function trimFirstAndLastLines(str)
+{
+	return str.replace(/^[ ]*[\n]+|[\n]*[ ]*$/g, '');
+};
+
+/**
+ * Parses key/value pairs into hash object.
+ * 
+ * Understands the following formats:
+ * - name: word;
+ * - name: [word, word];
+ * - name: "string";
+ * - name: 'string';
+ * 
+ * For example:
+ *   name1: value; name2: [value, value]; name3: 'value'
+ *   
+ * @param {String} str    Input string.
+ * @return {Object}       Returns deserialized object.
+ */
+function parseParams(str)
+{
+	var match, 
+		result = {},
+		arrayRegex = new XRegExp("^\\[(?<values>(.*?))\\]$"),
+		regex = new XRegExp(
+			"(?<name>[\\w-]+)" +
+			"\\s*:\\s*" +
+			"(?<value>" +
+				"[\\w-%#]+|" +		// word
+				"\\[.*?\\]|" +		// [] array
+				'".*?"|' +			// "" string
+				"'.*?'" +			// '' string
+			")\\s*;?",
+			"g"
+		)
+		;
+
+	while ((match = regex.exec(str)) != null) 
+	{
+		var value = match.value
+			.replace(/^['"]|['"]$/g, '') // strip quotes from end of strings
+			;
+		
+		// try to parse array value
+		if (value != null && arrayRegex.test(value))
+		{
+			var m = arrayRegex.exec(value);
+			value = m.values.length > 0 ? m.values.split(/\s*,\s*/) : [];
+		}
+		
+		result[match.name] = value;
+	}
+	
+	return result;
+};
+
+/**
+ * Wraps each line of the string into <code/> tag with given style applied to it.
+ * 
+ * @param {String} str   Input string.
+ * @param {String} css   Style name to apply to the string.
+ * @return {String}      Returns input string with each line surrounded by <span/> tag.
+ */
+function wrapLinesWithCode(str, css)
+{
+	if (str == null || str.length == 0 || str == '\n') 
+		return str;
+
+	str = str.replace(/</g, '&lt;');
+
+	// Replace two or more sequential spaces with &nbsp; leaving last space untouched.
+	str = str.replace(/ {2,}/g, function(m)
+	{
+		var spaces = '';
+		
+		for (var i = 0; i < m.length - 1; i++)
+			spaces += sh.config.space;
+		
+		return spaces + ' ';
+	});
+
+	// Split each line and apply <span class="...">...</span> to them so that
+	// leading spaces aren't included.
+	if (css != null) 
+		str = eachLine(str, function(line)
+		{
+			if (line.length == 0) 
+				return '';
+			
+			var spaces = '';
+			
+			line = line.replace(/^(&nbsp;| )+/, function(s)
+			{
+				spaces = s;
+				return '';
+			});
+			
+			if (line.length == 0) 
+				return spaces;
+			
+			return spaces + '<code class="' + css + '">' + line + '</code>';
+		});
+
+	return str;
+};
+
+/**
+ * Pads number with zeros until it's length is the same as given length.
+ * 
+ * @param {Number} number	Number to pad.
+ * @param {Number} length	Max string length with.
+ * @return {String}			Returns a string padded with proper amount of '0'.
+ */
+function padNumber(number, length)
+{
+	var result = number.toString();
+	
+	while (result.length < length)
+		result = '0' + result;
+	
+	return result;
+};
+
+/**
+ * Replaces tabs with spaces.
+ * 
+ * @param {String} code		Source code.
+ * @param {Number} tabSize	Size of the tab.
+ * @return {String}			Returns code with all tabs replaces by spaces.
+ */
+function processTabs(code, tabSize)
+{
+	var tab = '';
+	
+	for (var i = 0; i < tabSize; i++)
+		tab += ' ';
+
+	return code.replace(/\t/g, tab);
+};
+
+/**
+ * Replaces tabs with smart spaces.
+ * 
+ * @param {String} code    Code to fix the tabs in.
+ * @param {Number} tabSize Number of spaces in a column.
+ * @return {String}        Returns code with all tabs replaces with roper amount of spaces.
+ */
+function processSmartTabs(code, tabSize)
+{
+	var lines = splitLines(code),
+		tab = '\t',
+		spaces = ''
+		;
+	
+	// Create a string with 1000 spaces to copy spaces from... 
+	// It's assumed that there would be no indentation longer than that.
+	for (var i = 0; i < 50; i++) 
+		spaces += '                    '; // 20 spaces * 50
+			
+	// This function inserts specified amount of spaces in the string
+	// where a tab is while removing that given tab.
+	function insertSpaces(line, pos, count)
+	{
+		return line.substr(0, pos)
+			+ spaces.substr(0, count)
+			+ line.substr(pos + 1, line.length) // pos + 1 will get rid of the tab
+			;
+	};
+
+	// Go through all the lines and do the 'smart tabs' magic.
+	code = eachLine(code, function(line)
+	{
+		if (line.indexOf(tab) == -1) 
+			return line;
+		
+		var pos = 0;
+		
+		while ((pos = line.indexOf(tab)) != -1) 
+		{
+			// This is pretty much all there is to the 'smart tabs' logic.
+			// Based on the position within the line and size of a tab,
+			// calculate the amount of spaces we need to insert.
+			var spaces = tabSize - pos % tabSize;
+			line = insertSpaces(line, pos, spaces);
+		}
+		
+		return line;
+	});
+	
+	return code;
+};
+
+/**
+ * Performs various string fixes based on configuration.
+ */
+function fixInputString(str)
+{
+	var br = /<br\s*\/?>|&lt;br\s*\/?&gt;/gi;
+	
+	if (sh.config.bloggerMode == true)
+		str = str.replace(br, '\n');
+
+	if (sh.config.stripBrs == true)
+		str = str.replace(br, '');
+		
+	return str;
+};
+
+/**
+ * Removes all white space at the begining and end of a string.
+ * 
+ * @param {String} str   String to trim.
+ * @return {String}      Returns string without leading and following white space characters.
+ */
+function trim(str)
+{
+	return str.replace(/^\s+|\s+$/g, '');
+};
+
+/**
+ * Unindents a block of text by the lowest common indent amount.
+ * @param {String} str   Text to unindent.
+ * @return {String}      Returns unindented text block.
+ */
+function unindent(str)
+{
+	var lines = splitLines(fixInputString(str)),
+		indents = new Array(),
+		regex = /^\s*/,
+		min = 1000
+		;
+	
+	// go through every line and check for common number of indents
+	for (var i = 0; i < lines.length && min > 0; i++) 
+	{
+		var line = lines[i];
+		
+		if (trim(line).length == 0) 
+			continue;
+		
+		var matches = regex.exec(line);
+		
+		// In the event that just one line doesn't have leading white space
+		// we can't unindent anything, so bail completely.
+		if (matches == null) 
+			return str;
+			
+		min = Math.min(matches[0].length, min);
+	}
+	
+	// trim minimum common number of white space from the begining of every line
+	if (min > 0) 
+		for (var i = 0; i < lines.length; i++) 
+			lines[i] = lines[i].substr(min);
+	
+	return lines.join('\n');
+};
+
+/**
+ * Callback method for Array.sort() which sorts matches by
+ * index position and then by length.
+ * 
+ * @param {Match} m1	Left object.
+ * @param {Match} m2    Right object.
+ * @return {Number}     Returns -1, 0 or -1 as a comparison result.
+ */
+function matchesSortCallback(m1, m2)
+{
+	// sort matches by index first
+	if(m1.index < m2.index)
+		return -1;
+	else if(m1.index > m2.index)
+		return 1;
+	else
+	{
+		// if index is the same, sort by length
+		if(m1.length < m2.length)
+			return -1;
+		else if(m1.length > m2.length)
+			return 1;
+	}
+	
+	return 0;
+};
+
+/**
+ * Executes given regular expression on provided code and returns all
+ * matches that are found.
+ * 
+ * @param {String} code    Code to execute regular expression on.
+ * @param {Object} regex   Regular expression item info from <code>regexList</code> collection.
+ * @return {Array}         Returns a list of Match objects.
+ */ 
+function getMatches(code, regexInfo)
+{
+	function defaultAdd(match, regexInfo)
+	{
+		return match[0];
+	};
+	
+	var index = 0,
+		match = null,
+		matches = [],
+		func = regexInfo.func ? regexInfo.func : defaultAdd
+		;
+	
+	while((match = regexInfo.regex.exec(code)) != null)
+	{
+		var resultMatch = func(match, regexInfo);
+		
+		if (typeof(resultMatch) == 'string')
+			resultMatch = [new sh.Match(resultMatch, match.index, regexInfo.css)];
+
+		matches = matches.concat(resultMatch);
+	}
+	
+	return matches;
+};
+
+/**
+ * Turns all URLs in the code into <a/> tags.
+ * @param {String} code Input code.
+ * @return {String} Returns code with </a> tags.
+ */
+function processUrls(code)
+{
+	var gt = /(.*)((&gt;|&lt;).*)/;
+	
+	return code.replace(sh.regexLib.url, function(m)
+	{
+		var suffix = '',
+			match = null
+			;
+		
+		// We include &lt; and &gt; in the URL for the common cases like <http://google.com>
+		// The problem is that they get transformed into &lt;http://google.com&gt;
+		// Where as &gt; easily looks like part of the URL string.
+	
+		if (match = gt.exec(m))
+		{
+			m = match[1];
+			suffix = match[2];
+		}
+		
+		return '<a href="' + m + '">' + m + '</a>' + suffix;
+	});
+};
+
+/**
+ * Finds all <SCRIPT TYPE="syntaxhighlighter" /> elementss.
+ * @return {Array} Returns array of all found SyntaxHighlighter tags.
+ */
+function getSyntaxHighlighterScriptTags()
+{
+	var tags = document.getElementsByTagName('script'),
+		result = []
+		;
+	
+	for (var i = 0; i < tags.length; i++)
+		if (tags[i].type == 'syntaxhighlighter')
+			result.push(tags[i]);
+			
+	return result;
+};
+
+/**
+ * Strips <![CDATA[]]> from <SCRIPT /> content because it should be used
+ * there in most cases for XHTML compliance.
+ * @param {String} original	Input code.
+ * @return {String} Returns code without leading <![CDATA[]]> tags.
+ */
+function stripCData(original)
+{
+	var left = '<![CDATA[',
+		right = ']]>',
+		// for some reason IE inserts some leading blanks here
+		copy = trim(original),
+		changed = false,
+		leftLength = left.length,
+		rightLength = right.length
+		;
+	
+	if (copy.indexOf(left) == 0)
+	{
+		copy = copy.substring(leftLength);
+		changed = true;
+	}
+	
+	var copyLength = copy.length;
+	
+	if (copy.indexOf(right) == copyLength - rightLength)
+	{
+		copy = copy.substring(0, copyLength - rightLength);
+		changed = true;
+	}
+	
+	return changed ? copy : original;
+};
+
+
+/**
+ * Quick code mouse double click handler.
+ */
+function quickCodeHandler(e)
+{
+	var target = e.target,
+		highlighterDiv = findParentElement(target, '.syntaxhighlighter'),
+		container = findParentElement(target, '.container'),
+		textarea = document.createElement('textarea'),
+		highlighter
+		;
+
+	if (!container || !highlighterDiv || findElement(container, 'textarea'))
+		return;
+
+	highlighter = getHighlighterById(highlighterDiv.id);
+	
+	// add source class name
+	addClass(highlighterDiv, 'source');
+
+	// Have to go over each line and grab it's text, can't just do it on the
+	// container because Firefox loses all \n where as Webkit doesn't.
+	var lines = container.childNodes,
+		code = []
+		;
+	
+	for (var i = 0; i < lines.length; i++)
+		code.push(lines[i].innerText || lines[i].textContent);
+	
+	// using \r instead of \r or \r\n makes this work equally well on IE, FF and Webkit
+	code = code.join('\r');
+	
+	// inject <textarea/> tag
+	textarea.appendChild(document.createTextNode(code));
+	container.appendChild(textarea);
+	
+	// preselect all text
+	textarea.focus();
+	textarea.select();
+	
+	// set up handler for lost focus
+	attachEvent(textarea, 'blur', function(e)
+	{
+		textarea.parentNode.removeChild(textarea);
+		removeClass(highlighterDiv, 'source');
+	});
+};
+
+/**
+ * Match object.
+ */
+sh.Match = function(value, index, css)
+{
+	this.value = value;
+	this.index = index;
+	this.length = value.length;
+	this.css = css;
+	this.brushName = null;
+};
+
+sh.Match.prototype.toString = function()
+{
+	return this.value;
+};
+
+/**
+ * Simulates HTML code with a scripting language embedded.
+ * 
+ * @param {String} scriptBrushName Brush name of the scripting language.
+ */
+sh.HtmlScript = function(scriptBrushName)
+{
+	var brushClass = findBrush(scriptBrushName),
+		scriptBrush,
+		xmlBrush = new sh.brushes.Xml(),
+		bracketsRegex = null,
+		ref = this,
+		methodsToExpose = 'getDiv getHtml init'.split(' ')
+		;
+
+	if (brushClass == null)
+		return;
+	
+	scriptBrush = new brushClass();
+	
+	for(var i = 0; i < methodsToExpose.length; i++)
+		// make a closure so we don't lose the name after i changes
+		(function() {
+			var name = methodsToExpose[i];
+			
+			ref[name] = function()
+			{
+				return xmlBrush[name].apply(xmlBrush, arguments);
+			};
+		})();
+	
+	if (scriptBrush.htmlScript == null)
+	{
+		alert(sh.config.strings.brushNotHtmlScript + scriptBrushName);
+		return;
+	}
+	
+	xmlBrush.regexList.push(
+		{ regex: scriptBrush.htmlScript.code, func: process }
+	);
+	
+	function offsetMatches(matches, offset)
+	{
+		for (var j = 0; j < matches.length; j++) 
+			matches[j].index += offset;
+	}
+	
+	function process(match, info)
+	{
+		var code = match.code,
+			matches = [],
+			regexList = scriptBrush.regexList,
+			offset = match.index + match.left.length,
+			htmlScript = scriptBrush.htmlScript,
+			result
+			;
+
+		// add all matches from the code
+		for (var i = 0; i < regexList.length; i++)
+		{
+			result = getMatches(code, regexList[i]);
+			offsetMatches(result, offset);
+			matches = matches.concat(result);
+		}
+		
+		// add left script bracket
+		if (htmlScript.left != null && match.left != null)
+		{
+			result = getMatches(match.left, htmlScript.left);
+			offsetMatches(result, match.index);
+			matches = matches.concat(result);
+		}
+		
+		// add right script bracket
+		if (htmlScript.right != null && match.right != null)
+		{
+			result = getMatches(match.right, htmlScript.right);
+			offsetMatches(result, match.index + match[0].lastIndexOf(match.right));
+			matches = matches.concat(result);
+		}
+		
+		for (var j = 0; j < matches.length; j++)
+			matches[j].brushName = brushClass.brushName;
+			
+		return matches;
+	}
+};
+
+/**
+ * Main Highlither class.
+ * @constructor
+ */
+sh.Highlighter = function()
+{
+	// not putting any code in here because of the prototype inheritance
+};
+
+sh.Highlighter.prototype = {
+	/**
+	 * Returns value of the parameter passed to the highlighter.
+	 * @param {String} name				Name of the parameter.
+	 * @param {Object} defaultValue		Default value.
+	 * @return {Object}					Returns found value or default value otherwise.
+	 */
+	getParam: function(name, defaultValue)
+	{
+		var result = this.params[name];
+		return toBoolean(result == null ? defaultValue : result);
+	},
+	
+	/**
+	 * Shortcut to document.createElement().
+	 * @param {String} name		Name of the element to create (DIV, A, etc).
+	 * @return {HTMLElement}	Returns new HTML element.
+	 */
+	create: function(name)
+	{
+		return document.createElement(name);
+	},
+	
+	/**
+	 * Applies all regular expression to the code and stores all found
+	 * matches in the `this.matches` array.
+	 * @param {Array} regexList		List of regular expressions.
+	 * @param {String} code			Source code.
+	 * @return {Array}				Returns list of matches.
+	 */
+	findMatches: function(regexList, code)
+	{
+		var result = [];
+		
+		if (regexList != null)
+			for (var i = 0; i < regexList.length; i++) 
+				// BUG: length returns len+1 for array if methods added to prototype chain (oising@gmail.com)
+				if (typeof (regexList[i]) == "object")
+					result = result.concat(getMatches(code, regexList[i]));
+		
+		// sort and remove nested the matches
+		return this.removeNestedMatches(result.sort(matchesSortCallback));
+	},
+	
+	/**
+	 * Checks to see if any of the matches are inside of other matches. 
+	 * This process would get rid of highligted strings inside comments, 
+	 * keywords inside strings and so on.
+	 */
+	removeNestedMatches: function(matches)
+	{
+		// Optimized by Jose Prado (http://joseprado.com)
+		for (var i = 0; i < matches.length; i++) 
+		{ 
+			if (matches[i] === null)
+				continue;
+			
+			var itemI = matches[i],
+				itemIEndPos = itemI.index + itemI.length
+				;
+			
+			for (var j = i + 1; j < matches.length && matches[i] !== null; j++) 
+			{
+				var itemJ = matches[j];
+				
+				if (itemJ === null) 
+					continue;
+				else if (itemJ.index > itemIEndPos) 
+					break;
+				else if (itemJ.index == itemI.index && itemJ.length > itemI.length)
+					matches[i] = null;
+				else if (itemJ.index >= itemI.index && itemJ.index < itemIEndPos) 
+					matches[j] = null;
+			}
+		}
+		
+		return matches;
+	},
+	
+	/**
+	 * Creates an array containing integer line numbers starting from the 'first-line' param.
+	 * @return {Array} Returns array of integers.
+	 */
+	figureOutLineNumbers: function(code)
+	{
+		var lines = [],
+			firstLine = parseInt(this.getParam('first-line'))
+			;
+		
+		eachLine(code, function(line, index)
+		{
+			lines.push(index + firstLine);
+		});
+		
+		return lines;
+	},
+	
+	/**
+	 * Determines if specified line number is in the highlighted list.
+	 */
+	isLineHighlighted: function(lineNumber)
+	{
+		var list = this.getParam('highlight', []);
+		
+		if (typeof(list) != 'object' && list.push == null) 
+			list = [ list ];
+		
+		return indexOf(list, lineNumber.toString()) != -1;
+	},
+	
+	/**
+	 * Generates HTML markup for a single line of code while determining alternating line style.
+	 * @param {Integer} lineNumber	Line number.
+	 * @param {String} code Line	HTML markup.
+	 * @return {String}				Returns HTML markup.
+	 */
+	getLineHtml: function(lineIndex, lineNumber, code)
+	{
+		var classes = [
+			'line',
+			'number' + lineNumber,
+			'index' + lineIndex,
+			'alt' + (lineNumber % 2 == 0 ? 1 : 2).toString()
+		];
+		
+		if (this.isLineHighlighted(lineNumber))
+		 	classes.push('highlighted');
+		
+		if (lineNumber == 0)
+			classes.push('break');
+			
+		return '<div class="' + classes.join(' ') + '">' + code + '</div>';
+	},
+	
+	/**
+	 * Generates HTML markup for line number column.
+	 * @param {String} code			Complete code HTML markup.
+	 * @param {Array} lineNumbers	Calculated line numbers.
+	 * @return {String}				Returns HTML markup.
+	 */
+	getLineNumbersHtml: function(code, lineNumbers)
+	{
+		var html = '',
+			count = splitLines(code).length,
+			firstLine = parseInt(this.getParam('first-line')),
+			pad = this.getParam('pad-line-numbers')
+			;
+		
+		if (pad == true)
+			pad = (firstLine + count - 1).toString().length;
+		else if (isNaN(pad) == true)
+			pad = 0;
+			
+		for (var i = 0; i < count; i++)
+		{
+			var lineNumber = lineNumbers ? lineNumbers[i] : firstLine + i,
+				code = lineNumber == 0 ? sh.config.space : padNumber(lineNumber, pad)
+				;
+				
+			html += this.getLineHtml(i, lineNumber, code);
+		}
+		
+		return html;
+	},
+	
+	/**
+	 * Splits block of text into individual DIV lines.
+	 * @param {String} code			Code to highlight.
+	 * @param {Array} lineNumbers	Calculated line numbers.
+	 * @return {String}				Returns highlighted code in HTML form.
+	 */
+	getCodeLinesHtml: function(html, lineNumbers)
+	{
+		html = trim(html);
+		
+		var lines = splitLines(html),
+			padLength = this.getParam('pad-line-numbers'),
+			firstLine = parseInt(this.getParam('first-line')),
+			html = '',
+			brushName = this.getParam('brush')
+			;
+
+		for (var i = 0; i < lines.length; i++)
+		{
+			var line = lines[i],
+				indent = /^(&nbsp;|\s)+/.exec(line),
+				spaces = null,
+				lineNumber = lineNumbers ? lineNumbers[i] : firstLine + i;
+				;
+
+			if (indent != null)
+			{
+				spaces = indent[0].toString();
+				line = line.substr(spaces.length);
+				spaces = spaces.replace(' ', sh.config.space);
+			}
+
+			line = trim(line);
+			
+			if (line.length == 0)
+				line = sh.config.space;
+			
+			html += this.getLineHtml(
+				i,
+				lineNumber, 
+				(spaces != null ? '<code class="' + brushName + ' spaces">' + spaces + '</code>' : '') + line
+			);
+		}
+		
+		return html;
+	},
+	
+	/**
+	 * Returns HTML for the table title or empty string if title is null.
+	 */
+	getTitleHtml: function(title)
+	{
+		return title ? '<caption>' + title + '</caption>' : '';
+	},
+	
+	/**
+	 * Finds all matches in the source code.
+	 * @param {String} code		Source code to process matches in.
+	 * @param {Array} matches	Discovered regex matches.
+	 * @return {String} Returns formatted HTML with processed mathes.
+	 */
+	getMatchesHtml: function(code, matches)
+	{
+		var pos = 0, 
+			result = '',
+			brushName = this.getParam('brush', '')
+			;
+		
+		function getBrushNameCss(match)
+		{
+			var result = match ? (match.brushName || brushName) : brushName;
+			return result ? result + ' ' : '';
+		};
+		
+		// Finally, go through the final list of matches and pull the all
+		// together adding everything in between that isn't a match.
+		for (var i = 0; i < matches.length; i++) 
+		{
+			var match = matches[i],
+				matchBrushName
+				;
+			
+			if (match === null || match.length === 0) 
+				continue;
+			
+			matchBrushName = getBrushNameCss(match);
+			
+			result += wrapLinesWithCode(code.substr(pos, match.index - pos), matchBrushName + 'plain')
+					+ wrapLinesWithCode(match.value, matchBrushName + match.css)
+					;
+
+			pos = match.index + match.length + (match.offset || 0);
+		}
+
+		// don't forget to add whatever's remaining in the string
+		result += wrapLinesWithCode(code.substr(pos), getBrushNameCss() + 'plain');
+
+		return result;
+	},
+	
+	/**
+	 * Generates HTML markup for the whole syntax highlighter.
+	 * @param {String} code Source code.
+	 * @return {String} Returns HTML markup.
+	 */
+	getHtml: function(code)
+	{
+		var html = '',
+			classes = [ 'syntaxhighlighter' ],
+			tabSize,
+			matches,
+			lineNumbers
+			;
+		
+		// process light mode
+		if (this.getParam('light') == true)
+			this.params.toolbar = this.params.gutter = false;
+
+		className = 'syntaxhighlighter';
+
+		if (this.getParam('collapse') == true)
+			classes.push('collapsed');
+		
+		if ((gutter = this.getParam('gutter')) == false)
+			classes.push('nogutter');
+
+		// add custom user style name
+		classes.push(this.getParam('class-name'));
+
+		// add brush alias to the class name for custom CSS
+		classes.push(this.getParam('brush'));
+
+		code = trimFirstAndLastLines(code)
+			.replace(/\r/g, ' ') // IE lets these buggers through
+			;
+
+		tabSize = this.getParam('tab-size');
+
+		// replace tabs with spaces
+		code = this.getParam('smart-tabs') == true
+			? processSmartTabs(code, tabSize)
+			: processTabs(code, tabSize)
+			;
+
+		// unindent code by the common indentation
+		if (this.getParam('unindent'))
+			code = unindent(code);
+
+		if (gutter)
+			lineNumbers = this.figureOutLineNumbers(code);
+		
+		// find matches in the code using brushes regex list
+		matches = this.findMatches(this.regexList, code);
+		// processes found matches into the html
+		html = this.getMatchesHtml(code, matches);
+		// finally, split all lines so that they wrap well
+		html = this.getCodeLinesHtml(html, lineNumbers);
+
+		// finally, process the links
+		if (this.getParam('auto-links'))
+			html = processUrls(html);
+		
+		if (typeof(navigator) != 'undefined' && navigator.userAgent && navigator.userAgent.match(/MSIE/))
+			classes.push('ie');
+		
+		html = 
+			'<div id="' + getHighlighterId(this.id) + '" class="' + classes.join(' ') + '">'
+				+ (this.getParam('toolbar') ? sh.toolbar.getHtml(this) : '')
+				+ '<table border="0" cellpadding="0" cellspacing="0">'
+					+ this.getTitleHtml(this.getParam('title'))
+					+ '<tbody>'
+						+ '<tr>'
+							+ (gutter ? '<td class="gutter">' + this.getLineNumbersHtml(code) + '</td>' : '')
+							+ '<td class="code">'
+								+ '<div class="container">'
+									+ html
+								+ '</div>'
+							+ '</td>'
+						+ '</tr>'
+					+ '</tbody>'
+				+ '</table>'
+			+ '</div>'
+			;
+			
+		return html;
+	},
+	
+	/**
+	 * Highlights the code and returns complete HTML.
+	 * @param {String} code     Code to highlight.
+	 * @return {Element}        Returns container DIV element with all markup.
+	 */
+	getDiv: function(code)
+	{
+		if (code === null) 
+			code = '';
+		
+		this.code = code;
+
+		var div = this.create('div');
+
+		// create main HTML
+		div.innerHTML = this.getHtml(code);
+		
+		// set up click handlers
+		if (this.getParam('toolbar'))
+			attachEvent(findElement(div, '.toolbar'), 'click', sh.toolbar.handler);
+		
+		if (this.getParam('quick-code'))
+			attachEvent(findElement(div, '.code'), 'dblclick', quickCodeHandler);
+		
+		return div;
+	},
+	
+	/**
+	 * Initializes the highlighter/brush.
+	 *
+	 * Constructor isn't used for initialization so that nothing executes during necessary
+	 * `new SyntaxHighlighter.Highlighter()` call when setting up brush inheritence.
+	 *
+	 * @param {Hash} params Highlighter parameters.
+	 */
+	init: function(params)
+	{
+		this.id = guid();
+		
+		// register this instance in the highlighters list
+		storeHighlighter(this);
+		
+		// local params take precedence over defaults
+		this.params = merge(sh.defaults, params || {})
+		
+		// process light mode
+		if (this.getParam('light') == true)
+			this.params.toolbar = this.params.gutter = false;
+	},
+	
+	/**
+	 * Converts space separated list of keywords into a regular expression string.
+	 * @param {String} str    Space separated keywords.
+	 * @return {String}       Returns regular expression string.
+	 */
+	getKeywords: function(str)
+	{
+		str = str
+			.replace(/^\s+|\s+$/g, '')
+			.replace(/\s+/g, '|')
+			;
+		
+		return '\\b(?:' + str + ')\\b';
+	},
+	
+	/**
+	 * Makes a brush compatible with the `html-script` functionality.
+	 * @param {Object} regexGroup Object containing `left` and `right` regular expressions.
+	 */
+	forHtmlScript: function(regexGroup)
+	{
+		var regex = { 'end' : regexGroup.right.source };
+
+		if(regexGroup.eof)
+			regex.end = "(?:(?:" + regex.end + ")|$)";
+		
+		this.htmlScript = {
+			left : { regex: regexGroup.left, css: 'script' },
+			right : { regex: regexGroup.right, css: 'script' },
+			code : new XRegExp(
+				"(?<left>" + regexGroup.left.source + ")" +
+				"(?<code>.*?)" +
+				"(?<right>" + regex.end + ")",
+				"sgi"
+				)
+		};
+	}
+}; // end of Highlighter
+
+return sh;
+}(); // end of anonymous function
+
+// CommonJS
+typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter : null;/**
  * SyntaxHighlighter
  * http://alexgorbatchev.com/SyntaxHighlighter
  *
