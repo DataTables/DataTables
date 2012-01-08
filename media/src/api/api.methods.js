@@ -626,7 +626,7 @@ this.fnGetData = function( mRow, iCol )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
-	if ( mRow )
+	if ( mRow !== undefined )
 	{
 		var iRow = (typeof mRow === 'object') ? 
 			_fnNodeToDataIndex(oSettings, mRow) : mRow;
