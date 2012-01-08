@@ -47,8 +47,7 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 	clear: both;
 	*zoom: 1;
 }
-
-div.dataTables_wrapper .ui-widget-header {
+.dataTables_wrapper .ui-widget-header {
 	font-weight: normal;
 }
 .dataTables_wrapper .ui-toolbar {
@@ -213,20 +212,20 @@ div.dataTables_wrapper .ui-widget-header {
 /*
  * Sorting
  */
-table.display thead th div.DataTables_sort_wrapper {
+table.dataTable thead th div.DataTables_sort_wrapper {
 	position: relative;
 	padding-right: 20px;
 	padding-right: 20px;
 }
 
-table.display thead th div.DataTables_sort_wrapper span {
+table.dataTable thead th div.DataTables_sort_wrapper span {
 	position: absolute;
 	top: 50%;
 	margin-top: -8px;
 	right: 0;
 }
 
-th:active {
+table.dataTable th:active {
 	outline: none;
 }
 

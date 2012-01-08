@@ -137,11 +137,9 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 	height: 22px;
 	line-height: 22px;
 }
-
 .paging_full_numbers a:active {
 	outline: none
 }
-
 .paging_full_numbers a:hover {
 	text-decoration: none;
 }
@@ -203,7 +201,7 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 .sorting_asc_disabled { background: url('../images/sort_asc_disabled.png') no-repeat center right; }
 .sorting_desc_disabled { background: url('../images/sort_desc_disabled.png') no-repeat center right; }
  
-th:active {
+table.dataTable th:active {
 	outline: none;
 }
 
