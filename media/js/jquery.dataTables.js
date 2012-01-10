@@ -8290,7 +8290,7 @@
 		 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
-		 *  @param {object} oData The state object to be saved
+		 *  @return {object} The DataTables state object to be loaded
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
