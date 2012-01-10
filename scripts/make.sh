@@ -43,7 +43,7 @@ mv DataTables.js.build $MAIN_FILE
 
 
 if [ "$CMD" != "debug" ]; then
-	if [ "$CMD" = "jshint" -o "$CMD" = "" ]; then
+	if [ "$CMD" = "jshint" -o "$CMD" = "" -o "$CMD" = "cdn" ]; then
 		echo "  JSHint"
 		jshint $MAIN_FILE --config ../../scripts/jshint.config
 		if [ $? -ne 0 ]; then
@@ -54,7 +54,7 @@ if [ "$CMD" != "debug" ]; then
 		fi
 	fi
 
-	if [ "$CMD" = "compress" -o "$CMD" = "" ]; then
+	if [ "$CMD" = "compress" -o "$CMD" = "" -o "$CMD" = "cdn" ]; then
 		echo "  Minification"
 		echo "/*
  * File:        jquery.dataTables.min.js
@@ -81,6 +81,21 @@ if [ "$CMD" != "debug" ]; then
 	if [ "$CMD" = "docs" -o "$CMD" = "" ]; then
 		echo "  Documentation"
 		$JSDOC -d ../../docs -t JSDoc-DataTables $MAIN_FILE
+	fi
+
+	if [ "$CMD" = "cdn" ]; then
+		echo "  CDN"
+		if [ -d ../../cdn ]; then
+			rm -Rf ../../cdn
+		fi
+		mkdir ../../cdn
+		mkdir ../../cdn/css
+		cp $MAIN_FILE ../../cdn
+		cp $MIN_FILE ../../cdn
+		cp ../css/jquery.dataTables.css ../../cdn/css
+		cp ../css/jquery.dataTables_themeroller.css ../../cdn/css
+		cp -r ../images ../../cdn/
+		rm ../../cdn/images/Sorting\ icons.psd
 	fi
 fi
 
