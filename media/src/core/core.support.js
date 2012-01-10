@@ -29,11 +29,12 @@ function _fnSettingsFromNode ( nTable )
 function _fnGetTrNodes ( oSettings )
 {
 	var aNodes = [];
-	for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+	var aoData = oSettings.aoData;
+	for ( var i=0, iLen=aoData.length ; i<iLen ; i++ )
 	{
-		if ( oSettings.aoData[i].nTr !== null )
+		if ( aoData[i].nTr !== null )
 		{
-			aNodes.push( oSettings.aoData[i].nTr );
+			aNodes.push( aoData[i].nTr );
 		}
 	}
 	return aNodes;

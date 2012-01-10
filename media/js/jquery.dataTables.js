@@ -2610,22 +2610,21 @@
 			var sName = 'name="'+oSettings.sTableId+'_length"';
 			var sStdMenu = '<select size="1" '+sName+'>';
 			var i, iLen;
+			var aLengthMenu = oSettings.aLengthMenu;
 			
-			if ( oSettings.aLengthMenu.length == 2 && typeof oSettings.aLengthMenu[0] === 'object' && 
-					typeof oSettings.aLengthMenu[1] === 'object' )
+			if ( aLengthMenu.length == 2 && typeof aLengthMenu[0] === 'object' && 
+					typeof aLengthMenu[1] === 'object' )
 			{
-				for ( i=0, iLen=oSettings.aLengthMenu[0].length ; i<iLen ; i++ )
+				for ( i=0, iLen=aLengthMenu[0].length ; i<iLen ; i++ )
 				{
-					sStdMenu += '<option value="'+oSettings.aLengthMenu[0][i]+'">'+
-						oSettings.aLengthMenu[1][i]+'</option>';
+					sStdMenu += '<option value="'+aLengthMenu[0][i]+'">'+aLengthMenu[1][i]+'</option>';
 				}
 			}
 			else
 			{
-				for ( i=0, iLen=oSettings.aLengthMenu.length ; i<iLen ; i++ )
+				for ( i=0, iLen=aLengthMenu.length ; i<iLen ; i++ )
 				{
-					sStdMenu += '<option value="'+oSettings.aLengthMenu[i]+'">'+
-						oSettings.aLengthMenu[i]+'</option>';
+					sStdMenu += '<option value="'+aLengthMenu[i]+'">'+aLengthMenu[i]+'</option>';
 				}
 			}
 			sStdMenu += '</select>';
@@ -4452,11 +4451,12 @@
 		function _fnGetTrNodes ( oSettings )
 		{
 			var aNodes = [];
-			for ( var i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+			var aoData = oSettings.aoData;
+			for ( var i=0, iLen=aoData.length ; i<iLen ; i++ )
 			{
-				if ( oSettings.aoData[i].nTr !== null )
+				if ( aoData[i].nTr !== null )
 				{
-					aNodes.push( oSettings.aoData[i].nTr );
+					aNodes.push( aoData[i].nTr );
 				}
 			}
 			return aNodes;
