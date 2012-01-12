@@ -794,13 +794,13 @@ this.fnOpen = function( nTr, mHtml, sClass )
 	nNewCell.className = sClass;
 	nNewCell.colSpan = _fnVisbleColumns( oSettings );
 
-	if( mHtml.jquery !== undefined || typeof mHtml === "object" )
+	if (typeof mHtml === "string")
 	{
-		nNewCell.appendChild( mHtml );
+		nNewCell.innerHTML = mHtml;
 	}
 	else
 	{
-		nNewCell.innerHTML = mHtml;
+		$(nNewCell).html( mHtml );
 	}
 
 	/* If the nTr isn't on the page at the moment - then we don't insert at the moment */
