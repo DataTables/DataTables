@@ -215,7 +215,7 @@ function _fnBuildHead( oSettings )
  */
 function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 {
-	var i, iLen, j, jLen, k, kLen;
+	var i, iLen, j, jLen, k, kLen, n, nLocalTr;
 	var aoLocal = [];
 	var aApplied = [];
 	var iColumns = oSettings.aoColumns.length;
@@ -247,12 +247,14 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 
 	for ( i=0, iLen=aoLocal.length ; i<iLen ; i++ )
 	{
+		nLocalTr = aoLocal[i].nTr;
+		
 		/* All cells are going to be replaced, so empty out the row */
-		if ( aoLocal[i].nTr )
+		if ( nLocalTr )
 		{
-			for ( k=0, kLen=aoLocal[i].nTr.childNodes.length ; k<kLen ; k++ )
+			while( (n = nLocalTr.firstChild) )
 			{
-				aoLocal[i].nTr.removeChild( aoLocal[i].nTr.childNodes[0] );
+				nLocalTr.removeChild( n );
 			}
 		}
 
@@ -266,7 +268,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 			 */
 			if ( aApplied[i][j] === undefined )
 			{
-				aoLocal[i].nTr.appendChild( aoLocal[i][j].cell );
+				nLocalTr.appendChild( aoLocal[i][j].cell );
 				aApplied[i][j] = 1;
 
 				/* Expand the cell to cover as many rows as needed */
@@ -305,7 +307,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
  */
 function _fnDraw( oSettings )
 {
-	var i, iLen;
+	var i, iLen, n;
 	var anRows = [];
 	var iRowCount = 0;
 	var iStripes = oSettings.asStripeClasses.length;
@@ -462,10 +464,9 @@ function _fnDraw( oSettings )
 		if ( !oSettings.oScroll.bInfinite || !oSettings._bInitComplete ||
 		 	oSettings.bSorted || oSettings.bFiltered )
 		{
-			nTrs = oSettings.nTBody.childNodes;
-			for ( i=nTrs.length-1 ; i>=0 ; i-- )
+			while( (n = oSettings.nTBody.firstChild) )
 			{
-				nTrs[i].parentNode.removeChild( nTrs[i] );
+				oSettings.nTBody.removeChild( n );
 			}
 		}
 		
