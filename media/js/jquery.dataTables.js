@@ -1367,6 +1367,7 @@
 							if ( nRow == oSettings.aoOpenRows[k].nParent )
 							{
 								anRows.push( oSettings.aoOpenRows[k].nTr );
+								break;
 							}
 						}
 					}
