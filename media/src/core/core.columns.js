@@ -21,7 +21,7 @@ function _fnAddColumn( oSettings, nTh )
 	oSettings.aoColumns.push( oCol );
 	
 	/* Add a column specific filter */
-	if ( oSettings.aoPreSearchCols[ iCol ] !== undefined )
+	if ( oSettings.aoPreSearchCols[ iCol ] === undefined )
 	{
 		oSettings.aoPreSearchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch );
 	}
