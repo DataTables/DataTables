@@ -5376,7 +5376,8 @@
 				{
 					return _fnGetCellData( oSettings, iRow, iCol, '' );
 				}
-				return oSettings.aoData[iRow]._aData;
+				return (oSettings.aoData[iRow]!==undefined) ?
+					oSettings.aoData[iRow]._aData : null;
 			}
 			return _fnGetDataMaster( oSettings );
 		};
@@ -5402,9 +5403,11 @@
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
-			return (iRow !== undefined) ?
-				oSettings.aoData[iRow].nTr :
-				_fnGetTrNodes( oSettings );
+			if ( iRow !== undefined ) {
+				return (oSettings.aoData[iRow]!==undefined) ?
+					oSettings.aoData[iRow].nTr : null;
+			}
+			return _fnGetTrNodes( oSettings );
 		};
 		
 		
