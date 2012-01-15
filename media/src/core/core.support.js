@@ -58,7 +58,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 		iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 	
 	/* Allow the collection to be limited to just one row */
-	if ( iIndividualRow )
+	if ( iIndividualRow !== undefined )
 	{
 		iStart = iIndividualRow;
 		iEnd = iIndividualRow+1;
