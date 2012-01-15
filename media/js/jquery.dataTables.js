@@ -4482,7 +4482,7 @@
 				iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 			
 			/* Allow the collection to be limited to just one row */
-			if ( iIndividualRow )
+			if ( iIndividualRow !== undefined )
 			{
 				iStart = iIndividualRow;
 				iEnd = iIndividualRow+1;
@@ -5503,7 +5503,9 @@
 		 *  @param {node} nTr The table row to 'open'
 		 *  @param {string|node|jQuery} mHtml The HTML to put into the row
 		 *  @param {string} sClass Class to give the new TD cell
-		 *  @returns {node} The row opened
+		 *  @returns {node} The row opened. Note that if the table row passed in as the
+		 *    first parameter, is not found in the table, this method will silently
+		 *    return.
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5525,6 +5527,13 @@
 		{
 			/* Find settings from table node */
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+		
+			/* Check that the row given is in the table */
+			var nTableRows = _fnGetTrNodes( oSettings );
+			if ( $.inArray(nTr, nTableRows) === -1 )
+			{
+				return;
+			}
 			
 			/* the old open one if there is one */
 			this.fnClose( nTr );
@@ -5546,7 +5555,7 @@
 		
 			/* If the nTr isn't on the page at the moment - then we don't insert at the moment */
 			var nTrs = $('tr', oSettings.nTBody);
-			if ( $.inArray(nTr, nTrs) != -1 )
+			if ( $.inArray(nTr, nTrs) != -1  )
 			{
 				$(nNewRow).insertAfter(nTr);
 			}
