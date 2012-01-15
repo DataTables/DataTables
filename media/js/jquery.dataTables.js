@@ -81,7 +81,7 @@
 			oSettings.aoColumns.push( oCol );
 			
 			/* Add a column specific filter */
-			if ( !oSettings.aoPreSearchCols[ iCol ] )
+			if ( oSettings.aoPreSearchCols[ iCol ] !== undefined )
 			{
 				oSettings.aoPreSearchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch );
 			}
