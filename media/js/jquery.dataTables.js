@@ -1292,7 +1292,7 @@
 			oSettings.bDrawing = true;
 			
 			/* Check and see if we have an initial draw position from state saving */
-			if ( oSettings.iInitDisplayStart && oSettings.iInitDisplayStart != -1 )
+			if ( oSettings.iInitDisplayStart !== undefined && oSettings.iInitDisplayStart != -1 )
 			{
 				if ( oSettings.oFeatures.bServerSide )
 				{
