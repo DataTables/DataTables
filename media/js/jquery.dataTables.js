@@ -3785,7 +3785,14 @@
 				aoData = oSettings.aoData,
 				aoColumns = oSettings.aoColumns,
 				oAria = oSettings.oLanguage.oAria;
-			
+		
+			/* Provide a pre-callback function which can be used to cancel the sort is false is returned */
+			var aPreSort = _fnCallbackFire( oSettings, 'aoPreSortCallback', 'preSort', [oSettings] );
+			if ( $.inArray( false, aPreSort ) !== -1 )
+			{
+				return;
+			}
+		
 			/* No sorting required if server-side or no sorting array */
 			if ( !oSettings.oFeatures.bServerSide && 
 				(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
@@ -6165,6 +6172,7 @@
 			_fnCallbackReg( oSettings, 'aoFooterCallback',     oInit.fnFooterCallback,    'user' );
 			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
+			_fnCallbackReg( oSettings, 'aoPreSortCallback',    oInit.fnPreSortCallback,   'user' );
 			
 			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 				   oSettings.oFeatures.bSortClasses )
@@ -6991,6 +6999,10 @@
 		 */
 		"oSort": {},
 	
+		/**
+		 * Hooks to different internal events such as pre-sort, post-sort, etc.
+		 */
+		"oHooks" : {},
 	
 		/**
 		 * Version string for plug-ins to check compatibility. Allowed format is
@@ -8186,6 +8198,18 @@
 		 *    } );
 		 */
 		"fnPreDrawCallback": null,
+	
+	
+		/**
+		 * Called at the very start of each table sort and can be used to cancel the
+		 * sort by returning false, any other return (including undefined) results in
+		 * the full draw occurring).
+		 *  @type function
+		 *  @param {object} oSettings DataTables settings object
+		 *  @returns {boolean} False will cancel the sort, anything else (including no
+		 *    return) will allow it to complete.
+		 */
+		"fnPreSortCallback": null,
 	
 	
 		/**
@@ -10260,6 +10284,14 @@
 		"aoPreDrawCallback": [],
 		
 		/**
+		 * Callback functions for just before the table is sorted. A return of 
+		 * false will be used to cancel the sort.
+		 *  @type array
+		 *  @default []
+		 */
+		"aoPreSortCallback": [],
+		
+		/**
 		 * Callback functions for when the table has been initialised.
 		 *  @type array
 		 *  @default []
@@ -10689,6 +10721,16 @@
 			}
 		},
 		
+		/**
+		 * Provides a hook before firing the sort function
+		 * @type function
+		 */
+	 	"fnPreSort" : function(){},
+		/**
+		 * Provides a hook after firing the sort function
+		 * @type function
+		 */
+	  	"fnPostSort" : function(){},
 		/**
 		 * The DataTables object for this table
 		 *  @type object

@@ -137,6 +137,7 @@ _fnCallbackReg( oSettings, 'aoHeaderCallback',     oInit.fnHeaderCallback,    'u
 _fnCallbackReg( oSettings, 'aoFooterCallback',     oInit.fnFooterCallback,    'user' );
 _fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 _fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
+_fnCallbackReg( oSettings, 'aoPreSortCallback',    oInit.fnPreSortCallback,   'user' );
 
 if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 	   oSettings.oFeatures.bSortClasses )

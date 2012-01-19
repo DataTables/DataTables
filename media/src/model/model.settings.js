@@ -396,6 +396,16 @@ DataTable.models.oSettings = {
 	 */
 	"aoRowCreatedCallback": [],
 	
+
+	/**
+	 * Callback functions for just before the table is sorted. A return of 
+	 * false will be used to cancel the sort.
+	 *  @type array
+	 *  @default []
+	 */
+	"aoPreSortCallback": [],
+	
+
 	/**
 	 * Callback functions for just before the table is redrawn. A return of 
 	 * false will be used to cancel the draw.
