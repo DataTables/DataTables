@@ -17,7 +17,14 @@ function _fnSort ( oSettings, bApplyClasses )
 		aoData = oSettings.aoData,
 		aoColumns = oSettings.aoColumns,
 		oAria = oSettings.oLanguage.oAria;
-	
+
+      /* Provide a pre-callback function which can be used to cancel the sort is false is returned */
+      var aPreSort = _fnCallbackFire( oSettings, 'aoPreSortCallback', 'preSort', [oSettings] );
+      if ( $.inArray( false, aPreSort ) !== -1 )
+      {
+        return;
+      }
+
 	/* No sorting required if server-side or no sorting array */
 	if ( !oSettings.oFeatures.bServerSide && 
 		(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )

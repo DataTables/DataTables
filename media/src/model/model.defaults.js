@@ -791,6 +791,18 @@ DataTable.defaults = {
 
 
 	/**
+     * Called at the very start of each table sort and can be used to cancel the
+     * sort by returning false, any other return (including undefined) results in
+     * the full draw occurring).
+     *  @type function
+     *  @param {object} oSettings DataTables settings object
+     *  @returns {boolean} False will cancel the sort, anything else (including no
+     *    return) will allow it to complete.
+     */
+    "fnPreSortCallback": null,
+
+
+	/**
 	 * Called at the very start of each table draw and can be used to cancel the
 	 * draw by returning false, any other return (including undefined) results in
 	 * the full draw occurring).
