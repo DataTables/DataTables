@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.0.beta.2
+ * @version     1.9.0.dev.3
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -4898,7 +4898,7 @@
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			/* Check if we want to add multiple rows or not */
-			if ( typeof mData[0] === "object" )
+			if ( $.isArray(mData[0]) )
 			{
 				for ( var i=0 ; i<mData.length ; i++ )
 				{
@@ -6451,7 +6451,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.0.beta.2";
+	DataTable.version = "1.9.0.dev.3";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the

@@ -157,7 +157,7 @@ this.fnAddData = function( mData, bRedraw )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	
 	/* Check if we want to add multiple rows or not */
-	if ( typeof mData[0] === "object" )
+	if ( $.isArray(mData[0]) )
 	{
 		for ( var i=0 ; i<mData.length ; i++ )
 		{
