@@ -236,35 +236,14 @@ function _fnGatherData( oSettings )
 
 /**
  * Take a TR element and convert it to an index in aoData
- *  @param {object} s dataTables settings object
+ *  @param {object} oSettings dataTables settings object
  *  @param {node} n the TR element to find
- *  @returns {int} index if found, null if not
+ *  @returns {int} index if the node is found, null if not
  *  @memberof DataTable#oApi
  */
-function _fnNodeToDataIndex( s, n )
+function _fnNodeToDataIndex( oSettings, n )
 {
-	var i, iLen;
-	
-	/* Optimisation - see if the nodes which are currently visible match, since that is
-	 * the most likely node to be asked for (a selector or event for example)
-	 */
-	for ( i=s._iDisplayStart, iLen=s._iDisplayEnd ; i<iLen ; i++ )
-	{
-		if ( s.aoData[ s.aiDisplay[i] ].nTr == n )
-		{
-			return s.aiDisplay[i];
-		}
-	}
-	
-	/* Otherwise we are in for a slog through the whole data cache */
-	for ( i=0, iLen=s.aoData.length ; i<iLen ; i++ )
-	{
-		if ( s.aoData[i].nTr == n )
-		{
-			return i;
-		}
-	}
-	return null;
+	return (n._DT_RowIndex!==undefined) ? n._DT_RowIndex : null;
 }
 
 
