@@ -15,6 +15,11 @@ function _fnCreateTr ( oSettings, iRow )
 	{
 		oData.nTr = document.createElement('tr');
 
+		/* Use a private property on the node to allow reserve mapping from the node
+		 * to the aoData array for fast look up
+		 */
+		oData.nTr._DT_RowIndex = iRow;
+
 		/* Special parameters can be given by the data source to be used on the row */
 		if ( oData._aData.DT_RowId )
 		{
@@ -35,20 +40,9 @@ function _fnCreateTr ( oSettings, iRow )
 			/* Render if needed - if bUseRendered is true then we already have the rendered
 			 * value in the data source - so can just use that
 			 */
-			if ( typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null) )
-			{
-				nTd.innerHTML = oCol.fnRender( {
-					"iDataRow": iRow,
-					"iDataColumn": i,
-					"aData": oData._aData,
-					"oSettings": oSettings,
-					"mDataProp": oCol.mDataProp
-				}, _fnGetCellData(oSettings, iRow, i, 'display') );
-			}
-			else
-			{
-				nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
-			}
+			nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null)) ?
+				_fnRender( oSettings, iRow, i ) :
+				_fnGetCellData( oSettings, iRow, i, 'display' );
 		
 			/* Add user defined class */
 			if ( oCol.sClass !== null )

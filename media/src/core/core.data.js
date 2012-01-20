@@ -34,13 +34,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 		/* Use rendered data for filtering/sorting */
 		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
 		{
-			_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
-				"iDataRow": iRow,
-				"iDataColumn": i,
-				"aData": oData._aData,
-				"oSettings": oSettings,
-				"mDataProp": oCol.mDataProp
-			}, _fnGetCellData(oSettings, iRow, i, 'display') ) );
+			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
 		}
 		
 		/* See if we should auto-detect the column type */
@@ -102,6 +96,7 @@ function _fnGatherData( oSettings )
 			if ( nTrs[i].nodeName.toUpperCase() == "TR" )
 			{
 				iThisIndex = oSettings.aoData.length;
+				nTrs[i]._DT_RowIndex = iThisIndex;
 				oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
 					"nTr": nTrs[i]
 				} ) );
@@ -191,13 +186,7 @@ function _fnGatherData( oSettings )
 				/* Rendering */
 				if ( bRender )
 				{
-					sRendered = oCol.fnRender( {
-							"iDataRow": iRow,
-							"iDataColumn": iColumn,
-							"aData": oData._aData,
-							"oSettings": oSettings,
-							"mDataProp": oCol.mDataProp
-						}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
+					sRendered = _fnRender( oSettings, iRow, iColumn );
 					nCell.innerHTML = sRendered;
 					if ( oCol.bUseRendered )
 					{
@@ -542,3 +531,25 @@ function _fnDeleteIndex( a, iTarget )
 	}
 }
 
+
+ /**
+ * Call the developer defined fnRender function for a given cell (row/column) with
+ * the required parameters and return the result.
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow aoData index for the row
+ *  @param {int} iCol aoColumns index for the column
+ *  @returns {*} Return of the developer's fnRender function
+ *  @memberof DataTable#oApi
+ */
+function _fnRender( oSettings, iRow, iCol )
+{
+	var oCol = oSettings.aoColumns[iCol];
+
+	return oCol.fnRender( {
+		"iDataRow":    iRow,
+		"iDataColumn": iCol,
+		"oSettings":   oSettings,
+		"aData":       oSettings.aoData[iRow]._aData,
+		"mDataProp":   oCol.mDataProp
+	}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
+}

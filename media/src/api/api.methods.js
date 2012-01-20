@@ -315,13 +315,22 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 {
 	/* Find settings from table node */
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	var i, iAODataIndex;
+	var i, iLen, iAODataIndex;
 	
 	iAODataIndex = (typeof mTarget === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mTarget) : mTarget;
 	
 	/* Return the data array from this row */
 	var oData = oSettings.aoData.splice( iAODataIndex, 1 );
+
+	/* Update the _DT_RowIndex parameter */
+	for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+	{
+		if ( oSettings.aoData[i].nTr !== null )
+		{
+			oSettings.aoData[i].nTr._DT_RowIndex = i;
+		}
+	}
 	
 	/* Remove the target row from the search array */
 	var iDisplayIndex = $.inArray( iAODataIndex, oSettings.aiDisplay );
@@ -1097,14 +1106,7 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		var oCol = oSettings.aoColumns[iColumn];
 		if ( oCol.fnRender !== null )
 		{
-			sDisplay = oCol.fnRender( {
-				"iDataRow": iRow,
-				"iDataColumn": iColumn,
-				"aData": oSettings.aoData[iRow]._aData,
-				"oSettings": oSettings,
-				"mDataProp": oCol.mDataProp
-			}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
-			
+			sDisplay = _fnRender( oSettings, iRow, iColumn );
 			if ( oCol.bUseRendered )
 			{
 				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );

@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -459,13 +459,7 @@
 				/* Use rendered data for filtering/sorting */
 				if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
 				{
-					_fnSetCellData( oSettings, iRow, i, oCol.fnRender( {
-						"iDataRow": iRow,
-						"iDataColumn": i,
-						"aData": oData._aData,
-						"oSettings": oSettings,
-						"mDataProp": oCol.mDataProp
-					}, _fnGetCellData(oSettings, iRow, i, 'display') ) );
+					_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
 				}
 				
 				/* See if we should auto-detect the column type */
@@ -527,6 +521,7 @@
 					if ( nTrs[i].nodeName.toUpperCase() == "TR" )
 					{
 						iThisIndex = oSettings.aoData.length;
+						nTrs[i]._DT_RowIndex = iThisIndex;
 						oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
 							"nTr": nTrs[i]
 						} ) );
@@ -616,13 +611,7 @@
 						/* Rendering */
 						if ( bRender )
 						{
-							sRendered = oCol.fnRender( {
-									"iDataRow": iRow,
-									"iDataColumn": iColumn,
-									"aData": oData._aData,
-									"oSettings": oSettings,
-									"mDataProp": oCol.mDataProp
-								}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
+							sRendered = _fnRender( oSettings, iRow, iColumn );
 							nCell.innerHTML = sRendered;
 							if ( oCol.bUseRendered )
 							{
@@ -968,6 +957,28 @@
 		}
 		
 		
+		 /**
+		 * Call the developer defined fnRender function for a given cell (row/column) with
+		 * the required parameters and return the result.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iRow aoData index for the row
+		 *  @param {int} iCol aoColumns index for the column
+		 *  @returns {*} Return of the developer's fnRender function
+		 *  @memberof DataTable#oApi
+		 */
+		function _fnRender( oSettings, iRow, iCol )
+		{
+			var oCol = oSettings.aoColumns[iCol];
+		
+			return oCol.fnRender( {
+				"iDataRow":    iRow,
+				"iDataColumn": iCol,
+				"oSettings":   oSettings,
+				"aData":       oSettings.aoData[iRow]._aData,
+				"mDataProp":   oCol.mDataProp
+			}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
+		}
+		
 		
 		/**
 		 * Create a new TR element (and it's TD children) for a row
@@ -983,6 +994,11 @@
 			if ( oData.nTr === null )
 			{
 				oData.nTr = document.createElement('tr');
+		
+				/* Use a private property on the node to allow reserve mapping from the node
+				 * to the aoData array for fast look up
+				 */
+				oData.nTr._DT_RowIndex = iRow;
 		
 				/* Special parameters can be given by the data source to be used on the row */
 				if ( oData._aData.DT_RowId )
@@ -1004,20 +1020,9 @@
 					/* Render if needed - if bUseRendered is true then we already have the rendered
 					 * value in the data source - so can just use that
 					 */
-					if ( typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null) )
-					{
-						nTd.innerHTML = oCol.fnRender( {
-							"iDataRow": iRow,
-							"iDataColumn": i,
-							"aData": oData._aData,
-							"oSettings": oSettings,
-							"mDataProp": oCol.mDataProp
-						}, _fnGetCellData(oSettings, iRow, i, 'display') );
-					}
-					else
-					{
-						nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
-					}
+					nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null)) ?
+						_fnRender( oSettings, iRow, i ) :
+						_fnGetCellData( oSettings, iRow, i, 'display' );
 				
 					/* Add user defined class */
 					if ( oCol.sClass !== null )
@@ -5056,13 +5061,22 @@
 		{
 			/* Find settings from table node */
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-			var i, iAODataIndex;
+			var i, iLen, iAODataIndex;
 			
 			iAODataIndex = (typeof mTarget === 'object') ? 
 				_fnNodeToDataIndex(oSettings, mTarget) : mTarget;
 			
 			/* Return the data array from this row */
 			var oData = oSettings.aoData.splice( iAODataIndex, 1 );
+		
+			/* Update the _DT_RowIndex parameter */
+			for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+			{
+				if ( oSettings.aoData[i].nTr !== null )
+				{
+					oSettings.aoData[i].nTr._DT_RowIndex = i;
+				}
+			}
 			
 			/* Remove the target row from the search array */
 			var iDisplayIndex = $.inArray( iAODataIndex, oSettings.aiDisplay );
@@ -5838,14 +5852,7 @@
 				var oCol = oSettings.aoColumns[iColumn];
 				if ( oCol.fnRender !== null )
 				{
-					sDisplay = oCol.fnRender( {
-						"iDataRow": iRow,
-						"iDataColumn": iColumn,
-						"aData": oSettings.aoData[iRow]._aData,
-						"oSettings": oSettings,
-						"mDataProp": oCol.mDataProp
-					}, _fnGetCellData(oSettings, iRow, iColumn, 'display') );
-					
+					sDisplay = _fnRender( oSettings, iRow, iColumn );
 					if ( oCol.bUseRendered )
 					{
 						_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
@@ -6010,7 +6017,8 @@
 			"_fnExtend": _fnExtend,
 			"_fnCallbackReg": _fnCallbackReg,
 			"_fnCallbackFire": _fnCallbackFire,
-			"_fnJsonString": _fnJsonString
+			"_fnJsonString": _fnJsonString,
+			"_fnRender": _fnRender
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
