@@ -4898,7 +4898,7 @@
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			
 			/* Check if we want to add multiple rows or not */
-			if ( $.isArray(mData[0]) )
+			if ( typeof mData[0] === "object" && mData[0] !== null )
 			{
 				for ( var i=0 ; i<mData.length ; i++ )
 				{
