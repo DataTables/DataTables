@@ -4728,7 +4728,7 @@
 		/**
 		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
 		 * return the resulting jQuery object.
-		 *  @param {string} sSelector jQuery selector
+		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
 		 *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
 		 *    criterion ("applied") or all TR elements (i.e. no filter).
@@ -4829,6 +4829,68 @@
 			var jqDescendants = jqA.find( sSelector );
 		
 			return $( [].concat($.makeArray(jqTRs), $.makeArray(jqDescendants)) );
+		};
+		
+		
+		/**
+		 * Almost identical to $ in operation, but in this case returns the data for the matched
+		 * rows - as such, the jQuery selector used should match TR elements rather than any
+		 * decendents. The data returned is the original data array/object that was used to create
+		 * the row (or a generated array if from a DOM source).
+		 *
+		 * This method is often useful incombination with $ where both functions are given the
+		 * same parameters and the array indexes will match identically.
+		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
+		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
+		 *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
+		 *    criterion ("applied") or all TR elements (i.e. no filter).
+		 *  @param {string} [oOpts.order=current] Order of the TR elements in the processed array.
+		 *    Can be either 'current', whereby the current sorting of the table is used, or
+		 *    'original' whereby the original order the data was read into the table is used.
+		 *  @param {string} [oOpts.page=all] Limit the selection to the currently displayed page
+		 *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
+		 *    'current' and filter is 'applied', regardless of what they might be given as.
+		 *  @returns {array} Data for the matched TR elements. If any elements, as a result of the
+		 *    selector, were not TR elements in the DataTable, they will have a null entry in the
+		 *    array.
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *
+		 *      // Get the data from the first row in the table
+		 *      var data = oTable._('tr:first');
+		 *
+		 *      // Do something useful with the data
+		 *      alert( "First cell is: "+data[0] );
+		 *    } );
+		 *
+		 *  @example
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable();
+		 *
+		 *      // Filter to 'Webkit' and get all data for 
+		 *      oTable.fnFilter('Webkit');
+		 *      var data = oTable._('tr', {"filter": "applied"});
+		 *      
+		 *      // Do something with the data
+		 *      alert( data.length+" rows matched the filter" );
+		 *    } );
+		 */
+		this._ = function ( sSelector, oOpts )
+		{
+			var aOut = [];
+			var i, iLen, iIndex;
+			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+			var aTrs = this.$( sSelector, oOpts );
+		
+			for ( i=0, iLen=aTrs.length ; i<iLen ; i++ )
+			{
+				iIndex = _fnNodeToDataIndex( oSettings, aTrs[i] );
+				aOut.push( iIndex!==null ? oSettings.aoData[iIndex]._aData : null );
+			}
+		
+			return aOut;
 		};
 		
 		
