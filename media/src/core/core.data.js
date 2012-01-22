@@ -182,6 +182,11 @@ function _fnGatherData( oSettings )
 						}
 					}
 				}
+
+				if ( typeof oCol.mDataProp === 'function' )
+				{
+					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
+				}
 				
 				/* Rendering */
 				if ( bRender )
@@ -346,9 +351,9 @@ function _fnGetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'function' )
 	{
-	    return function (data, type) {
-	        return mSource( data, type );
-	    };
+		return function (data, type) {
+			return mSource( data, type );
+		};
 	}
 	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
@@ -406,9 +411,9 @@ function _fnSetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'function' )
 	{
-	    return function (data, val) {
-	        return mSource( data, val );
-	    };
+		return function (data, val) {
+			mSource( data, 'set', val );
+		};
 	}
 	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{

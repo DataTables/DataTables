@@ -607,6 +607,11 @@
 								}
 							}
 						}
+		
+						if ( typeof oCol.mDataProp === 'function' )
+						{
+							nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
+						}
 						
 						/* Rendering */
 						if ( bRender )
@@ -771,9 +776,9 @@
 			}
 			else if ( typeof mSource === 'function' )
 			{
-			    return function (data, type) {
-			        return mSource( data, type );
-			    };
+				return function (data, type) {
+					return mSource( data, type );
+				};
 			}
 			else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 			{
@@ -831,9 +836,9 @@
 			}
 			else if ( typeof mSource === 'function' )
 			{
-			    return function (data, val) {
-			        return mSource( data, val );
-			    };
+				return function (data, val) {
+					mSource( data, 'set', val );
+				};
 			}
 			else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 			{
@@ -5887,8 +5892,8 @@
 			else
 			{
 				/* Individual cell update */
-				sDisplay = mData;
-				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+				_fnSetCellData( oSettings, iRow, iColumn, mData );
+				sDisplay = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 				
 				var oCol = oSettings.aoColumns[iColumn];
 				if ( oCol.fnRender !== null )
@@ -9403,6 +9408,10 @@
 		 * When using fnRender() for a column, you may wish to use the original data
 		 * (before rendering) for sorting and filtering (the default is to used the
 		 * rendered data that the user can see). This may be useful for dates etc.
+		 * 
+		 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
+		 * use of the 'type' that it gives, allowing (potentially) different data to
+		 * be used for sorting, filtering, display and type detection.
 		 *  @type boolean
 		 *  @default true
 		 * 
@@ -9586,17 +9595,35 @@
 	
 		/**
 		 * This property can be used to read data from any JSON data source property,
-		 * including deeply nested objects / properties. By default DataTables will
-		 * use an array index (incrementally increased for each column) as the data
-		 * source, but a string can be used for this property which will read an
-		 * object property from the data source, a function which will be given the
-		 * data source object to render into a string or null where the cell will be
-		 * treated as empty. For more information see
-		 * http://datatables.net/blog/Extended_data_source_options_with_DataTables
+		 * including deeply nested objects / properties. mDataProp can be given in a
+		 * number of different ways which effect its behaviour:
+		 *   <ul>
+		 *     <li>integer - treated as an array index for the data source. This is the
+		 *       default that DataTables uses (incrementally increased for each column).</li>
+		 *     <li>string - read an object property from the data source. Note that you can
+		 *       use Javascript dotted notation to read deep properties/arrays from the
+		 *       data source.</li>
+		 *     <li>null -  the sDafaultContent option will use used for the cell (empty
+		 *       string by default. This can be useful on generated columns such as
+		 *       edit / delete action columns.</li>
+		 *     <li>function - the function given will be executed whenever DataTables 
+		 *       needs to set or get the data for a cell in the column. The function 
+		 *       takes three parameters:
+		 *       <ul>
+		 *         <li>{array|object} The data source for the row</li>
+		 *         <li>{string} The type call data requested - this will be 'set' when
+		 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
+		 *           data.</li>
+		 *       </ul>
+		 *       The return value from the function is not required when 'set' is the type
+		 *       of call, but otherwise the return is what will be used for the data
+		 *       requested.</li>
+		 *    </ul>
 		 *  @type string|int|function|null
 		 *  @default null <i>Use automatically calculated column index</i>
 		 * 
 		 *  @example
+		 *    // Read table data from objects
 		 *    $(document).ready(function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
@@ -9606,6 +9633,35 @@
 		 *          { "mDataProp": "platform.inner" },
 		 *          { "mDataProp": "platform.details.0" },
 		 *          { "mDataProp": "platform.details.1" }
+		 *        ]
+		 *      } );
+		 *    } );
+		 * 
+		 *  @example
+		 *    // Using mDataProp as a function to provide different information for
+		 *    // sorting, filtering and display. In this case, currency (price)
+		 *    $(document).ready(function() {
+		 *      var oTable = $('#example').dataTable( {
+		 *        "aoColumnDefs": [
+		 *        {
+		 *          "aTargets": [ 0 ],
+		 *          "mDataProp": function ( source, type, val ) {
+		 *            if (type === 'set') {
+		 *              source.price = val;
+		 *              // Store the computed dislay and filter values for efficiency
+		 *              source.price_display = val=="" ? "" : "$"+numberFormat(val);
+		 *              source.price_filter  = val=="" ? "" : "$"+numberFormat(val)+" "+val;
+		 *              return;
+		 *            }
+		 *            else if (type === 'display') {
+		 *              return source.price_display;
+		 *            }
+		 *            else if (type === 'filter') {
+		 *              return source.price_filter;
+		 *            }
+		 *            // 'sort' and 'type' both just use the integer
+		 *            return source.price;
+		 *          }
 		 *        ]
 		 *      } );
 		 *    } );

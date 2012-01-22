@@ -1162,8 +1162,8 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	else
 	{
 		/* Individual cell update */
-		sDisplay = mData;
-		_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
+		_fnSetCellData( oSettings, iRow, iColumn, mData );
+		sDisplay = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 		
 		var oCol = oSettings.aoColumns[iColumn];
 		if ( oCol.fnRender !== null )
