@@ -9614,6 +9614,7 @@
 		 *         <li>{string} The type call data requested - this will be 'set' when
 		 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
 		 *           data.</li>
+		 *         <li>{*} Data to set when the second parameter is 'set'.</li>
 		 *       </ul>
 		 *       The return value from the function is not required when 'set' is the type
 		 *       of call, but otherwise the return is what will be used for the data
