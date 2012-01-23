@@ -994,7 +994,12 @@
 				{
 					$(oData.nTr).addClass( oData._aData.DT_RowClass );
 				}
-		
+				
+				if ( oData._aData.DT_RowData )
+				{
+					$(oData.nTr).data( oData._aData.DT_RowData );
+				}
+				
 				/* Process each column */
 				for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
