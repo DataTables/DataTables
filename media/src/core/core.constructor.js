@@ -61,12 +61,15 @@ var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
 	"nTable":        this,
 	"oApi":          _that.oApi,
 	"oInit":         oInit,
-	"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
 	"sDestroyWidth": $(this).width(),
 	"sInstance":     sId,
 	"sTableId":      sId
 } );
 DataTable.settings.push( oSettings );
+
+// Need to add the instance after the instance after the settings object has been added
+// to the settings array, so we can self reference the table instance if more than one
+oSettings.oInstance = (_that.length===1) ? _that : $(this).dataTable();
 
 /* Setting up the initialisation object */
 if ( !oInit )

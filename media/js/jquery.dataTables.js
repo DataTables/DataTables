@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.0.beta.3
+ * @version     1.9.0.dev.4
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -6143,12 +6143,15 @@
 				"nTable":        this,
 				"oApi":          _that.oApi,
 				"oInit":         oInit,
-				"oInstance":     (_that.length===1) ? _that : $(this).dataTable(),
 				"sDestroyWidth": $(this).width(),
 				"sInstance":     sId,
 				"sTableId":      sId
 			} );
 			DataTable.settings.push( oSettings );
+			
+			// Need to add the instance after the instance after the settings object has been added
+			// to the settings array, so we can self reference the table instance if more than one
+			oSettings.oInstance = (_that.length===1) ? _that : $(this).dataTable();
 			
 			/* Setting up the initialisation object */
 			if ( !oInit )
@@ -6505,7 +6508,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.0.beta.3";
+	DataTable.version = "1.9.0.dev.4";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
