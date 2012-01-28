@@ -1798,6 +1798,9 @@ function quickCodeHandler(e)
 	
 	// using \r instead of \r or \r\n makes this work equally well on IE, FF and Webkit
 	code = code.join('\r');
+
+    // For Webkit browsers, replace nbsp with a breaking space
+    code = code.replace(/\u00a0/g, " ");
 	
 	// inject <textarea/> tag
 	textarea.appendChild(document.createTextNode(code));
