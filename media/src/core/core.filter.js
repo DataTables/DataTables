@@ -8,6 +8,8 @@
  */
 function _fnFeatureHtmlFilter ( oSettings )
 {
+	var oPreviousSearch = oSettings.oPreviousSearch;
+	
 	var sSearchStr = oSettings.oLanguage.sSearch;
 	sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
 	  sSearchStr.replace('_INPUT_', '<input type="text" />') :
@@ -22,7 +24,7 @@ function _fnFeatureHtmlFilter ( oSettings )
 	}
 	
 	var jqFilter = $("input", nFilter);
-	jqFilter.val( oSettings.oPreviousSearch.sSearch.replace('"','&quot;') );
+	jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
 	jqFilter.bind( 'keyup.DT', function(e) {
 		/* Update all other filter input elements for the new display */
 		var n = oSettings.aanFeatures.f;
@@ -35,13 +37,13 @@ function _fnFeatureHtmlFilter ( oSettings )
 		}
 		
 		/* Now do the filter */
-		if ( this.value != oSettings.oPreviousSearch.sSearch )
+		if ( this.value != oPreviousSearch.sSearch )
 		{
 			_fnFilterComplete( oSettings, { 
 				"sSearch": this.value, 
-				"bRegex": oSettings.oPreviousSearch.bRegex,
-				"bSmart": oSettings.oPreviousSearch.bSmart ,
-				"bCaseInsensitive": oSettings.oPreviousSearch.bCaseInsensitive 
+				"bRegex": oPreviousSearch.bRegex,
+				"bSmart": oPreviousSearch.bSmart ,
+				"bCaseInsensitive": oPreviousSearch.bCaseInsensitive 
 			} );
 		}
 	} );
