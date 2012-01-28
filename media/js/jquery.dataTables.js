@@ -3116,54 +3116,6 @@
 				}, nTfootSize.getElementsByTagName('tr') );
 			}
 			
-			/* Size the table as a whole */
-			iSanityWidth = $(o.nTable).outerWidth();
-			if ( o.oScroll.sX === "" )
-			{
-				/* No x scrolling */
-				o.nTable.style.width = "100%";
-				
-				/* I know this is rubbish - but IE7 will make the width of the table when 100% include
-				 * the scrollbar - which is shouldn't. When there is a scrollbar we need to take this
-				 * into account.
-				 */
-				if ( ie67 && (nScrollBody.scrollHeight > 
-					nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
-				{
-					o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth()-o.oScroll.iBarWidth );
-				}
-			}
-			else
-			{
-				if ( o.oScroll.sXInner !== "" )
-				{
-					/* x scroll inner has been given - use it */
-					o.nTable.style.width = _fnStringToCss(o.oScroll.sXInner);
-				}
-				else if ( iSanityWidth == $(nScrollBody).width() &&
-				   $(nScrollBody).height() < $(o.nTable).height() )
-				{
-					/* There is y-scrolling - try to take account of the y scroll bar */
-					o.nTable.style.width = _fnStringToCss( iSanityWidth-o.oScroll.iBarWidth );
-					if ( $(o.nTable).outerWidth() > iSanityWidth-o.oScroll.iBarWidth )
-					{
-						/* Not possible to take account of it */
-						o.nTable.style.width = _fnStringToCss( iSanityWidth );
-					}
-				}
-				else
-				{
-					/* All else fails */
-					o.nTable.style.width = _fnStringToCss( iSanityWidth );
-				}
-			}
-			
-			/* Recalculate the sanity width - now that we've applied the required width, before it was
-			 * a temporary variable. This is required because the column width calculation is done
-			 * before this table DOM is created.
-			 */
-			iSanityWidth = $(o.nTable).outerWidth();
-			
 			/* We want the hidden header to have zero height, so remove padding and borders. Then
 			 * set the width based on the real headers
 			 */
@@ -3224,6 +3176,54 @@
 					nSizer.style.width = _fnStringToCss( aApplied.shift() );
 				}, anFootSizers );
 			}
+			
+			/* Size the table as a whole */
+			iSanityWidth = $(o.nTable).outerWidth();
+			if ( o.oScroll.sX === "" )
+			{
+				/* No x scrolling */
+				o.nTable.style.width = "100%";
+				
+				/* I know this is rubbish - but IE7 will make the width of the table when 100% include
+				 * the scrollbar - which is shouldn't. When there is a scrollbar we need to take this
+				 * into account.
+				 */
+				if ( ie67 && (nScrollBody.scrollHeight > 
+					nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
+				{
+					o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth()-o.oScroll.iBarWidth );
+				}
+			}
+			else
+			{
+				if ( o.oScroll.sXInner !== "" )
+				{
+					/* x scroll inner has been given - use it */
+					o.nTable.style.width = _fnStringToCss(o.oScroll.sXInner);
+				}
+				else if ( iSanityWidth == $(nScrollBody).width() &&
+				   $(nScrollBody).height() < $(o.nTable).height() )
+				{
+					/* There is y-scrolling - try to take account of the y scroll bar */
+					o.nTable.style.width = _fnStringToCss( iSanityWidth-o.oScroll.iBarWidth );
+					if ( $(o.nTable).outerWidth() > iSanityWidth-o.oScroll.iBarWidth )
+					{
+						/* Not possible to take account of it */
+						o.nTable.style.width = _fnStringToCss( iSanityWidth );
+					}
+				}
+				else
+				{
+					/* All else fails */
+					o.nTable.style.width = _fnStringToCss( iSanityWidth );
+				}
+			}
+			
+			/* Recalculate the sanity width - now that we've applied the required width, before it was
+			 * a temporary variable. This is required because the column width calculation is done
+			 * before this table DOM is created.
+			 */
+			iSanityWidth = $(o.nTable).outerWidth();
 			
 			/* Sanity check that the table is of a sensible width. If not then we are going to get
 			 * misalignment - try to prevent this by not allowing the table to shrink below its min width
@@ -3304,14 +3304,20 @@
 				}
 			}
 			
+			var iBarWidthAdjustment = 0;
+			if ( o.nTable.offsetHeight > nScrollBody.offsetHeight )
+			{
+				iBarWidthAdjustment = o.oScroll.iBarWidth;
+			}
+
 			/* Finally set the width's of the header and footer tables */
 			var iOuterWidth = $(o.nTable).outerWidth();
 			nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
-			nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+o.oScroll.iBarWidth );
+			nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+iBarWidthAdjustment );
 			
 			if ( o.nTFoot !== null )
 			{
-				nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+o.oScroll.iBarWidth );
+				nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+iBarWidthAdjustment );
 				nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
 			}
 			
