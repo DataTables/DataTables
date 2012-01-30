@@ -256,8 +256,8 @@ function _fnScrollDraw ( o )
 		 * the scrollbar - which is shouldn't. When there is a scrollbar we need to take this
 		 * into account.
 		 */
-		if ( ie67 && (nScrollBody.scrollHeight > 
-			nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
+		if ( ie67 && ($('tbody', nScrollBody).height() > nScrollBody.offsetHeight || 
+			$(nScrollBody).css('overflow-y') == "scroll")  )
 		{
 			o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth()-o.oScroll.iBarWidth );
 		}
@@ -408,7 +408,6 @@ function _fnScrollDraw ( o )
 	/*
 	 * 4. Clean up
 	 */
-	
 	if ( o.oScroll.sY === "" )
 	{
 		/* IE7< puts a vertical scrollbar in place (when it shouldn't be) due to subtracting
@@ -436,11 +435,11 @@ function _fnScrollDraw ( o )
 	/* Finally set the width's of the header and footer tables */
 	var iOuterWidth = $(o.nTable).outerWidth();
 	nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
-	nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth+o.oScroll.iBarWidth );
+	nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth );
 	
 	if ( o.nTFoot !== null )
 	{
-		nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth+o.oScroll.iBarWidth );
+		nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth );
 		nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
 	}
 	
