@@ -102,7 +102,7 @@ DataTable.models.ext = {
 	 *
 	 *  @example
 	 *    // Updating the cached sorting information with user entered values in HTML input elements
-	 *    jQuery.fn.dataTableExt.afnSortData['dom-text'] = function  ( oSettings, iColumn )
+	 *    jQuery.fn.dataTableExt.afnSortData['dom-text'] = function ( oSettings, iColumn )
 	 *    {
 	 *      var aData = [];
 	 *      $( 'td:eq('+iColumn+') input', oSettings.oApi._fnGetTrNodes(oSettings) ).each( function () {
@@ -199,7 +199,7 @@ DataTable.models.ext = {
 	 *        }
 	 *        
 	 *        // Check prefixed by currency
-	 *        if ( sData.charAt(0) == '$' || sData.charAt(0) == '£' ) {
+	 *        if ( sData.charAt(0) == '$' || sData.charAt(0) == '&pound;' ) {
 	 *          return 'currency';
 	 *        }
 	 *        return null;
@@ -493,10 +493,10 @@ DataTable.models.ext = {
 	 *    // Case-sensitive string sorting, with no pre-formatting method
 	 *    $.extend( $.fn.dataTableExt.oSort, {
 	 *      "string-case-asc": function(x,y) {
-	 *        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+	 *        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	 *      },
 	 *      "string-case-desc": function(x,y) {
-	 *        return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+	 *        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	 *      }
 	 *    } );
 	 *
@@ -507,10 +507,10 @@ DataTable.models.ext = {
 	 *        return x.toLowerCase();
 	 *      },
 	 *      "string-asc": function(x,y) {
-	 *        return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+	 *        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 	 *      },
 	 *      "string-desc": function(x,y) {
-	 *        return ((x < y) ?  1 : ((x > y) ? -1 : 0));
+	 *        return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 	 *      }
 	 *    } );
 	 */
