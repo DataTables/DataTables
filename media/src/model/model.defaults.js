@@ -13,6 +13,7 @@ DataTable.defaults = {
 	 * example with a custom Ajax call.
 	 *  @type array
 	 *  @default null
+	 *  @dtopt Option
 	 * 
 	 *  @example
 	 *    // Using a 2D array data source

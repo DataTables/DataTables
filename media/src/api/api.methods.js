@@ -14,6 +14,7 @@
  *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
  *    'current' and filter is 'applied', regardless of what they might be given as.
  *  @returns {object} jQuery object, filtered by the given selector.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -128,6 +129,7 @@ this.$ = function ( sSelector, oOpts )
  *  @returns {array} Data for the matched TR elements. If any elements, as a result of the
  *    selector, were not TR elements in the DataTable, they will have a null entry in the
  *    array.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -161,8 +163,7 @@ this._ = function ( sSelector, oOpts )
 
 	for ( i=0, iLen=aTrs.length ; i<iLen ; i++ )
 	{
-		iIndex = _fnNodeToDataIndex( oSettings, aTrs[i] );
-		aOut.push( iIndex!==null ? oSettings.aoData[iIndex]._aData : null );
+		aOut.push( this.fnGetData(aTrs[i]) );
 	}
 
 	return aOut;
@@ -666,31 +667,38 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 
 
 /**
- * Return an array with the data which is used to make up the table
- * or string if both row and column are given
- *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
- *    internal index (mapped to the TR element)
- *  @param {int} [iCol] Optional column index that you want the data of
- *  @returns {array|string} If mRow is undefined, then the data for all rows is
+ * Get the data for the whole table, an individual row or an individual cell based on the 
+ * provided parameters.
+ *  @param {int|node} [mRow] A TR row node, TD/TH cell node or an integer. If given as
+ *    a TR node then the data source for the whole row will be returned. If given as a
+ *    TD/TH cell node then iCol will be automatically calculated and the data for the
+ *    cell returned. If given as an integer, then this is treated as the aoData internal
+ *    data index for the row (see fnGetPosition) and the data for that row used.
+ *  @param {int} [iCol] Optional column index that you want the data of.
+ *  @returns {array|object|string} If mRow is undefined, then the data for all rows is
  *    returned. If mRow is defined, just data for that row, and is iCol is
  *    defined, only data for the designated cell is returned.
  *
  *  @example
+ *    // Row data
  *    $(document).ready(function() {
- *      $('#example tbody td').click( function () {
- *        // Get the position of the current data from the node
- *        var aPos = oTable.fnGetPosition( this );
- *        
- *        // Get the data array for this row
- *        var aData = oTable.fnGetData( this.parentNode );
- *        
- *        // Update the data array and return the value
- *        aData[ aPos[1] ] = 'clicked';
- *        this.innerHTML = 'clicked';
- *      } );
- *      
- *      // Init DataTables
  *      oTable = $('#example').dataTable();
+ *
+ *      oTable.$('tr').click( function () {
+ *        var data = oTable.fnGetData( this );
+ *        // ... do something with the array / object of data for the row
+ *      } );
+ *    } );
+ *
+ *  @example
+ *    // Individual cell data
+ *    $(document).ready(function() {
+ *      oTable = $('#example').dataTable();
+ *
+ *      oTable.$('td').click( function () {
+ *        var sData = oTable.fnGetData( this );
+ *        alert( 'The cell clicked on had the value of '+sData );
+ *      } );
  *    } );
  */
 this.fnGetData = function( mRow, iCol )
@@ -699,9 +707,21 @@ this.fnGetData = function( mRow, iCol )
 	
 	if ( mRow !== undefined )
 	{
-		var iRow = (typeof mRow === 'object') ? 
-			_fnNodeToDataIndex(oSettings, mRow) : mRow;
-		
+		var iRow = mRow;
+		if ( typeof mRow === 'object' )
+		{
+			var sNode = mRow.nodeName.toLowerCase();
+			if (sNode === "tr" )
+			{
+				iRow = _fnNodeToDataIndex(oSettings, mRow);
+			}
+			else if ( sNode === "td" )
+			{
+				iRow = _fnNodeToDataIndex(oSettings, mRow.parentNode);
+				iCol = _fnNodeToColumnIndex( oSettings, iRow, mRow );
+			}
+		}
+
 		if ( iCol !== undefined )
 		{
 			return _fnGetCellData( oSettings, iRow, iCol, '' );
@@ -777,16 +797,9 @@ this.fnGetPosition = function( nNode )
 	}
 	else if ( sNodeName == "TD" || sNodeName == "TH" )
 	{
-		var iDataIndex = _fnNodeToDataIndex(oSettings, nNode.parentNode);
-		var anCells = _fnGetTdNodes( oSettings, iDataIndex );
-
-		for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
-		{
-			if ( anCells[i] == nNode )
-			{
-				return [ iDataIndex, _fnColumnIndexToVisible(oSettings, i ), i ];
-			}
-		}
+		var iDataIndex = _fnNodeToDataIndex( oSettings, nNode.parentNode );
+		var iColumnIndex = _fnNodeToColumnIndex( oSettings, iDataIndex, nNode );
+		return [ iDataIndex, _fnColumnIndexToVisible(oSettings, iColumnIndex ), iColumnIndex ];
 	}
 	return null;
 };

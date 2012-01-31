@@ -253,6 +253,29 @@ function _fnNodeToDataIndex( oSettings, n )
 
 
 /**
+ * Take a TD element and convert it into a column data index (not the visible index)
+ *  @param {object} oSettings dataTables settings object
+ *  @param {int} iRow The row number the TD/TH can be found in
+ *  @param {node} n The TD/TH element to find
+ *  @returns {int} index if the node is found, -1 if not
+ *  @memberof DataTable#oApi
+ */
+function _fnNodeToColumnIndex( oSettings, iRow, n )
+{
+	var anCells = _fnGetTdNodes( oSettings, iRow );
+
+	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	{
+		if ( anCells[i] === n )
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+
+/**
  * Get an array of data for a given row from the internal data cache
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iRow aoData row id

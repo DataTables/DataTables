@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -674,6 +674,29 @@
 		function _fnNodeToDataIndex( oSettings, n )
 		{
 			return (n._DT_RowIndex!==undefined) ? n._DT_RowIndex : null;
+		}
+		
+		
+		/**
+		 * Take a TD element and convert it into a column data index (not the visible index)
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {int} iRow The row number the TD/TH can be found in
+		 *  @param {node} n The TD/TH element to find
+		 *  @returns {int} index if the node is found, -1 if not
+		 *  @memberof DataTable#oApi
+		 */
+		function _fnNodeToColumnIndex( oSettings, iRow, n )
+		{
+			var anCells = _fnGetTdNodes( oSettings, iRow );
+		
+			for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			{
+				if ( anCells[i] === n )
+				{
+					return i;
+				}
+			}
+			return -1;
 		}
 		
 		
@@ -4745,6 +4768,7 @@
 		 *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
 		 *    'current' and filter is 'applied', regardless of what they might be given as.
 		 *  @returns {object} jQuery object, filtered by the given selector.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -4859,6 +4883,7 @@
 		 *  @returns {array} Data for the matched TR elements. If any elements, as a result of the
 		 *    selector, were not TR elements in the DataTable, they will have a null entry in the
 		 *    array.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -4892,8 +4917,7 @@
 		
 			for ( i=0, iLen=aTrs.length ; i<iLen ; i++ )
 			{
-				iIndex = _fnNodeToDataIndex( oSettings, aTrs[i] );
-				aOut.push( iIndex!==null ? oSettings.aoData[iIndex]._aData : null );
+				aOut.push( this.fnGetData(aTrs[i]) );
 			}
 		
 			return aOut;
@@ -5430,9 +5454,21 @@
 			
 			if ( mRow !== undefined )
 			{
-				var iRow = (typeof mRow === 'object') ? 
-					_fnNodeToDataIndex(oSettings, mRow) : mRow;
-				
+				var iRow = mRow;
+				if ( typeof mRow === 'object' )
+				{
+					var sNode = mRow.nodeName.toLowerCase();
+					if (sNode === "tr" )
+					{
+						iRow = _fnNodeToDataIndex(oSettings, mRow);
+					}
+					else if ( sNode === "td" )
+					{
+						iRow = _fnNodeToDataIndex(oSettings, mRow.parentNode);
+						iCol = _fnNodeToColumnIndex( oSettings, iRow, mRow );
+					}
+				}
+		
 				if ( iCol !== undefined )
 				{
 					return _fnGetCellData( oSettings, iRow, iCol, '' );
@@ -5508,16 +5544,9 @@
 			}
 			else if ( sNodeName == "TD" || sNodeName == "TH" )
 			{
-				var iDataIndex = _fnNodeToDataIndex(oSettings, nNode.parentNode);
-				var anCells = _fnGetTdNodes( oSettings, iDataIndex );
-		
-				for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					if ( anCells[i] == nNode )
-					{
-						return [ iDataIndex, _fnColumnIndexToVisible(oSettings, i ), i ];
-					}
-				}
+				var iDataIndex = _fnNodeToDataIndex( oSettings, nNode.parentNode );
+				var iColumnIndex = _fnNodeToColumnIndex( oSettings, iDataIndex, nNode );
+				return [ iDataIndex, _fnColumnIndexToVisible(oSettings, iColumnIndex ), iColumnIndex ];
 			}
 			return null;
 		};
@@ -6065,7 +6094,8 @@
 			"_fnCallbackReg": _fnCallbackReg,
 			"_fnCallbackFire": _fnCallbackFire,
 			"_fnJsonString": _fnJsonString,
-			"_fnRender": _fnRender
+			"_fnRender": _fnRender,
+			"_fnNodeToColumnIndex": _fnNodeToColumnIndex
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
@@ -7446,6 +7476,7 @@
 		 * example with a custom Ajax call.
 		 *  @type array
 		 *  @default null
+		 *  @dtopt Option
 		 * 
 		 *  @example
 		 *    // Using a 2D array data source
@@ -9282,6 +9313,7 @@
 		 * do a multi-column sort over the two columns.
 		 *  @type array
 		 *  @default null <i>Takes the value of the column index automatically</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs

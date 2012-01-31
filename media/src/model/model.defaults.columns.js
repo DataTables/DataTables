@@ -11,6 +11,7 @@ DataTable.defaults.columns = {
 	 * do a multi-column sort over the two columns.
 	 *  @type array
 	 *  @default null <i>Takes the value of the column index automatically</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
