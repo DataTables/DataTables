@@ -4940,6 +4940,7 @@
 		 *  @returns {array} An array of integers, representing the list of indexes in 
 		 *    <i>aoData</i> ({@link DataTable.models.oSettings}) that have been added to 
 		 *    the table.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    // Global var for counter
@@ -5012,6 +5013,7 @@
 		 * through the sWidth parameter). This can be useful when the width of the table's 
 		 * parent element changes (for example a window resize).
 		 *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5045,6 +5047,7 @@
 		/**
 		 * Quickly and simply clear a table
 		 *  @param {bool} [bRedraw=true] redraw the table or not
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5072,6 +5075,7 @@
 		 * are currently 'open'.
 		 *  @param {node} nTr the table row to 'close'
 		 *  @returns {int} 0 on success, or 1 if failed (can't find the row)
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5119,6 +5123,7 @@
 		 *  @param {function|null} [fnCallBack] Callback function
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 *  @returns {array} The row that was deleted
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5187,6 +5192,7 @@
 		 * Restore the table to it's original state in the DOM by removing all of DataTables 
 		 * enhancements, alterations to the DOM structure of the table and event listeners.
 		 *  @param {boolean} [bRemove=false] Completely remove the table from the DOM
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5317,6 +5323,7 @@
 		/**
 		 * Redraw the table
 		 *  @param {bool} [bComplete=true] Re-filter and resort (if enabled) the table before the draw.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5349,6 +5356,7 @@
 		 *  @param {bool} [bSmart=true] Perform smart filtering or not
 		 *  @param {bool} [bShowGlobal=true] Show the input global filter in it's input box(es)
 		 *  @param {bool} [bCaseInsensitive=true] Do case-insensitive matching (true) or not (false)
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5432,6 +5440,7 @@
 		 *  @returns {array|object|string} If mRow is undefined, then the data for all rows is
 		 *    returned. If mRow is defined, just data for that row, and is iCol is
 		 *    defined, only data for the designated cell is returned.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    // Row data
@@ -5494,6 +5503,7 @@
 		 *  @param {int} [iRow] Optional row index for the TR element you want
 		 *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
 		 *    in the table's body, or iRow is defined, just the TR element requested.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5521,6 +5531,7 @@
 		 *  @param {node} nNode this can either be a TR, TD or TH in the table's body
 		 *  @returns {int} If nNode is given as a TR, then a single index is returned, or
 		 *    if given as a cell, an array of [row index, column index (visible)] is given.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5563,6 +5574,7 @@
 		 * Check to see if a row is 'open' or not.
 		 *  @param {node} nTr the table row to check
 		 *  @returns {boolean} true if the row is currently open, false otherwise
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5607,6 +5619,7 @@
 		 *  @returns {node} The row opened. Note that if the table row passed in as the
 		 *    first parameter, is not found in the table, this method will silently
 		 *    return.
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5677,6 +5690,7 @@
 		 *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
 		 *    or page number to jump to (integer), note that page 0 is the first page.
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5702,6 +5716,7 @@
 		 *  @param {int} iCol The column whose display should be changed
 		 *  @param {bool} bShow Show (true) or hide (false) the column
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5819,6 +5834,7 @@
 		 * Get the settings for a particular table for external manipulation
 		 *  @returns {object} DataTables settings object. See 
 		 *    {@link DataTable.models.oSettings}
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5839,6 +5855,7 @@
 		 * Sort the table by a particular row
 		 *  @param {int} iCol the data index to sort on. Note that this will not match the 
 		 *    'display index' if you have hidden data entries
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5861,6 +5878,7 @@
 		 *  @param {node} nNode the element to attach the sort listener to
 		 *  @param {int} iColumn the column that a click on this node will sort on
 		 *  @param {function} [fnCallback] callback function when sort is run
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5888,6 +5906,7 @@
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 *  @param {bool} [bAction=true] Perform predraw actions or not
 		 *  @returns {int} 0 on success, 1 on error
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -5981,6 +6000,7 @@
 		 *  @returns {boolean} true if this version of DataTables is greater or equal to the required
 		 *    version, or false if this version of DataTales is not suitable
 		 *  @method
+		 *  @dtopt API
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7546,6 +7566,7 @@
 		 * column's index and a direction string ('asc' or 'desc').
 		 *  @type array
 		 *  @default [[0,'asc']]
+		 *  @dtopt Option
 		 * 
 		 *  @example
 		 *    // Sort by 3rd column first, and then 4th column
@@ -7574,6 +7595,7 @@
 		 * together.
 		 *  @type array
 		 *  @default null
+		 *  @dtopt Option
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -7594,6 +7616,7 @@
 		 * displayed options (useful for language strings such as 'All').
 		 *  @type array
 		 *  @default [ 10, 25, 50, 100 ]
+		 *  @dtopt Option
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7656,6 +7679,7 @@
 		 * accepted and the default will be used.
 		 *  @type array
 		 *  @default []
+		 *  @dtopt Option
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -7678,6 +7702,7 @@
 		 * sequentially, looping when required.
 		 *  @type array
 		 *  @default [ 'odd', 'even' ]
+		 *  @dtopt Option
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -7695,6 +7720,7 @@
 		 * tables widths are passed in using aoColumns.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7714,6 +7740,7 @@
 		 * time.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7733,6 +7760,7 @@
 		 * per normal.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7761,6 +7789,7 @@
 		 * @ref{sDom}.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7778,6 +7807,7 @@
 		 * about filtered data if that action is being performed.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7795,6 +7825,7 @@
 		 * traditionally used).
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -7811,6 +7842,7 @@
 		 * menu (sizes are 10, 25, 50 and 100). Requires pagination (bPaginate).
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7826,6 +7858,7 @@
 		 * Enable or disable pagination.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7844,6 +7877,7 @@
 		 * the entries.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7865,6 +7899,7 @@
 		 * you need.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7896,6 +7931,7 @@
 		 * this.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7917,6 +7953,7 @@
 		 * the result set will fit within the given Y height.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7934,9 +7971,11 @@
 		 * sScrollY). Infinite scrolling means that DataTables will continually load
 		 * data as a user scrolls through a table, which is very useful for large
 		 * dataset. This cannot be used with pagination, which is automatically
-		 * disabled.
+		 * disabled. Note - the Scroller extra for DataTables is recommended in
+		 * in preference to this option.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -7956,6 +7995,8 @@
 		 * source to obtain the required data for each draw.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Features
+		 *  @dtopt Server-side
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7973,6 +8014,7 @@
 		 * disabled by the "bSortable" option for each column.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -7990,6 +8032,7 @@
 		 * This is useful when using complex headers.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8009,6 +8052,7 @@
 		 * turn this off.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -8027,6 +8071,7 @@
 		 * display display will match what thy had previously set up.
 		 *  @type boolean
 		 *  @default false
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -8051,6 +8096,7 @@
 		 *  @param {string} sPath Path of the cookie to set
 		 *  @returns {string} Cookie formatted string (which should be encoded by
 		 *    using encodeURIComponent())
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready( function () {
@@ -8073,6 +8119,7 @@
 		 *  @param {node} nRow "TR" element for the current row
 		 *  @param {array} aData Raw data array for this row
 		 *  @param {int} iDataIndex The index of this row in aoData
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8095,6 +8142,7 @@
 		 * dynamically modify any aspect you want about the created DOM.
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8120,6 +8168,7 @@
 		 *    display array
 		 *  @param {array int} aiDisplay Index array to translate the visual position
 		 *    to the full data array
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8142,6 +8191,7 @@
 		 *  @type function
 		 *  @param {int} iIn number to be formatted
 		 *  @returns {string} formatted string for DataTables to show the number
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8201,6 +8251,7 @@
 		 *    display array
 		 *  @param {array int} aiDisplay Index array to translate the visual position
 		 *    to the full data array
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8230,6 +8281,7 @@
 		 *  @param {string} sPre The string that DataTables has formatted using it's
 		 *    own rules
 		 *  @returns {string} The string to be displayed in the information element.
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $('#example').dataTable( {
@@ -8249,7 +8301,8 @@
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {object} json The JSON object request from the server - only
-		 *    present if client-side Ajax sourced data is used</li></ol>
+		 *    present if client-side Ajax sourced data is used
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8271,6 +8324,7 @@
 		 *  @param {object} oSettings DataTables settings object
 		 *  @returns {boolean} False will cancel the draw, anything else (including no
 		 *    return) will allow it to complete.
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8296,6 +8350,7 @@
 		 *  @param {int} iDisplayIndex The display index for the current table draw
 		 *  @param {int} iDisplayIndexFull The index of the data in the full list of
 		 *    rows (after filtering)
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8325,6 +8380,8 @@
 		 *  @param {function} fnCallback to be called on completion of the data get
 		 *    process that will draw the data on the page.
 		 *  @param {object} oSettings DataTables settings object
+		 *  @dtopt Callbacks
+		 *  @dtopt Server-side
 		 * 
 		 *  @example
 		 *    // POST data to server
@@ -8380,6 +8437,8 @@
 		 *    significant number of parameters!
 		 *  @returns {undefined} Ensure that you modify the aoData array passed in,
 		 *    as this is passed by reference.
+		 *  @dtopt Callbacks
+		 *  @dtopt Server-side
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8403,6 +8462,7 @@
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
 		 *  @return {object} The DataTables state object to be loaded
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8451,6 +8511,7 @@
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {object} oData The state object that is to be loaded
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    // Remove a saved filter, so filtering is never loaded
@@ -8481,6 +8542,7 @@
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {object} oData The state object that was loaded
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    // Show an alert with the filtering value that was saved
@@ -8502,6 +8564,7 @@
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {object} oData The state object to be saved
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8540,6 +8603,7 @@
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {object} oData The state object to be saved
+		 *  @dtopt Callbacks
 		 * 
 		 *  @example
 		 *    // Remove a saved filter, so filtering is never saved
@@ -8559,6 +8623,7 @@
 		 * value is given in seconds.
 		 *  @type int
 		 *  @default 7200 <i>(2 hours)</i>
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8579,6 +8644,7 @@
 		 * the information element and pagination to be displayed correctly).
 		 *  @type int
 		 *  @default null
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8598,6 +8664,7 @@
 		 * this to a custom setting using a pop-up menu.
 		 *  @type int
 		 *  @default 10
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8616,6 +8683,7 @@
 		 * the third page, it should be "20".
 		 *  @type int
 		 *  @default 0
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -8634,6 +8702,7 @@
 		 * user, while not so large that it will load more data than need.
 		 *  @type int
 		 *  @default 100
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8657,6 +8726,7 @@
 		 * disable built-in keyboard navigation.
 		 *  @type int
 		 *  @default 0
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -8688,6 +8758,7 @@
 				 * Note that the column header is prefixed to this string.
 				 *  @type string
 				 *  @default : activate to sort column ascending
+				 *  @dtopt Language
 				 * 
 				 *  @example
 				 *    $(document).ready(function() {
@@ -8708,6 +8779,7 @@
 				 * Note that the column header is prefixed to this string.
 				 *  @type string
 				 *  @default : activate to sort column ascending
+				 *  @dtopt Language
 				 * 
 				 *  @example
 				 *    $(document).ready(function() {
@@ -8734,6 +8806,7 @@
 				 * button to take the user to the first page.
 				 *  @type string
 				 *  @default First
+				 *  @dtopt Language
 				 * 
 				 *  @example
 				 *    $(document).ready(function() {
@@ -8754,6 +8827,7 @@
 				 * button to take the user to the last page.
 				 *  @type string
 				 *  @default Last
+				 *  @dtopt Language
 				 * 
 				 *  @example
 				 *    $(document).ready(function() {
@@ -8774,6 +8848,7 @@
 				 * button to take the user to the next page.
 				 *  @type string
 				 *  @default Next
+				 *  @dtopt Language
 				 * 
 				 *  @example
 				 *    $(document).ready(function() {
@@ -8794,6 +8869,7 @@
 				 * button to take the user to the previous page.
 				 *  @type string
 				 *  @default Previous
+				 *  @dtopt Language
 				 * 
 				 *  @example
 				 *    $(document).ready(function() {
@@ -8816,6 +8892,7 @@
 			 * instead (either the default or given value).
 			 *  @type string
 			 *  @default No data available in table
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -8836,6 +8913,7 @@
 			 * can be freely moved or removed as the language requirements change.
 			 *  @type string
 			 *  @default Showing _START_ to _END_ of _TOTAL_ entries
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -8854,6 +8932,7 @@
 			 * format of this string should match sInfo.
 			 *  @type string
 			 *  @default Showing 0 to 0 of 0 entries
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -8873,6 +8952,7 @@
 			 * is. The variable _MAX_ is dynamically updated.
 			 *  @type string
 			 *  @default (filtered from _MAX_ total entries)
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -8893,6 +8973,7 @@
 			 * being used) at all times.
 			 *  @type string
 			 *  @default <i>Empty string</i>
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -8913,6 +8994,7 @@
 			 * character you wish with this parameter.
 			 *  @type string
 			 *  @default ,
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -8933,6 +9015,7 @@
 			 * with a custom select box if required.
 			 *  @type string
 			 *  @default Show _MENU_ entries
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    // Language change only
@@ -8972,6 +9055,7 @@
 			 * Ajax sourced data with client-side processing.
 			 *  @type string
 			 *  @default Loading...
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready( function() {
@@ -8990,6 +9074,7 @@
 			 * (usually a sort command or similar).
 			 *  @type string
 			 *  @default Processing...
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -9011,6 +9096,7 @@
 			 * then the input box is appended to the string automatically.
 			 *  @type string
 			 *  @default Search:
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    // Input text box will be appended at the end automatically
@@ -9044,6 +9130,7 @@
 			 * the example language files to see how this works in action.
 			 *  @type string
 			 *  @default <i>Empty string - i.e. disabled</i>
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -9063,6 +9150,7 @@
 			 * information in the table at all (regardless of filtering).
 			 *  @type string
 			 *  @default No matching records found
+			 *  @dtopt Language
 			 * 
 			 *  @example
 			 *    $(document).ready(function() {
@@ -9087,6 +9175,7 @@
 		 * any point in the data), when false this will not be done.
 		 *  @type object
 		 *  @extends DataTable.models.oSearch
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -9105,6 +9194,8 @@
 		 * notation to get a data source for multiple levels of nesting.
 		 *  @type string
 		 *  @default aaData
+		 *  @dtopt Options
+		 *  @dtopt Server-side
 		 * 
 		 *  @example
 		 *    // Get data from { "data": [...] }
@@ -9134,6 +9225,8 @@
 		 * the parameter 'aaData' which is the data source for the table.
 		 *  @type string
 		 *  @default null
+		 *  @dtopt Options
+		 *  @dtopt Server-side
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -9150,6 +9243,7 @@
 		 * assigns to a cookie when state saving is enabled.
 		 *  @type string
 		 *  @default SpryMedia_DataTables_
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9201,6 +9295,7 @@
 		 *  @type string
 		 *  @default lfrtip <i>(when bJQueryUI is false)</i> <b>or</b> 
 		 *    <"H"lfr>t<"F"ip> <i>(when bJQueryUI is true)</i>
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9218,6 +9313,7 @@
 		 * the end user. Further methods can be added using the API (see below).
 		 *  @type string
 		 *  @default two_button
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
@@ -9237,6 +9333,7 @@
 		 * as a pixel measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9258,6 +9355,7 @@
 		 * measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
+		 *  @dtopt Options
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9279,6 +9377,7 @@
 		 * (in which case it will be treated as a pixel measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
+		 *  @dtopt Features
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9296,6 +9395,8 @@
 		 * processing or Ajax sourced data.
 		 *  @type string
 		 *  @default GET
+		 *  @dtopt Options
+		 *  @dtopt Server-side
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9359,6 +9460,7 @@
 		 * parameter.
 		 *  @type array
 		 *  @default [ 'asc', 'desc' ]
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9393,6 +9495,7 @@
 		 * Enable or disable filtering on the data in this column.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9423,6 +9526,7 @@
 		 * Enable or disable sorting on this column.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9459,6 +9563,7 @@
 		 * be used for sorting, filtering, display and type detection.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9502,6 +9607,7 @@
 		 * Enable or disable the display of this column.
 		 *  @type boolean
 		 *  @default true
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9539,6 +9645,7 @@
 		 *  @param {array|object} oData The data for the whole row
 		 *  @param {int} iRow The row index for the aoData data store
 		 *  @param {int} iCol The column index for aoColumns
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    $(document).ready(function() {
@@ -9564,11 +9671,12 @@
 		 *  @param {object} o Object with the following parameters:
 		 *  @param {int}    o.iDataRow The row in aoData
 		 *  @param {int}    o.iDataColumn The column in question
-		 *  @param {array   o.aData The data for the row in question
+		 *  @param {array}  o.aData The data for the row in question
 		 *  @param {object} o.oSettings The settings object for this DataTables instance
 		 *  @param {object} o.mDataProp The data property used for this column
 		 *  @param {*}      val The current cell value
 		 *  @returns {string} The string you which to use in the display
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9610,6 +9718,7 @@
 		 * on hidden columns for example.
 		 *  @type int
 		 *  @default -1 <i>Use automatically calculated column index</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9667,6 +9776,7 @@
 		 *    </ul>
 		 *  @type string|int|function|null
 		 *  @default null <i>Use automatically calculated column index</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Read table data from objects
@@ -9719,6 +9829,7 @@
 		 * Class to give to each cell in this column.
 		 *  @type string
 		 *  @default <i>Empty string</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9759,6 +9870,7 @@
 		 * general DataTables.net documentation
 		 *  @type string
 		 *  @default <i>Empty string<i>
+		 *  @dtopt Columns
 		 *    
 		 *  @example
 		 *    // Using aoColumns
@@ -9784,6 +9896,7 @@
 		 * is set to null, or because the data source itself is null).
 		 *  @type string
 		 *  @default null
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9827,6 +9940,7 @@
 		 * client-side, your server-side code does not also need updating).
 		 *  @type string
 		 *  @default <i>Empty string</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9866,6 +9980,7 @@
 		 * elements such as form inputs.
 		 *  @type string
 		 *  @default std
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9903,6 +10018,7 @@
 		 *  @type string
 		 *  @default null <i>Derived from the 'TH' value for this column in the 
 		 *    original HTML table.</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9941,6 +10057,7 @@
 		 * plug-ins.
 		 *  @type string
 		 *  @default null <i>Auto-detected from raw data</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
@@ -9976,6 +10093,7 @@
 		 * remains readable.
 		 *  @type string
 		 *  @default null <i>Automatic</i>
+		 *  @dtopt Columns
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs

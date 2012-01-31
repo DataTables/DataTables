@@ -48,6 +48,7 @@ DataTable.defaults.columns = {
 	 * parameter.
 	 *  @type array
 	 *  @default [ 'asc', 'desc' ]
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -82,6 +83,7 @@ DataTable.defaults.columns = {
 	 * Enable or disable filtering on the data in this column.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -112,6 +114,7 @@ DataTable.defaults.columns = {
 	 * Enable or disable sorting on this column.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -148,6 +151,7 @@ DataTable.defaults.columns = {
 	 * be used for sorting, filtering, display and type detection.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -191,6 +195,7 @@ DataTable.defaults.columns = {
 	 * Enable or disable the display of this column.
 	 *  @type boolean
 	 *  @default true
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -228,6 +233,7 @@ DataTable.defaults.columns = {
 	 *  @param {array|object} oData The data for the whole row
 	 *  @param {int} iRow The row index for the aoData data store
 	 *  @param {int} iCol The column index for aoColumns
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    $(document).ready(function() {
@@ -253,11 +259,12 @@ DataTable.defaults.columns = {
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
 	 *  @param {int}    o.iDataColumn The column in question
-	 *  @param {array   o.aData The data for the row in question
+	 *  @param {array}  o.aData The data for the row in question
 	 *  @param {object} o.oSettings The settings object for this DataTables instance
 	 *  @param {object} o.mDataProp The data property used for this column
 	 *  @param {*}      val The current cell value
 	 *  @returns {string} The string you which to use in the display
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -299,6 +306,7 @@ DataTable.defaults.columns = {
 	 * on hidden columns for example.
 	 *  @type int
 	 *  @default -1 <i>Use automatically calculated column index</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -356,6 +364,7 @@ DataTable.defaults.columns = {
 	 *    </ul>
 	 *  @type string|int|function|null
 	 *  @default null <i>Use automatically calculated column index</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Read table data from objects
@@ -408,6 +417,7 @@ DataTable.defaults.columns = {
 	 * Class to give to each cell in this column.
 	 *  @type string
 	 *  @default <i>Empty string</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -448,6 +458,7 @@ DataTable.defaults.columns = {
 	 * general DataTables.net documentation
 	 *  @type string
 	 *  @default <i>Empty string<i>
+	 *  @dtopt Columns
 	 *    
 	 *  @example
 	 *    // Using aoColumns
@@ -473,6 +484,7 @@ DataTable.defaults.columns = {
 	 * is set to null, or because the data source itself is null).
 	 *  @type string
 	 *  @default null
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -516,6 +528,7 @@ DataTable.defaults.columns = {
 	 * client-side, your server-side code does not also need updating).
 	 *  @type string
 	 *  @default <i>Empty string</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -555,6 +568,7 @@ DataTable.defaults.columns = {
 	 * elements such as form inputs.
 	 *  @type string
 	 *  @default std
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -592,6 +606,7 @@ DataTable.defaults.columns = {
 	 *  @type string
 	 *  @default null <i>Derived from the 'TH' value for this column in the 
 	 *    original HTML table.</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -630,6 +645,7 @@ DataTable.defaults.columns = {
 	 * plug-ins.
 	 *  @type string
 	 *  @default null <i>Auto-detected from raw data</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -665,6 +681,7 @@ DataTable.defaults.columns = {
 	 * remains readable.
 	 *  @type string
 	 *  @default null <i>Automatic</i>
+	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs

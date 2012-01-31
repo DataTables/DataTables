@@ -186,6 +186,7 @@ this._ = function ( sSelector, oOpts )
  *  @returns {array} An array of integers, representing the list of indexes in 
  *    <i>aoData</i> ({@link DataTable.models.oSettings}) that have been added to 
  *    the table.
+ *  @dtopt API
  *
  *  @example
  *    // Global var for counter
@@ -258,6 +259,7 @@ this.fnAddData = function( mData, bRedraw )
  * through the sWidth parameter). This can be useful when the width of the table's 
  * parent element changes (for example a window resize).
  *  @param {boolean} [bRedraw=true] Redraw the table or not, you will typically want to
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -291,6 +293,7 @@ this.fnAdjustColumnSizing = function ( bRedraw )
 /**
  * Quickly and simply clear a table
  *  @param {bool} [bRedraw=true] redraw the table or not
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -318,6 +321,7 @@ this.fnClearTable = function( bRedraw )
  * are currently 'open'.
  *  @param {node} nTr the table row to 'close'
  *  @returns {int} 0 on success, or 1 if failed (can't find the row)
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -365,6 +369,7 @@ this.fnClose = function( nTr )
  *  @param {function|null} [fnCallBack] Callback function
  *  @param {bool} [bRedraw=true] Redraw the table or not
  *  @returns {array} The row that was deleted
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -433,6 +438,7 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
  * Restore the table to it's original state in the DOM by removing all of DataTables 
  * enhancements, alterations to the DOM structure of the table and event listeners.
  *  @param {boolean} [bRemove=false] Completely remove the table from the DOM
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -563,6 +569,7 @@ this.fnDestroy = function ( bRemove )
 /**
  * Redraw the table
  *  @param {bool} [bComplete=true] Re-filter and resort (if enabled) the table before the draw.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -595,6 +602,7 @@ this.fnDraw = function( bComplete )
  *  @param {bool} [bSmart=true] Perform smart filtering or not
  *  @param {bool} [bShowGlobal=true] Show the input global filter in it's input box(es)
  *  @param {bool} [bCaseInsensitive=true] Do case-insensitive matching (true) or not (false)
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -678,6 +686,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
  *  @returns {array|object|string} If mRow is undefined, then the data for all rows is
  *    returned. If mRow is defined, just data for that row, and is iCol is
  *    defined, only data for the designated cell is returned.
+ *  @dtopt API
  *
  *  @example
  *    // Row data
@@ -740,6 +749,7 @@ this.fnGetData = function( mRow, iCol )
  *  @param {int} [iRow] Optional row index for the TR element you want
  *  @returns {array|node} If iRow is undefined, returns an array of all TR elements
  *    in the table's body, or iRow is defined, just the TR element requested.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -767,6 +777,7 @@ this.fnGetNodes = function( iRow )
  *  @param {node} nNode this can either be a TR, TD or TH in the table's body
  *  @returns {int} If nNode is given as a TR, then a single index is returned, or
  *    if given as a cell, an array of [row index, column index (visible)] is given.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -809,6 +820,7 @@ this.fnGetPosition = function( nNode )
  * Check to see if a row is 'open' or not.
  *  @param {node} nTr the table row to check
  *  @returns {boolean} true if the row is currently open, false otherwise
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -853,6 +865,7 @@ this.fnIsOpen = function( nTr )
  *  @returns {node} The row opened. Note that if the table row passed in as the
  *    first parameter, is not found in the table, this method will silently
  *    return.
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -923,6 +936,7 @@ this.fnOpen = function( nTr, mHtml, sClass )
  *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
  *    or page number to jump to (integer), note that page 0 is the first page.
  *  @param {bool} [bRedraw=true] Redraw the table or not
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -948,6 +962,7 @@ this.fnPageChange = function ( mAction, bRedraw )
  *  @param {int} iCol The column whose display should be changed
  *  @param {bool} bShow Show (true) or hide (false) the column
  *  @param {bool} [bRedraw=true] Redraw the table or not
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1065,6 +1080,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
  * Get the settings for a particular table for external manipulation
  *  @returns {object} DataTables settings object. See 
  *    {@link DataTable.models.oSettings}
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1085,6 +1101,7 @@ this.fnSettings = function()
  * Sort the table by a particular row
  *  @param {int} iCol the data index to sort on. Note that this will not match the 
  *    'display index' if you have hidden data entries
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1107,6 +1124,7 @@ this.fnSort = function( aaSort )
  *  @param {node} nNode the element to attach the sort listener to
  *  @param {int} iColumn the column that a click on this node will sort on
  *  @param {function} [fnCallback] callback function when sort is run
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1134,6 +1152,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
  *  @param {bool} [bRedraw=true] Redraw the table or not
  *  @param {bool} [bAction=true] Perform predraw actions or not
  *  @returns {int} 0 on success, 1 on error
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
@@ -1227,6 +1246,7 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
  *  @returns {boolean} true if this version of DataTables is greater or equal to the required
  *    version, or false if this version of DataTales is not suitable
  *  @method
+ *  @dtopt API
  *
  *  @example
  *    $(document).ready(function() {
