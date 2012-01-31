@@ -829,6 +829,7 @@ this.fnGetPosition = function( nNode )
 this.fnIsOpen = function( nTr )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+	var aoOpenRows = oSettings.aoOpenRows;
 	
 	for ( var i=0 ; i<oSettings.aoOpenRows.length ; i++ )
 	{
@@ -960,11 +961,11 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var i, iLen;
-	var iColumns = oSettings.aoColumns.length;
+	var aoColumns = oSettings.aoColumns;
 	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
 	
 	/* No point in doing anything if we are requesting what is already true */
-	if ( oSettings.aoColumns[iCol].bVisible == bShow )
+	if ( aoColumns[iCol].bVisible == bShow )
 	{
 		return;
 	}
@@ -975,7 +976,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		var iInsert = 0;
 		for ( i=0 ; i<iCol ; i++ )
 		{
-			if ( oSettings.aoColumns[i].bVisible )
+			if ( aoColumns[i].bVisible )
 			{
 				iInsert++;
 			}
@@ -987,9 +988,9 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 		/* Which coloumn should we be inserting before? */
 		if ( !bAppend )
 		{
-			for ( i=iCol ; i<iColumns ; i++ )
+			for ( i=iCol ; i<aoColumns.length ; i++ )
 			{
-				if ( oSettings.aoColumns[i].bVisible )
+				if ( aoColumns[i].bVisible )
 				{
 					iBefore = i;
 					break;
@@ -1031,7 +1032,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	}
 
 	/* Clear to set the visible flag */
-	oSettings.aoColumns[iCol].bVisible = bShow;
+	aoColumns[iCol].bVisible = bShow;
 
 	/* Redraw the header and footer based on the new column visibility */
 	_fnDrawHead( oSettings, oSettings.aoHeader );
