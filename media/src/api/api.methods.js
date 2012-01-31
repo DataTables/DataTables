@@ -962,6 +962,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	var i, iLen;
 	var aoColumns = oSettings.aoColumns;
+	var aoData = oSettings.aoData;
 	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
 	
 	/* No point in doing anything if we are requesting what is already true */
@@ -998,20 +999,20 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 			}
 		}
 
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
-			if ( oSettings.aoData[i].nTr !== null )
+			if ( aoData[i].nTr !== null )
 			{
 				if ( bAppend )
 				{
-					oSettings.aoData[i].nTr.appendChild( 
-						oSettings.aoData[i]._anHidden[iCol]
+					aoData[i].nTr.appendChild( 
+						aoData[i]._anHidden[iCol]
 					);
 				}
 				else
 				{
-					oSettings.aoData[i].nTr.insertBefore(
-						oSettings.aoData[i]._anHidden[iCol], 
+					aoData[i].nTr.insertBefore(
+						aoData[i]._anHidden[iCol], 
 						_fnGetTdNodes( oSettings, i )[iBefore] );
 				}
 			}
@@ -1020,12 +1021,12 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	else
 	{
 		/* Remove a column from display */
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
-			if ( oSettings.aoData[i].nTr !== null )
+			if ( aoData[i].nTr !== null )
 			{
 				nTd = _fnGetTdNodes( oSettings, i )[iCol];
-				oSettings.aoData[i]._anHidden[iCol] = nTd;
+				aoData[i]._anHidden[iCol] = nTd;
 				nTd.parentNode.removeChild( nTd );
 			}
 		}
