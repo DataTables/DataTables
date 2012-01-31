@@ -1,5 +1,4 @@
 
-
 /**
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
@@ -572,11 +571,11 @@ function _fnAddOptionsHtml ( oSettings )
 				/* Replace jQuery UI constants */
 				if ( sAttr == "H" )
 				{
-					sAttr = "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix";
+					sAttr = oSettings.oClasses.sJUIHeader;
 				}
 				else if ( sAttr == "F" )
 				{
-					sAttr = "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix";
+					sAttr = oSettings.oClasses.sJUIFooter;
 				}
 				
 				/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
