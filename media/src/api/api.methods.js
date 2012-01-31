@@ -110,25 +110,26 @@ this.$ = function ( sSelector, oOpts )
 
 /**
  * Almost identical to $ in operation, but in this case returns the data for the matched
- * rows - as such, the jQuery selector used should match TR elements rather than any
- * decendents. The data returned is the original data array/object that was used to create
- * the row (or a generated array if from a DOM source).
+ * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
+ * rather than any decendents, so the data can be obtained for the row/cell. If matching
+ * rows are found, the data returned is the original data array/object that was used to  
+ * create the row (or a generated array if from a DOM source).
  *
  * This method is often useful incombination with $ where both functions are given the
  * same parameters and the array indexes will match identically.
  *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
  *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
- *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
- *    criterion ("applied") or all TR elements (i.e. no filter).
- *  @param {string} [oOpts.order=current] Order of the TR elements in the processed array.
+ *  @param {string} [oOpts.filter=none] Select elements that meet the current filter
+ *    criterion ("applied") or all elements (i.e. no filter).
+ *  @param {string} [oOpts.order=current] Order of the data in the processed array.
  *    Can be either 'current', whereby the current sorting of the table is used, or
  *    'original' whereby the original order the data was read into the table is used.
  *  @param {string} [oOpts.page=all] Limit the selection to the currently displayed page
  *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
  *    'current' and filter is 'applied', regardless of what they might be given as.
- *  @returns {array} Data for the matched TR elements. If any elements, as a result of the
- *    selector, were not TR elements in the DataTable, they will have a null entry in the
- *    array.
+ *  @returns {array} Data for the matched elements. If any elements, as a result of the
+ *    selector, were not TR, TD or TH elements in the DataTable, they will have a null 
+ *    entry in the array.
  *  @dtopt API
  *
  *  @example

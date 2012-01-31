@@ -4864,25 +4864,26 @@
 		
 		/**
 		 * Almost identical to $ in operation, but in this case returns the data for the matched
-		 * rows - as such, the jQuery selector used should match TR elements rather than any
-		 * decendents. The data returned is the original data array/object that was used to create
-		 * the row (or a generated array if from a DOM source).
+		 * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
+		 * rather than any decendents, so the data can be obtained for the row/cell. If matching
+		 * rows are found, the data returned is the original data array/object that was used to  
+		 * create the row (or a generated array if from a DOM source).
 		 *
 		 * This method is often useful incombination with $ where both functions are given the
 		 * same parameters and the array indexes will match identically.
 		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
-		 *  @param {string} [oOpts.filter=none] Select TR elements that meet the current filter
-		 *    criterion ("applied") or all TR elements (i.e. no filter).
-		 *  @param {string} [oOpts.order=current] Order of the TR elements in the processed array.
+		 *  @param {string} [oOpts.filter=none] Select elements that meet the current filter
+		 *    criterion ("applied") or all elements (i.e. no filter).
+		 *  @param {string} [oOpts.order=current] Order of the data in the processed array.
 		 *    Can be either 'current', whereby the current sorting of the table is used, or
 		 *    'original' whereby the original order the data was read into the table is used.
 		 *  @param {string} [oOpts.page=all] Limit the selection to the currently displayed page
 		 *    ("current") or not ("all"). If 'current' is given, then order is assumed to be 
 		 *    'current' and filter is 'applied', regardless of what they might be given as.
-		 *  @returns {array} Data for the matched TR elements. If any elements, as a result of the
-		 *    selector, were not TR elements in the DataTable, they will have a null entry in the
-		 *    array.
+		 *  @returns {array} Data for the matched elements. If any elements, as a result of the
+		 *    selector, were not TR, TD or TH elements in the DataTable, they will have a null 
+		 *    entry in the array.
 		 *  @dtopt API
 		 *
 		 *  @example
@@ -5421,31 +5422,38 @@
 		
 		
 		/**
-		 * Return an array with the data which is used to make up the table
-		 * or string if both row and column are given
-		 *  @param {mixed} [mRow] The TR row element to get the data for, or the aoData
-		 *    internal index (mapped to the TR element)
-		 *  @param {int} [iCol] Optional column index that you want the data of
-		 *  @returns {array|string} If mRow is undefined, then the data for all rows is
+		 * Get the data for the whole table, an individual row or an individual cell based on the 
+		 * provided parameters.
+		 *  @param {int|node} [mRow] A TR row node, TD/TH cell node or an integer. If given as
+		 *    a TR node then the data source for the whole row will be returned. If given as a
+		 *    TD/TH cell node then iCol will be automatically calculated and the data for the
+		 *    cell returned. If given as an integer, then this is treated as the aoData internal
+		 *    data index for the row (see fnGetPosition) and the data for that row used.
+		 *  @param {int} [iCol] Optional column index that you want the data of.
+		 *  @returns {array|object|string} If mRow is undefined, then the data for all rows is
 		 *    returned. If mRow is defined, just data for that row, and is iCol is
 		 *    defined, only data for the designated cell is returned.
 		 *
 		 *  @example
+		 *    // Row data
 		 *    $(document).ready(function() {
-		 *      $('#example tbody td').click( function () {
-		 *        // Get the position of the current data from the node
-		 *        var aPos = oTable.fnGetPosition( this );
-		 *        
-		 *        // Get the data array for this row
-		 *        var aData = oTable.fnGetData( this.parentNode );
-		 *        
-		 *        // Update the data array and return the value
-		 *        aData[ aPos[1] ] = 'clicked';
-		 *        this.innerHTML = 'clicked';
-		 *      } );
-		 *      
-		 *      // Init DataTables
 		 *      oTable = $('#example').dataTable();
+		 *
+		 *      oTable.$('tr').click( function () {
+		 *        var data = oTable.fnGetData( this );
+		 *        // ... do something with the array / object of data for the row
+		 *      } );
+		 *    } );
+		 *
+		 *  @example
+		 *    // Individual cell data
+		 *    $(document).ready(function() {
+		 *      oTable = $('#example').dataTable();
+		 *
+		 *      oTable.$('td').click( function () {
+		 *        var sData = oTable.fnGetData( this );
+		 *        alert( 'The cell clicked on had the value of '+sData );
+		 *      } );
 		 *    } );
 		 */
 		this.fnGetData = function( mRow, iCol )
