@@ -4913,7 +4913,6 @@
 		{
 			var aOut = [];
 			var i, iLen, iIndex;
-			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			var aTrs = this.$( sSelector, oOpts );
 		
 			for ( i=0, iLen=aTrs.length ; i<iLen ; i++ )
