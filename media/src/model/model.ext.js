@@ -212,6 +212,7 @@ DataTable.models.ext = {
 	/**
 	 * Provide a common method for plug-ins to check the version of DataTables being used, 
 	 * in order to ensure compatibility.
+	 *  @type function
 	 *  @param {string} sVersion Version string to check for, in the format "X.Y.Z". Note 
 	 *    that the formats "X" and "X.Y" are also acceptable.
 	 *  @returns {boolean} true if this version of DataTables is greater or equal to the 
