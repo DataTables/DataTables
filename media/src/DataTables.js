@@ -123,7 +123,6 @@
 
 	/**
 	 * Extension object for DataTables that is used to provide all extension options.
-	 * See {@link DataTable.models.ext} for full information about the extension object.
 	 * 
 	 * Note that the <i>DataTable.ext</i> object is available through
 	 * <i>jQuery.fn.dataTable.ext</i> where it may be accessed and manipulated. It is

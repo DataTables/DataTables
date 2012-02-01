@@ -1685,7 +1685,7 @@ DataTable.defaults = {
 	 * (default) it will be treated as a straight string. When "bSmart"
 	 * DataTables will use it's smart filtering methods (to word match at
 	 * any point in the data), when false this will not be done.
-	 *  @type object
+	 *  @namespace
 	 *  @extends DataTable.models.oSearch
 	 *  @dtopt Options
 	 * 

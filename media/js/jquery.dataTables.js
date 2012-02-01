@@ -9152,7 +9152,7 @@
 		 * (default) it will be treated as a straight string. When "bSmart"
 		 * DataTables will use it's smart filtering methods (to word match at
 		 * any point in the data), when false this will not be done.
-		 *  @type object
+		 *  @namespace
 		 *  @extends DataTable.models.oSearch
 		 *  @dtopt Options
 		 * 
@@ -10962,7 +10962,6 @@
 
 	/**
 	 * Extension object for DataTables that is used to provide all extension options.
-	 * See {@link DataTable.models.ext} for full information about the extension object.
 	 * 
 	 * Note that the <i>DataTable.ext</i> object is available through
 	 * <i>jQuery.fn.dataTable.ext</i> where it may be accessed and manipulated. It is
