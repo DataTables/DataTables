@@ -125,9 +125,11 @@
 	 * Extension object for DataTables that is used to provide all extension options.
 	 * See {@link DataTable.models.ext} for full information about the extension object.
 	 * 
-	 * Note that the <i>DataTable.ext</i> object is aliased to <i>jQuery.fn.dataTableExt</i> 
-	 * through which it may be accessed and manipulated, or <i>jQuery.fn.dataTable.ext</i>.
+	 * Note that the <i>DataTable.ext</i> object is available through
+	 * <i>jQuery.fn.dataTable.ext</i> where it may be accessed and manipulated. It is
+	 * also aliased to <i>jQuery.fn.dataTableExt</i> for historic reasons.
 	 *  @namespace
+	 *  @extends DataTable.models.ext
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
 	require('ext.classes.js');

@@ -8163,6 +8163,7 @@
 		 * rendered as "1,000,000") to help readability for the end user. This
 		 * function will override the default method DataTables uses.
 		 *  @type function
+		 *  @member
 		 *  @param {int} iIn number to be formatted
 		 *  @returns {string} formatted string for DataTables to show the number
 		 *  @dtopt Callbacks
@@ -8348,6 +8349,7 @@
 		 * application. For example you could use POST data, or pull information from
 		 * a Gears or AIR database.
 		 *  @type function
+		 *  @member
 		 *  @param {string} sSource HTTP source to obtain the data from (sAjaxSource)
 		 *  @param {array} aoData A key/value pair object containing the data to send
 		 *    to the server
@@ -8434,6 +8436,7 @@
 		 * state of a table is loaded. By default DataTables will load from its state saving
 		 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
 		 *  @type function
+		 *  @member
 		 *  @param {object} oSettings DataTables settings object
 		 *  @return {object} The DataTables state object to be loaded
 		 *  @dtopt Callbacks
@@ -8536,6 +8539,7 @@
 		 * information for the table is stored - by default it will use a cookie, but you
 		 * might want to use local storage (HTML5) or a server-side database.
 		 *  @type function
+		 *  @member
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {object} oData The state object to be saved
 		 *  @dtopt Callbacks
@@ -10959,9 +10963,11 @@
 	 * Extension object for DataTables that is used to provide all extension options.
 	 * See {@link DataTable.models.ext} for full information about the extension object.
 	 * 
-	 * Note that the <i>DataTable.ext</i> object is aliased to <i>jQuery.fn.dataTableExt</i> 
-	 * through which it may be accessed and manipulated, or <i>jQuery.fn.dataTable.ext</i>.
+	 * Note that the <i>DataTable.ext</i> object is available through
+	 * <i>jQuery.fn.dataTable.ext</i> where it may be accessed and manipulated. It is
+	 * also aliased to <i>jQuery.fn.dataTableExt</i> for historic reasons.
 	 *  @namespace
+	 *  @extends DataTable.models.ext
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
 	

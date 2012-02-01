@@ -697,6 +697,7 @@ DataTable.defaults = {
 	 * rendered as "1,000,000") to help readability for the end user. This
 	 * function will override the default method DataTables uses.
 	 *  @type function
+	 *  @member
 	 *  @param {int} iIn number to be formatted
 	 *  @returns {string} formatted string for DataTables to show the number
 	 *  @dtopt Callbacks
@@ -882,6 +883,7 @@ DataTable.defaults = {
 	 * application. For example you could use POST data, or pull information from
 	 * a Gears or AIR database.
 	 *  @type function
+	 *  @member
 	 *  @param {string} sSource HTTP source to obtain the data from (sAjaxSource)
 	 *  @param {array} aoData A key/value pair object containing the data to send
 	 *    to the server
@@ -968,6 +970,7 @@ DataTable.defaults = {
 	 * state of a table is loaded. By default DataTables will load from its state saving
 	 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
 	 *  @type function
+	 *  @member
 	 *  @param {object} oSettings DataTables settings object
 	 *  @return {object} The DataTables state object to be loaded
 	 *  @dtopt Callbacks
@@ -1070,6 +1073,7 @@ DataTable.defaults = {
 	 * information for the table is stored - by default it will use a cookie, but you
 	 * might want to use local storage (HTML5) or a server-side database.
 	 *  @type function
+	 *  @member
 	 *  @param {object} oSettings DataTables settings object
 	 *  @param {object} oData The state object to be saved
 	 *  @dtopt Callbacks
