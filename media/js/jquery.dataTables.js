@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.0.dev.4
+ * @version     1.9.0
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -6542,7 +6542,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.0.dev.4";
+	DataTable.version = "1.9.0";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
