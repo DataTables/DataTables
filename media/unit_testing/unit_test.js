@@ -387,7 +387,11 @@ var oSession = {
 	{
 		while( $.fn.dataTableSettings.length > 0 )
 		{
-			$.fn.dataTableSettings[0].oInstance.fnDestroy();
+			try {
+				$.fn.dataTableSettings[0].oInstance.fnDestroy();
+			} catch (e) {
+				$.fn.dataTableSettings.splice( 0, 1 );
+			}
 		}
 		//$.fn.dataTableSettings.splice( 0, $.fn.dataTableSettings.length );
 		var nDemo = document.getElementById('demo');

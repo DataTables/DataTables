@@ -380,33 +380,24 @@ function _fnGetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
-		/* If there is a . in the source string then the data source is in a nested object
-		 * we provide two 'quick' functions for the look up to speed up the most common
-		 * operation, and a generalised one for when it is needed
+		/* If there is a . in the source string then the data source is in a 
+		 * nested object so we loop over the data for each level to get the next
+		 * level down. On each loop we test for undefined, and if found immediatly
+		 * return. This allows entire objects to be missing and sDefaultContent to
+		 * be used if defined, rather than throwing an error
 		 */
 		var a = mSource.split('.');
-		if ( a.length == 2 )
-		{
-			return function (data, type) {
-				return data[ a[0] ][ a[1] ];
-			};
-		}
-		else if ( a.length == 3 )
-		{
-			return function (data, type) {
-				return data[ a[0] ][ a[1] ][ a[2] ];
-			};
-		}
-		else
-		{
-			return function (data, type) {
-				for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+		return function (data, type) {
+			for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+			{
+				data = data[ a[i] ];
+				if ( data === undefined )
 				{
-					data = data[ a[i] ];
+					return undefined;
 				}
-				return data;
-			};
-		}
+			}
+			return data;
+		};
 	}
 	else
 	{
@@ -440,32 +431,15 @@ function _fnSetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
 	{
-		/* Like the get, we need to get data from a nested object. Again two fast lookup
-		 * functions are provided, and a generalised one.
-		 */
+		/* Like the get, we need to get data from a nested object.  */
 		var a = mSource.split('.');
-		if ( a.length == 2 )
-		{
-			return function (data, val) {
-				data[ a[0] ][ a[1] ] = val;
-			};
-		}
-		else if ( a.length == 3 )
-		{
-			return function (data, val) {
-				data[ a[0] ][ a[1] ][ a[2] ] = val;
-			};
-		}
-		else
-		{
-			return function (data, val) {
-				for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
-				{
-					data = data[ a[i] ];
-				}
-				data[ a[a.length-1] ] = val;
-			};
-		}
+		return function (data, val) {
+			for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
+			{
+				data = data[ a[i] ];
+			}
+			data[ a[a.length-1] ] = val;
+		};
 	}
 	else
 	{
