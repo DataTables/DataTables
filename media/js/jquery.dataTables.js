@@ -6549,7 +6549,7 @@
 	 * tables on a given page.
 	 * 
 	 * Note that the <i>DataTable.settings</i> object is aliased to <i>jQuery.fn.dataTableExt</i> 
-	 * through which is may be accessed and manipulated, or <i>jQuery.fn.dataTable.settings</i>.
+	 * through which it may be accessed and manipulated, or <i>jQuery.fn.dataTable.settings</i>.
 	 *  @member
 	 *  @type array
 	 *  @default []
@@ -10960,7 +10960,7 @@
 	 * See {@link DataTable.models.ext} for full information about the extension object.
 	 * 
 	 * Note that the <i>DataTable.ext</i> object is aliased to <i>jQuery.fn.dataTableExt</i> 
-	 * through which is may be accessed and manipulated, or <i>jQuery.fn.dataTable.ext</i>.
+	 * through which it may be accessed and manipulated, or <i>jQuery.fn.dataTable.ext</i>.
 	 *  @namespace
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
