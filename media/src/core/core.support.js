@@ -198,8 +198,8 @@ function _fnBindAction( n, oData, fn )
 {
 	$(n)
 		.bind( 'click.DT', oData, function (e) {
-				fn(e);
 				n.blur(); // Remove focus outline for mouse users
+				fn(e);
 			} )
 		.bind( 'keypress.DT', oData, function (e){
 			if ( e.which === 13 ) {

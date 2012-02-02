@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.0
+ * @version     1.9.1.dev
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -4609,8 +4609,8 @@
 		{
 			$(n)
 				.bind( 'click.DT', oData, function (e) {
-						fn(e);
 						n.blur(); // Remove focus outline for mouse users
+						fn(e);
 					} )
 				.bind( 'keypress.DT', oData, function (e){
 					if ( e.which === 13 ) {
@@ -6542,7 +6542,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.0";
+	DataTable.version = "1.9.1.dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
