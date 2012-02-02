@@ -4577,9 +4577,9 @@
 		 */
 		function _fnExtend( oOut, oExtender )
 		{
-			for ( var prop in oOut )
+			for ( var prop in oExtender )
 			{
-				if ( oOut.hasOwnProperty(prop) && oExtender[prop] !== undefined )
+				if ( oExtender.hasOwnProperty(prop) )
 				{
 					if ( typeof oInit[prop] === 'object' && $.isArray(oExtender[prop]) === false )
 					{
@@ -6219,8 +6219,8 @@
 			_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
 			_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 			_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
-			_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 			_fnMap( oSettings, oInit, "asStripeClasses" );
+			_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 			_fnMap( oSettings, oInit, "fnServerData" );
 			_fnMap( oSettings, oInit, "fnFormatNumber" );
 			_fnMap( oSettings, oInit, "sServerMethod" );

@@ -166,9 +166,9 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
  */
 function _fnExtend( oOut, oExtender )
 {
-	for ( var prop in oOut )
+	for ( var prop in oExtender )
 	{
-		if ( oOut.hasOwnProperty(prop) && oExtender[prop] !== undefined )
+		if ( oExtender.hasOwnProperty(prop) )
 		{
 			if ( typeof oInit[prop] === 'object' && $.isArray(oExtender[prop]) === false )
 			{
