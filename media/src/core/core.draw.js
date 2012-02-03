@@ -311,6 +311,7 @@ function _fnDraw( oSettings )
 	var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
 	if ( $.inArray( false, aPreDraw ) !== -1 )
 	{
+		_fnProcessingDisplay( oSettings, false );
 		return;
 	}
 	
