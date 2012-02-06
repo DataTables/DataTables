@@ -345,9 +345,10 @@ DataTable.defaults.columns = {
 	 *     <li>string - read an object property from the data source. Note that you can
 	 *       use Javascript dotted notation to read deep properties/arrays from the
 	 *       data source.</li>
-	 *     <li>null -  the sDafaultContent option will use used for the cell (empty
-	 *       string by default. This can be useful on generated columns such as
-	 *       edit / delete action columns.</li>
+	 *     <li>null - the sDefaultContent option will be used for the cell (null
+	 *       by default, so you will need to specify the default content you want -
+	 *       typically an empty string). This can be useful on generated columns such 
+	 *       as edit / delete action columns.</li>
 	 *     <li>function - the function given will be executed whenever DataTables 
 	 *       needs to set or get the data for a cell in the column. The function 
 	 *       takes three parameters:
