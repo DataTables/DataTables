@@ -259,7 +259,7 @@ function _fnScrollDraw ( o )
 		if ( ie67 && ($('tbody', nScrollBody).height() > nScrollBody.offsetHeight || 
 			$(nScrollBody).css('overflow-y') == "scroll")  )
 		{
-			o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth()-o.oScroll.iBarWidth );
+			o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth() - o.oScroll.iBarWidth);
 		}
 	}
 	else
@@ -436,12 +436,21 @@ function _fnScrollDraw ( o )
 	var iOuterWidth = $(o.nTable).outerWidth();
 	nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
 	nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth );
+
+	// Figure out if there are scrollbar present - if so then we need a the header and footer to
+	// provide a bit more space to allow "overflow" scrolling (i.e. past the scrollbar)
+	var bScrolling = $(o.nTable).height() > nScrollBody.clientHeight || $(nScrollBody).css('overflow-y') == "scroll";
+	nScrollHeadInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	
 	if ( o.nTFoot !== null )
 	{
-		nScrollFootInner.style.width = _fnStringToCss( o.nTable.offsetWidth );
-		nScrollFootTable.style.width = _fnStringToCss( o.nTable.offsetWidth );
+		nScrollFootTable.style.width = _fnStringToCss( iOuterWidth );
+		nScrollFootInner.style.width = _fnStringToCss( iOuterWidth );
+		nScrollFootInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	}
+
+	/* Adjust the position of the header incase we loose the y-scrollbar */
+	$(nScrollBody).scroll();
 	
 	/* If sorting or filtering has occurred, jump the scrolling back to the top */
 	if ( o.bSorted || o.bFiltered )
