@@ -8599,7 +8599,7 @@
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
-		 *        "fnStateLoadParams": function (oSettings, oData) {
+		 *        "fnStateSaveParams": function (oSettings, oData) {
 		 *          oData.oFilter.sSearch = "";
 		 *      } );
 		 *    } );
