@@ -8507,7 +8507,7 @@
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateLoadParams": function (oSettings, oData) {
-		 *          oData.oFilter.sSearch = "";
+		 *          oData.oSearch.sSearch = "";
 		 *      } );
 		 *    } );
 		 * 
@@ -8538,7 +8538,7 @@
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateLoaded": function (oSettings, oData) {
-		 *          alert( 'Saved filter was: '+oData.oFilter.sSearch );
+		 *          alert( 'Saved filter was: '+oData.oSearch.sSearch );
 		 *      } );
 		 *    } );
 		 */
@@ -8600,7 +8600,7 @@
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateSaveParams": function (oSettings, oData) {
-		 *          oData.oFilter.sSearch = "";
+		 *          oData.oSearch.sSearch = "";
 		 *      } );
 		 *    } );
 		 */
