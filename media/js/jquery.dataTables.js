@@ -3049,6 +3049,7 @@
 				nScrollHeadTable = nScrollHeadInner.getElementsByTagName('table')[0],
 				nScrollBody = o.nTable.parentNode,
 				i, iLen, j, jLen, anHeadToSize, anHeadSizers, anFootSizers, anFootToSize, oStyle, iVis,
+				nTheadSize, nTfootSize,
 				iWidth, aApplied=[], iSanityWidth,
 				nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
 				nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
@@ -3059,22 +3060,7 @@
 			 */
 			
 			/* Remove the old minimised thead and tfoot elements in the inner table */
-			var nTheadSize = o.nTable.getElementsByTagName('thead');
-			if ( nTheadSize.length > 0 )
-			{
-				o.nTable.removeChild( nTheadSize[0] );
-			}
-			
-			var nTfootSize;
-			if ( o.nTFoot !== null )
-			{
-				/* Remove the old minimised footer element in the cloned header */
-				nTfootSize = o.nTable.getElementsByTagName('tfoot');
-				if ( nTfootSize.length > 0 )
-				{
-					o.nTable.removeChild( nTfootSize[0] );
-				}
-			}
+			$(o.nTable).children('thead, tfoot').remove();
 			
 			/* Clone the current header and footer elements and then place it into the inner table */
 			nTheadSize = o.nTHead.cloneNode(true);
