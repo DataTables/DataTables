@@ -125,7 +125,7 @@ function _fnLog( oSettings, iLevel, sMesg )
 		}
 		return;
 	}
-	else if ( console !== undefined && console.log )
+	else if ( window.console && console.log )
 	{
 		console.log( sAlert );
 	}
