@@ -1954,7 +1954,12 @@
 				nFilter.id = oSettings.sTableId+'_filter';
 			}
 			
-			var jqFilter = $("input", nFilter);
+			var jqFilter = $('input[type="text"]', nFilter);
+		
+			// Store a reference to the input element, so other input elements could be
+			// added to the filter wrapper if needed (submit button for example)
+			nFilter._DT_Input = jqFilter[0];
+		
 			jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
 			jqFilter.bind( 'keyup.DT', function(e) {
 				/* Update all other filter input elements for the new display */
@@ -1963,7 +1968,7 @@
 				{
 					if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
 					{
-						$('input', n[i]).val( this.value );
+						$(n[i]._DT_Input).val( this.value );
 					}
 				}
 				
@@ -5380,7 +5385,7 @@
 					var n = oSettings.aanFeatures.f;
 					for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 					{
-						$('input', n[i]).val( sInput );
+						$(n[i]._DT_Input).val( sInput );
 					}
 				}
 			}

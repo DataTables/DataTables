@@ -656,7 +656,7 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 			var n = oSettings.aanFeatures.f;
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 			{
-				$('input', n[i]).val( sInput );
+				$(n[i]._DT_Input).val( sInput );
 			}
 		}
 	}
