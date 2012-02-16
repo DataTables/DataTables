@@ -18,29 +18,28 @@ $.fn.dataTableExt.oPagination.iTweenTime = 100;
 $.fn.dataTableExt.oPagination.scrolling = {
 	"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
 	{
-		/* Store the next and previous elements in the oSettings object as they can be very
-		 * usful for automation - particularly testing
-		 */
-		var nPrevious = document.createElement( 'div' );
-		var nNext = document.createElement( 'div' );
+		var oLang = oSettings.oLanguage.oPaginate;
+		var oClasses = oSettings.oClasses;
+		var fnClickHandler = function ( e ) {
+			if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
+			{
+				fnCallbackDraw( oSettings );
+			}
+		};
+
+		var sAppend = (!oSettings.bJUI) ?
+			'<a class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sPrevious+'</a>'+
+			'<a class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sNext+'</a>'
+			:
+			'<a class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
+			'<a class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
+		$(nPaging).append( sAppend );
 		
-		if ( oSettings.sTableId !== '' )
-		{
-			nPaging.setAttribute( 'id', oSettings.sTableId+'_paginate' );
-			nPrevious.setAttribute( 'id', oSettings.sTableId+'_previous' );
-			nNext.setAttribute( 'id', oSettings.sTableId+'_next' );
-		}
+		var els = $('a', nPaging);
+		var nPrevious = els[0],
+			nNext = els[1];
 		
-		nPrevious.className = "paginate_disabled_previous";
-		nNext.className = "paginate_disabled_next";
-		
-		nPrevious.title = oSettings.oLanguage.oPaginate.sPrevious;
-		nNext.title = oSettings.oLanguage.oPaginate.sNext;
-		
-		nPaging.appendChild( nPrevious );
-		nPaging.appendChild( nNext );
-		
-		$(nPrevious).click( function() {
+		oSettings.oApi._fnBindAction( nPrevious, {action: "previous"}, function() {
 			/* Disallow paging event during a current paging event */
 			if ( typeof oSettings.iPagingLoopStart != 'undefined' && oSettings.iPagingLoopStart != -1 )
 			{
@@ -69,8 +68,8 @@ $.fn.dataTableExt.oPagination.scrolling = {
 			};
 			innerLoop();
 		} );
-		
-		$(nNext).click( function() {
+
+		oSettings.oApi._fnBindAction( nNext, {action: "next"}, function() {
 			/* Disallow paging event during a current paging event */
 			if ( typeof oSettings.iPagingLoopStart != 'undefined' && oSettings.iPagingLoopStart != -1 )
 			{
@@ -98,10 +97,6 @@ $.fn.dataTableExt.oPagination.scrolling = {
 			};
 			innerLoop();
 		} );
-		
-		/* Take the brutal approach to cancelling text selection */
-		$(nPrevious).bind( 'selectstart', function () { return false; } );
-		$(nNext).bind( 'selectstart', function () { return false; } );
 	},
 	
 	"fnUpdate": function ( oSettings, fnCallbackDraw )
