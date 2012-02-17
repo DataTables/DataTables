@@ -5,7 +5,9 @@ $.extend( DataTable.ext.oSort, {
 	 */
 	"string-pre": function ( a )
 	{
-		if ( typeof a != 'string' ) { a = ''; }
+		if ( typeof a != 'string' ) {
+			a = (a !== null && a.toString) ? a.toString() : '';
+		}
 		return a.toLowerCase();
 	},
 
