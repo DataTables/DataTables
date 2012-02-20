@@ -121,7 +121,7 @@ function _fnLog( oSettings, iLevel, sMesg )
 		}
 		else
 		{
-			throw sAlert;
+			throw new Error(sAlert);
 		}
 		return;
 	}

@@ -42,9 +42,16 @@ function _fnSort ( oSettings, bApplyClasses )
 			if ( DataTable.ext.afnSortData[sDataType] )
 			{
 				var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
-				for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
+				if ( aData.length === aoData.length )
 				{
-					_fnSetCellData( oSettings, j, iColumn, aData[j] );
+					for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
+					{
+						_fnSetCellData( oSettings, j, iColumn, aData[j] );
+					}
+				}
+				else
+				{
+					_fnLog( oSettings, 0, "Returned data sort array (col "+iColumn+") is the wrong length" );
 				}
 			}
 		}
