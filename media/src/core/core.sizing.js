@@ -77,7 +77,7 @@ function _fnCalculateColumnWidths ( oSettings )
 	{
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
-			iTmpWidth = $(oHeaders[i]).width();
+			iTmpWidth = $(oHeaders[i]).outerWidth();
 			if ( iTmpWidth !== null )
 			{
 				oSettings.aoColumns[i].sWidth = _fnStringToCss( iTmpWidth );
