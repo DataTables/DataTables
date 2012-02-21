@@ -979,7 +979,7 @@ DataTable.defaults = {
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
-	 *        "fnStateSave": function (oSettings, oData) {
+	 *        "fnStateLoad": function (oSettings, oData) {
 	 *          var o;
 	 *          
 	 *          // Send an Ajax request to the server to get the data. Note that
