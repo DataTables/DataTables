@@ -1788,8 +1788,8 @@
 		function _fnAjaxParameters( oSettings )
 		{
 			var iColumns = oSettings.aoColumns.length;
-			var aoData = [], mDataProp;
-			var i;
+			var aoData = [], mDataProp, aaSort, aDataSort;
+			var i, j;
 			
 			aoData.push( { "name": "sEcho",          "value": oSettings.iDraw } );
 			aoData.push( { "name": "iColumns",       "value": iColumns } );
@@ -1820,20 +1820,24 @@
 			/* Sorting */
 			if ( oSettings.oFeatures.bSort !== false )
 			{
-				var iFixed = oSettings.aaSortingFixed !== null ? oSettings.aaSortingFixed.length : 0;
-				var iUser = oSettings.aaSorting.length;
-				aoData.push( { "name": "iSortingCols",   "value": iFixed+iUser } );
-				for ( i=0 ; i<iFixed ; i++ )
-				{
-					aoData.push( { "name": "iSortCol_"+i,  "value": oSettings.aaSortingFixed[i][0] } );
-					aoData.push( { "name": "sSortDir_"+i,  "value": oSettings.aaSortingFixed[i][1] } );
-				}
+				var iCounter = 0;
+		
+				aaSort = ( oSettings.aaSortingFixed !== null ) ?
+					oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
+					oSettings.aaSorting.slice();
 				
-				for ( i=0 ; i<iUser ; i++ )
+				for ( i=0 ; i<aaSort.length ; i++ )
 				{
-					aoData.push( { "name": "iSortCol_"+(i+iFixed),  "value": oSettings.aaSorting[i][0] } );
-					aoData.push( { "name": "sSortDir_"+(i+iFixed),  "value": oSettings.aaSorting[i][1] } );
+					aDataSort = oSettings.aoColumns[ aaSort[i][0] ].aDataSort;
+					
+					for ( j=0 ; j<aDataSort.length ; j++ )
+					{
+						aoData.push( { "name": "iSortCol_"+iCounter,  "value": aDataSort[j] } );
+						aoData.push( { "name": "sSortDir_"+iCounter,  "value": aaSort[i][1] } );
+						iCounter++;
+					}
 				}
+				aoData.push( { "name": "iSortingCols",   "value": iCounter } );
 				
 				for ( i=0 ; i<iColumns ; i++ )
 				{
@@ -3778,14 +3782,9 @@
 			if ( !oSettings.oFeatures.bServerSide && 
 				(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
 			{
-				if ( oSettings.aaSortingFixed !== null )
-				{
-					aaSort = oSettings.aaSortingFixed.concat( oSettings.aaSorting );
-				}
-				else
-				{
-					aaSort = oSettings.aaSorting.slice();
-				}
+				aaSort = ( oSettings.aaSortingFixed !== null ) ?
+					oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
+					oSettings.aaSorting.slice();
 				
 				/* If there is a sorting data type, and a fuction belonging to it, then we need to
 				 * get the data from the developer's function and apply it for this column

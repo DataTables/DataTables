@@ -22,14 +22,9 @@ function _fnSort ( oSettings, bApplyClasses )
 	if ( !oSettings.oFeatures.bServerSide && 
 		(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
 	{
-		if ( oSettings.aaSortingFixed !== null )
-		{
-			aaSort = oSettings.aaSortingFixed.concat( oSettings.aaSorting );
-		}
-		else
-		{
-			aaSort = oSettings.aaSorting.slice();
-		}
+		aaSort = ( oSettings.aaSortingFixed !== null ) ?
+			oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
+			oSettings.aaSorting.slice();
 		
 		/* If there is a sorting data type, and a fuction belonging to it, then we need to
 		 * get the data from the developer's function and apply it for this column
