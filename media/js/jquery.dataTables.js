@@ -6220,6 +6220,7 @@
 			_fnMap( oSettings.oFeatures, oInit, "bInfo" );
 			_fnMap( oSettings.oFeatures, oInit, "bProcessing" );
 			_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
+			_fnMap( oSettings.oFeatures, oInit, "bCopyData" );
 			_fnMap( oSettings.oFeatures, oInit, "bSortClasses" );
 			_fnMap( oSettings.oFeatures, oInit, "bServerSide" );
 			_fnMap( oSettings.oFeatures, oInit, "bDeferRender" );
