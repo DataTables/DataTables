@@ -436,18 +436,22 @@
 		 */
 		function _fnAddData ( oSettings, aDataSupplied )
 		{
-			var oCol;
+			var oCol, aDataIn;
 			
+		    if (oSettings.oFeatures.bCopyData){
 			/* Take an independent copy of the data source so we can bash it about as we wish */
-			var aDataIn = ($.isArray(aDataSupplied)) ?
+			aDataIn = ($.isArray(aDataSupplied)) ?
 				aDataSupplied.slice() :
 				$.extend( true, {}, aDataSupplied );
+		    } else {
+		    	 aDataIn = aDataSupplied;
+		    }
+
 			
 			/* Create the object for storing information about this new row */
 			var iRow = oSettings.aoData.length;
-			var oData = $.extend( true, {}, DataTable.models.oRow, {
-				"_aData": aDataIn
-			} );
+			var oData = $.extend( true, {}, DataTable.models.oRow);
+			oData._aData = aDataIn;
 			oSettings.aoData.push( oData );
 		
 			/* Create the cells */
@@ -10148,6 +10152,22 @@
 			 *  @type boolean
 			 */
 			"bAutoWidth": null,
+
+			/**
+			 * Enable or disable automatic copying of supplied data. This can be disabled
+			 * as an optimisation (Copying large javascript objects can be slow in older browsers)
+			 *  @type boolean
+			 *  @default true
+			 *  @dtopt Features
+			 *
+			 *  @example
+			 *    $(document).ready( function () {
+			 *      $('#example').dataTable( {
+			 *        "bCopyData": false
+			 *      } );
+			 *    } );
+			 */
+			"bCopyData": true,
 	
 			/**
 			 * Delay the creation of TR and TD elements until they are actually
