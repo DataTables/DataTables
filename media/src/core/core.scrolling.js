@@ -76,7 +76,8 @@ function _fnFeatureHtmlTable ( oSettings )
 	nScrollHead.style.border = "0";
 	nScrollHead.style.width = "100%";
 	nScrollFoot.style.border = "0";
-	nScrollHeadInner.style.width = "150%"; /* will be overwritten */
+	nScrollHeadInner.style.width = oSettings.oScroll.sXInner !== "" ?
+		oSettings.oScroll.sXInner : "100%"; /* will be overwritten */
 	
 	/* Modify attributes to respect the clones */
 	nScrollHeadTable.removeAttribute('id');

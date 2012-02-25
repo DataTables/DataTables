@@ -16,7 +16,11 @@
 				$('#example').dataTable( {
 					"bProcessing": true,
 					"bServerSide": true,
-					"sAjaxSource": "../server_side/scripts/server_processing.php"
+					"sAjaxSource": "../server_side/scripts/server_processing.php",
+					"sScrollY": "300",
+					bPaginate: false,
+					sScrollX: "100%",
+					sScrollXInner: "120%"
 				} );
 			} );
 		</script>
