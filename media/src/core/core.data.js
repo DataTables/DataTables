@@ -20,9 +20,8 @@ function _fnAddData ( oSettings, aDataSupplied )
 	
 	/* Create the object for storing information about this new row */
 	var iRow = oSettings.aoData.length;
-	var oData = $.extend( true, {}, DataTable.models.oRow, {
-		"_aData": aDataIn
-	} );
+	var oData = $.extend( true, {}, DataTable.models.oRow );
+	oData._aData = aDataIn;
 	oSettings.aoData.push( oData );
 
 	/* Create the cells */
