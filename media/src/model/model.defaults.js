@@ -294,7 +294,7 @@ DataTable.defaults = {
 	 * specified (this allow matching across multiple columns). Note that if you
 	 * wish to use filtering in DataTables this must remain 'true' - to remove the
 	 * default filtering input box and retain filtering abilities, please use
-	 * @ref{sDom}.
+	 * {@link DataTable.defaults.sDom}.
 	 *  @type boolean
 	 *  @default true
 	 *  @dtopt Features
