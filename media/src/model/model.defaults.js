@@ -209,7 +209,8 @@ DataTable.defaults = {
 	 * array may be of any length, and DataTables will apply each class 
 	 * sequentially, looping when required.
 	 *  @type array
-	 *  @default [ 'odd', 'even' ]
+	 *  @default null <i>Will take the values determinted by the oClasses.sStripe*
+	 *    options</i>
 	 *  @dtopt Option
 	 * 
 	 *  @example
@@ -219,7 +220,7 @@ DataTable.defaults = {
 	 *      } );
 	 *    } )
 	 */
-	"asStripeClasses": [ 'odd', 'even' ],
+	"asStripeClasses": null,
 
 
 	/**

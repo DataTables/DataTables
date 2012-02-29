@@ -6353,6 +6353,13 @@
 			/*
 			 * Stripes
 			 */
+			if ( oInit.asStripeClasses === null )
+			{
+				oSettings.asStripeClasses =[
+					oSettings.oClasses.sStripeOdd,
+					oSettings.oClasses.sStripeEven
+				];
+			}
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var bStripeRemove = false;
@@ -7683,7 +7690,8 @@
 		 * array may be of any length, and DataTables will apply each class 
 		 * sequentially, looping when required.
 		 *  @type array
-		 *  @default [ 'odd', 'even' ]
+		 *  @default null <i>Will take the values determinted by the oClasses.sStripe*
+		 *    options</i>
 		 *  @dtopt Option
 		 * 
 		 *  @example
@@ -7693,7 +7701,7 @@
 		 *      } );
 		 *    } )
 		 */
-		"asStripeClasses": [ 'odd', 'even' ],
+		"asStripeClasses": null,
 	
 	
 		/**

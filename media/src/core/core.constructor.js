@@ -230,6 +230,13 @@ else
 /*
  * Stripes
  */
+if ( oInit.asStripeClasses === null )
+{
+	oSettings.asStripeClasses =[
+		oSettings.oClasses.sStripeOdd,
+		oSettings.oClasses.sStripeEven
+	];
+}
 
 /* Remove row stripe classes if they are already on the table row */
 var bStripeRemove = false;
