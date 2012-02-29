@@ -926,8 +926,8 @@ DataTable.defaults = {
 			"type": oSettings.sServerMethod,
 			"error": function (xhr, error, thrown) {
 				if ( error == "parsererror" ) {
-					alert( "DataTables warning: JSON data from server could not be parsed. "+
-						"This is caused by a JSON formatting error." );
+					oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
+						"server could not be parsed. This is caused by a JSON formatting error." );
 				}
 			}
 		} );
