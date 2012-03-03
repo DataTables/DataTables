@@ -6320,8 +6320,9 @@
 			if ( oInit.iDeferLoading !== null )
 			{
 				oSettings.bDeferLoading = true;
-				oSettings._iRecordsTotal = oInit.iDeferLoading;
-				oSettings._iRecordsDisplay = oInit.iDeferLoading;
+				var tmp = $.isArray( oInit.iDeferLoading );
+				oSettings._iRecordsDisplay = tmp ? oInit.iDeferLoading[0] : oInit.iDeferLoading;
+				oSettings._iRecordsTotal = tmp ? oInit.iDeferLoading[1] : oInit.iDeferLoading;
 			}
 			
 			if ( oInit.aaData !== null )
