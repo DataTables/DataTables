@@ -978,7 +978,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	var i, iLen;
 	var aoColumns = oSettings.aoColumns;
 	var aoData = oSettings.aoData;
-	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
+	var nTd, bAppend, iBefore;
 	
 	/* No point in doing anything if we are requesting what is already true */
 	if ( aoColumns[iCol].bVisible == bShow )
