@@ -1164,7 +1164,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
 this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	var iVisibleColumn, i, iLen, sDisplay;
+	var i, iLen, sDisplay;
 	var iRow = (typeof mRow === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
 	
