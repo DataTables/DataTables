@@ -5713,7 +5713,7 @@
 			var i, iLen;
 			var aoColumns = oSettings.aoColumns;
 			var aoData = oSettings.aoData;
-			var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
+			var nTd, bAppend, iBefore;
 			
 			/* No point in doing anything if we are requesting what is already true */
 			if ( aoColumns[iCol].bVisible == bShow )
@@ -5899,7 +5899,7 @@
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-			var iVisibleColumn, i, iLen, sDisplay;
+			var i, iLen, sDisplay;
 			var iRow = (typeof mRow === 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
 			
@@ -8636,17 +8636,36 @@
 		 * will be applied to it), thus saving on an XHR at load time. iDeferLoading
 		 * is used to indicate that deferred loading is required, but it is also used
 		 * to tell DataTables how many records there are in the full table (allowing
-		 * the information element and pagination to be displayed correctly).
-		 *  @type int
+		 * the information element and pagination to be displayed correctly). In the case
+		 * where a filtering is applied to the table on initial load, this can be
+		 * indicated by giving the parameter as an array, where the first element is
+		 * the number of records available after filtering and the second element is the
+		 * number of records without filtering (allowing the table information element
+		 * to be shown correctly).
+		 *  @type int | array
 		 *  @default null
 		 *  @dtopt Options
 		 * 
 		 *  @example
+		 *    // 57 records available in the table, no filtering applied
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bServerSide": true,
 		 *        "sAjaxSource": "scripts/server_processing.php",
 		 *        "iDeferLoading": 57
+		 *      } );
+		 *    } );
+		 * 
+		 *  @example
+		 *    // 57 records after filtering, 100 without filtering (an initial filter applied)
+		 *    $(document).ready(function() {
+		 *      $('#example').dataTable( {
+		 *        "bServerSide": true,
+		 *        "sAjaxSource": "scripts/server_processing.php",
+		 *        "iDeferLoading": [ 57, 100 ],
+		 *        "oSearch": {
+		 *          "sSearch": "my_filter"
+		 *        }
 		 *      } );
 		 *    } );
 		 */
@@ -9762,8 +9781,9 @@
 		 *       <ul>
 		 *         <li>{array|object} The data source for the row</li>
 		 *         <li>{string} The type call data requested - this will be 'set' when
-		 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
-		 *           data.</li>
+		 *           setting data or 'filter', 'display', 'type', 'sort' or undefined when 
+		 *           gathering data. Note that when <i>undefined</i> is given for the type
+		 *           DataTables expects to get the raw data for the object back</li>
 		 *         <li>{*} Data to set when the second parameter is 'set'.</li>
 		 *       </ul>
 		 *       The return value from the function is not required when 'set' is the type
@@ -9811,7 +9831,7 @@
 		 *            else if (type === 'filter') {
 		 *              return source.price_filter;
 		 *            }
-		 *            // 'sort' and 'type' both just use the integer
+		 *            // 'sort', 'type' and undefined all just use the integer
 		 *            return source.price;
 		 *          }
 		 *        ]

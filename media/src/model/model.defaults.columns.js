@@ -355,8 +355,9 @@ DataTable.defaults.columns = {
 	 *       <ul>
 	 *         <li>{array|object} The data source for the row</li>
 	 *         <li>{string} The type call data requested - this will be 'set' when
-	 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
-	 *           data.</li>
+	 *           setting data or 'filter', 'display', 'type', 'sort' or undefined when 
+	 *           gathering data. Note that when <i>undefined</i> is given for the type
+	 *           DataTables expects to get the raw data for the object back</li>
 	 *         <li>{*} Data to set when the second parameter is 'set'.</li>
 	 *       </ul>
 	 *       The return value from the function is not required when 'set' is the type
@@ -404,7 +405,7 @@ DataTable.defaults.columns = {
 	 *            else if (type === 'filter') {
 	 *              return source.price_filter;
 	 *            }
-	 *            // 'sort' and 'type' both just use the integer
+	 *            // 'sort', 'type' and undefined all just use the integer
 	 *            return source.price;
 	 *          }
 	 *        ]
