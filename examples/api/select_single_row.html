@@ -29,7 +29,9 @@
 				/* Add a click handler for the delete row */
 				$('#delete').click( function() {
 					var anSelected = fnGetSelected( oTable );
-					oTable.fnDeleteRow( anSelected[0] );
+					if ( anSelected.length !== 0 ) {
+						oTable.fnDeleteRow( anSelected[0] );
+					}
 				} );
 				
 				/* Init the table */
@@ -503,7 +505,9 @@ $(document).ready(function() {
 	/* Add a click handler for the delete row */
 	$('#delete').click( function() {
 		var anSelected = fnGetSelected( oTable );
-		oTable.fnDeleteRow( anSelected[0] );
+		if ( anSelected.length !== 0 ) {
+			oTable.fnDeleteRow( anSelected[0] );
+		}
 	} );
 	
 	/* Init the table */
