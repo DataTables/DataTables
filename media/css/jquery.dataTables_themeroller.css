@@ -7,6 +7,7 @@ table.dataTable {
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
+	border-collapse: collapse;
 }
 
 table.dataTable thead th {
