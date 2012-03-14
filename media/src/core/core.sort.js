@@ -134,6 +134,7 @@ function _fnSort ( oSettings, bApplyClasses )
 
 	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
+		var sTitle = aoColumns[i].sTitle.replace( /<.*?>/g, "" );
 		nTh = aoColumns[i].nTh;
 		nTh.removeAttribute('aria-sort');
 		nTh.removeAttribute('aria-label');
@@ -147,18 +148,18 @@ function _fnSort ( oSettings, bApplyClasses )
 				
 				var nextSort = (aoColumns[i].asSorting[ aaSort[0][2]+1 ]) ? 
 					aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
-				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+				nTh.setAttribute('aria-label', sTitle+
 					(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 			}
 			else
 			{
-				nTh.setAttribute('aria-label', aoColumns[i].sTitle+
+				nTh.setAttribute('aria-label', sTitle+
 					(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 			}
 		}
 		else
 		{
-			nTh.setAttribute('aria-label', aoColumns[i].sTitle);
+			nTh.setAttribute('aria-label', sTitle);
 		}
 	}
 	
