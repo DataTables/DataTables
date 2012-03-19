@@ -36,7 +36,9 @@ function _fnSort ( oSettings, bApplyClasses )
 			sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
 			if ( DataTable.ext.afnSortData[sDataType] )
 			{
-				var aData = DataTable.ext.afnSortData[sDataType]( oSettings, iColumn, iVisColumn );
+				var aData = DataTable.ext.afnSortData[sDataType].call( 
+					oSettings.oInstance, oSettings, iColumn, iVisColumn
+				);
 				if ( aData.length === aoData.length )
 				{
 					for ( j=0, jLen=aoData.length ; j<jLen ; j++ )
