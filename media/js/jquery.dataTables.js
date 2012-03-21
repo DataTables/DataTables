@@ -9346,7 +9346,7 @@
 		 * Enable horizontal scrolling. When a table is too wide to fit into a certain
 		 * layout, or you have a large number of columns in the table, you can enable
 		 * x-scrolling to show the table in a viewport, which can be scrolled. This
-		 * property can by any CSS unit, or a number (in which case it will be treated
+		 * property can be any CSS unit, or a number (in which case it will be treated
 		 * as a pixel measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
@@ -9387,10 +9387,10 @@
 	
 		/**
 		 * Enable vertical scrolling. Vertical scrolling will constrain the DataTable
-		 * to the given height, an enable scrolling for any data which overflows the
+		 * to the given height, and enable scrolling for any data which overflows the
 		 * current viewport. This can be used as an alternative to paging to display
 		 * a lot of data in a small area (although paging and scrolling can both be
-		 * enabled at the same time). This property can by any CSS unit, or a number
+		 * enabled at the same time). This property can be any CSS unit, or a number
 		 * (in which case it will be treated as a pixel measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
