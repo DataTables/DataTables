@@ -1098,7 +1098,7 @@ this.fnSettings = function()
 
 
 /**
- * Sort the table by a particular row
+ * Sort the table by a particular column
  *  @param {int} iCol the data index to sort on. Note that this will not match the 
  *    'display index' if you have hidden data entries
  *  @dtopt API
