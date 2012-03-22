@@ -6232,6 +6232,7 @@
 			_fnMap( oSettings, oInit, "asStripeClasses" );
 			_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 			_fnMap( oSettings, oInit, "fnServerData" );
+			_fnMap( oSettings, oInit, "fnOnParserError" );
 			_fnMap( oSettings, oInit, "fnFormatNumber" );
 			_fnMap( oSettings, oInit, "sServerMethod" );
 			_fnMap( oSettings, oInit, "aaSorting" );
@@ -8411,8 +8412,12 @@
 				"type": oSettings.sServerMethod,
 				"error": function (xhr, error, thrown) {
 					if ( error == "parsererror" ) {
-						oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
-							"server could not be parsed. This is caused by a JSON formatting error." );
+						if (typeof oSettings.oInit.fnOnParserError === 'function') {
+							oSettings.oInit.fnOnParserError(error, thrown);
+						} else {
+							oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
+								"server could not be parsed. This is caused by a JSON formatting error." );
+						}
 					}
 				}
 			} );
@@ -10166,6 +10171,12 @@
 	 *    will be done in 2.0.
 	 */
 	DataTable.models.oSettings = {
+		/**
+		 * Function to be called when there's a parser error from server data.
+		 * @type functinon
+		 */
+		"fnOnParserError": null,
+
 		/**
 		 * Primary features of DataTables and their enablement state.
 		 *  @namespace
