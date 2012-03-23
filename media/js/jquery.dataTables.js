@@ -5267,15 +5267,7 @@
 			else if ( !bRemove )
 			{
 				nOrig.appendChild( oSettings.nTable );
-			}
-		
-			for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-			{
-				if ( oSettings.aoData[i].nTr !== null )
-				{
-					nBody.appendChild( oSettings.aoData[i].nTr );
-				}
-			}
+			}		
 			
 			/* Restore the width of the original table */
 			if ( oSettings.oFeatures.bAutoWidth === true )
