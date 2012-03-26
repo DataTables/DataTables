@@ -656,7 +656,7 @@ DataTable.defaults = {
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "fnDrawCallback": function() {
+	 *        "fnDrawCallback": function( oSettings ) {
 	 *          alert( 'DataTables has redrawn the table' );
 	 *        }
 	 *      } );
