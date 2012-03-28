@@ -8407,7 +8407,7 @@
 					$(oSettings.oInstance).trigger('xhr', oSettings);
 					fnCallback( json );
 				},
-				"dataType": "json",
+				"dataType": oSettings.oInit.sAjaxDataType,
 				"cache": false,
 				"type": oSettings.sServerMethod,
 				"error": function (xhr, error, thrown) {
@@ -9259,7 +9259,13 @@
 		 */
 		"sAjaxSource": null,
 	
-	
+		/**
+		 * Property indicating the Ajax data type.
+		 * Defaults to 'json'
+		 * @type string
+		 */
+		"sAjaxDataType": "json",
+    
 		/**
 		 * This parameter can be used to override the default prefix that DataTables
 		 * assigns to a cookie when state saving is enabled.
