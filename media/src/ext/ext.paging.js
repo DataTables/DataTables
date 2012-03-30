@@ -184,7 +184,13 @@ $.extend( DataTable.ext.oPagination, {
 			};
 			
 			/* Pages calculation */
-			if (iPages < iPageCount)
+			if ( oSettings._iDisplayLength === -1 )
+			{
+				iStartButton = 1;
+				iEndButton = 1;
+				iCurrentPage = 1;
+			}
+			else if (iPages < iPageCount)
 			{
 				iStartButton = 1;
 				iEndButton = iPages;
@@ -204,6 +210,7 @@ $.extend( DataTable.ext.oPagination, {
 				iStartButton = iCurrentPage - Math.ceil(iPageCount / 2) + 1;
 				iEndButton = iStartButton + iPageCount - 1;
 			}
+
 			
 			/* Build the dynamic list */
 			for ( i=iStartButton ; i<=iEndButton ; i++ )
