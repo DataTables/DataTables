@@ -50,7 +50,7 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 }
 
 /* Ensure the table has an ID - required for accessibility */
-if ( sId === null )
+if ( sId === null || sId === "" )
 {
 	sId = "DataTables_Table_"+(DataTable.ext._oExternConfig.iNextUnique++);
 	this.id = sId;
