@@ -2575,6 +2575,8 @@
 		 */
 		function _fnLanguageCompat( oLanguage )
 		{
+			var oDefaults = DataTable.defaults.oLanguage;
+		
 			/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
 			 * sZeroRecords - assuming that is given.
 			 */
