@@ -193,14 +193,14 @@ function _fnScrollDraw ( o )
 	
 	/* Remove the old minimised thead and tfoot elements in the inner table */
 	$(o.nTable).children('thead, tfoot').remove();
-	
+
 	/* Clone the current header and footer elements and then place it into the inner table */
-	nTheadSize = o.nTHead.cloneNode(true);
+	nTheadSize = $(o.nTHead).clone()[0];
 	o.nTable.insertBefore( nTheadSize, o.nTable.childNodes[0] );
 	
 	if ( o.nTFoot !== null )
 	{
-		nTfootSize = o.nTFoot.cloneNode(true);
+		nTfootSize = $(o.nTFoot).clone()[0];
 		o.nTable.insertBefore( nTfootSize, o.nTable.childNodes[1] );
 	}
 	
