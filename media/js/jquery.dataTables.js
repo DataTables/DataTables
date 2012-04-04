@@ -5324,7 +5324,7 @@
 		this.fnDraw = function( bComplete )
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-			if ( bComplete )
+			if ( bComplete === false )
 			{
 				_fnCalculateEnd( oSettings );
 				_fnDraw( oSettings );
