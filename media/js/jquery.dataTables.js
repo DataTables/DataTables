@@ -3296,7 +3296,7 @@
 				 	o.oScroll.iBarWidth : 0;
 				if ( o.nTable.offsetHeight < nScrollBody.offsetHeight )
 				{
-					nScrollBody.style.height = _fnStringToCss( $(o.nTable).height()+iExtra );
+					nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+iExtra );
 				}
 			}
 			
