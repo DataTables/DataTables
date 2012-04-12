@@ -3112,6 +3112,14 @@
 					n.style.width = "";
 				}, nTfootSize.getElementsByTagName('tr') );
 			}
+		
+			// If scroll collapse is enabled, when we put the headers back into the body for sizing, we
+			// will end up forcing the scrollbar to appear, making our measurements wrong for when we
+			// then hide it (end of this function), so add the header height to the body scroller.
+			if ( o.oScroll.bCollapse && o.oScroll.sY !== "" )
+			{
+				nScrollBody.style.height = (nScrollBody.offsetHeight + o.nTHead.offsetHeight)+"px";
+			}
 			
 			/* Size the table as a whole */
 			iSanityWidth = $(o.nTable).outerWidth();
