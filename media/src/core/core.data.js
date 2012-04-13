@@ -441,6 +441,10 @@ function _fnSetObjectDataFn( mSource )
 			for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
 			{
 				data = data[ a[i] ];
+				if ( data === undefined )
+				{
+					return;
+				}
 			}
 			data[ a[a.length-1] ] = val;
 		};
