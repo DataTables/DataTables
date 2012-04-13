@@ -370,6 +370,12 @@ _fnSortingClasses( oSettings );
  * Final init
  * Cache the header, body and footer as required, creating them if needed
  */
+
+// Work around for Webkit bug 83867 - store the caption-side before removing from doc
+var captions = $(this).children('caption').each( function () {
+	this._captionSide = $(this).css('caption-side');
+} );
+
 var thead = $(this).children('thead');
 if ( thead.length === 0 )
 {
@@ -390,6 +396,14 @@ oSettings.nTBody.setAttribute( "aria-live", "polite" );
 oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 
 var tfoot = $(this).children('tfoot');
+if ( tfoot.length === 0 && captions.length > 0 && (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
+{
+	// If we are a scrolling table, and no footer has been given, then we need to create
+	// a tfoot element for the caption element to be appended to
+	tfoot = [ document.createElement( 'tfoot' ) ];
+	this.appendChild( tfoot[0] );
+}
+
 if ( tfoot.length > 0 )
 {
 	oSettings.nTFoot = tfoot[0];

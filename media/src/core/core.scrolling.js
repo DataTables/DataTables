@@ -89,11 +89,20 @@ function _fnFeatureHtmlTable ( oSettings )
 		nScrollFootTable.style.marginLeft = "0";
 	}
 	
-	/* Move any caption elements from the body to the header */
-	var nCaptions = $(oSettings.nTable).children('caption');
-	for ( var i=0, iLen=nCaptions.length ; i<iLen ; i++ )
+	/* Move caption elements from the body to the header, footer or leave where it is
+	 * depending on the configuration. Note that the DTD says there can be only one caption */
+	var nCaption = $(oSettings.nTable).children('caption');
+	if ( nCaption.length > 0 )
 	{
-		nScrollHeadTable.appendChild( nCaptions[i] );
+		nCaption = nCaption[0];
+		if ( nCaption._captionSide === "top" )
+		{
+			nScrollHeadTable.appendChild( nCaption );
+		}
+		else if ( nCaption._captionSide === "bottom" && nTfoot )
+		{
+			nScrollFootTable.appendChild( nCaption );
+		}
 	}
 	
 	/*
