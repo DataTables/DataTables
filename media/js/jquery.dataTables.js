@@ -737,8 +737,9 @@
 			{
 				if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 				{
-					_fnLog( oSettings, 0, "Requested unknown parameter '"+oCol.mDataProp+
-						"' from the data source for row "+iRow );
+					_fnLog( oSettings, 0, "Requested unknown parameter "+
+						(typeof oCol.mDataProp=='function' ? '{mDataprop function}' : "'"+oCol.mDataProp+"'")+
+						" from the data source for row "+iRow );
 					oSettings.iDrawError = oSettings.iDraw;
 				}
 				return oCol.sDefaultContent;
