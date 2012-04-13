@@ -33,19 +33,21 @@ function _fnFeatureHtmlFilter ( oSettings )
 	jqFilter.bind( 'keyup.DT', function(e) {
 		/* Update all other filter input elements for the new display */
 		var n = oSettings.aanFeatures.f;
+		var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
+
 		for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 		{
 			if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
 			{
-				$(n[i]._DT_Input).val( this.value );
+				$(n[i]._DT_Input).val( val );
 			}
 		}
 		
 		/* Now do the filter */
-		if ( this.value != oPreviousSearch.sSearch )
+		if ( val != oPreviousSearch.sSearch )
 		{
 			_fnFilterComplete( oSettings, { 
-				"sSearch": this.value, 
+				"sSearch": val, 
 				"bRegex": oPreviousSearch.bRegex,
 				"bSmart": oPreviousSearch.bSmart ,
 				"bCaseInsensitive": oPreviousSearch.bCaseInsensitive 
