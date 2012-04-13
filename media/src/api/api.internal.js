@@ -112,7 +112,8 @@ this.oApi = {
 	"_fnCallbackFire": _fnCallbackFire,
 	"_fnJsonString": _fnJsonString,
 	"_fnRender": _fnRender,
-	"_fnNodeToColumnIndex": _fnNodeToColumnIndex
+	"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
+	"_fnInfoMacros": _fnInfoMacros
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );

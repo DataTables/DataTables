@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -1371,22 +1371,22 @@
 					anRows[ 0 ].className = oSettings.asStripeClasses[0];
 				}
 		
-				var sZero = oSettings.oLanguage.sZeroRecords.replace(
-					'_MAX_', oSettings.fnFormatNumber(oSettings.fnRecordsTotal()) );
+				var oLang = oSettings.oLanguage;
+				var sZero = oLang.sZeroRecords;
 				if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 				{
-					sZero = oSettings.oLanguage.sLoadingRecords;
+					sZero = oLang.sLoadingRecords;
 				}
-				else if ( oSettings.oLanguage.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
+				else if ( oLang.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
 				{
-					sZero = oSettings.oLanguage.sEmptyTable;
+					sZero = oLang.sEmptyTable;
 				}
 		
 				var nTd = document.createElement( 'td' );
 				nTd.setAttribute( 'valign', "top" );
 				nTd.colSpan = _fnVisbleColumns( oSettings );
 				nTd.className = oSettings.oClasses.sRowEmpty;
-				nTd.innerHTML = sZero;
+				nTd.innerHTML = _fnInfoMacros( oSettings, sZero );
 				
 				anRows[ iRowCount ].appendChild( nTd );
 			}
@@ -2380,57 +2380,41 @@
 			}
 			
 			var
-				iStart = oSettings._iDisplayStart+1, iEnd = oSettings.fnDisplayEnd(),
-				iMax = oSettings.fnRecordsTotal(), iTotal = oSettings.fnRecordsDisplay(),
-				sStart = oSettings.fnFormatNumber( iStart ), sEnd = oSettings.fnFormatNumber( iEnd ),
-				sMax = oSettings.fnFormatNumber( iMax ), sTotal = oSettings.fnFormatNumber( iTotal ),
+				oLang = oSettings.oLanguage,
+				iStart = oSettings._iDisplayStart+1,
+				iEnd = oSettings.fnDisplayEnd(),
+				iMax = oSettings.fnRecordsTotal(),
+				iTotal = oSettings.fnRecordsDisplay(),
 				sOut;
 			
-			/* When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
-			 * internally
-			 */
-			if ( oSettings.oScroll.bInfinite )
-			{
-				sStart = oSettings.fnFormatNumber( 1 );
-			}
-			
-			if ( oSettings.fnRecordsDisplay() === 0 && 
-				   oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
+			if ( iTotal === 0 && iTotal == iMax )
 			{
 				/* Empty record set */
-				sOut = oSettings.oLanguage.sInfoEmpty+ oSettings.oLanguage.sInfoPostFix;
+				sOut = oLang.sInfoEmpty;
 			}
-			else if ( oSettings.fnRecordsDisplay() === 0 )
+			else if ( iTotal === 0 )
 			{
-				/* Rmpty record set after filtering */
-				sOut = oSettings.oLanguage.sInfoEmpty +' '+ 
-					oSettings.oLanguage.sInfoFiltered.replace('_MAX_', sMax)+
-						oSettings.oLanguage.sInfoPostFix;
+				/* Empty record set after filtering */
+				sOut = oLang.sInfoEmpty +' '+ oLang.sInfoFiltered;
 			}
-			else if ( oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
+			else if ( iTotal == iMax )
 			{
 				/* Normal record set */
-				sOut = oSettings.oLanguage.sInfo.
-						replace('_START_', sStart).
-						replace('_END_',   sEnd).
-						replace('_TOTAL_', sTotal)+ 
-					oSettings.oLanguage.sInfoPostFix;
+				sOut = oLang.sInfo;
 			}
 			else
 			{
 				/* Record set after filtering */
-				sOut = oSettings.oLanguage.sInfo.
-						replace('_START_', sStart).
-						replace('_END_',   sEnd).
-						replace('_TOTAL_', sTotal) +' '+ 
-					oSettings.oLanguage.sInfoFiltered.replace('_MAX_', 
-						oSettings.fnFormatNumber(oSettings.fnRecordsTotal()))+ 
-					oSettings.oLanguage.sInfoPostFix;
+				sOut = oLang.sInfo +' '+ oLang.sInfoFiltered;
 			}
+		
+			// Convert the macros
+			sOut += oLang.sInfoPostFix;
+			sOut = _fnInfoMacros( oSettings, sOut );
 			
-			if ( oSettings.oLanguage.fnInfoCallback !== null )
+			if ( oLang.fnInfoCallback !== null )
 			{
-				sOut = oSettings.oLanguage.fnInfoCallback.call( oSettings.oInstance, 
+				sOut = oLang.fnInfoCallback.call( oSettings.oInstance, 
 					oSettings, iStart, iEnd, iMax, iTotal, sOut );
 			}
 			
@@ -2439,6 +2423,33 @@
 			{
 				$(n[i]).html( sOut );
 			}
+		}
+		
+		
+		function _fnInfoMacros ( oSettings, str )
+		{
+			var
+				iStart = oSettings._iDisplayStart+1,
+				sStart = oSettings.fnFormatNumber( iStart ),
+				iEnd = oSettings.fnDisplayEnd(),
+				sEnd = oSettings.fnFormatNumber( iEnd ),
+				iTotal = oSettings.fnRecordsDisplay(),
+				sTotal = oSettings.fnFormatNumber( iTotal ),
+				iMax = oSettings.fnRecordsTotal(),
+				sMax = oSettings.fnFormatNumber( iMax );
+		
+			// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
+			// internally
+			if ( oSettings.oScroll.bInfinite )
+			{
+				sStart = oSettings.fnFormatNumber( 1 );
+			}
+		
+			return str.
+				replace('_START_', sStart).
+				replace('_END_',   sEnd).
+				replace('_TOTAL_', sTotal).
+				replace('_MAX_',   sMax);
 		}
 		
 		
@@ -6129,7 +6140,8 @@
 			"_fnCallbackFire": _fnCallbackFire,
 			"_fnJsonString": _fnJsonString,
 			"_fnRender": _fnRender,
-			"_fnNodeToColumnIndex": _fnNodeToColumnIndex
+			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
+			"_fnInfoMacros": _fnInfoMacros
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
