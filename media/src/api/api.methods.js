@@ -459,10 +459,8 @@ this.fnDestroy = function ( bRemove )
 	/* Flag to note that the table is currently being destroyed - no action should be taken */
 	oSettings.bDestroying = true;
 	
-	/* Restore hidden columns */
-	for ( i=0, iLen=oSettings.aoDestroyCallback.length ; i<iLen ; i++ ) {
-		oSettings.aoDestroyCallback[i].fn();
-	}
+	/* Fire off the destroy callbacks for plug-ins etc */
+	_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
 	
 	/* Restore hidden columns */
 	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )

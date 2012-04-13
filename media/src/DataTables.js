@@ -246,4 +246,14 @@
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
+
+	/**
+	 * Destroy event, fired when the DataTable is destroyed by calling fnDestroy or passing
+	 * the bDestroy:true parameter in the initialisation object. This can be used to remove
+	 * bound events, added DOM nodes, etc.
+	 *  @name DataTable#destroy
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
 }(jQuery, window, document, undefined));

@@ -5232,10 +5232,8 @@
 			/* Flag to note that the table is currently being destroyed - no action should be taken */
 			oSettings.bDestroying = true;
 			
-			/* Restore hidden columns */
-			for ( i=0, iLen=oSettings.aoDestroyCallback.length ; i<iLen ; i++ ) {
-				oSettings.aoDestroyCallback[i].fn();
-			}
+			/* Fire off the destroy callbacks for plug-ins etc */
+			_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
 			
 			/* Restore hidden columns */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
@@ -11815,6 +11813,16 @@
 	 * if you override fnServerData and which to use this event, you need to trigger it in
 	 * you success function).
 	 *  @name DataTable#xhr
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Destroy event, fired when the DataTable is destroyed by calling fnDestroy or passing
+	 * the bDestroy:true parameter in the initialisation object. This can be used to remove
+	 * bound events, added DOM nodes, etc.
+	 *  @name DataTable#destroy
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
