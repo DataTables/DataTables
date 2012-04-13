@@ -83,6 +83,8 @@
 		} );
 	};
 
+	require('api.static.js');
+
 	/**
 	 * Version string for plug-ins to check compatibility. Allowed format is
 	 * a.b.c.d.e where: a:int, b:int, c:int, d:string(dev|beta), e:int. d and

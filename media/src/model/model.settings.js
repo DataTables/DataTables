@@ -854,5 +854,15 @@ DataTable.models.oSettings = {
 	 * tabindex attribute value that is added to DataTables control elements, allowing
 	 * keyboard navigation of the table and its controls.
 	 */
-	"iTabIndex": 0
+	"iTabIndex": 0,
+
+	/**
+	 * DIV container for the footer scrolling table if scrolling
+	 */
+	"nScrollHead": null,
+
+	/**
+	 * DIV container for the footer scrolling table if scrolling
+	 */
+	"nScrollFoot": null
 };

@@ -224,28 +224,7 @@ DataTable.models.ext = {
 	 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
 	 *    } );
 	 */
-	"fnVersionCheck": function( sVersion )
-	{
-		/* This is cheap, but very effective */
-		var fnZPad = function (Zpad, count)
-		{
-			while(Zpad.length < count) {
-				Zpad += '0';
-			}
-			return Zpad;
-		};
-		var aThis = DataTable.ext.sVersion.split('.');
-		var aThat = sVersion.split('.');
-		var sThis = '', sThat = '';
-		
-		for ( var i=0, iLen=aThat.length ; i<iLen ; i++ )
-		{
-			sThis += fnZPad( aThis[i], 3 );
-			sThat += fnZPad( aThat[i], 3 );
-		}
-		
-		return parseInt(sThis, 10) >= parseInt(sThat, 10);
-	},
+	"fnVersionCheck": DataTable.fnVersionCheck,
 
 
 	/**
