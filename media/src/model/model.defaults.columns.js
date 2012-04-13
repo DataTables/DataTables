@@ -416,6 +416,29 @@ DataTable.defaults.columns = {
 
 
 	/**
+	 * Change the cell type created for the column - either TD cells or TH cells. This
+	 * can be useful as TH cells have semantic meaning in the table body, allowing them
+	 * to act as a header for a row (you may wish to add scope='row' to the TH elements).
+	 *  @type string
+	 *  @default td
+	 *  @dtopt Columns
+	 * 
+	 *  @example
+	 *    // Make the first column use TH cells
+	 *    $(document).ready(function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "aoColumnDefs": [
+	 *        {
+	 *          "aTargets": [ 0 ],
+	 *          "sCellType": "th"
+	 *        ]
+	 *      } );
+	 *    } );
+	 */
+	"sCellType": "td",
+
+
+	/**
 	 * Class to give to each cell in this column.
 	 *  @type string
 	 *  @default <i>Empty string</i>

@@ -35,7 +35,7 @@ function _fnCreateTr ( oSettings, iRow )
 		for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			var oCol = oSettings.aoColumns[i];
-			nTd = document.createElement('td');
+			nTd = document.createElement( oCol.sCellType );
 
 			/* Render if needed - if bUseRendered is true then we already have the rendered
 			 * value in the data source - so can just use that
