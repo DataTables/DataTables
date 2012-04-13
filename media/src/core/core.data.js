@@ -35,6 +35,10 @@ function _fnAddData ( oSettings, aDataSupplied )
 		{
 			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
 		}
+		else
+		{
+			_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
+		}
 		
 		/* See if we should auto-detect the column type */
 		if ( oCol._bAutoType && oCol.sType != 'string' )
