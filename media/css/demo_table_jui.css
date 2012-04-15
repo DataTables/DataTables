@@ -296,6 +296,10 @@ tr.even {
 	clear: both;
 }
 
+.dataTables_scrollBody {
+	-webkit-overflow-scrolling: touch;
+}
+
 .top, .bottom {
 	padding: 15px;
 	background-color: #F5F5F5;
