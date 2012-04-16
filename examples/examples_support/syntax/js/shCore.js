@@ -1,21 +1,5 @@
-/**
- * SyntaxHighlighter
- * http://alexgorbatchev.com/SyntaxHighlighter
- *
- * SyntaxHighlighter is donationware. If you are using it, please donate.
- * http://alexgorbatchev.com/SyntaxHighlighter/donate.html
- *
- * @version
- * 3.0.83 (July 02 2010)
- * 
- * @copyright
- * Copyright (C) 2004-2010 Alex Gorbatchev.
- *
- * @license
- * Dual licensed under the MIT and GPL licenses.
- */
-// XRegExp 1.5.0
-// (c) 2007-2010 Steven Levithan
+// XRegExp 1.5.1
+// (c) 2007-2012 Steven Levithan
 // MIT License
 // <http://xregexp.com>
 // Provides an augmented, extensible, cross-browser implementation of regular expressions,
@@ -29,7 +13,7 @@ if (XRegExp) {
 }
 
 // Run within an anonymous function to protect variables and avoid new globals
-(function () {
+(function (undefined) {
 
     //---------------------------------
     //  Constructor
@@ -73,7 +57,7 @@ if (XRegExp) {
             } else {
                 // Check for native multicharacter metasequences (excluding character classes) at
                 // the current position
-                if (match = real.exec.call(nativeTokens[currScope], pattern.slice(pos))) {
+                if (match = nativ.exec.call(nativeTokens[currScope], pattern.slice(pos))) {
                     output.push(match[0]);
                     pos += match[0].length;
                 } else {
@@ -89,7 +73,7 @@ if (XRegExp) {
             }
         }
 
-        regex = RegExp(output.join(""), real.replace.call(flags, flagClip, ""));
+        regex = RegExp(output.join(""), nativ.replace.call(flags, flagClip, ""));
         regex._xregexp = {
             source: pattern,
             captureNames: context.hasNamedCapture ? context.captureNames : null
@@ -102,7 +86,7 @@ if (XRegExp) {
     //  Public properties
     //---------------------------------
 
-    XRegExp.version = "1.5.0";
+    XRegExp.version = "1.5.1";
 
     // Token scope bitflags
     XRegExp.INSIDE_CLASS = 1;
@@ -119,22 +103,17 @@ if (XRegExp) {
         isInsideConstructor = false,
         tokens = [],
         // Copy native globals for reference ("native" is an ES3 reserved keyword)
-        real = {
+        nativ = {
             exec: RegExp.prototype.exec,
             test: RegExp.prototype.test,
             match: String.prototype.match,
             replace: String.prototype.replace,
             split: String.prototype.split
         },
-        compliantExecNpcg = real.exec.call(/()??/, "")[1] === undefined, // check `exec` handling of nonparticipating capturing groups
+        compliantExecNpcg = nativ.exec.call(/()??/, "")[1] === undefined, // check `exec` handling of nonparticipating capturing groups
         compliantLastIndexIncrement = function () {
             var x = /^/g;
-            real.test.call(x, "");
-            return !x.lastIndex;
-        }(),
-        compliantLastIndexReset = function () {
-            var x = /x/g;
-            real.replace.call("x", x, "");
+            nativ.test.call(x, "");
             return !x.lastIndex;
         }(),
         hasNativeY = RegExp.prototype.sticky !== undefined,
@@ -189,15 +168,17 @@ if (XRegExp) {
     // Accepts a string to search, regex to search with, position to start the search within the
     // string (default: 0), and an optional Boolean indicating whether matches must start at-or-
     // after the position or at the specified position only. This function ignores the `lastIndex`
-    // property of the provided regex
+    // of the provided regex in its own handling, but updates the property for compatibility
     XRegExp.execAt = function (str, regex, pos, anchored) {
-        regex = clone(regex, "g" + ((anchored && hasNativeY) ? "y" : ""));
-        regex.lastIndex = pos = pos || 0;
-        var match = regex.exec(str);
-        if (anchored)
-            return (match && match.index === pos) ? match : null;
-        else
-            return match;
+        var r2 = clone(regex, "g" + ((anchored && hasNativeY) ? "y" : "")),
+            match;
+        r2.lastIndex = pos = pos || 0;
+        match = r2.exec(str); // Run the altered `exec` (required for `lastIndex` fix, etc.)
+        if (anchored && match && match.index !== pos)
+            match = null;
+        if (regex.global)
+            regex.lastIndex = match ? r2.lastIndex : 0;
+        return match;
     };
 
     // Breaks the unrestorable link to XRegExp's private list of tokens, thereby preventing
@@ -219,16 +200,18 @@ if (XRegExp) {
     // Executes `callback` once per match within `str`. Provides a simpler and cleaner way to
     // iterate over regex matches compared to the traditional approaches of subverting
     // `String.prototype.replace` or repeatedly calling `exec` within a `while` loop
-    XRegExp.iterate = function (str, origRegex, callback, context) {
-        var regex = clone(origRegex, "g"),
+    XRegExp.iterate = function (str, regex, callback, context) {
+        var r2 = clone(regex, "g"),
             i = -1, match;
-        while (match = regex.exec(str)) {
+        while (match = r2.exec(str)) { // Run the altered `exec` (required for `lastIndex` fix, etc.)
+            if (regex.global)
+                regex.lastIndex = r2.lastIndex; // Doing this to follow expectations if `lastIndex` is checked within `callback`
             callback.call(context, match, ++i, str, regex);
-            if (regex.lastIndex === match.index)
-                regex.lastIndex++;
+            if (r2.lastIndex === match.index)
+                r2.lastIndex++;
         }
-        if (origRegex.global)
-            origRegex.lastIndex = 0;
+        if (regex.global)
+            regex.lastIndex = 0;
     };
 
     // Accepts a string and an array of regexes; returns the result of using each successive regex
@@ -285,16 +268,18 @@ if (XRegExp) {
     //   rather than the empty string.
     // - `lastIndex` should not be incremented after zero-length matches.
     RegExp.prototype.exec = function (str) {
-        var match = real.exec.apply(this, arguments),
-            name, r2;
-        if (match && str) {
+        var match, name, r2, origLastIndex;
+        if (!this.global)
+            origLastIndex = this.lastIndex;
+        match = nativ.exec.apply(this, arguments);
+        if (match) {
             // Fix browsers whose `exec` methods don't consistently return `undefined` for
             // nonparticipating capturing groups
             if (!compliantExecNpcg && match.length > 1 && indexOf(match, "") > -1) {
-                r2 = RegExp(this.source, real.replace.call(getNativeFlags(this), "g", ""));
+                r2 = RegExp(this.source, nativ.replace.call(getNativeFlags(this), "g", ""));
                 // Using `str.slice(match.index)` rather than `match[0]` in case lookahead allowed
                 // matching due to characters outside the match
-                real.replace.call(str.slice(match.index), r2, function () {
+                nativ.replace.call((str + "").slice(match.index), r2, function () {
                     for (var i = 1; i < arguments.length - 2; i++) {
                         if (arguments[i] === undefined)
                             match[i] = undefined;
@@ -313,29 +298,33 @@ if (XRegExp) {
             if (!compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
                 this.lastIndex--;
         }
+        if (!this.global)
+            this.lastIndex = origLastIndex; // Fix IE, Opera bug (last tested IE 9.0.5, Opera 11.61 on Windows)
         return match;
     };
 
-    // Don't override `test` if it won't change anything
-    if (!compliantLastIndexIncrement) {
-        // Fix browser bug in native method
-        RegExp.prototype.test = function (str) {
-            // Use the native `exec` to skip some processing overhead, even though the overriden
-            // `exec` would take care of the `lastIndex` fix
-            var match = real.exec.call(this, str);
-            // Fix browsers that increment `lastIndex` after zero-length matches
-            if (match && this.global && !match[0].length && (this.lastIndex > match.index))
-                this.lastIndex--;
-            return !!match;
-        };
-    }
+    // Fix browser bugs in native method
+    RegExp.prototype.test = function (str) {
+        // Use the native `exec` to skip some processing overhead, even though the altered
+        // `exec` would take care of the `lastIndex` fixes
+        var match, origLastIndex;
+        if (!this.global)
+            origLastIndex = this.lastIndex;
+        match = nativ.exec.call(this, str);
+        // Fix browsers that increment `lastIndex` after zero-length matches
+        if (match && !compliantLastIndexIncrement && this.global && !match[0].length && (this.lastIndex > match.index))
+            this.lastIndex--;
+        if (!this.global)
+            this.lastIndex = origLastIndex; // Fix IE, Opera bug (last tested IE 9.0.5, Opera 11.61 on Windows)
+        return !!match;
+    };
 
     // Adds named capture support and fixes browser bugs in native method
     String.prototype.match = function (regex) {
         if (!XRegExp.isRegExp(regex))
             regex = RegExp(regex); // Native `RegExp`
         if (regex.global) {
-            var result = real.match.apply(this, arguments);
+            var result = nativ.match.apply(this, arguments);
             regex.lastIndex = 0; // Fix IE bug
             return result;
         }
@@ -350,20 +339,24 @@ if (XRegExp) {
     // third (`flags`) parameter
     String.prototype.replace = function (search, replacement) {
         var isRegex = XRegExp.isRegExp(search),
-            captureNames, result, str;
+            captureNames, result, str, origLastIndex;
 
-        // There are many combinations of search/replacement types/values and browser bugs that
-        // preclude passing to native `replace`, so just keep this check relatively simple
-        if (isRegex && typeof replacement.valueOf() === "string" && replacement.indexOf("${") === -1 && compliantLastIndexReset)
-            return real.replace.apply(this, arguments);
+        // There are too many combinations of search/replacement types/values and browser bugs that
+        // preclude passing to native `replace`, so don't try
+        //if (...)
+        //    return nativ.replace.apply(this, arguments);
 
-        if (!isRegex)
+        if (isRegex) {
+            if (search._xregexp)
+                captureNames = search._xregexp.captureNames; // Array or `null`
+            if (!search.global)
+                origLastIndex = search.lastIndex;
+        } else {
             search = search + ""; // Type conversion
-        else if (search._xregexp)
-            captureNames = search._xregexp.captureNames; // Array or `null`
+        }
 
-        if (typeof replacement === "function") {
-            result = real.replace.call(this, search, function () {
+        if (Object.prototype.toString.call(replacement) === "[object Function]") {
+            result = nativ.replace.call(this + "", search, function () {
                 if (captureNames) {
                     // Change the `arguments[0]` string primitive to a String object which can store properties
                     arguments[0] = new String(arguments[0]);
@@ -373,16 +366,16 @@ if (XRegExp) {
                             arguments[0][captureNames[i]] = arguments[i + 1];
                     }
                 }
-                // Update `lastIndex` before calling `replacement`
+                // Update `lastIndex` before calling `replacement` (fix browsers)
                 if (isRegex && search.global)
                     search.lastIndex = arguments[arguments.length - 2] + arguments[0].length;
                 return replacement.apply(null, arguments);
             });
         } else {
             str = this + ""; // Type conversion, so `args[args.length - 1]` will be a string (given nonstring `this`)
-            result = real.replace.call(str, search, function () {
+            result = nativ.replace.call(str, search, function () {
                 var args = arguments; // Keep this function's `arguments` available through closure
-                return real.replace.call(replacement, replacementToken, function ($0, $1, $2) {
+                return nativ.replace.call(replacement + "", replacementToken, function ($0, $1, $2) {
                     // Numbered backreference (without delimiters) or special variable
                     if ($1) {
                         switch ($1) {
@@ -428,8 +421,12 @@ if (XRegExp) {
             });
         }
 
-        if (isRegex && search.global)
-            search.lastIndex = 0; // Fix IE bug
+        if (isRegex) {
+            if (search.global)
+                search.lastIndex = 0; // Fix IE, Safari bug (last tested IE 9.0.5, Safari 5.1.2 on Windows)
+            else
+                search.lastIndex = origLastIndex; // Fix IE, Opera bug (last tested IE 9.0.5, Opera 11.61 on Windows)
+        }
 
         return result;
     };
@@ -438,7 +435,7 @@ if (XRegExp) {
     String.prototype.split = function (s /* separator */, limit) {
         // If separator `s` is not a regex, use the native `split`
         if (!XRegExp.isRegExp(s))
-            return real.split.apply(this, arguments);
+            return nativ.split.apply(this, arguments);
 
         var str = this + "", // Type conversion
             output = [],
@@ -482,7 +479,7 @@ if (XRegExp) {
         }
 
         if (lastLastIndex === str.length) {
-            if (!real.test.call(s, "") || lastLength)
+            if (!nativ.test.call(s, "") || lastLength)
                 output.push("");
         } else {
             output.push(str.slice(lastLastIndex));
@@ -511,7 +508,7 @@ if (XRegExp) {
             };
         }
         return regex;
-    };
+    }
 
     function getNativeFlags (regex) {
         return (regex.global     ? "g" : "") +
@@ -519,7 +516,7 @@ if (XRegExp) {
                (regex.multiline  ? "m" : "") +
                (regex.extended   ? "x" : "") + // Proposed for ES4; included in AS3
                (regex.sticky     ? "y" : "");
-    };
+    }
 
     function runTokens (pattern, index, scope, context) {
         var i = tokens.length,
@@ -548,7 +545,7 @@ if (XRegExp) {
             isInsideConstructor = false;
         }
         return result;
-    };
+    }
 
     function indexOf (array, item, from) {
         if (Array.prototype.indexOf) // Use the native array method if available
@@ -558,7 +555,7 @@ if (XRegExp) {
                 return i;
         }
         return -1;
-    };
+    }
 
 
     //---------------------------------
@@ -573,7 +570,7 @@ if (XRegExp) {
         /\(\?#[^)]*\)/,
         function (match) {
             // Keep tokens separated unless the following token is a quantifier
-            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
+            return nativ.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
         }
     );
 
@@ -635,7 +632,7 @@ if (XRegExp) {
         /(?:\s+|#.*)+/,
         function (match) {
             // Keep tokens separated unless the following token is a quantifier
-            return real.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
+            return nativ.test.call(quantifier, match.input.slice(match.index + match[0].length)) ? "" : "(?:)";
         },
         XRegExp.OUTSIDE_CLASS,
         function () {return this.hasFlag("x");}
@@ -664,6 +661,7 @@ if (XRegExp) {
     */
 
 })();
+
 //
 // Begin anonymous function. This is used to contain local scope variables without polutting global scope.
 //
