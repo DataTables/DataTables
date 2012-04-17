@@ -1,5 +1,4 @@
 
-
 /**
  * Perform a jQuery selector action on the table's TR elements (from the tbody) and
  * return the resulting jQuery object.
@@ -1211,6 +1210,21 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		{
 			/* Do the actual HTML update */
 			_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
+		}
+		
+		if ( oCol.fnRenderAfter )
+		{
+			oCol.fnRenderAfter(
+				{
+					"iDataRow": iRow,
+					"iDataColumn": iColumn,
+					"aData": oSettings.aoData[iRow]._aData,
+					"oSettings": oSettings,
+					"mDataProp": oCol.mDataProp,
+					"nTd": _fnGetTdNodes( oSettings, iRow )[iColumn],
+					"nTr": oSettings.aoData[iRow].nTr
+				}, _fnGetCellData(oSettings, iRow, iColumn, 'display')
+			);
 		}
 	}
 	
