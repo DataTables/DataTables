@@ -1,5 +1,4 @@
 
-
 /**
  * Add a data array to the table, creating DOM node etc. This is the parallel to 
  * _fnGatherData, but for adding rows from a Javascript source, rather than a
@@ -226,6 +225,22 @@ function _fnGatherData( oSettings )
 						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
 					);
 				}
+				
+				if ( oCol.fnRenderAfter )
+				{
+					oCol.fnRenderAfter(
+						{
+							"iDataRow": iRow,
+							"iDataColumn": iColumn,
+							"aData": oData._aData,
+							"oSettings": oSettings,
+							"mDataProp": oCol.mDataProp,
+							"nTd": nCell,
+							"nTr": oData.nTr
+						}, _fnGetCellData(oSettings, iRow, iColumn, 'display')
+					);
+				}
+
 			}
 		}
 	}
