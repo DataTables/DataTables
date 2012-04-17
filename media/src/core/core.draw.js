@@ -1,5 +1,4 @@
 
-
 /**
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
@@ -64,6 +63,21 @@ function _fnCreateTr ( oSettings, iRow )
 			{
 				oCol.fnCreatedCell.call( oSettings.oInstance,
 					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
+				);
+			}
+			
+			if ( oCol.fnRenderAfter )
+			{
+				oCol.fnRenderAfter(
+					{
+						"iDataRow": iRow,
+						"iDataColumn": i,
+						"aData": oData._aData,
+						"oSettings": oSettings,
+						"mDataProp": oCol.mDataProp,
+						"nTd": nTd,
+						"nTr": oData.nTr
+					}, _fnGetCellData(oSettings, iRow, i, 'display')
 				);
 			}
 		}
