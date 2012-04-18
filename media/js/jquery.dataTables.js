@@ -4379,6 +4379,11 @@
 			 */
 			var aParts = window.location.pathname.split('/');
 			var sNameFile = sName + '_' + aParts.pop().replace(/[\/:]/g,"").toLowerCase();
+			/*
+			 * Need to remove anything after a semicolon so that the cookie doesn't contain one.
+			 * This occurs when jsessionid is appended to the url for example.
+			 */
+		    sNameFile = sNameFile.split(';', 1)[0];
 			var sFullCookie, oData;
 			
 			if ( fnCallback !== null )
