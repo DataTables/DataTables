@@ -1832,7 +1832,7 @@ DataTable.defaults = {
 	 *  @example
 	 *    $(document).ready(function() {
 	 *      $('#example').dataTable( {
-	 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&lgt;'
+	 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&gt;'
 	 *      } );
 	 *    } );
 	 */

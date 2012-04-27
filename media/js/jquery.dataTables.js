@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.1
+ * @version     1.9.2.dev
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -6715,7 +6715,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.1";
+	DataTable.version = "1.9.2.dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
@@ -9451,7 +9451,7 @@
 		 *  @example
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
-		 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&lgt;'
+		 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&gt;'
 		 *      } );
 		 *    } );
 		 */
