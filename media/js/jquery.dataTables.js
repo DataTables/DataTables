@@ -8599,7 +8599,7 @@
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
-		 *        "fnStateLoad": function (oSettings, oData) {
+		 *        "fnStateLoad": function (oSettings) {
 		 *          var o;
 		 *          
 		 *          // Send an Ajax request to the server to get the data. Note that
