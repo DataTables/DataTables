@@ -1269,12 +1269,6 @@
 		 */
 		function _fnDraw( oSettings )
 		{
-			var i, iLen, n;
-			var anRows = [];
-			var iRowCount = 0;
-			var iStripes = oSettings.asStripeClasses.length;
-			var iOpenRows = oSettings.aoOpenRows.length;
-			
 			/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
 			var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
 			if ( $.inArray( false, aPreDraw ) !== -1 )
@@ -1282,6 +1276,12 @@
 				_fnProcessingDisplay( oSettings, false );
 				return;
 			}
+			
+			var i, iLen, n;
+			var anRows = [];
+			var iRowCount = 0;
+			var iStripes = oSettings.asStripeClasses.length;
+			var iOpenRows = oSettings.aoOpenRows.length;
 			
 			oSettings.bDrawing = true;
 			
