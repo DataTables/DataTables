@@ -414,8 +414,8 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 		fnCallBack.call( this, oSettings, oData );
 	}
 	
-	/* Check for an 'overflow' they case for dislaying the table */
-	if ( oSettings._iDisplayStart >= oSettings.aiDisplay.length )
+	/* Check for an 'overflow' they case for displaying the table */
+	if ( oSettings._iDisplayStart >= oSettings.fnRecordsDisplay() )
 	{
 		oSettings._iDisplayStart -= oSettings._iDisplayLength;
 		if ( oSettings._iDisplayStart < 0 )
