@@ -65,6 +65,21 @@ function _fnCreateTr ( oSettings, iRow )
 					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
 				);
 			}
+
+			if ( typeof oCol.fnRenderAfter === 'function' )
+			{
+				oCol.fnRenderAfter(
+					{
+						"iDataRow": iRow,
+						"iDataColumn": i,
+						"aData": oData._aData,
+						"oSettings": oSettings,
+						"mDataProp": oCol.mDataProp,
+						"nTd": nTd,
+						"nTr": oData.nTr
+					}, _fnGetCellData(oSettings, iRow, i, 'display')
+				);
+			}
 		}
 
 		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, iRow] );

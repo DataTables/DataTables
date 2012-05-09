@@ -1212,6 +1212,21 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 			/* Do the actual HTML update */
 			_fnGetTdNodes( oSettings, iRow )[iColumn].innerHTML = sDisplay;
 		}
+
+		if ( typeof oCol.fnRenderAfter === 'function' )
+		{
+			oCol.fnRenderAfter(
+				{
+					"iDataRow": iRow,
+					"iDataColumn": iColumn,
+					"aData": oSettings.aoData[iRow]._aData,
+					"oSettings": oSettings,
+					"mDataProp": oCol.mDataProp,
+					"nTd": _fnGetTdNodes( oSettings, iRow )[iColumn],
+					"nTr": oSettings.aoData[iRow].nTr
+				}, _fnGetCellData(oSettings, iRow, iColumn, 'display')
+			);
+		}
 	}
 	
 	/* Modify the search index for this row (strictly this is likely not needed, since fnReDraw
