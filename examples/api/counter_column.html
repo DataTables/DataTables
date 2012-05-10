@@ -15,13 +15,14 @@
 			$(document).ready(function() {
 				$('#example').dataTable( {
 					"fnDrawCallback": function ( oSettings ) {
+						var that = this;
+
 						/* Need to redo the counters if filtered or sorted */
 						if ( oSettings.bSorted || oSettings.bFiltered )
 						{
-							for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
-							{
-								$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
-							}
+							this.$('td:first-child', {"filter":"applied"}).each( function (i) {
+								that.fnUpdate( i+1, this.parentNode, 0, false, false );
+							} );
 						}
 					},
 					"aoColumnDefs": [
@@ -539,10 +540,9 @@
 			/* Need to redo the counters if filtered or sorted */
 			if ( oSettings.bSorted || oSettings.bFiltered )
 			{
-				for ( var i=0, iLen=oSettings.aiDisplay.length ; i&lt;iLen ; i++ )
-				{
-					$('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
-				}
+				this.$('td:first-child', {"filter":"applied"}).each( function (i) {
+					that.fnUpdate( i+1, this.parentNode, 0, false, false );
+				} );
 			}
 		},
 		"aoColumnDefs": [
