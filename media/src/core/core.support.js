@@ -191,7 +191,7 @@ function _fnExtend( oOut, oExtender )
  * same effect as a click, if the element has focus.
  *  @param {element} n Element to bind the action to
  *  @param {object} oData Data object to pass to the triggered function
- *  @param {function) fn Callback function for when the event is triggered
+ *  @param {function} fn Callback function for when the event is triggered
  *  @memberof DataTable#oApi
  */
 function _fnBindAction( n, oData, fn )
@@ -218,7 +218,7 @@ function _fnBindAction( n, oData, fn )
  *  @param {object} oSettings dataTables settings object
  *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
  *  @param {function} fn Function to be called back
- *  @param {string) sName Identifying name for the callback (i.e. a label)
+ *  @param {string} sName Identifying name for the callback (i.e. a label)
  *  @memberof DataTable#oApi
  */
 function _fnCallbackReg( oSettings, sStore, fn, sName )
@@ -241,7 +241,7 @@ function _fnCallbackReg( oSettings, sStore, fn, sName )
  *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
  *  @param {string} sTrigger Name of the jQuery custom event to trigger. If null no trigger
  *    is fired
- *  @param {array) aArgs Array of arguments to pass to the callback function / trigger
+ *  @param {array} aArgs Array of arguments to pass to the callback function / trigger
  *  @memberof DataTable#oApi
  */
 function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )

@@ -113,7 +113,7 @@ DataTable.models.oColumn = {
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
 	 *  @param {int}    o.iDataColumn The column in question
-	 *  @param {array   o.aData The data for the row in question
+	 *  @param {array}  o.aData The data for the row in question
 	 *  @param {object} o.oSettings The settings object for this DataTables instance
 	 *  @returns {string} The string you which to use in the display
 	 *  @default null
