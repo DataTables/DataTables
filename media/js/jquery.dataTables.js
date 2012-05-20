@@ -4817,8 +4817,11 @@
 		 */
 		this.$ = function ( sSelector, oOpts )
 		{
-			var i, iLen, a = [];
+			var i, iLen, a = [], tr;
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+			var aoData = oSettings.aoData;
+			var aiDisplay = oSettings.aiDisplay;
+			var aiDisplayMaster = oSettings.aiDisplayMaster;
 		
 			if ( !oOpts )
 			{
@@ -4837,37 +4840,54 @@
 			{
 				for ( i=oSettings._iDisplayStart, iLen=oSettings.fnDisplayEnd() ; i<iLen ; i++ )
 				{
-					a.push( oSettings.aoData[ oSettings.aiDisplay[i] ].nTr );
+					tr = aoData[ aiDisplay[i] ].nTr;
+					if ( tr )
+					{
+						a.push( tr );
+					}
 				}
 			}
 			else if ( oOpts.order == "current" && oOpts.filter == "none" )
 			{
-				for ( i=0, iLen=oSettings.aiDisplayMaster.length ; i<iLen ; i++ )
+				for ( i=0, iLen=aiDisplayMaster.length ; i<iLen ; i++ )
 				{
-					a.push( oSettings.aoData[ oSettings.aiDisplayMaster[i] ].nTr );
+					tr = aoData[ aiDisplayMaster[i] ].nTr;
+					if ( tr )
+					{
+						a.push( tr );
+					}
 				}
 			}
 			else if ( oOpts.order == "current" && oOpts.filter == "applied" )
 			{
-				for ( i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+				for ( i=0, iLen=aiDisplay.length ; i<iLen ; i++ )
 				{
-					a.push( oSettings.aoData[ oSettings.aiDisplay[i] ].nTr );
+					tr = aoData[ aiDisplay[i] ].nTr;
+					if ( tr )
+					{
+						a.push( tr );
+					}
 				}
 			}
 			else if ( oOpts.order == "original" && oOpts.filter == "none" )
 			{
-				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+				for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 				{
-					a.push( oSettings.aoData[ i ].nTr );
+					tr = aoData[ i ].nTr ;
+					if ( tr )
+					{
+						a.push( tr );
+					}
 				}
 			}
 			else if ( oOpts.order == "original" && oOpts.filter == "applied" )
 			{
-				for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+				for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 				{
-					if ( $.inArray( i, oSettings.aiDisplay ) !== -1 )
+					tr = aoData[ i ].nTr;
+					if ( $.inArray( i, aiDisplay ) !== -1 && tr )
 					{
-						a.push( oSettings.aoData[ i ].nTr );
+						a.push( tr );
 					}
 				}
 			}
