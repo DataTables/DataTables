@@ -8539,8 +8539,8 @@
 		 *        "bProcessing": true,
 		 *        "bServerSide": true,
 		 *        "sAjaxSource": "xhr.php",
-		 *        "fnServerData": function ( sSource, aoData, fnCallback ) {
-		 *          $.ajax( {
+		 *        "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+		 *          oSettings.jqXHR = $.ajax( {
 		 *            "dataType": 'json', 
 		 *            "type": "POST", 
 		 *            "url": sSource, 
