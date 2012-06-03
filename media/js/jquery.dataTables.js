@@ -1954,8 +1954,8 @@
 			
 			var sSearchStr = oSettings.oLanguage.sSearch;
 			sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
-			  sSearchStr.replace('_INPUT_', '<input type="search" results="5" />') :
-			  sSearchStr==="" ? '<input type="search" results="5" />' : sSearchStr+' <input type="search" results="5" />';
+			  sSearchStr.replace('_INPUT_', '<input type="search" results="5" placeholder="Search..." />') :
+			  sSearchStr==="" ? '<input type="search" results="5" placeholder="Search..." />' : sSearchStr+' <input type="search" results="5" placeholder="Search..." />';
 			
 			var nFilter = document.createElement( 'div' );
 			nFilter.className = oSettings.oClasses.sFilter;
