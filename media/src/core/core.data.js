@@ -440,11 +440,13 @@ function _fnSetObjectDataFn( mSource )
 		return function (data, val) {
 			for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
 			{
-				data = data[ a[i] ];
-				if ( data === undefined )
+				// If the nested object doesn't currently exist - since we are
+				// trying to set the value - create it
+				if ( data[ a[i] ] === undefined )
 				{
-					return;
+					data[ a[i] ] = {};
 				}
+				data = data[ a[i] ];
 			}
 			data[ a[a.length-1] ] = val;
 		};
