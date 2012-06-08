@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="handlebars.js" default="package" basedir=".">  
+
+    <property name="dist.dir" value="dist"/>
+    <property name="handlebars.js" value="${dist.dir}/handlebars.js"/>
+
+    <property name="build.dir" value="build"/>
+    <!--
+         This is the build file for handlebars.js. It simply invokes the Rakefile based build.
+
+    -->
+
+    <!-- Addin' the IVY Stuff... -->
+    <import file="ivy/ivy_build.xml"/>
+
+    <!-- ivy publish targets call this -->
+    <target name="package">
+        <exec executable="bash" outputproperty="git.tagnumber">
+            <arg value="-c"/>
+            <arg line='"git describe --abbrev=0 --tags | sed s/v//"'/>
+        </exec>
+        <echo>(cleaned up) Git tag: ${git.tagnumber}</echo>
+
+        <property name="ivy.major.revision" value="${git.tagnumber}"/>
+
+        <exec executable="bundle">
+            <arg line="install"/>
+        </exec>
+
+        <exec executable="rake">
+            <arg line="release"/>
+        </exec>
+        
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+
+        <copy file="${handlebars.js}" todir="${build.dir}"/>
+    </target>
+</project>

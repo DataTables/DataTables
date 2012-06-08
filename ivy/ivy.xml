@@ -1,0 +1,18 @@
+<!-- 
+-->
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+	<info organisation="wycats" module="handlebars.js"/>
+      
+   <configurations>
+        <conf name="dev" visibility="public"/>
+        <conf name="prod" visibility="public"/>
+        <conf name="test" visibility="public"/>
+        <conf name="default" extends="dev"/>
+    </configurations>
+    <publications>
+        <artifact name="handlebars" type="javascript" ext="js" conf="dev,test,default"/>
+    </publications>
+    <dependencies>
+        
+	</dependencies> 
+</ivy-module>
