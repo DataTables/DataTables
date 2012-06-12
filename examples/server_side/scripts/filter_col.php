@@ -2,11 +2,30 @@
   /* MySQL connection */
 	include( $_SERVER['DOCUMENT_ROOT']."/datatables/mysql.php" ); /* ;-) */
 	
-	$gaSql['link'] =  mysql_pconnect( $gaSql['server'], $gaSql['user'], $gaSql['password']  ) or
-		die( 'Could not open connection to server' );
+	/* 
+	 * Local functions
+	 */
+	function fatal_error ( $sErrorMessage = '' )
+	{
+		header( $_SERVER['SERVER_PROTOCOL'] .' 500 Internal Server Error' );
+		die( $sErrorMessage );
+	}
+
 	
-	mysql_select_db( $gaSql['db'], $gaSql['link'] ) or 
-		die( 'Could not select database '. $gaSql['db'] );
+	/* 
+	 * MySQL connection
+	 */
+	if ( ! $gaSql['link'] = mysql_pconnect( $gaSql['server'], $gaSql['user'], $gaSql['password']  ) )
+	{
+		fatal_error( 'Could not open connection to server' );
+	}
+
+	if ( ! mysql_select_db( $gaSql['db'], $gaSql['link'] ) )
+	{
+		fatal_error( 'Could not select database ' );
+	}
+
+
 	
 	/* Paging */
 	$sLimit = "";
@@ -65,12 +84,12 @@
 		$sOrder
 		$sLimit
 	";
-	$rResult = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+	$rResult = mysql_query( $sQuery, $gaSql['link'] ) or fatal_error( 'MySQL Error: ' . mysql_errno() );
 	
 	$sQuery = "
 		SELECT FOUND_ROWS()
 	";
-	$rResultFilterTotal = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+	$rResultFilterTotal = mysql_query( $sQuery, $gaSql['link'] ) or fatal_error( 'MySQL Error: ' . mysql_errno() );
 	$aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
 	$iFilteredTotal = $aResultFilterTotal[0];
 	
@@ -78,7 +97,7 @@
 		SELECT COUNT(id)
 		FROM   ajax
 	";
-	$rResultTotal = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+	$rResultTotal = mysql_query( $sQuery, $gaSql['link'] ) or fatal_error( 'MySQL Error: ' . mysql_errno() );
 	$aResultTotal = mysql_fetch_array($rResultTotal);
 	$iTotal = $aResultTotal[0];
 	
