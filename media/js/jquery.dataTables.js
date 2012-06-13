@@ -2342,7 +2342,7 @@
 		 */
 		function _fnEscapeRegex ( sVal )
 		{
-			var acEscape = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^' ];
+			var acEscape = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ];
 			var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
 			return sVal.replace(reReplace, '\\$1');
 		}
