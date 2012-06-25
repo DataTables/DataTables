@@ -194,7 +194,7 @@ function _fnScrollDraw ( o )
 		iWidth, aApplied=[], iSanityWidth,
 		nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
 		nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
-		ie67 = $.browser.msie && $.browser.version <= 7;
+		ie67 = o.oBrowser.bScrollOversize;
 	
 	/*
 	 * 1. Re-create the table inside the scrolling div
