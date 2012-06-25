@@ -371,6 +371,9 @@ _fnSortingClasses( oSettings );
  * Cache the header, body and footer as required, creating them if needed
  */
 
+/* Browser support detection */
+_fnBrowserDetect( oSettings );
+
 // Work around for Webkit bug 83867 - store the caption-side before removing from doc
 var captions = $(this).children('caption').each( function () {
 	this._captionSide = $(this).css('caption-side');

@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.2
+ * @version     1.9.3.dev
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -3098,7 +3098,7 @@
 				iWidth, aApplied=[], iSanityWidth,
 				nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
 				nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
-				ie67 = $.browser.msie && $.browser.version <= 7;
+				ie67 = o.oBrowser.bScrollOversize;
 			
 			/*
 			 * 1. Re-create the table inside the scrolling div
@@ -4779,6 +4779,33 @@
 			return (bArr ? "[" : "{") + json + (bArr ? "]" : "}");
 		};
 		
+		
+		/**
+		 * From some browsers (specifically IE6/7) we need special handling to work around browser
+		 * bugs - this function is used to detect when these workarounds are needed.
+		 *  @param {object} oSettings dataTables settings object
+		 *  @memberof DataTable#oApi
+		 */
+		function _fnBrowserDetect( oSettings )
+		{
+			/* IE6/7 will oversize a width 100% element inside a scrolling element, to include the
+			 * width of the scrollbar, while other browsers ensure the inner element is contained
+			 * without forcing scrolling
+			 */
+			var n = $(
+				'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
+					'<div style="position:absolute; top:1px; left:1px; width:100px; height:50px; overflow:scroll;">'+
+						'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
+					'</div>'+
+				'</div>')[0];
+		
+			document.body.appendChild( n );
+			oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
+			document.body.removeChild( n );
+		
+			alert( oSettings.oBrowser.bScrollOversize );
+		}
+		
 
 		
 		
@@ -6171,7 +6198,8 @@
 			"_fnJsonString": _fnJsonString,
 			"_fnRender": _fnRender,
 			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
-			"_fnInfoMacros": _fnInfoMacros
+			"_fnInfoMacros": _fnInfoMacros,
+			"_fnBrowserDetect": _fnBrowserDetect
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );
@@ -6560,6 +6588,9 @@
 			 * Cache the header, body and footer as required, creating them if needed
 			 */
 			
+			/* Browser support detection */
+			_fnBrowserDetect( oSettings );
+			
 			// Work around for Webkit bug 83867 - store the caption-side before removing from doc
 			var captions = $(this).children('caption').each( function () {
 				this._captionSide = $(this).css('caption-side');
@@ -6736,7 +6767,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.2";
+	DataTable.version = "1.9.3.dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
@@ -10544,9 +10575,23 @@
 			 * Information callback function. See 
 			 * {@link DataTable.defaults.fnInfoCallback}
 			 *  @type function
-			 *  @default 
+			 *  @default null
 			 */
 			"fnInfoCallback": null
+		},
+		
+		/**
+		 * Browser support parameters
+		 *  @namespace
+		 */
+		"oBrowser": {
+			/**
+			 * Indicate if the browser incorrectly calculates width:100% inside a
+			 * scrolling element (IE6/7)
+			 *  @type boolean
+			 *  @default false
+			 */
+			"bScrollOversize": false
 		},
 		
 		/**
