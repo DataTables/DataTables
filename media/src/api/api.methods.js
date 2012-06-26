@@ -1186,30 +1186,26 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	var iRow = (typeof mRow === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
 	
-	if ( oSettings.__fnUpdateDeep === undefined && $.isArray(mData) && typeof mData === 'object' )
+	if ( $.isArray(mData) && iColumn === undefined )
 	{
 		/* Array update - update the whole row */
 		oSettings.aoData[iRow]._aData = mData.slice();
 		
 		/* Flag to the function that we are recursing */
-		oSettings.__fnUpdateDeep = true;
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
 			this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 		}
-		oSettings.__fnUpdateDeep = undefined;
 	}
-	else if ( oSettings.__fnUpdateDeep === undefined && mData !== null && typeof mData === 'object' )
+	else if ( $.isPlainObject(mData) && iColumn === undefined )
 	{
 		/* Object update - update the whole row - assume the developer gets the object right */
 		oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
 
-		oSettings.__fnUpdateDeep = true;
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
 			this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 		}
-		oSettings.__fnUpdateDeep = undefined;
 	}
 	else
 	{
