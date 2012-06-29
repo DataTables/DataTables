@@ -143,6 +143,16 @@ DataTable.models.oColumn = {
 	"mDataProp": null,
 	
 	/**
+	 * Partner property to mDataProp which is used (only when defined) to get
+	 * the data - i.e. it is basically the same as mDataProp, but without the
+	 * 'set' option, and also the data fed to it is the result from mDataProp.
+	 * This is the rendering method to match the data method of mDataProp.
+	 *  @type function|int|string|null
+	 *  @default null
+	 */
+	"mRender": null,
+	
+	/**
 	 * Unique header TH/TD element for this column - this is what the sorting
 	 * listener is attached to (if sorting is enabled.)
 	 *  @type node

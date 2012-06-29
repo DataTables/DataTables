@@ -381,8 +381,8 @@ function _fnGetObjectDataFn( mSource )
 	}
 	else if ( typeof mSource === 'function' )
 	{
-		return function (data, type) {
-			return mSource( data, type );
+		return function (data, type, extra) {
+			return mSource( data, type, extra );
 		};
 	}
 	else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
@@ -406,7 +406,11 @@ function _fnGetObjectDataFn( mSource )
 
 					if ( arrayNotation ) {
 						a[i] = a[i].replace(__reArray, '');
-						data = data[ a[i] ];
+
+						// Condition allows simply [] to be passed in
+						if ( a[i] !== "" ) {
+							data = data[ a[i] ];
+						}
 						out = [];
 						
 						// Get the remainder of the nested object to get

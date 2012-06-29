@@ -146,12 +146,12 @@ DataTable.defaults.columns = {
 	 * (before rendering) for sorting and filtering (the default is to used the
 	 * rendered data that the user can see). This may be useful for dates etc.
 	 * 
-	 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
-	 * use of the 'type' that it gives, allowing (potentially) different data to
-	 * be used for sorting, filtering, display and type detection.
+	 * *NOTE* This property is now deprecated, and it is suggested that you use
+	 * mDataProp and / or mRender to render data for the DataTable.
 	 *  @type boolean
 	 *  @default true
 	 *  @dtopt Columns
+	 *  @deprecated
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
@@ -413,6 +413,76 @@ DataTable.defaults.columns = {
 	 *    } );
 	 */
 	"mDataProp": null,
+
+
+
+	/**
+	 * This property is the rendering partner to mDataProp and it is suggested that
+	 * when you want to manipulate data for display (including filtering, sorting etc)
+	 * but not altering the underlying data for the table, use this property. mDataProp
+	 * can actually do everything this property can and more, but this parameter is
+	 * easier to use since there is no 'set' option. Like mDataProp is can be given
+	 * in a number of different ways to effect its behaviour, with the addition of 
+	 * supporting array syntax for easy outputting of arrays (including arrays of
+	 * objects):
+	 *   <ul>
+	 *     <li>integer - treated as an array index for the data source. This is the
+	 *       default that DataTables uses (incrementally increased for each column).</li>
+	 *     <li>string - read an object property from the data source. Note that you can
+	 *       use Javascript dotted notation to read deep properties/arrays from the
+	 *       data source and also array brackets to indicate that the data reader should
+	 *       loop over the data source array. When characters are given between the array
+	 *       brackets, these characters are used to join the data source array together.
+	 *       For example: "accounts[, ].name" would result in a comma separated list with
+	 *       the 'name' value from the 'accounts' array of objects.</li>
+	 *     <li>function - the function given will be executed whenever DataTables 
+	 *       needs to set or get the data for a cell in the column. The function 
+	 *       takes three parameters:
+	 *       <ul>
+	 *         <li>{array|object} The data source for the row (based on mDataProp)</li>
+	 *         <li>{string} The type call data requested - this will be 'filter', 'display', 
+	 *           'type' or 'sort'.</li>
+	 *         <li>{array|object} The full data source for the row (not based on mDataProp)</li>
+	 *       </ul>
+	 *       The return value from the function is what will be used for the data
+	 *       requested.</li>
+	 *    </ul>
+	 *  @type string|int|function|null
+	 *  @default null <i>Use mDataProp</i>
+	 *  @dtopt Columns
+	 * 
+	 *  @example
+	 *    // Create a comma separated list from an array of objects
+	 *    $(document).ready(function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "sAjaxSource": "sources/deep.txt",
+	 *        "aoColumns": [
+	 *          { "mDataProp": "engine" },
+	 *          { "mDataProp": "browser" },
+	 *          {
+	 *            "mDataProp": "platform",
+	 *            "mRender": "[, ].name"
+	 *          }
+	 *        ]
+	 *      } );
+	 *    } );
+	 * 
+	 *  @example
+	 *    // Use as a function to create a link from the data source
+	 *    $(document).ready(function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "aoColumnDefs": [
+	 *        {
+	 *          "aTargets": [ 0 ],
+	 *          "mDataProp": "download_link",
+	 *          "mRender": function ( data, type, full ) {
+	 *            return '<a href="'+data+'">Download</a>';
+	 *          }
+	 *        ]
+	 *      } );
+	 *    } );
+	 */
+	"mRender": null,
 
 
 	/**

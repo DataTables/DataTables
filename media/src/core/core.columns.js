@@ -85,7 +85,18 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	}
 
 	/* Cache the data get and set functions for speed */
-	oCol.fnGetData = _fnGetObjectDataFn( oCol.mDataProp );
+	var mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
+	var mData = _fnGetObjectDataFn( oCol.mDataProp );
+
+	oCol.fnGetData = function (oData, sSpecific) {
+		var innerData = mData( oData, sSpecific );
+
+		if ( oCol.mRender && (sSpecific && sSpecific !== '') )
+		{
+			return mRender( innerData, sSpecific, oData );
+		}
+		return innerData;
+	};
 	oCol.fnSetData = _fnSetObjectDataFn( oCol.mDataProp );
 	
 	/* Feature sorting overrides column specific when off */
