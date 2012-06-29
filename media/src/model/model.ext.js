@@ -92,8 +92,8 @@ DataTable.models.ext = {
 	 *     </il>
 	 *   </ul>
 	 *  
-	 * Note that as of v1.9, it is typically preferable to use <i>mDataProp</i> to prepare data for
-	 * the different uses that DataTables can put the data to. Specifically <i>mDataProp</i> when
+	 * Note that as of v1.9, it is typically preferable to use <i>mData</i> to prepare data for
+	 * the different uses that DataTables can put the data to. Specifically <i>mData</i> when
 	 * used as a function will give you a 'type' (sorting, filtering etc) that you can use to 
 	 * prepare the data as required for the different types. As such, this method is deprecated.
 	 *  @type array
@@ -258,8 +258,8 @@ DataTable.models.ext = {
 	 *     </il>
 	 *   </ul>
 	 * 
-	 * Note that as of v1.9, it is typically preferable to use <i>mDataProp</i> to prepare data for
-	 * the different uses that DataTables can put the data to. Specifically <i>mDataProp</i> when
+	 * Note that as of v1.9, it is typically preferable to use <i>mData</i> to prepare data for
+	 * the different uses that DataTables can put the data to. Specifically <i>mData</i> when
 	 * used as a function will give you a 'type' (sorting, filtering etc) that you can use to 
 	 * prepare the data as required for the different types. As such, this method is deprecated.
 	 *  @type object

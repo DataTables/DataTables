@@ -50,7 +50,7 @@ function _fnAjaxParameters( oSettings )
 		
 	for ( i=0 ; i<iColumns ; i++ )
 	{
-	  mDataProp = oSettings.aoColumns[i].mDataProp;
+	  mDataProp = oSettings.aoColumns[i].mData;
 		aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)==="function" ? 'function' : mDataProp } );
 	}
 	

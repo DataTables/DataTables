@@ -18,7 +18,7 @@ DataTable.models.oRow = {
 	/**
 	 * Data object from the original data source for the row. This is either
 	 * an array if using the traditional form of DataTables, or an object if
-	 * using mDataProp options. The exact type will depend on the passed in
+	 * using mData options. The exact type will depend on the passed in
 	 * data from the data source, or will be an array if using DOM a data 
 	 * source.
 	 *  @type array|object

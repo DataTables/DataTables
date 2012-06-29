@@ -31,7 +31,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 		oCol = oSettings.aoColumns[i];
 
 		/* Use rendered data for filtering/sorting */
-		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
+		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mData !== null )
 		{
 			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
 		}
@@ -186,7 +186,7 @@ function _fnGatherData( oSettings )
 					}
 				}
 
-				if ( typeof oCol.mDataProp === 'function' )
+				if ( typeof oCol.mData === 'function' )
 				{
 					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 				}
@@ -317,7 +317,7 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 		if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 		{
 			_fnLog( oSettings, 0, "Requested unknown parameter "+
-				(typeof oCol.mDataProp=='function' ? '{mDataprop function}' : "'"+oCol.mDataProp+"'")+
+				(typeof oCol.mData=='function' ? '{mData function}' : "'"+oCol.mData+"'")+
 				" from the data source for row "+iRow );
 			oSettings.iDrawError = oSettings.iDraw;
 		}
@@ -620,6 +620,6 @@ function _fnRender( oSettings, iRow, iCol )
 		"iDataColumn": iCol,
 		"oSettings":   oSettings,
 		"aData":       oSettings.aoData[iRow]._aData,
-		"mDataProp":   oCol.mDataProp
+		"mDataProp":   oCol.mData
 	}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
 }

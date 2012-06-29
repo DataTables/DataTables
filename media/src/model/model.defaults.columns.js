@@ -147,7 +147,7 @@ DataTable.defaults.columns = {
 	 * rendered data that the user can see). This may be useful for dates etc.
 	 * 
 	 * *NOTE* This property is now deprecated, and it is suggested that you use
-	 * mDataProp and / or mRender to render data for the DataTable.
+	 * mData and / or mRender to render data for the DataTable.
 	 *  @type boolean
 	 *  @default true
 	 *  @dtopt Columns
@@ -336,8 +336,17 @@ DataTable.defaults.columns = {
 
 
 	/**
+	 * This parameter has been replaced by mData in DataTables to ensure naming
+	 * consistency. mDataProp can still be used, as there is backwards compatibility
+	 * in DataTables for this option, but it is strongly recommended that you use
+	 * mData in preference to mDataProp.
+	 *  @name DataTable.defaults.columns.mDataProp
+	 */
+
+
+	/**
 	 * This property can be used to read data from any JSON data source property,
-	 * including deeply nested objects / properties. mDataProp can be given in a
+	 * including deeply nested objects / properties. mData can be given in a
 	 * number of different ways which effect its behaviour:
 	 *   <ul>
 	 *     <li>integer - treated as an array index for the data source. This is the
@@ -364,6 +373,11 @@ DataTable.defaults.columns = {
 	 *       of call, but otherwise the return is what will be used for the data
 	 *       requested.</li>
 	 *    </ul>
+	 *
+	 * Note that prior to DataTables 1.9.2 mData was called mDataProp. The name change
+	 * reflects the flexibility of this property and is consistent with the naming of
+	 * mRender. If 'mDataProp' is given, then it will still be used by DataTables, as
+	 * it automatically maps the old name to the new if required.
 	 *  @type string|int|function|null
 	 *  @default null <i>Use automatically calculated column index</i>
 	 *  @dtopt Columns
@@ -374,24 +388,24 @@ DataTable.defaults.columns = {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/deep.txt",
 	 *        "aoColumns": [
-	 *          { "mDataProp": "engine" },
-	 *          { "mDataProp": "browser" },
-	 *          { "mDataProp": "platform.inner" },
-	 *          { "mDataProp": "platform.details.0" },
-	 *          { "mDataProp": "platform.details.1" }
+	 *          { "mData": "engine" },
+	 *          { "mData": "browser" },
+	 *          { "mData": "platform.inner" },
+	 *          { "mData": "platform.details.0" },
+	 *          { "mData": "platform.details.1" }
 	 *        ]
 	 *      } );
 	 *    } );
 	 * 
 	 *  @example
-	 *    // Using mDataProp as a function to provide different information for
+	 *    // Using mData as a function to provide different information for
 	 *    // sorting, filtering and display. In this case, currency (price)
 	 *    $(document).ready(function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *        {
 	 *          "aTargets": [ 0 ],
-	 *          "mDataProp": function ( source, type, val ) {
+	 *          "mData": function ( source, type, val ) {
 	 *            if (type === 'set') {
 	 *              source.price = val;
 	 *              // Store the computed dislay and filter values for efficiency
@@ -412,16 +426,15 @@ DataTable.defaults.columns = {
 	 *      } );
 	 *    } );
 	 */
-	"mDataProp": null,
-
+	"mData": null,
 
 
 	/**
-	 * This property is the rendering partner to mDataProp and it is suggested that
+	 * This property is the rendering partner to mData and it is suggested that
 	 * when you want to manipulate data for display (including filtering, sorting etc)
-	 * but not altering the underlying data for the table, use this property. mDataProp
+	 * but not altering the underlying data for the table, use this property. mData
 	 * can actually do everything this property can and more, but this parameter is
-	 * easier to use since there is no 'set' option. Like mDataProp is can be given
+	 * easier to use since there is no 'set' option. Like mData is can be given
 	 * in a number of different ways to effect its behaviour, with the addition of 
 	 * supporting array syntax for easy outputting of arrays (including arrays of
 	 * objects):
@@ -439,16 +452,16 @@ DataTable.defaults.columns = {
 	 *       needs to set or get the data for a cell in the column. The function 
 	 *       takes three parameters:
 	 *       <ul>
-	 *         <li>{array|object} The data source for the row (based on mDataProp)</li>
+	 *         <li>{array|object} The data source for the row (based on mData)</li>
 	 *         <li>{string} The type call data requested - this will be 'filter', 'display', 
 	 *           'type' or 'sort'.</li>
-	 *         <li>{array|object} The full data source for the row (not based on mDataProp)</li>
+	 *         <li>{array|object} The full data source for the row (not based on mData)</li>
 	 *       </ul>
 	 *       The return value from the function is what will be used for the data
 	 *       requested.</li>
 	 *    </ul>
 	 *  @type string|int|function|null
-	 *  @default null <i>Use mDataProp</i>
+	 *  @default null <i>Use mData</i>
 	 *  @dtopt Columns
 	 * 
 	 *  @example
@@ -457,10 +470,10 @@ DataTable.defaults.columns = {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/deep.txt",
 	 *        "aoColumns": [
-	 *          { "mDataProp": "engine" },
-	 *          { "mDataProp": "browser" },
+	 *          { "mData": "engine" },
+	 *          { "mData": "browser" },
 	 *          {
-	 *            "mDataProp": "platform",
+	 *            "mData": "platform",
 	 *            "mRender": "[, ].name"
 	 *          }
 	 *        ]
@@ -474,7 +487,7 @@ DataTable.defaults.columns = {
 	 *        "aoColumnDefs": [
 	 *        {
 	 *          "aTargets": [ 0 ],
-	 *          "mDataProp": "download_link",
+	 *          "mData": "download_link",
 	 *          "mRender": function ( data, type, full ) {
 	 *            return '<a href="'+data+'">Download</a>';
 	 *          }
@@ -575,7 +588,7 @@ DataTable.defaults.columns = {
 
 	/**
 	 * Allows a default value to be given for a column's data, and will be used
-	 * whenever a null data source is encountered (this can be because mDataProp
+	 * whenever a null data source is encountered (this can be because mData
 	 * is set to null, or because the data source itself is null).
 	 *  @type string
 	 *  @default null
@@ -587,7 +600,7 @@ DataTable.defaults.columns = {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          {
-	 *            "mDataProp": null,
+	 *            "mData": null,
 	 *            "sDefaultContent": "Edit",
 	 *            "aTargets": [ -1 ]
 	 *          }
@@ -604,7 +617,7 @@ DataTable.defaults.columns = {
 	 *          null,
 	 *          null,
 	 *          {
-	 *            "mDataProp": null,
+	 *            "mData": null,
 	 *            "sDefaultContent": "Edit"
 	 *          }
 	 *        ]

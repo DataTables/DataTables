@@ -76,7 +76,7 @@
 				"nTh": nTh ? nTh : document.createElement('th'),
 				"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
 				"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
-				"mDataProp": oDefaults.mDataProp ? oDefaults.oDefaults : iCol
+				"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
 			} );
 			oSettings.aoColumns.push( oCol );
 			
@@ -115,7 +115,7 @@
 		 * Apply options for a column
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {int} iCol column index to consider
-		 *  @param {object} oOptions object with sType, bVisible and bSearchable
+		 *  @param {object} oOptions object with sType, bVisible and bSearchable etc
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnColumnOptions( oSettings, iCol, oOptions )
@@ -125,6 +125,12 @@
 			/* User specified column options */
 			if ( oOptions !== undefined && oOptions !== null )
 			{
+				/* Backwards compatibility for mDataProp */
+				if ( oOptions.mDataProp && !oOptions.mData )
+				{
+					oOptions.mData = oOptions.mDataProp;
+				}
+		
 				if ( oOptions.sType !== undefined )
 				{
 					oCol.sType = oOptions.sType;
@@ -146,7 +152,7 @@
 		
 			/* Cache the data get and set functions for speed */
 			var mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
-			var mData = _fnGetObjectDataFn( oCol.mDataProp );
+			var mData = _fnGetObjectDataFn( oCol.mData );
 		
 			oCol.fnGetData = function (oData, sSpecific) {
 				var innerData = mData( oData, sSpecific );
@@ -157,7 +163,7 @@
 				}
 				return innerData;
 			};
-			oCol.fnSetData = _fnSetObjectDataFn( oCol.mDataProp );
+			oCol.fnSetData = _fnSetObjectDataFn( oCol.mData );
 			
 			/* Feature sorting overrides column specific when off */
 			if ( !oSettings.oFeatures.bSort )
@@ -467,7 +473,7 @@
 				oCol = oSettings.aoColumns[i];
 		
 				/* Use rendered data for filtering/sorting */
-				if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mDataProp !== null )
+				if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mData !== null )
 				{
 					_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
 				}
@@ -622,7 +628,7 @@
 							}
 						}
 		
-						if ( typeof oCol.mDataProp === 'function' )
+						if ( typeof oCol.mData === 'function' )
 						{
 							nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 						}
@@ -753,7 +759,7 @@
 				if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 				{
 					_fnLog( oSettings, 0, "Requested unknown parameter "+
-						(typeof oCol.mDataProp=='function' ? '{mDataprop function}' : "'"+oCol.mDataProp+"'")+
+						(typeof oCol.mData=='function' ? '{mData function}' : "'"+oCol.mData+"'")+
 						" from the data source for row "+iRow );
 					oSettings.iDrawError = oSettings.iDraw;
 				}
@@ -1056,7 +1062,7 @@
 				"iDataColumn": iCol,
 				"oSettings":   oSettings,
 				"aData":       oSettings.aoData[iRow]._aData,
-				"mDataProp":   oCol.mDataProp
+				"mDataProp":   oCol.mData
 			}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
 		}
 		
@@ -1100,7 +1106,7 @@
 					/* Render if needed - if bUseRendered is true then we already have the rendered
 					 * value in the data source - so can just use that
 					 */
-					nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null)) ?
+					nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
 						_fnRender( oSettings, iRow, i ) :
 						_fnGetCellData( oSettings, iRow, i, 'display' );
 				
@@ -1899,7 +1905,7 @@
 				
 			for ( i=0 ; i<iColumns ; i++ )
 			{
-			  mDataProp = oSettings.aoColumns[i].mDataProp;
+			  mDataProp = oSettings.aoColumns[i].mData;
 				aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)==="function" ? 'function' : mDataProp } );
 			}
 			
@@ -5096,8 +5102,8 @@
 		 *    <ul>
 		 *      <li>1D array of data - add a single row with the data provided</li>
 		 *      <li>2D array of arrays - add multiple rows in a single call</li>
-		 *      <li>object - data object when using <i>mDataProp</i></li>
-		 *      <li>array of objects - multiple data objects when using <i>mDataProp</i></li>
+		 *      <li>object - data object when using <i>mData</i></li>
+		 *      <li>array of objects - multiple data objects when using <i>mData</i></li>
 		 *    </ul>
 		 *  @param {bool} [bRedraw=true] redraw the table or not
 		 *  @returns {array} An array of integers, representing the list of indexes in 
@@ -6967,8 +6973,8 @@
 		 *     </il>
 		 *   </ul>
 		 *  
-		 * Note that as of v1.9, it is typically preferable to use <i>mDataProp</i> to prepare data for
-		 * the different uses that DataTables can put the data to. Specifically <i>mDataProp</i> when
+		 * Note that as of v1.9, it is typically preferable to use <i>mData</i> to prepare data for
+		 * the different uses that DataTables can put the data to. Specifically <i>mData</i> when
 		 * used as a function will give you a 'type' (sorting, filtering etc) that you can use to 
 		 * prepare the data as required for the different types. As such, this method is deprecated.
 		 *  @type array
@@ -7133,8 +7139,8 @@
 		 *     </il>
 		 *   </ul>
 		 * 
-		 * Note that as of v1.9, it is typically preferable to use <i>mDataProp</i> to prepare data for
-		 * the different uses that DataTables can put the data to. Specifically <i>mDataProp</i> when
+		 * Note that as of v1.9, it is typically preferable to use <i>mData</i> to prepare data for
+		 * the different uses that DataTables can put the data to. Specifically <i>mData</i> when
 		 * used as a function will give you a 'type' (sorting, filtering etc) that you can use to 
 		 * prepare the data as required for the different types. As such, this method is deprecated.
 		 *  @type object
@@ -7461,7 +7467,7 @@
 		/**
 		 * Data object from the original data source for the row. This is either
 		 * an array if using the traditional form of DataTables, or an object if
-		 * using mDataProp options. The exact type will depend on the passed in
+		 * using mData options. The exact type will depend on the passed in
 		 * data from the data source, or will be an array if using DOM a data 
 		 * source.
 		 *  @type array|object
@@ -7560,7 +7566,7 @@
 		 * and filtering use the rendered value (true - default), or you can have
 		 * the sorting and filtering us the original value (false).
 		 * 
-		 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
+		 * *NOTE* It is it is advisable now to use mData as a function and make 
 		 * use of the 'type' that it gives, allowing (potentially) different data to
 		 * be used for sorting, filtering, display and type detection.
 		 *  @type boolean
@@ -7600,7 +7606,7 @@
 		/**
 		 * Function to get data from a cell in a column. You should <b>never</b>
 		 * access data directly through _aData internally in DataTables - always use
-		 * the method attached to this property. It allows mDataProp to function as
+		 * the method attached to this property. It allows mData to function as
 		 * required. This function is automatically assigned by the column 
 		 * initialisation method
 		 *  @type function
@@ -7630,7 +7636,7 @@
 		/**
 		 * Function to set data for a cell in the column. You should <b>never</b> 
 		 * set the data directly to _aData internally in DataTables - always use
-		 * this method. It allows mDataProp to function as required. This function
+		 * this method. It allows mData to function as required. This function
 		 * is automatically assigned by the column initialisation method
 		 *  @type function
 		 *  @param {array|object} oData The data array/object for the array 
@@ -7647,13 +7653,13 @@
 		 *  @type function|int|string|null
 		 *  @default null
 		 */
-		"mDataProp": null,
+		"mData": null,
 		
 		/**
-		 * Partner property to mDataProp which is used (only when defined) to get
-		 * the data - i.e. it is basically the same as mDataProp, but without the
-		 * 'set' option, and also the data fed to it is the result from mDataProp.
-		 * This is the rendering method to match the data method of mDataProp.
+		 * Partner property to mData which is used (only when defined) to get
+		 * the data - i.e. it is basically the same as mData, but without the
+		 * 'set' option, and also the data fed to it is the result from mData.
+		 * This is the rendering method to match the data method of mData.
 		 *  @type function|int|string|null
 		 *  @default null
 		 */
@@ -7698,7 +7704,7 @@
 		
 		/**
 		 * Allows a default value to be given for a column's data, and will be used
-		 * whenever a null data source is encountered (this can be because mDataProp
+		 * whenever a null data source is encountered (this can be because mData
 		 * is set to null, or because the data source itself is null).
 		 *  @type string
 		 *  @default null
@@ -7799,7 +7805,7 @@
 		 *    } );
 		 *    
 		 *  @example
-		 *    // Using an array of objects as a data source (mDataProp)
+		 *    // Using an array of objects as a data source (mData)
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
 		 *        "aaData": [
@@ -7819,11 +7825,11 @@
 		 *          }
 		 *        ],
 		 *        "aoColumns": [
-		 *          { "sTitle": "Engine",   "mDataProp": "engine" },
-		 *          { "sTitle": "Browser",  "mDataProp": "browser" },
-		 *          { "sTitle": "Platform", "mDataProp": "platform" },
-		 *          { "sTitle": "Version",  "mDataProp": "version" },
-		 *          { "sTitle": "Grade",    "mDataProp": "grade" }
+		 *          { "sTitle": "Engine",   "mData": "engine" },
+		 *          { "sTitle": "Browser",  "mData": "browser" },
+		 *          { "sTitle": "Platform", "mData": "platform" },
+		 *          { "sTitle": "Version",  "mData": "version" },
+		 *          { "sTitle": "Grade",    "mData": "grade" }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -9856,7 +9862,7 @@
 		 * rendered data that the user can see). This may be useful for dates etc.
 		 * 
 		 * *NOTE* This property is now deprecated, and it is suggested that you use
-		 * mDataProp and / or mRender to render data for the DataTable.
+		 * mData and / or mRender to render data for the DataTable.
 		 *  @type boolean
 		 *  @default true
 		 *  @dtopt Columns
@@ -10045,8 +10051,17 @@
 	
 	
 		/**
+		 * This parameter has been replaced by mData in DataTables to ensure naming
+		 * consistency. mDataProp can still be used, as there is backwards compatibility
+		 * in DataTables for this option, but it is strongly recommended that you use
+		 * mData in preference to mDataProp.
+		 *  @name DataTable.defaults.columns.mDataProp
+		 */
+	
+	
+		/**
 		 * This property can be used to read data from any JSON data source property,
-		 * including deeply nested objects / properties. mDataProp can be given in a
+		 * including deeply nested objects / properties. mData can be given in a
 		 * number of different ways which effect its behaviour:
 		 *   <ul>
 		 *     <li>integer - treated as an array index for the data source. This is the
@@ -10073,6 +10088,11 @@
 		 *       of call, but otherwise the return is what will be used for the data
 		 *       requested.</li>
 		 *    </ul>
+		 *
+		 * Note that prior to DataTables 1.9.2 mData was called mDataProp. The name change
+		 * reflects the flexibility of this property and is consistent with the naming of
+		 * mRender. If 'mDataProp' is given, then it will still be used by DataTables, as
+		 * it automatically maps the old name to the new if required.
 		 *  @type string|int|function|null
 		 *  @default null <i>Use automatically calculated column index</i>
 		 *  @dtopt Columns
@@ -10083,24 +10103,24 @@
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
 		 *        "aoColumns": [
-		 *          { "mDataProp": "engine" },
-		 *          { "mDataProp": "browser" },
-		 *          { "mDataProp": "platform.inner" },
-		 *          { "mDataProp": "platform.details.0" },
-		 *          { "mDataProp": "platform.details.1" }
+		 *          { "mData": "engine" },
+		 *          { "mData": "browser" },
+		 *          { "mData": "platform.inner" },
+		 *          { "mData": "platform.details.0" },
+		 *          { "mData": "platform.details.1" }
 		 *        ]
 		 *      } );
 		 *    } );
 		 * 
 		 *  @example
-		 *    // Using mDataProp as a function to provide different information for
+		 *    // Using mData as a function to provide different information for
 		 *    // sorting, filtering and display. In this case, currency (price)
 		 *    $(document).ready(function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "aoColumnDefs": [
 		 *        {
 		 *          "aTargets": [ 0 ],
-		 *          "mDataProp": function ( source, type, val ) {
+		 *          "mData": function ( source, type, val ) {
 		 *            if (type === 'set') {
 		 *              source.price = val;
 		 *              // Store the computed dislay and filter values for efficiency
@@ -10121,16 +10141,15 @@
 		 *      } );
 		 *    } );
 		 */
-		"mDataProp": null,
-	
+		"mData": null,
 	
 	
 		/**
-		 * This property is the rendering partner to mDataProp and it is suggested that
+		 * This property is the rendering partner to mData and it is suggested that
 		 * when you want to manipulate data for display (including filtering, sorting etc)
-		 * but not altering the underlying data for the table, use this property. mDataProp
+		 * but not altering the underlying data for the table, use this property. mData
 		 * can actually do everything this property can and more, but this parameter is
-		 * easier to use since there is no 'set' option. Like mDataProp is can be given
+		 * easier to use since there is no 'set' option. Like mData is can be given
 		 * in a number of different ways to effect its behaviour, with the addition of 
 		 * supporting array syntax for easy outputting of arrays (including arrays of
 		 * objects):
@@ -10148,16 +10167,16 @@
 		 *       needs to set or get the data for a cell in the column. The function 
 		 *       takes three parameters:
 		 *       <ul>
-		 *         <li>{array|object} The data source for the row (based on mDataProp)</li>
+		 *         <li>{array|object} The data source for the row (based on mData)</li>
 		 *         <li>{string} The type call data requested - this will be 'filter', 'display', 
 		 *           'type' or 'sort'.</li>
-		 *         <li>{array|object} The full data source for the row (not based on mDataProp)</li>
+		 *         <li>{array|object} The full data source for the row (not based on mData)</li>
 		 *       </ul>
 		 *       The return value from the function is what will be used for the data
 		 *       requested.</li>
 		 *    </ul>
 		 *  @type string|int|function|null
-		 *  @default null <i>Use mDataProp</i>
+		 *  @default null <i>Use mData</i>
 		 *  @dtopt Columns
 		 * 
 		 *  @example
@@ -10166,10 +10185,10 @@
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
 		 *        "aoColumns": [
-		 *          { "mDataProp": "engine" },
-		 *          { "mDataProp": "browser" },
+		 *          { "mData": "engine" },
+		 *          { "mData": "browser" },
 		 *          {
-		 *            "mDataProp": "platform",
+		 *            "mData": "platform",
 		 *            "mRender": "[, ].name"
 		 *          }
 		 *        ]
@@ -10183,7 +10202,7 @@
 		 *        "aoColumnDefs": [
 		 *        {
 		 *          "aTargets": [ 0 ],
-		 *          "mDataProp": "download_link",
+		 *          "mData": "download_link",
 		 *          "mRender": function ( data, type, full ) {
 		 *            return '<a href="'+data+'">Download</a>';
 		 *          }
@@ -10284,7 +10303,7 @@
 	
 		/**
 		 * Allows a default value to be given for a column's data, and will be used
-		 * whenever a null data source is encountered (this can be because mDataProp
+		 * whenever a null data source is encountered (this can be because mData
 		 * is set to null, or because the data source itself is null).
 		 *  @type string
 		 *  @default null
@@ -10296,7 +10315,7 @@
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          {
-		 *            "mDataProp": null,
+		 *            "mData": null,
 		 *            "sDefaultContent": "Edit",
 		 *            "aTargets": [ -1 ]
 		 *          }
@@ -10313,7 +10332,7 @@
 		 *          null,
 		 *          null,
 		 *          {
-		 *            "mDataProp": null,
+		 *            "mData": null,
 		 *            "sDefaultContent": "Edit"
 		 *          }
 		 *        ]

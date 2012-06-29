@@ -16,7 +16,7 @@ function _fnAddColumn( oSettings, nTh )
 		"nTh": nTh ? nTh : document.createElement('th'),
 		"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
 		"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
-		"mDataProp": oDefaults.mDataProp ? oDefaults.oDefaults : iCol
+		"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
 	} );
 	oSettings.aoColumns.push( oCol );
 	
@@ -55,7 +55,7 @@ function _fnAddColumn( oSettings, nTh )
  * Apply options for a column
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column index to consider
- *  @param {object} oOptions object with sType, bVisible and bSearchable
+ *  @param {object} oOptions object with sType, bVisible and bSearchable etc
  *  @memberof DataTable#oApi
  */
 function _fnColumnOptions( oSettings, iCol, oOptions )
@@ -65,6 +65,12 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	/* User specified column options */
 	if ( oOptions !== undefined && oOptions !== null )
 	{
+		/* Backwards compatibility for mDataProp */
+		if ( oOptions.mDataProp && !oOptions.mData )
+		{
+			oOptions.mData = oOptions.mDataProp;
+		}
+
 		if ( oOptions.sType !== undefined )
 		{
 			oCol.sType = oOptions.sType;
@@ -86,7 +92,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 
 	/* Cache the data get and set functions for speed */
 	var mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
-	var mData = _fnGetObjectDataFn( oCol.mDataProp );
+	var mData = _fnGetObjectDataFn( oCol.mData );
 
 	oCol.fnGetData = function (oData, sSpecific) {
 		var innerData = mData( oData, sSpecific );
@@ -97,7 +103,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 		}
 		return innerData;
 	};
-	oCol.fnSetData = _fnSetObjectDataFn( oCol.mDataProp );
+	oCol.fnSetData = _fnSetObjectDataFn( oCol.mData );
 	
 	/* Feature sorting overrides column specific when off */
 	if ( !oSettings.oFeatures.bSort )

@@ -199,8 +199,8 @@ this._ = function ( sSelector, oOpts )
  *    <ul>
  *      <li>1D array of data - add a single row with the data provided</li>
  *      <li>2D array of arrays - add multiple rows in a single call</li>
- *      <li>object - data object when using <i>mDataProp</i></li>
- *      <li>array of objects - multiple data objects when using <i>mDataProp</i></li>
+ *      <li>object - data object when using <i>mData</i></li>
+ *      <li>array of objects - multiple data objects when using <i>mData</i></li>
  *    </ul>
  *  @param {bool} [bRedraw=true] redraw the table or not
  *  @returns {array} An array of integers, representing the list of indexes in 
