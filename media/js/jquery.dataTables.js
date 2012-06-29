@@ -785,6 +785,9 @@
 		}
 		
 		
+		// Private variable that is used to match array syntax in the data property object
+		var __reArray = /\[.*?\]$/;
+		
 		/**
 		 * Return a function that can be used to get data from a source object, taking
 		 * into account the ability to use nested objects as a source
@@ -807,25 +810,62 @@
 					return mSource( data, type );
 				};
 			}
-			else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
+			else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
 			{
 				/* If there is a . in the source string then the data source is in a 
 				 * nested object so we loop over the data for each level to get the next
-				 * level down. On each loop we test for undefined, and if found immediatly
+				 * level down. On each loop we test for undefined, and if found immediately
 				 * return. This allows entire objects to be missing and sDefaultContent to
 				 * be used if defined, rather than throwing an error
 				 */
-				var a = mSource.split('.');
-				return function (data, type) {
-					for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+				var fetchData = function (data, type, src) {
+					var a = src.split('.');
+					var arrayNotation, out, innerSrc;
+		
+					if ( src !== "" )
 					{
-						data = data[ a[i] ];
-						if ( data === undefined )
+						for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 						{
-							return undefined;
+							// Check if we are dealing with an array notation request
+							arrayNotation = a[i].match(__reArray);
+		
+							if ( arrayNotation ) {
+								a[i] = a[i].replace(__reArray, '');
+								data = data[ a[i] ];
+								out = [];
+								
+								// Get the remainder of the nested object to get
+								a.splice( 0, i+1 );
+								innerSrc = a.join('.');
+		
+								// Traverse each entry in the array getting the properties requested
+								for ( var j=0, jLen=data.length ; j<jLen ; j++ ) {
+									out.push( fetchData( data[j], type, innerSrc ) );
+								}
+		
+								// If a string is given in between the array notation indicators, that
+								// is used to join the strings together, otherwise an array is returned
+								var join = arrayNotation[0].substring(1, arrayNotation[0].length-1);
+								data = (join==="") ? out : out.join(join);
+		
+								// The inner call to fetchData has already traversed through the remainder
+								// of the source requested, so we exit from the loop
+								break;
+							}
+		
+							data = data[ a[i] ];
+							if ( data === undefined )
+							{
+								return undefined;
+							}
 						}
 					}
+		
 					return data;
+				};
+		
+				return function (data, type) {
+					return fetchData( data, type, mSource );
 				};
 			}
 			else
@@ -858,13 +898,41 @@
 					mSource( data, 'set', val );
 				};
 			}
-			else if ( typeof mSource === 'string' && mSource.indexOf('.') != -1 )
+			else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
 			{
-				/* Like the get, we need to get data from a nested object.  */
-				var a = mSource.split('.');
-				return function (data, val) {
+				/* Like the get, we need to get data from a nested object */
+				var setData = function (data, val, src) {
+					var a = src.split('.'), b;
+					var arrayNotation, o, innerSrc;
+		
 					for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
 					{
+						// Check if we are dealing with an array notation request
+						arrayNotation = a[i].match(__reArray);
+		
+						if ( arrayNotation )
+						{
+							a[i] = a[i].replace(__reArray, '');
+							data[ a[i] ] = [];
+							
+							// Get the remainder of the nested object to set so we can recurse
+							b = a.slice();
+							b.splice( 0, i+1 );
+							innerSrc = b.join('.');
+		
+							// Traverse each entry in the array setting the properties requested
+							for ( var j=0, jLen=val.length ; j<jLen ; j++ )
+							{
+								o = {};
+								setData( o, val[j], innerSrc );
+								data[ a[i] ].push( o );
+							}
+		
+							// The inner call to setData has already traversed through the remainder
+							// of the source and has set the data, thus we can exit here
+							return;
+						}
+		
 						// If the nested object doesn't currently exist - since we are
 						// trying to set the value - create it
 						if ( data[ a[i] ] === undefined )
@@ -873,7 +941,14 @@
 						}
 						data = data[ a[i] ];
 					}
-					data[ a[a.length-1] ] = val;
+		
+					// If array notation is used, we just want to strip it and use the property name
+					// and assign the value. If it isn't used, then we get the result we want anyway
+					data[ a[a.length-1].replace(__reArray, '') ] = val;
+				};
+		
+				return function (data, val) {
+					return setData( data, val, mSource );
 				};
 			}
 			else
