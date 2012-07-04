@@ -6,11 +6,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "engine" },
+			{ "mData": "browser" },
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -28,11 +28,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
-					{ "mDataProp": "browser", "bSortable": false },
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "engine" },
+					{ "mData": "browser", "bSortable": false },
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 			$('#example thead th:eq(1)').click();
@@ -62,11 +62,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
-					{ "mDataProp": "browser", "bSortable": false },
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version", "bSortable": false },
-					{ "mDataProp": "grade" }
+					{ "mData": "engine" },
+					{ "mData": "browser", "bSortable": false },
+					{ "mData": "platform" },
+					{ "mData": "version", "bSortable": false },
+					{ "mData": "grade" }
 				]
 			} );
 		},

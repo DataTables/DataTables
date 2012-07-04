@@ -6,11 +6,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "engine" },
+			{ "mData": "browser" },
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -33,11 +33,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
-					{ "mDataProp": "browser", "bSearchable": false },
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "engine" },
+					{ "mData": "browser", "bSearchable": false },
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 			oSettings = oTable.fnSettings();
@@ -59,11 +59,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine", "bSearchable": false },
-					{ "mDataProp": "browser", "bSearchable": false },
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "engine", "bSearchable": false },
+					{ "mData": "browser", "bSearchable": false },
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 			oSettings = oTable.fnSettings();

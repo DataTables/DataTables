@@ -53,7 +53,7 @@ DataTable.models.oColumn = {
 	 * and filtering use the rendered value (true - default), or you can have
 	 * the sorting and filtering us the original value (false).
 	 * 
-	 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
+	 * *NOTE* It is it is advisable now to use mData as a function and make 
 	 * use of the 'type' that it gives, allowing (potentially) different data to
 	 * be used for sorting, filtering, display and type detection.
 	 *  @type boolean
@@ -93,7 +93,7 @@ DataTable.models.oColumn = {
 	/**
 	 * Function to get data from a cell in a column. You should <b>never</b>
 	 * access data directly through _aData internally in DataTables - always use
-	 * the method attached to this property. It allows mDataProp to function as
+	 * the method attached to this property. It allows mData to function as
 	 * required. This function is automatically assigned by the column 
 	 * initialisation method
 	 *  @type function
@@ -138,7 +138,7 @@ DataTable.models.oColumn = {
 	/**
 	 * Function to set data for a cell in the column. You should <b>never</b> 
 	 * set the data directly to _aData internally in DataTables - always use
-	 * this method. It allows mDataProp to function as required. This function
+	 * this method. It allows mData to function as required. This function
 	 * is automatically assigned by the column initialisation method
 	 *  @type function
 	 *  @param {array|object} oData The data array/object for the array 
@@ -155,7 +155,17 @@ DataTable.models.oColumn = {
 	 *  @type function|int|string|null
 	 *  @default null
 	 */
-	"mDataProp": null,
+	"mData": null,
+	
+	/**
+	 * Partner property to mData which is used (only when defined) to get
+	 * the data - i.e. it is basically the same as mData, but without the
+	 * 'set' option, and also the data fed to it is the result from mData.
+	 * This is the rendering method to match the data method of mData.
+	 *  @type function|int|string|null
+	 *  @default null
+	 */
+	"mRender": null,
 	
 	/**
 	 * Unique header TH/TD element for this column - this is what the sorting
@@ -196,7 +206,7 @@ DataTable.models.oColumn = {
 	
 	/**
 	 * Allows a default value to be given for a column's data, and will be used
-	 * whenever a null data source is encountered (this can be because mDataProp
+	 * whenever a null data source is encountered (this can be because mData
 	 * is set to null, or because the data source itself is null).
 	 *  @type string
 	 *  @default null

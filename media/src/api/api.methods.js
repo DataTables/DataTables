@@ -199,8 +199,8 @@ this._ = function ( sSelector, oOpts )
  *    <ul>
  *      <li>1D array of data - add a single row with the data provided</li>
  *      <li>2D array of arrays - add multiple rows in a single call</li>
- *      <li>object - data object when using <i>mDataProp</i></li>
- *      <li>array of objects - multiple data objects when using <i>mDataProp</i></li>
+ *      <li>object - data object when using <i>mData</i></li>
+ *      <li>array of objects - multiple data objects when using <i>mData</i></li>
  *    </ul>
  *  @param {bool} [bRedraw=true] redraw the table or not
  *  @returns {array} An array of integers, representing the list of indexes in 
@@ -1186,30 +1186,26 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	var iRow = (typeof mRow === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
 	
-	if ( oSettings.__fnUpdateDeep === undefined && $.isArray(mData) && typeof mData === 'object' )
+	if ( $.isArray(mData) && iColumn === undefined )
 	{
 		/* Array update - update the whole row */
 		oSettings.aoData[iRow]._aData = mData.slice();
 		
 		/* Flag to the function that we are recursing */
-		oSettings.__fnUpdateDeep = true;
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
 			this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 		}
-		oSettings.__fnUpdateDeep = undefined;
 	}
-	else if ( oSettings.__fnUpdateDeep === undefined && mData !== null && typeof mData === 'object' )
+	else if ( $.isPlainObject(mData) && iColumn === undefined )
 	{
 		/* Object update - update the whole row - assume the developer gets the object right */
 		oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
 
-		oSettings.__fnUpdateDeep = true;
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
 			this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 		}
-		oSettings.__fnUpdateDeep = undefined;
 	}
 	else
 	{

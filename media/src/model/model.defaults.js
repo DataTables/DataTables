@@ -34,7 +34,7 @@ DataTable.defaults = {
 	 *    } );
 	 *    
 	 *  @example
-	 *    // Using an array of objects as a data source (mDataProp)
+	 *    // Using an array of objects as a data source (mData)
 	 *    $(document).ready( function () {
 	 *      $('#example').dataTable( {
 	 *        "aaData": [
@@ -54,11 +54,11 @@ DataTable.defaults = {
 	 *          }
 	 *        ],
 	 *        "aoColumns": [
-	 *          { "sTitle": "Engine",   "mDataProp": "engine" },
-	 *          { "sTitle": "Browser",  "mDataProp": "browser" },
-	 *          { "sTitle": "Platform", "mDataProp": "platform" },
-	 *          { "sTitle": "Version",  "mDataProp": "version" },
-	 *          { "sTitle": "Grade",    "mDataProp": "grade" }
+	 *          { "sTitle": "Engine",   "mData": "engine" },
+	 *          { "sTitle": "Browser",  "mData": "browser" },
+	 *          { "sTitle": "Platform", "mData": "platform" },
+	 *          { "sTitle": "Version",  "mData": "version" },
+	 *          { "sTitle": "Grade",    "mData": "grade" }
 	 *        ]
 	 *      } );
 	 *    } );
