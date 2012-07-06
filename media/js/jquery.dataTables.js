@@ -5634,32 +5634,37 @@
 		this.fnGetData = function( mRow, iCol )
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-			
-			if ( mRow !== undefined )
+			if ( mRow != null )
 			{
-				var iRow = mRow;
-				if ( typeof mRow === 'object' )
-				{
-					var sNode = mRow.nodeName.toLowerCase();
-					if (sNode === "tr" )
-					{
-						iRow = _fnNodeToDataIndex(oSettings, mRow);
-					}
-					else if ( sNode === "td" )
-					{
-						iRow = _fnNodeToDataIndex(oSettings, mRow.parentNode);
-						iCol = _fnNodeToColumnIndex( oSettings, iRow, mRow );
-					}
-				}
+			  if ( mRow !== undefined )
+			  {
+				  var iRow = mRow;
+				  if ( typeof mRow === 'object' )
+				  {
+					  var sNode = mRow.nodeName.toLowerCase();
+					  if (sNode === "tr" )
+					  {
+						  iRow = _fnNodeToDataIndex(oSettings, mRow);
+					  }
+					  else if ( sNode === "td" )
+					  {
+						  iRow = _fnNodeToDataIndex(oSettings, mRow.parentNode);
+						  iCol = _fnNodeToColumnIndex( oSettings, iRow, mRow );
+					  }
+				  }
 		
-				if ( iCol !== undefined )
-				{
-					return _fnGetCellData( oSettings, iRow, iCol, '' );
-				}
-				return (oSettings.aoData[iRow]!==undefined) ?
-					oSettings.aoData[iRow]._aData : null;
-			}
-			return _fnGetDataMaster( oSettings );
+				  if ( iCol !== undefined )
+				  {
+					  return _fnGetCellData( oSettings, iRow, iCol, '' );
+				  }
+				  return (oSettings.aoData[iRow]!==undefined) ?
+					  oSettings.aoData[iRow]._aData : null;
+			  }
+			  return _fnGetDataMaster( oSettings );
+		  }
+		  else {
+		    return false;
+		  }
 		};
 		
 		
