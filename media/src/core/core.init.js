@@ -30,18 +30,33 @@ function _fnInitialise ( oSettings )
 	/* Okay to show that something is going on now */
 	_fnProcessingDisplay( oSettings, true );
 	
-	/* Calculate sizes for columns */
-	if ( oSettings.oFeatures.bAutoWidth )
-	{
-		_fnCalculateColumnWidths( oSettings );
-	}
-	
-	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
-	{
-		if ( oSettings.aoColumns[i].sWidth !== null )
+	var oTable = $(oSettings.nTable);
+
+	var fnInitialiseColumnWidths = function(){
+		/* Calculate sizes for columns */
+		if ( oSettings.oFeatures.bAutoWidth )
 		{
-			oSettings.aoColumns[i].nTh.style.width = _fnStringToCss( oSettings.aoColumns[i].sWidth );
+			_fnCalculateColumnWidths( oSettings );
 		}
+		
+		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		{
+			if ( oSettings.aoColumns[i].sWidth !== null )
+			{
+				oSettings.aoColumns[i].nTh.style.width = _fnStringToCss( oSettings.aoColumns[i].sWidth );
+			}
+		}
+	}
+
+	if(oTable.is(':visible'))
+	{
+		fnInitialiseColumnWidths();
+	}
+	else
+	{				
+		oTable.one('shown',function(){
+			fnInitialiseColumnWidths();
+		});
 	}
 	
 	/* If there is default sorting required - let's do it. The sort function will do the
