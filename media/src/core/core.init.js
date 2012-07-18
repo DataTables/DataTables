@@ -38,7 +38,7 @@ function _fnInitialise ( oSettings )
 	
 	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
-		if ( oSettings.aoColumns[i].sWidth !== null )
+		if ( oSettings.aoColumns[i].sWidth !== null && oSettings.aoColumns[i].sWidth != "0px")
 		{
 			oSettings.aoColumns[i].nTh.style.width = _fnStringToCss( oSettings.aoColumns[i].sWidth );
 		}
