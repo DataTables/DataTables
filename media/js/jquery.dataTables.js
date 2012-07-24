@@ -6100,7 +6100,7 @@
 					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 				}
 			}
-			else if ( $.isPlainObject(mData) && iColumn === undefined )
+			else if ( $.isPlainObject(mData) && iColumn === undefined && !(mData instanceof Date))
 			{
 				/* Object update - update the whole row - assume the developer gets the object right */
 				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
