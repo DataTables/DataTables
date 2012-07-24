@@ -226,6 +226,21 @@ function _fnGatherData( oSettings )
 						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
 					);
 				}
+
+				if ( typeof oCol.fnRenderAfter === 'function' )
+				{
+					oCol.fnRenderAfter(
+						{
+							"iDataRow": iRow,
+							"iDataColumn": iColumn,
+							"aData": oData._aData,
+							"oSettings": oSettings,
+							"mDataProp": oCol.mDataProp,
+							"nTd": nCell,
+							"nTr": oData.nTr
+						}, _fnGetCellData(oSettings, iRow, iColumn, 'display')
+					);
+				}
 			}
 		}
 	}

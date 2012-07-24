@@ -121,6 +121,21 @@ DataTable.models.oColumn = {
 	"fnRender": null,
 	
 	/**
+	 * Custom display function that will be called for the display of each cell 
+	 * in this column (after fnRender).
+	 *  @type function
+	 *  @param {object} o Object with the following parameters:
+	 *  @param {int}    o.iDataRow The row in aoData
+	 *  @param {int}    o.iDataColumn The column in question
+	 *  @param {array   o.aData The data for the row in question
+	 *  @param {object} o.oSettings The settings object for this DataTables instance
+	 *  @param {element} nTd The TD node that has been created
+	 *  @param {element} nTr The TR node that has been created
+	 *  @default null
+	 */
+	"fnRenderAfter": null,
+
+	/**
 	 * Function to set data for a cell in the column. You should <b>never</b> 
 	 * set the data directly to _aData internally in DataTables - always use
 	 * this method. It allows mData to function as required. This function
