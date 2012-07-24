@@ -2510,6 +2510,10 @@
 				/* Normal record set */
 				sOut = oLang.sInfo;
 			}
+            else if (isNaN(iTotal))
+            {
+                sOut = oLang.sInfoUnknown;
+            }
 			else
 			{
 				/* Record set after filtering */
@@ -2923,7 +2927,7 @@
 				if ( oSettings._iDisplayLength >= 0 )
 				{
 					/* Make sure we are not over running the display array */
-					if ( oSettings._iDisplayStart + oSettings._iDisplayLength < oSettings.fnRecordsDisplay() )
+					if ( isNaN(oSettings.fnRecordsDisplay()) || oSettings._iDisplayStart + oSettings._iDisplayLength < oSettings.fnRecordsDisplay() )
 					{
 						oSettings._iDisplayStart += oSettings._iDisplayLength;
 					}
@@ -9228,7 +9232,23 @@
 			 *    } );
 			 */
 			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
-		
+	
+			/**
+			 * Same as sInfo, but used when no information about the total number of records has been given.
+			 *  @type string
+			 *  @default Showing _START_ to _END_ of more entries _TOTAL_ entries
+			 *  @dtopt Language
+			 * 
+			 *  @example
+			 *    $(document).ready(function() {
+			 *      $('#example').dataTable( {
+			 *        "oLanguage": {
+			 *          "sInfoUnknown": "A  (_START_ to _END_) subarray of an unknown number of entries"
+			 *        }
+			 *      } );
+			 *    } );
+             */
+            "sInfoUnknown" : "Showing _START_ to _END_ of more entries",
 		
 			/**
 			 * Display information string for when the table is empty. Typically the 
@@ -11374,7 +11394,9 @@
 			if ( this.oFeatures.bServerSide ) {
 				if ( this.oFeatures.bPaginate === false || this._iDisplayLength == -1 ) {
 					return this._iDisplayStart+this.aiDisplay.length;
-				} else {
+				} else if ( isNaN(this._iRecordsDisplay)) {
+		            return this._iDisplayStart+this._iDisplayLength;
+                } else {
 					return Math.min( this._iDisplayStart+this._iDisplayLength, 
 						this._iRecordsDisplay );
 				}
@@ -11793,9 +11815,8 @@
 					);
 				}
 			}
-		}
-	} );
-	
+		}});
+
 	$.extend( DataTable.ext.oSort, {
 		/*
 		 * text sorting
