@@ -1125,6 +1125,7 @@ DataTable.defaults = {
 	 *        "bStateSave": true,
 	 *        "fnStateSaveParams": function (oSettings, oData) {
 	 *          oData.oSearch.sSearch = "";
+	 *        }
 	 *      } );
 	 *    } );
 	 */

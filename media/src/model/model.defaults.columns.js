@@ -402,8 +402,7 @@ DataTable.defaults.columns = {
 	 *    // sorting, filtering and display. In this case, currency (price)
 	 *    $(document).ready(function() {
 	 *      var oTable = $('#example').dataTable( {
-	 *        "aoColumnDefs": [
-	 *        {
+	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [ 0 ],
 	 *          "mData": function ( source, type, val ) {
 	 *            if (type === 'set') {
@@ -422,7 +421,7 @@ DataTable.defaults.columns = {
 	 *            // 'sort', 'type' and undefined all just use the integer
 	 *            return source.price;
 	 *          }
-	 *        ]
+	 *        } ]
 	 *      } );
 	 *    } );
 	 */
