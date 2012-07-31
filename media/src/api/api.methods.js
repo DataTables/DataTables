@@ -1234,8 +1234,10 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	 * will rebuild the search array - however, the redraw might be disabled by the user)
 	 */
 	var iDisplayIndex = $.inArray( iRow, oSettings.aiDisplay );
-	oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow( oSettings, 
-		_fnGetRowData( oSettings, iRow, 'filter' ) );
+	oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow(
+		oSettings, 
+		_fnGetRowData( oSettings, iRow, 'filter', _fnGetColumns( oSettings, 'bSearchable' ) )
+	);
 	
 	/* Perform pre-draw actions */
 	if ( bAction === undefined || bAction )

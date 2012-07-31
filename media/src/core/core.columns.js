@@ -218,21 +218,35 @@ function _fnColumnIndexToVisible( oSettings, iMatch )
 
 /**
  * Get the number of visible columns
+ *  @param {object} oSettings dataTables settings object
  *  @returns {int} i the number of visible columns
- *  @param {object} oS dataTables settings object
  *  @memberof DataTable#oApi
  */
-function _fnVisbleColumns( oS )
+function _fnVisbleColumns( oSettings )
 {
-	var iVis = 0;
-	for ( var i=0 ; i<oS.aoColumns.length ; i++ )
-	{
-		if ( oS.aoColumns[i].bVisible === true )
-		{
-			iVis++;
+	return _fnGetColumns( oSettings, 'bVisible' ).length;
+}
+
+
+/**
+ * Get an array of column indexes that match a given property
+ *  @param {object} oSettings dataTables settings object
+ *  @param {string} sParam Parameter in aoColumns to look for - typically 
+ *    bVisible or bSearchable
+ *  @returns {array} Array of indexes with matched properties
+ *  @memberof DataTable#oApi
+ */
+function _fnGetColumns( oSettings, sParam )
+{
+	var a = [];
+
+	$.map( oSettings.aoColumns, function(val, i) {
+		if ( val[sParam] ) {
+			a.push( i );
 		}
-	}
-	return iVis;
+	} );
+
+	return a;
 }
 
 

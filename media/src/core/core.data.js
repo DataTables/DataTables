@@ -283,15 +283,16 @@ function _fnNodeToColumnIndex( oSettings, iRow, n )
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iRow aoData row id
  *  @param {string} sSpecific data get type ('type' 'filter' 'sort')
+ *  @param {array} aiColumns Array of column indexes to get data from
  *  @returns {array} Data array
  *  @memberof DataTable#oApi
  */
-function _fnGetRowData( oSettings, iRow, sSpecific )
+function _fnGetRowData( oSettings, iRow, sSpecific, aiColumns )
 {
 	var out = [];
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	for ( var i=0, iLen=aiColumns.length ; i<iLen ; i++ )
 	{
-		out.push( _fnGetCellData( oSettings, iRow, i, sSpecific ) );
+		out.push( _fnGetCellData( oSettings, iRow, aiColumns[i], sSpecific ) );
 	}
 	return out;
 }

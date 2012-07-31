@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect*/
+/*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns*/
 
 (/** @lends <global> */function($, window, document, undefined) {
 	/** 
@@ -278,21 +278,35 @@
 		
 		/**
 		 * Get the number of visible columns
+		 *  @param {object} oSettings dataTables settings object
 		 *  @returns {int} i the number of visible columns
-		 *  @param {object} oS dataTables settings object
 		 *  @memberof DataTable#oApi
 		 */
-		function _fnVisbleColumns( oS )
+		function _fnVisbleColumns( oSettings )
 		{
-			var iVis = 0;
-			for ( var i=0 ; i<oS.aoColumns.length ; i++ )
-			{
-				if ( oS.aoColumns[i].bVisible === true )
-				{
-					iVis++;
+			return _fnGetColumns( oSettings, 'bVisible' ).length;
+		}
+		
+		
+		/**
+		 * Get an array of column indexes that match a given property
+		 *  @param {object} oSettings dataTables settings object
+		 *  @param {string} sParam Parameter in aoColumns to look for - typically 
+		 *    bVisible or bSearchable
+		 *  @returns {array} Array of indexes with matched properties
+		 *  @memberof DataTable#oApi
+		 */
+		function _fnGetColumns( oSettings, sParam )
+		{
+			var a = [];
+		
+			$.map( oSettings.aoColumns, function(val, i) {
+				if ( val[sParam] ) {
+					a.push( i );
 				}
-			}
-			return iVis;
+			} );
+		
+			return a;
 		}
 		
 		
@@ -725,15 +739,16 @@
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {int} iRow aoData row id
 		 *  @param {string} sSpecific data get type ('type' 'filter' 'sort')
+		 *  @param {array} aiColumns Array of column indexes to get data from
 		 *  @returns {array} Data array
 		 *  @memberof DataTable#oApi
 		 */
-		function _fnGetRowData( oSettings, iRow, sSpecific )
+		function _fnGetRowData( oSettings, iRow, sSpecific, aiColumns )
 		{
 			var out = [];
-			for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			for ( var i=0, iLen=aiColumns.length ; i<iLen ; i++ )
 			{
-				out.push( _fnGetCellData( oSettings, iRow, i, sSpecific ) );
+				out.push( _fnGetCellData( oSettings, iRow, aiColumns[i], sSpecific ) );
 			}
 			return out;
 		}
@@ -2173,15 +2188,22 @@
 		function _fnFilterCustom( oSettings )
 		{
 			var afnFilters = DataTable.ext.afnFiltering;
+			var aiFilterColumns = _fnGetColumns( oSettings, 'bSearchable' );
+		
 			for ( var i=0, iLen=afnFilters.length ; i<iLen ; i++ )
 			{
 				var iCorrector = 0;
 				for ( var j=0, jLen=oSettings.aiDisplay.length ; j<jLen ; j++ )
 				{
 					var iDisIndex = oSettings.aiDisplay[j-iCorrector];
+					var bTest = afnFilters[i](
+						oSettings,
+						_fnGetRowData( oSettings, iDisIndex, 'filter', aiFilterColumns ),
+						iDisIndex
+					);
 					
 					/* Check if we should use this row based on the filtering function */
-					if ( !afnFilters[i]( oSettings, _fnGetRowData( oSettings, iDisIndex, 'filter' ), iDisIndex ) )
+					if ( !bTest )
 					{
 						oSettings.aiDisplay.splice( j-iCorrector, 1 );
 						iCorrector++;
@@ -2320,15 +2342,19 @@
 			if ( !oSettings.oFeatures.bServerSide )
 			{
 				/* Clear out the old data */
-				oSettings.asDataSearch.splice( 0, oSettings.asDataSearch.length );
+				oSettings.asDataSearch = [];
+		
+				var aiFilterColumns = _fnGetColumns( oSettings, 'bSearchable' );
+				var aiIndex = (iMaster===1) ?
+				 	oSettings.aiDisplayMaster :
+				 	oSettings.aiDisplay;
 				
-				var aArray = (iMaster && iMaster===1) ?
-				 	oSettings.aiDisplayMaster : oSettings.aiDisplay;
-				
-				for ( var i=0, iLen=aArray.length ; i<iLen ; i++ )
+				for ( var i=0, iLen=aiIndex.length ; i<iLen ; i++ )
 				{
-					oSettings.asDataSearch[i] = _fnBuildSearchRow( oSettings,
-						_fnGetRowData( oSettings, aArray[i], 'filter' ) );
+					oSettings.asDataSearch[i] = _fnBuildSearchRow(
+						oSettings,
+						_fnGetRowData( oSettings, aiIndex[i], 'filter', aiFilterColumns )
+					);
 				}
 			}
 		}
@@ -2342,30 +2368,15 @@
 		 */
 		function _fnBuildSearchRow( oSettings, aData )
 		{
-			var sSearch = '';
-			if ( oSettings.__nTmpFilter === undefined )
-			{
-				oSettings.__nTmpFilter = document.createElement('div');
-			}
-			var nTmp = oSettings.__nTmpFilter;
-			
-			for ( var j=0, jLen=oSettings.aoColumns.length ; j<jLen ; j++ )
-			{
-				if ( oSettings.aoColumns[j].bSearchable )
-				{
-					var sData = aData[j];
-					sSearch += _fnDataToSearch( sData, oSettings.aoColumns[j].sType )+'  ';
-				}
-			}
+			var sSearch = aData.join('  ');
 			
 			/* If it looks like there is an HTML entity in the string, attempt to decode it */
 			if ( sSearch.indexOf('&') !== -1 )
 			{
-				nTmp.innerHTML = sSearch;
-				sSearch = nTmp.textContent ? nTmp.textContent : nTmp.innerText;
+				sSearch = $('<div>').html(sSearch).text();
 				
 				/* IE and Opera appear to put an newline where there is a <br> tag - remove it */
-				sSearch = sSearch.replace(/\n/g," ").replace(/\r/g,"");
+				sSearch = sSearch.replace( /[\n\r]/g, " " );
 			}
 			
 			return sSearch;
@@ -6137,8 +6148,10 @@
 			 * will rebuild the search array - however, the redraw might be disabled by the user)
 			 */
 			var iDisplayIndex = $.inArray( iRow, oSettings.aiDisplay );
-			oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow( oSettings, 
-				_fnGetRowData( oSettings, iRow, 'filter' ) );
+			oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow(
+				oSettings, 
+				_fnGetRowData( oSettings, iRow, 'filter', _fnGetColumns( oSettings, 'bSearchable' ) )
+			);
 			
 			/* Perform pre-draw actions */
 			if ( bAction === undefined || bAction )
@@ -6289,7 +6302,8 @@
 			"_fnRender": _fnRender,
 			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
 			"_fnInfoMacros": _fnInfoMacros,
-			"_fnBrowserDetect": _fnBrowserDetect
+			"_fnBrowserDetect": _fnBrowserDetect,
+			"_fnGetColumns": _fnGetColumns
 		};
 		
 		$.extend( DataTable.ext.oApi, this.oApi );

@@ -114,7 +114,8 @@ this.oApi = {
 	"_fnRender": _fnRender,
 	"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
 	"_fnInfoMacros": _fnInfoMacros,
-	"_fnBrowserDetect": _fnBrowserDetect
+	"_fnBrowserDetect": _fnBrowserDetect,
+	"_fnGetColumns": _fnGetColumns
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );
