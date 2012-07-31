@@ -169,22 +169,11 @@ function _fnAdjustColumnSizing ( oSettings )
  */
 function _fnVisibleToColumnIndex( oSettings, iMatch )
 {
-	var iColumn = -1;
-	
-	for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
-	{
-		if ( oSettings.aoColumns[i].bVisible === true )
-		{
-			iColumn++;
-		}
-		
-		if ( iColumn == iMatch )
-		{
-			return i;
-		}
-	}
-	
-	return null;
+	var aiVis = _fnGetColumns( oSettings, 'bVisible' );
+
+	return typeof aiVis[iMatch] === 'number' ?
+		aiVis[iMatch] :
+		null;
 }
 
 
@@ -198,21 +187,10 @@ function _fnVisibleToColumnIndex( oSettings, iMatch )
  */
 function _fnColumnIndexToVisible( oSettings, iMatch )
 {
-	var iVisible = -1;
-	for ( var i=0 ; i<oSettings.aoColumns.length ; i++ )
-	{
-		if ( oSettings.aoColumns[i].bVisible === true )
-		{
-			iVisible++;
-		}
-		
-		if ( i == iMatch )
-		{
-			return oSettings.aoColumns[i].bVisible === true ? iVisible : null;
-		}
-	}
-	
-	return null;
+	var aiVis = _fnGetColumns( oSettings, 'bVisible' );
+	var iPos = $.inArray( iMatch, aiVis );
+
+	return iPos !== -1 ? iPos : null;
 }
 
 
