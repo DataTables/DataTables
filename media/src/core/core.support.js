@@ -166,17 +166,21 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
  */
 function _fnExtend( oOut, oExtender )
 {
+	var val;
+	
 	for ( var prop in oExtender )
 	{
 		if ( oExtender.hasOwnProperty(prop) )
 		{
-			if ( typeof oInit[prop] === 'object' && $.isArray(oExtender[prop]) === false )
+			val = oExtender[prop];
+
+			if ( typeof oInit[prop] === 'object' && val !== null && $.isArray(val) === false )
 			{
-				$.extend( true, oOut[prop], oExtender[prop] );
+				$.extend( true, oOut[prop], val );
 			}
 			else
 			{
-				oOut[prop] = oExtender[prop];
+				oOut[prop] = val;
 			}
 		}
 	}
