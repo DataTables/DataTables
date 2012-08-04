@@ -67,7 +67,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 	for ( iRow=iStart ; iRow<iEnd ; iRow++ )
 	{
 		oData = oSettings.aoData[iRow];
-		if ( oData.nTr !== null )
+		if ( oData !== undefined && oData.nTr !== null )        
 		{
 			/* get the TD child nodes - taking into account text etc nodes */
 			anTds = [];
