@@ -919,7 +919,7 @@ DataTable.defaults = {
 			"data": aoData,
 			"success": function (json) {
 				if ( json.sError ) {
-					alert( json.sError );
+					oSettings.oApi._fnLog( oSettings, 0, json.sError );
 				}
 				
 				$(oSettings.oInstance).trigger('xhr', oSettings);
