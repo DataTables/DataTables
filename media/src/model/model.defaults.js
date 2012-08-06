@@ -918,6 +918,10 @@ DataTable.defaults = {
 			"url":  sUrl,
 			"data": aoData,
 			"success": function (json) {
+				if ( json.sError ) {
+					alert( json.sError );
+				}
+				
 				$(oSettings.oInstance).trigger('xhr', oSettings);
 				fnCallback( json );
 			},
