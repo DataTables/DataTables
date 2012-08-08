@@ -922,7 +922,7 @@ DataTable.defaults = {
 					oSettings.oApi._fnLog( oSettings, 0, json.sError );
 				}
 				
-				$(oSettings.oInstance).trigger('xhr', oSettings);
+				$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
 				fnCallback( json );
 			},
 			"dataType": "json",
