@@ -433,11 +433,11 @@ function _fnGetObjectDataFn( mSource )
 						break;
 					}
 
-					data = data[ a[i] ];
-					if ( data === undefined )
+					if ( data === null || data[ a[i] ] === undefined )
 					{
 						return undefined;
 					}
+					data = data[ a[i] ];
 				}
 			}
 
@@ -515,7 +515,7 @@ function _fnSetObjectDataFn( mSource )
 
 				// If the nested object doesn't currently exist - since we are
 				// trying to set the value - create it
-				if ( data[ a[i] ] === undefined )
+				if ( data[ a[i] ] === null || data[ a[i] ] === undefined )
 				{
 					data[ a[i] ] = {};
 				}
