@@ -18,6 +18,7 @@ $(document).ready( function () {
 					],
 					"aoColumns": [
 						{ "mDataProp": "a" },
+						{ "mDataProp": "b" },
 						{ "mDataProp": "b.c" }
 					]
 				} );
@@ -42,6 +43,7 @@ $(document).ready( function () {
 				],
 				"aoColumns": [
 					{ "mDataProp": "a" },
+					{ "mDataProp": "b" },
 					{ "mDataProp": "b.c", "sDefaultContent": "allan" }
 				]
 			} );
@@ -62,11 +64,12 @@ $(document).ready( function () {
 				],
 				"aoColumns": [
 					{ "mDataProp": "a" },
+					{ "mDataProp": "b" },
 					{ "mDataProp": "b.c", "sDefaultContent": "allan" }
 				]
 			} );
 		},
-		function () { return $('#example tbody td:eq(5)').html() === "allan"; }
+		function () { return $('#example tbody td:eq(8)').html() === "allan"; }
 	);
 	
 	oTest.fnComplete();

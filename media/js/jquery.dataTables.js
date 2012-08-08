@@ -2352,12 +2352,10 @@
 			if ( sSearch.indexOf('&') !== -1 )
 			{
 				sSearch = $('<div>').html(sSearch).text();
-				
-				/* IE and Opera appear to put an newline where there is a <br> tag - remove it */
-				sSearch = sSearch.replace( /[\n\r]/g, " " );
 			}
 			
-			return sSearch;
+			// Strip newline characters
+			return sSearch.replace( /[\n\r]/g, " " );
 		}
 		
 		/**
