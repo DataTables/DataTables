@@ -100,7 +100,7 @@ function _fnAjaxParameters( oSettings )
 
 
 /**
- * Add Ajax parameters from plugins
+ * Add Ajax parameters from plug-ins
  *  @param {object} oSettings dataTables settings object
  *  @param array {objects} aoData name/value pairs to send to the server
  *  @memberof DataTable#oApi
@@ -127,7 +127,7 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	if ( json.sEcho !== undefined )
 	{
 		/* Protect against old returns over-writing a new one. Possible when you get
-		 * very fast interaction, and later queires are completed much faster
+		 * very fast interaction, and later queries are completed much faster
 		 */
 		if ( json.sEcho*1 < oSettings.iDraw )
 		{

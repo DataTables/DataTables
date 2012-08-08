@@ -379,7 +379,7 @@ function _fnDraw( oSettings )
 				}
 			}
 			
-			/* Row callback functions - might want to manipule the row */
+			/* Row callback functions - might want to manipulate the row */
 			_fnCallbackFire( oSettings, 'aoRowCallback', null, 
 				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 			
@@ -755,7 +755,7 @@ function _fnDetectHeader ( aLayout, nThead )
  *  @param {object} oSettings dataTables settings object
  *  @param {node} nHeader automatically detect the layout from this node - optional
  *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
- *  @returns array {node} aReturn list of unique ths
+ *  @returns array {node} aReturn list of unique th's
  *  @memberof DataTable#oApi
  */
 function _fnGetUniqueThs ( oSettings, nHeader, aLayout )

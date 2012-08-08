@@ -108,7 +108,7 @@ function _fnFeatureHtmlTable ( oSettings )
 	/*
 	 * Sizing
 	 */
-	/* When xscrolling add the width and a scroller to move the header with the body */
+	/* When x-scrolling add the width and a scroller to move the header with the body */
 	if ( oSettings.oScroll.sX !== "" )
 	{
 		nScrollHead.style.width = _fnStringToCss( oSettings.oScroll.sX );
@@ -219,7 +219,7 @@ function _fnScrollDraw ( o )
 	
 	/* Remove old sizing and apply the calculated column widths
 	 * Get the unique column headers in the newly created (cloned) header. We want to apply the
-	 * calclated sizes to this header
+	 * calculated sizes to this header
 	 */
 	if ( o.oScroll.sX === "" )
 	{
@@ -453,7 +453,7 @@ function _fnScrollDraw ( o )
 		nScrollFootInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	}
 
-	/* Adjust the position of the header incase we loose the y-scrollbar */
+	/* Adjust the position of the header in case we loose the y-scrollbar */
 	$(nScrollBody).scroll();
 	
 	/* If sorting or filtering has occurred, jump the scrolling back to the top */

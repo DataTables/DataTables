@@ -26,7 +26,7 @@ function _fnSort ( oSettings, bApplyClasses )
 			oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
 			oSettings.aaSorting.slice();
 		
-		/* If there is a sorting data type, and a fuction belonging to it, then we need to
+		/* If there is a sorting data type, and a function belonging to it, then we need to
 		 * get the data from the developer's function and apply it for this column
 		 */
 		for ( i=0 ; i<aaSort.length ; i++ )
@@ -208,17 +208,17 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		 * twice - once for when bProcessing is enabled, and another time for when it is 
 		 * disabled, as we need to perform slightly different actions.
 		 *   Basically the issue here is that the Javascript engine in modern browsers don't 
-		 * appear to allow the rendering engine to update the display while it is still excuting
+		 * appear to allow the rendering engine to update the display while it is still executing
 		 * it's thread (well - it does but only after long intervals). This means that the 
 		 * 'processing' display doesn't appear for a table sort. To break the js thread up a bit
 		 * I force an execution break by using setTimeout - but this breaks the expected 
 		 * thread continuation for the end-developer's point of view (their code would execute
-		 * too early), so we on;y do it when we absolutely have to.
+		 * too early), so we only do it when we absolutely have to.
 		 */
 		var fnInnerSorting = function () {
 			var iColumn, iNextSort;
 			
-			/* If the shift key is pressed then we are multipe column sorting */
+			/* If the shift key is pressed then we are multiple column sorting */
 			if ( e.shiftKey )
 			{
 				/* Are we already doing some kind of sort on this column? */
@@ -391,10 +391,10 @@ function _fnSortingClasses( oSettings )
 	 * Apply the required classes to the table body
 	 * Note that this is given as a feature switch since it can significantly slow down a sort
 	 * on large data sets (adding and removing of classes is always slow at the best of times..)
-	 * Further to this, note that this code is admitadly fairly ugly. It could be made a lot 
-	 * simpiler using jQuery selectors and add/removeClass, but that is significantly slower
+	 * Further to this, note that this code is admittedly fairly ugly. It could be made a lot 
+	 * simpler using jQuery selectors and add/removeClass, but that is significantly slower
 	 * (on the order of 5 times slower) - hence the direct DOM manipulation here.
-	 * Note that for defered drawing we do use jQuery - the reason being that taking the first
+	 * Note that for deferred drawing we do use jQuery - the reason being that taking the first
 	 * row found to see if the whole column needs processed can miss classes since the first
 	 * column might be new.
 	 */

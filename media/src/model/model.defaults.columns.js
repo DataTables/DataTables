@@ -15,7 +15,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *          { "aDataSort": [ 0, 1 ], "aTargets": [ 0 ] },
@@ -27,7 +27,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [
 	 *          { "aDataSort": [ 0, 1 ] },
@@ -52,7 +52,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *          { "asSorting": [ "asc" ], "aTargets": [ 1 ] },
@@ -64,7 +64,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [
 	 *          null,
@@ -87,7 +87,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "bSearchable": false, "aTargets": [ 0 ] }
@@ -96,7 +96,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "bSearchable": false },
@@ -118,7 +118,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "bSortable": false, "aTargets": [ 0 ] }
@@ -127,7 +127,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "bSortable": false },
@@ -155,7 +155,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          {
@@ -171,7 +171,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          {
@@ -199,7 +199,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "bVisible": false, "aTargets": [ 0 ] }
@@ -208,7 +208,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "bVisible": false },
@@ -236,7 +236,7 @@ DataTable.defaults.columns = {
 	 *  @dtopt Columns
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [3],
@@ -268,7 +268,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          {
@@ -283,7 +283,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "fnRender": function ( o, val ) {
@@ -310,7 +310,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "iDataSort": 1, "aTargets": [ 0 ] }
@@ -320,7 +320,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "iDataSort": 1 },
@@ -352,7 +352,7 @@ DataTable.defaults.columns = {
 	 *     <li>integer - treated as an array index for the data source. This is the
 	 *       default that DataTables uses (incrementally increased for each column).</li>
 	 *     <li>string - read an object property from the data source. Note that you can
-	 *       use Javascript dotted notation to read deep properties/arrays from the
+	 *       use Javascript dotted notation to read deep properties / arrays from the
 	 *       data source.</li>
 	 *     <li>null - the sDefaultContent option will be used for the cell (null
 	 *       by default, so you will need to specify the default content you want -
@@ -384,7 +384,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Read table data from objects
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/deep.txt",
 	 *        "aoColumns": [
@@ -400,7 +400,7 @@ DataTable.defaults.columns = {
 	 *  @example
 	 *    // Using mData as a function to provide different information for
 	 *    // sorting, filtering and display. In this case, currency (price)
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [ 0 ],
@@ -441,7 +441,7 @@ DataTable.defaults.columns = {
 	 *     <li>integer - treated as an array index for the data source. This is the
 	 *       default that DataTables uses (incrementally increased for each column).</li>
 	 *     <li>string - read an object property from the data source. Note that you can
-	 *       use Javascript dotted notation to read deep properties/arrays from the
+	 *       use Javascript dotted notation to read deep properties / arrays from the
 	 *       data source and also array brackets to indicate that the data reader should
 	 *       loop over the data source array. When characters are given between the array
 	 *       brackets, these characters are used to join the data source array together.
@@ -465,7 +465,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Create a comma separated list from an array of objects
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/deep.txt",
 	 *        "aoColumns": [
@@ -481,7 +481,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Use as a function to create a link from the data source
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *        {
@@ -507,13 +507,12 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Make the first column use TH cells
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
-	 *        "aoColumnDefs": [
-	 *        {
+	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [ 0 ],
 	 *          "sCellType": "th"
-	 *        ]
+	 *        } ]
 	 *      } );
 	 *    } );
 	 */
@@ -528,7 +527,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sClass": "my_class", "aTargets": [ 0 ] }
@@ -538,7 +537,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sClass": "my_class" },
@@ -569,7 +568,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          null,
@@ -595,7 +594,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          {
@@ -609,7 +608,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          null,
@@ -639,7 +638,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sName": "engine", "aTargets": [ 0 ] },
@@ -653,7 +652,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sName": "engine" },
@@ -670,7 +669,7 @@ DataTable.defaults.columns = {
 
 	/**
 	 * Defines a data source type for the sorting which can be used to read
-	 * realtime information from the table (updating the internally cached
+	 * real-time information from the table (updating the internally cached
 	 * version) prior to sorting. This allows sorting to occur on user editable
 	 * elements such as form inputs.
 	 *  @type string
@@ -679,7 +678,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *          { "sSortDataType": "dom-text", "aTargets": [ 2, 3 ] },
@@ -692,7 +691,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [
 	 *          null,
@@ -717,7 +716,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sTitle": "My column title", "aTargets": [ 0 ] }
@@ -727,7 +726,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sTitle": "My column title" },
@@ -756,7 +755,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sType": "html", "aTargets": [ 0 ] }
@@ -766,7 +765,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sType": "html" },
@@ -783,7 +782,7 @@ DataTable.defaults.columns = {
 
 	/**
 	 * Defining the width of the column, this parameter may take any CSS value
-	 * (3em, 20px etc). DataTables applys 'smart' widths to columns which have not
+	 * (3em, 20px etc). DataTables apples 'smart' widths to columns which have not
 	 * been given a specific width through this interface ensuring that the table
 	 * remains readable.
 	 *  @type string
@@ -792,7 +791,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sWidth": "20%", "aTargets": [ 0 ] }
@@ -802,7 +801,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sWidth": "20%" },

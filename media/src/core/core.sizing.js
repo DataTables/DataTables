@@ -284,7 +284,7 @@ function _fnScrollingWidthAdjust ( oSettings, n )
  * Get the widest node
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
- *  @returns {string} max strlens for each column
+ *  @returns {string} max string length for each column
  *  @memberof DataTable#oApi
  */
 function _fnGetWidestNode( oSettings, iCol )
@@ -309,7 +309,7 @@ function _fnGetWidestNode( oSettings, iCol )
  * Get the maximum strlen for each data column
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
- *  @returns {string} max strlens for each column
+ *  @returns {string} max string length for each column
  *  @memberof DataTable#oApi
  */
 function _fnGetMaxLenString( oSettings, iCol )

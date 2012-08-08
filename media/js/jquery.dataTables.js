@@ -205,7 +205,7 @@
 		 */
 		function _fnAdjustColumnSizing ( oSettings )
 		{
-			/* Not interested in doing column width calculation if autowidth is disabled */
+			/* Not interested in doing column width calculation if auto-width is disabled */
 			if ( oSettings.oFeatures.bAutoWidth === false )
 			{
 				return false;
@@ -464,7 +464,7 @@
 			{
 				oCol = oSettings.aoColumns[i];
 		
-				/* Use rendered data for filtering/sorting */
+				/* Use rendered data for filtering / sorting */
 				if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mData !== null )
 				{
 					_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
@@ -632,7 +632,7 @@
 							nCell.innerHTML = sRendered;
 							if ( oCol.bUseRendered )
 							{
-								/* Use the rendered data for filtering/sorting */
+								/* Use the rendered data for filtering / sorting */
 								_fnSetCellData( oSettings, iRow, iColumn, sRendered );
 							}
 						}
@@ -643,7 +643,7 @@
 							nCell.className += ' '+oCol.sClass;
 						}
 						
-						/* Column visability */
+						/* Column visibility */
 						if ( !bVisible )
 						{
 							oData._anHidden[iColumn] = nCell;
@@ -1439,7 +1439,7 @@
 						}
 					}
 					
-					/* Row callback functions - might want to manipule the row */
+					/* Row callback functions - might want to manipulate the row */
 					_fnCallbackFire( oSettings, 'aoRowCallback', null, 
 						[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 					
@@ -1815,7 +1815,7 @@
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {node} nHeader automatically detect the layout from this node - optional
 		 *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
-		 *  @returns array {node} aReturn list of unique ths
+		 *  @returns array {node} aReturn list of unique th's
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
@@ -1948,7 +1948,7 @@
 		
 		
 		/**
-		 * Add Ajax parameters from plugins
+		 * Add Ajax parameters from plug-ins
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param array {objects} aoData name/value pairs to send to the server
 		 *  @memberof DataTable#oApi
@@ -1975,7 +1975,7 @@
 			if ( json.sEcho !== undefined )
 			{
 				/* Protect against old returns over-writing a new one. Possible when you get
-				 * very fast interaction, and later queires are completed much faster
+				 * very fast interaction, and later queries are completed much faster
 				 */
 				if ( json.sEcho*1 < oSettings.iDraw )
 				{
@@ -2363,7 +2363,7 @@
 		 *  @param {string} sSearch string to search for
 		 *  @param {bool} bRegex treat as a regular expression or not
 		 *  @param {bool} bSmart perform smart filtering or not
-		 *  @param {bool} bCaseInsensitive Do case insenstive matching or not
+		 *  @param {bool} bCaseInsensitive Do case insensitive matching or not
 		 *  @returns {RegExp} constructed object
 		 *  @memberof DataTable#oApi
 		 */
@@ -2418,7 +2418,7 @@
 		
 		
 		/**
-		 * scape a string stuch that it can be used in a regular expression
+		 * scape a string such that it can be used in a regular expression
 		 *  @param {string} sVal string to escape
 		 *  @returns {string} escaped string
 		 *  @memberof DataTable#oApi
@@ -2795,7 +2795,7 @@
 		
 		
 		/**
-		 * Rcalculate the end point based on the start point
+		 * Recalculate the end point based on the start point
 		 *  @param {object} oSettings dataTables settings object
 		 *  @memberof DataTable#oApi
 		 */
@@ -2899,7 +2899,7 @@
 					oSettings._iDisplayStart - oSettings._iDisplayLength :
 					0;
 				
-				/* Correct for underrun */
+				/* Correct for under-run */
 				if ( oSettings._iDisplayStart < 0 )
 				{
 				  oSettings._iDisplayStart = 0;
@@ -3095,7 +3095,7 @@
 			/*
 			 * Sizing
 			 */
-			/* When xscrolling add the width and a scroller to move the header with the body */
+			/* When x-scrolling add the width and a scroller to move the header with the body */
 			if ( oSettings.oScroll.sX !== "" )
 			{
 				nScrollHead.style.width = _fnStringToCss( oSettings.oScroll.sX );
@@ -3206,7 +3206,7 @@
 			
 			/* Remove old sizing and apply the calculated column widths
 			 * Get the unique column headers in the newly created (cloned) header. We want to apply the
-			 * calclated sizes to this header
+			 * calculated sizes to this header
 			 */
 			if ( o.oScroll.sX === "" )
 			{
@@ -3440,7 +3440,7 @@
 				nScrollFootInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 			}
 		
-			/* Adjust the position of the header incase we loose the y-scrollbar */
+			/* Adjust the position of the header in case we loose the y-scrollbar */
 			$(nScrollBody).scroll();
 			
 			/* If sorting or filtering has occurred, jump the scrolling back to the top */
@@ -3766,7 +3766,7 @@
 		 * Get the widest node
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {int} iCol column of interest
-		 *  @returns {string} max strlens for each column
+		 *  @returns {string} max string length for each column
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnGetWidestNode( oSettings, iCol )
@@ -3791,7 +3791,7 @@
 		 * Get the maximum strlen for each data column
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {int} iCol column of interest
-		 *  @returns {string} max strlens for each column
+		 *  @returns {string} max string length for each column
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnGetMaxLenString( oSettings, iCol )
@@ -3913,7 +3913,7 @@
 					oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
 					oSettings.aaSorting.slice();
 				
-				/* If there is a sorting data type, and a fuction belonging to it, then we need to
+				/* If there is a sorting data type, and a function belonging to it, then we need to
 				 * get the data from the developer's function and apply it for this column
 				 */
 				for ( i=0 ; i<aaSort.length ; i++ )
@@ -4095,17 +4095,17 @@
 				 * twice - once for when bProcessing is enabled, and another time for when it is 
 				 * disabled, as we need to perform slightly different actions.
 				 *   Basically the issue here is that the Javascript engine in modern browsers don't 
-				 * appear to allow the rendering engine to update the display while it is still excuting
+				 * appear to allow the rendering engine to update the display while it is still executing
 				 * it's thread (well - it does but only after long intervals). This means that the 
 				 * 'processing' display doesn't appear for a table sort. To break the js thread up a bit
 				 * I force an execution break by using setTimeout - but this breaks the expected 
 				 * thread continuation for the end-developer's point of view (their code would execute
-				 * too early), so we on;y do it when we absolutely have to.
+				 * too early), so we only do it when we absolutely have to.
 				 */
 				var fnInnerSorting = function () {
 					var iColumn, iNextSort;
 					
-					/* If the shift key is pressed then we are multipe column sorting */
+					/* If the shift key is pressed then we are multiple column sorting */
 					if ( e.shiftKey )
 					{
 						/* Are we already doing some kind of sort on this column? */
@@ -4278,10 +4278,10 @@
 			 * Apply the required classes to the table body
 			 * Note that this is given as a feature switch since it can significantly slow down a sort
 			 * on large data sets (adding and removing of classes is always slow at the best of times..)
-			 * Further to this, note that this code is admitadly fairly ugly. It could be made a lot 
-			 * simpiler using jQuery selectors and add/removeClass, but that is significantly slower
+			 * Further to this, note that this code is admittedly fairly ugly. It could be made a lot 
+			 * simpler using jQuery selectors and add/removeClass, but that is significantly slower
 			 * (on the order of 5 times slower) - hence the direct DOM manipulation here.
-			 * Note that for defered drawing we do use jQuery - the reason being that taking the first
+			 * Note that for deferred drawing we do use jQuery - the reason being that taking the first
 			 * row found to see if the whole column needs processed can miss classes since the first
 			 * column might be new.
 			 */
@@ -4427,7 +4427,7 @@
 			$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
 			
 			/* Column visibility state
-			 * Pass back visibiliy settings to the init handler, but to do not here override
+			 * Pass back visibility settings to the init handler, but to do not here override
 			 * the init object that the user might have passed in
 			 */
 			oInit.saved_aoColumns = [];
@@ -4739,7 +4739,7 @@
 		
 		/**
 		 * Bind an event handers to allow a click or return key to activate the callback.
-		 * This is good for accessability since a return on the keyboard will have the
+		 * This is good for accessibility since a return on the keyboard will have the
 		 * same effect as a click, if the element has focus.
 		 *  @param {element} n Element to bind the action to
 		 *  @param {object} oData Data object to pass to the triggered function
@@ -4768,7 +4768,7 @@
 		 * Register a callback function. Easily allows a callback function to be added to
 		 * an array store of callback functions that can then all be called together.
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+		 *  @param {string} sStore Name of the array storage for the callbacks in oSettings
 		 *  @param {function} fn Function to be called back
 		 *  @param {string} sName Identifying name for the callback (i.e. a label)
 		 *  @memberof DataTable#oApi
@@ -4790,7 +4790,7 @@
 		 * array store is done backwards! Further note that you do not want to fire off triggers
 		 * in time sensitive applications (for example cell creation) as its slow.
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+		 *  @param {string} sStore Name of the array storage for the callbacks in oSettings
 		 *  @param {string} sTrigger Name of the jQuery custom event to trigger. If null no trigger
 		 *    is fired
 		 *  @param {array} aArgs Array of arguments to pass to the callback function / trigger
@@ -4818,7 +4818,7 @@
 		/**
 		 * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
 		 * library, then we use that as it is fast, safe and accurate. If the function isn't 
-		 * available then we need to built it ourselves - the insperation for this function comes
+		 * available then we need to built it ourselves - the inspiration for this function comes
 		 * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
 		 * not perfect and absolutely should not be used as a replacement to json2.js - but it does
 		 * do what we need, without requiring a dependency for DataTables.
@@ -5025,11 +5025,11 @@
 		/**
 		 * Almost identical to $ in operation, but in this case returns the data for the matched
 		 * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
-		 * rather than any decendents, so the data can be obtained for the row/cell. If matching
+		 * rather than any descendants, so the data can be obtained for the row/cell. If matching
 		 * rows are found, the data returned is the original data array/object that was used to  
 		 * create the row (or a generated array if from a DOM source).
 		 *
-		 * This method is often useful incombination with $ where both functions are given the
+		 * This method is often useful in-combination with $ where both functions are given the
 		 * same parameters and the array indexes will match identically.
 		 *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
 		 *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
@@ -6062,7 +6062,7 @@
 		 *  @param {node|int} mRow TR element you want to update or the aoData index
 		 *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
-		 *  @param {bool} [bAction=true] Perform predraw actions or not
+		 *  @param {bool} [bAction=true] Perform pre-draw actions or not
 		 *  @returns {int} 0 on success, 1 on error
 		 *  @dtopt API
 		 *
@@ -6169,7 +6169,7 @@
 		
 		/*
 		 * This is really a good bit rubbish this method of exposing the internal methods
-		 * publically... - To be fixed in 2.0 using methods on the prototype
+		 * publicly... - To be fixed in 2.0 using methods on the prototype
 		 */
 		
 		
@@ -6554,7 +6554,7 @@
 					
 			if ( bStripeRemove )
 			{
-				/* Store the classes which we are about to remove so they can be readded on destroy */
+				/* Store the classes which we are about to remove so they can be re-added on destroy */
 				oSettings.asDestroyStripes = [ '', '' ];
 				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
 				{
@@ -7892,7 +7892,7 @@
 		 *  @dtopt Option
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
 		 *      } );
@@ -7902,7 +7902,7 @@
 		 *    // Setting the default display length as well as length menu
 		 *    // This is likely to be wanted if you remove the '10' option which
 		 *    // is the iDisplayLength default.
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "iDisplayLength": 25,
 		 *        "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
@@ -7974,7 +7974,7 @@
 		 * array may be of any length, and DataTables will apply each class 
 		 * sequentially, looping when required.
 		 *  @type array
-		 *  @default null <i>Will take the values determinted by the oClasses.sStripe*
+		 *  @default null <i>Will take the values determined by the oClasses.sStripe*
 		 *    options</i>
 		 *  @dtopt Option
 		 * 
@@ -8017,7 +8017,7 @@
 		 *  @dtopt Features
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/arrays.txt",
 		 *        "bDeferRender": true
@@ -8037,7 +8037,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sScrollY": "200px",
 		 *        "bPaginate": false
@@ -8176,7 +8176,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      initTable();
 		 *      tableActions();
 		 *    } );
@@ -8208,7 +8208,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bScrollAutoCss": false,
 		 *        "sScrollY": "200px"
@@ -8230,7 +8230,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sScrollY": "200",
 		 *        "bScrollCollapse": true
@@ -8252,7 +8252,7 @@
 		 *  @dtopt Features
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bScrollInfinite": true,
 		 *        "bScrollCollapse": true,
@@ -8309,7 +8309,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bSortCellsTop": true
 		 *      } );
@@ -8396,7 +8396,7 @@
 		 *  @dtopt Callbacks
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
 		 *          // Bold the grade for all 'A' grade browsers
@@ -8469,7 +8469,7 @@
 		 *  @dtopt Callbacks
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "fnFormatNumber": function ( iIn ) {
 		 *          if ( iIn &lt; 1000 ) {
@@ -8628,7 +8628,7 @@
 		 *  @dtopt Callbacks
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 		 *          // Bold the grade for all 'A' grade browsers
@@ -8661,7 +8661,7 @@
 		 * 
 		 *  @example
 		 *    // POST data to server
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bProcessing": true,
 		 *        "bServerSide": true,
@@ -8721,7 +8721,7 @@
 		 *  @dtopt Server-side
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bProcessing": true,
 		 *        "bServerSide": true,
@@ -8746,7 +8746,7 @@
 		 *  @dtopt Callbacks
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateLoad": function (oSettings) {
@@ -8796,21 +8796,23 @@
 		 * 
 		 *  @example
 		 *    // Remove a saved filter, so filtering is never loaded
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateLoadParams": function (oSettings, oData) {
 		 *          oData.oSearch.sSearch = "";
+		 *        }
 		 *      } );
 		 *    } );
 		 * 
 		 *  @example
 		 *    // Disallow state loading by returning false
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateLoadParams": function (oSettings, oData) {
 		 *          return false;
+		 *        }
 		 *      } );
 		 *    } );
 		 */
@@ -8827,11 +8829,12 @@
 		 * 
 		 *  @example
 		 *    // Show an alert with the filtering value that was saved
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateLoaded": function (oSettings, oData) {
 		 *          alert( 'Saved filter was: '+oData.oSearch.sSearch );
+		 *        }
 		 *      } );
 		 *    } );
 		 */
@@ -8849,7 +8852,7 @@
 		 *  @dtopt Callbacks
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateSave": function (oSettings, oData) {
@@ -8889,7 +8892,7 @@
 		 * 
 		 *  @example
 		 *    // Remove a saved filter, so filtering is never saved
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateSaveParams": function (oSettings, oData) {
@@ -8911,7 +8914,7 @@
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "iCookieDuration": 60*60*24 // 1 day
+		 *        "iCookieDuration": 60*60*24; // 1 day
 		 *      } );
 		 *    } )
 		 */
@@ -8936,7 +8939,7 @@
 		 * 
 		 *  @example
 		 *    // 57 records available in the table, no filtering applied
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bServerSide": true,
 		 *        "sAjaxSource": "scripts/server_processing.php",
@@ -8946,7 +8949,7 @@
 		 * 
 		 *  @example
 		 *    // 57 records after filtering, 100 without filtering (an initial filter applied)
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bServerSide": true,
 		 *        "sAjaxSource": "scripts/server_processing.php",
@@ -9007,7 +9010,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bScrollInfinite": true,
 		 *        "bScrollCollapse": true,
@@ -9031,7 +9034,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "iTabIndex": 1
 		 *      } );
@@ -9063,7 +9066,7 @@
 				 *  @dtopt Language
 				 * 
 				 *  @example
-				 *    $(document).ready(function() {
+				 *    $(document).ready( function() {
 				 *      $('#example').dataTable( {
 				 *        "oLanguage": {
 				 *          "oAria": {
@@ -9084,7 +9087,7 @@
 				 *  @dtopt Language
 				 * 
 				 *  @example
-				 *    $(document).ready(function() {
+				 *    $(document).ready( function() {
 				 *      $('#example').dataTable( {
 				 *        "oLanguage": {
 				 *          "oAria": {
@@ -9111,7 +9114,7 @@
 				 *  @dtopt Language
 				 * 
 				 *  @example
-				 *    $(document).ready(function() {
+				 *    $(document).ready( function() {
 				 *      $('#example').dataTable( {
 				 *        "oLanguage": {
 				 *          "oPaginate": {
@@ -9132,7 +9135,7 @@
 				 *  @dtopt Language
 				 * 
 				 *  @example
-				 *    $(document).ready(function() {
+				 *    $(document).ready( function() {
 				 *      $('#example').dataTable( {
 				 *        "oLanguage": {
 				 *          "oPaginate": {
@@ -9153,7 +9156,7 @@
 				 *  @dtopt Language
 				 * 
 				 *  @example
-				 *    $(document).ready(function() {
+				 *    $(document).ready( function() {
 				 *      $('#example').dataTable( {
 				 *        "oLanguage": {
 				 *          "oPaginate": {
@@ -9174,7 +9177,7 @@
 				 *  @dtopt Language
 				 * 
 				 *  @example
-				 *    $(document).ready(function() {
+				 *    $(document).ready( function() {
 				 *      $('#example').dataTable( {
 				 *        "oLanguage": {
 				 *          "oPaginate": {
@@ -9197,7 +9200,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sEmptyTable": "No data available in table"
@@ -9218,7 +9221,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sInfo": "Got a total of _TOTAL_ entries to show (_START_ to _END_)"
@@ -9237,7 +9240,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sInfoEmpty": "No entries to show"
@@ -9257,7 +9260,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sInfoFiltered": " - filtering from _MAX_ records"
@@ -9278,7 +9281,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sInfoPostFix": "All records shown are derived from real information."
@@ -9299,7 +9302,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sInfoThousands": "'"
@@ -9321,7 +9324,7 @@
 			 * 
 			 *  @example
 			 *    // Language change only
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sLengthMenu": "Display _MENU_ records"
@@ -9331,7 +9334,7 @@
 			 *    
 			 *  @example
 			 *    // Language and options change
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sLengthMenu": 'Display <select>'+
@@ -9379,7 +9382,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sProcessing": "DataTables is currently busy"
@@ -9402,7 +9405,7 @@
 			 * 
 			 *  @example
 			 *    // Input text box will be appended at the end automatically
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sSearch": "Filter records:"
@@ -9412,7 +9415,7 @@
 			 *    
 			 *  @example
 			 *    // Specify where the filter should appear
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sSearch": "Apply filter _INPUT_ to table"
@@ -9435,7 +9438,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sUrl": "http://www.sprymedia.co.uk/dataTables/lang.txt"
@@ -9455,7 +9458,7 @@
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "sZeroRecords": "No records to display"
@@ -9501,7 +9504,7 @@
 		 * 
 		 *  @example
 		 *    // Get data from { "data": [...] }
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/data.txt",
 		 *        "sAjaxDataProp": "data"
@@ -9510,7 +9513,7 @@
 		 *    
 		 *  @example
 		 *    // Get data from { "data": { "inner": [...] } }
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/data.txt",
 		 *        "sAjaxDataProp": "data.inner"
@@ -9548,7 +9551,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sCookiePrefix": "my_datatable_",
 		 *      } );
@@ -9600,7 +9603,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&gt;'
 		 *      } );
@@ -9638,7 +9641,7 @@
 		 *  @dtopt Features
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sScrollX": "100%",
 		 *        "bScrollCollapse": true
@@ -9660,7 +9663,7 @@
 		 *  @dtopt Options
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sScrollX": "100%",
 		 *        "sScrollXInner": "110%"
@@ -9682,7 +9685,7 @@
 		 *  @dtopt Features
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "sScrollY": "200px",
 		 *        "bPaginate": false
@@ -9701,7 +9704,7 @@
 		 *  @dtopt Server-side
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "bServerSide": true,
 		 *        "sAjaxSource": "scripts/post.php",
@@ -9729,7 +9732,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [
 		 *          { "aDataSort": [ 0, 1 ], "aTargets": [ 0 ] },
@@ -9741,7 +9744,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [
 		 *          { "aDataSort": [ 0, 1 ] },
@@ -9766,7 +9769,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [
 		 *          { "asSorting": [ "asc" ], "aTargets": [ 1 ] },
@@ -9778,7 +9781,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [
 		 *          null,
@@ -9801,7 +9804,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "bSearchable": false, "aTargets": [ 0 ] }
@@ -9810,7 +9813,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "bSearchable": false },
@@ -9832,7 +9835,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "bSortable": false, "aTargets": [ 0 ] }
@@ -9841,7 +9844,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "bSortable": false },
@@ -9869,7 +9872,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          {
@@ -9885,7 +9888,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          {
@@ -9913,7 +9916,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "bVisible": false, "aTargets": [ 0 ] }
@@ -9922,7 +9925,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "bVisible": false },
@@ -9950,7 +9953,7 @@
 		 *  @dtopt Columns
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ {
 		 *          "aTargets": [3],
@@ -9982,7 +9985,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          {
@@ -9997,7 +10000,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "fnRender": function ( o, val ) {
@@ -10024,7 +10027,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "iDataSort": 1, "aTargets": [ 0 ] }
@@ -10034,7 +10037,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "iDataSort": 1 },
@@ -10066,7 +10069,7 @@
 		 *     <li>integer - treated as an array index for the data source. This is the
 		 *       default that DataTables uses (incrementally increased for each column).</li>
 		 *     <li>string - read an object property from the data source. Note that you can
-		 *       use Javascript dotted notation to read deep properties/arrays from the
+		 *       use Javascript dotted notation to read deep properties / arrays from the
 		 *       data source.</li>
 		 *     <li>null - the sDefaultContent option will be used for the cell (null
 		 *       by default, so you will need to specify the default content you want -
@@ -10098,7 +10101,7 @@
 		 * 
 		 *  @example
 		 *    // Read table data from objects
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
 		 *        "aoColumns": [
@@ -10114,7 +10117,7 @@
 		 *  @example
 		 *    // Using mData as a function to provide different information for
 		 *    // sorting, filtering and display. In this case, currency (price)
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "aoColumnDefs": [ {
 		 *          "aTargets": [ 0 ],
@@ -10155,7 +10158,7 @@
 		 *     <li>integer - treated as an array index for the data source. This is the
 		 *       default that DataTables uses (incrementally increased for each column).</li>
 		 *     <li>string - read an object property from the data source. Note that you can
-		 *       use Javascript dotted notation to read deep properties/arrays from the
+		 *       use Javascript dotted notation to read deep properties / arrays from the
 		 *       data source and also array brackets to indicate that the data reader should
 		 *       loop over the data source array. When characters are given between the array
 		 *       brackets, these characters are used to join the data source array together.
@@ -10179,7 +10182,7 @@
 		 * 
 		 *  @example
 		 *    // Create a comma separated list from an array of objects
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "sAjaxSource": "sources/deep.txt",
 		 *        "aoColumns": [
@@ -10195,7 +10198,7 @@
 		 * 
 		 *  @example
 		 *    // Use as a function to create a link from the data source
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
 		 *        "aoColumnDefs": [
 		 *        {
@@ -10221,13 +10224,12 @@
 		 * 
 		 *  @example
 		 *    // Make the first column use TH cells
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      var oTable = $('#example').dataTable( {
-		 *        "aoColumnDefs": [
-		 *        {
+		 *        "aoColumnDefs": [ {
 		 *          "aTargets": [ 0 ],
 		 *          "sCellType": "th"
-		 *        ]
+		 *        } ]
 		 *      } );
 		 *    } );
 		 */
@@ -10242,7 +10244,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "sClass": "my_class", "aTargets": [ 0 ] }
@@ -10252,7 +10254,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "sClass": "my_class" },
@@ -10283,7 +10285,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          null,
@@ -10309,7 +10311,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          {
@@ -10323,7 +10325,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          null,
@@ -10353,7 +10355,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "sName": "engine", "aTargets": [ 0 ] },
@@ -10367,7 +10369,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "sName": "engine" },
@@ -10384,7 +10386,7 @@
 	
 		/**
 		 * Defines a data source type for the sorting which can be used to read
-		 * realtime information from the table (updating the internally cached
+		 * real-time information from the table (updating the internally cached
 		 * version) prior to sorting. This allows sorting to occur on user editable
 		 * elements such as form inputs.
 		 *  @type string
@@ -10393,7 +10395,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [
 		 *          { "sSortDataType": "dom-text", "aTargets": [ 2, 3 ] },
@@ -10406,7 +10408,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [
 		 *          null,
@@ -10431,7 +10433,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "sTitle": "My column title", "aTargets": [ 0 ] }
@@ -10441,7 +10443,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "sTitle": "My column title" },
@@ -10470,7 +10472,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "sType": "html", "aTargets": [ 0 ] }
@@ -10480,7 +10482,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "sType": "html" },
@@ -10497,7 +10499,7 @@
 	
 		/**
 		 * Defining the width of the column, this parameter may take any CSS value
-		 * (3em, 20px etc). DataTables applys 'smart' widths to columns which have not
+		 * (3em, 20px etc). DataTables apples 'smart' widths to columns which have not
 		 * been given a specific width through this interface ensuring that the table
 		 * remains readable.
 		 *  @type string
@@ -10506,7 +10508,7 @@
 		 * 
 		 *  @example
 		 *    // Using aoColumnDefs
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumnDefs": [ 
 		 *          { "sWidth": "20%", "aTargets": [ 0 ] }
@@ -10516,7 +10518,7 @@
 		 *    
 		 *  @example
 		 *    // Using aoColumns
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "aoColumns": [ 
 		 *          { "sWidth": "20%" },
@@ -11766,12 +11768,12 @@
 						continue;
 					}
 					
-					/* Build up the dynamic list forst - html and listeners */
+					/* Build up the dynamic list first - html and listeners */
 					$('span:eq(0)', an[i])
 						.html( sList )
 						.children('a').each( fnBind );
 					
-					/* Update the premanent botton's classes */
+					/* Update the permanent button's classes */
 					anButtons = an[i].getElementsByTagName('a');
 					anStatic = [
 						anButtons[0], anButtons[1], 

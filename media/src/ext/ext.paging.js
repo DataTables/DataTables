@@ -228,12 +228,12 @@ $.extend( DataTable.ext.oPagination, {
 					continue;
 				}
 				
-				/* Build up the dynamic list forst - html and listeners */
+				/* Build up the dynamic list first - html and listeners */
 				$('span:eq(0)', an[i])
 					.html( sList )
 					.children('a').each( fnBind );
 				
-				/* Update the premanent botton's classes */
+				/* Update the permanent button's classes */
 				anButtons = an[i].getElementsByTagName('a');
 				anStatic = [
 					anButtons[0], anButtons[1], 

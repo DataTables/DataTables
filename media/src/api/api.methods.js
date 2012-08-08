@@ -131,11 +131,11 @@ this.$ = function ( sSelector, oOpts )
 /**
  * Almost identical to $ in operation, but in this case returns the data for the matched
  * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
- * rather than any decendents, so the data can be obtained for the row/cell. If matching
+ * rather than any descendants, so the data can be obtained for the row/cell. If matching
  * rows are found, the data returned is the original data array/object that was used to  
  * create the row (or a generated array if from a DOM source).
  *
- * This method is often useful incombination with $ where both functions are given the
+ * This method is often useful in-combination with $ where both functions are given the
  * same parameters and the array indexes will match identically.
  *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
  *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
@@ -1168,7 +1168,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
  *  @param {node|int} mRow TR element you want to update or the aoData index
  *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
  *  @param {bool} [bRedraw=true] Redraw the table or not
- *  @param {bool} [bAction=true] Perform predraw actions or not
+ *  @param {bool} [bAction=true] Perform pre-draw actions or not
  *  @returns {int} 0 on success, 1 on error
  *  @dtopt API
  *

@@ -145,7 +145,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
  */
 function _fnAdjustColumnSizing ( oSettings )
 {
-	/* Not interested in doing column width calculation if autowidth is disabled */
+	/* Not interested in doing column width calculation if auto-width is disabled */
 	if ( oSettings.oFeatures.bAutoWidth === false )
 	{
 		return false;

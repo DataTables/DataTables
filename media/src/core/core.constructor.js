@@ -253,7 +253,7 @@ for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
 		
 if ( bStripeRemove )
 {
-	/* Store the classes which we are about to remove so they can be readded on destroy */
+	/* Store the classes which we are about to remove so they can be re-added on destroy */
 	oSettings.asDestroyStripes = [ '', '' ];
 	if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
 	{

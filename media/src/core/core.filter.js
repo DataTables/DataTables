@@ -330,7 +330,7 @@ function _fnBuildSearchRow( oSettings, aData )
  *  @param {string} sSearch string to search for
  *  @param {bool} bRegex treat as a regular expression or not
  *  @param {bool} bSmart perform smart filtering or not
- *  @param {bool} bCaseInsensitive Do case insenstive matching or not
+ *  @param {bool} bCaseInsensitive Do case insensitive matching or not
  *  @returns {RegExp} constructed object
  *  @memberof DataTable#oApi
  */
@@ -385,7 +385,7 @@ function _fnDataToSearch ( sData, sType )
 
 
 /**
- * scape a string stuch that it can be used in a regular expression
+ * scape a string such that it can be used in a regular expression
  *  @param {string} sVal string to escape
  *  @returns {string} escaped string
  *  @memberof DataTable#oApi

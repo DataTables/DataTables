@@ -191,7 +191,7 @@ function _fnExtend( oOut, oExtender )
 
 /**
  * Bind an event handers to allow a click or return key to activate the callback.
- * This is good for accessability since a return on the keyboard will have the
+ * This is good for accessibility since a return on the keyboard will have the
  * same effect as a click, if the element has focus.
  *  @param {element} n Element to bind the action to
  *  @param {object} oData Data object to pass to the triggered function
@@ -220,7 +220,7 @@ function _fnBindAction( n, oData, fn )
  * Register a callback function. Easily allows a callback function to be added to
  * an array store of callback functions that can then all be called together.
  *  @param {object} oSettings dataTables settings object
- *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+ *  @param {string} sStore Name of the array storage for the callbacks in oSettings
  *  @param {function} fn Function to be called back
  *  @param {string} sName Identifying name for the callback (i.e. a label)
  *  @memberof DataTable#oApi
@@ -242,7 +242,7 @@ function _fnCallbackReg( oSettings, sStore, fn, sName )
  * array store is done backwards! Further note that you do not want to fire off triggers
  * in time sensitive applications (for example cell creation) as its slow.
  *  @param {object} oSettings dataTables settings object
- *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+ *  @param {string} sStore Name of the array storage for the callbacks in oSettings
  *  @param {string} sTrigger Name of the jQuery custom event to trigger. If null no trigger
  *    is fired
  *  @param {array} aArgs Array of arguments to pass to the callback function / trigger
@@ -270,7 +270,7 @@ function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 /**
  * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
  * library, then we use that as it is fast, safe and accurate. If the function isn't 
- * available then we need to built it ourselves - the insperation for this function comes
+ * available then we need to built it ourselves - the inspiration for this function comes
  * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
  * not perfect and absolutely should not be used as a replacement to json2.js - but it does
  * do what we need, without requiring a dependency for DataTables.

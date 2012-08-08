@@ -30,7 +30,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 	{
 		oCol = oSettings.aoColumns[i];
 
-		/* Use rendered data for filtering/sorting */
+		/* Use rendered data for filtering / sorting */
 		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mData !== null )
 		{
 			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
@@ -198,7 +198,7 @@ function _fnGatherData( oSettings )
 					nCell.innerHTML = sRendered;
 					if ( oCol.bUseRendered )
 					{
-						/* Use the rendered data for filtering/sorting */
+						/* Use the rendered data for filtering / sorting */
 						_fnSetCellData( oSettings, iRow, iColumn, sRendered );
 					}
 				}
@@ -209,7 +209,7 @@ function _fnGatherData( oSettings )
 					nCell.className += ' '+oCol.sClass;
 				}
 				
-				/* Column visability */
+				/* Column visibility */
 				if ( !bVisible )
 				{
 					oData._anHidden[iColumn] = nCell;
