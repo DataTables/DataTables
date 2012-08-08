@@ -245,6 +245,7 @@
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 *  @param {object} json JSON returned from the server
 	 */
 
 	/**
