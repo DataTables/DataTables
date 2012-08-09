@@ -159,6 +159,9 @@ function _fnFeatureHtmlTable ( oSettings )
 						_fnPageChange( oSettings, 'next' );
 						_fnCalculateEnd( oSettings );
 						_fnDraw( oSettings );
+						
+						/* Fire Scroll Callback once the draw is complete */
+						_fnCallbackFire( oSettings, 'aoScrollCallback', null, [oSettings] );
 					}
 				}
 			}

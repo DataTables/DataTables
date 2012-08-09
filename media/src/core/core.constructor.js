@@ -136,6 +136,7 @@ _fnCallbackReg( oSettings, 'aoStateLoadParams',    oInit.fnStateLoadParams,   'u
 _fnCallbackReg( oSettings, 'aoStateLoaded',        oInit.fnStateLoaded,       'user' );
 _fnCallbackReg( oSettings, 'aoRowCallback',        oInit.fnRowCallback,       'user' );
 _fnCallbackReg( oSettings, 'aoRowCreatedCallback', oInit.fnCreatedRow,        'user' );
+_fnCallbackReg( oSettings, 'aoScrollCallback', 	   oInit.fnScrollCallback,    'user' );
 _fnCallbackReg( oSettings, 'aoHeaderCallback',     oInit.fnHeaderCallback,    'user' );
 _fnCallbackReg( oSettings, 'aoFooterCallback',     oInit.fnFooterCallback,    'user' );
 _fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
