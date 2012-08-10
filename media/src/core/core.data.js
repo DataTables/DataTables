@@ -1,5 +1,4 @@
 
-
 /**
  * Add a data array to the table, creating DOM node etc. This is the parallel to 
  * _fnGatherData, but for adding rows from a Javascript source, rather than a
@@ -64,7 +63,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 	/* Add to the display array */
 	oSettings.aiDisplayMaster.push( iRow );
 
-	/* Create the DOM imformation */
+	/* Create the DOM information */
 	if ( !oSettings.oFeatures.bDeferRender )
 	{
 		_fnCreateTr( oSettings, iRow );
