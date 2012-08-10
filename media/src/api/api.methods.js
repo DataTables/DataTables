@@ -474,7 +474,7 @@ this.fnDestroy = function ( bRemove )
 	var nBody = oSettings.nTBody;
 	var i, iLen;
 
-	bRemove = (bRemove===undefined) ? false : true;
+	bRemove = (bRemove===undefined) ? false : bRemove;
 	
 	/* Flag to note that the table is currently being destroyed - no action should be taken */
 	oSettings.bDestroying = true;
