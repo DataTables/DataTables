@@ -5387,6 +5387,7 @@
 			
 			/* Blitz all DT events */
 			$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
+			$('thead>tr>th', oSettings.nTable).unbind('.DT');
 			
 			/* If there is an 'empty' indicator row, remove it */
 			$('tbody>tr>td.'+oSettings.oClasses.sRowEmpty, oSettings.nTable).parent().remove();
