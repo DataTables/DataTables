@@ -6299,7 +6299,7 @@
 		
 		
 		var _that = this;
-		this.each(function() {
+		return this.each(function() {
 			
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
@@ -6743,8 +6743,6 @@
 				_fnInitialise( oSettings );
 			}
 		} );
-		_that = null;
-		return this;
 	};
 
 	
