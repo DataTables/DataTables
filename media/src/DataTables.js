@@ -78,9 +78,11 @@
 		require('api.internal.js');
 		
 		var _that = this;
-		return this.each(function() {
+		this.each(function() {
 			require('core.constructor.js');
 		} );
+		_that = null;
+		return this;
 	};
 
 	require('api.static.js');
