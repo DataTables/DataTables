@@ -581,6 +581,7 @@ this.fnDestroy = function ( bRemove )
 	
 	/* End it all */
 	oSettings = null;
+	oInit = null;
 };
 
 
