@@ -481,13 +481,16 @@ this.fnDestroy = function ( bRemove )
 	
 	/* Fire off the destroy callbacks for plug-ins etc */
 	_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
-	
-	/* Restore hidden columns */
-	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+
+	/* If the table is not being removed, restore the hidden columns */
+	if ( !bRemove )
 	{
-		if ( oSettings.aoColumns[i].bVisible === false )
+		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
-			this.fnSetColumnVis( i, true );
+			if ( oSettings.aoColumns[i].bVisible === false )
+			{
+				this.fnSetColumnVis( i, true );
+			}
 		}
 	}
 	
