@@ -474,20 +474,23 @@ this.fnDestroy = function ( bRemove )
 	var nBody = oSettings.nTBody;
 	var i, iLen;
 
-	bRemove = (bRemove===undefined) ? false : true;
+	bRemove = (bRemove===undefined) ? false : bRemove;
 	
 	/* Flag to note that the table is currently being destroyed - no action should be taken */
 	oSettings.bDestroying = true;
 	
 	/* Fire off the destroy callbacks for plug-ins etc */
 	_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
-	
-	/* Restore hidden columns */
-	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+
+	/* If the table is not being removed, restore the hidden columns */
+	if ( !bRemove )
 	{
-		if ( oSettings.aoColumns[i].bVisible === false )
+		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
-			this.fnSetColumnVis( i, true );
+			if ( oSettings.aoColumns[i].bVisible === false )
+			{
+				this.fnSetColumnVis( i, true );
+			}
 		}
 	}
 	
@@ -581,6 +584,7 @@ this.fnDestroy = function ( bRemove )
 	
 	/* End it all */
 	oSettings = null;
+	oInit = null;
 };
 
 
