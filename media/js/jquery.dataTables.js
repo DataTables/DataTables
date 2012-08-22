@@ -433,7 +433,6 @@
 		}
 		
 		
-		
 		/**
 		 * Add a data array to the table, creating DOM node etc. This is the parallel to 
 		 * _fnGatherData, but for adding rows from a Javascript source, rather than a
@@ -498,7 +497,7 @@
 			/* Add to the display array */
 			oSettings.aiDisplayMaster.push( iRow );
 		
-			/* Create the DOM imformation */
+			/* Create the DOM information */
 			if ( !oSettings.oFeatures.bDeferRender )
 			{
 				_fnCreateTr( oSettings, iRow );
@@ -4881,7 +4880,7 @@
 			 */
 			var n = $(
 				'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
-					'<div style="position:absolute; top:1px; left:1px; width:100px; height:50px; overflow:scroll;">'+
+					'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
 						'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
 					'</div>'+
 				'</div>')[0];
@@ -5368,20 +5367,23 @@
 			var nBody = oSettings.nTBody;
 			var i, iLen;
 		
-			bRemove = (bRemove===undefined) ? false : true;
+			bRemove = (bRemove===undefined) ? false : bRemove;
 			
 			/* Flag to note that the table is currently being destroyed - no action should be taken */
 			oSettings.bDestroying = true;
 			
 			/* Fire off the destroy callbacks for plug-ins etc */
 			_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
-			
-			/* Restore hidden columns */
-			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		
+			/* If the table is not being removed, restore the hidden columns */
+			if ( !bRemove )
 			{
-				if ( oSettings.aoColumns[i].bVisible === false )
+				for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 				{
-					this.fnSetColumnVis( i, true );
+					if ( oSettings.aoColumns[i].bVisible === false )
+					{
+						this.fnSetColumnVis( i, true );
+					}
 				}
 			}
 			
@@ -5475,6 +5477,7 @@
 			
 			/* End it all */
 			oSettings = null;
+			oInit = null;
 		};
 		
 		
@@ -6298,7 +6301,7 @@
 		
 		
 		var _that = this;
-		return this.each(function() {
+		this.each(function() {
 			
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
@@ -6742,6 +6745,8 @@
 				_fnInitialise( oSettings );
 			}
 		} );
+		_that = null;
+		return this;
 	};
 
 	

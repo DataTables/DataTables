@@ -333,7 +333,7 @@ function _fnBrowserDetect( oSettings )
 	 */
 	var n = $(
 		'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
-			'<div style="position:absolute; top:1px; left:1px; width:100px; height:50px; overflow:scroll;">'+
+			'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
 				'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
 			'</div>'+
 		'</div>')[0];
