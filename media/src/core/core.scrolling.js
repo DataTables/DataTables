@@ -191,10 +191,18 @@ function _fnScrollDraw ( o )
 		nScrollBody = o.nTable.parentNode,
 		i, iLen, j, jLen, anHeadToSize, anHeadSizers, anFootSizers, anFootToSize, oStyle, iVis,
 		nTheadSize, nTfootSize,
-		iWidth, aApplied=[], iSanityWidth,
+		iWidth, aApplied=[], aAppliedFooter=[], iSanityWidth,
 		nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
 		nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
-		ie67 = o.oBrowser.bScrollOversize;
+		ie67 = o.oBrowser.bScrollOversize,
+		zeroOut = function(nSizer, nToSize) {
+			oStyle = nSizer.style;
+			oStyle.paddingTop = "0";
+			oStyle.paddingBottom = "0";
+			oStyle.borderTopWidth = "0";
+			oStyle.borderBottomWidth = "0";
+			oStyle.height = 0;
+		};
 	
 	/*
 	 * 1. Re-create the table inside the scrolling div
@@ -303,38 +311,40 @@ function _fnScrollDraw ( o )
 	anHeadToSize = o.nTHead.getElementsByTagName('tr');
 	anHeadSizers = nTheadSize.getElementsByTagName('tr');
 	
+	// Apply all styles in one pass. Invalidates layout only once because we don't read any 
+	// DOM properties.
+	_fnApplyToChildren( zeroOut, anHeadSizers, anHeadToSize );
+	 
+	// Read all widths in next pass. Forces layout only once because we do not change 
+	// any DOM properties.
 	_fnApplyToChildren( function(nSizer, nToSize) {
-		oStyle = nSizer.style;
-		oStyle.paddingTop = "0";
-		oStyle.paddingBottom = "0";
-		oStyle.borderTopWidth = "0";
-		oStyle.borderBottomWidth = "0";
-		oStyle.height = 0;
-		
-		iWidth = $(nSizer).width();
-		nToSize.style.width = _fnStringToCss( iWidth );
-		aApplied.push( iWidth );
+		aApplied.push( _fnStringToCss( $(nSizer).width() ) );
 	}, anHeadSizers, anHeadToSize );
+	 
+	// Apply all widths in final pass. Invalidates layout only once because we do not
+	// read any DOM properties.
+	_fnApplyToChildren( function(nSizer, nToSize, i) {
+		nToSize.style.width = aApplied[i];
+	}, anHeadSizers, anHeadToSize );
+
 	$(anHeadSizers).height(0);
 	
+	/* Same again with the footer if we have one */
 	if ( o.nTFoot !== null )
 	{
-		/* Clone the current footer and then place it into the body table as a "hidden header" */
 		anFootSizers = nTfootSize.getElementsByTagName('tr');
 		anFootToSize = o.nTFoot.getElementsByTagName('tr');
 		
+		_fnApplyToChildren( zeroOut, anFootSizers, anFootToSize );
+		 
 		_fnApplyToChildren( function(nSizer, nToSize) {
-			oStyle = nSizer.style;
-			oStyle.paddingTop = "0";
-			oStyle.paddingBottom = "0";
-			oStyle.borderTopWidth = "0";
-			oStyle.borderBottomWidth = "0";
-			oStyle.height = 0;
-			
-			iWidth = $(nSizer).width();
-			nToSize.style.width = _fnStringToCss( iWidth );
-			aApplied.push( iWidth );
+			aAppliedFooter.push( _fnStringToCss( $(nSizer).width() ) );
 		}, anFootSizers, anFootToSize );
+		 
+		_fnApplyToChildren( function(nSizer, nToSize, i) {
+			nToSize.style.width = aAppliedFooter[i];
+		}, anFootSizers, anFootToSize );
+
 		$(anFootSizers).height(0);
 	}
 	
@@ -345,16 +355,16 @@ function _fnScrollDraw ( o )
 	/* "Hide" the header and footer that we used for the sizing. We want to also fix their width
 	 * to what they currently are
 	 */
-	_fnApplyToChildren( function(nSizer) {
+	_fnApplyToChildren( function(nSizer, i) {
 		nSizer.innerHTML = "";
-		nSizer.style.width = _fnStringToCss( aApplied.shift() );
+		nSizer.style.width = aApplied[i];
 	}, anHeadSizers );
 	
 	if ( o.nTFoot !== null )
 	{
-		_fnApplyToChildren( function(nSizer) {
+		_fnApplyToChildren( function(nSizer, i) {
 			nSizer.innerHTML = "";
-			nSizer.style.width = _fnStringToCss( aApplied.shift() );
+			nSizer.style.width = aAppliedFooter[i];
 		}, anFootSizers );
 	}
 	
@@ -474,20 +484,25 @@ function _fnScrollDraw ( o )
  */
 function _fnApplyToChildren( fn, an1, an2 )
 {
-	for ( var i=0, iLen=an1.length ; i<iLen ; i++ )
+	var index=0,
+		i, iLen, j, jLen;
+
+	for ( i=0, iLen=an1.length ; i<iLen ; i++ )
 	{
-		for ( var j=0, jLen=an1[i].childNodes.length ; j<jLen ; j++ )
+		for ( j=0, jLen=an1[i].childNodes.length ; j<jLen ; j++ )
 		{
 			if ( an1[i].childNodes[j].nodeType == 1 )
 			{
 				if ( an2 )
 				{
-					fn( an1[i].childNodes[j], an2[i].childNodes[j] );
+					fn( an1[i].childNodes[j], an2[i].childNodes[j], index );
 				}
 				else
 				{
-					fn( an1[i].childNodes[j] );
+					fn( an1[i].childNodes[j], index );
 				}
+
+				index++;
 			}
 		}
 	}
