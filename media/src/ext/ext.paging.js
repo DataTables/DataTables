@@ -1,4 +1,3 @@
-
 /*
  * Variable: oPagination
  * Purpose:  
@@ -223,7 +222,7 @@ $.extend( DataTable.ext.oPagination, {
 			/* Loop over each instance of the pager */
 			for ( i=0, iLen=an.length ; i<iLen ; i++ )
 			{
-				if ( an[i].childNodes.length === 0 )
+				if ( !an[i].hasChildNodes() )
 				{
 					continue;
 				}
