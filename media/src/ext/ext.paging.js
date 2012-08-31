@@ -76,7 +76,7 @@ $.extend( DataTable.ext.oPagination, {
 			/* Loop over each instance of the pager */
 			for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 			{
-				if ( an[i].childNodes.length !== 0 )
+				if ( an[i].hasChildNodes() )
 				{
 					an[i].childNodes[0].className = ( oSettings._iDisplayStart === 0 ) ? 
 						oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
