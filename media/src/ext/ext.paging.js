@@ -176,7 +176,7 @@ $.extend( DataTable.ext.oPagination, {
 			var sList = "";
 			var iStartButton, iEndButton, i, iLen;
 			var oClasses = oSettings.oClasses;
-			var anButtons, anStatic, nPaginateList;
+			var anButtons, anStatic, nPaginateList, nNode;
 			var an = oSettings.aanFeatures.p;
 			var fnBind = function (j) {
 				oSettings.oApi._fnBindAction( this, {"page": j+iStartButton-1}, function(e) {
@@ -227,18 +227,19 @@ $.extend( DataTable.ext.oPagination, {
 			/* Loop over each instance of the pager */
 			for ( i=0, iLen=an.length ; i<iLen ; i++ )
 			{
-				if ( !an[i].hasChildNodes() )
+				nNode = an[i];
+				if ( !nNode.hasChildNodes() )
 				{
 					continue;
 				}
 				
 				/* Build up the dynamic list first - html and listeners */
-				$('span:eq(0)', an[i])
+				$('span:eq(0)', nNode)
 					.html( sList )
 					.children('a').each( fnBind );
 				
 				/* Update the permanent button's classes */
-				anButtons = an[i].getElementsByTagName('a');
+				anButtons = nNode.getElementsByTagName('a');
 				anStatic = [
 					anButtons[0], anButtons[1], 
 					anButtons[anButtons.length-2], anButtons[anButtons.length-1]
