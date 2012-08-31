@@ -3457,6 +3457,9 @@
 			{
 				nScrollBody.scrollTop = 0;
 			}
+			
+			/* Fire off the scroll draw callbacks for plug-ins etc */
+			_fnCallbackFire( o, "aoScrollDrawCallback", "scrollDraw", [oSettings] );
 		}
 		
 		
@@ -6459,6 +6462,7 @@
 			_fnCallbackReg( oSettings, 'aoFooterCallback',     oInit.fnFooterCallback,    'user' );
 			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
+			_fnCallbackReg( oSettings, 'aoScrollDrawCallback', oInit.fnScrollDrawCallback,'user' );
 			
 			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 				   oSettings.oFeatures.bSortClasses )
@@ -8633,6 +8637,27 @@
 		 *    } );
 		 */
 		"fnPreDrawCallback": null,
+	
+	
+		/**
+		 * Called at the very end of each scroll draw.  This can be used to recalculate custom
+		 * dom elements if the scroll is adjusted without a full redraw.
+		 *  @type function
+		 *  @param {object} oSettings DataTables settings object
+		 *  @dtopt Callbacks
+		 * 
+		 *  @example
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "fnScrollDrawCallback": function( oSettings ) {
+		 *          if ( $('#test').val() == 1 ) {
+		 *            return false;
+		 *          }
+		 *        }
+		 *      } );
+		 *    } );
+		 */
+		"fnScrollDrawCallback": null,
 	
 	
 		/**
@@ -10972,6 +10997,13 @@
 		 *  @default []
 		 */
 		"aoPreDrawCallback": [],
+		
+		/**
+		 * Callback functions for just after the scroll is drawn.
+		 *  @type array
+		 *  @default []
+		 */
+		"aoScrollDrawCallback": [],
 		
 		/**
 		 * Callback functions for when the table has been initialised.
