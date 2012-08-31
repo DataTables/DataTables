@@ -1,5 +1,4 @@
 
-
 /**
  * Add any control elements for the table - specifically scrolling
  *  @param {object} oSettings dataTables settings object
@@ -484,27 +483,31 @@ function _fnScrollDraw ( o )
  */
 function _fnApplyToChildren( fn, an1, an2 )
 {
-	var index=0,
-		i, iLen, j, jLen;
+	var index=0, i=0, iLen=an1.length;
+	var nNode1, nNode2;
 
-	for ( i=0, iLen=an1.length ; i<iLen ; i++ )
+	while ( i < iLen )
 	{
-		for ( j=0, jLen=an1[i].childNodes.length ; j<jLen ; j++ )
+		nNode1 = an1[i].firstChild;
+		nNode2 = an2 ? an2[i].firstChild : null;
+		while ( nNode1 )
 		{
-			if ( an1[i].childNodes[j].nodeType == 1 )
+			if ( nNode1.nodeType === 1 )
 			{
 				if ( an2 )
 				{
-					fn( an1[i].childNodes[j], an2[i].childNodes[j], index );
+					fn( nNode1, nNode2, index );
 				}
 				else
 				{
-					fn( an1[i].childNodes[j], index );
+					fn( nNode1, index );
 				}
-
 				index++;
 			}
+			nNode1 = nNode1.nextSibling;
+			nNode2 = an2 ? nNode2.nextSibling : null;
 		}
+		i++;
 	}
 }
 
