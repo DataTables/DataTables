@@ -1,4 +1,3 @@
-
 /**
  * Perform a jQuery selector action on the table's TR elements (from the tbody) and
  * return the resulting jQuery object.
@@ -575,7 +574,7 @@ this.fnDestroy = function ( bRemove )
 		var anRows = $(nBody).children('tr');
 		for ( i=0 ; i<iLen ; i++ )
 		{
-			anRows.filter(":nth-child(" + i + ")").addClass( oSettings.asDestroyStripes[i] );
+			anRows.filter(':nth-child(' + iLen + 'n + ' + i + ')').addClass( oSettings.asDestroyStripes[i] );
 		}
 	}
 	
