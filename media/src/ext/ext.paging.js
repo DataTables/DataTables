@@ -72,17 +72,22 @@ $.extend( DataTable.ext.oPagination, {
 			
 			var oClasses = oSettings.oClasses;
 			var an = oSettings.aanFeatures.p;
+			var nNode;
 
 			/* Loop over each instance of the pager */
 			for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 			{
-				if ( an[i].hasChildNodes() )
+				nNode = an[i].firstChild;
+				if ( nNode )
 				{
-					an[i].childNodes[0].className = ( oSettings._iDisplayStart === 0 ) ? 
-						oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
-					
-					an[i].childNodes[1].className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ? 
-						oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
+					/* Previous page */
+					nNode.className = ( oSettings._iDisplayStart === 0 ) ?
+					    oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
+					    
+					/* Next page */
+					nNode = nNode.nextSibling;
+					nNode.className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ?
+					    oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
 				}
 			}
 		}
