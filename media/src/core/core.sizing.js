@@ -1,5 +1,4 @@
 
-
 /**
  * Convert a CSS unit width to pixels (e.g. 2em)
  *  @param {string} sWidth width to be converted
@@ -284,7 +283,7 @@ function _fnScrollingWidthAdjust ( oSettings, n )
  * Get the widest node
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
- *  @returns {string} max string length for each column
+ *  @returns {node} widest table node
  *  @memberof DataTable#oApi
  */
 function _fnGetWidestNode( oSettings, iCol )
