@@ -13,10 +13,6 @@
  */
 function _fnFeatureHtmlPaginate ( oSettings )
 {
-	if ( oSettings.oScroll.bInfinite )
-	{
-		return null;
-	}
 	
 	var nPaginate = document.createElement( 'div' );
 	nPaginate.className = oSettings.oClasses.sPaging+oSettings.sPaginationType;
@@ -89,6 +85,18 @@ function _fnPageChange ( oSettings, mAction )
 			if ( oSettings._iDisplayStart + oSettings._iDisplayLength < oSettings.fnRecordsDisplay() )
 			{
 				oSettings._iDisplayStart += oSettings._iDisplayLength;
+				
+				/* This will check to see if you are running the source via AJAX and add on iDisplayStart for paging */
+				if(oSettings.sAjaxSource != "") {
+					if(oSettings.sAjaxSource.indexOf("?") > 0)
+					{
+						oSettings.sAjaxSource = oSettings.sAjaxSource+"&iDisplayStart="+oSettings._iDisplayStart;
+					}
+					else
+					{
+						oSettings.sAjaxSource = oSettings.sAjaxSource+"?iDisplayStart="+oSettings._iDisplayStart;
+					}
+				}
 			}
 		}
 		else

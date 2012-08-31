@@ -411,6 +411,13 @@ DataTable.models.oSettings = {
 	"aoRowCreatedCallback": [],
 	
 	/**
+	 * Array of callback functions for scroll callback functions
+	 *  @type array
+	 *  @default []
+	 */
+	"aoScrollCallback": [],
+	
+	/**
 	 * Callback functions for just before the table is redrawn. A return of 
 	 * false will be used to cancel the draw.
 	 *  @type array
