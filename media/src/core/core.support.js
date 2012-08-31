@@ -1,5 +1,4 @@
 
-
 /**
  * Return the settings object for a particular table
  *  @param {node} nTable table we are using as a dataTable
@@ -53,7 +52,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 {
 	var anReturn = [];
 	var iCorrector;
-	var anTds;
+	var anTds, nTd;
 	var iRow, iRows=oSettings.aoData.length,
 		iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 	
@@ -71,13 +70,15 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 		{
 			/* get the TD child nodes - taking into account text etc nodes */
 			anTds = [];
-			for ( iColumn=0, iColumns=oData.nTr.childNodes.length ; iColumn<iColumns ; iColumn++ )
+			nTd = oData.nTr.firstChild;
+			while ( nTd )
 			{
-				sNodeName = oData.nTr.childNodes[iColumn].nodeName.toLowerCase();
+				sNodeName = nTd.nodeName.toLowerCase();
 				if ( sNodeName == 'td' || sNodeName == 'th' )
 				{
-					anTds.push( oData.nTr.childNodes[iColumn] );
+					anTds.push( nTd );
 				}
+				nTd = nTd.nextSibling;
 			}
 
 			iCorrector = 0;
