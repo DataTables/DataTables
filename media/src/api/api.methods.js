@@ -1,5 +1,4 @@
 
-
 /**
  * Perform a jQuery selector action on the table's TR elements (from the tbody) and
  * return the resulting jQuery object.
@@ -566,12 +565,19 @@ this.fnDestroy = function ( bRemove )
 	  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
 	}
 	
-	/* If the were originally odd/even type classes - then we add them back here. Note
-	 * this is not fool proof (for example if not all rows as odd/even classes - but 
+	/* If the were originally stripe classes - then we add them back here. Note
+	 * this is not fool proof (for example if not all rows had stripe classes - but
 	 * it's a good effort without getting carried away
 	 */
-	$(nBody).children('tr:even').addClass( oSettings.asDestroyStripes[0] );
-	$(nBody).children('tr:odd').addClass( oSettings.asDestroyStripes[1] );
+	iLen = oSettings.asDestroyStripes.length;
+	if (iLen)
+	{
+		var anRows = $(nBody).children('tr');
+		for ( i=0 ; i<iLen ; i++ )
+		{
+			anRows.filter(":nth-child(" + i + ")").addClass( oSettings.asDestroyStripes[i] );
+		}
+	}
 	
 	/* Remove the settings object from the settings array */
 	for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
