@@ -1,4 +1,3 @@
-
 var i=0, iLen, j, jLen, k, kLen;
 var sId = this.getAttribute( 'id' );
 var bInitHandedOff = false;
@@ -240,41 +239,28 @@ if ( oInit.asStripeClasses === null )
 }
 
 /* Remove row stripe classes if they are already on the table row */
-var bStripeRemove = false;
-var anRows = $(this).children('tbody').children('tr');
-for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
+iLen=oSettings.asStripeClasses.length;
+oSettings.asDestroyStripes = [];
+if (iLen)
 {
-	if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripeClasses[i]) )
+	var bStripeRemove = false;
+	var anRows = $(this).children('tbody').children('tr:lt(' + iLen + ')');
+	for ( i=0 ; i<iLen ; i++ )
 	{
-		bStripeRemove = true;
-		break;
-	}
-}
-		
-if ( bStripeRemove )
-{
-	/* Store the classes which we are about to remove so they can be re-added on destroy */
-	oSettings.asDestroyStripes = [ '', '' ];
-	if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
-	{
-		oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeOdd+" ";
-	}
-	if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeEven) )
-	{
-		oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeEven;
-	}
-	if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeOdd) )
-	{
-		oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeOdd+" ";
-	}
-	if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeEven) )
-	{
-		oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeEven;
+		if ( anRows.hasClass( oSettings.asStripeClasses[i] ) )
+		{
+			bStripeRemove = true;
+			
+			/* Store the classes which we are about to remove so they can be re-added on destroy */
+			oSettings.asDestroyStripes.push( oSettings.asStripeClasses[i] );
+		}
 	}
 	
-	anRows.removeClass( oSettings.asStripeClasses.join(' ') );
+	if ( bStripeRemove )
+	{
+		anRows.removeClass( oSettings.asStripeClasses.join(' ') );
+	}
 }
-
 
 /*
  * Columns
