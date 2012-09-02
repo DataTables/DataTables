@@ -23,7 +23,26 @@
 /*jslint evil: true, undef: true, browser: true */
 /*globals $, jQuery,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns*/
 
-(/** @lends <global> */function($, window, document, undefined) {
+(/** @lends <global> */function( factory, window, document, undefined )
+{
+    "use strict";
+
+    // Define as an AMD module if possible
+    if ( typeof define === 'function' && define.amd )
+    {
+        define( ['jquery'], factory );
+    }
+    /* Define using browser globals otherwise
+     * Prevent multiple instantiations if the script is loaded twice
+     */
+    else if ( jQuery && !jQuery.fn.dataTable )
+    {
+        factory(jQuery);
+    }
+}
+(function( $ )
+{
+    "use strict";
 	/** 
 	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
 	 * highly flexible tool, based upon the foundations of progressive 
@@ -432,7 +451,6 @@
 			}
 		}
 		
-		
 		/**
 		 * Add a data array to the table, creating DOM node etc. This is the parallel to 
 		 * _fnGatherData, but for adding rows from a Javascript source, rather than a
@@ -515,7 +533,7 @@
 		function _fnGatherData( oSettings )
 		{
 			var iLoop, i, iLen, j, jLen, jInner,
-			 	nTds, nTrs, nTd, aLocalData, iThisIndex,
+			 	nTds, nTrs, nTd, nTr, aLocalData, iThisIndex,
 				iRow, iRows, iColumn, iColumns, sNodeName,
 				oCol, oData;
 			
@@ -526,31 +544,32 @@
 			 */
 			if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
 			{
-				nTrs = oSettings.nTBody.childNodes;
-				for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
+				nTr = oSettings.nTBody.firstChild;
+				while ( nTr )
 				{
-					if ( nTrs[i].nodeName.toUpperCase() == "TR" )
+					if ( nTr.nodeName.toUpperCase() == "TR" )
 					{
 						iThisIndex = oSettings.aoData.length;
-						nTrs[i]._DT_RowIndex = iThisIndex;
+						nTr._DT_RowIndex = iThisIndex;
 						oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
-							"nTr": nTrs[i]
+							"nTr": nTr
 						} ) );
-						
+		
 						oSettings.aiDisplayMaster.push( iThisIndex );
-						nTds = nTrs[i].childNodes;
+						nTd = nTr.firstChild;
 						jInner = 0;
-						
-						for ( j=0, jLen=nTds.length ; j<jLen ; j++ )
+						while ( nTd )
 						{
-							sNodeName = nTds[j].nodeName.toUpperCase();
+							sNodeName = nTd.nodeName.toUpperCase();
 							if ( sNodeName == "TD" || sNodeName == "TH" )
 							{
-								_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTds[j].innerHTML) );
+								_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTd.innerHTML) );
 								jInner++;
 							}
+							nTd = nTd.nextSibling;
 						}
 					}
+					nTr = nTr.nextSibling;
 				}
 			}
 			
@@ -562,14 +581,15 @@
 			nTds = [];
 			for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 			{
-				for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
+				nTd = nTrs[i].firstChild;
+				while ( nTd )
 				{
-					nTd = nTrs[i].childNodes[j];
 					sNodeName = nTd.nodeName.toUpperCase();
 					if ( sNodeName == "TD" || sNodeName == "TH" )
 					{
 						nTds.push( nTd );
 					}
+					nTd = nTd.nextSibling;
 				}
 			}
 			
@@ -1057,7 +1077,6 @@
 				"mDataProp":   oCol.mData
 			}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
 		}
-		
 		/**
 		 * Create a new TR element (and it's TD children) for a row
 		 *  @param {object} oSettings dataTables settings object
@@ -1750,10 +1769,12 @@
 		function _fnDetectHeader ( aLayout, nThead )
 		{
 			var nTrs = $(nThead).children('tr');
-			var nCell;
-			var i, j, k, l, iLen, jLen, iColShifted;
+			var nTr, nCell;
+			var i, k, l, iLen, jLen, iColShifted, iColumn, iColspan, iRowspan;
+			var bUnique;
 			var fnShiftCol = function ( a, i, j ) {
-				while ( a[i][j] ) {
+				var k = a[i];
+		                while ( k[j] ) {
 					j++;
 				}
 				return j;
@@ -1770,19 +1791,18 @@
 			/* Calculate a layout array */
 			for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 			{
-				var iColumn = 0;
+				nTr = nTrs[i];
+				iColumn = 0;
 				
 				/* For every cell in the row... */
-				for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
-				{
-					nCell = nTrs[i].childNodes[j];
-		
+				nCell = nTr.firstChild;
+				while ( nCell ) {
 					if ( nCell.nodeName.toUpperCase() == "TD" ||
 					     nCell.nodeName.toUpperCase() == "TH" )
 					{
 						/* Get the col and rowspan attributes from the DOM and sanitise them */
-						var iColspan = nCell.getAttribute('colspan') * 1;
-						var iRowspan = nCell.getAttribute('rowspan') * 1;
+						iColspan = nCell.getAttribute('colspan') * 1;
+						iRowspan = nCell.getAttribute('rowspan') * 1;
 						iColspan = (!iColspan || iColspan===0 || iColspan===1) ? 1 : iColspan;
 						iRowspan = (!iRowspan || iRowspan===0 || iRowspan===1) ? 1 : iRowspan;
 		
@@ -1791,6 +1811,9 @@
 						 */
 						iColShifted = fnShiftCol( aLayout, i, iColumn );
 						
+						/* Cache calculation for unique columns */
+						bUnique = iColspan === 1 ? true : false;
+						
 						/* If there is col / rowspan, copy the information into the layout grid */
 						for ( l=0 ; l<iColspan ; l++ )
 						{
@@ -1798,13 +1821,14 @@
 							{
 								aLayout[i+k][iColShifted+l] = {
 									"cell": nCell,
-									"unique": iColspan == 1 ? true : false
+									"unique": bUnique
 								};
-								aLayout[i+k].nTr = nTrs[i];
+								aLayout[i+k].nTr = nTr;
 							}
 						}
 					}
-				}
+					nCell = nCell.nextSibling;
+		               }
 			}
 		}
 		
@@ -2985,7 +3009,6 @@
 		}
 		
 		
-		
 		/**
 		 * Add any control elements for the table - specifically scrolling
 		 *  @param {object} oSettings dataTables settings object
@@ -3470,30 +3493,33 @@
 		 */
 		function _fnApplyToChildren( fn, an1, an2 )
 		{
-			var index=0,
-				i, iLen, j, jLen;
+			var index=0, i=0, iLen=an1.length;
+			var nNode1, nNode2;
 		
-			for ( i=0, iLen=an1.length ; i<iLen ; i++ )
+			while ( i < iLen )
 			{
-				for ( j=0, jLen=an1[i].childNodes.length ; j<jLen ; j++ )
+				nNode1 = an1[i].firstChild;
+				nNode2 = an2 ? an2[i].firstChild : null;
+				while ( nNode1 )
 				{
-					if ( an1[i].childNodes[j].nodeType == 1 )
+					if ( nNode1.nodeType === 1 )
 					{
 						if ( an2 )
 						{
-							fn( an1[i].childNodes[j], an2[i].childNodes[j], index );
+							fn( nNode1, nNode2, index );
 						}
 						else
 						{
-							fn( an1[i].childNodes[j], index );
+							fn( nNode1, index );
 						}
-		
 						index++;
 					}
+					nNode1 = nNode1.nextSibling;
+					nNode2 = an2 ? nNode2.nextSibling : null;
 				}
+				i++;
 			}
 		}
-		
 		
 		
 		/**
@@ -4561,7 +4587,6 @@
 		}
 		
 		
-		
 		/**
 		 * Return the settings object for a particular table
 		 *  @param {node} nTable table we are using as a dataTable
@@ -4615,7 +4640,7 @@
 		{
 			var anReturn = [];
 			var iCorrector;
-			var anTds;
+			var anTds, nTd;
 			var iRow, iRows=oSettings.aoData.length,
 				iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 			
@@ -4633,13 +4658,15 @@
 				{
 					/* get the TD child nodes - taking into account text etc nodes */
 					anTds = [];
-					for ( iColumn=0, iColumns=oData.nTr.childNodes.length ; iColumn<iColumns ; iColumn++ )
+					nTd = oData.nTr.firstChild;
+					while ( nTd )
 					{
-						sNodeName = oData.nTr.childNodes[iColumn].nodeName.toLowerCase();
+						sNodeName = nTd.nodeName.toLowerCase();
 						if ( sNodeName == 'td' || sNodeName == 'th' )
 						{
-							anTds.push( oData.nTr.childNodes[iColumn] );
+							anTds.push( nTd );
 						}
+						nTd = nTd.nextSibling;
 					}
 		
 					iCorrector = 0;
@@ -4906,8 +4933,6 @@
 		}
 		
 
-		
-		
 		/**
 		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
 		 * return the resulting jQuery object.
@@ -5474,12 +5499,19 @@
 			  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
 			}
 			
-			/* If the were originally odd/even type classes - then we add them back here. Note
-			 * this is not fool proof (for example if not all rows as odd/even classes - but 
+			/* If the were originally stripe classes - then we add them back here. Note
+			 * this is not fool proof (for example if not all rows had stripe classes - but
 			 * it's a good effort without getting carried away
 			 */
-			$(nBody).children('tr:even').addClass( oSettings.asDestroyStripes[0] );
-			$(nBody).children('tr:odd').addClass( oSettings.asDestroyStripes[1] );
+			iLen = oSettings.asDestroyStripes.length;
+			if (iLen)
+			{
+				var anRows = $(nBody).children('tr');
+				for ( i=0 ; i<iLen ; i++ )
+				{
+					anRows.filter(':nth-child(' + iLen + 'n + ' + i + ')').addClass( oSettings.asDestroyStripes[i] );
+				}
+			}
 			
 			/* Remove the settings object from the settings array */
 			for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
@@ -6317,7 +6349,6 @@
 		
 		var _that = this;
 		this.each(function() {
-			
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
@@ -6559,41 +6590,28 @@
 			}
 			
 			/* Remove row stripe classes if they are already on the table row */
-			var bStripeRemove = false;
-			var anRows = $(this).children('tbody').children('tr');
-			for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
+			iLen=oSettings.asStripeClasses.length;
+			oSettings.asDestroyStripes = [];
+			if (iLen)
 			{
-				if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripeClasses[i]) )
+				var bStripeRemove = false;
+				var anRows = $(this).children('tbody').children('tr:lt(' + iLen + ')');
+				for ( i=0 ; i<iLen ; i++ )
 				{
-					bStripeRemove = true;
-					break;
-				}
-			}
-					
-			if ( bStripeRemove )
-			{
-				/* Store the classes which we are about to remove so they can be re-added on destroy */
-				oSettings.asDestroyStripes = [ '', '' ];
-				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
-				{
-					oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeOdd+" ";
-				}
-				if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeEven) )
-				{
-					oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeEven;
-				}
-				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeOdd) )
-				{
-					oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeOdd+" ";
-				}
-				if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeEven) )
-				{
-					oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeEven;
+					if ( anRows.hasClass( oSettings.asStripeClasses[i] ) )
+					{
+						bStripeRemove = true;
+						
+						/* Store the classes which we are about to remove so they can be re-added on destroy */
+						oSettings.asDestroyStripes.push( oSettings.asStripeClasses[i] );
+					}
 				}
 				
-				anRows.removeClass( oSettings.asStripeClasses.join(' ') );
+				if ( bStripeRemove )
+				{
+					anRows.removeClass( oSettings.asStripeClasses.join(' ') );
+				}
 			}
-			
 			
 			/*
 			 * Columns
@@ -11558,7 +11576,6 @@
 		"sJUIFooter": "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"
 	} );
 	
-	
 	/*
 	 * Variable: oPagination
 	 * Purpose:  
@@ -11633,17 +11650,22 @@
 				
 				var oClasses = oSettings.oClasses;
 				var an = oSettings.aanFeatures.p;
+				var nNode;
 	
 				/* Loop over each instance of the pager */
 				for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 				{
-					if ( an[i].childNodes.length !== 0 )
+					nNode = an[i].firstChild;
+					if ( nNode )
 					{
-						an[i].childNodes[0].className = ( oSettings._iDisplayStart === 0 ) ? 
-							oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
-						
-						an[i].childNodes[1].className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ? 
-							oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
+						/* Previous page */
+						nNode.className = ( oSettings._iDisplayStart === 0 ) ?
+						    oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
+						    
+						/* Next page */
+						nNode = nNode.nextSibling;
+						nNode.className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ?
+						    oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
 					}
 				}
 			}
@@ -11732,7 +11754,7 @@
 				var sList = "";
 				var iStartButton, iEndButton, i, iLen;
 				var oClasses = oSettings.oClasses;
-				var anButtons, anStatic, nPaginateList;
+				var anButtons, anStatic, nPaginateList, nNode;
 				var an = oSettings.aanFeatures.p;
 				var fnBind = function (j) {
 					oSettings.oApi._fnBindAction( this, {"page": j+iStartButton-1}, function(e) {
@@ -11783,18 +11805,19 @@
 				/* Loop over each instance of the pager */
 				for ( i=0, iLen=an.length ; i<iLen ; i++ )
 				{
-					if ( an[i].childNodes.length === 0 )
+					nNode = an[i];
+					if ( !nNode.hasChildNodes() )
 					{
 						continue;
 					}
 					
 					/* Build up the dynamic list first - html and listeners */
-					$('span:eq(0)', an[i])
+					$('span:eq(0)', nNode)
 						.html( sList )
 						.children('a').each( fnBind );
 					
 					/* Update the permanent button's classes */
-					anButtons = an[i].getElementsByTagName('a');
+					anButtons = nNode.getElementsByTagName('a');
 					anStatic = [
 						anButtons[0], anButtons[1], 
 						anButtons[anButtons.length-2], anButtons[anButtons.length-1]
@@ -12109,4 +12132,4 @@
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 */
-}(jQuery, window, document, undefined));
+}), window, document, undefined );
