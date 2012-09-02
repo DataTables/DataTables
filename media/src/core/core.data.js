@@ -1,4 +1,3 @@
-
 /**
  * Add a data array to the table, creating DOM node etc. This is the parallel to 
  * _fnGatherData, but for adding rows from a Javascript source, rather than a
@@ -81,7 +80,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 function _fnGatherData( oSettings )
 {
 	var iLoop, i, iLen, j, jLen, jInner,
-	 	nTds, nTrs, nTd, aLocalData, iThisIndex,
+	 	nTds, nTrs, nTd, nTr, aLocalData, iThisIndex,
 		iRow, iRows, iColumn, iColumns, sNodeName,
 		oCol, oData;
 	
@@ -92,31 +91,32 @@ function _fnGatherData( oSettings )
 	 */
 	if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
 	{
-		nTrs = oSettings.nTBody.childNodes;
-		for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
+		nTr = oSettings.nTBody.firstChild;
+		while ( nTr )
 		{
-			if ( nTrs[i].nodeName.toUpperCase() == "TR" )
+			if ( nTr.nodeName.toUpperCase() == "TR" )
 			{
 				iThisIndex = oSettings.aoData.length;
-				nTrs[i]._DT_RowIndex = iThisIndex;
+				nTr._DT_RowIndex = iThisIndex;
 				oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
-					"nTr": nTrs[i]
+					"nTr": nTr
 				} ) );
-				
+
 				oSettings.aiDisplayMaster.push( iThisIndex );
-				nTds = nTrs[i].childNodes;
+				nTd = nTr.firstChild;
 				jInner = 0;
-				
-				for ( j=0, jLen=nTds.length ; j<jLen ; j++ )
+				while ( nTd )
 				{
-					sNodeName = nTds[j].nodeName.toUpperCase();
+					sNodeName = nTd.nodeName.toUpperCase();
 					if ( sNodeName == "TD" || sNodeName == "TH" )
 					{
-						_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTds[j].innerHTML) );
+						_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTd.innerHTML) );
 						jInner++;
 					}
+					nTd = nTd.nextSibling;
 				}
 			}
+			nTr = nTr.nextSibling;
 		}
 	}
 	
@@ -128,14 +128,15 @@ function _fnGatherData( oSettings )
 	nTds = [];
 	for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 	{
-		for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
+		nTd = nTrs[i].firstChild;
+		while ( nTd )
 		{
-			nTd = nTrs[i].childNodes[j];
 			sNodeName = nTd.nodeName.toUpperCase();
 			if ( sNodeName == "TD" || sNodeName == "TH" )
 			{
 				nTds.push( nTd );
 			}
+			nTd = nTd.nextSibling;
 		}
 	}
 	
