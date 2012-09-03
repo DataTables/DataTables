@@ -219,8 +219,8 @@ function _fnScrollDraw ( o )
 	{
 		nTfootSize = $(o.nTFoot).clone()[0];
 		o.nTable.insertBefore( nTfootSize, o.nTable.childNodes[1] );
-		anFootSizers = nTfootSize.getElementsByTagName('tr');
 		anFootToSize = o.nTFoot.getElementsByTagName('tr');
+		anFootSizers = nTfootSize.getElementsByTagName('tr');
 	}
 	
 	/*
