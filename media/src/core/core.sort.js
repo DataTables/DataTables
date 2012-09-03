@@ -401,34 +401,32 @@ function _fnSortingClasses( oSettings )
 	if ( oSettings.oFeatures.bSort && oSettings.oFeatures.bSortClasses )
 	{
 		var nTds = _fnGetTdNodes( oSettings );
-		var reClass = new RegExp(sClass + "[123]", "g");
 		
 		/* Remove the old classes */
-		if ( oSettings.oFeatures.bDeferRender )
-		{
+		if ( oSettings.oFeatures.bDeferRender || nTds.length >= iColumns )
+                {
+			var reClass = new RegExp(sClass + "[123]");
+			
+			/* Track columns where we've found one of the sorting classes */
+			var abFound = [];
+
 			for ( i=0, iLen=nTds.length; i<iLen; i++ )
 			{
-				if ( nTds[i].className.lastIndexOf(sClass, 0) != -1 )
+				/* Determine which column we're looking at */
+				iTargetCol = i % iColumns;
+				
+				/* Check if we've already found the class at least once in this column
+				 *
+				 * If not, check the className of this cell
+				 */
+				abFound[iTargetCol] = abFound[iTargetCol] || ( nTds[i].className.indexOf(sClass) !== -1 );
+				if ( abFound[iTargetCol] )
 				{
 					nTds[i].className =
 						$.trim( nTds[i].className.replace( reClass, "" ) );
 				}
 			}
-		}
-		else if ( nTds.length >= iColumns )
-		{
-			for ( i=0 ; i<iColumns ; i++ )
-			{
-				if ( nTds[i].className.lastIndexOf(sClass, 0) != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className =
-                                			$.trim( nTds[(iColumns*j)+i].className.replace( reClass, "" ) );
-					}
-				}
-			}
-		}
+                }
 		
 		/* Add the new classes to the table */
 		var iClass = 1, iTargetCol;
