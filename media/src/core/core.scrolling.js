@@ -1,4 +1,3 @@
-
 /**
  * Add any control elements for the table - specifically scrolling
  *  @param {object} oSettings dataTables settings object
@@ -213,11 +212,15 @@ function _fnScrollDraw ( o )
 	/* Clone the current header and footer elements and then place it into the inner table */
 	nTheadSize = $(o.nTHead).clone()[0];
 	o.nTable.insertBefore( nTheadSize, o.nTable.childNodes[0] );
+	anHeadToSize = o.nTHead.getElementsByTagName('tr');
+	anHeadSizers = nTheadSize.getElementsByTagName('tr');
 	
 	if ( o.nTFoot !== null )
 	{
 		nTfootSize = $(o.nTFoot).clone()[0];
 		o.nTable.insertBefore( nTfootSize, o.nTable.childNodes[1] );
+		anFootSizers = nTfootSize.getElementsByTagName('tr');
+		anFootToSize = o.nTFoot.getElementsByTagName('tr');
 	}
 	
 	/*
@@ -245,7 +248,7 @@ function _fnScrollDraw ( o )
 	{
 		_fnApplyToChildren( function(n) {
 			n.style.width = "";
-		}, nTfootSize.getElementsByTagName('tr') );
+		}, anFootSizers );
 	}
 
 	// If scroll collapse is enabled, when we put the headers back into the body for sizing, we
