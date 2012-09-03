@@ -1,5 +1,4 @@
 
-
 /**
  * Change the order of the table
  *  @param {object} oSettings dataTables settings object
@@ -411,30 +410,15 @@ function _fnSortingClasses( oSettings )
 		}
 		else if ( nTds.length >= iColumns )
 		{
+			var reClass = new RegExp(sClass + "[123]", "g");
 			for ( i=0 ; i<iColumns ; i++ )
 			{
-				if ( nTds[i].className.indexOf(sClass+"1") != -1 )
+				if ( nTds[i].className.lastIndexOf(sClass, 0) != -1 )
 				{
 					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
 					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"1", "" ) );
-					}
-				}
-				else if ( nTds[i].className.indexOf(sClass+"2") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"2", "" ) );
-					}
-				}
-				else if ( nTds[i].className.indexOf(sClass+"3") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( " "+sClass+"3", "" ) );
+						nTds[(iColumns*j)+i].className =
+                                			$.trim( nTds[(iColumns*j)+i].className.replace( reClass, "" ) );
 					}
 				}
 			}
