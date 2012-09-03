@@ -1,4 +1,3 @@
-
 /**
  * Convert a CSS unit width to pixels (e.g. 2em)
  *  @param {string} sWidth width to be converted
@@ -15,7 +14,7 @@ function _fnConvertToWidth ( sWidth, nParent )
 	
 	if ( !nParent )
 	{
-		nParent = document.getElementsByTagName('body')[0];
+		nParent = document.body;
 	}
 	
 	var iWidth;
