@@ -1,4 +1,3 @@
-
 /**
  * Change the order of the table
  *  @param {object} oSettings dataTables settings object
@@ -402,15 +401,22 @@ function _fnSortingClasses( oSettings )
 	if ( oSettings.oFeatures.bSort && oSettings.oFeatures.bSortClasses )
 	{
 		var nTds = _fnGetTdNodes( oSettings );
-
+		var reClass = new RegExp(sClass + "[123]", "g");
+		
 		/* Remove the old classes */
 		if ( oSettings.oFeatures.bDeferRender )
 		{
-			$(nTds).removeClass(sClass+'1 '+sClass+'2 '+sClass+'3');
+			for ( i=0, iLen=nTds.length; i<iLen; i++ )
+			{
+				if ( nTds[i].className.lastIndexOf(sClass) != -1 )
+				{
+					nTds[i].className =
+						$.trim( nTds[i].className.replace( reClass, "" ) );
+				}
+			}
 		}
 		else if ( nTds.length >= iColumns )
 		{
-			var reClass = new RegExp(sClass + "[123]", "g");
 			for ( i=0 ; i<iColumns ; i++ )
 			{
 				if ( nTds[i].className.lastIndexOf(sClass, 0) != -1 )
