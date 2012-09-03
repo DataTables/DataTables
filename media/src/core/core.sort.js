@@ -408,7 +408,7 @@ function _fnSortingClasses( oSettings )
 		{
 			for ( i=0, iLen=nTds.length; i<iLen; i++ )
 			{
-				if ( nTds[i].className.lastIndexOf(sClass) != -1 )
+				if ( nTds[i].className.lastIndexOf(sClass, 0) != -1 )
 				{
 					nTds[i].className =
 						$.trim( nTds[i].className.replace( reClass, "" ) );
