@@ -408,7 +408,7 @@ function _fnSortingClasses( oSettings )
 			var reClass = new RegExp(sClass + "[123]");
 			
 			/* Track columns where we've found one of the sorting classes */
-			var abFound = [];
+			var abFound = [], iFound = 0;
 
 			for ( i=0, iLen=nTds.length; i<iLen; i++ )
 			{
@@ -421,9 +421,10 @@ function _fnSortingClasses( oSettings )
 				 * 
 				 * Stop once we've found all 3 sorting classes
 				 */
-				if (abFound.length < 3)
+				if (iFound < 3 && !abFound[iTargetCol] && nTds[i].className.indexOf(sClass) !== -1)
 				{
-					abFound[iTargetCol] |= nTds[i].className.indexOf(sClass) !== -1;
+					abFound[iTargetCol] = true;
+					iFound++;
 				}
 				
 				if ( abFound[iTargetCol] )
