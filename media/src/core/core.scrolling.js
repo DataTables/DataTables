@@ -310,8 +310,6 @@ function _fnScrollDraw ( o )
 	/* We want the hidden header to have zero height, so remove padding and borders. Then
 	 * set the width based on the real headers
 	 */
-	anHeadToSize = o.nTHead.getElementsByTagName('tr');
-	anHeadSizers = nTheadSize.getElementsByTagName('tr');
 	
 	// Apply all styles in one pass. Invalidates layout only once because we don't read any 
 	// DOM properties.
@@ -334,9 +332,6 @@ function _fnScrollDraw ( o )
 	/* Same again with the footer if we have one */
 	if ( o.nTFoot !== null )
 	{
-		anFootSizers = nTfootSize.getElementsByTagName('tr');
-		anFootToSize = o.nTFoot.getElementsByTagName('tr');
-		
 		_fnApplyToChildren( zeroOut, anFootSizers, anFootToSize );
 		 
 		_fnApplyToChildren( function(nSizer, nToSize) {
