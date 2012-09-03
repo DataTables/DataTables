@@ -404,7 +404,7 @@ function _fnSortingClasses( oSettings )
 		
 		/* Remove the old classes */
 		if ( oSettings.oFeatures.bDeferRender || nTds.length >= iColumns )
-                {
+		{
 			var reClass = new RegExp(sClass + "[123]");
 			
 			/* Track columns where we've found one of the sorting classes */
@@ -418,15 +418,21 @@ function _fnSortingClasses( oSettings )
 				/* Check if we've already found the class at least once in this column
 				 *
 				 * If not, check the className of this cell
+				 * 
+				 * Stop once we've found all 3 sorting classes
 				 */
-				abFound[iTargetCol] = abFound[iTargetCol] || ( nTds[i].className.indexOf(sClass) !== -1 );
+				if (abFound.length < 3)
+				{
+					abFound[iTargetCol] |= nTds[i].className.indexOf(sClass) !== -1;
+				}
+				
 				if ( abFound[iTargetCol] )
 				{
 					nTds[i].className =
 						$.trim( nTds[i].className.replace( reClass, "" ) );
 				}
 			}
-                }
+		}
 		
 		/* Add the new classes to the table */
 		var iClass = 1, iTargetCol;
