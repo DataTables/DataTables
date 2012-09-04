@@ -1,4 +1,3 @@
-
 /**
  * Add any control elements for the table - specifically scrolling
  *  @param {object} oSettings dataTables settings object
@@ -194,7 +193,7 @@ function _fnScrollDraw ( o )
 		nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
 		nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
 		ie67 = o.oBrowser.bScrollOversize,
-		zeroOut = function(nSizer, nToSize) {
+		zeroOut = function(nSizer) {
 			oStyle = nSizer.style;
 			oStyle.paddingTop = "0";
 			oStyle.paddingBottom = "0";
@@ -312,19 +311,19 @@ function _fnScrollDraw ( o )
 	
 	// Apply all styles in one pass. Invalidates layout only once because we don't read any 
 	// DOM properties.
-	_fnApplyToChildren( zeroOut, anHeadSizers, anHeadToSize );
+	_fnApplyToChildren( zeroOut, anHeadSizers );
 	 
 	// Read all widths in next pass. Forces layout only once because we do not change 
 	// any DOM properties.
-	_fnApplyToChildren( function(nSizer, nToSize) {
+	_fnApplyToChildren( function(nSizer) {
 		aApplied.push( _fnStringToCss( $(nSizer).width() ) );
-	}, anHeadSizers, anHeadToSize );
+	}, anHeadSizers );
 	 
 	// Apply all widths in final pass. Invalidates layout only once because we do not
 	// read any DOM properties.
-	_fnApplyToChildren( function(nSizer, nToSize, i) {
+	_fnApplyToChildren( function(nToSize, i) {
 		nToSize.style.width = aApplied[i];
-	}, anHeadSizers, anHeadToSize );
+	}, anHeadToSize );
 
 	$(anHeadSizers).height(0);
 	
@@ -334,15 +333,15 @@ function _fnScrollDraw ( o )
 		anFootSizers = nTfootSize.getElementsByTagName('tr');
 		anFootToSize = o.nTFoot.getElementsByTagName('tr');
 		
-		_fnApplyToChildren( zeroOut, anFootSizers, anFootToSize );
+		_fnApplyToChildren( zeroOut, anFootSizers );
 		 
-		_fnApplyToChildren( function(nSizer, nToSize) {
+		_fnApplyToChildren( function(nSizer) {
 			aAppliedFooter.push( _fnStringToCss( $(nSizer).width() ) );
-		}, anFootSizers, anFootToSize );
+		}, anFootSizers );
 		 
-		_fnApplyToChildren( function(nSizer, nToSize, i) {
+		_fnApplyToChildren( function(nToSize, i) {
 			nToSize.style.width = aAppliedFooter[i];
-		}, anFootSizers, anFootToSize );
+		}, anFootToSize );
 
 		$(anFootSizers).height(0);
 	}
