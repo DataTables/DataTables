@@ -1,4 +1,3 @@
-
 /**
  * Convert a CSS unit width to pixels (e.g. 2em)
  *  @param {string} sWidth width to be converted
@@ -45,6 +44,7 @@ function _fnCalculateColumnWidths ( oSettings )
 	var i, iIndex, iCorrector, iWidth;
 	var oHeaders = $('th', oSettings.nTHead);
 	var widthAttr = oSettings.nTable.getAttribute('width');
+	var nWrapper = oSettings.nTable.parentNode;
 	
 	/* Convert any user input sizes into pixel sizes */
 	for ( i=0 ; i<iColums ; i++ )
@@ -56,7 +56,7 @@ function _fnCalculateColumnWidths ( oSettings )
 			if ( oSettings.aoColumns[i].sWidth !== null )
 			{
 				iTmpWidth = _fnConvertToWidth( oSettings.aoColumns[i].sWidthOrig, 
-					oSettings.nTable.parentNode );
+					nWrapper );
 				if ( iTmpWidth !== null )
 				{
 					oSettings.aoColumns[i].sWidth = _fnStringToCss( iTmpWidth );
@@ -156,7 +156,6 @@ function _fnCalculateColumnWidths ( oSettings )
 		}
 		
 		/* Build the table and 'display' it */
-		var nWrapper = oSettings.nTable.parentNode;
 		nWrapper.appendChild( nCalcTmp );
 		
 		/* When scrolling (X or Y) we want to set the width of the table as appropriate. However,
