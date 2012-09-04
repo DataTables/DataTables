@@ -385,11 +385,11 @@ function _fnScrollDraw ( o )
 		
 		/* Apply the calculated minimum width to the table wrappers */
 		nScrollBody.style.width = _fnStringToCss( iCorrection );
-		nScrollHeadInner.parentNode.style.width = _fnStringToCss( iCorrection );
+		o.nScrollHead.style.width = _fnStringToCss( iCorrection );
 		
 		if ( o.nTFoot !== null )
 		{
-			nScrollFootInner.parentNode.style.width = _fnStringToCss( iCorrection );
+			o.nScrollFoot.style.width = _fnStringToCss( iCorrection );
 		}
 		
 		/* And give the user a warning that we've stopped the table getting too small */
@@ -408,11 +408,11 @@ function _fnScrollDraw ( o )
 	else
 	{
 		nScrollBody.style.width = _fnStringToCss( '100%' );
-		nScrollHeadInner.parentNode.style.width = _fnStringToCss( '100%' );
+		o.nScrollHead.style.width = _fnStringToCss( '100%' );
 		
 		if ( o.nTFoot !== null )
 		{
-			nScrollFootInner.parentNode.style.width = _fnStringToCss( '100%' );
+			o.nScrollFoot.style.width = _fnStringToCss( '100%' );
 		}
 	}
 	
