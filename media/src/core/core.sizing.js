@@ -14,7 +14,7 @@ function _fnConvertToWidth ( sWidth, nParent )
 	
 	if ( !nParent )
 	{
-		nParent = document.getElementsByTagName('body')[0];
+		nParent = document.body;
 	}
 	
 	var iWidth;
