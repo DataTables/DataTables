@@ -1,5 +1,4 @@
 
-
 /**
  * Generate the node required for the info display
  *  @param {object} oSettings dataTables settings object
@@ -109,9 +108,9 @@ function _fnInfoMacros ( oSettings, str )
 	}
 
 	return str.
-		replace('_START_', sStart).
-		replace('_END_',   sEnd).
-		replace('_TOTAL_', sTotal).
-		replace('_MAX_',   sMax);
+		replace(/_START_/g, sStart).
+		replace(/_END_/g,   sEnd).
+		replace(/_TOTAL_/g, sTotal).
+		replace(/_MAX_/g,   sMax);
 }
 
