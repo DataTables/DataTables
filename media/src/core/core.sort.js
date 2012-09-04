@@ -1,5 +1,3 @@
-
-
 /**
  * Change the order of the table
  *  @param {object} oSettings dataTables settings object
@@ -403,56 +401,49 @@ function _fnSortingClasses( oSettings )
 	if ( oSettings.oFeatures.bSort && oSettings.oFeatures.bSortClasses )
 	{
 		var nTds = _fnGetTdNodes( oSettings );
-
-		/* Remove the old classes */
-		if ( oSettings.oFeatures.bDeferRender )
-		{
-			$(nTds).removeClass(sClass+'1 '+sClass+'2 '+sClass+'3');
-		}
-		else if ( nTds.length >= iColumns )
-		{
-			for ( i=0 ; i<iColumns ; i++ )
-			{
-				if ( nTds[i].className.indexOf(sClass+"1") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"1", "" ) );
-					}
-				}
-				else if ( nTds[i].className.indexOf(sClass+"2") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"2", "" ) );
-					}
-				}
-				else if ( nTds[i].className.indexOf(sClass+"3") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( " "+sClass+"3", "" ) );
-					}
-				}
-			}
-		}
 		
-		/* Add the new classes to the table */
-		var iClass = 1, iTargetCol;
-		for ( i=0 ; i<aaSort.length ; i++ )
+		/* Determine what the sorting class for each column should be */
+		var iClass, iTargetCol;
+		var asClasses = [];
+		for (i = 0; i < iColumns; i++)
+		{
+			asClasses.push("");
+		}
+		for (i = 0, iClass = 1; i < aaSort.length; i++)
 		{
 			iTargetCol = parseInt( aaSort[i][0], 10 );
-			for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-			{
-				nTds[(iColumns*j)+iTargetCol].className += " "+sClass+iClass;
-			}
+			asClasses[iTargetCol] = sClass + iClass;
 			
 			if ( iClass < 3 )
 			{
 				iClass++;
+			}
+		}
+		
+		/* Make changes to the classes for each cell as needed */
+		var reClass = new RegExp(sClass + "[123]");
+		var sTmpClass, sCurrentClass, sNewClass;
+		for ( i=0, iLen=nTds.length; i<iLen; i++ )
+		{
+			/* Determine which column we're looking at */
+			iTargetCol = i % iColumns;
+			
+			/* What is the full list of classes now */
+			sCurrentClass = nTds[i].className;
+			/* What sorting class should be applied? */
+			sNewClass = asClasses[iTargetCol];
+			/* What would the new full list be if we did a replacement? */
+			sTmpClass = sCurrentClass.replace(reClass, sNewClass);
+			
+			if ( sTmpClass != sCurrentClass )
+			{
+				/* We changed something */
+				nTds[i].className = $.trim( sTmpClass );
+			}
+			else if ( sNewClass.length > 0 && sCurrentClass.indexOf(sNewClass) == -1 )
+			{
+				/* We need to add a class */
+				nTds[i].className = sCurrentClass + " " + sNewClass;
 			}
 		}
 	}
