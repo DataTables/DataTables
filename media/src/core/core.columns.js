@@ -1,4 +1,3 @@
-
 /**
  * Add a column to the list used for the table with default values
  *  @param {object} oSettings dataTables settings object
@@ -240,9 +239,9 @@ function _fnGetColumns( oSettings, sParam )
 function _fnDetectType( sData )
 {
 	var aTypes = DataTable.ext.aTypes,
-		i=0, iLen = aTypes.length;
+		i, iLen;
 	
-	for ( ; i<iLen ; i++ )
+	for ( i=0, iLen = aTypes.length ; i<iLen ; i++ )
 	{
 		var sType = aTypes[i]( sData );
 		if ( sType !== null )
@@ -265,9 +264,9 @@ function _fnReOrderIndex ( oSettings, sColumns )
 {
 	var aColumns = sColumns.split(','),
 		aiReturn = [], 
-		i=0, iLen=oSettings.aoColumns.length, j;
+		i, iLen, j;
 	
-	for ( ; i<iLen ; i++ )
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		for ( j=0 ; j<iLen ; j++ )
 		{
@@ -292,8 +291,8 @@ function _fnReOrderIndex ( oSettings, sColumns )
 function _fnColumnOrdering ( oSettings )
 {
 	var sNames = '',
-		i=0, iLen=oSettings.aoColumns.length;
-	for ( ; i<iLen ; i++ )
+		i, iLen;
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		sNames += oSettings.aoColumns[i].sName+',';
 	}
