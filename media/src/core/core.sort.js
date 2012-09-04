@@ -402,52 +402,48 @@ function _fnSortingClasses( oSettings )
 	{
 		var nTds = _fnGetTdNodes( oSettings );
 		
-		/* Remove the old classes */
-		if ( oSettings.oFeatures.bDeferRender || nTds.length >= iColumns )
+		/* Determine what the sorting class for each column should be */
+		var iClass, iTargetCol;
+		var asClasses = [];
+		for (i = 0; i < iColumns; i++)
 		{
-			var reClass = new RegExp(sClass + "[123]");
-			
-			/* Track columns where we've found one of the sorting classes */
-			var abFound = [], iFound = 0;
-
-			for ( i=0, iLen=nTds.length; i<iLen; i++ )
-			{
-				/* Determine which column we're looking at */
-				iTargetCol = i % iColumns;
-				
-				/* Check if we've already found the class at least once in this column
-				 *
-				 * If not, check the className of this cell
-				 * 
-				 * Stop once we've found all 3 sorting classes
-				 */
-				if (iFound < 3 && !abFound[iTargetCol] && nTds[i].className.indexOf(sClass) !== -1)
-				{
-					abFound[iTargetCol] = true;
-					iFound++;
-				}
-				
-				if ( abFound[iTargetCol] )
-				{
-					nTds[i].className =
-						$.trim( nTds[i].className.replace( reClass, "" ) );
-				}
-			}
+			asClasses.push("");
 		}
-		
-		/* Add the new classes to the table */
-		var iClass = 1, iTargetCol;
-		for ( i=0 ; i<aaSort.length ; i++ )
+		for (i = 0, iClass = 1; i < aaSort.length; i++)
 		{
 			iTargetCol = parseInt( aaSort[i][0], 10 );
-			for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-			{
-				nTds[(iColumns*j)+iTargetCol].className += " "+sClass+iClass;
-			}
+			asClasses[iTargetCol] = sClass + iClass;
 			
 			if ( iClass < 3 )
 			{
 				iClass++;
+			}
+		}
+		
+		/* Make changes to the classes for each cell as needed */
+		var reClass = new RegExp(sClass + "[123]");
+		var sTmpClass, sCurrentClass, sNewClass;
+		for ( i=0, iLen=nTds.length; i<iLen; i++ )
+		{
+			/* Determine which column we're looking at */
+			iTargetCol = i % iColumns;
+			
+			/* What is the full list of classes now */
+			sCurrentClass = nTds[i].className;
+			/* What sorting class should be applied? */
+			sNewClass = asClasses[iTargetCol];
+			/* What would the new full list be if we did a replacement? */
+			sTmpClass = sCurrentClass.replace(reClass, sNewClass);
+			
+			if ( sTmpClass != sCurrentClass )
+			{
+				/* We changed something */
+				nTds[i].className = $.trim( sTmpClass );
+			}
+			else if ( sNewClass.length > 0 && sCurrentClass.indexOf(sNewClass) == -1 )
+			{
+				/* We need to add a class */
+				nTds[i].className = sCurrentClass + " " + sNewClass;
 			}
 		}
 	}
