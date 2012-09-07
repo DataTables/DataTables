@@ -1,5 +1,3 @@
-
-
 /**
  * Perform a jQuery selector action on the table's TR elements (from the tbody) and
  * return the resulting jQuery object.
@@ -37,8 +35,11 @@
  */
 this.$ = function ( sSelector, oOpts )
 {
-	var i, iLen, a = [];
+	var i, iLen, a = [], tr;
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+	var aoData = oSettings.aoData;
+	var aiDisplay = oSettings.aiDisplay;
+	var aiDisplayMaster = oSettings.aiDisplayMaster;
 
 	if ( !oOpts )
 	{
@@ -57,37 +58,54 @@ this.$ = function ( sSelector, oOpts )
 	{
 		for ( i=oSettings._iDisplayStart, iLen=oSettings.fnDisplayEnd() ; i<iLen ; i++ )
 		{
-			a.push( oSettings.aoData[ oSettings.aiDisplay[i] ].nTr );
+			tr = aoData[ aiDisplay[i] ].nTr;
+			if ( tr )
+			{
+				a.push( tr );
+			}
 		}
 	}
 	else if ( oOpts.order == "current" && oOpts.filter == "none" )
 	{
-		for ( i=0, iLen=oSettings.aiDisplayMaster.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aiDisplayMaster.length ; i<iLen ; i++ )
 		{
-			a.push( oSettings.aoData[ oSettings.aiDisplayMaster[i] ].nTr );
+			tr = aoData[ aiDisplayMaster[i] ].nTr;
+			if ( tr )
+			{
+				a.push( tr );
+			}
 		}
 	}
 	else if ( oOpts.order == "current" && oOpts.filter == "applied" )
 	{
-		for ( i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aiDisplay.length ; i<iLen ; i++ )
 		{
-			a.push( oSettings.aoData[ oSettings.aiDisplay[i] ].nTr );
+			tr = aoData[ aiDisplay[i] ].nTr;
+			if ( tr )
+			{
+				a.push( tr );
+			}
 		}
 	}
 	else if ( oOpts.order == "original" && oOpts.filter == "none" )
 	{
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
-			a.push( oSettings.aoData[ i ].nTr );
+			tr = aoData[ i ].nTr ;
+			if ( tr )
+			{
+				a.push( tr );
+			}
 		}
 	}
 	else if ( oOpts.order == "original" && oOpts.filter == "applied" )
 	{
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
+		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
 		{
-			if ( $.inArray( i, oSettings.aiDisplay ) !== -1 )
+			tr = aoData[ i ].nTr;
+			if ( $.inArray( i, aiDisplay ) !== -1 && tr )
 			{
-				a.push( oSettings.aoData[ i ].nTr );
+				a.push( tr );
 			}
 		}
 	}
@@ -111,11 +129,11 @@ this.$ = function ( sSelector, oOpts )
 /**
  * Almost identical to $ in operation, but in this case returns the data for the matched
  * rows - as such, the jQuery selector used should match TR row nodes or TD/TH cell nodes
- * rather than any decendents, so the data can be obtained for the row/cell. If matching
+ * rather than any descendants, so the data can be obtained for the row/cell. If matching
  * rows are found, the data returned is the original data array/object that was used to  
  * create the row (or a generated array if from a DOM source).
  *
- * This method is often useful incombination with $ where both functions are given the
+ * This method is often useful in-combination with $ where both functions are given the
  * same parameters and the array indexes will match identically.
  *  @param {string|node|jQuery} sSelector jQuery selector or node collection to act on
  *  @param {object} [oOpts] Optional parameters for modifying the rows to be included
@@ -179,8 +197,8 @@ this._ = function ( sSelector, oOpts )
  *    <ul>
  *      <li>1D array of data - add a single row with the data provided</li>
  *      <li>2D array of arrays - add multiple rows in a single call</li>
- *      <li>object - data object when using <i>mDataProp</i></li>
- *      <li>array of objects - multiple data objects when using <i>mDataProp</i></li>
+ *      <li>object - data object when using <i>mData</i></li>
+ *      <li>array of objects - multiple data objects when using <i>mData</i></li>
  *    </ul>
  *  @param {bool} [bRedraw=true] redraw the table or not
  *  @returns {array} An array of integers, representing the list of indexes in 
@@ -414,8 +432,8 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 		fnCallBack.call( this, oSettings, oData );
 	}
 	
-	/* Check for an 'overflow' they case for dislaying the table */
-	if ( oSettings._iDisplayStart >= oSettings.aiDisplay.length )
+	/* Check for an 'overflow' they case for displaying the table */
+	if ( oSettings._iDisplayStart >= oSettings.fnRecordsDisplay() )
 	{
 		oSettings._iDisplayStart -= oSettings._iDisplayLength;
 		if ( oSettings._iDisplayStart < 0 )
@@ -454,22 +472,23 @@ this.fnDestroy = function ( bRemove )
 	var nBody = oSettings.nTBody;
 	var i, iLen;
 
-	bRemove = (bRemove===undefined) ? false : true;
+	bRemove = (bRemove===undefined) ? false : bRemove;
 	
 	/* Flag to note that the table is currently being destroyed - no action should be taken */
 	oSettings.bDestroying = true;
 	
-	/* Restore hidden columns */
-	for ( i=0, iLen=oSettings.aoDestroyCallback.length ; i<iLen ; i++ ) {
-		oSettings.aoDestroyCallback[i].fn();
-	}
-	
-	/* Restore hidden columns */
-	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	/* Fire off the destroy callbacks for plug-ins etc */
+	_fnCallbackFire( oSettings, "aoDestroyCallback", "destroy", [oSettings] );
+
+	/* If the table is not being removed, restore the hidden columns */
+	if ( !bRemove )
 	{
-		if ( oSettings.aoColumns[i].bVisible === false )
+		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
-			this.fnSetColumnVis( i, true );
+			if ( oSettings.aoColumns[i].bVisible === false )
+			{
+				this.fnSetColumnVis( i, true );
+			}
 		}
 	}
 	
@@ -545,12 +564,19 @@ this.fnDestroy = function ( bRemove )
 	  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
 	}
 	
-	/* If the were originally odd/even type classes - then we add them back here. Note
-	 * this is not fool proof (for example if not all rows as odd/even classes - but 
+	/* If the were originally stripe classes - then we add them back here. Note
+	 * this is not fool proof (for example if not all rows had stripe classes - but
 	 * it's a good effort without getting carried away
 	 */
-	$(nBody).children('tr:even').addClass( oSettings.asDestroyStripes[0] );
-	$(nBody).children('tr:odd').addClass( oSettings.asDestroyStripes[1] );
+	iLen = oSettings.asDestroyStripes.length;
+	if (iLen)
+	{
+		var anRows = $(nBody).children('tr');
+		for ( i=0 ; i<iLen ; i++ )
+		{
+			anRows.filter(':nth-child(' + iLen + 'n + ' + i + ')').addClass( oSettings.asDestroyStripes[i] );
+		}
+	}
 	
 	/* Remove the settings object from the settings array */
 	for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
@@ -563,6 +589,7 @@ this.fnDestroy = function ( bRemove )
 	
 	/* End it all */
 	oSettings = null;
+	oInit = null;
 };
 
 
@@ -582,7 +609,7 @@ this.fnDestroy = function ( bRemove )
 this.fnDraw = function( bComplete )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	if ( bComplete )
+	if ( bComplete === false )
 	{
 		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
@@ -978,7 +1005,7 @@ this.fnSetColumnVis = function ( iCol, bShow, bRedraw )
 	var i, iLen;
 	var aoColumns = oSettings.aoColumns;
 	var aoData = oSettings.aoData;
-	var nTd, nCell, anTrs, jqChildren, bAppend, iBefore;
+	var nTd, bAppend, iBefore;
 	
 	/* No point in doing anything if we are requesting what is already true */
 	if ( aoColumns[iCol].bVisible == bShow )
@@ -1098,7 +1125,7 @@ this.fnSettings = function()
 
 
 /**
- * Sort the table by a particular row
+ * Sort the table by a particular column
  *  @param {int} iCol the data index to sort on. Note that this will not match the 
  *    'display index' if you have hidden data entries
  *  @dtopt API
@@ -1150,7 +1177,7 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
  *  @param {node|int} mRow TR element you want to update or the aoData index
  *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
  *  @param {bool} [bRedraw=true] Redraw the table or not
- *  @param {bool} [bAction=true] Perform predraw actions or not
+ *  @param {bool} [bAction=true] Perform pre-draw actions or not
  *  @returns {int} 0 on success, 1 on error
  *  @dtopt API
  *
@@ -1164,34 +1191,30 @@ this.fnSortListener = function( nNode, iColumn, fnCallback )
 this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-	var iVisibleColumn, i, iLen, sDisplay;
+	var i, iLen, sDisplay;
 	var iRow = (typeof mRow === 'object') ? 
 		_fnNodeToDataIndex(oSettings, mRow) : mRow;
 	
-	if ( oSettings.__fnUpdateDeep === undefined && $.isArray(mData) && typeof mData === 'object' )
+	if ( $.isArray(mData) && iColumn === undefined )
 	{
 		/* Array update - update the whole row */
 		oSettings.aoData[iRow]._aData = mData.slice();
 		
 		/* Flag to the function that we are recursing */
-		oSettings.__fnUpdateDeep = true;
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
 			this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 		}
-		oSettings.__fnUpdateDeep = undefined;
 	}
-	else if ( oSettings.__fnUpdateDeep === undefined && mData !== null && typeof mData === 'object' )
+	else if ( $.isPlainObject(mData) && iColumn === undefined )
 	{
 		/* Object update - update the whole row - assume the developer gets the object right */
 		oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
 
-		oSettings.__fnUpdateDeep = true;
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
 			this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
 		}
-		oSettings.__fnUpdateDeep = undefined;
 	}
 	else
 	{
@@ -1220,8 +1243,10 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	 * will rebuild the search array - however, the redraw might be disabled by the user)
 	 */
 	var iDisplayIndex = $.inArray( iRow, oSettings.aiDisplay );
-	oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow( oSettings, 
-		_fnGetRowData( oSettings, iRow, 'filter' ) );
+	oSettings.asDataSearch[iDisplayIndex] = _fnBuildSearchRow(
+		oSettings, 
+		_fnGetRowData( oSettings, iRow, 'filter', _fnGetColumns( oSettings, 'bSearchable' ) )
+	);
 	
 	/* Perform pre-draw actions */
 	if ( bAction === undefined || bAction )

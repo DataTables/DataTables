@@ -18,9 +18,9 @@
 			$(document).ready(function() {
 				$("#tabs").tabs( {
 					"show": function(event, ui) {
-						var oTable = $('div.dataTables_scrollBody>table.display', ui.panel).dataTable();
-						if ( oTable.length > 0 ) {
-							oTable.fnAdjustColumnSizing();
+						var table = $.fn.dataTable.fnTables(true);
+						if ( table.length > 0 ) {
+							$(table).dataTable().fnAdjustColumnSizing();
 						}
 					}
 				} );
@@ -300,9 +300,9 @@
 			<pre class="brush: js;">$(document).ready(function() {
 	$("#tabs").tabs( {
 		"show": function(event, ui) {
-			var oTable = $('div.dataTables_scrollBody&gt;table.display', ui.panel).dataTable();
-			if ( oTable.length &gt; 0 ) {
-				oTable.fnAdjustColumnSizing();
+			var table = $.fn.dataTable.fnTables(true);
+			if ( table.length &gt; 0 ) {
+				$(table).dataTable().fnAdjustColumnSizing();
 			}
 		}
 	} );

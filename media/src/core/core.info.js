@@ -1,5 +1,4 @@
 
-
 /**
  * Generate the node required for the info display
  *  @param {object} oSettings dataTables settings object
@@ -43,57 +42,36 @@ function _fnUpdateInfo ( oSettings )
 	}
 	
 	var
-		iStart = oSettings._iDisplayStart+1, iEnd = oSettings.fnDisplayEnd(),
-		iMax = oSettings.fnRecordsTotal(), iTotal = oSettings.fnRecordsDisplay(),
-		sStart = oSettings.fnFormatNumber( iStart ), sEnd = oSettings.fnFormatNumber( iEnd ),
-		sMax = oSettings.fnFormatNumber( iMax ), sTotal = oSettings.fnFormatNumber( iTotal ),
+		oLang = oSettings.oLanguage,
+		iStart = oSettings._iDisplayStart+1,
+		iEnd = oSettings.fnDisplayEnd(),
+		iMax = oSettings.fnRecordsTotal(),
+		iTotal = oSettings.fnRecordsDisplay(),
 		sOut;
 	
-	/* When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
-	 * internally
-	 */
-	if ( oSettings.oScroll.bInfinite )
-	{
-		sStart = oSettings.fnFormatNumber( 1 );
-	}
-	
-	if ( oSettings.fnRecordsDisplay() === 0 && 
-		   oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
+	if ( iTotal === 0 )
 	{
 		/* Empty record set */
-		sOut = oSettings.oLanguage.sInfoEmpty+ oSettings.oLanguage.sInfoPostFix;
+		sOut = oLang.sInfoEmpty;
 	}
-	else if ( oSettings.fnRecordsDisplay() === 0 )
-	{
-		/* Rmpty record set after filtering */
-		sOut = oSettings.oLanguage.sInfoEmpty +' '+ 
-			oSettings.oLanguage.sInfoFiltered.replace('_MAX_', sMax)+
-				oSettings.oLanguage.sInfoPostFix;
-	}
-	else if ( oSettings.fnRecordsDisplay() == oSettings.fnRecordsTotal() )
-	{
+	else {
 		/* Normal record set */
-		sOut = oSettings.oLanguage.sInfo.
-				replace('_START_', sStart).
-				replace('_END_',   sEnd).
-				replace('_TOTAL_', sTotal)+ 
-			oSettings.oLanguage.sInfoPostFix;
+		sOut = oLang.sInfo;
 	}
-	else
+
+	if ( iTotal != iMax )
 	{
 		/* Record set after filtering */
-		sOut = oSettings.oLanguage.sInfo.
-				replace('_START_', sStart).
-				replace('_END_',   sEnd).
-				replace('_TOTAL_', sTotal) +' '+ 
-			oSettings.oLanguage.sInfoFiltered.replace('_MAX_', 
-				oSettings.fnFormatNumber(oSettings.fnRecordsTotal()))+ 
-			oSettings.oLanguage.sInfoPostFix;
+		sOut += ' ' + oLang.sInfoFiltered;
 	}
+
+	// Convert the macros
+	sOut += oLang.sInfoPostFix;
+	sOut = _fnInfoMacros( oSettings, sOut );
 	
-	if ( oSettings.oLanguage.fnInfoCallback !== null )
+	if ( oLang.fnInfoCallback !== null )
 	{
-		sOut = oSettings.oLanguage.fnInfoCallback.call( oSettings.oInstance, 
+		sOut = oLang.fnInfoCallback.call( oSettings.oInstance, 
 			oSettings, iStart, iEnd, iMax, iTotal, sOut );
 	}
 	
@@ -102,5 +80,32 @@ function _fnUpdateInfo ( oSettings )
 	{
 		$(n[i]).html( sOut );
 	}
+}
+
+
+function _fnInfoMacros ( oSettings, str )
+{
+	var
+		iStart = oSettings._iDisplayStart+1,
+		sStart = oSettings.fnFormatNumber( iStart ),
+		iEnd = oSettings.fnDisplayEnd(),
+		sEnd = oSettings.fnFormatNumber( iEnd ),
+		iTotal = oSettings.fnRecordsDisplay(),
+		sTotal = oSettings.fnFormatNumber( iTotal ),
+		iMax = oSettings.fnRecordsTotal(),
+		sMax = oSettings.fnFormatNumber( iMax );
+
+	// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
+	// internally
+	if ( oSettings.oScroll.bInfinite )
+	{
+		sStart = oSettings.fnFormatNumber( 1 );
+	}
+
+	return str.
+		replace(/_START_/g, sStart).
+		replace(/_END_/g,   sEnd).
+		replace(/_TOTAL_/g, sTotal).
+		replace(/_MAX_/g,   sMax);
 }
 

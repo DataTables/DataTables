@@ -81,12 +81,6 @@
 			
 			<h1>Server side (PHP) code</h1>
 			<pre>&lt;?php
-	/*
-	 * Script:    DataTables server-side script for PHP and MySQL
-	 * Copyright: 2010 - Allan Jardine
-	 * License:   GPL v2 or BSD (3-point)
-	 */
-	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Easy set variables
 	 */
@@ -108,6 +102,9 @@
 	$gaSql['db']         = "";
 	$gaSql['server']     = "localhost";
 	
+	/* REMOVE THIS LINE (it just includes my SQL connection user/pass) */
+	include( $_SERVER['DOCUMENT_ROOT']."/datatables/mysql.php" );
+	
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * If you just want to use the basic configuration for DataTables with PHP server-side, there is
@@ -115,13 +112,27 @@
 	 */
 	
 	/* 
+	 * Local functions
+	 */
+	function fatal_error ( $sErrorMessage = '' )
+	{
+		header( $_SERVER['SERVER_PROTOCOL'] .' 500 Internal Server Error' );
+		die( $sErrorMessage );
+	}
+
+	
+	/* 
 	 * MySQL connection
 	 */
-	$gaSql['link'] =  mysql_pconnect( $gaSql['server'], $gaSql['user'], $gaSql['password']  ) or
-		die( 'Could not open connection to server' );
-	
-	mysql_select_db( $gaSql['db'], $gaSql['link'] ) or 
-		die( 'Could not select database '. $gaSql['db'] );
+	if ( ! $gaSql['link'] = mysql_pconnect( $gaSql['server'], $gaSql['user'], $gaSql['password']  ) )
+	{
+		fatal_error( 'Could not open connection to server' );
+	}
+
+	if ( ! mysql_select_db( $gaSql['db'], $gaSql['link'] ) )
+	{
+		fatal_error( 'Could not select database ' );
+	}
 	
 	
 	/* 
@@ -138,6 +149,7 @@
 	/*
 	 * Ordering
 	 */
+	$sOrder = "";
 	if ( isset( $_GET['iSortCol_0'] ) )
 	{
 		$sOrder = "ORDER BY  ";
@@ -145,8 +157,8 @@
 		{
 			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
 			{
-				$sOrder .= $aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."
-				 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+				$sOrder .= "`".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."` ".
+				 	mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
 			}
 		}
 		
@@ -165,12 +177,12 @@
 	 * on very large tables, and MySQL's regex functionality is very limited
 	 */
 	$sWhere = "";
-	if ( $_GET['sSearch'] != "" )
+	if ( isset($_GET['sSearch']) &amp;&amp; $_GET['sSearch'] != "" )
 	{
 		$sWhere = "WHERE (";
 		for ( $i=0 ; $i&lt;count($aColumns) ; $i++ )
 		{
-			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string( $_GET['sSearch'] )."%' OR ";
 		}
 		$sWhere = substr_replace( $sWhere, "", -3 );
 		$sWhere .= ')';
@@ -179,7 +191,7 @@
 	/* Individual column filtering */
 	for ( $i=0 ; $i&lt;count($aColumns) ; $i++ )
 	{
-		if ( $_GET['bSearchable_'.$i] == "true" &amp;&amp; $_GET['sSearch_'.$i] != '' )
+		if ( isset($_GET['bSearchable_'.$i]) &amp;&amp; $_GET['bSearchable_'.$i] == "true" &amp;&amp; $_GET['sSearch_'.$i] != '' )
 		{
 			if ( $sWhere == "" )
 			{
@@ -189,7 +201,7 @@
 			{
 				$sWhere .= " AND ";
 			}
-			$sWhere .= $aColumns[$i]." LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
+			$sWhere .= "`".$aColumns[$i]."` LIKE '%".mysql_real_escape_string($_GET['sSearch_'.$i])."%' ";
 		}
 	}
 	
@@ -199,28 +211,28 @@
 	 * Get data to display
 	 */
 	$sQuery = "
-		SELECT SQL_CALC_FOUND_ROWS ".str_replace(" , ", " ", implode(", ", $aColumns))."
+		SELECT SQL_CALC_FOUND_ROWS `".str_replace(" , ", " ", implode("`, `", $aColumns))."`
 		FROM   $sTable
 		$sWhere
 		$sOrder
 		$sLimit
-	";
-	$rResult = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+		";
+	$rResult = mysql_query( $sQuery, $gaSql['link'] ) or fatal_error( 'MySQL Error: ' . mysql_errno() );
 	
 	/* Data set length after filtering */
 	$sQuery = "
 		SELECT FOUND_ROWS()
 	";
-	$rResultFilterTotal = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+	$rResultFilterTotal = mysql_query( $sQuery, $gaSql['link'] ) or fatal_error( 'MySQL Error: ' . mysql_errno() );
 	$aResultFilterTotal = mysql_fetch_array($rResultFilterTotal);
 	$iFilteredTotal = $aResultFilterTotal[0];
 	
 	/* Total data set length */
 	$sQuery = "
-		SELECT COUNT(".$sIndexColumn.")
+		SELECT COUNT(`".$sIndexColumn."`)
 		FROM   $sTable
 	";
-	$rResultTotal = mysql_query( $sQuery, $gaSql['link'] ) or die(mysql_error());
+	$rResultTotal = mysql_query( $sQuery, $gaSql['link'] ) or fatal_error( 'MySQL Error: ' . mysql_errno() );
 	$aResultTotal = mysql_fetch_array($rResultTotal);
 	$iTotal = $aResultTotal[0];
 	

@@ -223,9 +223,23 @@ DataTable.models.oSettings = {
 		 * Information callback function. See 
 		 * {@link DataTable.defaults.fnInfoCallback}
 		 *  @type function
-		 *  @default 
+		 *  @default null
 		 */
 		"fnInfoCallback": null
+	},
+	
+	/**
+	 * Browser support parameters
+	 *  @namespace
+	 */
+	"oBrowser": {
+		/**
+		 * Indicate if the browser incorrectly calculates width:100% inside a
+		 * scrolling element (IE6/7)
+		 *  @type boolean
+		 *  @default false
+		 */
+		"bScrollOversize": false
 	},
 	
 	/**
@@ -854,5 +868,15 @@ DataTable.models.oSettings = {
 	 * tabindex attribute value that is added to DataTables control elements, allowing
 	 * keyboard navigation of the table and its controls.
 	 */
-	"iTabIndex": 0
+	"iTabIndex": 0,
+
+	/**
+	 * DIV container for the footer scrolling table if scrolling
+	 */
+	"nScrollHead": null,
+
+	/**
+	 * DIV container for the footer scrolling table if scrolling
+	 */
+	"nScrollFoot": null
 };

@@ -8,11 +8,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser", "iDataSort": 4 },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "engine" },
+			{ "mData": "browser", "iDataSort": 4 },
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -50,11 +50,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
-					{ "mDataProp": "browser", "iDataSort": 4 },
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade", "iDataSort": 1 }
+					{ "mData": "engine" },
+					{ "mData": "browser", "iDataSort": 4 },
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade", "iDataSort": 1 }
 				]
 			} );
 		},

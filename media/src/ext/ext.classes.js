@@ -59,7 +59,9 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sScrollFootInner": "dataTables_scrollFootInner",
 	
 	/* Misc */
-	"sFooterTH": ""
+	"sFooterTH": "",
+	"sJUIHeader": "",
+	"sJUIFooter": ""
 } );
 
 
@@ -103,6 +105,8 @@ $.extend( DataTable.ext.oJUIClasses, DataTable.ext.oStdClasses, {
 	"sScrollFoot": "dataTables_scrollFoot ui-state-default",
 	
 	/* Misc */
-	"sFooterTH": "ui-state-default"
+	"sFooterTH": "ui-state-default",
+	"sJUIHeader": "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix",
+	"sJUIFooter": "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"
 } );
 

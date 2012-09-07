@@ -1,5 +1,3 @@
-
-
 /**
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
@@ -35,12 +33,12 @@ function _fnCreateTr ( oSettings, iRow )
 		for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			var oCol = oSettings.aoColumns[i];
-			nTd = document.createElement('td');
+			nTd = document.createElement( oCol.sCellType );
 
 			/* Render if needed - if bUseRendered is true then we already have the rendered
 			 * value in the data source - so can just use that
 			 */
-			nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null)) ?
+			nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
 				_fnRender( oSettings, iRow, i ) :
 				_fnGetCellData( oSettings, iRow, i, 'display' );
 		
@@ -301,12 +299,6 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
  */
 function _fnDraw( oSettings )
 {
-	var i, iLen, n;
-	var anRows = [];
-	var iRowCount = 0;
-	var iStripes = oSettings.asStripeClasses.length;
-	var iOpenRows = oSettings.aoOpenRows.length;
-	
 	/* Provide a pre-callback function which can be used to cancel the draw is false is returned */
 	var aPreDraw = _fnCallbackFire( oSettings, 'aoPreDrawCallback', 'preDraw', [oSettings] );
 	if ( $.inArray( false, aPreDraw ) !== -1 )
@@ -314,6 +306,12 @@ function _fnDraw( oSettings )
 		_fnProcessingDisplay( oSettings, false );
 		return;
 	}
+	
+	var i, iLen, n;
+	var anRows = [];
+	var iRowCount = 0;
+	var iStripes = oSettings.asStripeClasses.length;
+	var iOpenRows = oSettings.aoOpenRows.length;
 	
 	oSettings.bDrawing = true;
 	
@@ -380,7 +378,7 @@ function _fnDraw( oSettings )
 				}
 			}
 			
-			/* Row callback functions - might want to manipule the row */
+			/* Row callback functions - might want to manipulate the row */
 			_fnCallbackFire( oSettings, 'aoRowCallback', null, 
 				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 			
@@ -411,22 +409,22 @@ function _fnDraw( oSettings )
 			anRows[ 0 ].className = oSettings.asStripeClasses[0];
 		}
 
-		var sZero = oSettings.oLanguage.sZeroRecords.replace(
-			'_MAX_', oSettings.fnFormatNumber(oSettings.fnRecordsTotal()) );
+		var oLang = oSettings.oLanguage;
+		var sZero = oLang.sZeroRecords;
 		if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
 		{
-			sZero = oSettings.oLanguage.sLoadingRecords;
+			sZero = oLang.sLoadingRecords;
 		}
-		else if ( oSettings.oLanguage.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
+		else if ( oLang.sEmptyTable && oSettings.fnRecordsTotal() === 0 )
 		{
-			sZero = oSettings.oLanguage.sEmptyTable;
+			sZero = oLang.sEmptyTable;
 		}
 
 		var nTd = document.createElement( 'td' );
 		nTd.setAttribute( 'valign', "top" );
 		nTd.colSpan = _fnVisbleColumns( oSettings );
 		nTd.className = oSettings.oClasses.sRowEmpty;
-		nTd.innerHTML = sZero;
+		nTd.innerHTML = _fnInfoMacros( oSettings, sZero );
 		
 		anRows[ iRowCount ].appendChild( nTd );
 	}
@@ -573,11 +571,11 @@ function _fnAddOptionsHtml ( oSettings )
 				/* Replace jQuery UI constants */
 				if ( sAttr == "H" )
 				{
-					sAttr = "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix";
+					sAttr = oSettings.oClasses.sJUIHeader;
 				}
 				else if ( sAttr == "F" )
 				{
-					sAttr = "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix";
+					sAttr = oSettings.oClasses.sJUIFooter;
 				}
 				
 				/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
@@ -692,10 +690,12 @@ function _fnAddOptionsHtml ( oSettings )
 function _fnDetectHeader ( aLayout, nThead )
 {
 	var nTrs = $(nThead).children('tr');
-	var nCell;
-	var i, j, k, l, iLen, jLen, iColShifted;
+	var nTr, nCell;
+	var i, k, l, iLen, jLen, iColShifted, iColumn, iColspan, iRowspan;
+	var bUnique;
 	var fnShiftCol = function ( a, i, j ) {
-		while ( a[i][j] ) {
+		var k = a[i];
+                while ( k[j] ) {
 			j++;
 		}
 		return j;
@@ -712,19 +712,18 @@ function _fnDetectHeader ( aLayout, nThead )
 	/* Calculate a layout array */
 	for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 	{
-		var iColumn = 0;
+		nTr = nTrs[i];
+		iColumn = 0;
 		
 		/* For every cell in the row... */
-		for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
-		{
-			nCell = nTrs[i].childNodes[j];
-
+		nCell = nTr.firstChild;
+		while ( nCell ) {
 			if ( nCell.nodeName.toUpperCase() == "TD" ||
 			     nCell.nodeName.toUpperCase() == "TH" )
 			{
 				/* Get the col and rowspan attributes from the DOM and sanitise them */
-				var iColspan = nCell.getAttribute('colspan') * 1;
-				var iRowspan = nCell.getAttribute('rowspan') * 1;
+				iColspan = nCell.getAttribute('colspan') * 1;
+				iRowspan = nCell.getAttribute('rowspan') * 1;
 				iColspan = (!iColspan || iColspan===0 || iColspan===1) ? 1 : iColspan;
 				iRowspan = (!iRowspan || iRowspan===0 || iRowspan===1) ? 1 : iRowspan;
 
@@ -733,6 +732,9 @@ function _fnDetectHeader ( aLayout, nThead )
 				 */
 				iColShifted = fnShiftCol( aLayout, i, iColumn );
 				
+				/* Cache calculation for unique columns */
+				bUnique = iColspan === 1 ? true : false;
+				
 				/* If there is col / rowspan, copy the information into the layout grid */
 				for ( l=0 ; l<iColspan ; l++ )
 				{
@@ -740,13 +742,14 @@ function _fnDetectHeader ( aLayout, nThead )
 					{
 						aLayout[i+k][iColShifted+l] = {
 							"cell": nCell,
-							"unique": iColspan == 1 ? true : false
+							"unique": bUnique
 						};
-						aLayout[i+k].nTr = nTrs[i];
+						aLayout[i+k].nTr = nTr;
 					}
 				}
 			}
-		}
+			nCell = nCell.nextSibling;
+               }
 	}
 }
 
@@ -756,7 +759,7 @@ function _fnDetectHeader ( aLayout, nThead )
  *  @param {object} oSettings dataTables settings object
  *  @param {node} nHeader automatically detect the layout from this node - optional
  *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
- *  @returns array {node} aReturn list of unique ths
+ *  @returns array {node} aReturn list of unique th's
  *  @memberof DataTable#oApi
  */
 function _fnGetUniqueThs ( oSettings, nHeader, aLayout )

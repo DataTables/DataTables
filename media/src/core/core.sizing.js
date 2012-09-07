@@ -1,5 +1,3 @@
-
-
 /**
  * Convert a CSS unit width to pixels (e.g. 2em)
  *  @param {string} sWidth width to be converted
@@ -16,7 +14,7 @@ function _fnConvertToWidth ( sWidth, nParent )
 	
 	if ( !nParent )
 	{
-		nParent = document.getElementsByTagName('body')[0];
+		nParent = document.body;
 	}
 	
 	var iWidth;
@@ -46,6 +44,7 @@ function _fnCalculateColumnWidths ( oSettings )
 	var i, iIndex, iCorrector, iWidth;
 	var oHeaders = $('th', oSettings.nTHead);
 	var widthAttr = oSettings.nTable.getAttribute('width');
+	var nWrapper = oSettings.nTable.parentNode;
 	
 	/* Convert any user input sizes into pixel sizes */
 	for ( i=0 ; i<iColums ; i++ )
@@ -57,7 +56,7 @@ function _fnCalculateColumnWidths ( oSettings )
 			if ( oSettings.aoColumns[i].sWidth !== null )
 			{
 				iTmpWidth = _fnConvertToWidth( oSettings.aoColumns[i].sWidthOrig, 
-					oSettings.nTable.parentNode );
+					nWrapper );
 				if ( iTmpWidth !== null )
 				{
 					oSettings.aoColumns[i].sWidth = _fnStringToCss( iTmpWidth );
@@ -157,7 +156,6 @@ function _fnCalculateColumnWidths ( oSettings )
 		}
 		
 		/* Build the table and 'display' it */
-		var nWrapper = oSettings.nTable.parentNode;
 		nWrapper.appendChild( nCalcTmp );
 		
 		/* When scrolling (X or Y) we want to set the width of the table as appropriate. However,
@@ -284,7 +282,7 @@ function _fnScrollingWidthAdjust ( oSettings, n )
  * Get the widest node
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
- *  @returns {string} max strlens for each column
+ *  @returns {node} widest table node
  *  @memberof DataTable#oApi
  */
 function _fnGetWidestNode( oSettings, iCol )
@@ -309,7 +307,7 @@ function _fnGetWidestNode( oSettings, iCol )
  * Get the maximum strlen for each data column
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iCol column of interest
- *  @returns {string} max strlens for each column
+ *  @returns {string} max string length for each column
  *  @memberof DataTable#oApi
  */
 function _fnGetMaxLenString( oSettings, iCol )

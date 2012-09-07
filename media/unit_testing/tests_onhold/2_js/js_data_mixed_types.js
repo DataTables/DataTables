@@ -24,19 +24,19 @@ $(document).ready( function () {
 	oTest.fnTest( 
 		"Sorting (first click) on second column",
 		function () { $('#example thead th:eq(1)').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "true"; }
+		function () { return $('#example tbody td:eq(1)').html() == ""; }
 	);
 	
 	oTest.fnTest( 
 		"Sorting (second click) on second column",
 		function () { $('#example thead th:eq(1)').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "Seamonkey 1.1"; }
+		function () { return $('#example tbody td:eq(1)').html() == "true"; }
 	);
 	
 	oTest.fnTest( 
 		"Sorting (third click) on second column",
 		function () { $('#example thead th:eq(1)').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "true"; }
+		function () { return $('#example tbody td:eq(1)').html() == ""; }
 	);
 	
 	oTest.fnTest( 
@@ -58,33 +58,33 @@ $(document).ready( function () {
 			oDispacher.click( $('#example thead th:eq(1)')[0], { 'shift': true } ); },
 		function () { var b = 
 			$('#example tbody tr:eq(1) td:eq(0)').html() == "Gecko" && 
-			$('#example tbody tr:eq(1) td:eq(1)').html() == "false"; return b; }
+			$('#example tbody tr:eq(1) td:eq(1)').html() == "Camino 1.0"; return b; }
 	);
 	
 	oTest.fnTest( 
 		"Sorting multi-column - sorting second column only",
 		function () { 
 			$('#example thead th:eq(1)').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "false"; }
+		function () { return $('#example tbody td:eq(1)').html() == ""; }
 	);
 	
 	/* Basic paging */
 	oTest.fnTest( 
 		"Paging to second page",
 		function () { $('#example_next').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "Firefox 1.5"; }
+		function () { return $('#example tbody td:eq(1)').html() == "Firefox 2.0"; }
 	);
 	
 	oTest.fnTest( 
 		"Paging to first page",
 		function () { $('#example_previous').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "false"; }
+		function () { return $('#example tbody td:eq(1)').html() == ""; }
 	);
 	
 	oTest.fnTest( 
 		"Attempting to page back beyond the first page",
 		function () { $('#example_previous').click(); },
-		function () { return $('#example tbody td:eq(1)').html() == "false"; }
+		function () { return $('#example tbody td:eq(1)').html() == ""; }
 	);
 	
 	/* Changing length */
@@ -297,7 +297,7 @@ $(document).ready( function () {
 	oTest.fnTest(
 		"Filter 'Win' - sorting column 1",
 		function () { $('#example thead th:eq(1)').click(); },
-		function () { return $('#example tbody tr:eq(0) td:eq(1)').html() == "true"; }
+		function () { return $('#example tbody tr:eq(0) td:eq(1)').html() == ""; }
 	);
 	
 	oTest.fnTest(
@@ -310,7 +310,7 @@ $(document).ready( function () {
 	oTest.fnTest(
 		"Filter 'Win' - sorting column 1 reverse",
 		function () { $('#example thead th:eq(1)').click(); },
-		function () { return $('#example tbody tr:eq(0) td:eq(1)').html() == "Seamonkey 1.1"; }
+		function () { return $('#example tbody tr:eq(0) td:eq(1)').html() == "true"; }
 	);
 	
 	oTest.fnTest(

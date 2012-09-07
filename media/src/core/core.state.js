@@ -80,7 +80,7 @@ function _fnLoadState ( oSettings, oInit )
 	$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
 	
 	/* Column visibility state
-	 * Pass back visibiliy settings to the init handler, but to do not here override
+	 * Pass back visibility settings to the init handler, but to do not here override
 	 * the init object that the user might have passed in
 	 */
 	oInit.saved_aoColumns = [];

@@ -39,7 +39,7 @@
 				return null;
 			}
 			
-			function fnDataTablesPipeline ( sSource, aoData, fnCallback ) {
+			function fnDataTablesPipeline ( sSource, aoData, fnCallback, oSettings ) {
 				var iPipe = 5; /* Ajust the pipe size */
 				
 				var bNeedServer = false;
@@ -91,7 +91,7 @@
 					fnSetKey( aoData, "iDisplayStart", iRequestStart );
 					fnSetKey( aoData, "iDisplayLength", iRequestLength*iPipe );
 					
-					$.getJSON( sSource, aoData, function (json) { 
+					oSettings.jqXHR = $.getJSON( sSource, aoData, function (json) { 
 						/* Callback processing */
 						oCache.lastJson = jQuery.extend(true, {}, json);
 						

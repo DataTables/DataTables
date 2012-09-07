@@ -18,11 +18,11 @@
 					"bServerSide": true,
 					"sAjaxSource": "scripts/objects.php",
 					"aoColumns": [
-						{ "mDataProp": "engine" },
-						{ "mDataProp": "browser" },
-						{ "mDataProp": "platform" },
-						{ "mDataProp": "version" },
-						{ "mDataProp": "grade" }
+						{ "mData": "engine" },
+						{ "mData": "browser" },
+						{ "mData": "platform" },
+						{ "mData": "version" },
+						{ "mData": "grade" }
 					]
 				} );
 			} );
@@ -36,7 +36,7 @@
 			
 			<h1>Preamble</h1>
 			<p>The "native" data format that DataTables expects for server-side processing is a 2D array of data (rows by columns). However, this is often not flexible enough for either the server-side environment, or you might want to convey more information in the data source than is necessary to show in the table (row IDs from the database for example). For this DataTables supports the reading of data for objects as well as arrays.</p>
-			<p>In this example the server responds with an array of objects, and DataTables will look up each property that is specified by the <b>mDataProp</b> property given for each column</p>
+			<p>In this example the server responds with an array of objects, and DataTables will look up each property that is specified by the <b>mData</b> property given for each column</p>
 			
 			<h1>Live example</h1>
 			<div id="dynamic">
@@ -76,11 +76,11 @@
 		"bServerSide": true,
 		"sAjaxSource": "scripts/objects.php",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "engine" },
+			{ "mData": "browser" },
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 } );</pre>

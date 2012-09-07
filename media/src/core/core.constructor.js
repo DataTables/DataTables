@@ -1,4 +1,3 @@
-
 var i=0, iLen, j, jLen, k, kLen;
 var sId = this.getAttribute( 'id' );
 var bInitHandedOff = false;
@@ -50,7 +49,7 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 }
 
 /* Ensure the table has an ID - required for accessibility */
-if ( sId === null )
+if ( sId === null || sId === "" )
 {
 	sId = "DataTables_Table_"+(DataTable.ext._oExternConfig.iNextUnique++);
 	this.id = sId;
@@ -197,8 +196,9 @@ if ( oInit.bStateSave )
 if ( oInit.iDeferLoading !== null )
 {
 	oSettings.bDeferLoading = true;
-	oSettings._iRecordsTotal = oInit.iDeferLoading;
-	oSettings._iRecordsDisplay = oInit.iDeferLoading;
+	var tmp = $.isArray( oInit.iDeferLoading );
+	oSettings._iRecordsDisplay = tmp ? oInit.iDeferLoading[0] : oInit.iDeferLoading;
+	oSettings._iRecordsTotal = tmp ? oInit.iDeferLoading[1] : oInit.iDeferLoading;
 }
 
 if ( oInit.aaData !== null )
@@ -230,43 +230,37 @@ else
 /*
  * Stripes
  */
+if ( oInit.asStripeClasses === null )
+{
+	oSettings.asStripeClasses =[
+		oSettings.oClasses.sStripeOdd,
+		oSettings.oClasses.sStripeEven
+	];
+}
 
 /* Remove row stripe classes if they are already on the table row */
-var bStripeRemove = false;
-var anRows = $(this).children('tbody').children('tr');
-for ( i=0, iLen=oSettings.asStripeClasses.length ; i<iLen ; i++ )
+iLen=oSettings.asStripeClasses.length;
+oSettings.asDestroyStripes = [];
+if (iLen)
 {
-	if ( anRows.filter(":lt(2)").hasClass( oSettings.asStripeClasses[i]) )
+	var bStripeRemove = false;
+	var anRows = $(this).children('tbody').children('tr:lt(' + iLen + ')');
+	for ( i=0 ; i<iLen ; i++ )
 	{
-		bStripeRemove = true;
-		break;
-	}
-}
-		
-if ( bStripeRemove )
-{
-	/* Store the classes which we are about to remove so they can be readded on destroy */
-	oSettings.asDestroyStripes = [ '', '' ];
-	if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeOdd) )
-	{
-		oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeOdd+" ";
-	}
-	if ( $(anRows[0]).hasClass(oSettings.oClasses.sStripeEven) )
-	{
-		oSettings.asDestroyStripes[0] += oSettings.oClasses.sStripeEven;
-	}
-	if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeOdd) )
-	{
-		oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeOdd+" ";
-	}
-	if ( $(anRows[1]).hasClass(oSettings.oClasses.sStripeEven) )
-	{
-		oSettings.asDestroyStripes[1] += oSettings.oClasses.sStripeEven;
+		if ( anRows.hasClass( oSettings.asStripeClasses[i] ) )
+		{
+			bStripeRemove = true;
+			
+			/* Store the classes which we are about to remove so they can be re-added on destroy */
+			oSettings.asDestroyStripes.push( oSettings.asStripeClasses[i] );
+		}
 	}
 	
-	anRows.removeClass( oSettings.asStripeClasses.join(' ') );
+	if ( bStripeRemove )
+	{
+		anRows.removeClass( oSettings.asStripeClasses.join(' ') );
+	}
 }
-
 
 /*
  * Columns
@@ -362,6 +356,15 @@ _fnSortingClasses( oSettings );
  * Final init
  * Cache the header, body and footer as required, creating them if needed
  */
+
+/* Browser support detection */
+_fnBrowserDetect( oSettings );
+
+// Work around for Webkit bug 83867 - store the caption-side before removing from doc
+var captions = $(this).children('caption').each( function () {
+	this._captionSide = $(this).css('caption-side');
+} );
+
 var thead = $(this).children('thead');
 if ( thead.length === 0 )
 {
@@ -382,6 +385,14 @@ oSettings.nTBody.setAttribute( "aria-live", "polite" );
 oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 
 var tfoot = $(this).children('tfoot');
+if ( tfoot.length === 0 && captions.length > 0 && (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
+{
+	// If we are a scrolling table, and no footer has been given, then we need to create
+	// a tfoot element for the caption element to be appended to
+	tfoot = [ document.createElement( 'tfoot' ) ];
+	this.appendChild( tfoot[0] );
+}
+
 if ( tfoot.length > 0 )
 {
 	oSettings.nTFoot = tfoot[0];

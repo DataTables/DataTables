@@ -92,8 +92,8 @@ DataTable.models.ext = {
 	 *     </il>
 	 *   </ul>
 	 *  
-	 * Note that as of v1.9, it is typically preferable to use <i>mDataProp</i> to prepare data for
-	 * the different uses that DataTables can put the data to. Specifically <i>mDataProp</i> when
+	 * Note that as of v1.9, it is typically preferable to use <i>mData</i> to prepare data for
+	 * the different uses that DataTables can put the data to. Specifically <i>mData</i> when
 	 * used as a function will give you a 'type' (sorting, filtering etc) that you can use to 
 	 * prepare the data as required for the different types. As such, this method is deprecated.
 	 *  @type array
@@ -224,28 +224,7 @@ DataTable.models.ext = {
 	 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
 	 *    } );
 	 */
-	"fnVersionCheck": function( sVersion )
-	{
-		/* This is cheap, but very effective */
-		var fnZPad = function (Zpad, count)
-		{
-			while(Zpad.length < count) {
-				Zpad += '0';
-			}
-			return Zpad;
-		};
-		var aThis = DataTable.ext.sVersion.split('.');
-		var aThat = sVersion.split('.');
-		var sThis = '', sThat = '';
-		
-		for ( var i=0, iLen=aThat.length ; i<iLen ; i++ )
-		{
-			sThis += fnZPad( aThis[i], 3 );
-			sThat += fnZPad( aThat[i], 3 );
-		}
-		
-		return parseInt(sThis, 10) >= parseInt(sThat, 10);
-	},
+	"fnVersionCheck": DataTable.fnVersionCheck,
 
 
 	/**
@@ -279,8 +258,8 @@ DataTable.models.ext = {
 	 *     </il>
 	 *   </ul>
 	 * 
-	 * Note that as of v1.9, it is typically preferable to use <i>mDataProp</i> to prepare data for
-	 * the different uses that DataTables can put the data to. Specifically <i>mDataProp</i> when
+	 * Note that as of v1.9, it is typically preferable to use <i>mData</i> to prepare data for
+	 * the different uses that DataTables can put the data to. Specifically <i>mData</i> when
 	 * used as a function will give you a 'type' (sorting, filtering etc) that you can use to 
 	 * prepare the data as required for the different types. As such, this method is deprecated.
 	 *  @type object

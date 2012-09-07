@@ -7,6 +7,7 @@ table.dataTable {
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
+	border-collapse: collapse;
 }
 
 table.dataTable thead th {
@@ -215,7 +216,6 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 table.dataTable thead th div.DataTables_sort_wrapper {
 	position: relative;
 	padding-right: 20px;
-	padding-right: 20px;
 }
 
 table.dataTable thead th div.DataTables_sort_wrapper span {
@@ -239,5 +239,6 @@ table.dataTable th:active {
 
 .dataTables_scrollBody {
 	*margin-top: -1px;
+	-webkit-overflow-scrolling: touch;
 }
 
