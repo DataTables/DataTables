@@ -48,14 +48,14 @@ DataTable.models.oColumn = {
 	"bSortable": null,
 	
 	/**
-	 * When using fnRender, you have two options for what to do with the data,
-	 * and this property serves as the switch. Firstly, you can have the sorting
-	 * and filtering use the rendered value (true - default), or you can have
-	 * the sorting and filtering us the original value (false).
-	 * 
-	 * *NOTE* It is it is advisable now to use mData as a function and make 
-	 * use of the 'type' that it gives, allowing (potentially) different data to
-	 * be used for sorting, filtering, display and type detection.
+	 * <code>Deprecated</code> When using fnRender, you have two options for what 
+	 * to do with the data, and this property serves as the switch. Firstly, you 
+	 * can have the sorting and filtering use the rendered value (true - default), 
+	 * or you can have the sorting and filtering us the original value (false).
+	 *
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type boolean
 	 *  @deprecated
 	 */
@@ -78,9 +78,9 @@ DataTable.models.oColumn = {
 	
 	/**
 	 * Developer definable function that is called whenever a cell is created (Ajax source,
-	 * etc) or processed for input (DOM source). This can be used as a compliment to fnRender
+	 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
 	 * allowing you to modify the DOM element (add background colour for example) when the
-	 * element is available (since it is not when fnRender is called).
+	 * element is available.
 	 *  @type function
 	 *  @param {element} nTd The TD node that has been created
 	 *  @param {*} sData The Data for the cell
@@ -107,8 +107,12 @@ DataTable.models.oColumn = {
 	"fnGetData": null,
 	
 	/**
-	 * Custom display function that will be called for the display of each cell 
-	 * in this column.
+	 * <code>Deprecated</code> Custom display function that will be called for the 
+	 * display of each cell in this column.
+	 *
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type function
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
@@ -117,6 +121,7 @@ DataTable.models.oColumn = {
 	 *  @param {object} o.oSettings The settings object for this DataTables instance
 	 *  @returns {string} The string you which to use in the display
 	 *  @default null
+	 *  @deprecated
 	 */
 	"fnRender": null,
 	

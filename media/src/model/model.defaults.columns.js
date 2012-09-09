@@ -142,51 +142,18 @@ DataTable.defaults.columns = {
 
 
 	/**
-	 * When using fnRender() for a column, you may wish to use the original data
-	 * (before rendering) for sorting and filtering (the default is to used the
-	 * rendered data that the user can see). This may be useful for dates etc.
+	 * <code>Deprecated</code> When using fnRender() for a column, you may wish 
+	 * to use the original data (before rendering) for sorting and filtering 
+	 * (the default is to used the rendered data that the user can see). This 
+	 * may be useful for dates etc.
 	 * 
-	 * *NOTE* This property is now deprecated, and it is suggested that you use
-	 * mData and / or mRender to render data for the DataTable.
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type boolean
 	 *  @default true
 	 *  @dtopt Columns
 	 *  @deprecated
-	 * 
-	 *  @example
-	 *    // Using aoColumnDefs
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumnDefs": [ 
-	 *          {
-	 *            "fnRender": function ( oObj ) {
-	 *              return oObj.aData[0] +' '+ oObj.aData[3];
-	 *            },
-	 *            "bUseRendered": false,
-	 *            "aTargets": [ 0 ]
-	 *          }
-	 *        ]
-	 *      } );
-	 *    } );
-	 *    
-	 *  @example
-	 *    // Using aoColumns
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumns": [ 
-	 *          {
-	 *            "fnRender": function ( oObj ) {
-	 *              return oObj.aData[0] +' '+ oObj.aData[3];
-	 *            },
-	 *            "bUseRendered": false
-	 *          },
-	 *          null,
-	 *          null,
-	 *          null,
-	 *          null
-	 *        ]
-	 *      } );
-	 *    } );
 	 */
 	"bUseRendered": true,
 
@@ -224,9 +191,9 @@ DataTable.defaults.columns = {
 	
 	/**
 	 * Developer definable function that is called whenever a cell is created (Ajax source,
-	 * etc) or processed for input (DOM source). This can be used as a compliment to fnRender
+	 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
 	 * allowing you to modify the DOM element (add background colour for example) when the
-	 * element is available (since it is not when fnRender is called).
+	 * element is available.
 	 *  @type function
 	 *  @param {element} nTd The TD node that has been created
 	 *  @param {*} sData The Data for the cell
@@ -253,8 +220,12 @@ DataTable.defaults.columns = {
 
 
 	/**
-	 * Custom display function that will be called for the display of each cell in
-	 * this column.
+	 * <code>Deprecated</code> Custom display function that will be called for the 
+	 * display of each cell in this column.
+	 *
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type function
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
@@ -265,37 +236,7 @@ DataTable.defaults.columns = {
 	 *  @param {*}      val The current cell value
 	 *  @returns {string} The string you which to use in the display
 	 *  @dtopt Columns
-	 * 
-	 *  @example
-	 *    // Using aoColumnDefs
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumnDefs": [ 
-	 *          {
-	 *            "fnRender": function ( o, val ) {
-	 *              return o.aData[0] +' '+ o.aData[3];
-	 *            },
-	 *            "aTargets": [ 0 ]
-	 *          }
-	 *        ]
-	 *      } );
-	 *    } );
-	 *    
-	 *  @example
-	 *    // Using aoColumns
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumns": [ 
-	 *          { "fnRender": function ( o, val ) {
-	 *            return o.aData[0] +' '+ o.aData[3];
-	 *          } },
-	 *          null,
-	 *          null,
-	 *          null,
-	 *          null
-	 *        ]
-	 *      } );
-	 *    } );
+	 *  @deprecated
 	 */
 	"fnRender": null,
 
