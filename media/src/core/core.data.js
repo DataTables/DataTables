@@ -9,22 +9,23 @@
  */
 function _fnAddData ( oSettings, aDataSupplied )
 {
-	var oCol;
+	var oCol,
+		i, iLen,
+		nTd, sThisType, sVarType,
 	
-	/* Take an independent copy of the data source so we can bash it about as we wish */
-	var aDataIn = ($.isArray(aDataSupplied)) ?
-		aDataSupplied.slice() :
-		$.extend( true, {}, aDataSupplied );
+		/* Take an independent copy of the data source so we can bash it about as we wish */
+		aDataIn = ($.isArray(aDataSupplied)) ?
+			aDataSupplied.slice() :
+			$.extend( true, {}, aDataSupplied ),
 	
-	/* Create the object for storing information about this new row */
-	var iRow = oSettings.aoData.length;
-	var oData = $.extend( true, {}, DataTable.models.oRow );
+		/* Create the object for storing information about this new row */
+		iRow = oSettings.aoData.length,
+		oData = $.extend( true, {}, DataTable.models.oRow );
 	oData._aData = aDataIn;
 	oSettings.aoData.push( oData );
 
 	/* Create the cells */
-	var nTd, sThisType;
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		oCol = oSettings.aoColumns[i];
 
@@ -42,7 +43,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 		if ( oCol._bAutoType && oCol.sType != 'string' )
 		{
 			/* Attempt to auto detect the type - same as _fnGatherData() */
-			var sVarType = _fnGetCellData( oSettings, iRow, i, 'type' );
+			sVarType = _fnGetCellData( oSettings, iRow, i, 'type' );
 			if ( sVarType !== null && sVarType !== '' )
 			{
 				sThisType = _fnDetectType( sVarType );
@@ -82,7 +83,9 @@ function _fnGatherData( oSettings )
 	var iLoop, i, iLen, j, jLen, jInner,
 	 	nTds, nTrs, nTd, nTr, aLocalData, iThisIndex,
 		iRow, iRows, iColumn, iColumns, sNodeName,
-		oCol, oData;
+		oCol, oData,
+		bAutoType, bRender, bClass, bVisible,
+		nCell, sThisType, sRendered, sValType;
 	
 	/*
 	 * Process by row first
@@ -151,12 +154,10 @@ function _fnGatherData( oSettings )
 			oCol.sTitle = oCol.nTh.innerHTML;
 		}
 		
-		var
-			bAutoType = oCol._bAutoType,
-			bRender = typeof oCol.fnRender === 'function',
-			bClass = oCol.sClass !== null,
-			bVisible = oCol.bVisible,
-			nCell, sThisType, sRendered, sValType;
+		bAutoType = oCol._bAutoType;
+		bRender = typeof oCol.fnRender === 'function';
+		bClass = oCol.sClass !== null;
+		bVisible = oCol.bVisible;
 		
 		/* A single loop to rule them all (and be more efficient) */
 		if ( bAutoType || bRender || bClass || !bVisible )
@@ -273,9 +274,10 @@ function _fnNodeToDataIndex( oSettings, n )
  */
 function _fnNodeToColumnIndex( oSettings, iRow, n )
 {
-	var anCells = _fnGetTdNodes( oSettings, iRow );
+	var anCells = _fnGetTdNodes( oSettings, iRow ),
+		i, iLen;
 
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		if ( anCells[i] === n )
 		{
@@ -297,8 +299,9 @@ function _fnNodeToColumnIndex( oSettings, iRow, n )
  */
 function _fnGetRowData( oSettings, iRow, sSpecific, aiColumns )
 {
-	var out = [];
-	for ( var i=0, iLen=aiColumns.length ; i<iLen ; i++ )
+	var out = [],
+		i, iLen;
+	for ( i=0, iLen=aiColumns.length ; i<iLen ; i++ )
 	{
 		out.push( _fnGetCellData( oSettings, iRow, aiColumns[i], sSpecific ) );
 	}
@@ -317,9 +320,9 @@ function _fnGetRowData( oSettings, iRow, sSpecific, aiColumns )
  */
 function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 {
-	var sData;
-	var oCol = oSettings.aoColumns[iCol];
-	var oData = oSettings.aoData[iRow]._aData;
+	var sData,
+		oCol = oSettings.aoColumns[iCol],
+		oData = oSettings.aoData[iRow]._aData;
 
 	if ( (sData=oCol.fnGetData( oData, sSpecific )) === undefined )
 	{
@@ -362,8 +365,8 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
  */
 function _fnSetCellData( oSettings, iRow, iCol, val )
 {
-	var oCol = oSettings.aoColumns[iCol];
-	var oData = oSettings.aoData[iRow]._aData;
+	var oCol = oSettings.aoColumns[iCol],
+		oData = oSettings.aoData[iRow]._aData;
 
 	oCol.fnSetData( oData, val );
 }
@@ -381,6 +384,8 @@ var __reArray = /\[.*?\]$/;
  */
 function _fnGetObjectDataFn( mSource )
 {
+	var fetchData;
+			
 	if ( mSource === null )
 	{
 		/* Give an empty string for rendering / sorting etc */
@@ -403,12 +408,13 @@ function _fnGetObjectDataFn( mSource )
 		 * be used if defined, rather than throwing an error
 		 */
 		var fetchData = function (data, type, src) {
-			var a = src.split('.');
-			var arrayNotation, out, innerSrc;
+			var a = src.split('.'),
+				arrayNotation, out, innerSrc, join,
+				i, iLen, j, jLen;
 
 			if ( src !== "" )
 			{
-				for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+				for ( i=0, iLen=a.length ; i<iLen ; i++ )
 				{
 					// Check if we are dealing with an array notation request
 					arrayNotation = a[i].match(__reArray);
@@ -427,13 +433,13 @@ function _fnGetObjectDataFn( mSource )
 						innerSrc = a.join('.');
 
 						// Traverse each entry in the array getting the properties requested
-						for ( var j=0, jLen=data.length ; j<jLen ; j++ ) {
+						for ( j=0, jLen=data.length ; j<jLen ; j++ ) {
 							out.push( fetchData( data[j], type, innerSrc ) );
 						}
 
 						// If a string is given in between the array notation indicators, that
 						// is used to join the strings together, otherwise an array is returned
-						var join = arrayNotation[0].substring(1, arrayNotation[0].length-1);
+						join = arrayNotation[0].substring(1, arrayNotation[0].length-1);
 						data = (join==="") ? out : out.join(join);
 
 						// The inner call to fetchData has already traversed through the remainder
@@ -475,6 +481,8 @@ function _fnGetObjectDataFn( mSource )
  */
 function _fnSetObjectDataFn( mSource )
 {
+	var setData;
+	
 	if ( mSource === null )
 	{
 		/* Nothing to do when the data source is null */
@@ -489,11 +497,12 @@ function _fnSetObjectDataFn( mSource )
 	else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
 	{
 		/* Like the get, we need to get data from a nested object */
-		var setData = function (data, val, src) {
-			var a = src.split('.'), b;
-			var arrayNotation, o, innerSrc;
+		setData = function (data, val, src) {
+			var a = src.split('.'), b,
+				arrayNotation, o, innerSrc,
+				i, iLen, j, jLen;
 
-			for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
+			for ( i=0, iLen=a.length-1 ; i<iLen ; i++ )
 			{
 				// Check if we are dealing with an array notation request
 				arrayNotation = a[i].match(__reArray);
@@ -509,7 +518,7 @@ function _fnSetObjectDataFn( mSource )
 					innerSrc = b.join('.');
 
 					// Traverse each entry in the array setting the properties requested
-					for ( var j=0, jLen=val.length ; j<jLen ; j++ )
+					for ( j=0, jLen=val.length ; j<jLen ; j++ )
 					{
 						o = {};
 						setData( o, val[j], innerSrc );
@@ -557,9 +566,9 @@ function _fnSetObjectDataFn( mSource )
  */
 function _fnGetDataMaster ( oSettings )
 {
-	var aData = [];
-	var iLen = oSettings.aoData.length;
-	for ( var i=0 ; i<iLen; i++ )
+	var aData = [],
+		i, iLen;
+	for ( i=0, iLen = oSettings.aoData.length ; i<iLen; i++ )
 	{
 		aData.push( oSettings.aoData[i]._aData );
 	}
@@ -590,9 +599,10 @@ function _fnClearTable( oSettings )
  */
 function _fnDeleteIndex( a, iTarget )
 {
-	var iTargetIndex = -1;
+	var iTargetIndex = -1,
+		i, iLen;
 	
-	for ( var i=0, iLen=a.length ; i<iLen ; i++ )
+	for ( i=0, iLen=a.length ; i<iLen ; i++ )
 	{
 		if ( a[i] == iTarget )
 		{

@@ -1,5 +1,3 @@
-
-
 /**
  * Add a column to the list used for the table with default values
  *  @param {object} oSettings dataTables settings object
@@ -8,16 +6,17 @@
  */
 function _fnAddColumn( oSettings, nTh )
 {
-	var oDefaults = DataTable.defaults.columns;
-	var iCol = oSettings.aoColumns.length;
-	var oCol = $.extend( {}, DataTable.models.oColumn, oDefaults, {
-		"sSortingClass": oSettings.oClasses.sSortable,
-		"sSortingClassJUI": oSettings.oClasses.sSortJUI,
-		"nTh": nTh ? nTh : document.createElement('th'),
-		"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
-		"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
-		"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
-	} );
+	var oDefaults = DataTable.defaults.columns,
+		iCol = oSettings.aoColumns.length,
+		oCol = $.extend( {}, DataTable.models.oColumn, oDefaults, {
+			"sSortingClass": oSettings.oClasses.sSortable,
+			"sSortingClassJUI": oSettings.oClasses.sSortJUI,
+			"nTh": nTh || document.createElement('th'),
+			"sTitle":    oDefaults.sTitle || nTh ? nTh.innerHTML : '',
+			"aDataSort": oDefaults.aDataSort || [iCol],
+			"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
+		} ),
+		oPre;
 	oSettings.aoColumns.push( oCol );
 	
 	/* Add a column specific filter */
@@ -27,7 +26,7 @@ function _fnAddColumn( oSettings, nTh )
 	}
 	else
 	{
-		var oPre = oSettings.aoPreSearchCols[ iCol ];
+		oPre = oSettings.aoPreSearchCols[ iCol ];
 		
 		/* Don't require that the user must specify bRegex, bSmart or bCaseInsensitive */
 		if ( oPre.bRegex === undefined )
@@ -60,7 +59,8 @@ function _fnAddColumn( oSettings, nTh )
  */
 function _fnColumnOptions( oSettings, iCol, oOptions )
 {
-	var oCol = oSettings.aoColumns[ iCol ];
+	var oCol = oSettings.aoColumns[ iCol ],
+		mRender, mData;
 	
 	/* User specified column options */
 	if ( oOptions !== undefined && oOptions !== null )
@@ -91,8 +91,8 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	}
 
 	/* Cache the data get and set functions for speed */
-	var mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
-	var mData = _fnGetObjectDataFn( oCol.mData );
+	mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
+	mData = _fnGetObjectDataFn( oCol.mData );
 
 	oCol.fnGetData = function (oData, sSpecific) {
 		var innerData = mData( oData, sSpecific );
@@ -145,6 +145,8 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
  */
 function _fnAdjustColumnSizing ( oSettings )
 {
+	var i, iLen;
+
 	/* Not interested in doing column width calculation if auto-width is disabled */
 	if ( oSettings.oFeatures.bAutoWidth === false )
 	{
@@ -152,7 +154,7 @@ function _fnAdjustColumnSizing ( oSettings )
 	}
 	
 	_fnCalculateColumnWidths( oSettings );
-	for ( var i=0 , iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	for ( i=0 , iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		oSettings.aoColumns[i].nTh.style.width = oSettings.aoColumns[i].sWidth;
 	}
@@ -187,8 +189,8 @@ function _fnVisibleToColumnIndex( oSettings, iMatch )
  */
 function _fnColumnIndexToVisible( oSettings, iMatch )
 {
-	var aiVis = _fnGetColumns( oSettings, 'bVisible' );
-	var iPos = $.inArray( iMatch, aiVis );
+	var aiVis = _fnGetColumns( oSettings, 'bVisible' ),
+		iPos = $.inArray( iMatch, aiVis );
 
 	return iPos !== -1 ? iPos : null;
 }
@@ -236,10 +238,10 @@ function _fnGetColumns( oSettings, sParam )
  */
 function _fnDetectType( sData )
 {
-	var aTypes = DataTable.ext.aTypes;
-	var iLen = aTypes.length;
+	var aTypes = DataTable.ext.aTypes,
+		i, iLen;
 	
-	for ( var i=0 ; i<iLen ; i++ )
+	for ( i=0, iLen = aTypes.length ; i<iLen ; i++ )
 	{
 		var sType = aTypes[i]( sData );
 		if ( sType !== null )
@@ -260,12 +262,13 @@ function _fnDetectType( sData )
  */
 function _fnReOrderIndex ( oSettings, sColumns )
 {
-	var aColumns = sColumns.split(',');
-	var aiReturn = [];
+	var aColumns = sColumns.split(','),
+		aiReturn = [], 
+		i, iLen, j;
 	
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
-		for ( var j=0 ; j<iLen ; j++ )
+		for ( j=0 ; j<iLen ; j++ )
 		{
 			if ( oSettings.aoColumns[i].sName == aColumns[j] )
 			{
@@ -287,8 +290,9 @@ function _fnReOrderIndex ( oSettings, sColumns )
  */
 function _fnColumnOrdering ( oSettings )
 {
-	var sNames = '';
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+	var sNames = '',
+		i, iLen;
+	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		sNames += oSettings.aoColumns[i].sName+',';
 	}
@@ -313,7 +317,8 @@ function _fnColumnOrdering ( oSettings )
  */
 function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 {
-	var i, iLen, j, jLen, k, kLen;
+	var i, iLen, j, jLen, k, kLen,
+		aTargets;
 
 	// Column definitions with aTargets
 	if ( aoColDefs )
@@ -322,7 +327,7 @@ function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 		for ( i=aoColDefs.length-1 ; i>=0 ; i-- )
 		{
 			/* Each definition can target multiple columns, as it is an array */
-			var aTargets = aoColDefs[i].aTargets;
+			aTargets = aoColDefs[i].aTargets;
 			if ( !$.isArray( aTargets ) )
 			{
 				_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
