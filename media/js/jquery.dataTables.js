@@ -639,14 +639,16 @@
 							}
 						}
 		
-						console.log( oCol.mRender, oCol.mData );
 						if ( oCol.mRender )
 						{
+							// mRender has been defined, so we need to get the value and set it
 							nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 						}
 						else if ( oCol.mData !== iColumn )
 						{
-							console.log( '123' );
+							// If mData is not the same as the column number, then we need to
+							// get the dev set value. If it is the column, no point in wasting
+							// time setting the value that is already there!
 							nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 						}
 						
