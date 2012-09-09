@@ -82,17 +82,7 @@
 						{ "sTitle": "Browser" },
 						{ "sTitle": "Platform" },
 						{ "sTitle": "Version", "sClass": "center" },
-						{
-							"sTitle": "Grade",
-							"sClass": "center",
-							"fnRender": function(obj) {
-								var sReturn = obj.aData[ obj.iDataColumn ];
-								if ( sReturn == "A" ) {
-									sReturn = "<b>A</b>";
-								}
-								return sReturn;
-							}
-						}
+						{ "sTitle": "Grade", "sClass": "center" }
 					]
 				} );	
 			} );
@@ -136,17 +126,7 @@
 			{ "sTitle": "Browser" },
 			{ "sTitle": "Platform" },
 			{ "sTitle": "Version", "sClass": "center" },
-			{
-				"sTitle": "Grade",
-				"sClass": "center",
-				"fnRender": function(obj) {
-					var sReturn = obj.aData[ obj.iDataColumn ];
-					if ( sReturn == "A" ) {
-						sReturn = "&lt;b&gt;A&lt;/b&gt;";
-					}
-					return sReturn;
-				}
-			}
+			{ "sTitle": "Grade", "sClass": "center" }
 		]
 	} );	
 } );</pre>
