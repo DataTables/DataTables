@@ -212,11 +212,15 @@ function _fnScrollDraw ( o )
 	/* Clone the current header and footer elements and then place it into the inner table */
 	nTheadSize = $(o.nTHead).clone()[0];
 	o.nTable.insertBefore( nTheadSize, o.nTable.childNodes[0] );
+	anHeadToSize = o.nTHead.getElementsByTagName('tr');
+	anHeadSizers = nTheadSize.getElementsByTagName('tr');
 	
 	if ( o.nTFoot !== null )
 	{
 		nTfootSize = $(o.nTFoot).clone()[0];
 		o.nTable.insertBefore( nTfootSize, o.nTable.childNodes[1] );
+		anFootToSize = o.nTFoot.getElementsByTagName('tr');
+		anFootSizers = nTfootSize.getElementsByTagName('tr');
 	}
 	
 	/*
@@ -244,7 +248,7 @@ function _fnScrollDraw ( o )
 	{
 		_fnApplyToChildren( function(n) {
 			n.style.width = "";
-		}, nTfootSize.getElementsByTagName('tr') );
+		}, anFootSizers );
 	}
 
 	// If scroll collapse is enabled, when we put the headers back into the body for sizing, we
@@ -306,8 +310,6 @@ function _fnScrollDraw ( o )
 	/* We want the hidden header to have zero height, so remove padding and borders. Then
 	 * set the width based on the real headers
 	 */
-	anHeadToSize = o.nTHead.getElementsByTagName('tr');
-	anHeadSizers = nTheadSize.getElementsByTagName('tr');
 	
 	// Apply all styles in one pass. Invalidates layout only once because we don't read any 
 	// DOM properties.
@@ -330,9 +332,6 @@ function _fnScrollDraw ( o )
 	/* Same again with the footer if we have one */
 	if ( o.nTFoot !== null )
 	{
-		anFootSizers = nTfootSize.getElementsByTagName('tr');
-		anFootToSize = o.nTFoot.getElementsByTagName('tr');
-		
 		_fnApplyToChildren( zeroOut, anFootSizers );
 		 
 		_fnApplyToChildren( function(nSizer) {
