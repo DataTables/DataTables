@@ -803,7 +803,8 @@ this.fnGetNodes = function( iRow )
  * and column index including hidden columns
  *  @param {node} nNode this can either be a TR, TD or TH in the table's body
  *  @returns {int} If nNode is given as a TR, then a single index is returned, or
- *    if given as a cell, an array of [row index, column index (visible)] is given.
+ *    if given as a cell, an array of [row index, column index (visible), 
+ *    column index (all)] is given.
  *  @dtopt API
  *
  *  @example
