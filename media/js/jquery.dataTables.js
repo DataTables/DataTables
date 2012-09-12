@@ -9182,8 +9182,8 @@
 			
 			
 				/**
-				 * Text to use when using the 'full_numbers' type of pagination for the
-				 * button to take the user to the next page.
+				 * Text to use for the 'next' pagination button (to take the user to the 
+				 * next page).
 				 *  @type string
 				 *  @default Next
 				 *  @dtopt Language
@@ -9203,8 +9203,8 @@
 			
 			
 				/**
-				 * Text to use when using the 'full_numbers' type of pagination for the
-				 * button to take the user to the previous page.
+				 * Text to use for the 'previous' pagination button (to take the user to  
+				 * the previous page).
 				 *  @type string
 				 *  @default Previous
 				 *  @dtopt Language
