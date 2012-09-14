@@ -38,9 +38,10 @@ function _fnCreateTr ( oSettings, iRow )
 			/* Render if needed - if bUseRendered is true then we already have the rendered
 			 * value in the data source - so can just use that
 			 */
-			nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
+			var sData = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
 				_fnRender( oSettings, iRow, i ) :
 				_fnGetCellData( oSettings, iRow, i, 'display' );
+			nTd.innerHTML = sData;
 		
 			/* Add user defined class */
 			if ( oCol.sClass !== null )
@@ -61,7 +62,7 @@ function _fnCreateTr ( oSettings, iRow )
 			if ( oCol.fnCreatedCell )
 			{
 				oCol.fnCreatedCell.call( oSettings.oInstance,
-					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
+					nTd, sData, oData._aData, iRow, i
 				);
 			}
 		}
