@@ -26,7 +26,7 @@ function _fnCreateTr ( oSettings, iRow )
 
 		if ( oData._aData.DT_RowClass )
 		{
-			$(oData.nTr).addClass( oData._aData.DT_RowClass );
+			oData.nTr.className = oData._aData.DT_RowClass;
 		}
 
 		/* Process each column */
@@ -41,7 +41,7 @@ function _fnCreateTr ( oSettings, iRow )
 			var sData = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
 				_fnRender( oSettings, iRow, i ) :
 				_fnGetCellData( oSettings, iRow, i, 'display' );
-			nTd.innerHTML = sData;
+			$(nTd).html(sData);
 		
 			/* Add user defined class */
 			if ( oCol.sClass !== null )
