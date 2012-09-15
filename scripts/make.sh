@@ -99,6 +99,65 @@ if [ "$CMD" != "debug" ]; then
 	fi
 fi
 
+
+# Back to DataTables root dir
+cd ../..
+
+#
+# Packaging files
+#
+cat <<EOF > package.json
+{
+	"name": "DataTables",
+	"version": "${VERSION}",
+	"title": "DataTables",
+	"author": {
+		"name": "Allan Jardine",
+		"url": "http://sprymedia.co.uk"
+	},
+	"licenses": [
+		{
+			"type": "BSD",
+			"url": "http://datatables.net/license_bsd"
+		},
+		{
+			"type": "GPLv2",
+			"url": "http://datatables.net/license_gpl2"
+		}
+	],
+	"dependencies": {
+		"jquery": "1.4 - 1.8"
+	},
+	"description": "DataTables enhances HTML tables with the ability to sort, filter and page the data in the table very easily. It provides a comprehensive API and set of configuration options, allowing you to consume data from virtually any data source.",
+	"keywords": [
+		"DataTables",
+		"DataTable",
+		"table",
+		"grid",
+		"filter",
+		"sort",
+		"page",
+		"internationalisable"
+	],
+	"homepage": "http://datatables.net"
+}
+EOF
+
+cat <<EOF > component.json
+{
+	"name": "DataTables",
+	"version": "${VERSION}",
+	"main": [
+		"./media/js/jquery.dataTables.js",
+		"./media/css/jquery.dataTables.css",
+	],
+	"dependencies": {
+		"jquery": "~1.8.0"
+	}
+}
+EOF
+
+
 echo "  Done\n"
 
 
