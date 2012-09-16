@@ -683,7 +683,10 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 			var n = oSettings.aanFeatures.f;
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 			{
-				$(n[i]._DT_Input).val( sInput );
+				if ( n[i]._DT_Input != document.activeElement )
+				{
+					$(n[i]._DT_Input).val( sInput );
+				}
 			}
 		}
 	}
