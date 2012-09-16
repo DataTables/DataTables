@@ -26,7 +26,7 @@ function _fnCreateTr ( oSettings, iRow )
 
 		if ( oData._aData.DT_RowClass )
 		{
-			$(oData.nTr).addClass( oData._aData.DT_RowClass );
+			oData.nTr.className = oData._aData.DT_RowClass;
 		}
 
 		/* Process each column */
