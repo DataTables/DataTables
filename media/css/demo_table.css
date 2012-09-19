@@ -201,7 +201,8 @@ table.display td.center {
 	background: url('../images/sort_desc_disabled.png') no-repeat center right;
 }
  
-th:active {
+table.display thead th:active,
+table.display thead td:active {
 	outline: none;
 }
 
