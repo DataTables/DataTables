@@ -6464,6 +6464,7 @@
 			_fnMap( oSettings, oInit, "asStripeClasses" );
 			_fnMap( oSettings, oInit, "asStripClasses", "asStripeClasses" ); // legacy
 			_fnMap( oSettings, oInit, "fnServerData" );
+			_fnMap( oSettings, oInit, "fnOnParserError" );
 			_fnMap( oSettings, oInit, "fnFormatNumber" );
 			_fnMap( oSettings, oInit, "sServerMethod" );
 			_fnMap( oSettings, oInit, "aaSorting" );
@@ -8741,13 +8742,17 @@
 					$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
 					fnCallback( json );
 				},
-				"dataType": "json",
+				"dataType": oSettings.oInit.sAjaxDataType,
 				"cache": false,
 				"type": oSettings.sServerMethod,
 				"error": function (xhr, error, thrown) {
 					if ( error == "parsererror" ) {
-						oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
-							"server could not be parsed. This is caused by a JSON formatting error." );
+						if (typeof oSettings.oInit.fnOnParserError === 'function') {
+							oSettings.oInit.fnOnParserError(error, thrown);
+						} else {
+							oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: JSON data from "+
+								"server could not be parsed. This is caused by a JSON formatting error." );
+						}
 					}
 				}
 			} );
@@ -9593,7 +9598,13 @@
 		 */
 		"sAjaxSource": null,
 	
-	
+		/**
+		 * Property indicating the Ajax data type.
+		 * Defaults to 'json'
+		 * @type string
+		 */
+		"sAjaxDataType": "json",
+    
 		/**
 		 * This parameter can be used to override the default prefix that DataTables
 		 * assigns to a cookie when state saving is enabled.
@@ -10550,6 +10561,12 @@
 	 *    will be done in 2.0.
 	 */
 	DataTable.models.oSettings = {
+		/**
+		 * Function to be called when there's a parser error from server data.
+		 * @type functinon
+		 */
+		"fnOnParserError": null,
+
 		/**
 		 * Primary features of DataTables and their enablement state.
 		 *  @namespace
