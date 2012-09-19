@@ -1165,7 +1165,7 @@
 		function _fnBuildHead( oSettings )
 		{
 			var i, nTh, iLen, j, jLen;
-			var iThs = oSettings.nTHead.getElementsByTagName('th').length;
+			var iThs = $('th, td', oSettings.nTHead).length;
 			var iCorrector = 0;
 			var jqChildren;
 			
@@ -1835,7 +1835,7 @@
 						}
 					}
 					nCell = nCell.nextSibling;
-		               }
+				}
 			}
 		}
 		
