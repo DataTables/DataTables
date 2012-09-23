@@ -147,15 +147,6 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 	oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
 	
-	/* Determine if reordering is required */
-	var sOrdering = _fnColumnOrdering(oSettings);
-	var bReOrder = (json.sColumns !== undefined && sOrdering !== "" && json.sColumns != sOrdering );
-	var aiIndex;
-	if ( bReOrder )
-	{
-		aiIndex = _fnReOrderIndex( oSettings, json.sColumns );
-	}
-	
 	var aData = _fnGetObjectDataFn( oSettings.sAjaxDataProp )( json );
 	for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 	{

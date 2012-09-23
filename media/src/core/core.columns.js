@@ -252,33 +252,6 @@ function _fnDetectType( sData )
 
 
 /**
- * Figure out how to reorder a display list
- *  @param {object} oSettings dataTables settings object
- *  @returns array {int} aiReturn index list for reordering
- *  @memberof DataTable#oApi
- */
-function _fnReOrderIndex ( oSettings, sColumns )
-{
-	var aColumns = sColumns.split(',');
-	var aiReturn = [];
-	
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
-	{
-		for ( var j=0 ; j<iLen ; j++ )
-		{
-			if ( oSettings.aoColumns[i].sName == aColumns[j] )
-			{
-				aiReturn.push( j );
-				break;
-			}
-		}
-	}
-	
-	return aiReturn;
-}
-
-
-/**
  * Get the column ordering that DataTables expects
  *  @param {object} oSettings dataTables settings object
  *  @returns {string} comma separated list of names
