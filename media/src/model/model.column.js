@@ -48,20 +48,6 @@ DataTable.models.oColumn = {
 	"bSortable": null,
 	
 	/**
-	 * <code>Deprecated</code> When using fnRender, you have two options for what 
-	 * to do with the data, and this property serves as the switch. Firstly, you 
-	 * can have the sorting and filtering use the rendered value (true - default), 
-	 * or you can have the sorting and filtering us the original value (false).
-	 *
-	 * Please note that this option has now been deprecated and will be removed
-	 * in the next version of DataTables. Please use mRender / mData rather than
-	 * fnRender.
-	 *  @type boolean
-	 *  @deprecated
-	 */
-	"bUseRendered": null,
-	
-	/**
 	 * Flag to indicate if the column is currently visible in the table or not
 	 *  @type boolean
 	 */
@@ -105,25 +91,6 @@ DataTable.models.oColumn = {
 	 *  @default null
 	 */
 	"fnGetData": null,
-	
-	/**
-	 * <code>Deprecated</code> Custom display function that will be called for the 
-	 * display of each cell in this column.
-	 *
-	 * Please note that this option has now been deprecated and will be removed
-	 * in the next version of DataTables. Please use mRender / mData rather than
-	 * fnRender.
-	 *  @type function
-	 *  @param {object} o Object with the following parameters:
-	 *  @param {int}    o.iDataRow The row in aoData
-	 *  @param {int}    o.iDataColumn The column in question
-	 *  @param {array}  o.aData The data for the row in question
-	 *  @param {object} o.oSettings The settings object for this DataTables instance
-	 *  @returns {string} The string you which to use in the display
-	 *  @default null
-	 *  @deprecated
-	 */
-	"fnRender": null,
 	
 	/**
 	 * Function to set data for a cell in the column. You should <b>never</b> 

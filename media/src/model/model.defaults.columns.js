@@ -142,23 +142,6 @@ DataTable.defaults.columns = {
 
 
 	/**
-	 * <code>Deprecated</code> When using fnRender() for a column, you may wish 
-	 * to use the original data (before rendering) for sorting and filtering 
-	 * (the default is to used the rendered data that the user can see). This 
-	 * may be useful for dates etc.
-	 * 
-	 * Please note that this option has now been deprecated and will be removed
-	 * in the next version of DataTables. Please use mRender / mData rather than
-	 * fnRender.
-	 *  @type boolean
-	 *  @default true
-	 *  @dtopt Columns
-	 *  @deprecated
-	 */
-	"bUseRendered": true,
-
-
-	/**
 	 * Enable or disable the display of this column.
 	 *  @type boolean
 	 *  @default true
@@ -217,28 +200,6 @@ DataTable.defaults.columns = {
 	 *    } );
 	 */
 	"fnCreatedCell": null,
-
-
-	/**
-	 * <code>Deprecated</code> Custom display function that will be called for the 
-	 * display of each cell in this column.
-	 *
-	 * Please note that this option has now been deprecated and will be removed
-	 * in the next version of DataTables. Please use mRender / mData rather than
-	 * fnRender.
-	 *  @type function
-	 *  @param {object} o Object with the following parameters:
-	 *  @param {int}    o.iDataRow The row in aoData
-	 *  @param {int}    o.iDataColumn The column in question
-	 *  @param {array}  o.aData The data for the row in question
-	 *  @param {object} o.oSettings The settings object for this DataTables instance
-	 *  @param {object} o.mDataProp The data property used for this column
-	 *  @param {*}      val The current cell value
-	 *  @returns {string} The string you which to use in the display
-	 *  @dtopt Columns
-	 *  @deprecated
-	 */
-	"fnRender": null,
 
 
 	/**

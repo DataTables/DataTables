@@ -34,13 +34,7 @@ function _fnCreateTr ( oSettings, iRow )
 		{
 			var oCol = oSettings.aoColumns[i];
 			nTd = document.createElement( oCol.sCellType );
-
-			/* Render if needed - if bUseRendered is true then we already have the rendered
-			 * value in the data source - so can just use that
-			 */
-			nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
-				_fnRender( oSettings, iRow, i ) :
-				_fnGetCellData( oSettings, iRow, i, 'display' );
+			nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 		
 			/* Add user defined class */
 			if ( oCol.sClass !== null )

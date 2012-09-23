@@ -111,7 +111,6 @@ this.oApi = {
 	"_fnCallbackReg": _fnCallbackReg,
 	"_fnCallbackFire": _fnCallbackFire,
 	"_fnJsonString": _fnJsonString,
-	"_fnRender": _fnRender,
 	"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
 	"_fnInfoMacros": _fnInfoMacros,
 	"_fnBrowserDetect": _fnBrowserDetect,

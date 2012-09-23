@@ -7,14 +7,9 @@
  *  @returns {int} >=0 if successful (index of new aoData entry), -1 if failed
  *  @memberof DataTable#oApi
  */
-function _fnAddData ( oSettings, aDataSupplied )
+function _fnAddData ( oSettings, aDataIn )
 {
 	var oCol;
-	
-	/* Take an independent copy of the data source so we can bash it about as we wish */
-	var aDataIn = ($.isArray(aDataSupplied)) ?
-		aDataSupplied.slice() :
-		$.extend( true, {}, aDataSupplied );
 	
 	/* Create the object for storing information about this new row */
 	var iRow = oSettings.aoData.length;
@@ -28,15 +23,7 @@ function _fnAddData ( oSettings, aDataSupplied )
 	{
 		oCol = oSettings.aoColumns[i];
 
-		/* Use rendered data for filtering / sorting */
-		if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mData !== null )
-		{
-			_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
-		}
-		else
-		{
-			_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
-		}
+		_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
 		
 		/* See if we should auto-detect the column type */
 		if ( oCol._bAutoType && oCol.sType != 'string' )
@@ -153,13 +140,12 @@ function _fnGatherData( oSettings )
 		
 		var
 			bAutoType = oCol._bAutoType,
-			bRender = typeof oCol.fnRender === 'function',
 			bClass = oCol.sClass !== null,
 			bVisible = oCol.bVisible,
 			nCell, sThisType, sRendered, sValType;
 		
 		/* A single loop to rule them all (and be more efficient) */
-		if ( bAutoType || bRender || bClass || !bVisible )
+		if ( bAutoType || bClass || !bVisible )
 		{
 			for ( iRow=0, iRows=oSettings.aoData.length ; iRow<iRows ; iRow++ )
 			{
@@ -197,18 +183,6 @@ function _fnGatherData( oSettings )
 					// get the dev set value. If it is the column, no point in wasting
 					// time setting the value that is already there!
 					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-				}
-				
-				/* Rendering */
-				if ( bRender )
-				{
-					sRendered = _fnRender( oSettings, iRow, iColumn );
-					nCell.innerHTML = sRendered;
-					if ( oCol.bUseRendered )
-					{
-						/* Use the rendered data for filtering / sorting */
-						_fnSetCellData( oSettings, iRow, iColumn, sRendered );
-					}
 				}
 				
 				/* Classes */
@@ -610,25 +584,3 @@ function _fnDeleteIndex( a, iTarget )
 	}
 }
 
-
- /**
- * Call the developer defined fnRender function for a given cell (row/column) with
- * the required parameters and return the result.
- *  @param {object} oSettings dataTables settings object
- *  @param {int} iRow aoData index for the row
- *  @param {int} iCol aoColumns index for the column
- *  @returns {*} Return of the developer's fnRender function
- *  @memberof DataTable#oApi
- */
-function _fnRender( oSettings, iRow, iCol )
-{
-	var oCol = oSettings.aoColumns[iCol];
-
-	return oCol.fnRender( {
-		"iDataRow":    iRow,
-		"iDataColumn": iCol,
-		"oSettings":   oSettings,
-		"aData":       oSettings.aoData[iRow]._aData,
-		"mDataProp":   oCol.mData
-	}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
-}

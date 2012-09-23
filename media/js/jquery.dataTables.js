@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.9.4
+ * @version     1.10.0.dev
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,define,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnRender,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns*/
+/*globals $, jQuery,define,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnReOrderIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -459,14 +459,9 @@
 		 *  @returns {int} >=0 if successful (index of new aoData entry), -1 if failed
 		 *  @memberof DataTable#oApi
 		 */
-		function _fnAddData ( oSettings, aDataSupplied )
+		function _fnAddData ( oSettings, aDataIn )
 		{
 			var oCol;
-			
-			/* Take an independent copy of the data source so we can bash it about as we wish */
-			var aDataIn = ($.isArray(aDataSupplied)) ?
-				aDataSupplied.slice() :
-				$.extend( true, {}, aDataSupplied );
 			
 			/* Create the object for storing information about this new row */
 			var iRow = oSettings.aoData.length;
@@ -480,15 +475,7 @@
 			{
 				oCol = oSettings.aoColumns[i];
 		
-				/* Use rendered data for filtering / sorting */
-				if ( typeof oCol.fnRender === 'function' && oCol.bUseRendered && oCol.mData !== null )
-				{
-					_fnSetCellData( oSettings, iRow, i, _fnRender(oSettings, iRow, i) );
-				}
-				else
-				{
-					_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
-				}
+				_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
 				
 				/* See if we should auto-detect the column type */
 				if ( oCol._bAutoType && oCol.sType != 'string' )
@@ -605,13 +592,12 @@
 				
 				var
 					bAutoType = oCol._bAutoType,
-					bRender = typeof oCol.fnRender === 'function',
 					bClass = oCol.sClass !== null,
 					bVisible = oCol.bVisible,
 					nCell, sThisType, sRendered, sValType;
 				
 				/* A single loop to rule them all (and be more efficient) */
-				if ( bAutoType || bRender || bClass || !bVisible )
+				if ( bAutoType || bClass || !bVisible )
 				{
 					for ( iRow=0, iRows=oSettings.aoData.length ; iRow<iRows ; iRow++ )
 					{
@@ -649,18 +635,6 @@
 							// get the dev set value. If it is the column, no point in wasting
 							// time setting the value that is already there!
 							nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-						}
-						
-						/* Rendering */
-						if ( bRender )
-						{
-							sRendered = _fnRender( oSettings, iRow, iColumn );
-							nCell.innerHTML = sRendered;
-							if ( oCol.bUseRendered )
-							{
-								/* Use the rendered data for filtering / sorting */
-								_fnSetCellData( oSettings, iRow, iColumn, sRendered );
-							}
 						}
 						
 						/* Classes */
@@ -1062,28 +1036,6 @@
 			}
 		}
 		
-		
-		 /**
-		 * Call the developer defined fnRender function for a given cell (row/column) with
-		 * the required parameters and return the result.
-		 *  @param {object} oSettings dataTables settings object
-		 *  @param {int} iRow aoData index for the row
-		 *  @param {int} iCol aoColumns index for the column
-		 *  @returns {*} Return of the developer's fnRender function
-		 *  @memberof DataTable#oApi
-		 */
-		function _fnRender( oSettings, iRow, iCol )
-		{
-			var oCol = oSettings.aoColumns[iCol];
-		
-			return oCol.fnRender( {
-				"iDataRow":    iRow,
-				"iDataColumn": iCol,
-				"oSettings":   oSettings,
-				"aData":       oSettings.aoData[iRow]._aData,
-				"mDataProp":   oCol.mData
-			}, _fnGetCellData(oSettings, iRow, iCol, 'display') );
-		}
 		/**
 		 * Create a new TR element (and it's TD children) for a row
 		 *  @param {object} oSettings dataTables settings object
@@ -1120,13 +1072,7 @@
 				{
 					var oCol = oSettings.aoColumns[i];
 					nTd = document.createElement( oCol.sCellType );
-		
-					/* Render if needed - if bUseRendered is true then we already have the rendered
-					 * value in the data source - so can just use that
-					 */
-					nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mData === null)) ?
-						_fnRender( oSettings, iRow, i ) :
-						_fnGetCellData( oSettings, iRow, i, 'display' );
+					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 				
 					/* Add user defined class */
 					if ( oCol.sClass !== null )
@@ -6173,15 +6119,6 @@
 				sDisplay = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 				
 				var oCol = oSettings.aoColumns[iColumn];
-				if ( oCol.fnRender !== null )
-				{
-					sDisplay = _fnRender( oSettings, iRow, iColumn );
-					if ( oCol.bUseRendered )
-					{
-						_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
-					}
-				}
-				
 				if ( oSettings.aoData[iRow].nTr !== null )
 				{
 					/* Do the actual HTML update */
@@ -6344,7 +6281,6 @@
 			"_fnCallbackReg": _fnCallbackReg,
 			"_fnCallbackFire": _fnCallbackFire,
 			"_fnJsonString": _fnJsonString,
-			"_fnRender": _fnRender,
 			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
 			"_fnInfoMacros": _fnInfoMacros,
 			"_fnBrowserDetect": _fnBrowserDetect,
@@ -6904,7 +6840,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.9.4";
+	DataTable.version = "1.10.0.dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
@@ -7608,20 +7544,6 @@
 		"bSortable": null,
 		
 		/**
-		 * <code>Deprecated</code> When using fnRender, you have two options for what 
-		 * to do with the data, and this property serves as the switch. Firstly, you 
-		 * can have the sorting and filtering use the rendered value (true - default), 
-		 * or you can have the sorting and filtering us the original value (false).
-		 *
-		 * Please note that this option has now been deprecated and will be removed
-		 * in the next version of DataTables. Please use mRender / mData rather than
-		 * fnRender.
-		 *  @type boolean
-		 *  @deprecated
-		 */
-		"bUseRendered": null,
-		
-		/**
 		 * Flag to indicate if the column is currently visible in the table or not
 		 *  @type boolean
 		 */
@@ -7665,25 +7587,6 @@
 		 *  @default null
 		 */
 		"fnGetData": null,
-		
-		/**
-		 * <code>Deprecated</code> Custom display function that will be called for the 
-		 * display of each cell in this column.
-		 *
-		 * Please note that this option has now been deprecated and will be removed
-		 * in the next version of DataTables. Please use mRender / mData rather than
-		 * fnRender.
-		 *  @type function
-		 *  @param {object} o Object with the following parameters:
-		 *  @param {int}    o.iDataRow The row in aoData
-		 *  @param {int}    o.iDataColumn The column in question
-		 *  @param {array}  o.aData The data for the row in question
-		 *  @param {object} o.oSettings The settings object for this DataTables instance
-		 *  @returns {string} The string you which to use in the display
-		 *  @default null
-		 *  @deprecated
-		 */
-		"fnRender": null,
 		
 		/**
 		 * Function to set data for a cell in the column. You should <b>never</b> 
@@ -9917,23 +9820,6 @@
 	
 	
 		/**
-		 * <code>Deprecated</code> When using fnRender() for a column, you may wish 
-		 * to use the original data (before rendering) for sorting and filtering 
-		 * (the default is to used the rendered data that the user can see). This 
-		 * may be useful for dates etc.
-		 * 
-		 * Please note that this option has now been deprecated and will be removed
-		 * in the next version of DataTables. Please use mRender / mData rather than
-		 * fnRender.
-		 *  @type boolean
-		 *  @default true
-		 *  @dtopt Columns
-		 *  @deprecated
-		 */
-		"bUseRendered": true,
-	
-	
-		/**
 		 * Enable or disable the display of this column.
 		 *  @type boolean
 		 *  @default true
@@ -9992,28 +9878,6 @@
 		 *    } );
 		 */
 		"fnCreatedCell": null,
-	
-	
-		/**
-		 * <code>Deprecated</code> Custom display function that will be called for the 
-		 * display of each cell in this column.
-		 *
-		 * Please note that this option has now been deprecated and will be removed
-		 * in the next version of DataTables. Please use mRender / mData rather than
-		 * fnRender.
-		 *  @type function
-		 *  @param {object} o Object with the following parameters:
-		 *  @param {int}    o.iDataRow The row in aoData
-		 *  @param {int}    o.iDataColumn The column in question
-		 *  @param {array}  o.aData The data for the row in question
-		 *  @param {object} o.oSettings The settings object for this DataTables instance
-		 *  @param {object} o.mDataProp The data property used for this column
-		 *  @param {*}      val The current cell value
-		 *  @returns {string} The string you which to use in the display
-		 *  @dtopt Columns
-		 *  @deprecated
-		 */
-		"fnRender": null,
 	
 	
 		/**

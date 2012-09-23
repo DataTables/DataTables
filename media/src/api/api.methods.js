@@ -1234,15 +1234,6 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		sDisplay = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
 		
 		var oCol = oSettings.aoColumns[iColumn];
-		if ( oCol.fnRender !== null )
-		{
-			sDisplay = _fnRender( oSettings, iRow, iColumn );
-			if ( oCol.bUseRendered )
-			{
-				_fnSetCellData( oSettings, iRow, iColumn, sDisplay );
-			}
-		}
-		
 		if ( oSettings.aoData[iRow].nTr !== null )
 		{
 			/* Do the actual HTML update */
