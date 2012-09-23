@@ -683,8 +683,15 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 			var n = oSettings.aanFeatures.f;
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 			{
-				if ( n[i]._DT_Input != document.activeElement )
-				{
+				// IE9 throws an 'unknown error' if document.activeElement is used
+				// inside an iframe or frame...
+				try {
+					if ( n[i]._DT_Input != document.activeElement )
+					{
+						$(n[i]._DT_Input).val( sInput );
+					}
+				}
+				catch ( e ) {
 					$(n[i]._DT_Input).val( sInput );
 				}
 			}
