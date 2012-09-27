@@ -1,5 +1,4 @@
 
-
 /**
  * Return the settings object for a particular table
  *  @param {node} nTable table we are using as a dataTable
@@ -53,7 +52,7 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 {
 	var anReturn = [];
 	var iCorrector;
-	var anTds;
+	var anTds, nTd;
 	var iRow, iRows=oSettings.aoData.length,
 		iColumn, iColumns, oData, sNodeName, iStart=0, iEnd=iRows;
 	
@@ -71,13 +70,15 @@ function _fnGetTdNodes ( oSettings, iIndividualRow )
 		{
 			/* get the TD child nodes - taking into account text etc nodes */
 			anTds = [];
-			for ( iColumn=0, iColumns=oData.nTr.childNodes.length ; iColumn<iColumns ; iColumn++ )
+			nTd = oData.nTr.firstChild;
+			while ( nTd )
 			{
-				sNodeName = oData.nTr.childNodes[iColumn].nodeName.toLowerCase();
+				sNodeName = nTd.nodeName.toLowerCase();
 				if ( sNodeName == 'td' || sNodeName == 'th' )
 				{
-					anTds.push( oData.nTr.childNodes[iColumn] );
+					anTds.push( nTd );
 				}
+				nTd = nTd.nextSibling;
 			}
 
 			iCorrector = 0;
@@ -166,17 +167,21 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
  */
 function _fnExtend( oOut, oExtender )
 {
+	var val;
+	
 	for ( var prop in oExtender )
 	{
 		if ( oExtender.hasOwnProperty(prop) )
 		{
-			if ( typeof oInit[prop] === 'object' && $.isArray(oExtender[prop]) === false )
+			val = oExtender[prop];
+
+			if ( typeof oInit[prop] === 'object' && val !== null && $.isArray(val) === false )
 			{
-				$.extend( true, oOut[prop], oExtender[prop] );
+				$.extend( true, oOut[prop], val );
 			}
 			else
 			{
-				oOut[prop] = oExtender[prop];
+				oOut[prop] = val;
 			}
 		}
 	}
@@ -187,11 +192,11 @@ function _fnExtend( oOut, oExtender )
 
 /**
  * Bind an event handers to allow a click or return key to activate the callback.
- * This is good for accessability since a return on the keyboard will have the
+ * This is good for accessibility since a return on the keyboard will have the
  * same effect as a click, if the element has focus.
  *  @param {element} n Element to bind the action to
  *  @param {object} oData Data object to pass to the triggered function
- *  @param {function) fn Callback function for when the event is triggered
+ *  @param {function} fn Callback function for when the event is triggered
  *  @memberof DataTable#oApi
  */
 function _fnBindAction( n, oData, fn )
@@ -216,9 +221,9 @@ function _fnBindAction( n, oData, fn )
  * Register a callback function. Easily allows a callback function to be added to
  * an array store of callback functions that can then all be called together.
  *  @param {object} oSettings dataTables settings object
- *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+ *  @param {string} sStore Name of the array storage for the callbacks in oSettings
  *  @param {function} fn Function to be called back
- *  @param {string) sName Identifying name for the callback (i.e. a label)
+ *  @param {string} sName Identifying name for the callback (i.e. a label)
  *  @memberof DataTable#oApi
  */
 function _fnCallbackReg( oSettings, sStore, fn, sName )
@@ -238,10 +243,10 @@ function _fnCallbackReg( oSettings, sStore, fn, sName )
  * array store is done backwards! Further note that you do not want to fire off triggers
  * in time sensitive applications (for example cell creation) as its slow.
  *  @param {object} oSettings dataTables settings object
- *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
+ *  @param {string} sStore Name of the array storage for the callbacks in oSettings
  *  @param {string} sTrigger Name of the jQuery custom event to trigger. If null no trigger
  *    is fired
- *  @param {array) aArgs Array of arguments to pass to the callback function / trigger
+ *  @param {array} aArgs Array of arguments to pass to the callback function / trigger
  *  @memberof DataTable#oApi
  */
 function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
@@ -266,7 +271,7 @@ function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 /**
  * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
  * library, then we use that as it is fast, safe and accurate. If the function isn't 
- * available then we need to built it ourselves - the insperation for this function comes
+ * available then we need to built it ourselves - the inspiration for this function comes
  * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
  * not perfect and absolutely should not be used as a replacement to json2.js - but it does
  * do what we need, without requiring a dependency for DataTables.
@@ -313,4 +318,29 @@ var _fnJsonString = (window.JSON) ? JSON.stringify : function( o )
 
 	return (bArr ? "[" : "{") + json + (bArr ? "]" : "}");
 };
+
+
+/**
+ * From some browsers (specifically IE6/7) we need special handling to work around browser
+ * bugs - this function is used to detect when these workarounds are needed.
+ *  @param {object} oSettings dataTables settings object
+ *  @memberof DataTable#oApi
+ */
+function _fnBrowserDetect( oSettings )
+{
+	/* IE6/7 will oversize a width 100% element inside a scrolling element, to include the
+	 * width of the scrollbar, while other browsers ensure the inner element is contained
+	 * without forcing scrolling
+	 */
+	var n = $(
+		'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
+			'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
+				'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
+			'</div>'+
+		'</div>')[0];
+
+	document.body.appendChild( n );
+	oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
+	document.body.removeChild( n );
+}
 

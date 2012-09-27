@@ -48,14 +48,14 @@ DataTable.models.oColumn = {
 	"bSortable": null,
 	
 	/**
-	 * When using fnRender, you have two options for what to do with the data,
-	 * and this property serves as the switch. Firstly, you can have the sorting
-	 * and filtering use the rendered value (true - default), or you can have
-	 * the sorting and filtering us the original value (false).
-	 * 
-	 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
-	 * use of the 'type' that it gives, allowing (potentially) different data to
-	 * be used for sorting, filtering, display and type detection.
+	 * <code>Deprecated</code> When using fnRender, you have two options for what 
+	 * to do with the data, and this property serves as the switch. Firstly, you 
+	 * can have the sorting and filtering use the rendered value (true - default), 
+	 * or you can have the sorting and filtering us the original value (false).
+	 *
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type boolean
 	 *  @deprecated
 	 */
@@ -78,9 +78,9 @@ DataTable.models.oColumn = {
 	
 	/**
 	 * Developer definable function that is called whenever a cell is created (Ajax source,
-	 * etc) or processed for input (DOM source). This can be used as a compliment to fnRender
+	 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
 	 * allowing you to modify the DOM element (add background colour for example) when the
-	 * element is available (since it is not when fnRender is called).
+	 * element is available.
 	 *  @type function
 	 *  @param {element} nTd The TD node that has been created
 	 *  @param {*} sData The Data for the cell
@@ -93,7 +93,7 @@ DataTable.models.oColumn = {
 	/**
 	 * Function to get data from a cell in a column. You should <b>never</b>
 	 * access data directly through _aData internally in DataTables - always use
-	 * the method attached to this property. It allows mDataProp to function as
+	 * the method attached to this property. It allows mData to function as
 	 * required. This function is automatically assigned by the column 
 	 * initialisation method
 	 *  @type function
@@ -107,23 +107,28 @@ DataTable.models.oColumn = {
 	"fnGetData": null,
 	
 	/**
-	 * Custom display function that will be called for the display of each cell 
-	 * in this column.
+	 * <code>Deprecated</code> Custom display function that will be called for the 
+	 * display of each cell in this column.
+	 *
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type function
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
 	 *  @param {int}    o.iDataColumn The column in question
-	 *  @param {array   o.aData The data for the row in question
+	 *  @param {array}  o.aData The data for the row in question
 	 *  @param {object} o.oSettings The settings object for this DataTables instance
 	 *  @returns {string} The string you which to use in the display
 	 *  @default null
+	 *  @deprecated
 	 */
 	"fnRender": null,
 	
 	/**
 	 * Function to set data for a cell in the column. You should <b>never</b> 
 	 * set the data directly to _aData internally in DataTables - always use
-	 * this method. It allows mDataProp to function as required. This function
+	 * this method. It allows mData to function as required. This function
 	 * is automatically assigned by the column initialisation method
 	 *  @type function
 	 *  @param {array|object} oData The data array/object for the array 
@@ -140,7 +145,17 @@ DataTable.models.oColumn = {
 	 *  @type function|int|string|null
 	 *  @default null
 	 */
-	"mDataProp": null,
+	"mData": null,
+	
+	/**
+	 * Partner property to mData which is used (only when defined) to get
+	 * the data - i.e. it is basically the same as mData, but without the
+	 * 'set' option, and also the data fed to it is the result from mData.
+	 * This is the rendering method to match the data method of mData.
+	 *  @type function|int|string|null
+	 *  @default null
+	 */
+	"mRender": null,
 	
 	/**
 	 * Unique header TH/TD element for this column - this is what the sorting
@@ -181,7 +196,7 @@ DataTable.models.oColumn = {
 	
 	/**
 	 * Allows a default value to be given for a column's data, and will be used
-	 * whenever a null data source is encountered (this can be because mDataProp
+	 * whenever a null data source is encountered (this can be because mData
 	 * is set to null, or because the data source itself is null).
 	 *  @type string
 	 *  @default null

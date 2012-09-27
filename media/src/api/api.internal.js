@@ -1,7 +1,7 @@
 
 /*
  * This is really a good bit rubbish this method of exposing the internal methods
- * publically... - To be fixed in 2.0 using methods on the prototype
+ * publicly... - To be fixed in 2.0 using methods on the prototype
  */
 
 
@@ -112,7 +112,10 @@ this.oApi = {
 	"_fnCallbackFire": _fnCallbackFire,
 	"_fnJsonString": _fnJsonString,
 	"_fnRender": _fnRender,
-	"_fnNodeToColumnIndex": _fnNodeToColumnIndex
+	"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
+	"_fnInfoMacros": _fnInfoMacros,
+	"_fnBrowserDetect": _fnBrowserDetect,
+	"_fnGetColumns": _fnGetColumns
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );

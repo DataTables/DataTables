@@ -6,11 +6,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "engine" },
+			{ "mData": "browser" },
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -40,11 +40,11 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"oLanguage": {
 					"sInfoEmpty": "unit test"
@@ -69,17 +69,17 @@ $(document).ready( function () {
 	
 	
 	oTest.fnWaitTest( 
-		"Macro's not replaced",
+		"Macro's replaced",
 		function () {
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"oLanguage": {
 					"sInfoEmpty": "unit _START_ _END_ _TOTAL_ test"
@@ -90,7 +90,7 @@ $(document).ready( function () {
 		function () {
 			var bReturn = document.getElementById('example_info').innerHTML.replace( 
 				' '+oSettings.oLanguage.sInfoFiltered.replace( '_MAX_', '57' ), "" ) ==
-					"unit _START_ _END_ _TOTAL_ test";
+					"unit 1 0 0 test";
 			return bReturn;
 		}
 	);

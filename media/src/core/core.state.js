@@ -80,7 +80,7 @@ function _fnLoadState ( oSettings, oInit )
 	$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
 	
 	/* Column visibility state
-	 * Pass back visibiliy settings to the init handler, but to do not here override
+	 * Pass back visibility settings to the init handler, but to do not here override
 	 * the init object that the user might have passed in
 	 */
 	oInit.saved_aoColumns = [];
@@ -132,35 +132,50 @@ function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
 	}
 	
 	/* Are we going to go over the cookie limit of 4KiB? If so, try to delete a cookies
-	 * belonging to DataTables. This is FAR from bullet proof
+	 * belonging to DataTables.
 	 */
-	var sOldName="", iOldTime=9999999999999;
-	var iLength = _fnReadCookie( sNameFile )!==null ? document.cookie.length : 
-		sFullCookie.length + document.cookie.length;
+	var
+		aCookies =document.cookie.split(';'),
+		iNewCookieLen = sFullCookie.split(';')[0].length,
+		aOldCookies = [];
 	
-	if ( iLength+10 > 4096 ) /* Magic 10 for padding */
+	if ( iNewCookieLen+document.cookie.length+10 > 4096 ) /* Magic 10 for padding */
 	{
-		var aCookies =document.cookie.split(';');
 		for ( var i=0, iLen=aCookies.length ; i<iLen ; i++ )
 		{
 			if ( aCookies[i].indexOf( sBaseName ) != -1 )
 			{
 				/* It's a DataTables cookie, so eval it and check the time stamp */
 				var aSplitCookie = aCookies[i].split('=');
-				try { oData = eval( '('+decodeURIComponent(aSplitCookie[1])+')' ); }
-				catch( e ) { continue; }
-				
-				if ( oData.iCreate && oData.iCreate < iOldTime )
-				{
-					sOldName = aSplitCookie[0];
-					iOldTime = oData.iCreate;
+				try {
+					oData = eval( '('+decodeURIComponent(aSplitCookie[1])+')' );
+
+					if ( oData && oData.iCreate )
+					{
+						aOldCookies.push( {
+							"name": aSplitCookie[0],
+							"time": oData.iCreate
+						} );
+					}
 				}
+				catch( e ) {}
 			}
 		}
-		
-		if ( sOldName !== "" )
-		{
-			document.cookie = sOldName+"=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path="+
+
+		// Make sure we delete the oldest ones first
+		aOldCookies.sort( function (a, b) {
+			return b.time - a.time;
+		} );
+
+		// Eliminate as many old DataTables cookies as we need to
+		while ( iNewCookieLen + document.cookie.length + 10 > 4096 ) {
+			if ( aOldCookies.length === 0 ) {
+				// Deleted all DT cookies and still not enough space. Can't state save
+				return;
+			}
+			
+			var old = aOldCookies.pop();
+			document.cookie = old.name+"=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path="+
 				aParts.join('/') + "/";
 		}
 	}

@@ -17,8 +17,8 @@
 					"bProcessing": true,
 					"bServerSide": true,
 					"sAjaxSource": "scripts/jsonp.php",
-					"fnServerData": function( sUrl, aoData, fnCallback ) {
-						$.ajax( {
+					"fnServerData": function( sUrl, aoData, fnCallback, oSettings ) {
+						oSettings.jqXHR = $.ajax( {
 							"url": sUrl,
 							"data": aoData,
 							"success": fnCallback,
@@ -76,8 +76,8 @@
 		"bProcessing": true,
 		"bServerSide": true,
 		"sAjaxSource": "scripts/jsonp.php",
-		"fnServerData": function( sUrl, aoData, fnCallback ) {
-			$.ajax( {
+		"fnServerData": function( sUrl, aoData, fnCallback, oSettings ) {
+			oSettings.jqXHR = $.ajax( {
 				"url": sUrl,
 				"data": aoData,
 				"success": fnCallback,

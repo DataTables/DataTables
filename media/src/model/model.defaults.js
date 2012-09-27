@@ -34,7 +34,7 @@ DataTable.defaults = {
 	 *    } );
 	 *    
 	 *  @example
-	 *    // Using an array of objects as a data source (mDataProp)
+	 *    // Using an array of objects as a data source (mData)
 	 *    $(document).ready( function () {
 	 *      $('#example').dataTable( {
 	 *        "aaData": [
@@ -54,11 +54,11 @@ DataTable.defaults = {
 	 *          }
 	 *        ],
 	 *        "aoColumns": [
-	 *          { "sTitle": "Engine",   "mDataProp": "engine" },
-	 *          { "sTitle": "Browser",  "mDataProp": "browser" },
-	 *          { "sTitle": "Platform", "mDataProp": "platform" },
-	 *          { "sTitle": "Version",  "mDataProp": "version" },
-	 *          { "sTitle": "Grade",    "mDataProp": "grade" }
+	 *          { "sTitle": "Engine",   "mData": "engine" },
+	 *          { "sTitle": "Browser",  "mData": "browser" },
+	 *          { "sTitle": "Platform", "mData": "platform" },
+	 *          { "sTitle": "Version",  "mData": "version" },
+	 *          { "sTitle": "Grade",    "mData": "grade" }
 	 *        ]
 	 *      } );
 	 *    } );
@@ -127,7 +127,7 @@ DataTable.defaults = {
 	 *  @dtopt Option
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
 	 *      } );
@@ -137,7 +137,7 @@ DataTable.defaults = {
 	 *    // Setting the default display length as well as length menu
 	 *    // This is likely to be wanted if you remove the '10' option which
 	 *    // is the iDisplayLength default.
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "iDisplayLength": 25,
 	 *        "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
@@ -209,7 +209,7 @@ DataTable.defaults = {
 	 * array may be of any length, and DataTables will apply each class 
 	 * sequentially, looping when required.
 	 *  @type array
-	 *  @default null <i>Will take the values determinted by the oClasses.sStripe*
+	 *  @default null <i>Will take the values determined by the oClasses.sStripe*
 	 *    options</i>
 	 *  @dtopt Option
 	 * 
@@ -252,7 +252,7 @@ DataTable.defaults = {
 	 *  @dtopt Features
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/arrays.txt",
 	 *        "bDeferRender": true
@@ -272,7 +272,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "sScrollY": "200px",
 	 *        "bPaginate": false
@@ -411,7 +411,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      initTable();
 	 *      tableActions();
 	 *    } );
@@ -443,7 +443,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bScrollAutoCss": false,
 	 *        "sScrollY": "200px"
@@ -465,7 +465,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "sScrollY": "200",
 	 *        "bScrollCollapse": true
@@ -487,7 +487,7 @@ DataTable.defaults = {
 	 *  @dtopt Features
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bScrollInfinite": true,
 	 *        "bScrollCollapse": true,
@@ -544,7 +544,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bSortCellsTop": true
 	 *      } );
@@ -631,7 +631,7 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
 	 *          // Bold the grade for all 'A' grade browsers
@@ -656,7 +656,7 @@ DataTable.defaults = {
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "fnDrawCallback": function() {
+	 *        "fnDrawCallback": function( oSettings ) {
 	 *          alert( 'DataTables has redrawn the table' );
 	 *        }
 	 *      } );
@@ -704,7 +704,7 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "fnFormatNumber": function ( iIn ) {
 	 *          if ( iIn &lt; 1000 ) {
@@ -863,7 +863,7 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "fnRowCallback": function( nRow, aData, iDisplayIndex, iDisplayIndexFull ) {
 	 *          // Bold the grade for all 'A' grade browsers
@@ -896,13 +896,13 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // POST data to server
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bProcessing": true,
 	 *        "bServerSide": true,
 	 *        "sAjaxSource": "xhr.php",
-	 *        "fnServerData": function ( sSource, aoData, fnCallback ) {
-	 *          $.ajax( {
+	 *        "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+	 *          oSettings.jqXHR = $.ajax( {
 	 *            "dataType": 'json', 
 	 *            "type": "POST", 
 	 *            "url": sSource, 
@@ -918,7 +918,11 @@ DataTable.defaults = {
 			"url":  sUrl,
 			"data": aoData,
 			"success": function (json) {
-				$(oSettings.oInstance).trigger('xhr', oSettings);
+				if ( json.sError ) {
+					oSettings.oApi._fnLog( oSettings, 0, json.sError );
+				}
+				
+				$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
 				fnCallback( json );
 			},
 			"dataType": "json",
@@ -952,7 +956,7 @@ DataTable.defaults = {
 	 *  @dtopt Server-side
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bProcessing": true,
 	 *        "bServerSide": true,
@@ -977,10 +981,10 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
-	 *        "fnStateLoad": function (oSettings, oData) {
+	 *        "fnStateLoad": function (oSettings) {
 	 *          var o;
 	 *          
 	 *          // Send an Ajax request to the server to get the data. Note that
@@ -1027,21 +1031,23 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // Remove a saved filter, so filtering is never loaded
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateLoadParams": function (oSettings, oData) {
 	 *          oData.oSearch.sSearch = "";
+	 *        }
 	 *      } );
 	 *    } );
 	 * 
 	 *  @example
 	 *    // Disallow state loading by returning false
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateLoadParams": function (oSettings, oData) {
 	 *          return false;
+	 *        }
 	 *      } );
 	 *    } );
 	 */
@@ -1058,11 +1064,12 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // Show an alert with the filtering value that was saved
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateLoaded": function (oSettings, oData) {
 	 *          alert( 'Saved filter was: '+oData.oSearch.sSearch );
+	 *        }
 	 *      } );
 	 *    } );
 	 */
@@ -1080,7 +1087,7 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateSave": function (oSettings, oData) {
@@ -1120,11 +1127,12 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // Remove a saved filter, so filtering is never saved
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bStateSave": true,
 	 *        "fnStateSaveParams": function (oSettings, oData) {
 	 *          oData.oSearch.sSearch = "";
+	 *        }
 	 *      } );
 	 *    } );
 	 */
@@ -1141,7 +1149,7 @@ DataTable.defaults = {
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "iCookieDuration": 60*60*24 // 1 day
+	 *        "iCookieDuration": 60*60*24; // 1 day
 	 *      } );
 	 *    } )
 	 */
@@ -1166,7 +1174,7 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // 57 records available in the table, no filtering applied
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bServerSide": true,
 	 *        "sAjaxSource": "scripts/server_processing.php",
@@ -1176,7 +1184,7 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // 57 records after filtering, 100 without filtering (an initial filter applied)
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bServerSide": true,
 	 *        "sAjaxSource": "scripts/server_processing.php",
@@ -1237,7 +1245,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bScrollInfinite": true,
 	 *        "bScrollCollapse": true,
@@ -1261,7 +1269,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "iTabIndex": 1
 	 *      } );
@@ -1293,7 +1301,7 @@ DataTable.defaults = {
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "oAria": {
@@ -1314,7 +1322,7 @@ DataTable.defaults = {
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "oAria": {
@@ -1341,7 +1349,7 @@ DataTable.defaults = {
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "oPaginate": {
@@ -1362,7 +1370,7 @@ DataTable.defaults = {
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "oPaginate": {
@@ -1376,14 +1384,14 @@ DataTable.defaults = {
 		
 		
 			/**
-			 * Text to use when using the 'full_numbers' type of pagination for the
-			 * button to take the user to the next page.
+			 * Text to use for the 'next' pagination button (to take the user to the 
+			 * next page).
 			 *  @type string
 			 *  @default Next
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "oPaginate": {
@@ -1397,14 +1405,14 @@ DataTable.defaults = {
 		
 		
 			/**
-			 * Text to use when using the 'full_numbers' type of pagination for the
-			 * button to take the user to the previous page.
+			 * Text to use for the 'previous' pagination button (to take the user to  
+			 * the previous page).
 			 *  @type string
 			 *  @default Previous
 			 *  @dtopt Language
 			 * 
 			 *  @example
-			 *    $(document).ready(function() {
+			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "oLanguage": {
 			 *          "oPaginate": {
@@ -1427,7 +1435,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sEmptyTable": "No data available in table"
@@ -1448,7 +1456,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sInfo": "Got a total of _TOTAL_ entries to show (_START_ to _END_)"
@@ -1467,7 +1475,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sInfoEmpty": "No entries to show"
@@ -1487,7 +1495,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sInfoFiltered": " - filtering from _MAX_ records"
@@ -1508,7 +1516,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sInfoPostFix": "All records shown are derived from real information."
@@ -1529,7 +1537,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sInfoThousands": "'"
@@ -1551,7 +1559,7 @@ DataTable.defaults = {
 		 * 
 		 *  @example
 		 *    // Language change only
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sLengthMenu": "Display _MENU_ records"
@@ -1561,7 +1569,7 @@ DataTable.defaults = {
 		 *    
 		 *  @example
 		 *    // Language and options change
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sLengthMenu": 'Display <select>'+
@@ -1609,7 +1617,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sProcessing": "DataTables is currently busy"
@@ -1632,7 +1640,7 @@ DataTable.defaults = {
 		 * 
 		 *  @example
 		 *    // Input text box will be appended at the end automatically
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sSearch": "Filter records:"
@@ -1642,7 +1650,7 @@ DataTable.defaults = {
 		 *    
 		 *  @example
 		 *    // Specify where the filter should appear
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sSearch": "Apply filter _INPUT_ to table"
@@ -1665,7 +1673,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sUrl": "http://www.sprymedia.co.uk/dataTables/lang.txt"
@@ -1685,7 +1693,7 @@ DataTable.defaults = {
 		 *  @dtopt Language
 		 * 
 		 *  @example
-		 *    $(document).ready(function() {
+		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "oLanguage": {
 		 *          "sZeroRecords": "No records to display"
@@ -1731,7 +1739,7 @@ DataTable.defaults = {
 	 * 
 	 *  @example
 	 *    // Get data from { "data": [...] }
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/data.txt",
 	 *        "sAjaxDataProp": "data"
@@ -1740,7 +1748,7 @@ DataTable.defaults = {
 	 *    
 	 *  @example
 	 *    // Get data from { "data": { "inner": [...] } }
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/data.txt",
 	 *        "sAjaxDataProp": "data.inner"
@@ -1778,7 +1786,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "sCookiePrefix": "my_datatable_",
 	 *      } );
@@ -1830,9 +1838,9 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&lgt;'
+	 *        "sDom": '&lt;"top"i&gt;rt&lt;"bottom"flp&gt;&lt;"clear"&gt;'
 	 *      } );
 	 *    } );
 	 */
@@ -1861,14 +1869,14 @@ DataTable.defaults = {
 	 * Enable horizontal scrolling. When a table is too wide to fit into a certain
 	 * layout, or you have a large number of columns in the table, you can enable
 	 * x-scrolling to show the table in a viewport, which can be scrolled. This
-	 * property can by any CSS unit, or a number (in which case it will be treated
+	 * property can be any CSS unit, or a number (in which case it will be treated
 	 * as a pixel measurement).
 	 *  @type string
 	 *  @default <i>blank string - i.e. disabled</i>
 	 *  @dtopt Features
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "sScrollX": "100%",
 	 *        "bScrollCollapse": true
@@ -1890,7 +1898,7 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "sScrollX": "100%",
 	 *        "sScrollXInner": "110%"
@@ -1902,17 +1910,17 @@ DataTable.defaults = {
 
 	/**
 	 * Enable vertical scrolling. Vertical scrolling will constrain the DataTable
-	 * to the given height, an enable scrolling for any data which overflows the
+	 * to the given height, and enable scrolling for any data which overflows the
 	 * current viewport. This can be used as an alternative to paging to display
 	 * a lot of data in a small area (although paging and scrolling can both be
-	 * enabled at the same time). This property can by any CSS unit, or a number
+	 * enabled at the same time). This property can be any CSS unit, or a number
 	 * (in which case it will be treated as a pixel measurement).
 	 *  @type string
 	 *  @default <i>blank string - i.e. disabled</i>
 	 *  @dtopt Features
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "sScrollY": "200px",
 	 *        "bPaginate": false
@@ -1931,7 +1939,7 @@ DataTable.defaults = {
 	 *  @dtopt Server-side
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "bServerSide": true,
 	 *        "sAjaxSource": "scripts/post.php",

@@ -93,7 +93,7 @@ function _fnFeatureHtmlLength ( oSettings )
 
 
 /**
- * Rcalculate the end point based on the start point
+ * Recalculate the end point based on the start point
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
  */

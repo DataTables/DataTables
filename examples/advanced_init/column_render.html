@@ -16,8 +16,11 @@
 				$('#example').dataTable( {
 					"aoColumnDefs": [ 
 						{
-							"fnRender": function ( oObj, sVal ) {
-								return sVal +' '+ oObj.aData[3];
+							// `data` refers to the data for the cell (defined by `mData`, which
+							// defaults to the column being worked with, in this case is the first
+							// Using `row[0]` is equivalent.
+							"mRender": function ( data, type, row ) {
+								return data +' '+ row[3];
 							},
 							"aTargets": [ 0 ]
 						},
@@ -35,7 +38,8 @@
 			</div>
 
 			<h1>Preamble</h1>
-			<p>You may specify a function for each column to render the available data in a specific manner which will be called when the table is drawn. In this example I've appended the rendering engine version to the rendering engine name in the first column, and hidden the version column.</p>
+			<p>Each column has an optional rendering control called <a href="http://datatables.net/ref#mRender">mRender</a> which can be used to process the content of each cell before the data is used. <code>mRender</code> has a wide array of options available to it for rendering different types of data (sorting, filtering, display etc), but it can be used very simply to manipulate the content of a cell, as shown here.</p>
+			<p>This example shows the rendering engine version combined with the rendering engine name in the first column, hiding the version column. This technique can be useful for adding links, assigning colours based on content rules and any other form of text manipulation you require.</p>
 			
 			<h1>Live example</h1>
 			<div id="demo">
@@ -469,8 +473,11 @@
 	$('#example').dataTable( {
 		"aoColumnDefs": [ 
 			{
-				"fnRender": function ( oObj, sVal ) {
-					return sVal +' '+ oObj.aData[3];
+				// `data` refers to the data for the cell (defined by `mData`, which
+				// defaults to the column being worked with, in this case is the first
+				// Using `row[0]` is equivalent.
+				"mRender": function ( data, type, row ) {
+					return data +' '+ row[3];
 				},
 				"aTargets": [ 0 ]
 			},

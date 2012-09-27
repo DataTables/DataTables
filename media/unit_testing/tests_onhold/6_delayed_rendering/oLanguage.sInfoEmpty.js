@@ -57,7 +57,7 @@ $(document).ready( function () {
 	
 	
 	oTest.fnWaitTest( 
-		"Macro's not replaced",
+		"Macro's replaced",
 		function () {
 			oSession.fnRestore();
 			oTable = $('#example').dataTable( {
@@ -72,7 +72,7 @@ $(document).ready( function () {
 		function () {
 			var bReturn = document.getElementById('example_info').innerHTML.replace( 
 				' '+oSettings.oLanguage.sInfoFiltered.replace( '_MAX_', '57' ), "" ) ==
-					"unit _START_ _END_ _TOTAL_ test";
+					"unit 1 0 0 test";
 			return bReturn;
 		}
 	);

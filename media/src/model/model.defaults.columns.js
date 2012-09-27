@@ -15,7 +15,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *          { "aDataSort": [ 0, 1 ], "aTargets": [ 0 ] },
@@ -27,7 +27,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [
 	 *          { "aDataSort": [ 0, 1 ] },
@@ -52,7 +52,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *          { "asSorting": [ "asc" ], "aTargets": [ 1 ] },
@@ -64,7 +64,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [
 	 *          null,
@@ -87,7 +87,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "bSearchable": false, "aTargets": [ 0 ] }
@@ -96,7 +96,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "bSearchable": false },
@@ -118,7 +118,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "bSortable": false, "aTargets": [ 0 ] }
@@ -127,7 +127,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "bSortable": false },
@@ -142,51 +142,18 @@ DataTable.defaults.columns = {
 
 
 	/**
-	 * When using fnRender() for a column, you may wish to use the original data
-	 * (before rendering) for sorting and filtering (the default is to used the
-	 * rendered data that the user can see). This may be useful for dates etc.
+	 * <code>Deprecated</code> When using fnRender() for a column, you may wish 
+	 * to use the original data (before rendering) for sorting and filtering 
+	 * (the default is to used the rendered data that the user can see). This 
+	 * may be useful for dates etc.
 	 * 
-	 * *NOTE* It is it is advisable now to use mDataProp as a function and make 
-	 * use of the 'type' that it gives, allowing (potentially) different data to
-	 * be used for sorting, filtering, display and type detection.
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type boolean
 	 *  @default true
 	 *  @dtopt Columns
-	 * 
-	 *  @example
-	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumnDefs": [ 
-	 *          {
-	 *            "fnRender": function ( oObj ) {
-	 *              return oObj.aData[0] +' '+ oObj.aData[3];
-	 *            },
-	 *            "bUseRendered": false,
-	 *            "aTargets": [ 0 ]
-	 *          }
-	 *        ]
-	 *      } );
-	 *    } );
-	 *    
-	 *  @example
-	 *    // Using aoColumns
-	 *    $(document).ready(function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumns": [ 
-	 *          {
-	 *            "fnRender": function ( oObj ) {
-	 *              return oObj.aData[0] +' '+ oObj.aData[3];
-	 *            },
-	 *            "bUseRendered": false
-	 *          },
-	 *          null,
-	 *          null,
-	 *          null,
-	 *          null
-	 *        ]
-	 *      } );
-	 *    } );
+	 *  @deprecated
 	 */
 	"bUseRendered": true,
 
@@ -199,7 +166,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "bVisible": false, "aTargets": [ 0 ] }
@@ -208,7 +175,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "bVisible": false },
@@ -224,9 +191,9 @@ DataTable.defaults.columns = {
 	
 	/**
 	 * Developer definable function that is called whenever a cell is created (Ajax source,
-	 * etc) or processed for input (DOM source). This can be used as a compliment to fnRender
+	 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
 	 * allowing you to modify the DOM element (add background colour for example) when the
-	 * element is available (since it is not when fnRender is called).
+	 * element is available.
 	 *  @type function
 	 *  @param {element} nTd The TD node that has been created
 	 *  @param {*} sData The Data for the cell
@@ -236,7 +203,7 @@ DataTable.defaults.columns = {
 	 *  @dtopt Columns
 	 * 
 	 *  @example
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [3],
@@ -253,8 +220,12 @@ DataTable.defaults.columns = {
 
 
 	/**
-	 * Custom display function that will be called for the display of each cell in
-	 * this column.
+	 * <code>Deprecated</code> Custom display function that will be called for the 
+	 * display of each cell in this column.
+	 *
+	 * Please note that this option has now been deprecated and will be removed
+	 * in the next version of DataTables. Please use mRender / mData rather than
+	 * fnRender.
 	 *  @type function
 	 *  @param {object} o Object with the following parameters:
 	 *  @param {int}    o.iDataRow The row in aoData
@@ -265,37 +236,7 @@ DataTable.defaults.columns = {
 	 *  @param {*}      val The current cell value
 	 *  @returns {string} The string you which to use in the display
 	 *  @dtopt Columns
-	 * 
-	 *  @example
-	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumnDefs": [ 
-	 *          {
-	 *            "fnRender": function ( o, val ) {
-	 *              return o.aData[0] +' '+ o.aData[3];
-	 *            },
-	 *            "aTargets": [ 0 ]
-	 *          }
-	 *        ]
-	 *      } );
-	 *    } );
-	 *    
-	 *  @example
-	 *    // Using aoColumns
-	 *    $(document).ready(function() {
-	 *      $('#example').dataTable( {
-	 *        "aoColumns": [ 
-	 *          { "fnRender": function ( o, val ) {
-	 *            return o.aData[0] +' '+ o.aData[3];
-	 *          } },
-	 *          null,
-	 *          null,
-	 *          null,
-	 *          null
-	 *        ]
-	 *      } );
-	 *    } );
+	 *  @deprecated
 	 */
 	"fnRender": null,
 
@@ -310,7 +251,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "iDataSort": 1, "aTargets": [ 0 ] }
@@ -320,7 +261,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "iDataSort": 1 },
@@ -336,14 +277,23 @@ DataTable.defaults.columns = {
 
 
 	/**
+	 * This parameter has been replaced by mData in DataTables to ensure naming
+	 * consistency. mDataProp can still be used, as there is backwards compatibility
+	 * in DataTables for this option, but it is strongly recommended that you use
+	 * mData in preference to mDataProp.
+	 *  @name DataTable.defaults.columns.mDataProp
+	 */
+
+
+	/**
 	 * This property can be used to read data from any JSON data source property,
-	 * including deeply nested objects / properties. mDataProp can be given in a
+	 * including deeply nested objects / properties. mData can be given in a
 	 * number of different ways which effect its behaviour:
 	 *   <ul>
 	 *     <li>integer - treated as an array index for the data source. This is the
 	 *       default that DataTables uses (incrementally increased for each column).</li>
 	 *     <li>string - read an object property from the data source. Note that you can
-	 *       use Javascript dotted notation to read deep properties/arrays from the
+	 *       use Javascript dotted notation to read deep properties / arrays from the
 	 *       data source.</li>
 	 *     <li>null - the sDefaultContent option will be used for the cell (null
 	 *       by default, so you will need to specify the default content you want -
@@ -355,42 +305,47 @@ DataTable.defaults.columns = {
 	 *       <ul>
 	 *         <li>{array|object} The data source for the row</li>
 	 *         <li>{string} The type call data requested - this will be 'set' when
-	 *           setting data or 'filter', 'display', 'type' or 'sort' when gathering
-	 *           data.</li>
+	 *           setting data or 'filter', 'display', 'type', 'sort' or undefined when 
+	 *           gathering data. Note that when <i>undefined</i> is given for the type
+	 *           DataTables expects to get the raw data for the object back</li>
 	 *         <li>{*} Data to set when the second parameter is 'set'.</li>
 	 *       </ul>
 	 *       The return value from the function is not required when 'set' is the type
 	 *       of call, but otherwise the return is what will be used for the data
 	 *       requested.</li>
 	 *    </ul>
+	 *
+	 * Note that prior to DataTables 1.9.2 mData was called mDataProp. The name change
+	 * reflects the flexibility of this property and is consistent with the naming of
+	 * mRender. If 'mDataProp' is given, then it will still be used by DataTables, as
+	 * it automatically maps the old name to the new if required.
 	 *  @type string|int|function|null
 	 *  @default null <i>Use automatically calculated column index</i>
 	 *  @dtopt Columns
 	 * 
 	 *  @example
 	 *    // Read table data from objects
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
 	 *        "sAjaxSource": "sources/deep.txt",
 	 *        "aoColumns": [
-	 *          { "mDataProp": "engine" },
-	 *          { "mDataProp": "browser" },
-	 *          { "mDataProp": "platform.inner" },
-	 *          { "mDataProp": "platform.details.0" },
-	 *          { "mDataProp": "platform.details.1" }
+	 *          { "mData": "engine" },
+	 *          { "mData": "browser" },
+	 *          { "mData": "platform.inner" },
+	 *          { "mData": "platform.details.0" },
+	 *          { "mData": "platform.details.1" }
 	 *        ]
 	 *      } );
 	 *    } );
 	 * 
 	 *  @example
-	 *    // Using mDataProp as a function to provide different information for
+	 *    // Using mData as a function to provide different information for
 	 *    // sorting, filtering and display. In this case, currency (price)
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      var oTable = $('#example').dataTable( {
-	 *        "aoColumnDefs": [
-	 *        {
+	 *        "aoColumnDefs": [ {
 	 *          "aTargets": [ 0 ],
-	 *          "mDataProp": function ( source, type, val ) {
+	 *          "mData": function ( source, type, val ) {
 	 *            if (type === 'set') {
 	 *              source.price = val;
 	 *              // Store the computed dislay and filter values for efficiency
@@ -404,14 +359,105 @@ DataTable.defaults.columns = {
 	 *            else if (type === 'filter') {
 	 *              return source.price_filter;
 	 *            }
-	 *            // 'sort' and 'type' both just use the integer
+	 *            // 'sort', 'type' and undefined all just use the integer
 	 *            return source.price;
+	 *          }
+	 *        } ]
+	 *      } );
+	 *    } );
+	 */
+	"mData": null,
+
+
+	/**
+	 * This property is the rendering partner to mData and it is suggested that
+	 * when you want to manipulate data for display (including filtering, sorting etc)
+	 * but not altering the underlying data for the table, use this property. mData
+	 * can actually do everything this property can and more, but this parameter is
+	 * easier to use since there is no 'set' option. Like mData is can be given
+	 * in a number of different ways to effect its behaviour, with the addition of 
+	 * supporting array syntax for easy outputting of arrays (including arrays of
+	 * objects):
+	 *   <ul>
+	 *     <li>integer - treated as an array index for the data source. This is the
+	 *       default that DataTables uses (incrementally increased for each column).</li>
+	 *     <li>string - read an object property from the data source. Note that you can
+	 *       use Javascript dotted notation to read deep properties / arrays from the
+	 *       data source and also array brackets to indicate that the data reader should
+	 *       loop over the data source array. When characters are given between the array
+	 *       brackets, these characters are used to join the data source array together.
+	 *       For example: "accounts[, ].name" would result in a comma separated list with
+	 *       the 'name' value from the 'accounts' array of objects.</li>
+	 *     <li>function - the function given will be executed whenever DataTables 
+	 *       needs to set or get the data for a cell in the column. The function 
+	 *       takes three parameters:
+	 *       <ul>
+	 *         <li>{array|object} The data source for the row (based on mData)</li>
+	 *         <li>{string} The type call data requested - this will be 'filter', 'display', 
+	 *           'type' or 'sort'.</li>
+	 *         <li>{array|object} The full data source for the row (not based on mData)</li>
+	 *       </ul>
+	 *       The return value from the function is what will be used for the data
+	 *       requested.</li>
+	 *    </ul>
+	 *  @type string|int|function|null
+	 *  @default null <i>Use mData</i>
+	 *  @dtopt Columns
+	 * 
+	 *  @example
+	 *    // Create a comma separated list from an array of objects
+	 *    $(document).ready( function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "sAjaxSource": "sources/deep.txt",
+	 *        "aoColumns": [
+	 *          { "mData": "engine" },
+	 *          { "mData": "browser" },
+	 *          {
+	 *            "mData": "platform",
+	 *            "mRender": "[, ].name"
+	 *          }
+	 *        ]
+	 *      } );
+	 *    } );
+	 * 
+	 *  @example
+	 *    // Use as a function to create a link from the data source
+	 *    $(document).ready( function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "aoColumnDefs": [
+	 *        {
+	 *          "aTargets": [ 0 ],
+	 *          "mData": "download_link",
+	 *          "mRender": function ( data, type, full ) {
+	 *            return '<a href="'+data+'">Download</a>';
 	 *          }
 	 *        ]
 	 *      } );
 	 *    } );
 	 */
-	"mDataProp": null,
+	"mRender": null,
+
+
+	/**
+	 * Change the cell type created for the column - either TD cells or TH cells. This
+	 * can be useful as TH cells have semantic meaning in the table body, allowing them
+	 * to act as a header for a row (you may wish to add scope='row' to the TH elements).
+	 *  @type string
+	 *  @default td
+	 *  @dtopt Columns
+	 * 
+	 *  @example
+	 *    // Make the first column use TH cells
+	 *    $(document).ready( function() {
+	 *      var oTable = $('#example').dataTable( {
+	 *        "aoColumnDefs": [ {
+	 *          "aTargets": [ 0 ],
+	 *          "sCellType": "th"
+	 *        } ]
+	 *      } );
+	 *    } );
+	 */
+	"sCellType": "td",
 
 
 	/**
@@ -422,7 +468,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sClass": "my_class", "aTargets": [ 0 ] }
@@ -432,7 +478,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sClass": "my_class" },
@@ -463,7 +509,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          null,
@@ -481,7 +527,7 @@ DataTable.defaults.columns = {
 
 	/**
 	 * Allows a default value to be given for a column's data, and will be used
-	 * whenever a null data source is encountered (this can be because mDataProp
+	 * whenever a null data source is encountered (this can be because mData
 	 * is set to null, or because the data source itself is null).
 	 *  @type string
 	 *  @default null
@@ -489,11 +535,11 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          {
-	 *            "mDataProp": null,
+	 *            "mData": null,
 	 *            "sDefaultContent": "Edit",
 	 *            "aTargets": [ -1 ]
 	 *          }
@@ -503,14 +549,14 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          null,
 	 *          null,
 	 *          null,
 	 *          {
-	 *            "mDataProp": null,
+	 *            "mData": null,
 	 *            "sDefaultContent": "Edit"
 	 *          }
 	 *        ]
@@ -533,7 +579,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sName": "engine", "aTargets": [ 0 ] },
@@ -547,7 +593,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sName": "engine" },
@@ -564,7 +610,7 @@ DataTable.defaults.columns = {
 
 	/**
 	 * Defines a data source type for the sorting which can be used to read
-	 * realtime information from the table (updating the internally cached
+	 * real-time information from the table (updating the internally cached
 	 * version) prior to sorting. This allows sorting to occur on user editable
 	 * elements such as form inputs.
 	 *  @type string
@@ -573,7 +619,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [
 	 *          { "sSortDataType": "dom-text", "aTargets": [ 2, 3 ] },
@@ -586,7 +632,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [
 	 *          null,
@@ -611,7 +657,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sTitle": "My column title", "aTargets": [ 0 ] }
@@ -621,7 +667,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sTitle": "My column title" },
@@ -650,7 +696,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sType": "html", "aTargets": [ 0 ] }
@@ -660,7 +706,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sType": "html" },
@@ -677,7 +723,7 @@ DataTable.defaults.columns = {
 
 	/**
 	 * Defining the width of the column, this parameter may take any CSS value
-	 * (3em, 20px etc). DataTables applys 'smart' widths to columns which have not
+	 * (3em, 20px etc). DataTables apples 'smart' widths to columns which have not
 	 * been given a specific width through this interface ensuring that the table
 	 * remains readable.
 	 *  @type string
@@ -686,7 +732,7 @@ DataTable.defaults.columns = {
 	 * 
 	 *  @example
 	 *    // Using aoColumnDefs
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumnDefs": [ 
 	 *          { "sWidth": "20%", "aTargets": [ 0 ] }
@@ -696,7 +742,7 @@ DataTable.defaults.columns = {
 	 *    
 	 *  @example
 	 *    // Using aoColumns
-	 *    $(document).ready(function() {
+	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "aoColumns": [ 
 	 *          { "sWidth": "20%" },
