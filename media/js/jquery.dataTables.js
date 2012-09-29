@@ -3838,34 +3838,65 @@
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {bool} bApplyClasses optional - should we apply classes or not
 		 *  @memberof DataTable#oApi
+		 *  @todo This really needs split up!
 		 */
 		function _fnSort ( oSettings, bApplyClasses )
 		{
 			var
 				i, iLen, j, jLen, k, kLen,
 				sDataType, nTh,
-				aaSort = [],
+				aSort = [],
 			 	aiOrig = [],
-				oSort = DataTable.ext.oSort,
+				oExtSort = DataTable.ext.oSort,
 				aoData = oSettings.aoData,
 				aoColumns = oSettings.aoColumns,
-				oAria = oSettings.oLanguage.oAria;
-			
-			/* No sorting required if server-side or no sorting array */
-			if ( !oSettings.oFeatures.bServerSide && 
-				(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
-			{
-				aaSort = ( oSettings.aaSortingFixed !== null ) ?
+				oAria = oSettings.oLanguage.oAria,
+				fnFormatter, aDataSort, data, iCol, sType, oSort,
+				iFormatters = 0,
+				aaNestedSort = ( oSettings.aaSortingFixed !== null ) ?
 					oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
 					oSettings.aaSorting.slice();
-				
+		
+			/* Flatten the aDataSort inner arrays into a single array, otherwise we have nested
+			 * loops in multiple locations
+			 */
+			for ( i=0 ; i<aaNestedSort.length ; i++ )
+			{
+				aDataSort = aoColumns[ aaNestedSort[i][0] ].aDataSort;
+		
+				for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
+				{
+					iCol = aDataSort[k];
+					sType = aoColumns[ iCol ].sType || 'string';
+					fnFormatter = oExtSort[ sType+"-pre" ];
+		
+					aSort.push( {
+						col:    iCol,
+						dir:    aaNestedSort[i][1],
+						index:  aaNestedSort[i][2],
+						type:   sType,
+						format: fnFormatter
+					} );
+		
+					// Track if we can use the formatter method
+					if ( fnFormatter )
+					{
+						iFormatters++;
+					}
+				}
+			}
+		
+			/* No sorting required if server-side or no sorting array */
+			if ( !oSettings.oFeatures.bServerSide && aSort.length !== 0 )
+			{
 				/* If there is a sorting data type, and a function belonging to it, then we need to
 				 * get the data from the developer's function and apply it for this column
 				 */
-				for ( i=0 ; i<aaSort.length ; i++ )
+				for ( i=0 ; i<aSort.length ; i++ )
 				{
-					var iColumn = aaSort[i][0];
+					var iColumn = aSort[i].col;
 					var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
+		
 					sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
 					if ( DataTable.ext.afnSortData[sDataType] )
 					{
@@ -3885,6 +3916,7 @@
 						}
 					}
 				}
+		
 				
 				/* Create a value - key array of the current row positions such that we can use their
 				 * current position during the sort, if values match, in order to perform stable sorting
@@ -3898,23 +3930,17 @@
 				 * the data to be sorted only once, rather than needing to do it every time the sorting
 				 * function runs. This make the sorting function a very simple comparison
 				 */
-				var iSortLen = aaSort.length;
-				var fnSortFormat, aDataSort;
-				for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
+				for ( j=0 ; j<aSort.length ; j++ )
 				{
-					for ( j=0 ; j<iSortLen ; j++ )
-					{
-						aDataSort = aoColumns[ aaSort[j][0] ].aDataSort;
+					oSort = aSort[j];
 		
-						for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
-						{
-							sDataType = aoColumns[ aDataSort[k] ].sType;
-							fnSortFormat = oSort[ (sDataType ? sDataType : 'string')+"-pre" ];
-							
-							aoData[i]._aSortData[ aDataSort[k] ] = fnSortFormat ?
-								fnSortFormat( _fnGetCellData( oSettings, i, aDataSort[k], 'sort' ) ) :
-								_fnGetCellData( oSettings, i, aDataSort[k], 'sort' );
-						}
+					for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
+					{
+						data = _fnGetCellData( oSettings, i, oSort.col, 'sort' );
+		
+						aoData[i]._aSortData[ oSort.col ] = oSort.format ?
+							oSort.format( data ) :
+							data;
 					}
 				}
 				
@@ -3934,31 +3960,69 @@
 				 * Basically we have a test for each sorting column, if the data in that column is equal,
 				 * test the next column. If all columns match, then we use a numeric sort on the row 
 				 * positions in the original data array to provide a stable sort.
+				 *
+				 * Note - I know it seems excessive to have two sorting methods, but the first is around
+				 * 15% faster, so the second is only maintained for backwards compatibility with sorting
+				 * methods which do not have a pre-sort formatting function.
 				 */
-				oSettings.aiDisplayMaster.sort( function ( a, b ) {
-					var k, l, lLen, iTest, aDataSort, sDataType;
-					for ( k=0 ; k<iSortLen ; k++ )
-					{
-						aDataSort = aoColumns[ aaSort[k][0] ].aDataSort;
+				if ( iFormatters === aSort.length ) {
+					// All sort types have formatting functions
+					oSettings.aiDisplayMaster.sort( function ( a, b ) {
+						var
+							x, y, k, test, sort,
+							len=aSort.length,
+							dataA = aoData[a]._aSortData,
+							dataB = aoData[b]._aSortData;
 		
-						for ( l=0, lLen=aDataSort.length ; l<lLen ; l++ )
+						for ( k=0 ; k<len ; k++ )
 						{
-							sDataType = aoColumns[ aDataSort[l] ].sType;
-							
-							iTest = oSort[ (sDataType ? sDataType : 'string')+"-"+aaSort[k][1] ](
-								aoData[a]._aSortData[ aDataSort[l] ],
-								aoData[b]._aSortData[ aDataSort[l] ]
-							);
-						
-							if ( iTest !== 0 )
+							sort = aSort[k];
+		
+							x = dataA[ sort.col ];
+							y = dataB[ sort.col ];
+		
+							test = x<y ? -1 : x>y ? 1 : 0;
+							if ( test !== 0 )
 							{
-								return iTest;
+								return sort.dir === 'asc' ? test : -test;
 							}
 						}
-					}
-					
-					return oSort['numeric-asc']( aiOrig[a], aiOrig[b] );
-				} );
+						
+						x = aiOrig[a];
+						y = aiOrig[b];
+						return x<y ? -1 : x>y ? 1 : 0;
+					} );
+				}
+				else {
+					// Depreciated - remove in 1.11 (providing a plug-in option)
+					// Not all sort types have formatting methods, so we have to call their sorting
+					// methods.
+					oSettings.aiDisplayMaster.sort( function ( a, b ) {
+						var
+							x, y, k, l, test, sort,
+							len=aSort.length,
+							dataA = aoData[a]._aSortData,
+							dataB = aoData[b]._aSortData;
+		
+						for ( k=0 ; k<len ; k++ )
+						{
+							sort = aSort[k];
+		
+							x = dataA[ sort.col ];
+							y = dataB[ sort.col ];
+		
+							test = oExtSort[ sort.type+"-"+sort.dir ]( x, y );
+							if ( test !== 0 )
+							{
+								return test;
+							}
+						}
+						
+						x = aiOrig[a];
+						y = aiOrig[b];
+						return x<y ? -1 : x>y ? 1 : 0;
+					} );
+				}
 			}
 			
 			/* Alter the sorting classes to take account of the changes */
@@ -3977,12 +4041,12 @@
 				/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
 				if ( aoColumns[i].bSortable )
 				{
-					if ( aaSort.length > 0 && aaSort[0][0] == i )
+					if ( aSort.length > 0 && aSort[0].col == i )
 					{
-						nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+						nTh.setAttribute('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
 						
-						var nextSort = (aoColumns[i].asSorting[ aaSort[0][2]+1 ]) ? 
-							aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
+						var nextSort = (aoColumns[i].asSorting[ aSort[0].index+1 ]) ? 
+							aoColumns[i].asSorting[ aSort[0].index+1 ] : aoColumns[i].asSorting[0];
 						nTh.setAttribute('aria-label', sTitle+
 							(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 					}
@@ -6221,7 +6285,6 @@
 			"_fnGetTdNodes": _fnGetTdNodes,
 			"_fnEscapeRegex": _fnEscapeRegex,
 			"_fnDeleteIndex": _fnDeleteIndex,
-			"_fnReOrderIndex": _fnReOrderIndex,
 			"_fnColumnOrdering": _fnColumnOrdering,
 			"_fnLog": _fnLog,
 			"_fnClearTable": _fnClearTable,
@@ -8244,8 +8307,8 @@
 	
 	
 		/**
-		 * Enable or disable the addition of the classes 'sorting_1', 'sorting_2' and
-		 * 'sorting_3' to the columns which are currently being sorted on. This is
+		 * Enable or disable the addition of the classes `sorting\_1`, `sorting\_2` and
+		 * `sorting\_3` to the columns which are currently being sorted on. This is
 		 * presented as a feature switch as it can increase processing time (while
 		 * classes are removed and added) so for large data sets you might want to
 		 * turn this off.
@@ -11640,6 +11703,7 @@
 			return a.toLowerCase();
 		},
 	
+		// string-asc and -desc are retained only for compatibility with 
 		"string-asc": function ( x, y )
 		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -11659,16 +11723,6 @@
 			return a.replace( /<.*?>/g, "" ).toLowerCase();
 		},
 		
-		"html-asc": function ( x, y )
-		{
-			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-		},
-		
-		"html-desc": function ( x, y )
-		{
-			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-		},
-		
 		
 		/*
 		 * date sorting
@@ -11683,16 +11737,6 @@
 			}
 			return x;
 		},
-	
-		"date-asc": function ( x, y )
-		{
-			return x - y;
-		},
-		
-		"date-desc": function ( x, y )
-		{
-			return y - x;
-		},
 		
 		
 		/*
@@ -11702,16 +11746,6 @@
 		{
 			return (a=="-" || a==="") ? 0 : a*1;
 		},
-	
-		"numeric-asc": function ( x, y )
-		{
-			return x - y;
-		},
-		
-		"numeric-desc": function ( x, y )
-		{
-			return y - x;
-		}
 	} );
 	
 	
