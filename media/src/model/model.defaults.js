@@ -554,8 +554,8 @@ DataTable.defaults = {
 
 
 	/**
-	 * Enable or disable the addition of the classes 'sorting_1', 'sorting_2' and
-	 * 'sorting_3' to the columns which are currently being sorted on. This is
+	 * Enable or disable the addition of the classes `sorting\_1`, `sorting\_2` and
+	 * `sorting\_3` to the columns which are currently being sorted on. This is
 	 * presented as a feature switch as it can increase processing time (while
 	 * classes are removed and added) so for large data sets you might want to
 	 * turn this off.
