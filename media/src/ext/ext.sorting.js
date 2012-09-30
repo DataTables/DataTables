@@ -1,12 +1,16 @@
-
 $.extend( DataTable.ext.oSort, {
 	/*
 	 * text sorting
 	 */
 	"string-pre": function ( a )
 	{
-		if ( typeof a != 'string' ) {
-			a = (a !== null && a.toString) ? a.toString() : '';
+		if ( typeof a != 'string' )
+		{
+			if (a === null || a === undefined || !a.toString)
+			{
+				return '';
+			}
+			a = a.toString();
 		}
 		return a.toLowerCase();
 	},
