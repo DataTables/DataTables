@@ -1,4 +1,3 @@
-
 /**
  * Generate the node required for the info display
  *  @param {object} oSettings dataTables settings object
@@ -85,8 +84,10 @@ function _fnUpdateInfo ( oSettings )
 
 function _fnInfoMacros ( oSettings, str )
 {
+	// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
+	// internally
 	var
-		iStart = oSettings._iDisplayStart+1,
+		iStart = oSettings.oScroll.bInfinite ? 1 : oSettings._iDisplayStart+1,
 		sStart = oSettings.fnFormatNumber( iStart ),
 		iEnd = oSettings.fnDisplayEnd(),
 		sEnd = oSettings.fnFormatNumber( iEnd ),
@@ -94,13 +95,6 @@ function _fnInfoMacros ( oSettings, str )
 		sTotal = oSettings.fnFormatNumber( iTotal ),
 		iMax = oSettings.fnRecordsTotal(),
 		sMax = oSettings.fnFormatNumber( iMax );
-
-	// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
-	// internally
-	if ( oSettings.oScroll.bInfinite )
-	{
-		sStart = oSettings.fnFormatNumber( 1 );
-	}
 
 	return str.
 		replace(/_START_/g, sStart).
