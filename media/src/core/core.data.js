@@ -172,25 +172,6 @@ function _fnGatherData( oSettings )
 					}
 				}
 
-				if ( oCol.mRender )
-				{
-					// mRender has been defined, so we need to get the value and set it
-					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-				}
-				else if ( oCol.mData !== iColumn )
-				{
-					// If mData is not the same as the column number, then we need to
-					// get the dev set value. If it is the column, no point in wasting
-					// time setting the value that is already there!
-					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-				}
-				
-				/* Classes */
-				if ( bClass )
-				{
-					nCell.className += ' '+oCol.sClass;
-				}
-				
 				/* Column visibility */
 				if ( !bVisible )
 				{
@@ -202,11 +183,34 @@ function _fnGatherData( oSettings )
 					oData._anHidden[iColumn] = null;
 				}
 
-				if ( oCol.fnCreatedCell )
+				/* Classes */
+				if ( bClass )
 				{
-					oCol.fnCreatedCell.call( oSettings.oInstance,
-						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
-					);
+					nCell.className += ' '+oCol.sClass;
+				}
+
+				if ( oCol.mRender || oCol.mData !== iColumn || oCol.fnCreatedCell )
+				{
+					var sData = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
+				
+					if ( oCol.mRender || oCol.mData !== iColumn )
+					{
+						// mRender has been defined, so we need to get the value and set it
+
+						// or
+
+						// If mData is not the same as the column number, then we need to
+						// get the dev set value. If it is the column, no point in wasting
+						// time setting the value that is already there!
+						nCell.innerHTML = sData;
+					}
+
+					if ( oCol.fnCreatedCell )
+					{
+						oCol.fnCreatedCell.call( oSettings.oInstance,
+							nCell, sData, oData._aData, iRow, iColumn
+						);
+					}
 				}
 			}
 		}
