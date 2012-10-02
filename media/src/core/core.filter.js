@@ -1,5 +1,4 @@
 
-
 /**
  * Generate the node required for filtering text
  *  @returns {node} Filter control element
@@ -336,22 +335,19 @@ function _fnBuildSearchRow( oSettings, aData )
  */
 function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 {
-	var asSearch, sRegExpString;
+	var asSearch,
+		sRegExpString = bRegex ? sSearch : _fnEscapeRegex( sSearch );
 	
 	if ( bSmart )
 	{
 		/* Generate the regular expression to use. Something along the lines of:
 		 * ^(?=.*?\bone\b)(?=.*?\btwo\b)(?=.*?\bthree\b).*$
 		 */
-		asSearch = bRegex ? sSearch.split( ' ' ) : _fnEscapeRegex( sSearch ).split( ' ' );
+		asSearch = sRegExpString.split( ' ' );
 		sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
-		return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 	}
-	else
-	{
-		sSearch = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-		return new RegExp( sSearch, bCaseInsensitive ? "i" : "" );
-	}
+	
+	return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 }
 
 
