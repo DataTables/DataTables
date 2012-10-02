@@ -438,7 +438,7 @@ function _fnDraw( oSettings )
 	var
 		nAddFrag = document.createDocumentFragment(),
 		nRemoveFrag = document.createDocumentFragment(),
-		nBodyPar, nTrs;
+		nBodyPar;
 	
 	if ( oSettings.nTBody )
 	{
