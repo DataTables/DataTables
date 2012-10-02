@@ -1,4 +1,3 @@
-
 /**
  * Return the settings object for a particular table
  *  @param {node} nTable table we are using as a dataTable
@@ -143,13 +142,9 @@ function _fnLog( oSettings, iLevel, sMesg )
  */
 function _fnMap( oRet, oSrc, sName, sMappedName )
 {
-	if ( sMappedName === undefined )
-	{
-		sMappedName = sName;
-	}
 	if ( oSrc[sName] !== undefined )
 	{
-		oRet[sMappedName] = oSrc[sName];
+		oRet[sMappedName || sName] = oSrc[sName];
 	}
 }
 
