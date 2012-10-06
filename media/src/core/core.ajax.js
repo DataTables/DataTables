@@ -1,5 +1,4 @@
 
-
 /**
  * Update the table using an Ajax call
  *  @param {object} oSettings dataTables settings object
@@ -139,8 +138,7 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 		}
 	}
 	
-	if ( !oSettings.oScroll.bInfinite ||
-		   (oSettings.oScroll.bInfinite && (oSettings.bSorted || oSettings.bFiltered)) )
+	if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
 	{
 		_fnClearTable( oSettings );
 	}
