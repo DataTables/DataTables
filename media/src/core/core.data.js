@@ -291,11 +291,11 @@ function _fnGetRowData( oSettings, iRow, sSpecific, aiColumns )
  */
 function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 {
-	var sData;
 	var oCol = oSettings.aoColumns[iCol];
 	var oData = oSettings.aoData[iRow]._aData;
+	var sData = oCol.fnGetData( oData, sSpecific );
 
-	if ( (sData=oCol.fnGetData( oData, sSpecific )) === undefined )
+	if ( sData === undefined )
 	{
 		if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 		{
