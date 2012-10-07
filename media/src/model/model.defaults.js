@@ -1011,7 +1011,7 @@ DataTable.defaults = {
 					settings.oApi._fnLog( settings, 0, json.sError );
 				}
 				
-				$(oSettings.oInstance).trigger('xhr', [settings, json]);
+				$(settings.oInstance).trigger('xhr', [settings, json]);
 				callback( json );
 			},
 			"dataType": "json",
