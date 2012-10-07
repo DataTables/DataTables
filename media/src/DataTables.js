@@ -44,23 +44,6 @@
 (/** @lends <global> */function( $ ) {
 	"use strict";
 
-	require('core.compat.js');
-	require('core.columns.js');
-	require('core.data.js');
-	require('core.draw.js');
-	require('core.ajax.js');
-	require('core.filter.js');
-	require('core.info.js');
-	require('core.init.js');
-	require('core.length.js');
-	require('core.page.js');
-	require('core.processing.js');
-	require('core.scrolling.js');
-	require('core.sizing.js');
-	require('core.sort.js');
-	require('core.state.js');
-	require('core.support.js');
-	
 	/** 
 	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
 	 * highly flexible tool, based upon the foundations of progressive 
@@ -93,7 +76,26 @@
 	 *      } );
 	 *    } );
 	 */
-	var DataTable = function( oInit )
+	var DataTable;
+
+	require('core.compat.js');
+	require('core.columns.js');
+	require('core.data.js');
+	require('core.draw.js');
+	require('core.ajax.js');
+	require('core.filter.js');
+	require('core.info.js');
+	require('core.init.js');
+	require('core.length.js');
+	require('core.page.js');
+	require('core.processing.js');
+	require('core.scrolling.js');
+	require('core.sizing.js');
+	require('core.sort.js');
+	require('core.state.js');
+	require('core.support.js');
+
+	DataTable = function( oInit )
 	{
 		require('api.methods.js');
 		require('api.internal.js');

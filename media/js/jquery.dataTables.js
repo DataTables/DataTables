@@ -44,6 +44,40 @@
 (/** @lends <global> */function( $ ) {
 	"use strict";
 
+	/** 
+	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
+	 * highly flexible tool, based upon the foundations of progressive 
+	 * enhancement, which will add advanced interaction controls to any 
+	 * HTML table. For a full list of features please refer to
+	 * <a href="http://datatables.net">DataTables.net</a>.
+	 *
+	 * Note that the <i>DataTable</i> object is not a global variable but is
+	 * aliased to <i>jQuery.fn.DataTable</i> and <i>jQuery.fn.dataTable</i> through which 
+	 * it may be  accessed.
+	 *
+	 *  @class
+	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
+	 *    are defined by {@link DataTable.defaults}
+	 *  @requires jQuery 1.3+
+	 * 
+	 *  @example
+	 *    // Basic initialisation
+	 *    $(document).ready( function {
+	 *      $('#example').dataTable();
+	 *    } );
+	 *  
+	 *  @example
+	 *    // Initialisation with configuration options - in this case, disable
+	 *    // pagination and sorting.
+	 *    $(document).ready( function {
+	 *      $('#example').dataTable( {
+	 *        "bPaginate": false,
+	 *        "bSort": false 
+	 *      } );
+	 *    } );
+	 */
+	var DataTable;
+
 	
 	
 	/**
@@ -2017,7 +2051,6 @@
 	}
 	
 	
-	
 	/**
 	 * Generate the node required for filtering text
 	 *  @returns {node} Filter control element
@@ -2354,22 +2387,19 @@
 	 */
 	function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 	{
-		var asSearch, sRegExpString;
+		var asSearch,
+			sRegExpString = bRegex ? sSearch : _fnEscapeRegex( sSearch );
 		
 		if ( bSmart )
 		{
 			/* Generate the regular expression to use. Something along the lines of:
 			 * ^(?=.*?\bone\b)(?=.*?\btwo\b)(?=.*?\bthree\b).*$
 			 */
-			asSearch = bRegex ? sSearch.split( ' ' ) : _fnEscapeRegex( sSearch ).split( ' ' );
+			asSearch = sRegExpString.split( ' ' );
 			sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
-			return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 		}
-		else
-		{
-			sSearch = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-			return new RegExp( sSearch, bCaseInsensitive ? "i" : "" );
-		}
+		
+		return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 	}
 	
 	
@@ -4920,40 +4950,8 @@
 		document.body.removeChild( n );
 	}
 	
-	
-	/** 
-	 * DataTables is a plug-in for the jQuery Javascript library. It is a 
-	 * highly flexible tool, based upon the foundations of progressive 
-	 * enhancement, which will add advanced interaction controls to any 
-	 * HTML table. For a full list of features please refer to
-	 * <a href="http://datatables.net">DataTables.net</a>.
-	 *
-	 * Note that the <i>DataTable</i> object is not a global variable but is
-	 * aliased to <i>jQuery.fn.DataTable</i> and <i>jQuery.fn.dataTable</i> through which 
-	 * it may be  accessed.
-	 *
-	 *  @class
-	 *  @param {object} [oInit={}] Configuration object for DataTables. Options
-	 *    are defined by {@link DataTable.defaults}
-	 *  @requires jQuery 1.3+
-	 * 
-	 *  @example
-	 *    // Basic initialisation
-	 *    $(document).ready( function {
-	 *      $('#example').dataTable();
-	 *    } );
-	 *  
-	 *  @example
-	 *    // Initialisation with configuration options - in this case, disable
-	 *    // pagination and sorting.
-	 *    $(document).ready( function {
-	 *      $('#example').dataTable( {
-	 *        "bPaginate": false,
-	 *        "bSort": false 
-	 *      } );
-	 *    } );
-	 */
-	var DataTable = function( oInit )
+
+	DataTable = function( oInit )
 	{
 		/**
 		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
@@ -6811,7 +6809,6 @@
 		return this;
 	};
 
-	
 	/**
 	 * Provide a common method for plug-ins to check the version of DataTables being used, in order
 	 * to ensure compatibility.
@@ -6829,7 +6826,7 @@
 	{
 		var aThis = DataTable.ext.sVersion.split('.');
 		var aThat = sVersion.split('.');
-		var iThis, sThat;
+		var iThis, iThat;
 		
 		for ( var i=0, iLen=aThat.length ; i<iLen ; i++ ){
 			iThis = parseInt( aThis[i], 10 ) || 0;
@@ -8813,7 +8810,7 @@
 						settings.oApi._fnLog( settings, 0, json.sError );
 					}
 					
-					$(oSettings.oInstance).trigger('xhr', [settings, json]);
+					$(settings.oInstance).trigger('xhr', [settings, json]);
 					callback( json );
 				},
 				"dataType": "json",
@@ -12011,7 +12008,7 @@
 		"numeric-pre": function ( a )
 		{
 			return (a=="-" || a==="") ? 0 : a*1;
-		},
+		}
 	} );
 	
 	
