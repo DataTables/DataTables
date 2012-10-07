@@ -821,11 +821,11 @@
 		 */
 		function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 		{
-			var sData;
 			var oCol = oSettings.aoColumns[iCol];
 			var oData = oSettings.aoData[iRow]._aData;
+			var sData = oCol.fnGetData( oData, sSpecific );
 		
-			if ( (sData=oCol.fnGetData( oData, sSpecific )) === undefined )
+			if ( sData === undefined )
 			{
 				if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 				{
@@ -1496,15 +1496,12 @@
 					iRowCount++;
 					
 					/* If there is an open row - and it is attached to this parent - attach it on redraw */
-					if ( iOpenRows !== 0 )
+					for ( var k=0 ; k<iOpenRows ; k++ )
 					{
-						for ( var k=0 ; k<iOpenRows ; k++ )
+						if ( nRow == oSettings.aoOpenRows[k].nParent )
 						{
-							if ( nRow == oSettings.aoOpenRows[k].nParent )
-							{
-								anRows.push( oSettings.aoOpenRows[k].nTr );
-								break;
-							}
+							anRows.push( oSettings.aoOpenRows[k].nTr );
+							break;
 						}
 					}
 				}
@@ -1554,7 +1551,7 @@
 			var
 				nAddFrag = document.createDocumentFragment(),
 				nRemoveFrag = document.createDocumentFragment(),
-				nBodyPar, nTrs;
+				nBodyPar;
 			
 			if ( oSettings.nTBody )
 			{
@@ -1923,10 +1920,7 @@
 					}, oSettings );
 				return false;
 			}
-			else
-			{
-				return true;
-			}
+			return true;
 		}
 		
 		
@@ -2034,10 +2028,7 @@
 				{
 					return;
 				}
-				else
-				{
-					oSettings.iDraw = json.sEcho * 1;
-				}
+				oSettings.iDraw = json.sEcho * 1;
 			}
 			
 			if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
@@ -2459,7 +2450,6 @@
 			return sVal.replace(reReplace, '\\$1');
 		}
 		
-		
 		/**
 		 * Generate the node required for the info display
 		 *  @param {object} oSettings dataTables settings object
@@ -2546,8 +2536,10 @@
 		
 		function _fnInfoMacros ( oSettings, str )
 		{
+			// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
+			// internally
 			var
-				iStart = oSettings._iDisplayStart+1,
+				iStart = oSettings.oScroll.bInfinite ? 1 : oSettings._iDisplayStart+1,
 				sStart = oSettings.fnFormatNumber( iStart ),
 				iEnd = oSettings.fnDisplayEnd(),
 				sEnd = oSettings.fnFormatNumber( iEnd ),
@@ -2555,13 +2547,6 @@
 				sTotal = oSettings.fnFormatNumber( iTotal ),
 				iMax = oSettings.fnRecordsTotal(),
 				sMax = oSettings.fnFormatNumber( iMax );
-		
-			// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
-			// internally
-			if ( oSettings.oScroll.bInfinite )
-			{
-				sStart = oSettings.fnFormatNumber( 1 );
-			}
 		
 			return str.
 				replace(/_START_/g, sStart).
@@ -6828,7 +6813,6 @@
 	};
 
 	
-	
 	/**
 	 * Provide a common method for plug-ins to check the version of DataTables being used, in order
 	 * to ensure compatibility.
@@ -6844,25 +6828,24 @@
 	 */
 	DataTable.fnVersionCheck = function( sVersion )
 	{
-		/* This is cheap, but effective */
-		var fnZPad = function (Zpad, count)
-		{
-			while(Zpad.length < count) {
-				Zpad += '0';
-			}
-			return Zpad;
-		};
 		var aThis = DataTable.ext.sVersion.split('.');
 		var aThat = sVersion.split('.');
-		var sThis = '', sThat = '';
+		var iThis, sThat;
 		
-		for ( var i=0, iLen=aThat.length ; i<iLen ; i++ )
-		{
-			sThis += fnZPad( aThis[i], 3 );
-			sThat += fnZPad( aThat[i], 3 );
+		for ( var i=0, iLen=aThat.length ; i<iLen ; i++ ){
+			iThis = parseInt( aThis[i], 10 ) || 0;
+			iThat = parseInt( aThat[i], 10 ) || 0;
+			
+			// Parts are the same, keep comparing
+			if (iThis === iThat)
+			{
+				continue;
+			}
+			
+			// Parts are different, return immediately
+			return iThis > iThat;
 		}
-		
-		return parseInt(sThis, 10) >= parseInt(sThat, 10);
+		return true;
 	};
 	
 	
@@ -11970,15 +11953,19 @@
 			}
 		}
 	} );
-	
 	$.extend( DataTable.ext.oSort, {
 		/*
 		 * text sorting
 		 */
 		"string-pre": function ( a )
 		{
-			if ( typeof a != 'string' ) {
-				a = (a !== null && a.toString) ? a.toString() : '';
+			if ( typeof a != 'string' )
+			{
+				if (a === null || a === undefined || !a.toString)
+				{
+					return '';
+				}
+				a = a.toString();
 			}
 			return a.toLowerCase();
 		},
