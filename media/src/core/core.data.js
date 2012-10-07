@@ -377,11 +377,11 @@ function _fnGetObjectDataFn( mSource )
 		 * be used if defined, rather than throwing an error
 		 */
 		var fetchData = function (data, type, src) {
-			var a = src.split('.');
 			var arrayNotation, out, innerSrc;
 
 			if ( src !== "" )
 			{
+				var a = src.split('.');
 				for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 				{
 					// Check if we are dealing with an array notation request
