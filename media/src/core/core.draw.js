@@ -380,15 +380,12 @@ function _fnDraw( oSettings )
 			iRowCount++;
 			
 			/* If there is an open row - and it is attached to this parent - attach it on redraw */
-			if ( iOpenRows !== 0 )
+			for ( var k=0 ; k<iOpenRows ; k++ )
 			{
-				for ( var k=0 ; k<iOpenRows ; k++ )
+				if ( nRow == oSettings.aoOpenRows[k].nParent )
 				{
-					if ( nRow == oSettings.aoOpenRows[k].nParent )
-					{
-						anRows.push( oSettings.aoOpenRows[k].nTr );
-						break;
-					}
+					anRows.push( oSettings.aoOpenRows[k].nTr );
+					break;
 				}
 			}
 		}
