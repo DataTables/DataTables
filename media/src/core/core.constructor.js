@@ -33,18 +33,17 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 		{
 			return DataTable.settings[i].oInstance;
 		}
-		else if ( oInit.bDestroy )
+		
+		if ( oInit.bDestroy )
 		{
 			DataTable.settings[i].oInstance.fnDestroy();
 			break;
 		}
-		else
-		{
-			_fnLog( DataTable.settings[i], 0, "Cannot reinitialise DataTable.\n\n"+
-				"To retrieve the DataTables object for this table, pass no arguments or see "+
-				"the docs for bRetrieve and bDestroy" );
-			return;
-		}
+
+		_fnLog( DataTable.settings[i], 0, "Cannot reinitialise DataTable.\n\n"+
+			"To retrieve the DataTables object for this table, pass no arguments or see "+
+			"the docs for bRetrieve and bDestroy" );
+		return;
 	}
 	
 	/* If the element we are initialising has the same ID as a table which was previously
