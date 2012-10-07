@@ -1,4 +1,3 @@
-
 /**
  * Provide a common method for plug-ins to check the version of DataTables being used, in order
  * to ensure compatibility.
@@ -16,7 +15,7 @@ DataTable.fnVersionCheck = function( sVersion )
 {
 	var aThis = DataTable.ext.sVersion.split('.');
 	var aThat = sVersion.split('.');
-	var iThis, sThat;
+	var iThis, iThat;
 	
 	for ( var i=0, iLen=aThat.length ; i<iLen ; i++ ){
 		iThis = parseInt( aThis[i], 10 ) || 0;
