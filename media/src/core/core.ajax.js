@@ -21,10 +21,7 @@ function _fnAjaxUpdate( oSettings )
 			}, oSettings );
 		return false;
 	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 
@@ -132,10 +129,7 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 		{
 			return;
 		}
-		else
-		{
-			oSettings.iDraw = json.sEcho * 1;
-		}
+		oSettings.iDraw = json.sEcho * 1;
 	}
 	
 	if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
