@@ -362,13 +362,15 @@ function _fnGetObjectDataFn( mSource )
 			return null;
 		};
 	}
-	else if ( typeof mSource === 'function' )
+	
+	if ( typeof mSource === 'function' )
 	{
 		return function (data, type, extra) {
 			return mSource( data, type, extra );
 		};
 	}
-	else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
+	
+	if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
 	{
 		/* If there is a . in the source string then the data source is in a 
 		 * nested object so we loop over the data for each level to get the next
@@ -377,11 +379,12 @@ function _fnGetObjectDataFn( mSource )
 		 * be used if defined, rather than throwing an error
 		 */
 		var fetchData = function (data, type, src) {
-			var a = src.split('.');
-			var arrayNotation, out, innerSrc;
+			var a, arrayNotation, out, innerSrc;
 
 			if ( src !== "" )
 			{
+				a = src.split('.');
+				
 				for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 				{
 					// Check if we are dealing with an array notation request
@@ -430,13 +433,11 @@ function _fnGetObjectDataFn( mSource )
 			return fetchData( data, type, mSource );
 		};
 	}
-	else
-	{
-		/* Array or flat object mapping */
-		return function (data, type) {
-			return data[mSource];	
-		};
-	}
+
+	/* Array or flat object mapping */
+	return function (data, type) {
+		return data[mSource];	
+	};
 }
 
 
