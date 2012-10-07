@@ -57,5 +57,5 @@ $.extend( DataTable.ext.oSort, {
 	"numeric-pre": function ( a )
 	{
 		return (a=="-" || a==="") ? 0 : a*1;
-	},
+	}
 } );
