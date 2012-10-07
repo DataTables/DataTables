@@ -175,7 +175,7 @@ function _fnExtend( oOut, oExtender )
 		{
 			val = oExtender[prop];
 
-			if ( typeof oInit[prop] === 'object' && val !== null && $.isArray(val) === false )
+			if ( typeof oExtender[prop] === 'object' && val !== null && $.isArray(val) === false )
 			{
 				$.extend( true, oOut[prop], val );
 			}
