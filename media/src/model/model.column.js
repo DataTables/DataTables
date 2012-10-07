@@ -6,7 +6,7 @@
  * is held in the settings aoColumns array and contains all the information that
  * DataTables needs about each individual column.
  * 
- * Note that this object is related to {@link DataTable.defaults.columns} 
+ * Note that this object is related to {@link DataTable.defaults.column} 
  * but this one is the internal data store for DataTables's cache of columns.
  * It should NOT be manipulated outside of DataTables. Any configuration should
  * be done through the initialisation options.

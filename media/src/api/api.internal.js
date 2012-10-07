@@ -113,7 +113,9 @@ this.oApi = {
 	"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
 	"_fnInfoMacros": _fnInfoMacros,
 	"_fnBrowserDetect": _fnBrowserDetect,
-	"_fnGetColumns": _fnGetColumns
+	"_fnGetColumns": _fnGetColumns,
+	"_fnHungarianMap": _fnHungarianMap,
+	"_fnCamelToHungarian": _fnCamelToHungarian
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );

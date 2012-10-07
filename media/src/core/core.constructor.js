@@ -12,6 +12,17 @@ if ( this.nodeName.toLowerCase() != 'table' )
 	return;
 }
 
+/* Convert the camel-case defaults to Hungarian */
+_fnCamelToHungarian( DataTable.defaults, DataTable.defaults, true );
+_fnCamelToHungarian( DataTable.defaults.column, DataTable.defaults.column, true );
+
+/* Setting up the initialisation object */
+if ( !oInit )
+{
+	oInit = {};
+}
+_fnCamelToHungarian( DataTable.defaults, oInit );
+
 /* Check to see if we are re-initialising a table */
 for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 {
@@ -69,12 +80,6 @@ DataTable.settings.push( oSettings );
 // Need to add the instance after the instance after the settings object has been added
 // to the settings array, so we can self reference the table instance if more than one
 oSettings.oInstance = (_that.length===1) ? _that : $(this).dataTable();
-
-/* Setting up the initialisation object */
-if ( !oInit )
-{
-	oInit = {};
-}
 
 // Backwards compatibility, before we apply all the defaults
 if ( oInit.oLanguage )
@@ -215,6 +220,7 @@ if ( oInit.oLanguage.sUrl !== "" )
 	oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
 	$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) {
 		_fnLanguageCompat( json );
+		_fnCamelToHungarian( DataTable.defaults.oLanguage, json );
 		$.extend( true, oSettings.oLanguage, oInit.oLanguage, json );
 		_fnInitialise( oSettings );
 	} );

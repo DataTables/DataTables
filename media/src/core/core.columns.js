@@ -8,7 +8,7 @@
  */
 function _fnAddColumn( oSettings, nTh )
 {
-	var oDefaults = DataTable.defaults.columns;
+	var oDefaults = DataTable.defaults.column;
 	var iCol = oSettings.aoColumns.length;
 	var oCol = $.extend( {}, DataTable.models.oColumn, oDefaults, {
 		"sSortingClass": oSettings.oClasses.sSortable,
@@ -65,6 +65,9 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	/* User specified column options */
 	if ( oOptions !== undefined && oOptions !== null )
 	{
+		// Map camel case parameters to their Hungarian counterparts
+		_fnCamelToHungarian( DataTable.defaults.column, oOptions );
+		
 		/* Backwards compatibility for mDataProp */
 		if ( oOptions.mDataProp && !oOptions.mData )
 		{
@@ -294,8 +297,8 @@ function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 		for ( i=aoColDefs.length-1 ; i>=0 ; i-- )
 		{
 			/* Each definition can target multiple columns, as it is an array */
-			var aTargets = aoColDefs[i].aTargets;
-			if ( !$.isArray( aTargets ) )
+			var aTargets = aoColDefs[i].targets || aoColDefs[i].aTargets;
+			if ( ! $.isArray( aTargets ) )
 			{
 				_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
 			}
