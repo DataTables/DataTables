@@ -200,13 +200,11 @@ function _fnSort ( oSettings, bApplyClasses )
 	{
 		var sTitle = aoColumns[i].sTitle.replace( /<.*?>/g, "" );
 		nTh = aoColumns[i].nTh;
-		nTh.removeAttribute('aria-sort');
-		nTh.removeAttribute('aria-label');
 		
 		/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
 		if ( aoColumns[i].bSortable )
 		{
-			if ( aSort.length > 0 && aSort[0].col == i )
+			if ( aSort.length && aSort[0].col == i )
 			{
 				nTh.setAttribute('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
 				
@@ -217,12 +215,14 @@ function _fnSort ( oSettings, bApplyClasses )
 			}
 			else
 			{
+				nTh.removeAttribute('aria-sort');
 				nTh.setAttribute('aria-label', sTitle+
 					(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 			}
 		}
 		else
 		{
+			nTh.removeAttribute('aria-sort');
 			nTh.setAttribute('aria-label', sTitle);
 		}
 	}
