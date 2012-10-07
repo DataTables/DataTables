@@ -66,11 +66,13 @@ function _fnAddData ( oSettings, aDataIn )
  */
 function _fnGatherData( oSettings )
 {
-	var iLoop, i, iLen, j, jLen, jInner,
-	 	nTds, nTrs, nTd, nTr, aLocalData, iThisIndex,
-		iRow, iRows, iColumn, iColumns, sNodeName,
-		oCol, oData;
-	
+	var bAutoType, bClass, bVisible, bSetInnerHTML,
+		fnCreatedCell,
+		iLen, iRow, iColumn,
+		nTrs, nTr, nCell, nCellNext,
+		oCol, oData,
+		sNodeName, sThisType, sValType, sData;
+
 	/*
 	 * Process by row first
 	 * Add the data object for the whole table - storing the tr node. Note - no point in getting
@@ -83,143 +85,137 @@ function _fnGatherData( oSettings )
 		{
 			if ( nTr.nodeName.toUpperCase() == "TR" )
 			{
-				iThisIndex = oSettings.aoData.length;
-				nTr._DT_RowIndex = iThisIndex;
+				iRow = oSettings.aoData.length;
+				nTr._DT_RowIndex = iRow;
 				oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
 					"nTr": nTr
 				} ) );
 
-				oSettings.aiDisplayMaster.push( iThisIndex );
-				nTd = nTr.firstChild;
-				jInner = 0;
-				while ( nTd )
+				oSettings.aiDisplayMaster.push( iRow );
+				nCell = nTr.firstChild;
+				iColumn = 0;
+				while ( nCell )
 				{
-					sNodeName = nTd.nodeName.toUpperCase();
+					sNodeName = nCell.nodeName.toUpperCase();
 					if ( sNodeName == "TD" || sNodeName == "TH" )
 					{
-						_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTd.innerHTML) );
-						jInner++;
+						_fnSetCellData( oSettings, iRow, iColumn, $.trim(nCell.innerHTML) );
+						iColumn++;
 					}
-					nTd = nTd.nextSibling;
+					nCell = nCell.nextSibling;
 				}
 			}
 			nTr = nTr.nextSibling;
 		}
 	}
-	
+
 	/* Gather in the TD elements of the Table - note that this is basically the same as
 	 * fnGetTdNodes, but that function takes account of hidden columns, which we haven't yet
 	 * setup!
 	 */
 	nTrs = _fnGetTrNodes( oSettings );
-	nTds = [];
-	for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
+	for ( iRow=0, iLen=nTrs.length ; iRow<iLen ; iRow++ )
 	{
-		nTd = nTrs[i].firstChild;
-		while ( nTd )
+		oData = oSettings.aoData[iRow];
+		
+		nTr = nTrs[iRow];
+		nCell = nTr.firstChild;
+		iColumn = 0;
+		while ( nCell )
 		{
-			sNodeName = nTd.nodeName.toUpperCase();
+			/* Get the next sibling up front, since the current cell may get removed */
+			nCellNext = nCell.nextSibling;
+			
+			/* Get only the nodes */
+			sNodeName = nCell.nodeName.toUpperCase();
 			if ( sNodeName == "TD" || sNodeName == "TH" )
 			{
-				nTds.push( nTd );
-			}
-			nTd = nTd.nextSibling;
-		}
-	}
-	
-	/* Now process by column */
-	for ( iColumn=0, iColumns=oSettings.aoColumns.length ; iColumn<iColumns ; iColumn++ )
-	{
-		oCol = oSettings.aoColumns[iColumn];
+				oCol = oSettings.aoColumns[iColumn];
 
-		/* Get the title of the column - unless there is a user set one */
-		if ( oCol.sTitle === null )
-		{
-			oCol.sTitle = oCol.nTh.innerHTML;
-		}
-		
-		var
-			bAutoType = oCol._bAutoType,
-			bClass = oCol.sClass !== null,
-			bVisible = oCol.bVisible,
-			nCell, sThisType, sRendered, sValType;
-		
-		/* A single loop to rule them all (and be more efficient) */
-		if ( bAutoType || bClass || !bVisible )
-		{
-			for ( iRow=0, iRows=oSettings.aoData.length ; iRow<iRows ; iRow++ )
-			{
-				oData = oSettings.aoData[iRow];
-				nCell = nTds[ (iRow*iColumns) + iColumn ];
-				
-				/* Type detection */
-				if ( bAutoType && oCol.sType != 'string' )
+				/* Get the title of the column - unless there is a user set one */
+				if ( oCol.sTitle === null )
 				{
-					sValType = _fnGetCellData( oSettings, iRow, iColumn, 'type' );
-					if ( sValType !== '' )
+					oCol.sTitle = oCol.nTh.innerHTML;
+				}
+
+				bAutoType = oCol._bAutoType,
+				bClass = oCol.sClass !== null,
+				bVisible = oCol.bVisible;
+
+				/* A single loop to rule them all (and be more efficient) */
+				if ( bAutoType || bClass || !bVisible )
+				{
+					/* Type detection */
+					if ( bAutoType && oCol.sType != 'string' )
 					{
-						sThisType = _fnDetectType( sValType );
-						if ( oCol.sType === null )
+						sValType = _fnGetCellData( oSettings, iRow, iColumn, 'type' );
+						if ( sValType !== '' )
 						{
-							oCol.sType = sThisType;
+							sThisType = _fnDetectType( sValType );
+							if ( oCol.sType === null )
+							{
+								oCol.sType = sThisType;
+							}
+							else if ( oCol.sType != sThisType &&
+								oCol.sType != "html" )
+							{
+								/* String is always the 'fallback' option */
+								oCol.sType = 'string';
+							}
 						}
-						else if ( oCol.sType != sThisType && 
-						          oCol.sType != "html" )
+					}
+
+					/* Column visibility */
+					if ( !bVisible )
+					{
+						oData._anHidden[iColumn] = nCell;
+						nCell.parentNode.removeChild( nCell );
+					}
+					else
+					{
+						oData._anHidden[iColumn] = null;
+					}
+				
+					/* Classes */
+					if ( bClass )
+					{
+						nCell.className += ' '+oCol.sClass;
+					}
+
+					bSetInnerHTML = oCol.mRender || oCol.mData !== iColumn;
+					fnCreatedCell = oCol.fnCreatedCell;
+					if ( bSetInnerHTML || fnCreatedCell )
+					{
+						sData = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
+	
+						if ( bSetInnerHTML )
 						{
-							/* String is always the 'fallback' option */
-							oCol.sType = 'string';
+							// mRender has been defined, so we need to get the value and set it
+	
+							// or
+	
+							// If mData is not the same as the column number, then we need to
+							// get the dev set value. If it is the column, no point in wasting
+							// time setting the value that is already there!
+							nCell.innerHTML = sData;
+						}
+	
+						if ( fnCreatedCell )
+						{
+							fnCreatedCell.call( oSettings.oInstance,
+								nCell, sData, oData._aData, iRow, iColumn
+							);
 						}
 					}
 				}
-
-				if ( oCol.mRender )
-				{
-					// mRender has been defined, so we need to get the value and set it
-					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-				}
-				else if ( oCol.mData !== iColumn )
-				{
-					// If mData is not the same as the column number, then we need to
-					// get the dev set value. If it is the column, no point in wasting
-					// time setting the value that is already there!
-					nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-				}
-				
-				/* Classes */
-				if ( bClass )
-				{
-					nCell.className += ' '+oCol.sClass;
-				}
-				
-				/* Column visibility */
-				if ( !bVisible )
-				{
-					oData._anHidden[iColumn] = nCell;
-					nCell.parentNode.removeChild( nCell );
-				}
-				else
-				{
-					oData._anHidden[iColumn] = null;
-				}
-
-				if ( oCol.fnCreatedCell )
-				{
-					oCol.fnCreatedCell.call( oSettings.oInstance,
-						nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
-					);
-				}
+				iColumn++;
 			}
-		}
-	}
 
-	/* Row created callbacks */
-	if ( oSettings.aoRowCreatedCallback.length !== 0 )
-	{
-		for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-		{
-			oData = oSettings.aoData[i];
-			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, i] );
+			nCell = nCellNext;
 		}
+
+		/* Row created callback */
+		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, oData._aData, iRow] );
 	}
 }
 
