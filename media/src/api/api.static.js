@@ -1,5 +1,4 @@
 
-
 /**
  * Provide a common method for plug-ins to check the version of DataTables being used, in order
  * to ensure compatibility.
@@ -15,25 +14,24 @@
  */
 DataTable.fnVersionCheck = function( sVersion )
 {
-	/* This is cheap, but effective */
-	var fnZPad = function (Zpad, count)
-	{
-		while(Zpad.length < count) {
-			Zpad += '0';
-		}
-		return Zpad;
-	};
 	var aThis = DataTable.ext.sVersion.split('.');
 	var aThat = sVersion.split('.');
-	var sThis = '', sThat = '';
+	var iThis, sThat;
 	
-	for ( var i=0, iLen=aThat.length ; i<iLen ; i++ )
-	{
-		sThis += fnZPad( aThis[i], 3 );
-		sThat += fnZPad( aThat[i], 3 );
+	for ( var i=0, iLen=aThat.length ; i<iLen ; i++ ){
+		iThis = parseInt( aThis[i], 10 ) || 0;
+		iThat = parseInt( aThat[i], 10 ) || 0;
+		
+		// Parts are the same, keep comparing
+		if (iThis === iThat)
+		{
+			continue;
+		}
+		
+		// Parts are different, return immediately
+		return iThis > iThat;
 	}
-	
-	return parseInt(sThis, 10) >= parseInt(sThat, 10);
+	return true;
 };
 
 
