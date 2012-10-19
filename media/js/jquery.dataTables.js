@@ -6617,27 +6617,12 @@
 			}
 			
 			/* Remove row stripe classes if they are already on the table row */
-			iLen=oSettings.asStripeClasses.length;
-			oSettings.asDestroyStripes = [];
-			if (iLen)
-			{
-				var bStripeRemove = false;
-				var anRows = $(this).children('tbody').children('tr:lt(' + iLen + ')');
-				for ( i=0 ; i<iLen ; i++ )
-				{
-					if ( anRows.hasClass( oSettings.asStripeClasses[i] ) )
-					{
-						bStripeRemove = true;
-						
-						/* Store the classes which we are about to remove so they can be re-added on destroy */
-						oSettings.asDestroyStripes.push( oSettings.asStripeClasses[i] );
-					}
-				}
-				
-				if ( bStripeRemove )
-				{
-					anRows.removeClass( oSettings.asStripeClasses.join(' ') );
-				}
+			var stripeClasses = oSettings.asStripeClasses;
+			if ( $.inArray( true, $.map( stripeClasses, function(el, i) {
+				return $('tbody tr:eq(0)', this).hasClass(el);
+			} ) ) !== -1 ) {
+				$('tbody tr', this).removeClass( stripeClasses.join(' ') );
+				oSettings.asDestroyStripes = stripeClasses.slice();
 			}
 			
 			/*
