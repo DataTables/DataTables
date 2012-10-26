@@ -2652,7 +2652,7 @@
 			 */
 			$('select option[value="'+oSettings._iDisplayLength+'"]', nLength).attr("selected", true);
 			
-			$('select', nLength).bind( 'change.DT', function(e) {
+		$('[name="'+oSettings.sTableId+'_length"]').live( 'change.DT', function(e) {
 				var iVal = $(this).val();
 				
 				/* Update all other length options for the new display */
