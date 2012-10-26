@@ -404,14 +404,13 @@ DataTable.defaults.column = {
 	 *    // Use as a function to create a link from the data source
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [
-	 *        {
+	 *        "columnDefs": [ {
 	 *          "targets": [ 0 ],
 	 *          "data": "download_link",
 	 *          "render": function ( data, type, full ) {
 	 *            return '<a href="'+data+'">Download</a>';
 	 *          }
-	 *        ]
+	 *        } ]
 	 *      } );
 	 *    } );
 	 */
