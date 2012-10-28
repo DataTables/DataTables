@@ -149,7 +149,7 @@ cat <<EOF > component.json
 	"version": "${VERSION}",
 	"main": [
 		"./media/js/jquery.dataTables.js",
-		"./media/css/jquery.dataTables.css",
+		"./media/css/jquery.dataTables.css"
 	],
 	"dependencies": {
 		"jquery": "~1.8.0"
