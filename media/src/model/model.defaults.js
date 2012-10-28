@@ -1300,7 +1300,7 @@ DataTable.defaults = {
 	 *      } );
 	 *    } );
 	 */
-	"bDeferLoading": null,
+	"iDeferLoading": null,
 
 
 	/**
