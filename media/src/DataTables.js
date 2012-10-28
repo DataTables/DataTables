@@ -1,7 +1,7 @@
 /**
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
- * @version     1.10.0.dev
+ * @version     1.10.0-dev
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -112,13 +112,13 @@
 
 	/**
 	 * Version string for plug-ins to check compatibility. Allowed format is
-	 * a.b.c.d.e where: a:int, b:int, c:int, d:string(dev|beta), e:int. d and
-	 * e are optional
+	 * `a.b.c-d` where: a:int, b:int, c:int, d:string(dev|beta|alpha). `d` is used
+	 * only for non-release builds. See http://semver.org/ for more information.
 	 *  @member
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.0.dev";
+	DataTable.version = "1.10.0-dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are created for the
