@@ -11991,7 +11991,7 @@
 		 */
 		"numeric-pre": function ( a )
 		{
-			return (a=="-" || a==="") ? 0 : a*1;
+			return (a=="-" || a==="") ? -Infinity : a*1;
 		}
 	} );
 	
