@@ -6270,6 +6270,7 @@
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
 			var bUsePassedData = false;
+			var oInitEmpty = oInit === undefined ? true : false;
 			
 			
 			/* Sanity check */
@@ -6297,7 +6298,7 @@
 				/* Base check on table node */
 				if ( DataTable.settings[i].nTable == this )
 				{
-					if ( oInit === undefined || oInit.bRetrieve )
+					if ( oInitEmpty || oInit.bRetrieve )
 					{
 						return DataTable.settings[i].oInstance;
 					}
