@@ -111,11 +111,9 @@ var oTest = {
 	 */
 	"fnCookieDestroy": function ( oTable )
 	{
-		var sName = oTable.fnSettings().sCookiePrefix+oTable.fnSettings().sInstance;
-		var aParts = window.location.pathname.split('/');
-		var sNameFile = sName + '_' + aParts.pop().replace(/[\/:]/g,"").toLowerCase();
-		document.cookie = sNameFile+"=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path="+
-			aParts.join('/') + "/";
+		var s = oTable.fnSettings();
+
+		localStorage.setItem( 'DataTables_'+s.sInstance+'_'+window.location.pathname, null );
 	},
 	
 	
