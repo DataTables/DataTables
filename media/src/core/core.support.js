@@ -269,58 +269,6 @@ function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
 
 
 /**
- * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
- * library, then we use that as it is fast, safe and accurate. If the function isn't 
- * available then we need to built it ourselves - the inspiration for this function comes
- * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
- * not perfect and absolutely should not be used as a replacement to json2.js - but it does
- * do what we need, without requiring a dependency for DataTables.
- *  @param {object} o JSON object to be converted
- *  @returns {string} JSON string
- *  @memberof DataTable#oApi
- */
-var _fnJsonString = (window.JSON) ? JSON.stringify : function( o )
-{
-	/* Not an object or array */
-	var sType = typeof o;
-	if (sType !== "object" || o === null)
-	{
-		// simple data type
-		if (sType === "string")
-		{
-			o = '"'+o+'"';
-		}
-		return o+"";
-	}
-
-	/* If object or array, need to recurse over it */
-	var
-		sProp, mValue,
-		json = [],
-		bArr = $.isArray(o);
-	
-	for (sProp in o)
-	{
-		mValue = o[sProp];
-		sType = typeof mValue;
-
-		if (sType === "string")
-		{
-			mValue = '"'+mValue+'"';
-		}
-		else if (sType === "object" && mValue !== null)
-		{
-			mValue = _fnJsonString(mValue);
-		}
-
-		json.push((bArr ? "" : '"'+sProp+'":') + mValue);
-	}
-
-	return (bArr ? "[" : "{") + json + (bArr ? "]" : "}");
-};
-
-
-/**
  * From some browsers (specifically IE6/7) we need special handling to work around browser
  * bugs - this function is used to detect when these workarounds are needed.
  *  @param {object} oSettings dataTables settings object

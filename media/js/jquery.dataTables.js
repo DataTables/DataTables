@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $, jQuery,define,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnCreateCookie,_fnReadCookie,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnJsonString,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns,_fnHungarianMap,_fnCamelToHungarian*/
+/*globals $, jQuery,define,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnServerParams,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnCalculateEnd,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnGetTrNodes,_fnGetTdNodes,_fnEscapeRegex,_fnDeleteIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns,_fnHungarianMap,_fnCamelToHungarian*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -4286,7 +4286,7 @@
 	
 	
 	/**
-	 * Save the state of a table in a cookie such that the page can be reloaded
+	 * Save the state of a table
 	 *  @param {object} oSettings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
@@ -4317,12 +4317,12 @@
 	
 		_fnCallbackFire( oSettings, "aoStateSaveParams", 'stateSaveParams', [oSettings, oState] );
 		
-		oSettings.fnStateSave.call( oSettings.oInstance, oSettings, oState );
+		oSettings.fnStateSaveCallback.call( oSettings.oInstance, oSettings, oState );
 	}
 	
 	
 	/**
-	 * Attempt to load a saved table state from a cookie
+	 * Attempt to load a saved table state
 	 *  @param {object} oSettings dataTables settings object
 	 *  @param {object} oInit DataTables init object so we can override settings
 	 *  @memberof DataTable#oApi
@@ -4334,7 +4334,7 @@
 			return;
 		}
 	
-		var oData = oSettings.fnStateLoad.call( oSettings.oInstance, oSettings );
+		var oData = oSettings.fnStateLoadCallback.call( oSettings.oInstance, oSettings );
 		if ( !oData )
 		{
 			return;
@@ -4346,6 +4346,11 @@
 		var abStateLoad = _fnCallbackFire( oSettings, 'aoStateLoadParams', 'stateLoadParams', [oSettings, oData] );
 		if ( $.inArray( false, abStateLoad ) !== -1 )
 		{
+			return;
+		}
+	
+		/* Reject old data */
+		if ( oData.iCreate < new Date().getTime() - (oSettings.iStateDuration*1000) ) {
 			return;
 		}
 		
@@ -4378,126 +4383,6 @@
 		_fnCallbackFire( oSettings, 'aoStateLoaded', 'stateLoaded', [oSettings, oData] );
 	}
 	
-	
-	/**
-	 * Create a new cookie with a value to store the state of a table
-	 *  @param {string} sName name of the cookie to create
-	 *  @param {string} sValue the value the cookie should take
-	 *  @param {int} iSecs duration of the cookie
-	 *  @param {string} sBaseName sName is made up of the base + file name - this is the base
-	 *  @param {function} fnCallback User definable function to modify the cookie
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnCreateCookie ( sName, sValue, iSecs, sBaseName, fnCallback )
-	{
-		var date = new Date();
-		date.setTime( date.getTime()+(iSecs*1000) );
-		
-		/* 
-		 * Shocking but true - it would appear IE has major issues with having the path not having
-		 * a trailing slash on it. We need the cookie to be available based on the path, so we
-		 * have to append the file name to the cookie name. Appalling. Thanks to vex for adding the
-		 * patch to use at least some of the path
-		 */
-		var aParts = window.location.pathname.split('/');
-		var sNameFile = sName + '_' + aParts.pop().replace(/[\/:]/g,"").toLowerCase();
-		var sFullCookie, oData;
-		
-		if ( fnCallback !== null )
-		{
-			oData = (typeof $.parseJSON === 'function') ? 
-				$.parseJSON( sValue ) : eval( '('+sValue+')' );
-			sFullCookie = fnCallback( sNameFile, oData, date.toGMTString(),
-				aParts.join('/')+"/" );
-		}
-		else
-		{
-			sFullCookie = sNameFile + "=" + encodeURIComponent(sValue) +
-				"; expires=" + date.toGMTString() +"; path=" + aParts.join('/')+"/";
-		}
-		
-		/* Are we going to go over the cookie limit of 4KiB? If so, try to delete a cookies
-		 * belonging to DataTables.
-		 */
-		var
-			aCookies =document.cookie.split(';'),
-			iNewCookieLen = sFullCookie.split(';')[0].length,
-			aOldCookies = [];
-		
-		if ( iNewCookieLen+document.cookie.length+10 > 4096 ) /* Magic 10 for padding */
-		{
-			for ( var i=0, iLen=aCookies.length ; i<iLen ; i++ )
-			{
-				if ( aCookies[i].indexOf( sBaseName ) != -1 )
-				{
-					/* It's a DataTables cookie, so eval it and check the time stamp */
-					var aSplitCookie = aCookies[i].split('=');
-					try {
-						oData = eval( '('+decodeURIComponent(aSplitCookie[1])+')' );
-	
-						if ( oData && oData.iCreate )
-						{
-							aOldCookies.push( {
-								"name": aSplitCookie[0],
-								"time": oData.iCreate
-							} );
-						}
-					}
-					catch( e ) {}
-				}
-			}
-	
-			// Make sure we delete the oldest ones first
-			aOldCookies.sort( function (a, b) {
-				return b.time - a.time;
-			} );
-	
-			// Eliminate as many old DataTables cookies as we need to
-			while ( iNewCookieLen + document.cookie.length + 10 > 4096 ) {
-				if ( aOldCookies.length === 0 ) {
-					// Deleted all DT cookies and still not enough space. Can't state save
-					return;
-				}
-				
-				var old = aOldCookies.pop();
-				document.cookie = old.name+"=; expires=Thu, 01-Jan-1970 00:00:01 GMT; path="+
-					aParts.join('/') + "/";
-			}
-		}
-		
-		document.cookie = sFullCookie;
-	}
-	
-	
-	/**
-	 * Read an old cookie to get a cookie with an old table state
-	 *  @param {string} sName name of the cookie to read
-	 *  @returns {string} contents of the cookie - or null if no cookie with that name found
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnReadCookie ( sName )
-	{
-		var
-			aParts = window.location.pathname.split('/'),
-			sNameEQ = sName + '_' + aParts[aParts.length-1].replace(/[\/:]/g,"").toLowerCase() + '=',
-		 	sCookieContents = document.cookie.split(';');
-		
-		for( var i=0 ; i<sCookieContents.length ; i++ )
-		{
-			var c = sCookieContents[i];
-			
-			while (c.charAt(0)==' ')
-			{
-				c = c.substring(1,c.length);
-			}
-			
-			if (c.indexOf(sNameEQ) === 0)
-			{
-				return decodeURIComponent( c.substring(sNameEQ.length,c.length) );
-			}
-		}
-		return null;
-	}
 	
 	
 	/**
@@ -4767,58 +4652,6 @@
 	
 		return aRet;
 	}
-	
-	
-	/**
-	 * JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
-	 * library, then we use that as it is fast, safe and accurate. If the function isn't 
-	 * available then we need to built it ourselves - the inspiration for this function comes
-	 * from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
-	 * not perfect and absolutely should not be used as a replacement to json2.js - but it does
-	 * do what we need, without requiring a dependency for DataTables.
-	 *  @param {object} o JSON object to be converted
-	 *  @returns {string} JSON string
-	 *  @memberof DataTable#oApi
-	 */
-	var _fnJsonString = (window.JSON) ? JSON.stringify : function( o )
-	{
-		/* Not an object or array */
-		var sType = typeof o;
-		if (sType !== "object" || o === null)
-		{
-			// simple data type
-			if (sType === "string")
-			{
-				o = '"'+o+'"';
-			}
-			return o+"";
-		}
-	
-		/* If object or array, need to recurse over it */
-		var
-			sProp, mValue,
-			json = [],
-			bArr = $.isArray(o);
-		
-		for (sProp in o)
-		{
-			mValue = o[sProp];
-			sType = typeof mValue;
-	
-			if (sType === "string")
-			{
-				mValue = '"'+mValue+'"';
-			}
-			else if (sType === "object" && mValue !== null)
-			{
-				mValue = _fnJsonString(mValue);
-			}
-	
-			json.push((bArr ? "" : '"'+sProp+'":') + mValue);
-		}
-	
-		return (bArr ? "[" : "{") + json + (bArr ? "]" : "}");
-	};
 	
 	
 	/**
@@ -6227,8 +6060,6 @@
 			"_fnClearTable": _fnClearTable,
 			"_fnSaveState": _fnSaveState,
 			"_fnLoadState": _fnLoadState,
-			"_fnCreateCookie": _fnCreateCookie,
-			"_fnReadCookie": _fnReadCookie,
 			"_fnDetectHeader": _fnDetectHeader,
 			"_fnGetUniqueThs": _fnGetUniqueThs,
 			"_fnScrollBarWidth": _fnScrollBarWidth,
@@ -6244,7 +6075,6 @@
 			"_fnExtend": _fnExtend,
 			"_fnCallbackReg": _fnCallbackReg,
 			"_fnCallbackFire": _fnCallbackFire,
-			"_fnJsonString": _fnJsonString,
 			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
 			"_fnInfoMacros": _fnInfoMacros,
 			"_fnBrowserDetect": _fnBrowserDetect,
@@ -6386,8 +6216,8 @@
 			_fnMap( oSettings, oInit, "sPaginationType" );
 			_fnMap( oSettings, oInit, "sAjaxSource" );
 			_fnMap( oSettings, oInit, "sAjaxDataProp" );
-			_fnMap( oSettings, oInit, "iCookieDuration" );
-			_fnMap( oSettings, oInit, "sCookiePrefix" );
+			_fnMap( oSettings, oInit, "iCookieDuration", "iStateDuration" ); // backwards compat
+			_fnMap( oSettings, oInit, "iStateDuration" );
 			_fnMap( oSettings, oInit, "sDom" );
 			_fnMap( oSettings, oInit, "bSortCellsTop" );
 			_fnMap( oSettings, oInit, "iTabIndex" );
@@ -6395,9 +6225,8 @@
 			_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 			_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 			_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
-			_fnMap( oSettings, oInit, "fnCookieCallback" );
-			_fnMap( oSettings, oInit, "fnStateLoad" );
-			_fnMap( oSettings, oInit, "fnStateSave" );
+			_fnMap( oSettings, oInit, "fnStateLoadCallback" );
+			_fnMap( oSettings, oInit, "fnStateSaveCallback" );
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
 			/* Callback functions which are array driven */
@@ -6458,7 +6287,7 @@
 				oSettings._iDisplayStart = oInit.iDisplayStart;
 			}
 			
-			/* Must be done after everything which can be overridden by a cookie! */
+			/* Must be done after everything which can be overridden by the state saving! */
 			if ( oInit.bStateSave )
 			{
 				oSettings.oFeatures.bStateSave = true;
@@ -8322,10 +8151,14 @@
 	
 	
 		/**
-		 * Enable or disable state saving. When enabled a cookie will be used to save
-		 * table display information such as pagination information, display length,
-		 * filtering and sorting. As such when the end user reloads the page the
-		 * display display will match what thy had previously set up.
+		 * Enable or disable state saving. When enabled HTML5 `localStorage` will be 
+		 * used to save table display information such as pagination information, 
+		 * display length, filtering and sorting. As such when the end user reloads
+		 * the page the display display will match what thy had previously set up.
+		 * 
+		 * Due to the use of `localStorage` the default state saving is not supported
+		 * in IE6 or 7. If state saving is required in those browsers, use
+		 * `stateSaveCallback` to provide a storage solution such as cookies.
 		 *  @type boolean
 		 *  @default false
 		 *
@@ -8340,36 +8173,6 @@
 		 *    } );
 		 */
 		"bStateSave": false,
-	
-	
-		/**
-		 * Customise the cookie and / or the parameters being stored when using
-		 * DataTables with state saving enabled. This function is called whenever
-		 * the cookie is modified, and it expects a fully formed cookie string to be
-		 * returned. Note that the data object passed in is a Javascript object which
-		 * must be converted to a string (`JSON.stringify` for example).
-		 *  @type function
-		 *  @param {string} name Name of the cookie defined by DataTables
-		 *  @param {object} data Data to be stored in the cookie
-		 *  @param {string} expires Cookie expires string
-		 *  @param {string} path Path of the cookie to set
-		 *  @returns {string} Cookie formatted string (which should be encoded by
-		 *    using encodeURIComponent())
-		 *
-		 *  @dtopt Callbacks
-		 *  @name DataTable.defaults.cookieCallback
-		 * 
-		 *  @example
-		 *    $(document).ready( function () {
-		 *      $('#example').dataTable( {
-		 *        "cookieCallback": function (name, data, expires, path) {
-		 *          // Customise data or name or whatever else here
-		 *          return name + "="+JSON.stringify(data)+"; expires=" + expires +"; path=" + path;
-		 *        }
-		 *      } );
-		 *    } );
-		 */
-		"fnCookieCallback": null,
 	
 	
 		/**
@@ -8746,8 +8549,8 @@
 	
 		/**
 		 * Load the table state. With this function you can define from where, and how, the
-		 * state of a table is loaded. By default DataTables will load from its state saving
-		 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
+		 * state of a table is loaded. By default DataTables will load from `localStorage`
+		 * but you might wish to use a server-side database or cookies.
 		 *  @type function
 		 *  @member
 		 *  @param {object} settings DataTables settings object
@@ -8780,17 +8583,11 @@
 		 *    } );
 		 */
 		"fnStateLoadCallback": function ( settings ) {
-			var sData = this.oApi._fnReadCookie( settings.sCookiePrefix+settings.sInstance );
-			var oData;
-	
 			try {
-				oData = (typeof $.parseJSON === 'function') ? 
-					$.parseJSON(sData) : eval( '('+sData+')' );
-			} catch (e) {
-				oData = null;
-			}
-	
-			return oData;
+				return JSON.parse( 
+					localStorage.getItem('DataTables_'+settings.sInstance+'_'+window.location.pathname)
+				);
+			} catch (e) {}
 		},
 	
 	
@@ -8858,8 +8655,8 @@
 	
 		/**
 		 * Save the table state. This function allows you to define where and how the state
-		 * information for the table is stored - by default it will use a cookie, but you
-		 * might want to use local storage (HTML5) or a server-side database.
+		 * information for the table is stored By default DataTables will use `localStorage`
+		 * but you might wish to use a server-side database or cookies.
 		 *  @type function
 		 *  @member
 		 *  @param {object} settings DataTables settings object
@@ -8886,13 +8683,12 @@
 		 *    } );
 		 */
 		"fnStateSaveCallback": function ( settings, data ) {
-			this.oApi._fnCreateCookie( 
-				settings.sCookiePrefix+settings.sInstance, 
-				this.oApi._fnJsonString(data), 
-				settings.iCookieDuration, 
-				settings.sCookiePrefix, 
-				settings.fnCookieCallback
-			);
+			try {
+				localStorage.setItem(
+					'DataTables_'+settings.sInstance+'_'+window.location.pathname,
+					JSON.stringify(data)
+				);
+			} catch (e) {}
 		},
 	
 	
@@ -8924,22 +8720,23 @@
 	
 	
 		/**
-		 * Duration of the cookie which is used for storing session information. This
+		 * Duration for which the saved state information is considered valid. After this period
+		 * has elapsed the state will be returned to the default.
 		 * value is given in seconds.
 		 *  @type int
 		 *  @default 7200 <i>(2 hours)</i>
 		 *
 		 *  @dtopt Options
-		 *  @name DataTable.defaults.cookieDuration
+		 *  @name DataTable.defaults.stateDuration
 		 * 
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "cookieDuration": 60*60*24; // 1 day
+		 *        "stateDuration": 60*60*24; // 1 day
 		 *      } );
 		 *    } )
 		 */
-		"fnCookieDuration": 7200,
+		"iStateDuration": 7200,
 	
 	
 		/**
@@ -9618,25 +9415,6 @@
 		 *    } )
 		 */
 		"sAjaxSource": null,
-	
-	
-		/**
-		 * This parameter can be used to override the default prefix that DataTables
-		 * assigns to a cookie when state saving is enabled.
-		 *  @type string
-		 *  @default SpryMedia_DataTables_
-		 *
-		 *  @dtopt Options
-		 *  @name DataTable.defaults.cookiePrefix
-		 * 
-		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "cookiePrefix": "my_datatable_",
-		 *      } );
-		 *    } );
-		 */
-		"sCookiePrefix": "SpryMedia_DataTables_",
 	
 	
 		/**
@@ -11104,31 +10882,13 @@
 		"sPaginationType": "two_button",
 		
 		/**
-		 * The cookie duration (for bStateSave) in seconds.
+		 * The state duration (for `stateSave`) in seconds.
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
 		 *  @type int
 		 *  @default 0
 		 */
-		"iCookieDuration": 0,
-		
-		/**
-		 * The cookie name prefix.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type string
-		 *  @default <i>Empty string</i>
-		 */
-		"sCookiePrefix": "",
-		
-		/**
-		 * Callback function for cookie creation.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type function
-		 *  @default null
-		 */
-		"fnCookieCallback": null,
+		"iStateDuration": 0,
 		
 		/**
 		 * Array of callback functions for state saving. Each array element is an 
@@ -11159,7 +10919,7 @@
 		"aoStateLoad": [],
 		
 		/**
-		 * State that was loaded from the cookie. Useful for back reference
+		 * State that was loaded. Useful for back reference
 		 *  @type object
 		 *  @default null
 		 */

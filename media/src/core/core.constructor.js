@@ -118,8 +118,8 @@ _fnMap( oSettings, oInit, "aLengthMenu" );
 _fnMap( oSettings, oInit, "sPaginationType" );
 _fnMap( oSettings, oInit, "sAjaxSource" );
 _fnMap( oSettings, oInit, "sAjaxDataProp" );
-_fnMap( oSettings, oInit, "iCookieDuration" );
-_fnMap( oSettings, oInit, "sCookiePrefix" );
+_fnMap( oSettings, oInit, "iCookieDuration", "iStateDuration" ); // backwards compat
+_fnMap( oSettings, oInit, "iStateDuration" );
 _fnMap( oSettings, oInit, "sDom" );
 _fnMap( oSettings, oInit, "bSortCellsTop" );
 _fnMap( oSettings, oInit, "iTabIndex" );
@@ -127,9 +127,8 @@ _fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
 _fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
 _fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
 _fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
-_fnMap( oSettings, oInit, "fnCookieCallback" );
-_fnMap( oSettings, oInit, "fnStateLoad" );
-_fnMap( oSettings, oInit, "fnStateSave" );
+_fnMap( oSettings, oInit, "fnStateLoadCallback" );
+_fnMap( oSettings, oInit, "fnStateSaveCallback" );
 _fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 
 /* Callback functions which are array driven */
@@ -190,7 +189,7 @@ if ( oSettings.iInitDisplayStart === undefined )
 	oSettings._iDisplayStart = oInit.iDisplayStart;
 }
 
-/* Must be done after everything which can be overridden by a cookie! */
+/* Must be done after everything which can be overridden by the state saving! */
 if ( oInit.bStateSave )
 {
 	oSettings.oFeatures.bStateSave = true;

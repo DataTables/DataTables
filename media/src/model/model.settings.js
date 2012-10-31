@@ -537,31 +537,13 @@ DataTable.models.oSettings = {
 	"sPaginationType": "two_button",
 	
 	/**
-	 * The cookie duration (for bStateSave) in seconds.
+	 * The state duration (for `stateSave`) in seconds.
 	 * Note that this parameter will be set by the initialisation routine. To
 	 * set a default use {@link DataTable.defaults}.
 	 *  @type int
 	 *  @default 0
 	 */
-	"iCookieDuration": 0,
-	
-	/**
-	 * The cookie name prefix.
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type string
-	 *  @default <i>Empty string</i>
-	 */
-	"sCookiePrefix": "",
-	
-	/**
-	 * Callback function for cookie creation.
-	 * Note that this parameter will be set by the initialisation routine. To
-	 * set a default use {@link DataTable.defaults}.
-	 *  @type function
-	 *  @default null
-	 */
-	"fnCookieCallback": null,
+	"iStateDuration": 0,
 	
 	/**
 	 * Array of callback functions for state saving. Each array element is an 
@@ -592,7 +574,7 @@ DataTable.models.oSettings = {
 	"aoStateLoad": [],
 	
 	/**
-	 * State that was loaded from the cookie. Useful for back reference
+	 * State that was loaded. Useful for back reference
 	 *  @type object
 	 *  @default null
 	 */

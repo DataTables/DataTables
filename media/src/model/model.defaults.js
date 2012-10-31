@@ -639,10 +639,14 @@ DataTable.defaults = {
 
 
 	/**
-	 * Enable or disable state saving. When enabled a cookie will be used to save
-	 * table display information such as pagination information, display length,
-	 * filtering and sorting. As such when the end user reloads the page the
-	 * display display will match what thy had previously set up.
+	 * Enable or disable state saving. When enabled HTML5 `localStorage` will be 
+	 * used to save table display information such as pagination information, 
+	 * display length, filtering and sorting. As such when the end user reloads
+	 * the page the display display will match what thy had previously set up.
+	 * 
+	 * Due to the use of `localStorage` the default state saving is not supported
+	 * in IE6 or 7. If state saving is required in those browsers, use
+	 * `stateSaveCallback` to provide a storage solution such as cookies.
 	 *  @type boolean
 	 *  @default false
 	 *
@@ -657,36 +661,6 @@ DataTable.defaults = {
 	 *    } );
 	 */
 	"bStateSave": false,
-
-
-	/**
-	 * Customise the cookie and / or the parameters being stored when using
-	 * DataTables with state saving enabled. This function is called whenever
-	 * the cookie is modified, and it expects a fully formed cookie string to be
-	 * returned. Note that the data object passed in is a Javascript object which
-	 * must be converted to a string (`JSON.stringify` for example).
-	 *  @type function
-	 *  @param {string} name Name of the cookie defined by DataTables
-	 *  @param {object} data Data to be stored in the cookie
-	 *  @param {string} expires Cookie expires string
-	 *  @param {string} path Path of the cookie to set
-	 *  @returns {string} Cookie formatted string (which should be encoded by
-	 *    using encodeURIComponent())
-	 *
-	 *  @dtopt Callbacks
-	 *  @name DataTable.defaults.cookieCallback
-	 * 
-	 *  @example
-	 *    $(document).ready( function () {
-	 *      $('#example').dataTable( {
-	 *        "cookieCallback": function (name, data, expires, path) {
-	 *          // Customise data or name or whatever else here
-	 *          return name + "="+JSON.stringify(data)+"; expires=" + expires +"; path=" + path;
-	 *        }
-	 *      } );
-	 *    } );
-	 */
-	"fnCookieCallback": null,
 
 
 	/**
@@ -1063,8 +1037,8 @@ DataTable.defaults = {
 
 	/**
 	 * Load the table state. With this function you can define from where, and how, the
-	 * state of a table is loaded. By default DataTables will load from its state saving
-	 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
+	 * state of a table is loaded. By default DataTables will load from `localStorage`
+	 * but you might wish to use a server-side database or cookies.
 	 *  @type function
 	 *  @member
 	 *  @param {object} settings DataTables settings object
@@ -1097,17 +1071,11 @@ DataTable.defaults = {
 	 *    } );
 	 */
 	"fnStateLoadCallback": function ( settings ) {
-		var sData = this.oApi._fnReadCookie( settings.sCookiePrefix+settings.sInstance );
-		var oData;
-
 		try {
-			oData = (typeof $.parseJSON === 'function') ? 
-				$.parseJSON(sData) : eval( '('+sData+')' );
-		} catch (e) {
-			oData = null;
-		}
-
-		return oData;
+			return JSON.parse( 
+				localStorage.getItem('DataTables_'+settings.sInstance+'_'+window.location.pathname)
+			);
+		} catch (e) {}
 	},
 
 
@@ -1175,8 +1143,8 @@ DataTable.defaults = {
 
 	/**
 	 * Save the table state. This function allows you to define where and how the state
-	 * information for the table is stored - by default it will use a cookie, but you
-	 * might want to use local storage (HTML5) or a server-side database.
+	 * information for the table is stored By default DataTables will use `localStorage`
+	 * but you might wish to use a server-side database or cookies.
 	 *  @type function
 	 *  @member
 	 *  @param {object} settings DataTables settings object
@@ -1203,13 +1171,12 @@ DataTable.defaults = {
 	 *    } );
 	 */
 	"fnStateSaveCallback": function ( settings, data ) {
-		this.oApi._fnCreateCookie( 
-			settings.sCookiePrefix+settings.sInstance, 
-			this.oApi._fnJsonString(data), 
-			settings.iCookieDuration, 
-			settings.sCookiePrefix, 
-			settings.fnCookieCallback
-		);
+		try {
+			localStorage.setItem(
+				'DataTables_'+settings.sInstance+'_'+window.location.pathname,
+				JSON.stringify(data)
+			);
+		} catch (e) {}
 	},
 
 
@@ -1241,22 +1208,23 @@ DataTable.defaults = {
 
 
 	/**
-	 * Duration of the cookie which is used for storing session information. This
+	 * Duration for which the saved state information is considered valid. After this period
+	 * has elapsed the state will be returned to the default.
 	 * value is given in seconds.
 	 *  @type int
 	 *  @default 7200 <i>(2 hours)</i>
 	 *
 	 *  @dtopt Options
-	 *  @name DataTable.defaults.cookieDuration
+	 *  @name DataTable.defaults.stateDuration
 	 * 
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "cookieDuration": 60*60*24; // 1 day
+	 *        "stateDuration": 60*60*24; // 1 day
 	 *      } );
 	 *    } )
 	 */
-	"fnCookieDuration": 7200,
+	"iStateDuration": 7200,
 
 
 	/**
@@ -1935,25 +1903,6 @@ DataTable.defaults = {
 	 *    } )
 	 */
 	"sAjaxSource": null,
-
-
-	/**
-	 * This parameter can be used to override the default prefix that DataTables
-	 * assigns to a cookie when state saving is enabled.
-	 *  @type string
-	 *  @default SpryMedia_DataTables_
-	 *
-	 *  @dtopt Options
-	 *  @name DataTable.defaults.cookiePrefix
-	 * 
-	 *  @example
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "cookiePrefix": "my_datatable_",
-	 *      } );
-	 *    } );
-	 */
-	"sCookiePrefix": "SpryMedia_DataTables_",
 
 
 	/**
