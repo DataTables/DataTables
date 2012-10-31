@@ -533,16 +533,21 @@
 	 * DOM source.
 	 *  @param {object} oSettings dataTables settings object
 	 *  @param {array} aData data array to be added
+	 *  @param {node} [nTr] TR element to add to the table - optional. If not given,
+	 *    DataTables will create a row automatically
+	 *  @param {array} [anTds] Array of TD|TH elements for the row - must be given
+	 *    if nTr is.
 	 *  @returns {int} >=0 if successful (index of new aoData entry), -1 if failed
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnAddData ( oSettings, aDataIn )
+	function _fnAddData ( oSettings, aDataIn, nTr, anTds )
 	{
 		var oCol;
 		
 		/* Create the object for storing information about this new row */
 		var iRow = oSettings.aoData.length;
 		var oData = $.extend( true, {}, DataTable.models.oRow );
+		
 		oData._aData = aDataIn;
 		oSettings.aoData.push( oData );
 	
@@ -581,7 +586,7 @@
 		/* Create the DOM information */
 		if ( !oSettings.oFeatures.bDeferRender )
 		{
-			_fnCreateTr( oSettings, iRow );
+			_fnCreateTr( oSettings, iRow, nTr, anTds );
 		}
 	
 		return iRow;
@@ -589,167 +594,41 @@
 	
 	
 	/**
-	 * Read in the data from the target table from the DOM
+	 * Add one or more TR elements to the table. Generally we'd expect to
+	 * use this for reading data from a DOM sourced table, but it could be
+	 * used for an TR element. Note that if a TR is given, it is used (i.e.
+	 * it is not cloned).
 	 *  @param {object} oSettings dataTables settings object
+	 *  @param {array|node|jQuery} trs The TR element(s) to add to the table
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnGatherData( oSettings )
+	function _fnAddTr( oSettings, trs )
 	{
-		var iLoop, i, iLen, j, jLen, jInner,
-		 	nTds, nTrs, nTd, nTr, aLocalData, iThisIndex,
-			iRow, iRows, iColumn, iColumns, sNodeName,
-			oCol, oData;
-		
-		/*
-		 * Process by row first
-		 * Add the data object for the whole table - storing the tr node. Note - no point in getting
-		 * DOM based data if we are going to go and replace it with Ajax source data.
-		 */
-		if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
-		{
-			nTr = oSettings.nTBody.firstChild;
-			while ( nTr )
-			{
-				if ( nTr.nodeName.toUpperCase() == "TR" )
-				{
-					iThisIndex = oSettings.aoData.length;
-					nTr._DT_RowIndex = iThisIndex;
-					oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
-						"nTr": nTr
-					} ) );
-	
-					oSettings.aiDisplayMaster.push( iThisIndex );
-					nTd = nTr.firstChild;
-					jInner = 0;
-					while ( nTd )
-					{
-						sNodeName = nTd.nodeName.toUpperCase();
-						if ( sNodeName == "TD" || sNodeName == "TH" )
-						{
-							_fnSetCellData( oSettings, iThisIndex, jInner, $.trim(nTd.innerHTML) );
-							jInner++;
-						}
-						nTd = nTd.nextSibling;
-					}
-				}
-				nTr = nTr.nextSibling;
-			}
+		// Allow an individual node to be passed in
+		if ( ! trs instanceof $ ) {
+			trs = $(trs);
 		}
-		
-		/* Gather in the TD elements of the Table - note that this is basically the same as
-		 * fnGetTdNodes, but that function takes account of hidden columns, which we haven't yet
-		 * setup!
-		 */
-		nTrs = _fnGetTrNodes( oSettings );
-		nTds = [];
-		for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
-		{
-			nTd = nTrs[i].firstChild;
-			while ( nTd )
-			{
-				sNodeName = nTd.nodeName.toUpperCase();
-				if ( sNodeName == "TD" || sNodeName == "TH" )
-				{
-					nTds.push( nTd );
-				}
-				nTd = nTd.nextSibling;
-			}
-		}
-		
-		/* Now process by column */
-		for ( iColumn=0, iColumns=oSettings.aoColumns.length ; iColumn<iColumns ; iColumn++ )
-		{
-			oCol = oSettings.aoColumns[iColumn];
 	
-			/* Get the title of the column - unless there is a user set one */
-			if ( oCol.sTitle === null )
-			{
-				oCol.sTitle = oCol.nTh.innerHTML;
-			}
-			
+		trs.each( function () {
 			var
-				bAutoType = oCol._bAutoType,
-				bClass = oCol.sClass !== null,
-				bVisible = oCol.bVisible,
-				nCell, sThisType, sRendered, sValType;
-			
-			/* A single loop to rule them all (and be more efficient) */
-			if ( bAutoType || bClass || !bVisible )
+				d = [],
+				tds = [],
+				td = this.firstChild,
+				name;
+	
+			while ( td )
 			{
-				for ( iRow=0, iRows=oSettings.aoData.length ; iRow<iRows ; iRow++ )
+				name = td.nodeName.toUpperCase();
+				if ( name == "TD" || name == "TH" )
 				{
-					oData = oSettings.aoData[iRow];
-					nCell = nTds[ (iRow*iColumns) + iColumn ];
-					
-					/* Type detection */
-					if ( bAutoType && oCol.sType != 'string' )
-					{
-						sValType = _fnGetCellData( oSettings, iRow, iColumn, 'type' );
-						if ( sValType !== '' )
-						{
-							sThisType = _fnDetectType( sValType );
-							if ( oCol.sType === null )
-							{
-								oCol.sType = sThisType;
-							}
-							else if ( oCol.sType != sThisType && 
-							          oCol.sType != "html" )
-							{
-								/* String is always the 'fallback' option */
-								oCol.sType = 'string';
-							}
-						}
-					}
-	
-					if ( oCol.mRender )
-					{
-						// mRender has been defined, so we need to get the value and set it
-						nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-					}
-					else if ( oCol.mData !== iColumn )
-					{
-						// If mData is not the same as the column number, then we need to
-						// get the dev set value. If it is the column, no point in wasting
-						// time setting the value that is already there!
-						nCell.innerHTML = _fnGetCellData( oSettings, iRow, iColumn, 'display' );
-					}
-					
-					/* Classes */
-					if ( bClass )
-					{
-						nCell.className += ' '+oCol.sClass;
-					}
-					
-					/* Column visibility */
-					if ( !bVisible )
-					{
-						oData._anHidden[iColumn] = nCell;
-						nCell.parentNode.removeChild( nCell );
-					}
-					else
-					{
-						oData._anHidden[iColumn] = null;
-					}
-	
-					if ( oCol.fnCreatedCell )
-					{
-						oCol.fnCreatedCell.call( oSettings.oInstance,
-							nCell, _fnGetCellData( oSettings, iRow, iColumn, 'display' ), oData._aData, iRow, iColumn
-						);
-					}
+					d.push( $.trim(td.innerHTML) );
+					tds.push( td );
 				}
+				td = td.nextSibling;
 			}
-		}
 	
-		/* Row created callbacks */
-		if ( oSettings.aoRowCreatedCallback.length !== 0 )
-		{
-			for ( i=0, iLen=oSettings.aoData.length ; i<iLen ; i++ )
-			{
-				oData = oSettings.aoData[i];
-				_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, i] );
-			}
-		}
+			_fnAddData( oSettings, d, this, tds );
+		} );
 	}
 	
 	
@@ -1117,65 +996,81 @@
 	 * Create a new TR element (and it's TD children) for a row
 	 *  @param {object} oSettings dataTables settings object
 	 *  @param {int} iRow Row to consider
+	 *  @param {node} [nTr] TR element to add to the table - optional. If not given,
+	 *    DataTables will create a row automatically
+	 *  @param {array} [anTds] Array of TD|TH elements for the row - must be given
+	 *    if nTr is.
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnCreateTr ( oSettings, iRow )
+	function _fnCreateTr ( oSettings, iRow, nTr, anTds )
 	{
-		var oData = oSettings.aoData[iRow];
-		var nTd;
+		var
+			row = oSettings.aoData[iRow],
+			rowData = row._aData,
+			nTd, oCol,
+			i, iLen;
 	
-		if ( oData.nTr === null )
+		if ( row.nTr === null )
 		{
-			oData.nTr = document.createElement('tr');
+			nTr = nTr || document.createElement('tr');
 	
 			/* Use a private property on the node to allow reserve mapping from the node
 			 * to the aoData array for fast look up
 			 */
-			oData.nTr._DT_RowIndex = iRow;
+			nTr._DT_RowIndex = iRow;
 	
 			/* Special parameters can be given by the data source to be used on the row */
-			if ( oData._aData.DT_RowId )
+			if ( rowData.DT_RowId )
 			{
-				oData.nTr.id = oData._aData.DT_RowId;
+				nTr.id = rowData.DT_RowId;
 			}
 	
-			if ( oData._aData.DT_RowClass )
+			if ( rowData.DT_RowClass )
 			{
-				oData.nTr.className = oData._aData.DT_RowClass;
+				nTr.className += ' '+rowData.DT_RowClass;
 			}
 	
 			/* Process each column */
-			for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
-				var oCol = oSettings.aoColumns[i];
-				nTd = document.createElement( oCol.sCellType );
-				nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+				oCol = oSettings.aoColumns[i];
+	
+				nTd = nTr ? anTds[i] : document.createElement( oCol.sCellType );
+	
+				// Need to create the HTML if new, or if a rendering function is defined
+				if ( !nTr || oCol.mRender || oCol.mData !== i )
+				{
+					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+				}
 			
 				/* Add user defined class */
 				if ( oCol.sClass !== null )
 				{
-					nTd.className = oCol.sClass;
+					nTd.className += ' '+oCol.sClass;
 				}
-				
-				if ( oCol.bVisible )
+	
+				// Visibility - add or remove as required
+				row._anHidden[i] = oCol.bVisible ? null : nTd;
+				if ( oCol.bVisible && ! nTr )
 				{
-					oData.nTr.appendChild( nTd );
-					oData._anHidden[i] = null;
+					nTr.appendChild( nTd );
 				}
-				else
+				else if ( ! oCol.bVisible && nTr )
 				{
-					oData._anHidden[i] = nTd;
+					nTd.parentNode.removeChild( nTd );
 				}
 	
 				if ( oCol.fnCreatedCell )
 				{
 					oCol.fnCreatedCell.call( oSettings.oInstance,
-						nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
+						nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), rowData, iRow, i
 					);
 				}
 			}
 	
-			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, iRow] );
+			row.nTr = nTr;
+	
+			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
 		}
 	}
 	
@@ -6277,7 +6172,7 @@
 			"_fnColumnOptions": _fnColumnOptions,
 			"_fnAddData": _fnAddData,
 			"_fnCreateTr": _fnCreateTr,
-			"_fnGatherData": _fnGatherData,
+			"_fnAddTr": _fnAddTr,
 			"_fnBuildHead": _fnBuildHead,
 			"_fnDrawHead": _fnDrawHead,
 			"_fnDraw": _fnDraw,
@@ -6770,10 +6665,13 @@
 					_fnAddData( oSettings, oInit.aaData[ i ] );
 				}
 			}
-			else
+			else if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
 			{
-				/* Grab the data from the page */
-				_fnGatherData( oSettings );
+				/* Grab the data from the page - only do this when deferred loading or no Ajax
+				 * source since there is no point in reading the DOM data if we are then going
+				 * to replace it with Ajax data
+				 */
+				_fnAddTr( oSettings, $(oSettings.nTBody).children('tr') );
 			}
 			
 			/* Copy the data index array */

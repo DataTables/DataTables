@@ -2,65 +2,81 @@
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iRow Row to consider
+ *  @param {node} [nTr] TR element to add to the table - optional. If not given,
+ *    DataTables will create a row automatically
+ *  @param {array} [anTds] Array of TD|TH elements for the row - must be given
+ *    if nTr is.
  *  @memberof DataTable#oApi
  */
-function _fnCreateTr ( oSettings, iRow )
+function _fnCreateTr ( oSettings, iRow, nTr, anTds )
 {
-	var oData = oSettings.aoData[iRow];
-	var nTd;
+	var
+		row = oSettings.aoData[iRow],
+		rowData = row._aData,
+		nTd, oCol,
+		i, iLen;
 
-	if ( oData.nTr === null )
+	if ( row.nTr === null )
 	{
-		oData.nTr = document.createElement('tr');
+		nTr = nTr || document.createElement('tr');
 
 		/* Use a private property on the node to allow reserve mapping from the node
 		 * to the aoData array for fast look up
 		 */
-		oData.nTr._DT_RowIndex = iRow;
+		nTr._DT_RowIndex = iRow;
 
 		/* Special parameters can be given by the data source to be used on the row */
-		if ( oData._aData.DT_RowId )
+		if ( rowData.DT_RowId )
 		{
-			oData.nTr.id = oData._aData.DT_RowId;
+			nTr.id = rowData.DT_RowId;
 		}
 
-		if ( oData._aData.DT_RowClass )
+		if ( rowData.DT_RowClass )
 		{
-			oData.nTr.className = oData._aData.DT_RowClass;
+			nTr.className += ' '+rowData.DT_RowClass;
 		}
 
 		/* Process each column */
-		for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
-			var oCol = oSettings.aoColumns[i];
-			nTd = document.createElement( oCol.sCellType );
-			nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+			oCol = oSettings.aoColumns[i];
+
+			nTd = nTr ? anTds[i] : document.createElement( oCol.sCellType );
+
+			// Need to create the HTML if new, or if a rendering function is defined
+			if ( !nTr || oCol.mRender || oCol.mData !== i )
+			{
+				nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+			}
 		
 			/* Add user defined class */
 			if ( oCol.sClass !== null )
 			{
-				nTd.className = oCol.sClass;
+				nTd.className += ' '+oCol.sClass;
 			}
-			
-			if ( oCol.bVisible )
+
+			// Visibility - add or remove as required
+			row._anHidden[i] = oCol.bVisible ? null : nTd;
+			if ( oCol.bVisible && ! nTr )
 			{
-				oData.nTr.appendChild( nTd );
-				oData._anHidden[i] = null;
+				nTr.appendChild( nTd );
 			}
-			else
+			else if ( ! oCol.bVisible && nTr )
 			{
-				oData._anHidden[i] = nTd;
+				nTd.parentNode.removeChild( nTd );
 			}
 
 			if ( oCol.fnCreatedCell )
 			{
 				oCol.fnCreatedCell.call( oSettings.oInstance,
-					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
+					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), rowData, iRow, i
 				);
 			}
 		}
 
-		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, iRow] );
+		row.nTr = nTr;
+
+		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
 	}
 }
 

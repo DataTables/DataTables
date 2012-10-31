@@ -37,7 +37,7 @@ this.oApi = {
 	"_fnColumnOptions": _fnColumnOptions,
 	"_fnAddData": _fnAddData,
 	"_fnCreateTr": _fnCreateTr,
-	"_fnGatherData": _fnGatherData,
+	"_fnAddTr": _fnAddTr,
 	"_fnBuildHead": _fnBuildHead,
 	"_fnDrawHead": _fnDrawHead,
 	"_fnDraw": _fnDraw,

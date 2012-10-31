@@ -397,10 +397,13 @@ if ( bUsePassedData )
 		_fnAddData( oSettings, oInit.aaData[ i ] );
 	}
 }
-else
+else if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
 {
-	/* Grab the data from the page */
-	_fnGatherData( oSettings );
+	/* Grab the data from the page - only do this when deferred loading or no Ajax
+	 * source since there is no point in reading the DOM data if we are then going
+	 * to replace it with Ajax data
+	 */
+	_fnAddTr( oSettings, $(oSettings.nTBody).children('tr') );
 }
 
 /* Copy the data index array */
