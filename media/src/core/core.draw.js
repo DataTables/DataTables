@@ -2,23 +2,23 @@
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iRow Row to consider
- *  @param {node} [nTr] TR element to add to the table - optional. If not given,
+ *  @param {node} [nTrIn] TR element to add to the table - optional. If not given,
  *    DataTables will create a row automatically
  *  @param {array} [anTds] Array of TD|TH elements for the row - must be given
  *    if nTr is.
  *  @memberof DataTable#oApi
  */
-function _fnCreateTr ( oSettings, iRow, nTr, anTds )
+function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 {
 	var
 		row = oSettings.aoData[iRow],
 		rowData = row._aData,
-		nTd, oCol,
+		nTr, nTd, oCol,
 		i, iLen;
 
 	if ( row.nTr === null )
 	{
-		nTr = nTr || document.createElement('tr');
+		nTr = nTrIn || document.createElement('tr');
 
 		/* Use a private property on the node to allow reserve mapping from the node
 		 * to the aoData array for fast look up
@@ -41,10 +41,10 @@ function _fnCreateTr ( oSettings, iRow, nTr, anTds )
 		{
 			oCol = oSettings.aoColumns[i];
 
-			nTd = nTr ? anTds[i] : document.createElement( oCol.sCellType );
+			nTd = nTrIn ? anTds[i] : document.createElement( oCol.sCellType );
 
 			// Need to create the HTML if new, or if a rendering function is defined
-			if ( !nTr || oCol.mRender || oCol.mData !== i )
+			if ( !nTrIn || oCol.mRender || oCol.mData !== i )
 			{
 				nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 			}
@@ -57,11 +57,11 @@ function _fnCreateTr ( oSettings, iRow, nTr, anTds )
 
 			// Visibility - add or remove as required
 			row._anHidden[i] = oCol.bVisible ? null : nTd;
-			if ( oCol.bVisible && ! nTr )
+			if ( oCol.bVisible && ! nTrIn )
 			{
 				nTr.appendChild( nTd );
 			}
-			else if ( ! oCol.bVisible && nTr )
+			else if ( ! oCol.bVisible && nTrIn )
 			{
 				nTd.parentNode.removeChild( nTd );
 			}
