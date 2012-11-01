@@ -2259,6 +2259,10 @@
 	 */
 	function _fnBuildSearchRow( oSettings, aData )
 	{
+		for ( var i=0, len=aData.length ; i<len ; i++ ) {
+			aData[i] = _fnDataToSearch( aData[i], oSettings.aoColumns[i].sType );
+		}
+		
 		var sSearch = aData.join('  ');
 		
 		/* If it looks like there is an HTML entity in the string, attempt to decode it */
