@@ -5873,7 +5873,8 @@
 		 * self-referencing in order to make the multi column updates easier.
 		 *  @param {object|array|string} mData Data to update the cell/row with
 		 *  @param {node|int} mRow TR element you want to update or the aoData index
-		 *  @param {int} [iColumn] The column to update (not used of mData is an array or object)
+		 *  @param {int} [iColumn] The column to update, give as null or undefined to
+		 *    update a whole row.
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 *  @param {bool} [bAction=true] Perform pre-draw actions or not
 		 *  @returns {int} 0 on success, 1 on error
@@ -5883,31 +5884,20 @@
 		 *    $(document).ready(function() {
 		 *      var oTable = $('#example').dataTable();
 		 *      oTable.fnUpdate( 'Example update', 0, 0 ); // Single cell
-		 *      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
+		 *      oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], $('tbody tr')[0] ); // Row
 		 *    } );
 		 */
 		this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
-			var i, iLen, sDisplay;
+			var i, sDisplay;
 			var iRow = (typeof mRow === 'object') ? 
 				_fnNodeToDataIndex(oSettings, mRow) : mRow;
-			
-			if ( $.isArray(mData) && iColumn === undefined )
+		
+			if ( iColumn === undefined || iColumn === null )
 			{
-				/* Array update - update the whole row */
-				oSettings.aoData[iRow]._aData = mData.slice();
-				
-				/* Flag to the function that we are recursing */
-				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-				{
-					this.fnUpdate( _fnGetCellData( oSettings, iRow, i ), iRow, i, false, false );
-				}
-			}
-			else if ( $.isPlainObject(mData) && iColumn === undefined )
-			{
-				/* Object update - update the whole row - assume the developer gets the object right */
-				oSettings.aoData[iRow]._aData = $.extend( true, {}, mData );
+				/* Update the whole row */
+				oSettings.aoData[iRow]._aData = mData;
 		
 				for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 				{
