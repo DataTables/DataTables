@@ -165,41 +165,27 @@ DataTable.models.ext = {
 	 * column) or they can be automatically detected by the methods in this array. The functions
 	 * defined in the array are quite simple, taking a single parameter (the data to analyse) 
 	 * and returning the type if it is a known type, or null otherwise.
-	 *   <ul>
-     *     <li>
-     *       Function input parameters:
-     *       <ul>
-	 *         <li>{*} Data from the column cell to be analysed</li>
-     *       </ul>
-     *     </li>
-	 *     <li>
-	 *       Function return:
-	 *       <ul>
-	 *         <li>{string|null} Data type detected, or null if unknown (and thus pass it
-	 *           on to the other type detection functions.</li>
-	 *       </ul>
-	 *     </il>
-	 *   </ul>
+	 * 
+	 * * Function input parameters:
+     *    * {*} Data from the column cell to be analysed
+     * * Function return:
+	 *    * {string|null} Data type detected, or null if unknown (and thus pass it
+	 *           on to the other type detection functions.
+	 *
 	 *  @type array
 	 *  @default []
 	 *  
 	 *  @example
 	 *    // Currency type detection plug-in:
 	 *    jQuery.fn.dataTableExt.aTypes.push(
-	 *      function ( sData ) {
-	 *        var sValidChars = "0123456789.-";
-	 *        var Char;
-	 *        
+	 *      function ( data ) {
 	 *        // Check the numeric part
-	 *        for ( i=1 ; i<sData.length ; i++ ) {
-	 *          Char = sData.charAt(i); 
-	 *          if (sValidChars.indexOf(Char) == -1) {
-	 *            return null;
-	 *          }
+	 *        if ( ! $.isNumeric( data.substring(1) ) ) {
+	 *          return null;
 	 *        }
 	 *        
 	 *        // Check prefixed by currency
-	 *        if ( sData.charAt(0) == '$' || sData.charAt(0) == '&pound;' ) {
+	 *        if ( data.charAt(0) == '$' || data.charAt(0) == '&pound;' ) {
 	 *          return 'currency';
 	 *        }
 	 *        return null;

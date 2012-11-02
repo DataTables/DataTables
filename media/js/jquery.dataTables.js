@@ -6809,41 +6809,27 @@
 		 * column) or they can be automatically detected by the methods in this array. The functions
 		 * defined in the array are quite simple, taking a single parameter (the data to analyse) 
 		 * and returning the type if it is a known type, or null otherwise.
-		 *   <ul>
-	     *     <li>
-	     *       Function input parameters:
-	     *       <ul>
-		 *         <li>{*} Data from the column cell to be analysed</li>
-	     *       </ul>
-	     *     </li>
-		 *     <li>
-		 *       Function return:
-		 *       <ul>
-		 *         <li>{string|null} Data type detected, or null if unknown (and thus pass it
-		 *           on to the other type detection functions.</li>
-		 *       </ul>
-		 *     </il>
-		 *   </ul>
+		 * 
+		 * * Function input parameters:
+	     *    * {*} Data from the column cell to be analysed
+	     * * Function return:
+		 *    * {string|null} Data type detected, or null if unknown (and thus pass it
+		 *           on to the other type detection functions.
+		 *
 		 *  @type array
 		 *  @default []
 		 *  
 		 *  @example
 		 *    // Currency type detection plug-in:
 		 *    jQuery.fn.dataTableExt.aTypes.push(
-		 *      function ( sData ) {
-		 *        var sValidChars = "0123456789.-";
-		 *        var Char;
-		 *        
+		 *      function ( data ) {
 		 *        // Check the numeric part
-		 *        for ( i=1 ; i<sData.length ; i++ ) {
-		 *          Char = sData.charAt(i); 
-		 *          if (sValidChars.indexOf(Char) == -1) {
-		 *            return null;
-		 *          }
+		 *        if ( ! $.isNumeric( data.substring(1) ) ) {
+		 *          return null;
 		 *        }
 		 *        
 		 *        // Check prefixed by currency
-		 *        if ( sData.charAt(0) == '$' || sData.charAt(0) == '&pound;' ) {
+		 *        if ( data.charAt(0) == '$' || data.charAt(0) == '&pound;' ) {
 		 *          return 'currency';
 		 *        }
 		 *        return null;
@@ -11649,49 +11635,29 @@
 	} );
 	
 	
+	// Built in type detection. See model.ext.aTypes for information about
+	// what is required from this methods.
 	$.extend( DataTable.ext.aTypes, [
-		/*
-		 * Function: -
-		 * Purpose:  Check to see if a string is numeric
-		 * Returns:  string:'numeric' or null
-		 * Inputs:   mixed:data - string to check
-		 */
+		// Numeric data type
 		function ( data )
 		{
 			return data==='' || data==='-' || (!isNaN( parseFloat(data) ) && isFinite( data )) ?
-				'numeric' :
-				null;
+				'numeric' : null;
 		},
 		
-		/*
-		 * Function: -
-		 * Purpose:  Check to see if a string is actually a formatted date
-		 * Returns:  string:'date' or null
-		 * Inputs:   string:sText - string to check
-		 */
-		function ( sData )
+		// Dates (only those recognised by the browser's Date.parse)
+		function ( data )
 		{
-			var iParse = Date.parse(sData);
-			if ( (iParse !== null && !isNaN(iParse)) || (typeof sData === 'string' && sData.length === 0) )
-			{
-				return 'date';
-			}
-			return null;
+			var parsed = Date.parse(data);
+			return (parsed !== null && !isNaN(parsed)) || (typeof data==='string' && data.length===0) ?
+				'date' : null;
 		},
 		
-		/*
-		 * Function: -
-		 * Purpose:  Check to see if a string should be treated as an HTML string
-		 * Returns:  string:'html' or null
-		 * Inputs:   string:sText - string to check
-		 */
-		function ( sData )
+		// HTML
+		function ( data )
 		{
-			if ( typeof sData === 'string' && sData.indexOf('<') != -1 && sData.indexOf('>') != -1 )
-			{
-				return 'html';
-			}
-			return null;
+			return typeof data === 'string' && data.indexOf('<') != -1 && data.indexOf('>') != -1 ?
+				'html' : null;
 		}
 	] );
 	
