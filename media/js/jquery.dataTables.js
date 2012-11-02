@@ -6180,6 +6180,13 @@
 				_fnLanguageCompat( oInit.oLanguage );
 			}
 			
+			// If the length menu is given, but the init display length is not, use the length menu
+			if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
+			{
+				oInit.iDisplayLength = $.isArray( oInit.aLengthMenu[0] ) ?
+					oInit.aLengthMenu[0][0] : oInit.aLengthMenu[0];
+			}
+			
 			oInit = _fnExtend( $.extend(true, {}, DataTable.defaults), oInit );
 			
 			// Map the initialisation options onto the settings object
@@ -7635,6 +7642,9 @@
 		 * option and the value, or a 2D array which will use the array in the first 
 		 * position as the value, and the array in the second position as the 
 		 * displayed options (useful for language strings such as 'All').
+		 *
+		 * Note that the `displayLength` property will be automatically set to the
+		 * first value given in this array, unless `displayLength` is also provided.
 		 *  @type array
 		 *  @default [ 10, 25, 50, 100 ]
 		 *
@@ -7645,17 +7655,6 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-		 *      } );
-		 *    } );
-		 *  
-		 *  @example
-		 *    // Setting the default display length as well as length menu
-		 *    // This is likely to be wanted if you remove the '10' option which
-		 *    // is the displayLength default.
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "displayLength": 25,
-		 *        "lengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]]
 		 *      } );
 		 *    } );
 		 */

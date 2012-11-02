@@ -88,6 +88,13 @@ if ( oInit.oLanguage )
 	_fnLanguageCompat( oInit.oLanguage );
 }
 
+// If the length menu is given, but the init display length is not, use the length menu
+if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
+{
+	oInit.iDisplayLength = $.isArray( oInit.aLengthMenu[0] ) ?
+		oInit.aLengthMenu[0][0] : oInit.aLengthMenu[0];
+}
+
 oInit = _fnExtend( $.extend(true, {}, DataTable.defaults), oInit );
 
 // Map the initialisation options onto the settings object
