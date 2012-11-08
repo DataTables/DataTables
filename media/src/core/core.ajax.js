@@ -1,5 +1,4 @@
 
-
 /**
  * Update the table using an Ajax call
  *  @param {object} oSettings dataTables settings object
@@ -22,10 +21,7 @@ function _fnAjaxUpdate( oSettings )
 			}, oSettings );
 		return false;
 	}
-	else
-	{
-		return true;
-	}
+	return true;
 }
 
 
@@ -50,7 +46,7 @@ function _fnAjaxParameters( oSettings )
 		
 	for ( i=0 ; i<iColumns ; i++ )
 	{
-	  mDataProp = oSettings.aoColumns[i].mDataProp;
+	  mDataProp = oSettings.aoColumns[i].mData;
 		aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)==="function" ? 'function' : mDataProp } );
 	}
 	
@@ -100,7 +96,7 @@ function _fnAjaxParameters( oSettings )
 
 
 /**
- * Add Ajax parameters from plugins
+ * Add Ajax parameters from plug-ins
  *  @param {object} oSettings dataTables settings object
  *  @param array {objects} aoData name/value pairs to send to the server
  *  @memberof DataTable#oApi
@@ -127,53 +123,26 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	if ( json.sEcho !== undefined )
 	{
 		/* Protect against old returns over-writing a new one. Possible when you get
-		 * very fast interaction, and later queires are completed much faster
+		 * very fast interaction, and later queries are completed much faster
 		 */
 		if ( json.sEcho*1 < oSettings.iDraw )
 		{
 			return;
 		}
-		else
-		{
-			oSettings.iDraw = json.sEcho * 1;
-		}
+		oSettings.iDraw = json.sEcho * 1;
 	}
 	
-	if ( !oSettings.oScroll.bInfinite ||
-		   (oSettings.oScroll.bInfinite && (oSettings.bSorted || oSettings.bFiltered)) )
+	if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
 	{
 		_fnClearTable( oSettings );
 	}
 	oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 	oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
 	
-	/* Determine if reordering is required */
-	var sOrdering = _fnColumnOrdering(oSettings);
-	var bReOrder = (json.sColumns !== undefined && sOrdering !== "" && json.sColumns != sOrdering );
-	var aiIndex;
-	if ( bReOrder )
-	{
-		aiIndex = _fnReOrderIndex( oSettings, json.sColumns );
-	}
-	
 	var aData = _fnGetObjectDataFn( oSettings.sAjaxDataProp )( json );
 	for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 	{
-		if ( bReOrder )
-		{
-			/* If we need to re-order, then create a new array with the correct order and add it */
-			var aDataSorted = [];
-			for ( var j=0, jLen=oSettings.aoColumns.length ; j<jLen ; j++ )
-			{
-				aDataSorted.push( aData[i][ aiIndex[j] ] );
-			}
-			_fnAddData( oSettings, aDataSorted );
-		}
-		else
-		{
-			/* No re-order required, sever got it "right" - just straight add */
-			_fnAddData( oSettings, aData[i] );
-		}
+		_fnAddData( oSettings, aData[i] );
 	}
 	oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	

@@ -75,7 +75,7 @@ function _fnPageChange ( oSettings, mAction )
 			oSettings._iDisplayStart - oSettings._iDisplayLength :
 			0;
 		
-		/* Correct for underrun */
+		/* Correct for under-run */
 		if ( oSettings._iDisplayStart < 0 )
 		{
 		  oSettings._iDisplayStart = 0;

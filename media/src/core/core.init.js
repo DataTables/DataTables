@@ -122,32 +122,3 @@ function _fnInitComplete ( oSettings, json )
 	_fnCallbackFire( oSettings, 'aoInitComplete', 'init', [oSettings, json] );
 }
 
-
-/**
- * Language compatibility - when certain options are given, and others aren't, we
- * need to duplicate the values over, in order to provide backwards compatibility
- * with older language files.
- *  @param {object} oSettings dataTables settings object
- *  @memberof DataTable#oApi
- */
-function _fnLanguageCompat( oLanguage )
-{
-	var oDefaults = DataTable.defaults.oLanguage;
-
-	/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-	 * sZeroRecords - assuming that is given.
-	 */
-	if ( !oLanguage.sEmptyTable && oLanguage.sZeroRecords &&
-		oDefaults.sEmptyTable === "No data available in table" )
-	{
-		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
-	}
-
-	/* Likewise with loading records */
-	if ( !oLanguage.sLoadingRecords && oLanguage.sZeroRecords &&
-		oDefaults.sLoadingRecords === "Loading..." )
-	{
-		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
-	}
-}
-

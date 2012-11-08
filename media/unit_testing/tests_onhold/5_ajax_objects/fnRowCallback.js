@@ -8,11 +8,11 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
-			{ "mDataProp": "browser" },
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "engine" },
+			{ "mData": "browser" },
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -34,11 +34,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"fnRowCallback": function ( nTr ) {
 					mPass = arguments.length;
@@ -59,11 +59,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					mPass++;
@@ -81,11 +81,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					$(nTr).addClass('unit_test');
@@ -105,11 +105,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					if ( asData.length != 5 )
@@ -131,11 +131,11 @@ $(document).ready( function () {
 			$('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumnDefs": [
-					{ "mDataProp": "engine", "aTargets": [0] },
-					{ "mDataProp": "browser", "aTargets": [1] },
-					{ "mDataProp": "platform", "aTargets": [2] },
-					{ "mDataProp": "version", "aTargets": [3] },
-					{ "mDataProp": "grade", "aTargets": [4] }
+					{ "mData": "engine", "aTargets": [0] },
+					{ "mData": "browser", "aTargets": [1] },
+					{ "mData": "platform", "aTargets": [2] },
+					{ "mData": "version", "aTargets": [3] },
+					{ "mData": "grade", "aTargets": [4] }
 				],
 				"fnRowCallback": function ( nTr, asData, iDrawIndex, iDataIndex ) {
 					if ( iCount != iDrawIndex )

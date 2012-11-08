@@ -1,7 +1,7 @@
 
 /*
  * This is really a good bit rubbish this method of exposing the internal methods
- * publically... - To be fixed in 2.0 using methods on the prototype
+ * publicly... - To be fixed in 2.0 using methods on the prototype
  */
 
 
@@ -37,7 +37,7 @@ this.oApi = {
 	"_fnColumnOptions": _fnColumnOptions,
 	"_fnAddData": _fnAddData,
 	"_fnCreateTr": _fnCreateTr,
-	"_fnGatherData": _fnGatherData,
+	"_fnAddTr": _fnAddTr,
 	"_fnBuildHead": _fnBuildHead,
 	"_fnDrawHead": _fnDrawHead,
 	"_fnDraw": _fnDraw,
@@ -87,14 +87,11 @@ this.oApi = {
 	"_fnGetTdNodes": _fnGetTdNodes,
 	"_fnEscapeRegex": _fnEscapeRegex,
 	"_fnDeleteIndex": _fnDeleteIndex,
-	"_fnReOrderIndex": _fnReOrderIndex,
 	"_fnColumnOrdering": _fnColumnOrdering,
 	"_fnLog": _fnLog,
 	"_fnClearTable": _fnClearTable,
 	"_fnSaveState": _fnSaveState,
 	"_fnLoadState": _fnLoadState,
-	"_fnCreateCookie": _fnCreateCookie,
-	"_fnReadCookie": _fnReadCookie,
 	"_fnDetectHeader": _fnDetectHeader,
 	"_fnGetUniqueThs": _fnGetUniqueThs,
 	"_fnScrollBarWidth": _fnScrollBarWidth,
@@ -110,10 +107,12 @@ this.oApi = {
 	"_fnExtend": _fnExtend,
 	"_fnCallbackReg": _fnCallbackReg,
 	"_fnCallbackFire": _fnCallbackFire,
-	"_fnJsonString": _fnJsonString,
-	"_fnRender": _fnRender,
 	"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
-	"_fnInfoMacros": _fnInfoMacros
+	"_fnInfoMacros": _fnInfoMacros,
+	"_fnBrowserDetect": _fnBrowserDetect,
+	"_fnGetColumns": _fnGetColumns,
+	"_fnHungarianMap": _fnHungarianMap,
+	"_fnCamelToHungarian": _fnCamelToHungarian
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );

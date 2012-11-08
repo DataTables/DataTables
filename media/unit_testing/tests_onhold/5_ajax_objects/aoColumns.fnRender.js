@@ -7,17 +7,17 @@ $(document).ready( function () {
 	var oTable = $('#example').dataTable( {
 		"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 		"aoColumns": [
-			{ "mDataProp": "engine" },
+			{ "mData": "engine" },
 			{
-				"mDataProp": "browser",
+				"mData": "browser",
 				"fnRender": function (a) {
 					mTmp++;
 					return a.aData['browser'];
 				}
 			},
-			{ "mDataProp": "platform" },
-			{ "mDataProp": "version" },
-			{ "mDataProp": "grade" }
+			{ "mData": "platform" },
+			{ "mData": "version" },
+			{ "mData": "grade" }
 		]
 	} );
 	var oSettings = oTable.fnSettings();
@@ -36,22 +36,22 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
+					{ "mData": "engine" },
 					{ 
 						"fnRender": function (a) {
 							if ( arguments.length != 2 || typeof a.iDataRow=='undefined' ||
 							 	typeof a.iDataColumn=='undefined' || typeof a.aData=='undefined' ||
-							 	typeof a.mDataProp=='undefined' )
+							 	typeof a.mData=='undefined' )
 							{
 								mTmp = false;
 							}
 							return a.aData['browser'];
 						},
-						"mDataProp": "browser"
+						"mData": "browser"
 					},
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 		},
@@ -66,9 +66,9 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
+					{ "mData": "engine" },
 					{
-						"mDataProp": "browser",
+						"mData": "browser",
 						"fnRender": function (a) {
 							if ( a.iDataColumn != 1 )
 							{
@@ -77,9 +77,9 @@ $(document).ready( function () {
 							return a.aData['browser'];
 						}
 					},
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 		},
@@ -94,9 +94,9 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
+					{ "mData": "engine" },
 					{
-						"mDataProp": "browser",
+						"mData": "browser",
 						"fnRender": function (a) {
 							if ( a.aData.length != 5 )
 							{
@@ -105,9 +105,9 @@ $(document).ready( function () {
 							return a.aData['browser'];
 						}
 					},
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 		},
@@ -121,16 +121,16 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
+					{ "mData": "engine" },
 					{
-						"mDataProp": "browser",
+						"mData": "browser",
 						"fnRender": function (a) {
 							return 'unittest';
 						}
 					},
-					{ "mDataProp": "platform" },
-					{ "mDataProp": "version" },
-					{ "mDataProp": "grade" }
+					{ "mData": "platform" },
+					{ "mData": "version" },
+					{ "mData": "grade" }
 				]
 			} );
 		},
@@ -144,21 +144,21 @@ $(document).ready( function () {
 			oTable = $('#example').dataTable( {
 				"sAjaxSource": "../../../examples/ajax/sources/objects.txt",
 				"aoColumns": [
-					{ "mDataProp": "engine" },
-					{ "mDataProp": "browser" },
+					{ "mData": "engine" },
+					{ "mData": "browser" },
 					{ 
-						"mDataProp": "platform",
+						"mData": "platform",
 						"fnRender": function (a) {
 							return 'unittest1';
 						}
 					},
 					{ 
-						"mDataProp": "version",
+						"mData": "version",
 						"fnRender": function (a) {
 							return 'unittest2';
 						}
 					},
-					{ "mDataProp": "grade" }
+					{ "mData": "grade" }
 				]
 			} );
 		},

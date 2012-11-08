@@ -1,4 +1,3 @@
-
 /*
  * Variable: oPagination
  * Purpose:  
@@ -73,17 +72,22 @@ $.extend( DataTable.ext.oPagination, {
 			
 			var oClasses = oSettings.oClasses;
 			var an = oSettings.aanFeatures.p;
+			var nNode;
 
 			/* Loop over each instance of the pager */
 			for ( var i=0, iLen=an.length ; i<iLen ; i++ )
 			{
-				if ( an[i].childNodes.length !== 0 )
+				nNode = an[i].firstChild;
+				if ( nNode )
 				{
-					an[i].childNodes[0].className = ( oSettings._iDisplayStart === 0 ) ? 
-						oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
-					
-					an[i].childNodes[1].className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ? 
-						oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
+					/* Previous page */
+					nNode.className = ( oSettings._iDisplayStart === 0 ) ?
+					    oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
+					    
+					/* Next page */
+					nNode = nNode.nextSibling;
+					nNode.className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ?
+					    oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
 				}
 			}
 		}
@@ -172,7 +176,7 @@ $.extend( DataTable.ext.oPagination, {
 			var sList = "";
 			var iStartButton, iEndButton, i, iLen;
 			var oClasses = oSettings.oClasses;
-			var anButtons, anStatic, nPaginateList;
+			var anButtons, anStatic, nPaginateList, nNode;
 			var an = oSettings.aanFeatures.p;
 			var fnBind = function (j) {
 				oSettings.oApi._fnBindAction( this, {"page": j+iStartButton-1}, function(e) {
@@ -223,18 +227,19 @@ $.extend( DataTable.ext.oPagination, {
 			/* Loop over each instance of the pager */
 			for ( i=0, iLen=an.length ; i<iLen ; i++ )
 			{
-				if ( an[i].childNodes.length === 0 )
+				nNode = an[i];
+				if ( !nNode.hasChildNodes() )
 				{
 					continue;
 				}
 				
-				/* Build up the dynamic list forst - html and listeners */
-				$('span:eq(0)', an[i])
+				/* Build up the dynamic list first - html and listeners */
+				$('span:eq(0)', nNode)
 					.html( sList )
 					.children('a').each( fnBind );
 				
-				/* Update the premanent botton's classes */
-				anButtons = an[i].getElementsByTagName('a');
+				/* Update the permanent button's classes */
+				anButtons = nNode.getElementsByTagName('a');
 				anStatic = [
 					anButtons[0], anButtons[1], 
 					anButtons[anButtons.length-2], anButtons[anButtons.length-1]

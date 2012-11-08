@@ -1,73 +1,82 @@
-
 /**
  * Create a new TR element (and it's TD children) for a row
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iRow Row to consider
+ *  @param {node} [nTrIn] TR element to add to the table - optional. If not given,
+ *    DataTables will create a row automatically
+ *  @param {array} [anTds] Array of TD|TH elements for the row - must be given
+ *    if nTr is.
  *  @memberof DataTable#oApi
  */
-function _fnCreateTr ( oSettings, iRow )
+function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 {
-	var oData = oSettings.aoData[iRow];
-	var nTd;
+	var
+		row = oSettings.aoData[iRow],
+		rowData = row._aData,
+		nTr, nTd, oCol,
+		i, iLen;
 
-	if ( oData.nTr === null )
+	if ( row.nTr === null )
 	{
-		oData.nTr = document.createElement('tr');
+		nTr = nTrIn || document.createElement('tr');
 
 		/* Use a private property on the node to allow reserve mapping from the node
 		 * to the aoData array for fast look up
 		 */
-		oData.nTr._DT_RowIndex = iRow;
+		nTr._DT_RowIndex = iRow;
 
 		/* Special parameters can be given by the data source to be used on the row */
-		if ( oData._aData.DT_RowId )
+		if ( rowData.DT_RowId )
 		{
-			oData.nTr.id = oData._aData.DT_RowId;
+			nTr.id = rowData.DT_RowId;
 		}
 
-		if ( oData._aData.DT_RowClass )
+		if ( rowData.DT_RowClass )
 		{
-			$(oData.nTr).addClass( oData._aData.DT_RowClass );
+			nTr.className += ' '+rowData.DT_RowClass;
 		}
 
 		/* Process each column */
-		for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
-			var oCol = oSettings.aoColumns[i];
-			nTd = document.createElement( oCol.sCellType );
+			oCol = oSettings.aoColumns[i];
 
-			/* Render if needed - if bUseRendered is true then we already have the rendered
-			 * value in the data source - so can just use that
-			 */
-			nTd.innerHTML = (typeof oCol.fnRender === 'function' && (!oCol.bUseRendered || oCol.mDataProp === null)) ?
-				_fnRender( oSettings, iRow, i ) :
-				_fnGetCellData( oSettings, iRow, i, 'display' );
+			nTd = nTrIn ? anTds[i] : document.createElement( oCol.sCellType );
+
+			// Need to create the HTML if new, or if a rendering function is defined
+			if ( !nTrIn || oCol.mRender || oCol.mData !== i )
+			{
+				nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+			}
 		
 			/* Add user defined class */
 			if ( oCol.sClass !== null )
 			{
-				nTd.className = oCol.sClass;
+				nTd.className += ' '+oCol.sClass;
 			}
-			
-			if ( oCol.bVisible )
+
+			// Visibility - add or remove as required
+			row._anHidden[i] = oCol.bVisible ? null : nTd;
+			if ( oCol.bVisible && ! nTrIn )
 			{
-				oData.nTr.appendChild( nTd );
-				oData._anHidden[i] = null;
+				nTr.appendChild( nTd );
 			}
-			else
+			else if ( ! oCol.bVisible && nTrIn )
 			{
-				oData._anHidden[i] = nTd;
+				nTd.parentNode.removeChild( nTd );
 			}
 
 			if ( oCol.fnCreatedCell )
 			{
 				oCol.fnCreatedCell.call( oSettings.oInstance,
-					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), oData._aData, iRow, i
+					nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), rowData, iRow, i
 				);
 			}
 		}
 
-		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [oData.nTr, oData._aData, iRow] );
+		row.nTr = nTr;
+
+		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
 	}
 }
 
@@ -80,7 +89,7 @@ function _fnCreateTr ( oSettings, iRow )
 function _fnBuildHead( oSettings )
 {
 	var i, nTh, iLen, j, jLen;
-	var iThs = oSettings.nTHead.getElementsByTagName('th').length;
+	var iThs = $('th, td', oSettings.nTHead).length;
 	var iCorrector = 0;
 	var jqChildren;
 	
@@ -379,7 +388,7 @@ function _fnDraw( oSettings )
 				}
 			}
 			
-			/* Row callback functions - might want to manipule the row */
+			/* Row callback functions - might want to manipulate the row */
 			_fnCallbackFire( oSettings, 'aoRowCallback', null, 
 				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 			
@@ -387,15 +396,12 @@ function _fnDraw( oSettings )
 			iRowCount++;
 			
 			/* If there is an open row - and it is attached to this parent - attach it on redraw */
-			if ( iOpenRows !== 0 )
+			for ( var k=0 ; k<iOpenRows ; k++ )
 			{
-				for ( var k=0 ; k<iOpenRows ; k++ )
+				if ( nRow == oSettings.aoOpenRows[k].nParent )
 				{
-					if ( nRow == oSettings.aoOpenRows[k].nParent )
-					{
-						anRows.push( oSettings.aoOpenRows[k].nTr );
-						break;
-					}
+					anRows.push( oSettings.aoOpenRows[k].nTr );
+					break;
 				}
 			}
 		}
@@ -445,7 +451,7 @@ function _fnDraw( oSettings )
 	var
 		nAddFrag = document.createDocumentFragment(),
 		nRemoveFrag = document.createDocumentFragment(),
-		nBodyPar, nTrs;
+		nBodyPar;
 	
 	if ( oSettings.nTBody )
 	{
@@ -691,10 +697,12 @@ function _fnAddOptionsHtml ( oSettings )
 function _fnDetectHeader ( aLayout, nThead )
 {
 	var nTrs = $(nThead).children('tr');
-	var nCell;
-	var i, j, k, l, iLen, jLen, iColShifted;
+	var nTr, nCell;
+	var i, k, l, iLen, jLen, iColShifted, iColumn, iColspan, iRowspan;
+	var bUnique;
 	var fnShiftCol = function ( a, i, j ) {
-		while ( a[i][j] ) {
+		var k = a[i];
+                while ( k[j] ) {
 			j++;
 		}
 		return j;
@@ -711,19 +719,18 @@ function _fnDetectHeader ( aLayout, nThead )
 	/* Calculate a layout array */
 	for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 	{
-		var iColumn = 0;
+		nTr = nTrs[i];
+		iColumn = 0;
 		
 		/* For every cell in the row... */
-		for ( j=0, jLen=nTrs[i].childNodes.length ; j<jLen ; j++ )
-		{
-			nCell = nTrs[i].childNodes[j];
-
+		nCell = nTr.firstChild;
+		while ( nCell ) {
 			if ( nCell.nodeName.toUpperCase() == "TD" ||
 			     nCell.nodeName.toUpperCase() == "TH" )
 			{
 				/* Get the col and rowspan attributes from the DOM and sanitise them */
-				var iColspan = nCell.getAttribute('colspan') * 1;
-				var iRowspan = nCell.getAttribute('rowspan') * 1;
+				iColspan = nCell.getAttribute('colspan') * 1;
+				iRowspan = nCell.getAttribute('rowspan') * 1;
 				iColspan = (!iColspan || iColspan===0 || iColspan===1) ? 1 : iColspan;
 				iRowspan = (!iRowspan || iRowspan===0 || iRowspan===1) ? 1 : iRowspan;
 
@@ -732,6 +739,9 @@ function _fnDetectHeader ( aLayout, nThead )
 				 */
 				iColShifted = fnShiftCol( aLayout, i, iColumn );
 				
+				/* Cache calculation for unique columns */
+				bUnique = iColspan === 1 ? true : false;
+				
 				/* If there is col / rowspan, copy the information into the layout grid */
 				for ( l=0 ; l<iColspan ; l++ )
 				{
@@ -739,12 +749,13 @@ function _fnDetectHeader ( aLayout, nThead )
 					{
 						aLayout[i+k][iColShifted+l] = {
 							"cell": nCell,
-							"unique": iColspan == 1 ? true : false
+							"unique": bUnique
 						};
-						aLayout[i+k].nTr = nTrs[i];
+						aLayout[i+k].nTr = nTr;
 					}
 				}
 			}
+			nCell = nCell.nextSibling;
 		}
 	}
 }
@@ -755,7 +766,7 @@ function _fnDetectHeader ( aLayout, nThead )
  *  @param {object} oSettings dataTables settings object
  *  @param {node} nHeader automatically detect the layout from this node - optional
  *  @param {array} aLayout thead/tfoot layout from _fnDetectHeader - optional
- *  @returns array {node} aReturn list of unique ths
+ *  @returns array {node} aReturn list of unique th's
  *  @memberof DataTable#oApi
  */
 function _fnGetUniqueThs ( oSettings, nHeader, aLayout )

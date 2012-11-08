@@ -1,5 +1,4 @@
 
-
 /**
  * Generate the node required for filtering text
  *  @returns {node} Filter control element
@@ -133,15 +132,22 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 function _fnFilterCustom( oSettings )
 {
 	var afnFilters = DataTable.ext.afnFiltering;
+	var aiFilterColumns = _fnGetColumns( oSettings, 'bSearchable' );
+
 	for ( var i=0, iLen=afnFilters.length ; i<iLen ; i++ )
 	{
 		var iCorrector = 0;
 		for ( var j=0, jLen=oSettings.aiDisplay.length ; j<jLen ; j++ )
 		{
 			var iDisIndex = oSettings.aiDisplay[j-iCorrector];
+			var bTest = afnFilters[i](
+				oSettings,
+				_fnGetRowData( oSettings, iDisIndex, 'filter', aiFilterColumns ),
+				iDisIndex
+			);
 			
 			/* Check if we should use this row based on the filtering function */
-			if ( !afnFilters[i]( oSettings, _fnGetRowData( oSettings, iDisIndex, 'filter' ), iDisIndex ) )
+			if ( !bTest )
 			{
 				oSettings.aiDisplay.splice( j-iCorrector, 1 );
 				iCorrector++;
@@ -280,15 +286,19 @@ function _fnBuildSearchArray ( oSettings, iMaster )
 	if ( !oSettings.oFeatures.bServerSide )
 	{
 		/* Clear out the old data */
-		oSettings.asDataSearch.splice( 0, oSettings.asDataSearch.length );
+		oSettings.asDataSearch = [];
+
+		var aiFilterColumns = _fnGetColumns( oSettings, 'bSearchable' );
+		var aiIndex = (iMaster===1) ?
+		 	oSettings.aiDisplayMaster :
+		 	oSettings.aiDisplay;
 		
-		var aArray = (iMaster && iMaster===1) ?
-		 	oSettings.aiDisplayMaster : oSettings.aiDisplay;
-		
-		for ( var i=0, iLen=aArray.length ; i<iLen ; i++ )
+		for ( var i=0, iLen=aiIndex.length ; i<iLen ; i++ )
 		{
-			oSettings.asDataSearch[i] = _fnBuildSearchRow( oSettings,
-				_fnGetRowData( oSettings, aArray[i], 'filter' ) );
+			oSettings.asDataSearch[i] = _fnBuildSearchRow(
+				oSettings,
+				_fnGetRowData( oSettings, aiIndex[i], 'filter', aiFilterColumns )
+			);
 		}
 	}
 }
@@ -302,33 +312,20 @@ function _fnBuildSearchArray ( oSettings, iMaster )
  */
 function _fnBuildSearchRow( oSettings, aData )
 {
-	var sSearch = '';
-	if ( oSettings.__nTmpFilter === undefined )
-	{
-		oSettings.__nTmpFilter = document.createElement('div');
+	for ( var i=0, len=aData.length ; i<len ; i++ ) {
+		aData[i] = _fnDataToSearch( aData[i], oSettings.aoColumns[i].sType );
 	}
-	var nTmp = oSettings.__nTmpFilter;
 	
-	for ( var j=0, jLen=oSettings.aoColumns.length ; j<jLen ; j++ )
-	{
-		if ( oSettings.aoColumns[j].bSearchable )
-		{
-			var sData = aData[j];
-			sSearch += _fnDataToSearch( sData, oSettings.aoColumns[j].sType )+'  ';
-		}
-	}
+	var sSearch = aData.join('  ');
 	
 	/* If it looks like there is an HTML entity in the string, attempt to decode it */
 	if ( sSearch.indexOf('&') !== -1 )
 	{
-		nTmp.innerHTML = sSearch;
-		sSearch = nTmp.textContent ? nTmp.textContent : nTmp.innerText;
-		
-		/* IE and Opera appear to put an newline where there is a <br> tag - remove it */
-		sSearch = sSearch.replace(/\n/g," ").replace(/\r/g,"");
+		sSearch = $('<div>').html(sSearch).text();
 	}
 	
-	return sSearch;
+	// Strip newline characters
+	return sSearch.replace( /[\n\r]/g, " " );
 }
 
 /**
@@ -336,28 +333,25 @@ function _fnBuildSearchRow( oSettings, aData )
  *  @param {string} sSearch string to search for
  *  @param {bool} bRegex treat as a regular expression or not
  *  @param {bool} bSmart perform smart filtering or not
- *  @param {bool} bCaseInsensitive Do case insenstive matching or not
+ *  @param {bool} bCaseInsensitive Do case insensitive matching or not
  *  @returns {RegExp} constructed object
  *  @memberof DataTable#oApi
  */
 function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 {
-	var asSearch, sRegExpString;
+	var asSearch,
+		sRegExpString = bRegex ? sSearch : _fnEscapeRegex( sSearch );
 	
 	if ( bSmart )
 	{
 		/* Generate the regular expression to use. Something along the lines of:
 		 * ^(?=.*?\bone\b)(?=.*?\btwo\b)(?=.*?\bthree\b).*$
 		 */
-		asSearch = bRegex ? sSearch.split( ' ' ) : _fnEscapeRegex( sSearch ).split( ' ' );
+		asSearch = sRegExpString.split( ' ' );
 		sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
-		return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 	}
-	else
-	{
-		sSearch = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-		return new RegExp( sSearch, bCaseInsensitive ? "i" : "" );
-	}
+	
+	return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
 }
 
 
@@ -391,14 +385,14 @@ function _fnDataToSearch ( sData, sType )
 
 
 /**
- * scape a string stuch that it can be used in a regular expression
+ * scape a string such that it can be used in a regular expression
  *  @param {string} sVal string to escape
  *  @returns {string} escaped string
  *  @memberof DataTable#oApi
  */
 function _fnEscapeRegex ( sVal )
 {
-	var acEscape = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^' ];
+	var acEscape = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ];
 	var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
 	return sVal.replace(reReplace, '\\$1');
 }

@@ -1,38 +1,67 @@
-
-
 /**
  * Change the order of the table
  *  @param {object} oSettings dataTables settings object
  *  @param {bool} bApplyClasses optional - should we apply classes or not
  *  @memberof DataTable#oApi
+ *  @todo This really needs split up!
  */
 function _fnSort ( oSettings, bApplyClasses )
 {
 	var
 		i, iLen, j, jLen, k, kLen,
 		sDataType, nTh,
-		aaSort = [],
+		aSort = [],
 	 	aiOrig = [],
-		oSort = DataTable.ext.oSort,
+		oExtSort = DataTable.ext.oSort,
 		aoData = oSettings.aoData,
 		aoColumns = oSettings.aoColumns,
-		oAria = oSettings.oLanguage.oAria;
-	
-	/* No sorting required if server-side or no sorting array */
-	if ( !oSettings.oFeatures.bServerSide && 
-		(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
-	{
-		aaSort = ( oSettings.aaSortingFixed !== null ) ?
+		oAria = oSettings.oLanguage.oAria,
+		fnFormatter, aDataSort, data, iCol, sType, oSort,
+		iFormatters = 0,
+		aaNestedSort = ( oSettings.aaSortingFixed !== null ) ?
 			oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
 			oSettings.aaSorting.slice();
-		
-		/* If there is a sorting data type, and a fuction belonging to it, then we need to
+
+	/* Flatten the aDataSort inner arrays into a single array, otherwise we have nested
+	 * loops in multiple locations
+	 */
+	for ( i=0 ; i<aaNestedSort.length ; i++ )
+	{
+		aDataSort = aoColumns[ aaNestedSort[i][0] ].aDataSort;
+
+		for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
+		{
+			iCol = aDataSort[k];
+			sType = aoColumns[ iCol ].sType || 'string';
+			fnFormatter = oExtSort[ sType+"-pre" ];
+
+			aSort.push( {
+				col:    iCol,
+				dir:    aaNestedSort[i][1],
+				index:  aaNestedSort[i][2],
+				type:   sType,
+				format: fnFormatter
+			} );
+
+			// Track if we can use the formatter method
+			if ( fnFormatter )
+			{
+				iFormatters++;
+			}
+		}
+	}
+
+	/* No sorting required if server-side or no sorting array */
+	if ( !oSettings.oFeatures.bServerSide && aSort.length !== 0 )
+	{
+		/* If there is a sorting data type, and a function belonging to it, then we need to
 		 * get the data from the developer's function and apply it for this column
 		 */
-		for ( i=0 ; i<aaSort.length ; i++ )
+		for ( i=0 ; i<aSort.length ; i++ )
 		{
-			var iColumn = aaSort[i][0];
+			var iColumn = aSort[i].col;
 			var iVisColumn = _fnColumnIndexToVisible( oSettings, iColumn );
+
 			sDataType = oSettings.aoColumns[ iColumn ].sSortDataType;
 			if ( DataTable.ext.afnSortData[sDataType] )
 			{
@@ -52,6 +81,7 @@ function _fnSort ( oSettings, bApplyClasses )
 				}
 			}
 		}
+
 		
 		/* Create a value - key array of the current row positions such that we can use their
 		 * current position during the sort, if values match, in order to perform stable sorting
@@ -65,23 +95,17 @@ function _fnSort ( oSettings, bApplyClasses )
 		 * the data to be sorted only once, rather than needing to do it every time the sorting
 		 * function runs. This make the sorting function a very simple comparison
 		 */
-		var iSortLen = aaSort.length;
-		var fnSortFormat, aDataSort;
-		for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
+		for ( j=0 ; j<aSort.length ; j++ )
 		{
-			for ( j=0 ; j<iSortLen ; j++ )
-			{
-				aDataSort = aoColumns[ aaSort[j][0] ].aDataSort;
+			oSort = aSort[j];
 
-				for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
-				{
-					sDataType = aoColumns[ aDataSort[k] ].sType;
-					fnSortFormat = oSort[ (sDataType ? sDataType : 'string')+"-pre" ];
-					
-					aoData[i]._aSortData[ aDataSort[k] ] = fnSortFormat ?
-						fnSortFormat( _fnGetCellData( oSettings, i, aDataSort[k], 'sort' ) ) :
-						_fnGetCellData( oSettings, i, aDataSort[k], 'sort' );
-				}
+			for ( i=0, iLen=aoData.length ; i<iLen ; i++ )
+			{
+				data = _fnGetCellData( oSettings, i, oSort.col, 'sort' );
+
+				aoData[i]._aSortData[ oSort.col ] = oSort.format ?
+					oSort.format( data ) :
+					data;
 			}
 		}
 		
@@ -101,31 +125,69 @@ function _fnSort ( oSettings, bApplyClasses )
 		 * Basically we have a test for each sorting column, if the data in that column is equal,
 		 * test the next column. If all columns match, then we use a numeric sort on the row 
 		 * positions in the original data array to provide a stable sort.
+		 *
+		 * Note - I know it seems excessive to have two sorting methods, but the first is around
+		 * 15% faster, so the second is only maintained for backwards compatibility with sorting
+		 * methods which do not have a pre-sort formatting function.
 		 */
-		oSettings.aiDisplayMaster.sort( function ( a, b ) {
-			var k, l, lLen, iTest, aDataSort, sDataType;
-			for ( k=0 ; k<iSortLen ; k++ )
-			{
-				aDataSort = aoColumns[ aaSort[k][0] ].aDataSort;
+		if ( iFormatters === aSort.length ) {
+			// All sort types have formatting functions
+			oSettings.aiDisplayMaster.sort( function ( a, b ) {
+				var
+					x, y, k, test, sort,
+					len=aSort.length,
+					dataA = aoData[a]._aSortData,
+					dataB = aoData[b]._aSortData;
 
-				for ( l=0, lLen=aDataSort.length ; l<lLen ; l++ )
+				for ( k=0 ; k<len ; k++ )
 				{
-					sDataType = aoColumns[ aDataSort[l] ].sType;
-					
-					iTest = oSort[ (sDataType ? sDataType : 'string')+"-"+aaSort[k][1] ](
-						aoData[a]._aSortData[ aDataSort[l] ],
-						aoData[b]._aSortData[ aDataSort[l] ]
-					);
-				
-					if ( iTest !== 0 )
+					sort = aSort[k];
+
+					x = dataA[ sort.col ];
+					y = dataB[ sort.col ];
+
+					test = x<y ? -1 : x>y ? 1 : 0;
+					if ( test !== 0 )
 					{
-						return iTest;
+						return sort.dir === 'asc' ? test : -test;
 					}
 				}
-			}
-			
-			return oSort['numeric-asc']( aiOrig[a], aiOrig[b] );
-		} );
+				
+				x = aiOrig[a];
+				y = aiOrig[b];
+				return x<y ? -1 : x>y ? 1 : 0;
+			} );
+		}
+		else {
+			// Depreciated - remove in 1.11 (providing a plug-in option)
+			// Not all sort types have formatting methods, so we have to call their sorting
+			// methods.
+			oSettings.aiDisplayMaster.sort( function ( a, b ) {
+				var
+					x, y, k, l, test, sort,
+					len=aSort.length,
+					dataA = aoData[a]._aSortData,
+					dataB = aoData[b]._aSortData;
+
+				for ( k=0 ; k<len ; k++ )
+				{
+					sort = aSort[k];
+
+					x = dataA[ sort.col ];
+					y = dataB[ sort.col ];
+
+					test = oExtSort[ sort.type+"-"+sort.dir ]( x, y );
+					if ( test !== 0 )
+					{
+						return test;
+					}
+				}
+				
+				x = aiOrig[a];
+				y = aiOrig[b];
+				return x<y ? -1 : x>y ? 1 : 0;
+			} );
+		}
 	}
 	
 	/* Alter the sorting classes to take account of the changes */
@@ -144,12 +206,12 @@ function _fnSort ( oSettings, bApplyClasses )
 		/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
 		if ( aoColumns[i].bSortable )
 		{
-			if ( aaSort.length > 0 && aaSort[0][0] == i )
+			if ( aSort.length > 0 && aSort[0].col == i )
 			{
-				nTh.setAttribute('aria-sort', aaSort[0][1]=="asc" ? "ascending" : "descending" );
+				nTh.setAttribute('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
 				
-				var nextSort = (aoColumns[i].asSorting[ aaSort[0][2]+1 ]) ? 
-					aoColumns[i].asSorting[ aaSort[0][2]+1 ] : aoColumns[i].asSorting[0];
+				var nextSort = (aoColumns[i].asSorting[ aSort[0].index+1 ]) ? 
+					aoColumns[i].asSorting[ aSort[0].index+1 ] : aoColumns[i].asSorting[0];
 				nTh.setAttribute('aria-label', sTitle+
 					(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
 			}
@@ -208,17 +270,17 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 		 * twice - once for when bProcessing is enabled, and another time for when it is 
 		 * disabled, as we need to perform slightly different actions.
 		 *   Basically the issue here is that the Javascript engine in modern browsers don't 
-		 * appear to allow the rendering engine to update the display while it is still excuting
+		 * appear to allow the rendering engine to update the display while it is still executing
 		 * it's thread (well - it does but only after long intervals). This means that the 
 		 * 'processing' display doesn't appear for a table sort. To break the js thread up a bit
 		 * I force an execution break by using setTimeout - but this breaks the expected 
 		 * thread continuation for the end-developer's point of view (their code would execute
-		 * too early), so we on;y do it when we absolutely have to.
+		 * too early), so we only do it when we absolutely have to.
 		 */
 		var fnInnerSorting = function () {
 			var iColumn, iNextSort;
 			
-			/* If the shift key is pressed then we are multipe column sorting */
+			/* If the shift key is pressed then we are multiple column sorting */
 			if ( e.shiftKey )
 			{
 				/* Are we already doing some kind of sort on this column? */
@@ -391,10 +453,10 @@ function _fnSortingClasses( oSettings )
 	 * Apply the required classes to the table body
 	 * Note that this is given as a feature switch since it can significantly slow down a sort
 	 * on large data sets (adding and removing of classes is always slow at the best of times..)
-	 * Further to this, note that this code is admitadly fairly ugly. It could be made a lot 
-	 * simpiler using jQuery selectors and add/removeClass, but that is significantly slower
+	 * Further to this, note that this code is admittedly fairly ugly. It could be made a lot 
+	 * simpler using jQuery selectors and add/removeClass, but that is significantly slower
 	 * (on the order of 5 times slower) - hence the direct DOM manipulation here.
-	 * Note that for defered drawing we do use jQuery - the reason being that taking the first
+	 * Note that for deferred drawing we do use jQuery - the reason being that taking the first
 	 * row found to see if the whole column needs processed can miss classes since the first
 	 * column might be new.
 	 */
@@ -403,56 +465,49 @@ function _fnSortingClasses( oSettings )
 	if ( oSettings.oFeatures.bSort && oSettings.oFeatures.bSortClasses )
 	{
 		var nTds = _fnGetTdNodes( oSettings );
-
-		/* Remove the old classes */
-		if ( oSettings.oFeatures.bDeferRender )
-		{
-			$(nTds).removeClass(sClass+'1 '+sClass+'2 '+sClass+'3');
-		}
-		else if ( nTds.length >= iColumns )
-		{
-			for ( i=0 ; i<iColumns ; i++ )
-			{
-				if ( nTds[i].className.indexOf(sClass+"1") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"1", "" ) );
-					}
-				}
-				else if ( nTds[i].className.indexOf(sClass+"2") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( sClass+"2", "" ) );
-					}
-				}
-				else if ( nTds[i].className.indexOf(sClass+"3") != -1 )
-				{
-					for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-					{
-						nTds[(iColumns*j)+i].className = 
-							$.trim( nTds[(iColumns*j)+i].className.replace( " "+sClass+"3", "" ) );
-					}
-				}
-			}
-		}
 		
-		/* Add the new classes to the table */
-		var iClass = 1, iTargetCol;
-		for ( i=0 ; i<aaSort.length ; i++ )
+		/* Determine what the sorting class for each column should be */
+		var iClass, iTargetCol;
+		var asClasses = [];
+		for (i = 0; i < iColumns; i++)
+		{
+			asClasses.push("");
+		}
+		for (i = 0, iClass = 1; i < aaSort.length; i++)
 		{
 			iTargetCol = parseInt( aaSort[i][0], 10 );
-			for ( j=0, jLen=(nTds.length/iColumns) ; j<jLen ; j++ )
-			{
-				nTds[(iColumns*j)+iTargetCol].className += " "+sClass+iClass;
-			}
+			asClasses[iTargetCol] = sClass + iClass;
 			
 			if ( iClass < 3 )
 			{
 				iClass++;
+			}
+		}
+		
+		/* Make changes to the classes for each cell as needed */
+		var reClass = new RegExp(sClass + "[123]");
+		var sTmpClass, sCurrentClass, sNewClass;
+		for ( i=0, iLen=nTds.length; i<iLen; i++ )
+		{
+			/* Determine which column we're looking at */
+			iTargetCol = i % iColumns;
+			
+			/* What is the full list of classes now */
+			sCurrentClass = nTds[i].className;
+			/* What sorting class should be applied? */
+			sNewClass = asClasses[iTargetCol];
+			/* What would the new full list be if we did a replacement? */
+			sTmpClass = sCurrentClass.replace(reClass, sNewClass);
+			
+			if ( sTmpClass != sCurrentClass )
+			{
+				/* We changed something */
+				nTds[i].className = $.trim( sTmpClass );
+			}
+			else if ( sNewClass.length > 0 && sCurrentClass.indexOf(sNewClass) == -1 )
+			{
+				/* We need to add a class */
+				nTds[i].className = sCurrentClass + " " + sNewClass;
 			}
 		}
 	}

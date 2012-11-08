@@ -216,7 +216,6 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 table.dataTable thead th div.DataTables_sort_wrapper {
 	position: relative;
 	padding-right: 20px;
-	padding-right: 20px;
 }
 
 table.dataTable thead th div.DataTables_sort_wrapper span {

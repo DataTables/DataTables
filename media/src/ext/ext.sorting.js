@@ -1,16 +1,21 @@
-
 $.extend( DataTable.ext.oSort, {
 	/*
 	 * text sorting
 	 */
 	"string-pre": function ( a )
 	{
-		if ( typeof a != 'string' ) {
-			a = (a !== null && a.toString) ? a.toString() : '';
+		if ( typeof a != 'string' )
+		{
+			if (a === null || a === undefined || !a.toString)
+			{
+				return '';
+			}
+			a = a.toString();
 		}
 		return a.toLowerCase();
 	},
 
+	// string-asc and -desc are retained only for compatibility with 
 	"string-asc": function ( x, y )
 	{
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -30,16 +35,6 @@ $.extend( DataTable.ext.oSort, {
 		return a.replace( /<.*?>/g, "" ).toLowerCase();
 	},
 	
-	"html-asc": function ( x, y )
-	{
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	},
-	
-	"html-desc": function ( x, y )
-	{
-		return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-	},
-	
 	
 	/*
 	 * date sorting
@@ -54,16 +49,6 @@ $.extend( DataTable.ext.oSort, {
 		}
 		return x;
 	},
-
-	"date-asc": function ( x, y )
-	{
-		return x - y;
-	},
-	
-	"date-desc": function ( x, y )
-	{
-		return y - x;
-	},
 	
 	
 	/*
@@ -71,16 +56,6 @@ $.extend( DataTable.ext.oSort, {
 	 */
 	"numeric-pre": function ( a )
 	{
-		return (a=="-" || a==="") ? 0 : a*1;
-	},
-
-	"numeric-asc": function ( x, y )
-	{
-		return x - y;
-	},
-	
-	"numeric-desc": function ( x, y )
-	{
-		return y - x;
+		return (a=="-" || a==="") ? -Infinity : a*1;
 	}
 } );
