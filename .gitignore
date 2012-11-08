@@ -4,3 +4,6 @@ cdn
 media/js/jquery.dataTables.min.js
 .DS_Store
 Plugins
+ivy-lib
+build
+*.swp
