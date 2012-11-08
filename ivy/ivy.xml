@@ -1,7 +1,7 @@
 <!-- 
 -->
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
-	<info organisation="wycats" module="handlebars.js"/>
+	<info organisation="datatables" module="datatables"/>
       
    <configurations>
         <conf name="dev" visibility="public"/>
@@ -10,7 +10,8 @@
         <conf name="default" extends="dev"/>
     </configurations>
     <publications>
-        <artifact name="handlebars" type="javascript" ext="js" conf="dev,test,default"/>
+        <artifact name="jquery.dataTables" type="javascript" ext="js" conf="dev,test,default"/>
+        <artifact name="jquery.dataTables" type="stylesheet" ext="css" conf="dev,test,default"/>
     </publications>
     <dependencies>
         

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="handlebars.js" default="package" basedir=".">  
+<project name="datatables" default="package" basedir=".">  
 
     <property name="dist.dir" value="dist"/>
-    <property name="handlebars.js" value="${dist.dir}/handlebars.js"/>
 
     <property name="build.dir" value="build"/>
     <!--
@@ -23,17 +22,11 @@
 
         <property name="ivy.major.revision" value="${git.tagnumber}"/>
 
-        <exec executable="bundle">
-            <arg line="install"/>
-        </exec>
-
-        <exec executable="rake">
-            <arg line="release"/>
-        </exec>
         
         <delete dir="${build.dir}"/>
         <mkdir dir="${build.dir}"/>
 
-        <copy file="${handlebars.js}" todir="${build.dir}"/>
+        <copy file="media/js/jquery.dataTables.js" todir="${build.dir}"/>
+        <copy file="media/css/jquery.dataTables.css" todir="${build.dir}"/>
     </target>
 </project>
