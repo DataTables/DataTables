@@ -5,10 +5,11 @@
 		<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/media/images/favicon.ico" />
 		
 		<title>DataTables example</title>
-		<style type="text/css" title="currentStyle">
+		<!--<style type="text/css" title="currentStyle">
 			@import "../../media/css/demo_page.css";
 			@import "../../media/css/demo_table.css";
-		</style>
+		</style>-->
+		<link href="../bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
@@ -18,6 +19,7 @@
 				} );
 			} );
 		</script>
+		<script src="../bootstrap/js/bootstrap.min.js"></script>
 	</head>
 	<body id="dt_example" class="example_alt_pagination">
 		<div id="container">
@@ -32,7 +34,7 @@
 			
 			<h1>Live example</h1>
 			<div id="demo">
-<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-striped display" id="example">
 	<thead>
 		<tr>
 			<th>Rendering engine</th>

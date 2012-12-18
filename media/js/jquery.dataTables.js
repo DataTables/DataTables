@@ -11204,6 +11204,7 @@
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
 	
 	$.extend( DataTable.ext.oStdClasses, {
+		// Bootstrap markup
 		"sTable": "dataTable",
 	
 		/* Two buttons buttons */
@@ -11216,8 +11217,8 @@
 		
 		/* Full numbers paging buttons */
 		"sPageButton": "paginate_button",
-		"sPageButtonActive": "paginate_active",
-		"sPageButtonStaticDisabled": "paginate_button paginate_button_disabled",
+		"sPageButtonActive": "active paginate_active",
+		"sPageButtonStaticDisabled": "disabled paginate_button paginate_button_disabled",
 		"sPageFirst": "first",
 		"sPagePrevious": "previous",
 		"sPageNext": "next",
@@ -11234,7 +11235,7 @@
 		"sWrapper": "dataTables_wrapper",
 		"sFilter": "dataTables_filter",
 		"sInfo": "dataTables_info",
-		"sPaging": "dataTables_paginate paging_", /* Note that the type is postfixed */
+		"sPaging": "pagination dataTables_paginate paging_", /* Note that the type is postfixed */
 		"sLength": "dataTables_length",
 		"sProcessing": "dataTables_processing",
 		
@@ -11443,11 +11444,14 @@
 				};
 	
 				$(nPaging).append(
-					'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
-					'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
+					// Bootstrap markup
+					'<ul>'+
+					'<li><a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a></li>'+
+					'<li><a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a></li>'+
 					'<span></span>'+
-					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
-					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
+					'<li><a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a></li>'+
+					'<li><a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a></li>'+
+					'</ul>'
 				);
 				var els = $('a', nPaging);
 				var nFirst = els[0],
@@ -11533,11 +11537,12 @@
 	
 				
 				/* Build the dynamic list */
+				// Bootsrtap markup
 				for ( i=iStartButton ; i<=iEndButton ; i++ )
 				{
 					sList += (iCurrentPage !== i) ?
-						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
-						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
+						'<li class="paginate_page '+oClasses.sPageButton+'"><a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
+						'<li class="paginate_page '+oClasses.sPageButtonActive+'"><a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
 				}
 				
 				/* Loop over each instance of the pager */
@@ -11550,9 +11555,27 @@
 					}
 					
 					/* Build up the dynamic list first - html and listeners */
+					// Bootstrap markup
+					//
+					// The .paginate_page class has been added to identify the <li> elements and
+					// remove dependency to the <span> element, which can be removed from the markup.
+					// Note: the <span> element is only removed from the HTML markup. In order to avoid
+					// modifying to deeply this function, it is removed and restored each time we enter
+					// or leave this function.
+					//
+					// Restore the expected markup
+					if ( $('.paginate_page').length ) {
+						// if the <span> has been removed, restore it
+						$('.paginate_page').first().replaceWith('<span></span>')
+						if ( $('.paginate_page').length ) {
+							// if there are <li> elements, remove them
+							$('.paginate_page').remove()
+						};
+					};
+					// Create the new markup (requires the <span> and no .paginate_page)
 					$('span:eq(0)', nNode)
-						.html( sList )
-						.children('a').each( fnBind );
+						.replaceWith( sList ); // remove the <span> instead of appending children to it
+					$('.paginate_page').children('a').each( fnBind );
 					
 					/* Update the permanent button's classes */
 					anButtons = nNode.getElementsByTagName('a');
