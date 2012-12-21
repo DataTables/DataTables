@@ -22,8 +22,8 @@
 				} );
 				
 				$("tfoot input").keyup( function () {
-					/* Filter on the column (the index) of this element */
-					oTable.fnFilter( this.value, $("tfoot input").index(this) );
+					/* Filter on the column based on the index of this element's parent <th> */
+					oTable.fnFilter( this.value, $("tfoot th").index($(this).parent()) );
 				} );
 				
 				

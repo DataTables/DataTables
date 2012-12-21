@@ -1,5 +1,4 @@
 
-
 /**
  * Add a column to the list used for the table with default values
  *  @param {object} oSettings dataTables settings object
@@ -69,7 +68,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 		_fnCamelToHungarian( DataTable.defaults.column, oOptions );
 		
 		/* Backwards compatibility for mDataProp */
-		if ( oOptions.mDataProp && !oOptions.mData )
+		if ( oOptions.mDataProp !== undefined && !oOptions.mData )
 		{
 			oOptions.mData = oOptions.mDataProp;
 		}

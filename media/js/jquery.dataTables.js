@@ -296,23 +296,27 @@
 		
 		/* Check that the class assignment is correct for sorting */
 		if ( !oCol.bSortable ||
-			 ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+			($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
 		{
+			// either sorting is disabled for this column or neither 'asc' nor 'desc' is in the array
 			oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 			oCol.sSortingClassJUI = "";
 		}
-		else if ( $.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1 )
+		else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) != -1 )
 		{
+			// both, 'asc' and 'desc' are in the array, so it can be sorted both directions
 			oCol.sSortingClass = oSettings.oClasses.sSortable;
 			oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
 		}
 		else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) == -1 )
 		{
+			// 'asc' is in the array, while 'desc' is not, so the column can only be sorted ascending
 			oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
 			oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIAscAllowed;
 		}
 		else if ( $.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) != -1 )
 		{
+			// 'asc' is not in the array, while 'desc' is, so the column can only be sorted descending
 			oCol.sSortingClass = oSettings.oClasses.sSortableDesc;
 			oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIDescAllowed;
 		}
