@@ -75,7 +75,7 @@
 			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
 			{
 				$sOrder .= "`".$aColumns[ intval( $_GET['iSortCol_'.$i] ) ]."` ".
-				 	mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+					($_GET['sSortDir_'.$i]==='asc' ? 'asc' : 'desc') .", ";
 			}
 		}
 		

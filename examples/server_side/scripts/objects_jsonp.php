@@ -59,8 +59,8 @@
 	$sLimit = "";
 	if ( isset( $_GET['iDisplayStart'] ) && $_GET['iDisplayLength'] != '-1' )
 	{
-		$sLimit = "LIMIT ".mysql_real_escape_string( $_GET['iDisplayStart'] ).", ".
-			mysql_real_escape_string( $_GET['iDisplayLength'] );
+		$sLimit = "LIMIT ".intval( $_GET['iDisplayStart'] ).", ".
+			intval( $_GET['iDisplayLength'] );
 	}
 	
 	
@@ -76,8 +76,8 @@
 			if ( $_GET[ 'bSortable_'.intval($_GET['iSortCol_'.$i]) ] == "true" )
 			{
 				$iColumnIndex = array_search( $_GET['mDataProp_'.$_GET['iSortCol_'.$i]], $aColumns );
-				$sOrder .= $aColumns[ $iColumnIndex ]."
-				 	".mysql_real_escape_string( $_GET['sSortDir_'.$i] ) .", ";
+				$sOrder .= "`".$aColumns[ $iColumnIndex ]."` ".
+				 	($_GET['sSortDir_'.$i]==='asc' ? 'asc' : 'desc') .", ";
 			}
 		}
 		

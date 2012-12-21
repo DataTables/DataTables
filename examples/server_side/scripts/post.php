@@ -59,8 +59,8 @@
 	$sLimit = "";
 	if ( isset( $_POST['iDisplayStart'] ) && $_POST['iDisplayLength'] != '-1' )
 	{
-		$sLimit = "LIMIT ".mysql_real_escape_string( $_POST['iDisplayStart'] ).", ".
-			mysql_real_escape_string( $_POST['iDisplayLength'] );
+		$sLimit = "LIMIT ".intval( $_POST['iDisplayStart'] ).", ".
+			intval( $_POST['iDisplayLength'] );
 	}
 	
 	
@@ -74,8 +74,8 @@
 		{
 			if ( $_POST[ 'bSortable_'.intval($_POST['iSortCol_'.$i]) ] == "true" )
 			{
-				$sOrder .= $aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."
-				 	".mysql_real_escape_string( $_POST['sSortDir_'.$i] ) .", ";
+				$sOrder .= "`".$aColumns[ intval( $_POST['iSortCol_'.$i] ) ]."` ".
+				 	($_POST['sSortDir_'.$i]==='asc' ? 'asc' : 'desc') .", ";
 			}
 		}
 		
