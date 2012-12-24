@@ -112,7 +112,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	{
 		oCol.bSortable = false;
 	}
-	
+
 	/* Check that the class assignment is correct for sorting */
 	if ( !oCol.bSortable ||
 		 ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )

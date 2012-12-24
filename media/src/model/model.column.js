@@ -46,7 +46,15 @@ DataTable.models.oColumn = {
 	 *  @type boolean
 	 */
 	"bSortable": null,
-	
+
+	/**
+	 * Flag to indicate if the column should have sort arrows. Sort arrows 
+	 * will only appear for sortable columns, so this flag has no effect if
+	 * bSortable is false.
+	 *  @type boolean
+	 */
+	"bShowSortArrows": null,
+
 	/**
 	 * Flag to indicate if the column is currently visible in the table or not
 	 *  @type boolean
