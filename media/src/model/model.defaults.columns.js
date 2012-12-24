@@ -153,6 +153,38 @@ DataTable.defaults.column = {
 	 */
 	"bSortable": true,
 
+	/**
+	 * Show sort arrows on this column (if it is sortable).
+	 *  @type boolean
+	 *  @default true
+	 *
+	 *  @name DataTable.defaults.column.showSortArrows
+	 *  @dtopt Columns
+	 * 
+	 *  @example
+	 *    // Using `columnDefs`
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "columnDefs": [ 
+	 *          { "showSortArrows": false, "targets": [ 0 ] }
+	 *        ] } );
+	 *    } );
+	 *    
+	 *  @example
+	 *    // Using `columns`
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "columns": [ 
+	 *          { "showSortArrows": false },
+	 *          null,
+	 *          null,
+	 *          null,
+	 *          null
+	 *        ] } );
+	 *    } );
+	 */
+	"bShowSortArrows": true,
+
 
 	/**
 	 * Enable or disable the display of this column.

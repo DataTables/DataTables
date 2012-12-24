@@ -400,6 +400,11 @@ function _fnSortingClasses( oSettings )
 	/* Apply the required classes to the header */
 	for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 	{
+		/* If sort arrows are disabled for this column, we're all set */
+		if ( !oSettings.aoColumns[i].bShowSortArrows ) {
+			continue;
+		}
+
 		if ( oSettings.aoColumns[i].bSortable )
 		{
 			sClass = oSettings.aoColumns[i].sSortingClass;
