@@ -3714,7 +3714,7 @@
 	 */
 	function _fnStringToCss( s )
 	{
-		if ( s === null )
+		if ( s === null  || s === "oSettings.oScroll.sY")
 		{
 			return "0px";
 		}
