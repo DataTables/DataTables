@@ -99,7 +99,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 
 		if ( oCol.mRender && (sSpecific && sSpecific !== '') )
 		{
-			return mRender( innerData, sSpecific, oData );
+			return mRender( innerData, sSpecific, oData, iCol);
 		}
 		return innerData;
 	};

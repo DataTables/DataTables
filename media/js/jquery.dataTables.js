@@ -178,7 +178,7 @@
 		
 				if ( oCol.mRender && (sSpecific && sSpecific !== '') )
 				{
-					return mRender( innerData, sSpecific, oData );
+					return mRender( innerData, sSpecific, oData , iCol);
 				}
 				return innerData;
 			};
@@ -846,8 +846,8 @@
 			}
 			else if ( typeof mSource === 'function' )
 			{
-				return function (data, type, extra) {
-					return mSource( data, type, extra );
+				return function (data, type, extra, collumn) {
+					return mSource( data, type, extra, collumn);
 				};
 			}
 			else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
