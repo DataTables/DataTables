@@ -553,6 +553,10 @@
 						oSettings.aoData.push( $.extend( true, {}, DataTable.models.oRow, {
 							"nTr": nTr
 						} ) );
+						//force _aData to be object in case of defined mData;
+						if (oSettings.aoColumns[iThisIndex].mData!==undefined) {
+							oSettings.aoData[oSettings.aoData.length-1]._aData={};
+						}
 		
 						oSettings.aiDisplayMaster.push( iThisIndex );
 						nTd = nTr.firstChild;
