@@ -2687,7 +2687,7 @@ var dtLinks = [
 	} );
 	
 	/* Click handler to redirect to the documentation */
-	$('code.datatables_ref').live('click', function () {
+	$('body').on('click', 'code.datatables_ref', function () {
 		var i = $.inArray( this.innerHTML.replace(/"/g,''), dtOptions );
 		if ( i !== -1 ) {
 			window.location.href = "http://datatables.net/ref#"+dtLinks[i];
