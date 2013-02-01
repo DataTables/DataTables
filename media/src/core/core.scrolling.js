@@ -451,13 +451,14 @@ function _fnScrollDraw ( o )
 	// Figure out if there are scrollbar present - if so then we need a the header and footer to
 	// provide a bit more space to allow "overflow" scrolling (i.e. past the scrollbar)
 	var bScrolling = $(o.nTable).height() > nScrollBody.clientHeight || $(nScrollBody).css('overflow-y') == "scroll";
-	nScrollHeadInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
+	var padding = o.oBrowser.bScrollbarLeft ? 'paddingLeft' : 'paddingRight';
+	nScrollHeadInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	
 	if ( o.nTFoot !== null )
 	{
 		nScrollFootTable.style.width = _fnStringToCss( iOuterWidth );
 		nScrollFootInner.style.width = _fnStringToCss( iOuterWidth );
-		nScrollFootInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
+		nScrollFootInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 	}
 
 	/* Adjust the position of the header in case we loose the y-scrollbar */

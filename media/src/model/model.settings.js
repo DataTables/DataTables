@@ -239,7 +239,16 @@ DataTable.models.oSettings = {
 		 *  @type boolean
 		 *  @default false
 		 */
-		"bScrollOversize": false
+		"bScrollOversize": false,
+
+		/**
+		 * Determine if the vertical scrollbar is on the right or left of the
+		 * scrolling container - needed for rtl language layout, although not
+		 * all browsers move the scrollbar (Safari).
+		 *  @type boolean
+		 *  @default false
+		 */
+		"bScrollbarLeft": false
 	},
 	
 	/**

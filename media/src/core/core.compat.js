@@ -37,8 +37,8 @@ function _fnHungarianMap ( o )
 /**
  * Convert from camel case parameters to Hungarian, based on a Hungarian map
  * created by _fnHungarianMap.
- *  @param {object} src The model object which holds all parameters can has
- *    previously been run through `_fnHungarianMap`.
+ *  @param {object} src The model object which holds all parameters that can be
+ *    mapped.
  *  @param {object} user The object to convert from camel case to Hungarian.
  *  @param {boolean} force When set to `true`, properties which already have a
  *    Hungarian value in the `user` object will be overwritten. Otherwise they
@@ -49,7 +49,7 @@ function _fnCamelToHungarian ( src, user, force )
 {
 	if ( ! src._hungaianMap )
 	{
-		return;
+		_fnHungarianMap( src );
 	}
 
 	var hungarianKey;
@@ -96,5 +96,31 @@ function _fnLanguageCompat( oLanguage )
 	{
 		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
 	}
+}
+
+
+/**
+ * From some browsers (specifically IE6/7) we need special handling to work around browser
+ * bugs - this function is used to detect when these workarounds are needed.
+ *  @param {object} oSettings dataTables settings object
+ *  @memberof DataTable#oApi
+ */
+function _fnBrowserDetect( oSettings )
+{
+	/* IE6/7 will oversize a width 100% element inside a scrolling element, to include the
+	 * width of the scrollbar, while other browsers ensure the inner element is contained
+	 * without forcing scrolling
+	 */
+	var n = $(
+		'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
+			'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
+				'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
+			'</div>'+
+		'</div>')[0];
+
+	document.body.appendChild( n );
+	oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
+	oSettings.oBrowser.bScrollbarLeft = $('#DT_BrowserTest', n).offset().left !== 1 ? true : false;
+	document.body.removeChild( n );
 }
 
