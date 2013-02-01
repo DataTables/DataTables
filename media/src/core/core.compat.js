@@ -100,17 +100,13 @@ function _fnLanguageCompat( oLanguage )
 
 
 /**
- * From some browsers (specifically IE6/7) we need special handling to work around browser
- * bugs - this function is used to detect when these workarounds are needed.
+ * Browser feature detection for capabilities, quirks
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
  */
 function _fnBrowserDetect( oSettings )
 {
-	/* IE6/7 will oversize a width 100% element inside a scrolling element, to include the
-	 * width of the scrollbar, while other browsers ensure the inner element is contained
-	 * without forcing scrolling
-	 */
+	// Scrolling feature / quirks detection
 	var n = $(
 		'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
 			'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
@@ -119,7 +115,13 @@ function _fnBrowserDetect( oSettings )
 		'</div>')[0];
 
 	document.body.appendChild( n );
+	// IE6/7 will oversize a width 100% element inside a scrolling element, to
+	// include the width of the scrollbar, while other browsers ensure the inner
+	// element is contained without forcing scrolling
 	oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
+
+	// In rtl text layout, some browsers (most, but not all) will place the
+	// scrollbar on the left, rather than the right.
 	oSettings.oBrowser.bScrollbarLeft = $('#DT_BrowserTest', n).offset().left !== 1 ? true : false;
 	document.body.removeChild( n );
 }
