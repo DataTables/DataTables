@@ -717,7 +717,7 @@ DataTable.defaults.column = {
 
 	/**
 	 * Defining the width of the column, this parameter may take any CSS value
-	 * (3em, 20px etc). DataTables apples 'smart' widths to columns which have not
+	 * (3em, 20px etc). DataTables applies 'smart' widths to columns which have not
 	 * been given a specific width through this interface ensuring that the table
 	 * remains readable.
 	 *  @type string
