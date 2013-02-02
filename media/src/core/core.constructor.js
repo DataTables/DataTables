@@ -1,3 +1,4 @@
+/*global oInit,_that*/
 var i=0, iLen, j, jLen, k, kLen;
 var sId = this.getAttribute( 'id' );
 var bInitHandedOff = false;
@@ -30,11 +31,14 @@ for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
 	/* Base check on table node */
 	if ( DataTable.settings[i].nTable == this )
 	{
-		if ( oInitEmpty || oInit.bRetrieve )
+		var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : DataTable.defaults.bRetrieve;
+		var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : DataTable.defaults.bDestroy;
+
+		if ( oInitEmpty || bRetrieve )
 		{
 			return DataTable.settings[i].oInstance;
 		}
-		else if ( oInit.bDestroy )
+		else if ( bDestroy )
 		{
 			DataTable.settings[i].oInstance.fnDestroy();
 			break;
