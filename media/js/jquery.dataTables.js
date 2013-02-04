@@ -117,8 +117,8 @@
 	/**
 	 * Convert from camel case parameters to Hungarian, based on a Hungarian map
 	 * created by _fnHungarianMap.
-	 *  @param {object} src The model object which holds all parameters can has
-	 *    previously been run through `_fnHungarianMap`.
+	 *  @param {object} src The model object which holds all parameters that can be
+	 *    mapped.
 	 *  @param {object} user The object to convert from camel case to Hungarian.
 	 *  @param {boolean} force When set to `true`, properties which already have a
 	 *    Hungarian value in the `user` object will be overwritten. Otherwise they
@@ -129,7 +129,7 @@
 	{
 		if ( ! src._hungaianMap )
 		{
-			return;
+			_fnHungarianMap( src );
 		}
 	
 		var hungarianKey;
@@ -178,6 +178,33 @@
 		}
 	}
 	
+	
+	/**
+	 * Browser feature detection for capabilities, quirks
+	 *  @param {object} oSettings dataTables settings object
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnBrowserDetect( oSettings )
+	{
+		// Scrolling feature / quirks detection
+		var n = $(
+			'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
+				'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
+					'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
+				'</div>'+
+			'</div>')[0];
+	
+		document.body.appendChild( n );
+		// IE6/7 will oversize a width 100% element inside a scrolling element, to
+		// include the width of the scrollbar, while other browsers ensure the inner
+		// element is contained without forcing scrolling
+		oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
+	
+		// In rtl text layout, some browsers (most, but not all) will place the
+		// scrollbar on the left, rather than the right.
+		oSettings.oBrowser.bScrollbarLeft = $('#DT_BrowserTest', n).offset().left !== 1 ? true : false;
+		document.body.removeChild( n );
+	}
 	
 	
 	/**
@@ -249,7 +276,7 @@
 			_fnCamelToHungarian( DataTable.defaults.column, oOptions );
 			
 			/* Backwards compatibility for mDataProp */
-			if ( oOptions.mDataProp && !oOptions.mData )
+			if ( oOptions.mDataProp !== undefined && !oOptions.mData )
 			{
 				oOptions.mData = oOptions.mDataProp;
 			}
@@ -296,27 +323,23 @@
 		
 		/* Check that the class assignment is correct for sorting */
 		if ( !oCol.bSortable ||
-			($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+			 ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
 		{
-			// either sorting is disabled for this column or neither 'asc' nor 'desc' is in the array
 			oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 			oCol.sSortingClassJUI = "";
 		}
-		else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) != -1 )
+		else if ( $.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1 )
 		{
-			// both, 'asc' and 'desc' are in the array, so it can be sorted both directions
 			oCol.sSortingClass = oSettings.oClasses.sSortable;
 			oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
 		}
 		else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) == -1 )
 		{
-			// 'asc' is in the array, while 'desc' is not, so the column can only be sorted ascending
 			oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
 			oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIAscAllowed;
 		}
 		else if ( $.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) != -1 )
 		{
-			// 'asc' is not in the array, while 'desc' is, so the column can only be sorted descending
 			oCol.sSortingClass = oSettings.oClasses.sSortableDesc;
 			oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIDescAllowed;
 		}
@@ -720,17 +743,17 @@
 		}
 	
 		/* When the data source is null, we can use default column data */
-		if ( sData === null && oCol.sDefaultContent !== null )
+		if ( (sData === oData || sData === null) && oCol.sDefaultContent !== null )
 		{
 			sData = oCol.sDefaultContent;
 		}
 		else if ( typeof sData === 'function' )
 		{
-			/* If the data source is a function, then we run it and use the return */
+			// If the data source is a function, then we run it and use the return
 			return sData();
 		}
 	
-		if ( sSpecific == 'display' && sData === null )
+		if ( sData === null && sSpecific == 'display' )
 		{
 			return '';
 		}
@@ -755,8 +778,22 @@
 	}
 	
 	
-	// Private variable that is used to match array syntax in the data property object
+	// Private variable that is used to match action syntax in the data property object
 	var __reArray = /\[.*?\]$/;
+	var __reFn = /\(\)$/;
+	
+	/**
+	 * Split string on periods, taking into account escaped periods
+	 * @param  {string} str String to split
+	 * @return {array} Split string
+	 */
+	function _fnSplitObjNotation( str )
+	{
+		return $.map( str.match(/(\\.|[^\.])+/g), function ( s ) {
+			return s.replace('\\.', '.');
+		} );
+	}
+	
 	
 	/**
 	 * Return a function that can be used to get data from a source object, taking
@@ -771,7 +808,7 @@
 		{
 			/* Give an empty string for rendering / sorting etc */
 			return function (data, type) {
-				return null;
+				return data;
 			};
 		}
 		else if ( typeof mSource === 'function' )
@@ -780,26 +817,30 @@
 				return mSource( data, type, extra );
 			};
 		}
-		else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
+		else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 ||
+			      mSource.indexOf('[') !== -1 || mSource.indexOf('(') !== -1) )
 		{
-			/* If there is a . in the source string then the data source is in a 
+			/* If there is a . in the source string then the data source is in a
 			 * nested object so we loop over the data for each level to get the next
 			 * level down. On each loop we test for undefined, and if found immediately
 			 * return. This allows entire objects to be missing and sDefaultContent to
 			 * be used if defined, rather than throwing an error
 			 */
 			var fetchData = function (data, type, src) {
-				var a = src.split('.');
-				var arrayNotation, out, innerSrc;
+				var a = _fnSplitObjNotation( src );
+				var arrayNotation, funcNotation, out, innerSrc;
 	
 				if ( src !== "" )
 				{
 					for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 					{
-						// Check if we are dealing with an array notation request
+						// Check if we are dealing with special notation
 						arrayNotation = a[i].match(__reArray);
+						funcNotation = a[i].match(__reFn);
 	
-						if ( arrayNotation ) {
+						if ( arrayNotation )
+						{
+							// Array notation
 							a[i] = a[i].replace(__reArray, '');
 	
 							// Condition allows simply [] to be passed in
@@ -826,6 +867,13 @@
 							// of the source requested, so we exit from the loop
 							break;
 						}
+						else if ( funcNotation )
+						{
+							// Function call
+							a[i] = a[i].replace(__reFn, '');
+							data = data[ a[i] ]();
+							continue;
+						}
 	
 						if ( data === null || data[ a[i] ] === undefined )
 						{
@@ -846,7 +894,7 @@
 		{
 			/* Array or flat object mapping */
 			return function (data, type) {
-				return data[mSource];	
+				return data[mSource];
 			};
 		}
 	}
@@ -872,17 +920,20 @@
 				mSource( data, 'set', val );
 			};
 		}
-		else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 || mSource.indexOf('[') !== -1) )
+		else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 ||
+			      mSource.indexOf('[') !== -1 || mSource.indexOf('(') !== -1) )
 		{
 			/* Like the get, we need to get data from a nested object */
 			var setData = function (data, val, src) {
-				var a = src.split('.'), b;
-				var arrayNotation, o, innerSrc;
+				var a = _fnSplitObjNotation( src );
+				var aLast = a[a.length-1];
+				var arrayNotation, funcNotation, o, innerSrc;
 	
 				for ( var i=0, iLen=a.length-1 ; i<iLen ; i++ )
 				{
 					// Check if we are dealing with an array notation request
 					arrayNotation = a[i].match(__reArray);
+					funcNotation = a[i].match(__reFn);
 	
 					if ( arrayNotation )
 					{
@@ -906,6 +957,12 @@
 						// of the source and has set the data, thus we can exit here
 						return;
 					}
+					else if ( funcNotation )
+					{
+						// Function call
+						a[i] = a[i].replace(__reFn, '');
+						data = data[ a[i] ]( val );
+					}
 	
 					// If the nested object doesn't currently exist - since we are
 					// trying to set the value - create it
@@ -916,9 +973,18 @@
 					data = data[ a[i] ];
 				}
 	
-				// If array notation is used, we just want to strip it and use the property name
-				// and assign the value. If it isn't used, then we get the result we want anyway
-				data[ a[a.length-1].replace(__reArray, '') ] = val;
+				// Last item in the input - i.e, the actual set
+				if ( aLast.match(__reFn ) )
+				{
+					// Function call
+					data = data[ aLast.replace(__reFn, '') ]( val );
+				}
+				else
+				{
+					// If array notation is used, we just want to strip it and use the property name
+					// and assign the value. If it isn't used, then we get the result we want anyway
+					data[ aLast.replace(__reArray, '') ] = val;
+				}
 			};
 	
 			return function (data, val) {
@@ -929,7 +995,7 @@
 		{
 			/* Array or flat object mapping */
 			return function (data, val) {
-				data[mSource] = val;	
+				data[mSource] = val;
 			};
 		}
 	}
@@ -3315,13 +3381,14 @@
 		// Figure out if there are scrollbar present - if so then we need a the header and footer to
 		// provide a bit more space to allow "overflow" scrolling (i.e. past the scrollbar)
 		var bScrolling = $(o.nTable).height() > nScrollBody.clientHeight || $(nScrollBody).css('overflow-y') == "scroll";
-		nScrollHeadInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
+		var padding = o.oBrowser.bScrollbarLeft ? 'paddingLeft' : 'paddingRight';
+		nScrollHeadInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 		
 		if ( o.nTFoot !== null )
 		{
 			nScrollFootTable.style.width = _fnStringToCss( iOuterWidth );
 			nScrollFootInner.style.width = _fnStringToCss( iOuterWidth );
-			nScrollFootInner.style.paddingRight = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
+			nScrollFootInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
 		}
 	
 		/* Adjust the position of the header in case we loose the y-scrollbar */
@@ -4659,31 +4726,6 @@
 		}
 	
 		return aRet;
-	}
-	
-	
-	/**
-	 * From some browsers (specifically IE6/7) we need special handling to work around browser
-	 * bugs - this function is used to detect when these workarounds are needed.
-	 *  @param {object} oSettings dataTables settings object
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnBrowserDetect( oSettings )
-	{
-		/* IE6/7 will oversize a width 100% element inside a scrolling element, to include the
-		 * width of the scrollbar, while other browsers ensure the inner element is contained
-		 * without forcing scrolling
-		 */
-		var n = $(
-			'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
-				'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
-					'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
-				'</div>'+
-			'</div>')[0];
-	
-		document.body.appendChild( n );
-		oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
-		document.body.removeChild( n );
 	}
 	
 
@@ -6094,6 +6136,7 @@
 		
 		var _that = this;
 		this.each(function() {
+			/*global oInit,_that*/
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
@@ -6126,11 +6169,14 @@
 				/* Base check on table node */
 				if ( DataTable.settings[i].nTable == this )
 				{
-					if ( oInitEmpty || oInit.bRetrieve )
+					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : DataTable.defaults.bRetrieve;
+					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : DataTable.defaults.bDestroy;
+			
+					if ( oInitEmpty || bRetrieve )
 					{
 						return DataTable.settings[i].oInstance;
 					}
-					else if ( oInit.bDestroy )
+					else if ( bDestroy )
 					{
 						DataTable.settings[i].oInstance.fnDestroy();
 						break;
@@ -9829,53 +9875,117 @@
 	
 		/**
 		 * This parameter has been replaced by `data` in DataTables to ensure naming
-		 * consistency. `dataProp` can still be used, as there is backwards compatibility
-		 * in DataTables for this option, but it is strongly recommended that you use
-		 * `data` in preference to `dataProp`.
+		 * consistency. `dataProp` can still be used, as there is backwards
+		 * compatibility in DataTables for this option, but it is strongly
+		 * recommended that you use `data` in preference to `dataProp`.
 		 *  @name DataTable.defaults.column.dataProp
 		 */
 	
 	
 		/**
-		 * This property can be used to read data from any JSON data source property,
+		 * This property can be used to read data from any data source property,
 		 * including deeply nested objects / properties. `data` can be given in a
 		 * number of different ways which effect its behaviour:
 		 *
-		 * * integer - treated as an array index for the data source. This is the
+		 * * `integer` - treated as an array index for the data source. This is the
 		 *   default that DataTables uses (incrementally increased for each column).
-		 * * string - read an object property from the data source. Note that you can
-		 *   use Javascript dotted notation to read deep properties / arrays from the
-		 *   data source.
-		 * * null - the sDefaultContent option will be used for the cell (null
-		 *   by default, so you will need to specify the default content you want -
-		 *   typically an empty string). This can be useful on generated columns such 
-		 *   as edit / delete action columns.
-		 * * function - the function given will be executed whenever DataTables 
-		 *   needs to set or get the data for a cell in the column. The function 
+		 * * `string` - read an object property from the data source. There are
+		 *   three 'special' options that can be used in the string to alter how
+		 *   DataTables reads the data from the source object:
+		 *    * `.` - Dotted Javascript notation. Just as you use a `.` in
+		 *      Javascript to read from nested objects, so to can the options
+		 *      specified in `data`. For example: `browser.version` or
+		 *      `browser.name`. If your object parameter name contains a period, use
+		 *      `\\` to escape it - i.e. `first\\.name`.
+		 *    * `[]` - Array notation. DataTables can automatically combine data
+		 *      from and array source, joining the data with the characters provided
+		 *      between the two brackets. For example: `name[, ]` would provide a
+		 *      comma-space separated list from the source array. If no characters
+		 *      are provided between the brackets, the original array source is
+		 *      returned.
+		 *    * `()` - Function notation. Adding `()` to the end of a parameter will
+		 *      execute a function of the name given. For example: `browser()` for a
+		 *      simple function on the data source, `browser.version()` for a
+		 *      function in a nested property or even `browser().version` to get an
+		 *      object property if the function called returns an object. Note that
+		 *      function notation is recommended for use in `render` rather than
+		 *      `data` as it is much simpler to use as a renderer.
+		 * * `null` - use the original data source for the row rather than plucking
+		 *   data directly from it. This action has effects on two other
+		 *   initialisation options:
+		 *    * `defaultContent` - When null is given as the `data` option and
+		 *      `defaultContent` is specified for the column, the value defined by
+		 *      `defaultContent` will be used for the cell.
+		 *    * `render` - When null is used for the `data` option and the `render`
+		 *      option is specified for the column, the whole data source for the
+		 *      row is used for the renderer.
+		 * * `function` - the function given will be executed whenever DataTables
+		 *   needs to set or get the data for a cell in the column. The function
 		 *   takes three parameters:
-		 *    * {array|object} The data source for the row
-		 *    * {string} The type call data requested - this will be 'set' when
-		 *      setting data or 'filter', 'display', 'type', 'sort' or undefined when 
-		 *      gathering data. Note that when `undefined` is given for the type
-		 *      DataTables expects to get the raw data for the object back<
-		 *    * {*} Data to set when the second parameter is 'set'.
-		 * * The return value from the function is not required when 'set' is the type
-		 *   of call, but otherwise the return is what will be used for the data
-		 *   requested.
+		 *    * Parameters:
+		 *      * `{array|object}` The data source for the row
+		 *      * `{string}` The type call data requested - this will be 'set' when
+		 *        setting data or 'filter', 'display', 'type', 'sort' or undefined
+		 *        when gathering data. Note that when `undefined` is given for the
+		 *        type DataTables expects to get the raw data for the object back<
+		 *      * `{*}` Data to set when the second parameter is 'set'.
+		 *    * Return:
+		 *      * The return value from the function is not required when 'set' is
+		 *        the type of call, but otherwise the return is what will be used
+		 *        for the data requested.
 		 *
-		 * Note that prior to DataTables 1.9.2 `data` was called `mDataProp`. The name change
-		 * reflects the flexibility of this property and is consistent with the naming of
-		 * mRender. If 'mDataProp' is given, then it will still be used by DataTables, as
-		 * it automatically maps the old name to the new if required.
+		 * Note that `data` is a getter and setter option. If you just require
+		 * formatting of data for output, you will likely want to use `render` which
+		 * is simply a getter and thus simpler to use.
+		 *
+		 * Note that prior to DataTables 1.9.2 `data` was called `mDataProp`. The
+		 * name change reflects the flexibility of this property and is consistent
+		 * with the naming of mRender. If 'mDataProp' is given, then it will still
+		 * be used by DataTables, as it automatically maps the old name to the new
+		 * if required.
 		 *
 		 *  @type string|int|function|null
 		 *  @default null <i>Use automatically calculated column index</i>
 		 *
 		 *  @name DataTable.defaults.column.data
 		 *  @dtopt Columns
-		 * 
+		 *
 		 *  @example
 		 *    // Read table data from objects
+		 *    // JSON structure for each row:
+		 *    //   {
+		 *    //      "engine": {value},
+		 *    //      "browser": {value},
+		 *    //      "platform": {value},
+		 *    //      "version": {value},
+		 *    //      "grade": {value}
+		 *    //   }
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "ajaxSource": "sources/objects.txt",
+		 *        "columns": [
+		 *          { "data": "engine" },
+		 *          { "data": "browser" },
+		 *          { "data": "platform" },
+		 *          { "data": "version" },
+		 *          { "data": "grade" }
+		 *        ]
+		 *      } );
+		 *    } );
+		 *
+		 *  @example
+		 *    // Read information from deeply nested objects
+		 *    // JSON structure for each row:
+		 *    //   {
+		 *    //      "engine": {value},
+		 *    //      "browser": {value},
+		 *    //      "platform": {
+		 *    //         "inner": {value}
+		 *    //      },
+		 *    //      "details": [
+		 *    //         {value}, {value}
+		 *    //      ]
+		 *    //   }
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "ajaxSource": "sources/deep.txt",
@@ -9888,7 +9998,7 @@
 		 *        ]
 		 *      } );
 		 *    } );
-		 * 
+		 *
 		 *  @example
 		 *    // Using `data` as a function to provide different information for
 		 *    // sorting, filtering and display. In this case, currency (price)
@@ -9916,38 +10026,76 @@
 		 *        } ]
 		 *      } );
 		 *    } );
+		 *
+		 *  @example
+		 *    // Using default content
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "columnDefs": [ {
+		 *          "targets": [ 0 ],
+		 *          "data": null,
+		 *          "defaultContent": "Click to edit"
+		 *        } ]
+		 *      } );
+		 *    } );
+		 *
+		 *  @example
+		 *    // Using array notation - outputting a list from an array
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "columnDefs": [ {
+		 *          "targets": [ 0 ],
+		 *          "data": "name[, ]"
+		 *        } ]
+		 *      } );
+		 *    } );
+		 *
 		 */
 		"mData": null,
 	
 	
 		/**
 		 * This property is the rendering partner to `data` and it is suggested that
-		 * when you want to manipulate data for display (including filtering, sorting etc)
-		 * but not altering the underlying data for the table, use this property. `data`
-		 * can actually do everything this property can and more, but this parameter is
-		 * easier to use since there is no 'set' option. Like `data` this can be given
-		 * in a number of different ways to effect its behaviour, with the addition of 
-		 * supporting array syntax for easy outputting of arrays (including arrays of
-		 * objects):
+		 * when you want to manipulate data for display (including filtering,
+		 * sorting etc) but not altering the underlying data for the table, use this
+		 * property. `data` can actually do everything this property can and more,
+		 * but this parameter is much easier to use as there is no 'set' option.
+		 * Like `data` this option can be given in a number of different ways to
+		 * effect its behaviour:
 		 * 
-		 * * integer - treated as an array index for the data source. This is the
+		 * * `integer` - treated as an array index for the data source. This is the
 		 *   default that DataTables uses (incrementally increased for each column).
-		 * * string - read an object property from the data source. Note that you can
-		 *   use Javascript dotted notation to read deep properties / arrays from the
-		 *   data source and also array brackets to indicate that the data reader should
-		 *   loop over the data source array. When characters are given between the array
-		 *   brackets, these characters are used to join the data source array together.
-		 *   For example: "accounts[, ].name" would result in a comma separated list with
-		 *   the 'name' value from the 'accounts' array of objects.
-		 * * function - the function given will be executed whenever DataTables 
-		 *   needs to set or get the data for a cell in the column. The function 
+		 * * `string` - read an object property from the data source. There are
+		 *   three 'special' options that can be used in the string to alter how
+		 *   DataTables reads the data from the source object:
+		 *    * `.` - Dotted Javascript notation. Just as you use a `.` in
+		 *      Javascript to read from nested objects, so to can the options
+		 *      specified in `data`. For example: `browser.version` or
+		 *      `browser.name`. If your object parameter name contains a period, use
+		 *      `\\` to escape it - i.e. `first\\.name`.
+		 *    * `[]` - Array notation. DataTables can automatically combine data
+		 *      from and array source, joining the data with the characters provided
+		 *      between the two brackets. For example: `name[, ]` would provide a
+		 *      comma-space separated list from the source array. If no characters
+		 *      are provided between the brackets, the original array source is
+		 *      returned.
+		 *    * `()` - Function notation. Adding `()` to the end of a parameter will
+		 *      execute a function of the name given. For example: `browser()` for a
+		 *      simple function on the data source, `browser.version()` for a
+		 *      function in a nested property or even `browser().version` to get an
+		 *      object property if the function called returns an object.
+		 * * `function` - the function given will be executed whenever DataTables
+		 *   needs to set or get the data for a cell in the column. The function
 		 *   takes three parameters:
-		 *    * {array|object} The data source for the row (based on `data`)
-		 *    * {string} The type call data requested - this will be 'filter', 'display', 
-		 *      'type' or 'sort'.
-		 *    * {array|object} The full data source for the row (not based on `data`)
-		 *    * The return value from the function is what will be used for the data
-		 *       requested.
+		 *    * Parameters:
+		 *      * {array|object} The data source for the row (based on `data`)
+		 *      * {string} The type call data requested - this will be 'filter',
+		 *        'display', 'type' or 'sort'.
+		 *      * {array|object} The full data source for the row (not based on
+		 *        `data`)
+		 *    * Return:
+		 *      * The return value from the function is what will be used for the
+		 *        data requested.
 		 *
 		 *  @type string|int|function|null
 		 *  @default null _Use `data`_
@@ -9968,6 +10116,18 @@
 		 *            "render": "[, ].name"
 		 *          }
 		 *        ]
+		 *      } );
+		 *    } );
+		 * 
+		 *  @example
+		 *    // Execute a function to obtain data
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "columnDefs": [ {
+		 *          "targets": [ 0 ],
+		 *          "data": null, // Use the full data source object for the renderer's source
+		 *          "render": "browserName()"
+		 *        } ]
 		 *      } );
 		 *    } );
 		 * 
@@ -10288,7 +10448,7 @@
 	
 		/**
 		 * Defining the width of the column, this parameter may take any CSS value
-		 * (3em, 20px etc). DataTables apples 'smart' widths to columns which have not
+		 * (3em, 20px etc). DataTables applies 'smart' widths to columns which have not
 		 * been given a specific width through this interface ensuring that the table
 		 * remains readable.
 		 *  @type string
@@ -10567,7 +10727,16 @@
 			 *  @type boolean
 			 *  @default false
 			 */
-			"bScrollOversize": false
+			"bScrollOversize": false,
+	
+			/**
+			 * Determine if the vertical scrollbar is on the right or left of the
+			 * scrolling container - needed for rtl language layout, although not
+			 * all browsers move the scrollbar (Safari).
+			 *  @type boolean
+			 *  @default false
+			 */
+			"bScrollbarLeft": false
 		},
 		
 		/**
