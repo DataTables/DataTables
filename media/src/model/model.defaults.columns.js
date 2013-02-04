@@ -258,53 +258,116 @@ DataTable.defaults.column = {
 
 	/**
 	 * This parameter has been replaced by `data` in DataTables to ensure naming
-	 * consistency. `dataProp` can still be used, as there is backwards compatibility
-	 * in DataTables for this option, but it is strongly recommended that you use
-	 * `data` in preference to `dataProp`.
+	 * consistency. `dataProp` can still be used, as there is backwards
+	 * compatibility in DataTables for this option, but it is strongly
+	 * recommended that you use `data` in preference to `dataProp`.
 	 *  @name DataTable.defaults.column.dataProp
 	 */
 
 
 	/**
-	 * This property can be used to read data from any JSON data source property,
+	 * This property can be used to read data from any data source property,
 	 * including deeply nested objects / properties. `data` can be given in a
 	 * number of different ways which effect its behaviour:
 	 *
-	 * * integer - treated as an array index for the data source. This is the
+	 * * `integer` - treated as an array index for the data source. This is the
 	 *   default that DataTables uses (incrementally increased for each column).
-	 * * string - read an object property from the data source. Note that you can
-	 *   use Javascript dotted notation to read deep properties / arrays from the
-	 *   data source.
-	 * * null - the sDefaultContent option will be used for the cell (null
-	 *   by default, so you will need to specify the default content you want -
-	 *   typically an empty string). This can be useful on generated columns such 
-	 *   as edit / delete action columns.
-	 * * function - the function given will be executed whenever DataTables 
-	 *   needs to set or get the data for a cell in the column. The function 
+	 * * `string` - read an object property from the data source. There are
+	 *   three 'special' options that can be used in the string to alter how
+	 *   DataTables reads the data from the source object:
+	 *    * `.` - Dotted Javascript notation. Just as you use a `.` in
+	 *      Javascript to read from nested objects, so to can the options
+	 *      specified in `data`. For example: `browser.version` or
+	 *      `browser.name`.
+	 *    * `[]` - Array notation. DataTables can automatically combine data
+	 *      from and array source, joining the data with the characters provided
+	 *      between the two brackets. For example: `name[, ]` would provide a
+	 *      comma-space separated list from the source array. If no characters
+	 *      are provided between the brackets, the original array source is
+	 *      returned.
+	 *    * `()` - Function notation. Adding `()` to the end of a parameter will
+	 *      execute a function of the name given. For example: `browser()` for a
+	 *      simple function on the data source, `browser.version()` for a
+	 *      function in a nested property or even `browser().version` to get an
+	 *      object property if the function called returns an object. Note that
+	 *      function notation is recommended for use in `render` rather than
+	 *      `data` as it is much simpler to use as a renderer.
+	 * * `null` - use the original data source for the row rather than plucking
+	 *   data directly from it. This action has effects on two other
+	 *   initialisation options:
+	 *    * `defaultContent` - When null is given as the `data` option and
+	 *      `defaultContent` is specified for the column, the value defined by
+	 *      `defaultContent` will be used for the cell.
+	 *    * `render` - When null is used for the `data` option and the `render`
+	 *      option is specified for the column, the whole data source for the
+	 *      row is used for the renderer.
+	 * * `function` - the function given will be executed whenever DataTables
+	 *   needs to set or get the data for a cell in the column. The function
 	 *   takes three parameters:
-	 *    * {array|object} The data source for the row
-	 *    * {string} The type call data requested - this will be 'set' when
-	 *      setting data or 'filter', 'display', 'type', 'sort' or undefined when 
-	 *      gathering data. Note that when `undefined` is given for the type
-	 *      DataTables expects to get the raw data for the object back<
-	 *    * {*} Data to set when the second parameter is 'set'.
-	 * * The return value from the function is not required when 'set' is the type
-	 *   of call, but otherwise the return is what will be used for the data
-	 *   requested.
+	 *    * Parameters:
+	 *      * `{array|object}` The data source for the row
+	 *      * `{string}` The type call data requested - this will be 'set' when
+	 *        setting data or 'filter', 'display', 'type', 'sort' or undefined
+	 *        when gathering data. Note that when `undefined` is given for the
+	 *        type DataTables expects to get the raw data for the object back<
+	 *      * `{*}` Data to set when the second parameter is 'set'.
+	 *    * Return:
+	 *      * The return value from the function is not required when 'set' is
+	 *        the type of call, but otherwise the return is what will be used
+	 *        for the data requested.
 	 *
-	 * Note that prior to DataTables 1.9.2 `data` was called `mDataProp`. The name change
-	 * reflects the flexibility of this property and is consistent with the naming of
-	 * mRender. If 'mDataProp' is given, then it will still be used by DataTables, as
-	 * it automatically maps the old name to the new if required.
+	 * Note that `data` is a getter and setter option. If you just require
+	 * formatting of data for output, you will likely want to use `render` which
+	 * is simply a getter and thus simpler to use.
+	 *
+	 * Note that prior to DataTables 1.9.2 `data` was called `mDataProp`. The
+	 * name change reflects the flexibility of this property and is consistent
+	 * with the naming of mRender. If 'mDataProp' is given, then it will still
+	 * be used by DataTables, as it automatically maps the old name to the new
+	 * if required.
 	 *
 	 *  @type string|int|function|null
 	 *  @default null <i>Use automatically calculated column index</i>
 	 *
 	 *  @name DataTable.defaults.column.data
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Read table data from objects
+	 *    // JSON structure for each row:
+	 *    //   {
+	 *    //      "engine": {value},
+	 *    //      "browser": {value},
+	 *    //      "platform": {value},
+	 *    //      "version": {value},
+	 *    //      "grade": {value}
+	 *    //   }
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "ajaxSource": "sources/objects.txt",
+	 *        "columns": [
+	 *          { "data": "engine" },
+	 *          { "data": "browser" },
+	 *          { "data": "platform" },
+	 *          { "data": "version" },
+	 *          { "data": "grade" }
+	 *        ]
+	 *      } );
+	 *    } );
+	 *
+	 *  @example
+	 *    // Read information from deeply nested objects
+	 *    // JSON structure for each row:
+	 *    //   {
+	 *    //      "engine": {value},
+	 *    //      "browser": {value},
+	 *    //      "platform": {
+	 *    //         "inner": {value}
+	 *    //      },
+	 *    //      "details": [
+	 *    //         {value}, {value}
+	 *    //      ]
+	 *    //   }
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "ajaxSource": "sources/deep.txt",
@@ -317,7 +380,7 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 * 
+	 *
 	 *  @example
 	 *    // Using `data` as a function to provide different information for
 	 *    // sorting, filtering and display. In this case, currency (price)
@@ -345,38 +408,75 @@ DataTable.defaults.column = {
 	 *        } ]
 	 *      } );
 	 *    } );
+	 *
+	 *  @example
+	 *    // Using default content
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "columnDefs": [ {
+	 *          "targets": [ 0 ],
+	 *          "data": null,
+	 *          "defaultContent": "Click to edit"
+	 *        } ]
+	 *      } );
+	 *    } );
+	 *
+	 *  @example
+	 *    // Using array notation - outputting a list from an array
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "columnDefs": [ {
+	 *          "targets": [ 0 ],
+	 *          "data": "name[, ]"
+	 *        } ]
+	 *      } );
+	 *    } );
+	 *
 	 */
 	"mData": null,
 
 
 	/**
 	 * This property is the rendering partner to `data` and it is suggested that
-	 * when you want to manipulate data for display (including filtering, sorting etc)
-	 * but not altering the underlying data for the table, use this property. `data`
-	 * can actually do everything this property can and more, but this parameter is
-	 * easier to use since there is no 'set' option. Like `data` this can be given
-	 * in a number of different ways to effect its behaviour, with the addition of 
-	 * supporting array syntax for easy outputting of arrays (including arrays of
-	 * objects):
+	 * when you want to manipulate data for display (including filtering,
+	 * sorting etc) but not altering the underlying data for the table, use this
+	 * property. `data` can actually do everything this property can and more,
+	 * but this parameter is much easier to use as there is no 'set' option.
+	 * Like `data` this option can be given in a number of different ways to
+	 * effect its behaviour:
 	 * 
-	 * * integer - treated as an array index for the data source. This is the
+	 * * `integer` - treated as an array index for the data source. This is the
 	 *   default that DataTables uses (incrementally increased for each column).
-	 * * string - read an object property from the data source. Note that you can
-	 *   use Javascript dotted notation to read deep properties / arrays from the
-	 *   data source and also array brackets to indicate that the data reader should
-	 *   loop over the data source array. When characters are given between the array
-	 *   brackets, these characters are used to join the data source array together.
-	 *   For example: "accounts[, ].name" would result in a comma separated list with
-	 *   the 'name' value from the 'accounts' array of objects.
-	 * * function - the function given will be executed whenever DataTables 
-	 *   needs to set or get the data for a cell in the column. The function 
+	 * * `string` - read an object property from the data source. There are
+	 *   three 'special' options that can be used in the string to alter how
+	 *   DataTables reads the data from the source object:
+	 *    * `.` - Dotted Javascript notation. Just as you use a `.` in
+	 *      Javascript to read from nested objects, so to can the options
+	 *      specified in `data`. For example: `browser.version` or
+	 *      `browser.name`.
+	 *    * `[]` - Array notation. DataTables can automatically combine data
+	 *      from and array source, joining the data with the characters provided
+	 *      between the two brackets. For example: `name[, ]` would provide a
+	 *      comma-space separated list from the source array. If no characters
+	 *      are provided between the brackets, the original array source is
+	 *      returned.
+	 *    * `()` - Function notation. Adding `()` to the end of a parameter will
+	 *      execute a function of the name given. For example: `browser()` for a
+	 *      simple function on the data source, `browser.version()` for a
+	 *      function in a nested property or even `browser().version` to get an
+	 *      object property if the function called returns an object.
+	 * * `function` - the function given will be executed whenever DataTables
+	 *   needs to set or get the data for a cell in the column. The function
 	 *   takes three parameters:
-	 *    * {array|object} The data source for the row (based on `data`)
-	 *    * {string} The type call data requested - this will be 'filter', 'display', 
-	 *      'type' or 'sort'.
-	 *    * {array|object} The full data source for the row (not based on `data`)
-	 *    * The return value from the function is what will be used for the data
-	 *       requested.
+	 *    * Parameters:
+	 *      * {array|object} The data source for the row (based on `data`)
+	 *      * {string} The type call data requested - this will be 'filter',
+	 *        'display', 'type' or 'sort'.
+	 *      * {array|object} The full data source for the row (not based on
+	 *        `data`)
+	 *    * Return:
+	 *      * The return value from the function is what will be used for the
+	 *        data requested.
 	 *
 	 *  @type string|int|function|null
 	 *  @default null _Use `data`_
@@ -397,6 +497,18 @@ DataTable.defaults.column = {
 	 *            "render": "[, ].name"
 	 *          }
 	 *        ]
+	 *      } );
+	 *    } );
+	 * 
+	 *  @example
+	 *    // Execute a function to obtain data
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "columnDefs": [ {
+	 *          "targets": [ 0 ],
+	 *          "data": null, // Use the full data source object for the renderer's source
+	 *          "render": "browserName()"
+	 *        } ]
 	 *      } );
 	 *    } );
 	 * 
