@@ -278,7 +278,8 @@ DataTable.defaults.column = {
 	 *    * `.` - Dotted Javascript notation. Just as you use a `.` in
 	 *      Javascript to read from nested objects, so to can the options
 	 *      specified in `data`. For example: `browser.version` or
-	 *      `browser.name`.
+	 *      `browser.name`. If your object parameter name contains a period, use
+	 *      `\\` to escape it - i.e. `first\\.name`.
 	 *    * `[]` - Array notation. DataTables can automatically combine data
 	 *      from and array source, joining the data with the characters provided
 	 *      between the two brackets. For example: `name[, ]` would provide a
@@ -453,7 +454,8 @@ DataTable.defaults.column = {
 	 *    * `.` - Dotted Javascript notation. Just as you use a `.` in
 	 *      Javascript to read from nested objects, so to can the options
 	 *      specified in `data`. For example: `browser.version` or
-	 *      `browser.name`.
+	 *      `browser.name`. If your object parameter name contains a period, use
+	 *      `\\` to escape it - i.e. `first\\.name`.
 	 *    * `[]` - Array notation. DataTables can automatically combine data
 	 *      from and array source, joining the data with the characters provided
 	 *      between the two brackets. For example: `name[, ]` would provide a

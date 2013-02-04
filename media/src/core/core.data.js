@@ -227,6 +227,19 @@ var __reArray = /\[.*?\]$/;
 var __reFn = /\(\)$/;
 
 /**
+ * Split string on periods, taking into account escaped periods
+ * @param  {string} str String to split
+ * @return {array} Split string
+ */
+function _fnSplitObjNotation( str )
+{
+	return $.map( str.match(/(\\.|[^\.])+/g), function ( s ) {
+		return s.replace('\\.', '.');
+	} );
+}
+
+
+/**
  * Return a function that can be used to get data from a source object, taking
  * into account the ability to use nested objects as a source
  *  @param {string|int|function} mSource The data source for the object
@@ -258,7 +271,7 @@ function _fnGetObjectDataFn( mSource )
 		 * be used if defined, rather than throwing an error
 		 */
 		var fetchData = function (data, type, src) {
-			var a = src.split('.');
+			var a = _fnSplitObjNotation( src );
 			var arrayNotation, funcNotation, out, innerSrc;
 
 			if ( src !== "" )
@@ -356,7 +369,7 @@ function _fnSetObjectDataFn( mSource )
 	{
 		/* Like the get, we need to get data from a nested object */
 		var setData = function (data, val, src) {
-			var a = src.split('.'), b;
+			var a = _fnSplitObjNotation( src );
 			var aLast = a[a.length-1];
 			var arrayNotation, funcNotation, o, innerSrc;
 
