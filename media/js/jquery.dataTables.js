@@ -2689,12 +2689,9 @@
 		nLength.className = oSettings.oClasses.sLength;
 		nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
 		
-		/*
-		 * Set the length to the current display length - thanks to Andrea Pavlovic for this fix,
-		 * and Stefan Skopnik for fixing the fix!
-		 */
-		$('select option[value="'+oSettings._iDisplayLength+'"]', nLength).attr("selected", true);
-		
+		/* Set the length to the current display length */
+		$('select', nLength).val( oSettings._iDisplayLength );
+	
 		$('select', nLength).bind( 'change.DT', function(e) {
 			var iVal = $(this).val();
 			
