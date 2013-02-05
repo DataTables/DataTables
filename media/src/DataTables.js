@@ -262,15 +262,34 @@
 	 */
 
 	/**
-	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
-	 * made to the server for new data (note that this trigger is called in fnServerData,
-	 * if you override fnServerData and which to use this event, you need to trigger it in
-	 * you success function).
+	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a
+	 * request to made to the server for new data. This event is called before
+	 * DataTables processed the returned data, so it can also be used to pre-
+	 * process the data returned from the server, if needed.
+	 *
+	 * Note that this trigger is called in `fnServerData`, if you override
+	 * `fnServerData` and which to use this event, you need to trigger it in you
+	 * success function.
 	 *  @name DataTable#xhr
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 *  @param {object} json JSON returned from the server
+	 *
+	 *  @example
+	 *     // Use a custom property returned from the server in another DOM element
+	 *     $('#table').dataTable().on('xhr', function (settings, json) {
+	 *       $('#status').html( json.status );
+	 *     } );
+	 *
+	 *  @example
+	 *     // Pre-process the data returned from the server
+	 *     $('#table').dataTable().on('xhr', function (settings, json) {
+	 *       for ( var i=0, ien=json.aaData.length ; i<ien ; i++ ) {
+	 *         json.aaData[i].sum = json.aaData[i].one + json.aaData[i].two;
+	 *       }
+	 *       // Note no return - manipulate the data directly in the JSON object.
+	 *     } );
 	 */
 
 	/**
