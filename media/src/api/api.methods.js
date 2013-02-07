@@ -493,7 +493,7 @@ this.fnDestroy = function ( bRemove )
 	}
 	
 	/* Blitz all DT events */
-	$(oSettings.nTableWrapper).find('*').andSelf().unbind('.DT');
+	$(oSettings.nTableWrapper).unbind('.DT').find('*').unbind('.DT');
 	
 	/* If there is an 'empty' indicator row, remove it */
 	$('tbody>tr>td.'+oSettings.oClasses.sRowEmpty, oSettings.nTable).parent().remove();
