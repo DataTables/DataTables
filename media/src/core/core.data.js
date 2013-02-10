@@ -369,7 +369,7 @@ function _fnSetObjectDataFn( mSource )
 	{
 		/* Like the get, we need to get data from a nested object */
 		var setData = function (data, val, src) {
-			var a = _fnSplitObjNotation( src );
+			var a = _fnSplitObjNotation( src ), b;
 			var aLast = a[a.length-1];
 			var arrayNotation, funcNotation, o, innerSrc;
 
