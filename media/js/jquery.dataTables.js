@@ -925,7 +925,7 @@
 		{
 			/* Like the get, we need to get data from a nested object */
 			var setData = function (data, val, src) {
-				var a = _fnSplitObjNotation( src );
+				var a = _fnSplitObjNotation( src ), b;
 				var aLast = a[a.length-1];
 				var arrayNotation, funcNotation, o, innerSrc;
 	
@@ -1992,33 +1992,38 @@
 	 */
 	function _fnAjaxParameters( oSettings )
 	{
-		var iColumns = oSettings.aoColumns.length;
+		var aoColumns = oSettings.aoColumns;
+		var iColumns = aoColumns.length;
 		var aoData = [], mDataProp, aaSort, aDataSort;
 		var i, j;
+		var param = function ( name, value ) {
+			aoData.push( { 'name': name, 'value': value } );
+		};
 		
-		aoData.push( { "name": "sEcho",          "value": oSettings.iDraw } );
-		aoData.push( { "name": "iColumns",       "value": iColumns } );
-		aoData.push( { "name": "sColumns",       "value": _fnColumnOrdering(oSettings) } );
-		aoData.push( { "name": "iDisplayStart",  "value": oSettings._iDisplayStart } );
-		aoData.push( { "name": "iDisplayLength", "value": oSettings.oFeatures.bPaginate !== false ?
-			oSettings._iDisplayLength : -1 } );
+		param( 'sEcho',          oSettings.iDraw );
+		param( 'iColumns',       iColumns );
+		param( 'sColumns',       _fnColumnOrdering(oSettings) );
+		param( 'iDisplayStart',  oSettings._iDisplayStart );
+		param( 'iDisplayLength', oSettings.oFeatures.bPaginate !== false ?
+			oSettings._iDisplayLength : -1
+		);
 			
 		for ( i=0 ; i<iColumns ; i++ )
 		{
-		  mDataProp = oSettings.aoColumns[i].mData;
-			aoData.push( { "name": "mDataProp_"+i, "value": typeof(mDataProp)==="function" ? 'function' : mDataProp } );
+			mDataProp = aoColumns[i].mData;
+			param( "mDataProp_"+i, typeof(mDataProp)==="function" ? 'function' : mDataProp );
 		}
 		
 		/* Filtering */
 		if ( oSettings.oFeatures.bFilter !== false )
 		{
-			aoData.push( { "name": "sSearch", "value": oSettings.oPreviousSearch.sSearch } );
-			aoData.push( { "name": "bRegex",  "value": oSettings.oPreviousSearch.bRegex } );
+			param( 'sSearch', oSettings.oPreviousSearch.sSearch );
+			param( 'bRegex', oSettings.oPreviousSearch.bRegex );
 			for ( i=0 ; i<iColumns ; i++ )
 			{
-				aoData.push( { "name": "sSearch_"+i,     "value": oSettings.aoPreSearchCols[i].sSearch } );
-				aoData.push( { "name": "bRegex_"+i,      "value": oSettings.aoPreSearchCols[i].bRegex } );
-				aoData.push( { "name": "bSearchable_"+i, "value": oSettings.aoColumns[i].bSearchable } );
+				param( 'sSearch_'+i,     oSettings.aoPreSearchCols[i].sSearch );
+				param( 'bRegex_'+i,      oSettings.aoPreSearchCols[i].bRegex );
+				param( 'bSearchable_'+i, aoColumns[i].bSearchable );
 			}
 		}
 		
@@ -2033,20 +2038,20 @@
 			
 			for ( i=0 ; i<aaSort.length ; i++ )
 			{
-				aDataSort = oSettings.aoColumns[ aaSort[i][0] ].aDataSort;
+				aDataSort = aoColumns[ aaSort[i][0] ].aDataSort;
 				
 				for ( j=0 ; j<aDataSort.length ; j++ )
 				{
-					aoData.push( { "name": "iSortCol_"+iCounter,  "value": aDataSort[j] } );
-					aoData.push( { "name": "sSortDir_"+iCounter,  "value": aaSort[i][1] } );
+					param( 'iSortCol_'+iCounter, aDataSort[j] );
+					param( 'sSortDir_'+iCounter, aaSort[i][1] );
 					iCounter++;
 				}
 			}
-			aoData.push( { "name": "iSortingCols",   "value": iCounter } );
+			param( 'iSortingCols', iCounter );
 			
 			for ( i=0 ; i<iColumns ; i++ )
 			{
-				aoData.push( { "name": "bSortable_"+i,  "value": oSettings.aoColumns[i].bSortable } );
+				param( 'bSortable_'+i, aoColumns[i].bSortable );
 			}
 		}
 		
