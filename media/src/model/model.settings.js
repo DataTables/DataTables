@@ -251,6 +251,10 @@ DataTable.models.oSettings = {
 		"bScrollbarLeft": false
 	},
 	
+
+	"ajax": null,
+
+	
 	/**
 	 * Array referencing the nodes which are used for the features. The 
 	 * parameters of this object match what is allowed by sDom - i.e.

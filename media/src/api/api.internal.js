@@ -45,7 +45,6 @@ this.oApi = {
 	"_fnAjaxUpdate": _fnAjaxUpdate,
 	"_fnAjaxParameters": _fnAjaxParameters,
 	"_fnAjaxUpdateDraw": _fnAjaxUpdateDraw,
-	"_fnServerParams": _fnServerParams,
 	"_fnAddOptionsHtml": _fnAddOptionsHtml,
 	"_fnFeatureHtmlTable": _fnFeatureHtmlTable,
 	"_fnScrollDraw": _fnScrollDraw,
@@ -112,7 +111,9 @@ this.oApi = {
 	"_fnBrowserDetect": _fnBrowserDetect,
 	"_fnGetColumns": _fnGetColumns,
 	"_fnHungarianMap": _fnHungarianMap,
-	"_fnCamelToHungarian": _fnCamelToHungarian
+	"_fnCamelToHungarian": _fnCamelToHungarian,
+	"_fnBuildAjax": _fnBuildAjax,
+	"_fnAjaxDataSrc": _fnAjaxDataSrc
 };
 
 $.extend( DataTable.ext.oApi, this.oApi );

@@ -120,6 +120,7 @@ _fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
 _fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
 _fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
 _fnMap( oSettings, oInit, "asStripeClasses" );
+_fnMap( oSettings, oInit, "ajax" );
 _fnMap( oSettings, oInit, "fnServerData" );
 _fnMap( oSettings, oInit, "fnFormatNumber" );
 _fnMap( oSettings, oInit, "sServerMethod" );
@@ -408,7 +409,7 @@ if ( bUsePassedData )
 		_fnAddData( oSettings, oInit.aaData[ i ] );
 	}
 }
-else if ( oSettings.bDeferLoading || oSettings.sAjaxSource === null )
+else if ( oSettings.bDeferLoading || (oSettings.sAjaxSource === null && oSettings.ajax === null) )
 {
 	/* Grab the data from the page - only do this when deferred loading or no Ajax
 	 * source since there is no point in reading the DOM data if we are then going

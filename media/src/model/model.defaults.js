@@ -137,6 +137,161 @@ DataTable.defaults = {
 
 
 	/**
+	 * DataTables can be instructed to load data to display in the table from a
+	 * Ajax source. This option defines how that Ajax call is made and where to.
+	 *
+	 * The `ajax` property has three different modes of operation, depending on
+	 * how it is defined. These are:
+	 *
+	 * * `string` - Set the URL from where the data should be loaded from.
+	 * * `object` - Define properties for `jQuery.ajax`.
+	 * * `function` - Custom data get function
+	 *
+	 * `string`
+	 * --------
+	 *
+	 * As a string, the `ajax` property simply defines the URL from which
+	 * DataTables will load data.
+	 *
+	 * `object`
+	 * --------
+	 *
+	 * As an object, the parameters in the object are passed to
+	 * [jQuery.ajax](http://api.jquery.com/jQuery.ajax/) allowing fine control
+	 * of the Ajax request. DataTables has a number of default parameters which
+	 * you can override using this option. Please refer to the jQuery
+	 * documentation for a full description of the options available, although
+	 * the following parameters provide additional options in DataTables or
+	 * require special consideration:
+	 *
+	 * * `data` - As with jQuery, `data` can be provided as an object or array
+	 *   of name/value pairs, but it can also be used as a function to
+	 *   manipulate the data DataTables sends to the server. The function takes
+	 *   a single parameter, an array of name/value pairs that DataTables has
+	 *   readied for sending. An object or array can be returned which will be
+	 *   merged into the DataTables defaults, or you can add the items to the
+	 *   array passed in. This supersedes `fnServerParams` from DataTables 1.9-.
+	 *
+	 * * `dataSrc` - By default DataTables will look for the property 'aaData'
+	 *   when obtaining data from an Ajax source or for server-side processing -
+	 *   this parameter allows that property to be changed. You can use
+	 *   Javascript dotted object notation to get a data source for multiple
+	 *   levels of nesting, or it my be used as a function. As a function it
+	 *   takes a single parameter, the JSON returned from the server, which can
+	 *   be manipulated as required, with the returned value being that used by
+	 *   DataTables as the data source for the table. This supersedes
+	 *   `sAjaxDataProp` from DataTables 1.9-.
+	 *
+	 * * `success` - Should not be overridden it is used internally in
+	 *   DataTables. To manipulate the data returned by the server use
+	 *   `ajax.dataSrc`, or use `ajax` as a function (see below).
+	 *
+	 * `function`
+	 * ----------
+	 *
+	 * As a function, making the Ajax call is left up to yourself allowing
+	 * complete control of the Ajax request. Indeed, if desired, a method other
+	 * than Ajax could be used to obtain the required data, such as Web storage
+	 * or an AIR database.
+	 *
+	 * The function is given four parameters and no return is required. The
+	 * parameters are:
+	 *
+	 * 1. _object_ - Data to send to the server
+	 * 2. _function_ - Callback function that must be executed when the required
+	 *    data has been obtained. That data should be passed into the callback
+	 *    as the only parameter
+	 * 3. _object_ - DataTables settings object for the table
+	 *
+	 * Note that this supersedes `fnServerData` from DataTables 1.9-.
+	 *
+	 *  @type string|object|function
+	 *  @default null
+	 *
+	 *  @dtopt Option
+	 *  @name DataTable.defaults.ajax
+	 *  @since 1.10.0
+	 *
+	 * @example
+	 *   // Get JSON data from a file via Ajax.
+	 *   // Note DataTables expects data in the form `{ aaData: [ ...data... ] }` by default).
+	 *   $('#example').dataTable( {
+	 *     "ajax": "data.json"
+	 *   } );
+	 *
+	 * @example
+	 *   // Get JSON data from a file via Ajax, using `dataSrc` to change
+	 *   // `aaData` to `tableData` (i.e. `{ aaData: [ ...data... ] }`)
+	 *   $('#example').dataTable( {
+	 *     "ajax": {
+	 *       "url": "data.json",
+	 *       "dataSrc": "tableData"
+	 *     }
+	 *   } );
+	 *
+	 * @example
+	 *   // Get JSON data from a file via Ajax, using `dataSrc` to read data
+	 *   // from a plain array rather than an array in an object
+	 *   $('#example').dataTable( {
+	 *     "ajax": {
+	 *       "url": "data.json",
+	 *       "dataSrc": ""
+	 *     }
+	 *   } );
+	 *
+	 * @example
+	 *   // Manipulate the data returned from the server - add a link to data
+	 *   // (note this can, should, be done using `render` for the column - this
+	 *   // is just a simple example of how the data can be manipulated).
+	 *   $('#example').dataTable( {
+	 *     "ajax": {
+	 *       "url": "data.json",
+	 *       "dataSrc": function ( json ) {
+	 *         for ( var i=0, ien=json.length ; i<ien ; i++ ) {
+	 *           json[i][0] = '<a href="/message/'+json[i][0]+'>View message</a>';
+	 *         }
+	 *         return json;
+	 *       }
+	 *     }
+	 *   } );
+	 *
+	 * @example
+	 *   // Add data to the request
+	 *   $('#example').dataTable( {
+	 *     "ajax": {
+	 *       "url": "data.json",
+	 *       "data": function ( d ) {
+	 *         return {
+	 *           "extra_search": $('#extra').val()
+	 *         };
+	 *       }
+	 *     }
+	 *   } );
+	 *
+	 * @example
+	 *   // Send request as POST
+	 *   $('#example').dataTable( {
+	 *     "ajax": {
+	 *       "url": "data.json",
+	 *       "type": "POST"
+	 *     }
+	 *   } );
+	 *
+	 * @example
+	 *   // Get the data from localStorage (could interface with a form for
+	 *   // adding, editing and removing rows).
+	 *   $('#example').dataTable( {
+	 *     "ajax": function (data, callback, settings) {
+	 *       callback(
+	 *       	JSON.parse( localStorage.getItem('dataTablesData') )
+	 *       );
+	 *     }
+	 *   } );
+	 */
+	"ajax": null,
+
+
+	/**
 	 * This parameter allows you to readily specify the entries in the length drop
 	 * down menu that DataTables shows when pagination is enabled. It can be 
 	 * either a 1D array of options which will be used for both the displayed 
@@ -562,7 +717,7 @@ DataTable.defaults = {
 	 *    $(document).ready( function () {
 	 *      $('#example').dataTable( {
 	 *        "serverSide": true,
-	 *        "ajaxSource": "xhr.php"
+	 *        "ajax": "xhr.php"
 	 *      } );
 	 *    } );
 	 */
@@ -931,13 +1086,16 @@ DataTable.defaults = {
 
 
 	/**
+	 * __Deprecated__ The functionality provided by this parameter has now been
+	 * superseded by that provided through `ajax`, which should be used instead.
+	 *
 	 * This parameter allows you to override the default function which obtains
-	 * the data from the server so something more suitable for your application. For
-	 * example you could use POST data, or pull information from a Gears or AIR
-	 * database.
+	 * the data from the server so something more suitable for your application.
+	 * For example you could use POST data, or pull information from a Gears or
+	 * AIR database.
 	 *  @type function
 	 *  @member
-	 *  @param {string} source HTTP source to obtain the data from (`ajaxSource`)
+	 *  @param {string} source HTTP source to obtain the data from (`ajax`)
 	 *  @param {array} data A key/value pair object containing the data to send
 	 *    to the server
 	 *  @param {function} callback to be called on completion of the data get
@@ -947,54 +1105,17 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 *  @dtopt Server-side
 	 *  @name DataTable.defaults.serverData
-	 * 
-	 *  @example
-	 *    // POST data to server (note you can use `serverMethod` to set the
-	 *    // HTTP method is that is all you want to use `serverData` for.
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "processing": true,
-	 *        "serverSide": true,
-	 *        "ajaxSource": "xhr.php",
-	 *        "serverData": function ( source, data, callback, settings ) {
-	 *          settings.jqXHR = $.ajax( {
-	 *            "dataType": 'json', 
-	 *            "type": "POST", 
-	 *            "url": source, 
-	 *            "data": data, 
-	 *            "success": callback
-	 *          } );
-	 *        }
-	 *      } );
-	 *    } );
+	 *
+	 *  @deprecated 1.10. Please use `ajax` for this functionality now.
 	 */
-	"fnServerData": function ( url, data, callback, settings ) {
-		settings.jqXHR = $.ajax( {
-			"url":  url,
-			"data": data,
-			"success": function (json) {
-				if ( json.sError ) {
-					settings.oApi._fnLog( settings, 0, json.sError );
-				}
-				
-				$(settings.oInstance).trigger('xhr', [settings, json]);
-				callback( json );
-			},
-			"dataType": "json",
-			"cache": false,
-			"type": settings.sServerMethod,
-			"error": function (xhr, error, thrown) {
-				if ( error == "parsererror" ) {
-					settings.oApi._fnLog( settings, 0, "DataTables warning: JSON data from "+
-						"server could not be parsed. This is caused by a JSON formatting error." );
-				}
-			}
-		} );
-	},
+	"fnServerData": null,
 
 
 	/**
-	 * It is often useful to send extra data to the server when making an Ajax
+	 * __Deprecated__ The functionality provided by this parameter has now been
+	 * superseded by that provided through `ajax`, which should be used instead.
+	 *
+	 *  It is often useful to send extra data to the server when making an Ajax
 	 * request - for example custom filtering information, and this callback
 	 * function makes it trivial to send extra information to the server. The
 	 * passed in parameter is the data set that has been constructed by
@@ -1011,18 +1132,8 @@ DataTable.defaults = {
 	 *  @dtopt Callbacks
 	 *  @dtopt Server-side
 	 *  @name DataTable.defaults.serverParams
-	 * 
-	 *  @example
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "processing": true,
-	 *        "serverSide": true,
-	 *        "ajaxSource": "scripts/server_processing.php",
-	 *        "serverParams": function ( data ) {
-	 *          data.push( { "name": "more_data", "value": "my_value" } );
-	 *        }
-	 *      } );
-	 *    } );
+	 *
+	 *  @deprecated 1.10. Please use `ajax` for this functionality now.
 	 */
 	"fnServerParams": null,
 
@@ -1242,7 +1353,7 @@ DataTable.defaults = {
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "serverSide": true,
-	 *        "ajaxSource": "scripts/server_processing.php",
+	 *        "ajax": "scripts/server_processing.php",
 	 *        "deferLoading": 57
 	 *      } );
 	 *    } );
@@ -1252,7 +1363,7 @@ DataTable.defaults = {
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
 	 *        "serverSide": true,
-	 *        "ajaxSource": "scripts/server_processing.php",
+	 *        "ajax": "scripts/server_processing.php",
 	 *        "deferLoading": [ 57, 100 ],
 	 *        "search": {
 	 *          "search": "my_filter"
@@ -1843,6 +1954,9 @@ DataTable.defaults = {
 
 
 	/**
+	 * __Deprecated__ The functionality provided by this parameter has now been
+	 * superseded by that provided through `ajax`, which should be used instead.
+	 * 
 	 * By default DataTables will look for the property 'aaData' when obtaining
 	 * data from an Ajax source or for server-side processing - this parameter
 	 * allows that property to be changed. You can use Javascript dotted object
@@ -1853,46 +1967,29 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 *  @dtopt Server-side
 	 *  @name DataTable.defaults.ajaxDataProp
-	 * 
-	 *  @example
-	 *    // Get data from { "data": [...] }
-	 *    $(document).ready( function() {
-	 *      var oTable = $('#example').dataTable( {
-	 *        "ajaxSource": "sources/data.txt",
-	 *        "ajaxDataProp": "data"
-	 *      } );
-	 *    } );
-	 *    
-	 *  @example
-	 *    // Get data from { "data": { "inner": [...] } }
-	 *    $(document).ready( function() {
-	 *      var oTable = $('#example').dataTable( {
-	 *        "ajaxSource": "sources/data.txt",
-	 *        "ajaxDataProp": "data.inner"
-	 *      } );
-	 *    } );
+	 *
+	 *  @deprecated 1.10. Please use `ajax` for this functionality now.
 	 */
 	"sAjaxDataProp": "aaData",
 
 
 	/**
-	 * You can instruct DataTables to load data from an external source using this
-	 * parameter (use aData if you want to pass data in you already have). Simply
-	 * provide a url a JSON object can be obtained from. This object must include
-	 * the parameter `aaData` which is the data source for the table.
+	 * __Deprecated__ The functionality provided by this parameter has now been
+	 * superseded by that provided through `ajax`, which should be used instead.
+	 *
+	 * You can instruct DataTables to load data from an external
+	 * source using this parameter (use aData if you want to pass data in you
+	 * already have). Simply provide a url a JSON object can be obtained from.
+	 * This object must include the parameter `aaData` which is the data source
+	 * for the table.
 	 *  @type string
 	 *  @default null
 	 *
 	 *  @dtopt Options
 	 *  @dtopt Server-side
 	 *  @name DataTable.defaults.ajaxSource
-	 * 
-	 *  @example
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "ajaxSource": "/dataTables/json.php"
-	 *      } );
-	 *    } )
+	 *
+	 *  @deprecated 1.10. Please use `ajax` for this functionality now.
 	 */
 	"sAjaxSource": null,
 
@@ -2043,6 +2140,9 @@ DataTable.defaults = {
 
 
 	/**
+	 * __Deprecated__ The functionality provided by this parameter has now been
+	 * superseded by that provided through `ajax`, which should be used instead.
+	 *
 	 * Set the HTTP method that is used to make the Ajax call for server-side
 	 * processing or Ajax sourced data.
 	 *  @type string
@@ -2051,15 +2151,8 @@ DataTable.defaults = {
 	 *  @dtopt Options
 	 *  @dtopt Server-side
 	 *  @name DataTable.defaults.serverMethod
-	 * 
-	 *  @example
-	 *    $(document).ready( function() {
-	 *      $('#example').dataTable( {
-	 *        "serverSide": true,
-	 *        "ajaxSource": "scripts/post.php",
-	 *        "serverMethod": "POST"
-	 *      } );
-	 *    } );
+	 *
+	 *  @deprecated 1.10. Please use `ajax` for this functionality now.
 	 */
 	"sServerMethod": "GET"
 };

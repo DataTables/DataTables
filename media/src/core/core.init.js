@@ -64,13 +64,11 @@ function _fnInitialise ( oSettings )
 	}
 	
 	/* if there is an ajax source load the data */
-	if ( oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
+	if ( (oSettings.sAjaxSource || oSettings.ajax) && !oSettings.oFeatures.bServerSide )
 	{
 		var aoData = [];
-		_fnServerParams( oSettings, aoData );
-		oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData, function(json) {
-			var aData = (oSettings.sAjaxDataProp !== "") ?
-			 	_fnGetObjectDataFn( oSettings.sAjaxDataProp )(json) : json;
+		_fnBuildAjax( oSettings, [], function(json) {
+			var aData = _fnAjaxDataSrc( oSettings, json );
 
 			/* Got the data - add it to the table */
 			for ( i=0 ; i<aData.length ; i++ )

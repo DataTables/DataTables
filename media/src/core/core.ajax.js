@@ -1,4 +1,101 @@
 
+
+/**
+ * Create an Ajax call based on the table's settings, taking into account that
+ * parameters can have multiple forms, and backwards compatibility.
+ *
+ * @param {object} oSettings dataTables settings object
+ * @param {array} data Data to send to the server, required by
+ *     DataTables - may be augmented by developer callbacks
+ * @param {function} fn Callback function to run when data is obtained
+ */
+function _fnBuildAjax( oSettings, data, fn )
+{
+	// Compatibility with 1.9-, allow fnServerData and event to manipulate
+	_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
+
+	var ajaxData;
+
+	if ( $.isPlainObject( oSettings.ajax ) && oSettings.ajax.data )
+	{
+		ajaxData = oSettings.ajax.data;
+		var newData = $.isFunction( ajaxData ) ?
+			ajaxData( data ) :  // fn can manipulate data or return an object or array
+			ajaxData;           // object or array to merge
+
+		if ( $.isArray( newData ) )
+		{
+			// name value pair objects in an array
+			data = data.concat( newData );
+		}
+		else if ( $.isPlainObject( newData ) )
+		{
+			// aData is an array of name value pairs at this point - convert to
+			// an object to easily merge data - jQuery will cope with the switch
+			var oData = {};
+			$.each( data, function (key, val) {
+				oData[val.name] = val.value;
+			} );
+
+			data = $.extend( true, oData, newData );
+		}
+
+		// Remove the data property as we've resolved it already
+		delete oSettings.ajax.data;
+	}
+
+	var baseAjax = {
+		"data": data,
+		"success": function (json) {
+			if ( json.sError ) {
+				oSettings.oApi._fnLog( oSettings, 0, json.sError );
+			}
+			
+			$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
+			fn( json );
+		},
+		"dataType": "json",
+		"cache": false,
+		"type": oSettings.sServerMethod,
+		"error": function (xhr, error, thrown) {
+			if ( error == "parsererror" ) {
+				oSettings.oApi._fnLog( oSettings, 0, "DataTables: invalid JSON response" );
+			}
+		}
+	};
+
+	if ( oSettings.fnServerData )
+	{
+		// DataTables 1.9- compatibility
+		oSettings.fnServerData.call( oSettings.oInstance,
+			oSettings.sAjaxSource, data, fn, oSettings
+		);
+	}
+	else if ( oSettings.sAjaxSource || typeof oSettings.ajax === 'string' )
+	{
+		// DataTables 1.9- compatibility
+		oSettings.jqXHR = $.ajax( $.extend( baseAjax, {
+			url: oSettings.ajax || oSettings.sAjaxSource
+		} ) );
+	}
+	else if ( $.isFunction( oSettings.ajax ) )
+	{
+		// Is a function - let the caller define what needs to be done
+		oSettings.jqXHR = oSettings.ajax.call( oSettings.oInstance,
+			data, fn, oSettings
+		);
+	}
+	else
+	{
+		// Object to extend the base settings
+		oSettings.jqXHR = $.ajax( $.extend( baseAjax, oSettings.ajax ) );
+
+		// Restore for next time around
+		oSettings.ajax.data = ajaxData;
+	}
+}
+
+
 /**
  * Update the table using an Ajax call
  *  @param {object} oSettings dataTables settings object
@@ -13,12 +110,11 @@ function _fnAjaxUpdate( oSettings )
 		_fnProcessingDisplay( oSettings, true );
 		var iColumns = oSettings.aoColumns.length;
 		var aoData = _fnAjaxParameters( oSettings );
-		_fnServerParams( oSettings, aoData );
-		
-		oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aoData,
-			function(json) {
-				_fnAjaxUpdateDraw( oSettings, json );
-			}, oSettings );
+
+		_fnBuildAjax( oSettings, aoData, function(json) {
+			_fnAjaxUpdateDraw( oSettings, json );
+		}, oSettings );
+
 		return false;
 	}
 	return true;
@@ -96,18 +192,6 @@ function _fnAjaxParameters( oSettings )
 
 
 /**
- * Add Ajax parameters from plug-ins
- *  @param {object} oSettings dataTables settings object
- *  @param array {objects} aoData name/value pairs to send to the server
- *  @memberof DataTable#oApi
- */
-function _fnServerParams( oSettings, aoData )
-{
-	_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [aoData] );
-}
-
-
-/**
  * Data the data from the server (nuking the old) and redraw the table
  *  @param {object} oSettings dataTables settings object
  *  @param {object} json json data return from the server.
@@ -139,7 +223,7 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 	oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
 	
-	var aData = _fnGetObjectDataFn( oSettings.sAjaxDataProp )( json );
+	var aData = _fnAjaxDataSrc( oSettings, json );
 	for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 	{
 		_fnAddData( oSettings, aData[i] );
@@ -150,5 +234,25 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	_fnDraw( oSettings );
 	oSettings.bAjaxDataGet = true;
 	_fnProcessingDisplay( oSettings, false );
+}
+
+
+/**
+ * Get the data from the JSON data source to use for drawing a table. Using
+ * `_fnGetObjectDataFn` allows the data to be sourced from a property of the
+ * source object, or from a processing function.
+ *  @param {object} oSettings dataTables settings object
+ *  @param  {object} json Data source object / array from the server
+ *  @return {array} Array of data to use
+ */
+function _fnAjaxDataSrc ( oSettings, json )
+{
+	var dataSrc = $.isPlainObject( oSettings.ajax ) && oSettings.ajax.dataSrc !== undefined ?
+		oSettings.ajax.dataSrc :
+		oSettings.sAjaxDataProp; // Compatibility with 1.9-.
+
+	return dataSrc !== "" ?
+		_fnGetObjectDataFn( dataSrc )(json) :
+		json;
 }
 
