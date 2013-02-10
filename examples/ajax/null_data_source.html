@@ -14,15 +14,15 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"sAjaxSource": "sources/arrays.txt",
-					"aoColumns": [
+					"processing": true,
+					"ajax": "sources/arrays.txt",
+					"columns": [
 						null,
 						null,
 						null,
 						null,
 						null,
-						{ "mData": null }
+						{ "data": null }
 					]
 				} );
 			} );

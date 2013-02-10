@@ -39,9 +39,10 @@
 				return null;
 			}
 			
-			function fnDataTablesPipeline ( sSource, aoData, fnCallback, oSettings ) {
+			function fnDataTablesPipeline ( aoData, fnCallback, oSettings ) {
 				var iPipe = 5; /* Ajust the pipe size */
 				
+				var sSource = "scripts/server_processing.php";
 				var bNeedServer = false;
 				var sEcho = fnGetKey(aoData, "sEcho");
 				var iRequestStart = fnGetKey(aoData, "iDisplayStart");
@@ -117,10 +118,9 @@
 			
 			$(document).ready(function() {
 				$('#example').dataTable( {
-					"bProcessing": true,
-					"bServerSide": true,
-					"sAjaxSource": "scripts/server_processing.php",
-					"fnServerData": fnDataTablesPipeline
+					"processing": true,
+					"serverSide": true,
+					"ajax": fnDataTablesPipeline
 				} );
 			} );
 		</script>

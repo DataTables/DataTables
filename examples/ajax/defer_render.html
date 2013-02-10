@@ -13,10 +13,10 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				var oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"sAjaxSource": "sources/arrays.txt",
-					"bDeferRender": true
+				$('#example').dataTable( {
+					"processing": true,
+					"ajax": "sources/arrays.txt",
+					"deferRender": true
 				} );
 			} );
 		</script>

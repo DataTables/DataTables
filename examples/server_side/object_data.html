@@ -14,15 +14,15 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				$('#example').dataTable( {
-					"bProcessing": true,
-					"bServerSide": true,
-					"sAjaxSource": "scripts/objects.php",
-					"aoColumns": [
-						{ "mData": "engine" },
-						{ "mData": "browser" },
-						{ "mData": "platform" },
-						{ "mData": "version" },
-						{ "mData": "grade" }
+					"processing": true,
+					"serverSide": true,
+					"ajax": "scripts/objects.php",
+					"columns": [
+						{ "data": "engine" },
+						{ "data": "browser" },
+						{ "data": "platform" },
+						{ "data": "version" },
+						{ "data": "grade" }
 					]
 				} );
 			} );

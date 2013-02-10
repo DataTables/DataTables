@@ -15,10 +15,10 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"bServerSide": true,
-					"sAjaxSource": "scripts/server_processing.php",
-					"fnDrawCallback": function () {
+					"processing": true,
+					"serverSide": true,
+					"ajax": "scripts/server_processing.php",
+					"drawCallback": function () {
 						$('#example tbody td').editable( '../examples_support/editable_ajax.php', {
 							"callback": function( sValue, y ) {
 								/* Redraw the table from the new data on the server */

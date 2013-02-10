@@ -14,10 +14,12 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				$('#example').dataTable( {
-					"bProcessing": true,
-					"bServerSide": true,
-					"sAjaxSource": "scripts/post.php",
-					"sServerMethod": "POST"
+					"processing": true,
+					"serverSide": true,
+					"ajax": {
+						"url": "scripts/post.php",
+						"type": "POST"
+					}
 				} );
 			} );
 		</script>

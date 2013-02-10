@@ -14,14 +14,14 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"sAjaxSource": "sources/objects.txt",
-					"aoColumns": [
-						{ "mData": "engine" },
-						{ "mData": "browser" },
-						{ "mData": "platform" },
-						{ "mData": "version" },
-						{ "mData": "grade" }
+					"processing": true,
+					"ajax": "sources/objects.txt",
+					"columns": [
+						{ "data": "engine" },
+						{ "data": "browser" },
+						{ "data": "platform" },
+						{ "data": "version" },
+						{ "data": "grade" }
 					]
 				} );
 			} );

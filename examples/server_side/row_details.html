@@ -29,18 +29,18 @@
 			
 			$(document).ready(function() {
 				oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"bServerSide": true,
-					"sAjaxSource": "scripts/details_col.php",
-					"aoColumns": [
-						{ "sClass": "center", "bSortable": false },
+					"processing": true,
+					"serverSide": true,
+					"ajax": "scripts/details_col.php",
+					"columns": [
+						{ "class": "center", "sortable": false },
 						null,
 						null,
 						null,
-						{ "sClass": "center" },
-						{ "sClass": "center" }
+						{ "class": "center" },
+						{ "class": "center" }
 					],
-					"aaSorting": [[1, 'asc']]
+					"sorting": [[1, 'asc']]
 				} );
 				
 				$('#example tbody td img').live( 'click', function () {

@@ -14,14 +14,14 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"sAjaxSource": "sources/deep.txt",
-					"aoColumns": [
-						{ "mData": "engine" },
-						{ "mData": "browser" },
-						{ "mData": "platform.inner" },
-						{ "mData": "platform.details.0" },
-						{ "mData": "platform.details.1" }
+					"processing": true,
+					"ajax": "sources/deep.txt",
+					"columns": [
+						{ "data": "engine" },
+						{ "data": "browser" },
+						{ "data": "platform.inner" },
+						{ "data": "platform.details.0" },
+						{ "data": "platform.details.1" }
 					]
 				} );
 			} );

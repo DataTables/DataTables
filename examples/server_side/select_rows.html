@@ -17,10 +17,10 @@ $(document).ready(function() {
 	
 	/* Init the table */
 	$("#example").dataTable({
-		"bProcessing": true,
-		"bServerSide": true,
-		"sAjaxSource": "scripts/id.php",
-		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+		"processing": true,
+		"serverSide": true,
+		"ajax": "scripts/id.php",
+		"rowCallback": function( nRow, aData, iDisplayIndex ) {
 			if ( jQuery.inArray(aData.DT_RowId, aSelected) !== -1 ) {
 				$(nRow).addClass('row_selected');
 			}

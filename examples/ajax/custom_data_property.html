@@ -14,9 +14,11 @@
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 				var oTable = $('#example').dataTable( {
-					"bProcessing": true,
-					"sAjaxSource": "sources/custom_prop.txt",
-					"sAjaxDataProp": "demo"
+					"processing": true,
+					"ajax": {
+						"url": "sources/custom_prop.txt",
+						"dataSrc": "demo"
+					}
 				} );
 			} );
 		</script>
