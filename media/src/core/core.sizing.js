@@ -55,7 +55,7 @@ function _fnCalculateColumnWidths ( oSettings )
 			
 			if ( oSettings.aoColumns[i].sWidth !== null )
 			{
-				iTmpWidth = _fnConvertToWidth( oSettings.aoColumns[i].sWidthOrig, 
+				iTmpWidth = _fnConvertToWidth( oSettings.aoColumns[i].sWidthOrig,
 					nWrapper );
 				if ( iTmpWidth !== null )
 				{
@@ -67,8 +67,8 @@ function _fnCalculateColumnWidths ( oSettings )
 		}
 	}
 	
-	/* If the number of columns in the DOM equals the number that we have to process in 
-	 * DataTables, then we can use the offsets that are created by the web-browser. No custom 
+	/* If the number of columns in the DOM equals the number that we have to process in
+	 * DataTables, then we can use the offsets that are created by the web-browser. No custom
 	 * sizes can be set in order for this to happen, nor scrolling used
 	 */
 	if ( iColums == oHeaders.length && iUserInputs === 0 && iVisibleColumns == iColums &&
@@ -197,7 +197,7 @@ function _fnCalculateColumnWidths ( oSettings )
 			oNodes = _fnGetUniqueThs( oSettings, $('thead', nCalcTmp)[0] );
 		}
 
-		/* Browsers need a bit of a hand when a width is assigned to any columns when 
+		/* Browsers need a bit of a hand when a width is assigned to any columns when
 		 * x-scrolling as they tend to collapse the table to the min-width, even if
 		 * we sent the column widths. So we need to keep track of what the table width
 		 * should be by summing the user given values, and the automatic values
@@ -369,7 +369,7 @@ function _fnStringToCss( s )
  *  @memberof DataTable#oApi
  */
 function _fnScrollBarWidth ()
-{  
+{
 	var inner = document.createElement('p');
 	var style = inner.style;
 	style.width = "100%";
@@ -398,6 +398,6 @@ function _fnScrollBarWidth ()
 	}
 	
 	document.body.removeChild(outer);
-	return (w1 - w2);  
+	return (w1 - w2);
 }
 

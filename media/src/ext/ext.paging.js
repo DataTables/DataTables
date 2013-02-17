@@ -1,6 +1,6 @@
 /*
  * Variable: oPagination
- * Purpose:  
+ * Purpose:
  * Scope:    jQuery.fn.dataTableExt
  */
 $.extend( DataTable.ext.oPagination, {
@@ -83,7 +83,7 @@ $.extend( DataTable.ext.oPagination, {
 					/* Previous page */
 					nNode.className = ( oSettings._iDisplayStart === 0 ) ?
 					    oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
-					    
+
 					/* Next page */
 					nNode = nNode.nextSibling;
 					nNode.className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ?
@@ -241,12 +241,12 @@ $.extend( DataTable.ext.oPagination, {
 				/* Update the permanent button's classes */
 				anButtons = nNode.getElementsByTagName('a');
 				anStatic = [
-					anButtons[0], anButtons[1], 
+					anButtons[0], anButtons[1],
 					anButtons[anButtons.length-2], anButtons[anButtons.length-1]
 				];
 
 				$(anStatic).removeClass( oClasses.sPageButton+" "+oClasses.sPageButtonActive+" "+oClasses.sPageButtonStaticDisabled );
-				$([anStatic[0], anStatic[1]]).addClass( 
+				$([anStatic[0], anStatic[1]]).addClass(
 					(iCurrentPage==1) ?
 						oClasses.sPageButtonStaticDisabled :
 						oClasses.sPageButton

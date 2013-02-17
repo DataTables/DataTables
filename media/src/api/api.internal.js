@@ -14,7 +14,7 @@
 function _fnExternApiFunc (sFunc)
 {
 	return function() {
-		var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat( 
+		var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat(
 			Array.prototype.slice.call(arguments) );
 		return DataTable.ext.oApi[sFunc].apply( this, aArgs );
 	};

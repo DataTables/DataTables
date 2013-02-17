@@ -4,7 +4,7 @@
  * Create a mapping object that allows camel case parameters to be looked up
  * for their Hungarian counterparts. The mapping is stored in a private
  * parameter called `_hungaianMap` which can be accessed on the source object.
- *  @param {object} o 
+ *  @param {object} o
  *  @memberof DataTable#oApi
  */
 function _fnHungarianMap ( o )

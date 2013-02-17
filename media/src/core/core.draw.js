@@ -141,7 +141,7 @@ function _fnBuildHead( oSettings )
 		_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 	}
 	
-	/* ARIA role for the rows */	
+	/* ARIA role for the rows */
 	$(oSettings.nTHead).children('tr').attr('role', 'row');
 	
 	/* Add the extra markup needed by jQuery UI's themes */
@@ -206,13 +206,13 @@ function _fnBuildHead( oSettings )
  * Draw the header (or footer) element based on the column visibility states. The
  * methodology here is to use the layout array from _fnDetectHeader, modified for
  * the instantaneous column visibility, to construct the new layout. The grid is
- * traversed over cell at a time in a rows x columns grid fashion, although each 
+ * traversed over cell at a time in a rows x columns grid fashion, although each
  * cell insert can cover multiple elements in the grid - which is tracks using the
  * aApplied array. Cell inserts in the grid will only occur where there isn't
  * already a cell in that position.
  *  @param {object} oSettings dataTables settings object
  *  @param array {objects} aoSource Layout array from _fnDetectHeader
- *  @param {boolean} [bIncludeHidden=false] If true then include the hidden columns in the calc, 
+ *  @param {boolean} [bIncludeHidden=false] If true then include the hidden columns in the calc,
  *  @memberof DataTable#oApi
  */
 function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
@@ -389,7 +389,7 @@ function _fnDraw( oSettings )
 			}
 			
 			/* Row callback functions - might want to manipulate the row */
-			_fnCallbackFire( oSettings, 'aoRowCallback', null, 
+			_fnCallbackFire( oSettings, 'aoRowCallback', null,
 				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
 			
 			anRows.push( nRow );
@@ -437,15 +437,15 @@ function _fnDraw( oSettings )
 	}
 	
 	/* Header and footer callbacks */
-	_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0], 
+	_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
 		_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 	
-	_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0], 
+	_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
 		_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 	
-	/* 
+	/*
 	 * Need to remove any old row from the display - note we can't just empty the tbody using
-	 * $().html('') since this will unbind the jQuery event handlers (even although the node 
+	 * $().html('') since this will unbind the jQuery event handlers (even although the node
 	 * still exists!) - equally we can't use innerHTML, since IE throws an exception.
 	 */
 	var
@@ -462,7 +462,7 @@ function _fnDraw( oSettings )
 		 * up. When not infinite scroll, always do it.
 		 */
 		if ( !oSettings.oScroll.bInfinite || !oSettings._bInitComplete ||
-		 	oSettings.bSorted || oSettings.bFiltered )
+			oSettings.bSorted || oSettings.bFiltered )
 		{
 			while( (n = oSettings.nTBody.firstChild) )
 			{
@@ -541,7 +541,7 @@ function _fnAddOptionsHtml ( oSettings )
 	var nHolding = $('<div></div>')[0];
 	oSettings.nTable.parentNode.insertBefore( nHolding, oSettings.nTable );
 	
-	/* 
+	/*
 	 * All DataTables are wrapped in a div
 	 */
 	oSettings.nTableWrapper = $('<div id="'+oSettings.sTableId+'_wrapper" class="'+oSettings.oClasses.sWrapper+'" role="grid"></div>')[0];
@@ -734,7 +734,7 @@ function _fnDetectHeader ( aLayout, nThead )
 				iColspan = (!iColspan || iColspan===0 || iColspan===1) ? 1 : iColspan;
 				iRowspan = (!iRowspan || iRowspan===0 || iRowspan===1) ? 1 : iRowspan;
 
-				/* There might be colspan cells already in this row, so shift our target 
+				/* There might be colspan cells already in this row, so shift our target
 				 * accordingly
 				 */
 				iColShifted = fnShiftCol( aLayout, i, iColumn );
@@ -786,7 +786,7 @@ function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 	{
 		for ( var j=0, jLen=aLayout[i].length ; j<jLen ; j++ )
 		{
-			if ( aLayout[i][j].unique && 
+			if ( aLayout[i][j].unique &&
 				 (!aReturn[j] || !oSettings.bSortCellsTop) )
 			{
 				aReturn[j] = aLayout[i][j].cell;

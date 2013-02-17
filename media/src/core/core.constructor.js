@@ -171,8 +171,8 @@ else if ( oSettings.oFeatures.bDeferRender )
 
 if ( oInit.bJQueryUI )
 {
-	/* Use the JUI classes object for display. You could clone the oStdClasses object if 
-	 * you want to have multiple tables with multiple independent classes 
+	/* Use the JUI classes object for display. You could clone the oStdClasses object if
+	 * you want to have multiple tables with multiple independent classes
 	 */
 	$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
 	
@@ -226,7 +226,7 @@ if ( oInit.aaData !== null )
 if ( oInit.oLanguage.sUrl !== "" )
 {
 	/* Get the language definitions from a file - because this Ajax call makes the language
-	 * get async to the remainder of this function we use bInitHandedOff to indicate that 
+	 * get async to the remainder of this function we use bInitHandedOff to indicate that
 	 * _fnInitialise will be fired by the returned Ajax handler, rather than the constructor
 	 */
 	oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;

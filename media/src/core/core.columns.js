@@ -139,7 +139,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 
 
 /**
- * Adjust the table column widths for new data. Note: you would probably want to 
+ * Adjust the table column widths for new data. Note: you would probably want to
  * do a redraw after calling this function!
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
@@ -210,7 +210,7 @@ function _fnVisbleColumns( oSettings )
 /**
  * Get an array of column indexes that match a given property
  *  @param {object} oSettings dataTables settings object
- *  @param {string} sParam Parameter in aoColumns to look for - typically 
+ *  @param {string} sParam Parameter in aoColumns to look for - typically
  *    bVisible or bSearchable
  *  @returns {array} Array of indexes with matched properties
  *  @memberof DataTable#oApi

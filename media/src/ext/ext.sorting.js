@@ -15,7 +15,7 @@ $.extend( DataTable.ext.oSort, {
 		return a.toLowerCase();
 	},
 
-	// string-asc and -desc are retained only for compatibility with 
+	// string-asc and -desc are retained only for compatibility with
 	"string-asc": function ( x, y )
 	{
 		return ((x < y) ? -1 : ((x > y) ? 1 : 0));

@@ -1,5 +1,5 @@
 /**
- * Add a data array to the table, creating DOM node etc. This is the parallel to 
+ * Add a data array to the table, creating DOM node etc. This is the parallel to
  * _fnGatherData, but for adding rows from a Javascript source, rather than a
  * DOM source.
  *  @param {object} oSettings dataTables settings object
@@ -478,7 +478,7 @@ function _fnClearTable( oSettings )
 
 
  /**
- * Take an array of integers (index array) and remove a target integer (value - not 
+ * Take an array of integers (index array) and remove a target integer (value - not
  * the key!)
  *  @param {array} a Index array to target
  *  @param {int} iTarget value to find

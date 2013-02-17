@@ -43,7 +43,7 @@ function _fnGetTrNodes ( oSettings )
 /**
  * Return an flat array with all TD nodes for the table, or row
  *  @param {object} oSettings dataTables settings object
- *  @param {int} [iIndividualRow] aoData index to get the nodes for - optional 
+ *  @param {int} [iIndividualRow] aoData index to get the nodes for - optional
  *    if not given then the return array will contain all nodes for the table
  *  @returns {array} TD array
  *  @memberof DataTable#oApi

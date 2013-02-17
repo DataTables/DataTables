@@ -1,7 +1,7 @@
 
 
 /*
- * Developer note - See note in model.defaults.js about the use of Hungarian 
+ * Developer note - See note in model.defaults.js about the use of Hungarian
  * notation and camel case.
  */
 
@@ -11,15 +11,15 @@
  */
 DataTable.defaults.column = {
 	/**
-	 * Allows a column's sorting to take multiple columns into account when 
-	 * doing a sort. For example first name / last name columns make sense to 
+	 * Allows a column's sorting to take multiple columns into account when
+	 * doing a sort. For example first name / last name columns make sense to
 	 * do a multi-column sort over the two columns.
 	 *  @type array
 	 *  @default null <i>Takes the value of the column index automatically</i>
 	 *
 	 *  @name DataTable.defaults.column.dataSort
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
@@ -31,7 +31,7 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
@@ -58,7 +58,7 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.sorting
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
@@ -70,7 +70,7 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
@@ -95,21 +95,21 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.searchable
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "searchable": false, "targets": [ 0 ] }
 	 *        ] } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "searchable": false },
 	 *          null,
 	 *          null,
@@ -128,21 +128,21 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.sortable
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "sortable": false, "targets": [ 0 ] }
 	 *        ] } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "sortable": false },
 	 *          null,
 	 *          null,
@@ -161,21 +161,21 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.visible
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "visible": false, "targets": [ 0 ] }
 	 *        ] } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "visible": false },
 	 *          null,
 	 *          null,
@@ -201,7 +201,7 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.createdCell
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
@@ -228,22 +228,22 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.dataSort
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "dataSort": 1, "targets": [ 0 ] }
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "dataSort": 1 },
 	 *          null,
 	 *          null,
@@ -445,7 +445,7 @@ DataTable.defaults.column = {
 	 * but this parameter is much easier to use as there is no 'set' option.
 	 * Like `data` this option can be given in a number of different ways to
 	 * effect its behaviour:
-	 * 
+	 *
 	 * * `integer` - treated as an array index for the data source. This is the
 	 *   default that DataTables uses (incrementally increased for each column).
 	 * * `string` - read an object property from the data source. There are
@@ -485,7 +485,7 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.render
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Create a comma separated list from an array of objects
 	 *    $(document).ready( function() {
@@ -501,7 +501,7 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 * 
+	 *
 	 *  @example
 	 *    // Execute a function to obtain data
 	 *    $(document).ready( function() {
@@ -513,7 +513,7 @@ DataTable.defaults.column = {
 	 *        } ]
 	 *      } );
 	 *    } );
-	 * 
+	 *
 	 *  @example
 	 *    // Use as a function to create a link from the data source
 	 *    $(document).ready( function() {
@@ -540,7 +540,7 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.cellType
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Make the first column use TH cells
 	 *    $(document).ready( function() {
@@ -562,22 +562,22 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.class
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "class": "my_class", "targets": [ 0 ] }
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "class": "my_class" },
 	 *          null,
 	 *          null,
@@ -593,7 +593,7 @@ DataTable.defaults.column = {
 	 * When DataTables calculates the column widths to assign to each column,
 	 * it finds the longest string in each column and then constructs a
 	 * temporary table and reads the widths from that. The problem with this
-	 * is that "mmm" is much wider then "iiii", but the latter is a longer 
+	 * is that "mmm" is much wider then "iiii", but the latter is a longer
 	 * string - thus the calculation can go wrong (doing it properly and putting
 	 * it into an DOM object and measuring that is horribly(!) slow). Thus as
 	 * a "work around" we provide this option. It will append its value to the
@@ -604,12 +604,12 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.contentPadding
 	 *  @dtopt Columns
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          null,
 	 *          null,
 	 *          null,
@@ -632,12 +632,12 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.defaultContent
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          {
 	 *            "data": null,
 	 *            "defaultContent": "Edit",
@@ -646,12 +646,12 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          null,
 	 *          null,
 	 *          null,
@@ -678,12 +678,12 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.name
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "name": "engine", "targets": [ 0 ] },
 	 *          { "name": "browser", "targets": [ 1 ] },
 	 *          { "name": "platform", "targets": [ 2 ] },
@@ -692,12 +692,12 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "name": "engine" },
 	 *          { "name": "browser" },
 	 *          { "name": "platform" },
@@ -720,7 +720,7 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.sortDataType
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
@@ -733,7 +733,7 @@ DataTable.defaults.column = {
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
@@ -755,27 +755,27 @@ DataTable.defaults.column = {
 	/**
 	 * The title of this column.
 	 *  @type string
-	 *  @default null <i>Derived from the 'TH' value for this column in the 
+	 *  @default null <i>Derived from the 'TH' value for this column in the
 	 *    original HTML table.</i>
 	 *
 	 *  @name DataTable.defaults.column.title
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "title": "My column title", "targets": [ 0 ] }
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "title": "My column title" },
 	 *          null,
 	 *          null,
@@ -801,22 +801,22 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.type
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "type": "html", "targets": [ 0 ] }
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "type": "html" },
 	 *          null,
 	 *          null,
@@ -839,22 +839,22 @@ DataTable.defaults.column = {
 	 *
 	 *  @name DataTable.defaults.column.width
 	 *  @dtopt Columns
-	 * 
+	 *
 	 *  @example
 	 *    // Using `columnDefs`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columnDefs": [ 
+	 *        "columnDefs": [
 	 *          { "width": "20%", "targets": [ 0 ] }
 	 *        ]
 	 *      } );
 	 *    } );
-	 *    
+	 *
 	 *  @example
 	 *    // Using `columns`
 	 *    $(document).ready( function() {
 	 *      $('#example').dataTable( {
-	 *        "columns": [ 
+	 *        "columns": [
 	 *          { "width": "20%" },
 	 *          null,
 	 *          null,
