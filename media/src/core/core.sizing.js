@@ -7,25 +7,24 @@
  */
 function _fnConvertToWidth ( sWidth, nParent )
 {
-	if ( !sWidth || sWidth === null || sWidth === '' )
+	if ( ! sWidth )
 	{
 		return 0;
 	}
 	
-	if ( !nParent )
+	if ( ! nParent )
 	{
 		nParent = document.body;
 	}
 	
-	var iWidth;
-	var nTmp = document.createElement( "div" );
-	nTmp.style.width = _fnStringToCss( sWidth );
+	var n = $('<div/>')
+		.css( 'width', _fnStringToCss( sWidth ) )
+		.appendTo( nParent );
+
+	var width = n.offsetWidth;
+	n.remove();
 	
-	nParent.appendChild( nTmp );
-	iWidth = nTmp.offsetWidth;
-	nParent.removeChild( nTmp );
-	
-	return ( iWidth );
+	return width;
 }
 
 
