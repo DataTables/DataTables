@@ -370,34 +370,36 @@ function _fnStringToCss( s )
  */
 function _fnScrollBarWidth ()
 {
-	var inner = document.createElement('p');
-	var style = inner.style;
-	style.width = "100%";
-	style.height = "200px";
-	style.padding = "0px";
-	
-	var outer = document.createElement('div');
-	style = outer.style;
-	style.position = "absolute";
-	style.top = "0px";
-	style.left = "0px";
-	style.visibility = "hidden";
-	style.width = "200px";
-	style.height = "150px";
-	style.padding = "0px";
-	style.overflow = "hidden";
-	outer.appendChild(inner);
-	
-	document.body.appendChild(outer);
+	var inner = $('<p/>').css( {
+		width: '100%',
+		height: 200,
+		padding: 0
+	} )[0];
+
+	var outer = $('<div/>')
+		.css( {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			width: 200,
+			height: 150,
+			padding: 0,
+			overflow: 'hidden',
+			visibility: 'hidden'
+		} )
+		.append( inner )
+		.appendTo( 'body' );
+
 	var w1 = inner.offsetWidth;
-	outer.style.overflow = 'scroll';
+	outer.css( 'overflow', 'scroll' );
 	var w2 = inner.offsetWidth;
-	if ( w1 == w2 )
+	if ( w1 === w2 )
 	{
-		w2 = outer.clientWidth;
+		w2 = outer[0].clientWidth;
 	}
 	
-	document.body.removeChild(outer);
-	return (w1 - w2);
+	outer.remove();
+
+	return w1 - w2;
 }
 
