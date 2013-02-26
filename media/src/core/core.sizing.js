@@ -21,7 +21,7 @@ function _fnConvertToWidth ( sWidth, nParent )
 		.css( 'width', _fnStringToCss( sWidth ) )
 		.appendTo( nParent );
 
-	var width = n.offsetWidth;
+	var width = n[0].offsetWidth;
 	n.remove();
 	
 	return width;
