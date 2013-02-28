@@ -631,6 +631,7 @@
 	 */
 	function _fnAddTr( oSettings, trs )
 	{
+        var fnTrimTD = oSettings.fnTrimTD || function(td) { return $.trim(td.innerHTML); };
 		// Allow an individual node to be passed in
 		if ( ! trs instanceof $ ) {
 			trs = $(trs);
@@ -648,7 +649,7 @@
 				name = td.nodeName.toUpperCase();
 				if ( name == "TD" || name == "TH" )
 				{
-					d.push( $.trim(td.innerHTML) );
+					d.push( fnTrimTD(td) );
 					tds.push( td );
 				}
 				td = td.nextSibling;
@@ -2155,7 +2156,7 @@
 		nFilter._DT_Input = jqFilter[0];
 
 		jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
-		jqFilter.bind( 'keyup.DT search', function(e) {
+		jqFilter.bind( 'keyup.DT search.DT', function(e) {
 			/* Update all other filter input elements for the new display */
 			var n = oSettings.aanFeatures.f;
 			var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(

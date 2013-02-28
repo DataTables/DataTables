@@ -29,7 +29,7 @@ function _fnFeatureHtmlFilter ( oSettings )
 	nFilter._DT_Input = jqFilter[0];
 
 	jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
-	jqFilter.bind( 'keyup.DT search', function(e) {
+	jqFilter.bind( 'keyup.DT search.DT', function(e) {
 		/* Update all other filter input elements for the new display */
 		var n = oSettings.aanFeatures.f;
 		var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
