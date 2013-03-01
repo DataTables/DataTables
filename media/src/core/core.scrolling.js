@@ -214,6 +214,7 @@ function _fnScrollDraw ( o )
 	o.nTable.insertBefore( nTheadSize, o.nTable.childNodes[0] );
 	anHeadToSize = o.nTHead.getElementsByTagName('tr');
 	anHeadSizers = nTheadSize.getElementsByTagName('tr');
+	$('th, td', nTheadSize).removeAttr('tabindex');
 	
 	if ( o.nTFoot !== null )
 	{
