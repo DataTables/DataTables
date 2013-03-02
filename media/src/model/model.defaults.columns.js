@@ -440,11 +440,11 @@ DataTable.defaults.column = {
 	/**
 	 * This property is the rendering partner to `data` and it is suggested that
 	 * when you want to manipulate data for display (including filtering,
-	 * sorting etc) but not altering the underlying data for the table, use this
-	 * property. `data` can actually do everything this property can and more,
-	 * but this parameter is much easier to use as there is no 'set' option.
-	 * Like `data` this option can be given in a number of different ways to
-	 * effect its behaviour:
+	 * sorting etc) without altering the underlying data for the table, use this
+	 * property. `render` can be considered to be the the read only companion to
+	 * `data` which is read / write (then as such more complex). Like `data`
+	 * this option can be given in a number of different ways to effect its
+	 * behaviour:
 	 *
 	 * * `integer` - treated as an array index for the data source. This is the
 	 *   default that DataTables uses (incrementally increased for each column).
@@ -467,6 +467,13 @@ DataTable.defaults.column = {
 	 *      simple function on the data source, `browser.version()` for a
 	 *      function in a nested property or even `browser().version` to get an
 	 *      object property if the function called returns an object.
+	 * * `object` - use different data for the different data types requested by
+	 *   DataTables ('filter', 'display', 'type' or 'sort'). The property names
+	 *   of the object is the data type the property refers to and the value can
+	 *   defined using an integer, string or function using the same rules as
+	 *   `render` normally does. Note that an `_` option _must_ be specified.
+	 *   This is the default value to use if you haven't specified a value for
+	 *   the data type requested by DataTables.
 	 * * `function` - the function given will be executed whenever DataTables
 	 *   needs to set or get the data for a cell in the column. The function
 	 *   takes three parameters:
@@ -480,8 +487,8 @@ DataTable.defaults.column = {
 	 *      * The return value from the function is what will be used for the
 	 *        data requested.
 	 *
-	 *  @type string|int|function|null
-	 *  @default null _Use `data`_
+	 *  @type string|int|function|object|null
+	 *  @default null Use the data source value.
 	 *
 	 *  @name DataTable.defaults.column.render
 	 *  @dtopt Columns
@@ -510,6 +517,27 @@ DataTable.defaults.column = {
 	 *          "targets": [ 0 ],
 	 *          "data": null, // Use the full data source object for the renderer's source
 	 *          "render": "browserName()"
+	 *        } ]
+	 *      } );
+	 *    } );
+	 *
+	 *  @example
+	 *    // As an object, extracting different data for the different types
+	 *    // This would be used with a data source such as:
+	 *    //   { "phone": 5552368, "phone_filter": "5552368 555-2368", "phone_display": "555-2368" }
+	 *    // Here the `phone` integer is used for sorting and type detection, while `phone_filter`
+	 *    // (which has both forms) is used for filtering for if a user inputs either format, while
+	 *    // the formatted phone number is the one that is shown in the table.
+	 *    $(document).ready( function() {
+	 *      $('#example').dataTable( {
+	 *        "columnDefs": [ {
+	 *          "targets": [ 0 ],
+	 *          "data": null, // Use the full data source object for the renderer's source
+	 *          "render": {
+	 *            "_": "phone",
+	 *            "filter": "phone_filter",
+	 *            "display": "phone_display"
+	 *          }
 	 *        } ]
 	 *      } );
 	 *    } );

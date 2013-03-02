@@ -248,7 +248,19 @@ function _fnSplitObjNotation( str )
  */
 function _fnGetObjectDataFn( mSource )
 {
-	if ( mSource === null )
+	if ( $.isPlainObject( mSource ) )
+	{
+		/* Build an object of get functions, and wrap them in a single call */
+		var o = {};
+		$.each( mSource, function (key, val) {
+			o[key] = _fnGetObjectDataFn( val );
+		} );
+
+		return function (data, type, extra) {
+			return o[ o[type] !== undefined ? type : '_' ](data, type, extra);
+		};
+	}
+	else if ( mSource === null )
 	{
 		/* Give an empty string for rendering / sorting etc */
 		return function (data, type) {
@@ -353,7 +365,16 @@ function _fnGetObjectDataFn( mSource )
  */
 function _fnSetObjectDataFn( mSource )
 {
-	if ( mSource === null )
+	if ( $.isPlainObject( mSource ) )
+	{
+		/* Unlike get, only the underscore (global) option is used for for
+		 * setting data since we don't know the type here. This is why an object
+		 * option is not documented for `mData` (which is read/write), but it is
+		 * for `mRender` which is read only.
+		 */
+		return _fnSetObjectDataFn( mSource._ );
+	}
+	else if ( mSource === null )
 	{
 		/* Nothing to do when the data source is null */
 		return function (data, val) {};
