@@ -83,7 +83,7 @@
 	/**
 	 * Create a mapping object that allows camel case parameters to be looked up
 	 * for their Hungarian counterparts. The mapping is stored in a private
-	 * parameter called `_hungaianMap` which can be accessed on the source object.
+	 * parameter called `_hungarianMap` which can be accessed on the source object.
 	 *  @param {object} o
 	 *  @memberof DataTable#oApi
 	 */
@@ -110,7 +110,7 @@
 			}
 		} );
 	
-		o._hungaianMap = map;
+		o._hungarianMap = map;
 	}
 	
 	
@@ -127,7 +127,7 @@
 	 */
 	function _fnCamelToHungarian ( src, user, force )
 	{
-		if ( ! src._hungaianMap )
+		if ( ! src._hungarianMap )
 		{
 			_fnHungarianMap( src );
 		}
@@ -135,7 +135,7 @@
 		var hungarianKey;
 	
 		$.each( user, function (key, val) {
-			hungarianKey = src._hungaianMap[ key ];
+			hungarianKey = src._hungarianMap[ key ];
 	
 			if ( hungarianKey !== undefined && (force || user[hungarianKey] === undefined) )
 			{
