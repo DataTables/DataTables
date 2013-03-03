@@ -249,6 +249,15 @@ function _fnCalculateColumnWidths ( oSettings )
 	if ( widthAttr )
 	{
 		oSettings.nTable.style.width = _fnStringToCss( widthAttr );
+
+		if ( ! oSettings._attachedResizing &&
+			(oSettings.oScroll.sY !== '' || oSettings.oScroll.sX !== '') )
+		{
+			$(window).bind('resize.DT-'+oSettings.sInstance, function () {
+				_fnScrollDraw( oSettings );
+			} );
+			oSettings._attachedResizing = true;
+		}
 	}
 }
 
