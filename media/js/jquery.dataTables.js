@@ -631,7 +631,6 @@
 	 */
 	function _fnAddTr( oSettings, trs )
 	{
-        var fnTrimTD = oSettings.fnTrimTD || function(td) { return $.trim(td.innerHTML); };
 		// Allow an individual node to be passed in
 		if ( ! trs instanceof $ ) {
 			trs = $(trs);
@@ -649,7 +648,7 @@
 				name = td.nodeName.toUpperCase();
 				if ( name == "TD" || name == "TH" )
 				{
-					d.push( fnTrimTD(td) );
+					d.push( $.trim(td.innerHTML) );
 					tds.push( td );
 				}
 				td = td.nextSibling;
