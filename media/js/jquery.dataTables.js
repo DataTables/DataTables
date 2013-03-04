@@ -2155,12 +2155,12 @@
 	function _fnFeatureHtmlFilter ( oSettings )
 	{
 		var oPreviousSearch = oSettings.oPreviousSearch;
-		
+
 		var sSearchStr = oSettings.oLanguage.sSearch;
 		sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
-		  sSearchStr.replace('_INPUT_', '<input type="text" />') :
-		  sSearchStr==="" ? '<input type="text" />' : sSearchStr+' <input type="text" />';
-		
+		  sSearchStr.replace('_INPUT_', '<input type="search" />') :
+		  sSearchStr==="" ? '<input type="search" />' : sSearchStr+' <input type="search" />';
+
 		var nFilter = document.createElement( 'div' );
 		nFilter.className = oSettings.oClasses.sFilter;
 		nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
@@ -2168,19 +2168,19 @@
 		{
 			nFilter.id = oSettings.sTableId+'_filter';
 		}
-		
-		var jqFilter = $('input[type="text"]', nFilter);
-	
+
+		var jqFilter = $('input[type="search"]', nFilter);
+
 		// Store a reference to the input element, so other input elements could be
 		// added to the filter wrapper if needed (submit button for example)
 		nFilter._DT_Input = jqFilter[0];
-	
+
 		jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
-		jqFilter.bind( 'keyup.DT', function(e) {
+		jqFilter.bind( 'keyup.DT search.DT', function(e) {
 			/* Update all other filter input elements for the new display */
 			var n = oSettings.aanFeatures.f;
 			var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
-	
+
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 			{
 				if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
@@ -2188,7 +2188,7 @@
 					$(n[i]._DT_Input).val( val );
 				}
 			}
-			
+
 			/* Now do the filter */
 			if ( val != oPreviousSearch.sSearch )
 			{
@@ -2200,7 +2200,7 @@
 				} );
 			}
 		} );
-	
+
 		jqFilter
 			.attr('aria-controls', oSettings.sTableId)
 			.bind( 'keypress.DT', function(e) {
@@ -2211,7 +2211,7 @@
 				}
 			}
 		);
-		
+
 		return nFilter;
 	}
 	
