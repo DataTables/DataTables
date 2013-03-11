@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example table-type="html-multi">
+
+<css lib="datatables" />
+<js lib="jquery" />
+<js lib="datatables" />
+
+<title>Multiple tables</title>
+<js><![CDATA[
+$(document).ready(function() {
+	$('.dataTable').dataTable();
+} );
+]]></js>
+
+<info>
+Using standard jQuery selector syntax with DataTables it is trivial to initialise multiple tables with a single line of Javascript, as shown below. All tables are completely independent, but share the parameters passed thought the initialiser object (for example if you specific the Spanish language file, all tables will be shown in Spanish).
+</info>
+
+</dt-example>

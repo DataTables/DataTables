@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example table-type="html">
+
+<css lib="datatables" />
+<js lib="jquery" />
+<js lib="datatables" />
+
+<title>Flexible table width</title>
+<js><![CDATA[
+$(document).ready(function() {
+	$('#example').dataTable();
+} );
+]]></js>
+
+<info>
+	<p>Often you may want to have your table resize dynamically with the page. Typically this is done by assigning <code>width:100%</code> in your CSS, but this presents a problem for Javascript since it can be very hard to get that relative size, rather than the absolute pixels. As such, if you apply the <code>width</code> attribute to the HTML table tag, this will be used as the width for the table (overruling any CSS styles).</p>
+
+	<p>This example shows a table width <code>width="100%"</code> and the container is also flexible width, so as the window is resized, the table will also resize dynamically.</p>
+</info>
+
+</dt-example>

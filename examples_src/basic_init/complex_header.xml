@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dt-example table-type="html-complex-header">
+
+<css lib="datatables" />
+<js lib="jquery" />
+<js lib="datatables" />
+
+<title>Complex headers (row and colspans)</title>
+<js><![CDATA[
+$(document).ready(function() {
+	$('#example').dataTable();
+} );
+]]></js>
+
+<info>
+When using tables to display data, you will often wish to display column information in groups. DataTables fully supports <code>colspan</code> and <code>rowspans</code> in the header, assigning the required sorting listeners to the TH element suitable for that column. Each column must have one TH cell (and only one) which is unique to it for the listeners to be added. The example shown below has the core browser information grouped together.
+</info>
+
+</dt-example>
