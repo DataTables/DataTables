@@ -6,12 +6,12 @@
  * @author      Allan Jardine (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
  *
- * @copyright Copyright 2008-2012 Allan Jardine, all rights reserved.
+ * @copyright Copyright 2008-2013 Allan Jardine.
  *
- * This source file is free software, under either the GPL v2 license or a
- * BSD style license, available at:
- *   http://datatables.net/license_gpl2
- *   http://datatables.net/license_bsd
+ * This source file is free software, available under the following licenses:
+ *   GPL v2 license        - http://datatables.net/license_gpl2
+ *   BSD (3 point) license - http://datatables.net/license_bsd
+ *   MIT license           - http://datatables.net/license_mit
  *
  * This source file is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
@@ -2155,12 +2155,12 @@
 	function _fnFeatureHtmlFilter ( oSettings )
 	{
 		var oPreviousSearch = oSettings.oPreviousSearch;
-
+		
 		var sSearchStr = oSettings.oLanguage.sSearch;
 		sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
 		  sSearchStr.replace('_INPUT_', '<input type="search" />') :
 		  sSearchStr==="" ? '<input type="search" />' : sSearchStr+' <input type="search" />';
-
+		
 		var nFilter = document.createElement( 'div' );
 		nFilter.className = oSettings.oClasses.sFilter;
 		nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
@@ -2168,19 +2168,19 @@
 		{
 			nFilter.id = oSettings.sTableId+'_filter';
 		}
-
+		
 		var jqFilter = $('input[type="search"]', nFilter);
-
+	
 		// Store a reference to the input element, so other input elements could be
 		// added to the filter wrapper if needed (submit button for example)
 		nFilter._DT_Input = jqFilter[0];
-
+	
 		jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
 		jqFilter.bind( 'keyup.DT search.DT', function(e) {
 			/* Update all other filter input elements for the new display */
 			var n = oSettings.aanFeatures.f;
 			var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
-
+	
 			for ( var i=0, iLen=n.length ; i<iLen ; i++ )
 			{
 				if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
@@ -2188,7 +2188,7 @@
 					$(n[i]._DT_Input).val( val );
 				}
 			}
-
+			
 			/* Now do the filter */
 			if ( val != oPreviousSearch.sSearch )
 			{
@@ -2200,7 +2200,7 @@
 				} );
 			}
 		} );
-
+	
 		jqFilter
 			.attr('aria-controls', oSettings.sTableId)
 			.bind( 'keypress.DT', function(e) {
@@ -2211,7 +2211,7 @@
 				}
 			}
 		);
-
+		
 		return nFilter;
 	}
 	
@@ -3827,6 +3827,15 @@
 		if ( widthAttr )
 		{
 			oSettings.nTable.style.width = _fnStringToCss( widthAttr );
+	
+			if ( ! oSettings._attachedResizing &&
+				(oSettings.oScroll.sY !== '' || oSettings.oScroll.sX !== '') )
+			{
+				$(window).bind('resize.DT-'+oSettings.sInstance, function () {
+					_fnScrollDraw( oSettings );
+				} );
+				oSettings._attachedResizing = true;
+			}
 		}
 	}
 	
@@ -5368,6 +5377,7 @@
 			
 			/* Blitz all DT events */
 			$(oSettings.nTableWrapper).unbind('.DT').find('*').unbind('.DT');
+			$(window).unbind('.DT-'+oSettings.sInstance);
 			
 			/* If there is an 'empty' indicator row, remove it */
 			$('tbody>tr>td.'+oSettings.oClasses.sRowEmpty, oSettings.nTable).parent().remove();
