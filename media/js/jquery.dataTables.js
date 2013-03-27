@@ -1575,15 +1575,6 @@
 		oSettings.bSorted = false;
 		oSettings.bFiltered = false;
 		oSettings.bDrawing = false;
-		
-		if ( oSettings.oFeatures.bServerSide )
-		{
-			_fnProcessingDisplay( oSettings, false );
-			if ( !oSettings._bInitComplete )
-			{
-				_fnInitComplete( oSettings );
-			}
-		}
 	}
 	
 	
@@ -2121,6 +2112,12 @@
 		
 		oSettings.bAjaxDataGet = false;
 		_fnDraw( oSettings );
+	
+		if ( ! oSettings._bInitComplete )
+		{
+			_fnInitComplete( oSettings, json );
+		}
+		
 		oSettings.bAjaxDataGet = true;
 		_fnProcessingDisplay( oSettings, false );
 	}
@@ -2759,7 +2756,7 @@
 			return;
 		}
 		
-		/* Server-side processing initialisation complete is done at the end of _fnDraw */
+		/* Server-side processing init complete is done by _fnAjaxUpdateDraw */
 		if ( !oSettings.oFeatures.bServerSide )
 		{
 			_fnProcessingDisplay( oSettings, false );

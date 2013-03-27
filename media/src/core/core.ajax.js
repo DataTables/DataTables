@@ -237,6 +237,12 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	
 	oSettings.bAjaxDataGet = false;
 	_fnDraw( oSettings );
+
+	if ( ! oSettings._bInitComplete )
+	{
+		_fnInitComplete( oSettings, json );
+	}
+	
 	oSettings.bAjaxDataGet = true;
 	_fnProcessingDisplay( oSettings, false );
 }

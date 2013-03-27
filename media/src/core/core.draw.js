@@ -490,15 +490,6 @@ function _fnDraw( oSettings )
 	oSettings.bSorted = false;
 	oSettings.bFiltered = false;
 	oSettings.bDrawing = false;
-	
-	if ( oSettings.oFeatures.bServerSide )
-	{
-		_fnProcessingDisplay( oSettings, false );
-		if ( !oSettings._bInitComplete )
-		{
-			_fnInitComplete( oSettings );
-		}
-	}
 }
 
 
