@@ -171,7 +171,7 @@ $.extend( DataTable.ext.oPagination, {
 			
 			var iPageCount = DataTable.ext.oPagination.iFullNumbersShowPages;
 			var iPageCountHalf = Math.floor(iPageCount / 2);
-			var iPages = Math.ceil((oSettings.fnRecordsDisplay()) / oSettings._iDisplayLength);
+			var iPages = Math.ceil((oSettings.fnRecordsTotal()) / oSettings._iDisplayLength);
 			var iCurrentPage = Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength) + 1;
 			var sList = "";
 			var iStartButton, iEndButton, i, iLen;
