@@ -76,7 +76,7 @@ var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
 	"nTable":        this,
 	"oApi":          _that.oApi,
 	"oInit":         oInit,
-	"sDestroyWidth": $(this).width(),
+	"sDestroyWidth": $(this)[0].style.width,
 	"sInstance":     sId,
 	"sTableId":      sId
 } );

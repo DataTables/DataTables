@@ -559,11 +559,10 @@ this.fnDestroy = function ( bRemove )
 		}
 	}
 	
-	/* Restore the width of the original table */
-	if ( oSettings.oFeatures.bAutoWidth === true )
-	{
-	  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
-	}
+	/* Restore the width of the original table - was read from the style property,
+	 * so we can restore directly to that
+	 */
+	oSettings.nTable.style.width = oSettings.sDestroyWidth;
 	
 	/* If the were originally stripe classes - then we add them back here. Note
 	 * this is not fool proof (for example if not all rows had stripe classes - but
