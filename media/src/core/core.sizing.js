@@ -378,36 +378,41 @@ function _fnStringToCss( s )
  */
 function _fnScrollBarWidth ()
 {
-	var inner = $('<p/>').css( {
-		width: '100%',
-		height: 200,
-		padding: 0
-	} )[0];
-
-	var outer = $('<div/>')
-		.css( {
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			width: 200,
-			height: 150,
-			padding: 0,
-			overflow: 'hidden',
-			visibility: 'hidden'
-		} )
-		.append( inner )
-		.appendTo( 'body' );
-
-	var w1 = inner.offsetWidth;
-	outer.css( 'overflow', 'scroll' );
-	var w2 = inner.offsetWidth;
-	if ( w1 === w2 )
+	if ( ! DataTable.__scrollbarWidth )
 	{
-		w2 = outer[0].clientWidth;
-	}
-	
-	outer.remove();
+		var inner = $('<p/>').css( {
+			width: '100%',
+			height: 200,
+			padding: 0
+		} )[0];
 
-	return w1 - w2;
+		var outer = $('<div/>')
+			.css( {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: 200,
+				height: 150,
+				padding: 0,
+				overflow: 'hidden',
+				visibility: 'hidden'
+			} )
+			.append( inner )
+			.appendTo( 'body' );
+
+		var w1 = inner.offsetWidth;
+		outer.css( 'overflow', 'scroll' );
+		var w2 = inner.offsetWidth;
+		if ( w1 === w2 )
+		{
+			w2 = outer[0].clientWidth;
+		}
+		
+		outer.remove();
+
+		DataTable.__scrollbarWidth = w1 - w2;
+	}
+
+	return DataTable.__scrollbarWidth;
 }
 
