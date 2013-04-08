@@ -730,7 +730,7 @@ function _fnDetectHeader ( aLayout, nThead )
 							"unique": bUnique
 						};
 					}
-                    aLayout[i+k].nTr = nTr;
+          aLayout[i+k].nTr = nTr;
 				}
         aLayout[i][iColShifted].rowspan = iRowspan;
         aLayout[i][iColShifted].colspan = iColspan;
