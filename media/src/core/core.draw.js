@@ -275,10 +275,10 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 
 				/* Expand the cell to cover as many rows/columns as needed */
 				for ( rs = 0; rs < iRowspan; rs++ ) {
-                    for ( cs = 0; cs < iColspan; cs++ ) {
-                        aApplied[i+rs][j+cs] = 1;
-                    }
-                }
+          for ( cs = 0; cs < iColspan; cs++ ) {
+            aApplied[i+rs][j+cs] = 1;
+          }
+        }
 
 				/* Do the actual expansion in the DOM */
 				aoLocal[i][j].cell.rowSpan = iRowspan;
@@ -732,8 +732,8 @@ function _fnDetectHeader ( aLayout, nThead )
 					}
                     aLayout[i+k].nTr = nTr;
 				}
-                aLayout[i][iColShifted].rowspan = iRowspan;
-                aLayout[i][iColShifted].colspan = iColspan;
+        aLayout[i][iColShifted].rowspan = iRowspan;
+        aLayout[i][iColShifted].colspan = iColspan;
 			}
 			nCell = nCell.nextSibling;
 		}
