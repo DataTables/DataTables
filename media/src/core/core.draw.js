@@ -222,6 +222,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 	var aApplied = [];
 	var iColumns = oSettings.aoColumns.length;
 	var iRowspan, iColspan;
+	var rs, cs;
 
 	if (  bIncludeHidden === undefined )
 	{
@@ -262,8 +263,8 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 
 		for ( j=0, jLen=aoLocal[i].length ; j<jLen ; j++ )
 		{
-			iRowspan = 1;
-			iColspan = 1;
+			iRowspan = aoLocal[i][j].rowspan || 1;
+			iColspan = aoLocal[i][j].colspan || 1;
 
 			/* Check to see if there is already a cell (row/colspan) covering our target
 			 * insert point. If there is, then there is nothing to do.
@@ -271,27 +272,13 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 			if ( aApplied[i][j] === undefined )
 			{
 				nLocalTr.appendChild( aoLocal[i][j].cell );
-				aApplied[i][j] = 1;
 
-				/* Expand the cell to cover as many rows as needed */
-				while ( aoLocal[i+iRowspan] !== undefined &&
-				        aoLocal[i][j].cell == aoLocal[i+iRowspan][j].cell )
-				{
-					aApplied[i+iRowspan][j] = 1;
-					iRowspan++;
-				}
-
-				/* Expand the cell to cover as many columns as needed */
-				while ( aoLocal[i][j+iColspan] !== undefined &&
-				        aoLocal[i][j].cell == aoLocal[i][j+iColspan].cell )
-				{
-					/* Must update the applied array over the rows for the columns */
-					for ( k=0 ; k<iRowspan ; k++ )
-					{
-						aApplied[i+k][j+iColspan] = 1;
-					}
-					iColspan++;
-				}
+				/* Expand the cell to cover as many rows/columns as needed */
+				for ( rs = 0; rs < iRowspan; rs++ ) {
+                    for ( cs = 0; cs < iColspan; cs++ ) {
+                        aApplied[i+rs][j+cs] = 1;
+                    }
+                }
 
 				/* Do the actual expansion in the DOM */
 				aoLocal[i][j].cell.rowSpan = iRowspan;
@@ -734,17 +721,19 @@ function _fnDetectHeader ( aLayout, nThead )
 				bUnique = iColspan === 1 ? true : false;
 				
 				/* If there is col / rowspan, copy the information into the layout grid */
-				for ( l=0 ; l<iColspan ; l++ )
+				for ( k=0 ; k<iRowspan ; k++ )
 				{
-					for ( k=0 ; k<iRowspan ; k++ )
+					for ( l=0 ; l<iColspan ; l++ )
 					{
 						aLayout[i+k][iColShifted+l] = {
 							"cell": nCell,
 							"unique": bUnique
 						};
-						aLayout[i+k].nTr = nTr;
 					}
+                    aLayout[i+k].nTr = nTr;
 				}
+                aLayout[i][iColShifted].rowspan = iRowspan;
+                aLayout[i][iColShifted].colspan = iColspan;
 			}
 			nCell = nCell.nextSibling;
 		}
