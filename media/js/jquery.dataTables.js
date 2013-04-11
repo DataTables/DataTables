@@ -6473,6 +6473,13 @@
 			{
 				$.extend( oSettings.oClasses, DataTable.ext.oStdClasses );
 			}
+			
+			/* Allow user to extend classes object via initialisation options */
+			if ( oInit.oClasses )
+			{
+				$.extend( oSettings.oClasses, oInit.oClasses );
+			}
+
 			$(this).addClass( oSettings.oClasses.sTable );
 			
 			/* Calculate the scroll bar width and cache it for use later on */
