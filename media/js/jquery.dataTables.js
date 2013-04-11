@@ -6475,7 +6475,8 @@
 			}
 			
 			/* Allow user to extend classes object via initialisation options */
-			if ( oInit.oClasses ) {
+			if ( oInit.oClasses )
+			{
 				$.extend( oSettings.oClasses, oInit.oClasses );
 			}
 
