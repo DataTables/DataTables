@@ -108,6 +108,7 @@
 		return this;
 	};
 
+	require('api.core.js');
 	require('api.static.js');
 
 	/**
@@ -166,8 +167,10 @@
 	require('ext.types.js');
 
 	// jQuery aliases
-	$.fn.DataTable = DataTable;
 	$.fn.dataTable = DataTable;
+	$.fn.DataTable = function ( opts ) {
+		return $(this).dataTable( opts ).api();
+	};
 	$.fn.dataTableSettings = DataTable.settings;
 	$.fn.dataTableExt = DataTable.ext;
 

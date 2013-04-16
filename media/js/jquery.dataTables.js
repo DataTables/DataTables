@@ -3953,37 +3953,42 @@
 	 */
 	function _fnScrollBarWidth ()
 	{
-		var inner = $('<p/>').css( {
-			width: '100%',
-			height: 200,
-			padding: 0
-		} )[0];
-	
-		var outer = $('<div/>')
-			.css( {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				width: 200,
-				height: 150,
-				padding: 0,
-				overflow: 'hidden',
-				visibility: 'hidden'
-			} )
-			.append( inner )
-			.appendTo( 'body' );
-	
-		var w1 = inner.offsetWidth;
-		outer.css( 'overflow', 'scroll' );
-		var w2 = inner.offsetWidth;
-		if ( w1 === w2 )
+		if ( ! DataTable.__scrollbarWidth )
 		{
-			w2 = outer[0].clientWidth;
-		}
-		
-		outer.remove();
+			var inner = $('<p/>').css( {
+				width: '100%',
+				height: 200,
+				padding: 0
+			} )[0];
 	
-		return w1 - w2;
+			var outer = $('<div/>')
+				.css( {
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					width: 200,
+					height: 150,
+					padding: 0,
+					overflow: 'hidden',
+					visibility: 'hidden'
+				} )
+				.append( inner )
+				.appendTo( 'body' );
+	
+			var w1 = inner.offsetWidth;
+			outer.css( 'overflow', 'scroll' );
+			var w2 = inner.offsetWidth;
+			if ( w1 === w2 )
+			{
+				w2 = outer[0].clientWidth;
+			}
+			
+			outer.remove();
+	
+			DataTable.__scrollbarWidth = w1 - w2;
+		}
+	
+		return DataTable.__scrollbarWidth;
 	}
 	
 	/**
@@ -5067,6 +5072,16 @@
 			return aOut;
 		};
 		
+		/**
+		 * Create a DataTables Api instance, with the currently selected tables for
+		 * the Api's context.
+		 * @return {DataTables.Api}
+		 */
+		this.api = function ()
+		{
+			return new DataTable.Api( this );
+		};
+		
 		
 		/**
 		 * Add a single new row or multiple rows of data to the table. Please note
@@ -5439,11 +5454,10 @@
 				}
 			}
 			
-			/* Restore the width of the original table */
-			if ( oSettings.oFeatures.bAutoWidth === true )
-			{
-			  oSettings.nTable.style.width = _fnStringToCss(oSettings.sDestroyWidth);
-			}
+			/* Restore the width of the original table - was read from the style property,
+			 * so we can restore directly to that
+			 */
+			oSettings.nTable.style.width = oSettings.sDestroyWidth;
 			
 			/* If the were originally stripe classes - then we add them back here. Note
 			 * this is not fool proof (for example if not all rows had stripe classes - but
@@ -6363,7 +6377,7 @@
 				"nTable":        this,
 				"oApi":          _that.oApi,
 				"oInit":         oInit,
-				"sDestroyWidth": $(this).width(),
+				"sDestroyWidth": $(this)[0].style.width,
 				"sInstance":     sId,
 				"sTableId":      sId
 			} );
@@ -6723,6 +6737,526 @@
 		return this;
 	};
 
+	
+	
+	(/** @lends <global> */function() {
+	
+	
+	/**
+	 * Computed structure of the DataTables API, defined by the options passed to
+	 * `DataTable.Api.register()` when building the API.
+	 *
+	 * The structure is built in order to speed creation and extension of the Api
+	 * objects since the extensions are effectively pre-parsed.
+	 *
+	 * The array is an array of objects with the following structure, where this
+	 * base array represents the Api prototype base:
+	 *
+	 *     [
+	 *       {
+	 *         name:      'data'                -- string   - Property name
+	 *         val:       function () {},       -- function - Api method (or undefined if just an object
+	 *         methodExt: [ ... ],              -- array    - Array of Api object definitions to extend the method result
+	 *         propExt:   [ ... ]               -- array    - Array of Api object definitions to extend the property
+	 *       },
+	 *       {
+	 *         name:     'row'
+	 *         val:       {},
+	 *         methodExt: [ ... ],
+	 *         propExt:   [
+	 *           {
+	 *             name:      'data'
+	 *             val:       function () {},
+	 *             methodExt: [ ... ],
+	 *             propExt:   [ ... ]
+	 *           },
+	 *           ...
+	 *         ]
+	 *       }
+	 *     ]
+	 *
+	 * @type {Array}
+	 * @internal
+	 */
+	var _apiStruct = [];
+	
+	
+	/**
+	 * Api object reference.
+	 *
+	 * @type object
+	 * @internal
+	 */
+	var _api;
+	
+	
+	/**
+	 * `Array.prototype` reference.
+	 *
+	 * @type object
+	 * @internal
+	 */
+	var _arrayProto = Array.prototype;
+	
+	
+	
+	
+	/**
+	 * Abstraction for `context` parameter of the `Api` constructor to allow it to
+	 * take several different forms for ease of use.
+	 *
+	 * Each of the input parameter types will be converted to a DataTables settings
+	 * object where possible.
+	 *
+	 * @param  {string|node|jQuery|object} mixed DataTable identifier. Can be one
+	 *   of:
+	 *
+	 *   * `string` - jQuery selector. Any DataTables' matching the given selector
+	 *     with be found and used.
+	 *   * `node` - `TABLE` node which has already been formed into a DataTable.
+	 *   * `jQuery` - A jQuery object of `TABLE` nodes.
+	 *   * `object` - DataTables settings object
+	 * @return {array|object|null} Matching DataTables settings object, or an array
+	 *   of matching objects. `null` or `undefined` is returned if no matching
+	 *   DataTable is found.
+	 * @internal
+	 */
+	var _toSettings = function ( mixed )
+	{
+		var idx, jq;
+		var tables = $.map( DataTable.settings, function (el, i) {
+			return el.nTable;
+		} );
+	
+		if ( mixed.nTable && mixed.oApi ) {
+			// DataTables settings object
+			return mixed;
+		}
+		else if ( mixed.nodeName && mixed.nodeName.toLowerCase() === 'table' ) {
+			// Table node
+			idx = $.inArray( mixed, tables );
+			return idx !== -1 ? tables[idx] : null;
+		}
+		else if ( typeof mixed === 'string' ) {
+			// jQuery selector
+			jq = $(mixed);
+		}
+		else if ( mixed instanceof $ ) {
+			// jQuery object (also DataTables instance)
+			jq = mixed;
+		}
+	
+		if ( jq ) {
+			return jq.map( function(el, i) {
+				idx = $.inArray( el, tables );
+				return idx !== -1 ? tables[idx] : null;
+			} );
+		}
+	};
+	
+	
+	/**
+	 * Find the unique elements in a source array.
+	 *
+	 * @param  {array} src Source array
+	 * @return {array} Array of unique items
+	 * @internal
+	 */
+	var _unique = function ( src )
+	{
+		// Use an object to store values which have been added to the unique
+		// array. This allows us to avoid a second loop (indexOf) to determine
+		// if the value is already in the unique array at the cost of temporary
+		// memory allocation.
+		var a=[], o={}, val;
+	
+		for ( var i=0, ien=src.length ; i<ien ; i++ ) {
+			val = src[i];
+	
+			if ( o[ val ] === undefined ) {
+				a.push( val );
+				o[ val ] = true;
+			}
+		}
+	
+		return a;
+	};
+	
+	
+	
+	/**
+	 * DataTables API class - used to control and interface with  one or more
+	 * DataTables enhanced tables.
+	 *
+	 * The API class is heavily based on jQuery, presenting a chainable interface
+	 * that you can use to interact with tables. Each instance of the API class has
+	 * a "context" - i.e. the tables that it will operate on. This could be a single
+	 * table, all tables on a page or a sub-set thereof.
+	 *
+	 * Additionally the API is designed to allow you to easily work with the data in
+	 * the tables, retrieving and manipulating it as required. This is done by
+	 * presenting the API class as an array like interface. The contents of the
+	 * array depend upon the actions requested by each method (for example
+	 * `rows().nodes()` will return an array of nodes, while `rows().data()` will
+	 * return an array of objects or arrays depending upon your table's
+	 * configuration). The API object has a number of array like methods (`push`,
+	 * `pop`, `reverse` etc) as well as additional helper methods (`each`, `pluck`,
+	 * `unique` etc) to assist your working with the data held in a table.
+	 *
+	 * Most methods (those which return an Api instance) are chainable, which means
+	 * the return from a method call also has all of the methods available that the
+	 * top level object had. For example, these two calls are equivalent:
+	 *
+	 *     // Not chained
+	 *     api.row.add( {...} );
+	 *     api.draw();
+	 *
+	 *     // Chained
+	 *     api.row.add( {...} ).draw();
+	 *
+	 * @class DataTable.Api
+	 * @param {array|object|string|jQuery} context DataTable identifier. This is
+	 *   used to define which DataTables enhanced tables this API will operate on.
+	 *   Can be one of:
+	 *
+	 *   * `string` - jQuery selector. Any DataTables' matching the given selector
+	 *     with be found and used.
+	 *   * `node` - `TABLE` node which has already been formed into a DataTable.
+	 *   * `jQuery` - A jQuery object of `TABLE` nodes.
+	 *   * `object` - DataTables settings object
+	 * @param {array} [data] Data to initialise the Api instance with.
+	 *
+	 * @example
+	 *   // Direct initialisation during DataTables construction
+	 *   var api = $('#example').DataTable();
+	 *
+	 * @example
+	 *   // Initialisation using a DataTables jQuery object
+	 *   var api = $('#example').dataTable().api();
+	 *
+	 * @example
+	 *   // Initialisation as a constructor
+	 *   var api = new $.fn.DataTable.Api( 'table.dataTable' );
+	 */
+	DataTable.Api = _api = function ( context, data )
+	{
+		if ( ! this instanceof _api ) {
+			throw 'DT API must be constructed as a new object';
+			// or should it do the 'new' for the caller
+			// return new _api.apply( this, arguments );
+		}
+	
+		var settings = [];
+		var ctxSettings = function ( o ) {
+			var a = _toSettings( o );
+			if ( a ) {
+				settings.push.apply( settings, a );
+			}
+		};
+	
+		if ( $.isArray( context ) ) {
+			for ( var i=0, ien=context.length ; i<ien ; i++ ) {
+				ctxSettings( context[i] );
+			}
+		}
+		else {
+			ctxSettings( context );
+		}
+	
+		// Remove duplicates
+		this.context = _unique( settings );
+	
+		// Initial data
+		if ( data ) {
+			this.push.apply( this, data );
+		}
+	
+		_api.extend( this, this, _apiStruct );
+	};
+	
+	
+	_api.prototype = /** @lends DataTables.Api */{
+		/**
+		 * Return a new Api instance, comprised of the data held in the current
+		 * instance, join with the other array(s) and/or value(s).
+		 *
+		 * An alias for `Array.prototype.concat`.
+		 *
+		 * @type method
+		 * @param {*} value1 Arrays and/or values to concatenate.
+		 * @param {*} [...] Additional arrays and/or values to concatenate.
+		 * @returns {DataTables.Api} New API instance, comprising of the combined
+		 *   array.
+		 */
+		concat:  _arrayProto.concat,
+	
+	
+		context: [], // array of table settings objects
+	
+	
+		each: function ( fn )
+		{
+			if ( _arrayProto.forEach ) {
+				// Where possible, use the built-in forEach
+				_arrayProto.forEach.call( this, fn, this );
+			}
+			else {
+				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
+				for ( var i=0, ien=this.length ; i<ien; i++ ) {
+					// In strict mode the execution scope is the passed value
+					fn.call( this, this[i], i, this );
+				}
+			}
+		
+			return this;
+		},
+	
+	
+		filter: function ( fn )
+		{
+			var a = [];
+	
+			if ( _arrayProto.filter ) {
+				a = _arrayProto.filter( this, fn, this );
+			}
+			else {
+				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
+				for ( var i=0, ien=this.length ; i<ien ; i++ ) {
+					if ( fn.call( this, this[i], i, this ) ) {
+						a.push( this[i] );
+					}
+				}
+			}
+	
+			return new _api( this.context, a );
+		},
+	
+	
+		indexOf: _arrayProto.indexOf || function (obj, start)
+		{
+			for ( var i=(start || 0), ien=this.length ; i<ien ; i++ ) {
+				if ( this[i] === obj ) {
+					return i;
+				}
+			}
+			return -1;
+		},
+	
+	
+		lastIndexOf: _arrayProto.lastIndexOf || function (obj, start)
+		{
+			// Bit cheeky...
+			return this.indexOf.apply( this.toArray.reverse(), arguments );
+		},
+	
+	
+		length:  0,
+	
+	
+		map: function ( fn )
+		{
+			var a = [];
+	
+			if ( _arrayProto.map ) {
+				a = _arrayProto.map( this, fn, this );
+			}
+			else {
+				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
+				for ( var i=0, ien=this.length ; i<ien ; i++ ) {
+					a.push( fn.call( this, this[i], i ) );
+				}
+			}
+	
+			return new _api( this.context, a );
+		},
+	
+	
+		pluck: function ( prop )
+		{
+			return this.map( function ( el, i ) {
+				return el[ prop ];
+			} );
+		},
+	
+		pop:     _arrayProto.pop,
+	
+	
+		push:    _arrayProto.push,
+	
+	
+		reduce: _arrayProto.reduce || function ( fn, init )
+		{
+			var
+				value,
+				isSet = false;
+	
+			if ( arguments.length > 1 ) {
+				value = init;
+				isSet = true;
+			}
+	
+			for ( var i=0, ien=this.length ; i<ien ; i++ ) {
+				if ( ! this.hasOwnProperty(i) ) {
+					continue;
+				}
+	
+				value = isSet ?
+					fn( value, this[i], i, this ) :
+					this[i];
+	
+				isSet = true;
+			}
+	
+			return value;
+		},
+	
+	
+		reduceRight: _arrayProto.reduceRight || function ( fn, init )
+		{
+			var
+				value,
+				isSet = false;
+	
+			if ( arguments.length > 1 ) {
+				value = init;
+				isSet = true;
+			}
+	
+			for ( var i=this.length-1 ; i>=0 ; i-- ) {
+				if ( ! this.hasOwnProperty(i) ) {
+					continue;
+				}
+	
+				value = isSet ?
+					fn( value, this[i], i, this ) :
+					this[i];
+	
+				isSet = true;
+			}
+	
+			return value;
+		},
+	
+		reverse: _arrayProto.reverse,
+	
+	
+		shift:   _arrayProto.shift,
+	
+	
+		sort:    _arrayProto.sort, // ? name - order?
+	
+	
+		splice:  _arrayProto.splice,
+	
+	
+		toArray: function ()
+		{
+			return _arrayProto.slice.call( this );
+		},
+	
+	
+		unique: function ()
+		{
+			return new _api( this.context, _unique(this) );
+		},
+	
+	
+		unshift: _arrayProto.unshift
+	};
+	
+	
+	
+	
+	 _api.extend = function ( scope, obj, ext )
+	{
+		if ( ! obj instanceof _api ) {
+			return;
+		}
+	
+		var
+			i, ien,
+			j, jen,
+			struct,
+			methodScoping = function ( fn, struc ) {
+				return function () {
+					var ret = fn.apply( scope, arguments );
+	
+					// Method extension
+					_api.extend( ret, ret, struc.methodExt );
+					return ret;
+				};
+			};
+	
+		for ( i=0, ien=ext.length ; i<ien ; i++ ) {
+			struct = ext[i];
+	
+			// Value
+			if ( typeof struct.val === 'function' ) {
+				obj[ struct.name ] = methodScoping( struct.val, struct );
+			}
+			else {
+				obj[ struct.name ] = struct.val;
+			}
+	
+			// Property extension
+			_api.extend( scope, obj[ struct.name ], struct.propExt );
+		}
+	};
+	
+	
+	_api.register = function ( name, val )
+	{
+		var
+			i, ien,
+			heir = name.split('.'),
+			struct = _apiStruct,
+			key, method;
+	
+		var find = function ( src, name ) {
+			for ( var i=0, ien=src.length ; i<ien ; i++ ) {
+				if ( src[i].name === name ) {
+					return src[i];
+				}
+			}
+			return null;
+		};
+			
+		for ( i=0, ien=heir.length ; i<ien ; i++ ) {
+			method = heir[i].indexOf('()') !== -1;
+			key = method ?
+				heir[i].replace('()', '') :
+				heir[i];
+	
+			var src = find( struct, key );
+			if ( ! src ) {
+				src = {
+					name:      key,
+					val:       {},
+					methodExt: [],
+					propExt:   []
+				};
+				struct.push( src );
+			}
+	
+			if ( i === ien-1 ) {
+				src.val = val;
+			}
+			else {
+				struct = method ?
+					src.methodExt :
+					src.propExt;
+			}
+		}
+	
+		// Rebuild the API with the new construct
+		if ( _api.ready ) {
+			DataTable.api.build();
+		}
+	};
+	
+	
+	}());
+	
 	/**
 	 * Provide a common method for plug-ins to check the version of DataTables being used, in order
 	 * to ensure compatibility.
@@ -12112,8 +12646,10 @@
 	
 
 	// jQuery aliases
-	$.fn.DataTable = DataTable;
 	$.fn.dataTable = DataTable;
+	$.fn.DataTable = function ( opts ) {
+		return $(this).dataTable( opts ).api();
+	};
 	$.fn.dataTableSettings = DataTable.settings;
 	$.fn.dataTableExt = DataTable.ext;
 

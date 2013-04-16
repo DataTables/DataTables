@@ -187,6 +187,16 @@ this._ = function ( sSelector, oOpts )
 	return aOut;
 };
 
+/**
+ * Create a DataTables Api instance, with the currently selected tables for
+ * the Api's context.
+ * @return {DataTables.Api}
+ */
+this.api = function ()
+{
+	return new DataTable.Api( this );
+};
+
 
 /**
  * Add a single new row or multiple rows of data to the table. Please note
