@@ -37,7 +37,7 @@
  *     ]
  *
  * @type {Array}
- * @internal
+ * @ignore
  */
 var _apiStruct = [];
 
@@ -46,7 +46,7 @@ var _apiStruct = [];
  * Api object reference.
  *
  * @type object
- * @internal
+ * @ignore
  */
 var _api;
 
@@ -55,7 +55,7 @@ var _api;
  * `Array.prototype` reference.
  *
  * @type object
- * @internal
+ * @ignore
  */
 var _arrayProto = Array.prototype;
 
@@ -77,26 +77,26 @@ var _arrayProto = Array.prototype;
  *   * `node` - `TABLE` node which has already been formed into a DataTable.
  *   * `jQuery` - A jQuery object of `TABLE` nodes.
  *   * `object` - DataTables settings object
- * @return {array|object|null} Matching DataTables settings object, or an array
- *   of matching objects. `null` or `undefined` is returned if no matching
- *   DataTable is found.
- * @internal
+ * @return {array|null} Matching DataTables settings objects. `null` or
+ *   `undefined` is returned if no matching DataTable is found.
+ * @ignore
  */
 var _toSettings = function ( mixed )
 {
 	var idx, jq;
-	var tables = $.map( DataTable.settings, function (el, i) {
+	var settings = DataTable.settings;
+	var tables = $.map( settings, function (el, i) {
 		return el.nTable;
 	} );
 
 	if ( mixed.nTable && mixed.oApi ) {
 		// DataTables settings object
-		return mixed;
+		return [ mixed ];
 	}
 	else if ( mixed.nodeName && mixed.nodeName.toLowerCase() === 'table' ) {
 		// Table node
 		idx = $.inArray( mixed, tables );
-		return idx !== -1 ? tables[idx] : null;
+		return idx !== -1 ? [ settings[idx] ] : null;
 	}
 	else if ( typeof mixed === 'string' ) {
 		// jQuery selector
@@ -108,9 +108,9 @@ var _toSettings = function ( mixed )
 	}
 
 	if ( jq ) {
-		return jq.map( function(el, i) {
-			idx = $.inArray( el, tables );
-			return idx !== -1 ? tables[idx] : null;
+		return jq.map( function(i) {
+			idx = $.inArray( this, tables );
+			return idx !== -1 ? settings[idx] : null;
 		} );
 	}
 };
@@ -121,26 +121,34 @@ var _toSettings = function ( mixed )
  *
  * @param  {array} src Source array
  * @return {array} Array of unique items
- * @internal
+ * @ignore
  */
 var _unique = function ( src )
 {
-	// Use an object to store values which have been added to the unique
-	// array. This allows us to avoid a second loop (indexOf) to determine
-	// if the value is already in the unique array at the cost of temporary
-	// memory allocation.
-	var a=[], o={}, val;
+	// A faster unique method is to use object keys to identify used values,
+	// but this doesn't work with arrays or objects, which we must also
+	// consider. See jsperf.com/compare-array-unique-versions/4 for more
+	// information.
+	var
+		out = [],
+		val,
+		i, ien=src.length,
+		j, k=0;
 
-	for ( var i=0, ien=src.length ; i<ien ; i++ ) {
+	again: for ( i=0 ; i<ien ; i++ ) {
 		val = src[i];
 
-		if ( o[ val ] === undefined ) {
-			a.push( val );
-			o[ val ] = true;
+		for ( j=0 ; j<k ; j++ ) {
+			if ( out[j] === val ) {
+				continue again;
+			}
 		}
+
+		out.push( val );
+		k++;
 	}
 
-	return a;
+	return out;
 };
 
 

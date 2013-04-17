@@ -109,6 +109,7 @@
 	};
 
 	require('api.core.js');
+	require('api.table.js');
 	require('api.static.js');
 
 	/**
