@@ -423,15 +423,7 @@ oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 
 if ( oInit.bPaginate === true )
 {
-    $.extend( oSettings, {
-        '_iDisplayEnd': oSettings.fnDisplayEnd(),
-        '_iTotal': oSettings.fnRecordsTotal(),
-        '_iFilteredTotal': oSettings.fnRecordsDisplay(),
-        '_iPage': oSettings._iDisplayLength === -1 ?
-            0 : Math.ceil( ( oSettings._iDisplayStart + 1 ) / oSettings._iDisplayLength ),
-        '_iTotalPages': oSettings._iDisplayLength === -1 ?
-            0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-    } );
+	oSettings.fnUpdatePagingInfo();
 }
 
 /* Initialisation complete - table can be drawn */
