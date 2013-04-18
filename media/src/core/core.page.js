@@ -11,109 +11,103 @@
  *  @returns {node} Pagination feature node
  *  @memberof DataTable#oApi
  */
-function _fnFeatureHtmlPaginate ( oSettings )
+function _fnFeatureHtmlPaginate ( settings )
 {
-	if ( oSettings.oScroll.bInfinite )
+	if ( settings.oScroll.bInfinite )
 	{
 		return null;
 	}
 	
-	var nPaginate = document.createElement( 'div' );
-	nPaginate.className = oSettings.oClasses.sPaging+oSettings.sPaginationType;
-	
-	DataTable.ext.oPagination[ oSettings.sPaginationType ].fnInit( oSettings, nPaginate,
-		function( oSettings ) {
-			_fnCalculateEnd( oSettings );
-			_fnDraw( oSettings );
-		}
-	);
+	var
+		type   = settings.sPaginationType,
+		plugin = DataTable.ext.oPagination[ type ],
+		redraw = function( settings ) {
+			_fnCalculateEnd( settings );
+			_fnDraw( settings );
+		},
+		node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];
+
+	plugin.fnInit( settings, node, redraw );
 	
 	/* Add a draw callback for the pagination on first instance, to update the paging display */
-	if ( !oSettings.aanFeatures.p )
+	if ( ! settings.aanFeatures.p )
 	{
-		oSettings.aoDrawCallback.push( {
-			"fn": function( oSettings ) {
-				DataTable.ext.oPagination[ oSettings.sPaginationType ].fnUpdate( oSettings, function( oSettings ) {
-					_fnCalculateEnd( oSettings );
-					_fnDraw( oSettings );
-				} );
+		settings.aoDrawCallback.push( {
+			"fn": function( settings ) {
+				plugin.fnUpdate( settings, redraw );
 			},
 			"sName": "pagination"
 		} );
 	}
-	return nPaginate;
+
+	return node;
 }
 
 
 /**
  * Alter the display settings to change the page
- *  @param {object} oSettings dataTables settings object
- *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
- *    or page number to jump to (integer)
- *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
+ *  @param {object} settings DataTables settings object
+ *  @param {string|int} action Paging action to take: "first", "previous",
+ *    "next" or "last" or page number to jump to (integer)
+ *  @returns {bool} true page has changed, false - no change
  *  @memberof DataTable#oApi
  */
-function _fnPageChange ( oSettings, mAction )
+function _fnPageChange ( settings, action )
 {
-	var iOldStart = oSettings._iDisplayStart;
-	
-	if ( typeof mAction === "number" )
+	var
+		start     = settings._iDisplayStart,
+		len       = settings._iDisplayLength,
+		records   = settings.fnRecordsDisplay();
+
+	if ( records === 0 || len === -1 )
 	{
-		oSettings._iDisplayStart = mAction * oSettings._iDisplayLength;
-		if ( oSettings._iDisplayStart > oSettings.fnRecordsDisplay() )
+		start = 0;
+	}
+	else if ( typeof action === "number" )
+	{
+		start = action * len;
+
+		if ( start > records )
 		{
-			oSettings._iDisplayStart = 0;
+			start = 0;
 		}
 	}
-	else if ( mAction == "first" )
+	else if ( action == "first" )
 	{
-		oSettings._iDisplayStart = 0;
+		start = 0;
 	}
-	else if ( mAction == "previous" )
+	else if ( action == "previous" )
 	{
-		oSettings._iDisplayStart = oSettings._iDisplayLength>=0 ?
-			oSettings._iDisplayStart - oSettings._iDisplayLength :
+		start = len >= 0 ?
+			start - len :
 			0;
-		
-		/* Correct for under-run */
-		if ( oSettings._iDisplayStart < 0 )
+
+		if ( start < 0 )
 		{
-		  oSettings._iDisplayStart = 0;
+		  start = 0;
 		}
 	}
-	else if ( mAction == "next" )
+	else if ( action == "next" )
 	{
-		if ( oSettings._iDisplayLength >= 0 )
+		if ( start + len < records )
 		{
-			/* Make sure we are not over running the display array */
-			if ( oSettings._iDisplayStart + oSettings._iDisplayLength < oSettings.fnRecordsDisplay() )
-			{
-				oSettings._iDisplayStart += oSettings._iDisplayLength;
-			}
-		}
-		else
-		{
-			oSettings._iDisplayStart = 0;
+			start += len;
 		}
 	}
-	else if ( mAction == "last" )
+	else if ( action == "last" )
 	{
-		if ( oSettings._iDisplayLength >= 0 )
-		{
-			var iPages = parseInt( (oSettings.fnRecordsDisplay()-1) / oSettings._iDisplayLength, 10 ) + 1;
-			oSettings._iDisplayStart = (iPages-1) * oSettings._iDisplayLength;
-		}
-		else
-		{
-			oSettings._iDisplayStart = 0;
-		}
+		start = Math.floor( (records-1) / len) * len;
 	}
 	else
 	{
-		_fnLog( oSettings, 0, "Unknown paging action: "+mAction );
+		_fnLog( settings, 0, "Unknown paging action: "+action );
 	}
-	$(oSettings.oInstance).trigger('page', oSettings);
+
+	var changed = settings._iDisplayStart === start;
+	settings._iDisplayStart = start;
+
+	$(settings.oInstance).trigger('page', settings);
 	
-	return iOldStart != oSettings._iDisplayStart;
+	return changed;
 }
 

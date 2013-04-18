@@ -110,6 +110,8 @@
 
 	require('api.core.js');
 	require('api.table.js');
+	require('api.draw.js');
+	require('api.page.js');
 	require('api.static.js');
 
 	/**
@@ -308,6 +310,16 @@
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Page length change event, fired when number of records to show on each
+	 * page (the length) is changed.
+	 *  @name DataTable#length
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 *  @param {integer} len New length
 	 */
 }));
 

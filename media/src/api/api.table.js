@@ -2,7 +2,7 @@
 
 (/** @lends <global> */function() {
 
-var _api = DataTable.Api;
+var _Api = DataTable.Api;
 
 /**
  * Selector for HTML tables. Apply the given selector to the give array of
@@ -55,7 +55,7 @@ var _table_selector = function ( selector, a )
  *   information, if returned, is assigned to the API instance. Otherwise the
  *   original API instance is returned for chaining.
  */
-_api.register( 'tables()', function ( selector, fn ) {
+_Api.register( 'tables()', function ( selector, fn ) {
 	// Argument shifting
 	if ( typeof selector === 'function' ) {
 		fn = selector;
@@ -79,7 +79,7 @@ _api.register( 'tables()', function ( selector, fn ) {
 	// A new instance is created if there was a selector specified, or if
 	// data was returned from the callback
 	var api = selector || a.length ?
-		new _api( context, a ) :
+		new _Api( context, a ) :
 		this;
 
 	return api;
@@ -91,7 +91,7 @@ _api.register( 'tables()', function ( selector, fn ) {
  * @return {DataTable.Api} New Api instance containing the DOM nodes for the
  *   tables.
  */
-_api.register( 'tables().nodes()', function () {
+_Api.register( 'tables().nodes()', function () {
 	return this.tables( function ( settings, i ) {
 		return settings.nTable;
 	} );

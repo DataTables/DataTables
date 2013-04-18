@@ -2779,122 +2779,109 @@
 	}
 	
 	
+	function _fnLengthChange ( settings, val )
+	{
+		var
+			start = settings._iDisplayStart,
+			records = settings.fnRecordsDisplay(),
+			end,
+			len = parseInt( val, 10 );
+	
+		/* Redraw the table */
+		settings._iDisplayLength = len;
+		_fnCalculateEnd( settings );
+	
+		end = settings.fnDisplayEnd();
+		
+		/* If we have space to show extra rows (backing up from the end point - then do so */
+		if ( end === records )
+		{
+			start = end - len;
+		}
+		
+		if ( len === -1 || start < 0 )
+		{
+			start = 0;
+		}
+	
+		settings._iDisplayStart = start;
+	
+		// Fire length change event
+		$(settings.oInstance).trigger( 'length', [settings, len] );
+	}
+	
 	
 	/**
 	 * Generate the node required for user display length changing
-	 *  @param {object} oSettings dataTables settings object
+	 *  @param {object} settings dataTables settings object
 	 *  @returns {node} Display length feature node
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnFeatureHtmlLength ( oSettings )
+	function _fnFeatureHtmlLength ( settings )
 	{
-		if ( oSettings.oScroll.bInfinite )
-		{
+		if ( settings.oScroll.bInfinite ) {
 			return null;
 		}
-		
-		/* This can be overruled by not using the _MENU_ var/macro in the language variable */
-		var sName = 'name="'+oSettings.sTableId+'_length"';
-		var sStdMenu = '<select size="1" '+sName+'>';
-		var i, iLen;
-		var aLengthMenu = oSettings.aLengthMenu;
-		
-		if ( aLengthMenu.length == 2 && typeof aLengthMenu[0] === 'object' &&
-				typeof aLengthMenu[1] === 'object' )
-		{
-			for ( i=0, iLen=aLengthMenu[0].length ; i<iLen ; i++ )
-			{
-				sStdMenu += '<option value="'+aLengthMenu[0][i]+'">'+aLengthMenu[1][i]+'</option>';
-			}
-		}
-		else
-		{
-			for ( i=0, iLen=aLengthMenu.length ; i<iLen ; i++ )
-			{
-				sStdMenu += '<option value="'+aLengthMenu[i]+'">'+aLengthMenu[i]+'</option>';
-			}
-		}
-		sStdMenu += '</select>';
-		
-		var nLength = document.createElement( 'div' );
-		if ( !oSettings.aanFeatures.l )
-		{
-			nLength.id = oSettings.sTableId+'_length';
-		}
-		nLength.className = oSettings.oClasses.sLength;
-		nLength.innerHTML = '<label>'+oSettings.oLanguage.sLengthMenu.replace( '_MENU_', sStdMenu )+'</label>';
-		
-		/* Set the length to the current display length */
-		$('select', nLength).val( oSettings._iDisplayLength );
 	
-		$('select', nLength).bind( 'change.DT', function(e) {
-			var iVal = $(this).val();
-			
-			/* Update all other length options for the new display */
-			var n = oSettings.aanFeatures.l;
-			for ( i=0, iLen=n.length ; i<iLen ; i++ )
-			{
-				if ( n[i] != this.parentNode )
-				{
-					$('select', n[i]).val( iVal );
-				}
-			}
-			
-			/* Redraw the table */
-			oSettings._iDisplayLength = parseInt(iVal, 10);
-			_fnCalculateEnd( oSettings );
-			
-			/* If we have space to show extra rows (backing up from the end point - then do so */
-			if ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() )
-			{
-				oSettings._iDisplayStart = oSettings.fnDisplayEnd() - oSettings._iDisplayLength;
-				if ( oSettings._iDisplayStart < 0 )
-				{
-					oSettings._iDisplayStart = 0;
-				}
-			}
-			
-			if ( oSettings._iDisplayLength == -1 )
-			{
-				oSettings._iDisplayStart = 0;
-			}
-			
-			_fnDraw( oSettings );
+		var
+			tableId  = settings.sTableId,
+			menu     = settings.aLengthMenu,
+			d2       = $.isArray( menu[0] ),
+			lengths  = d2 ? menu[0] : menu,
+			language = d2 ? menu[1] : menu;
+	
+		var select = $('<select/>', {
+			'name':          tableId+'_length',
+			'aria-controls': tableId
 		} );
 	
+		for ( var i=0, ien=lengths.length ; i<ien ; i++ ) {
+			select[0][ i ] = new Option( language[i], lengths[i] );
+		}
 	
-		$('select', nLength).attr('aria-controls', oSettings.sTableId);
-		
-		return nLength;
+		var div = $('<div><label/></div>').addClass( settings.oClasses.sLength );
+		if ( ! settings.aanFeatures.l ) {
+			div[0].id = tableId+'_length';
+		}
+	
+		// This split doesn't matter where _MENU_ is, we get three items back from it
+		var a = settings.oLanguage.sLengthMenu.split(/(_MENU_)/);
+		div.children()
+			.append( a[0] )
+			.append( select )
+			.append( a[2] );
+	
+		select
+			.val( settings._iDisplayLength )
+			.bind( 'change.DT', function(e) {
+				_fnLengthChange( settings, $(this).val() );
+				_fnDraw( settings );
+			} );
+	
+		// Update node value whenever anything changes the table's length
+		$(settings.nTable).bind( 'length', function (e, s, len) {
+			select.val( len );
+		} );
+	
+		return div[0];
 	}
 	
 	
 	/**
 	 * Recalculate the end point based on the start point
-	 *  @param {object} oSettings dataTables settings object
+	 *  @param {object} settings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnCalculateEnd( oSettings )
+	function _fnCalculateEnd( settings )
 	{
-		if ( oSettings.oFeatures.bPaginate === false )
-		{
-			oSettings._iDisplayEnd = oSettings.aiDisplay.length;
-		}
-		else
-		{
-			/* Set the end point of the display - based on how many elements there are
-			 * still to display
-			 */
-			if ( oSettings._iDisplayStart + oSettings._iDisplayLength > oSettings.aiDisplay.length ||
-				   oSettings._iDisplayLength == -1 )
-			{
-				oSettings._iDisplayEnd = oSettings.aiDisplay.length;
-			}
-			else
-			{
-				oSettings._iDisplayEnd = oSettings._iDisplayStart + oSettings._iDisplayLength;
-			}
-		}
+		var
+			len     = settings._iDisplayLength,
+			calc    = settings._iDisplayStart + len,
+			records = settings.aiDisplay.length;
+	
+		settings._iDisplayEnd = ! settings.oFeatures.bPaginate || calc>records || len===-1 ?
+			records :
+			calc;
 	}
 	
 	
@@ -2910,110 +2897,104 @@
 	 *  @returns {node} Pagination feature node
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnFeatureHtmlPaginate ( oSettings )
+	function _fnFeatureHtmlPaginate ( settings )
 	{
-		if ( oSettings.oScroll.bInfinite )
+		if ( settings.oScroll.bInfinite )
 		{
 			return null;
 		}
 		
-		var nPaginate = document.createElement( 'div' );
-		nPaginate.className = oSettings.oClasses.sPaging+oSettings.sPaginationType;
-		
-		DataTable.ext.oPagination[ oSettings.sPaginationType ].fnInit( oSettings, nPaginate,
-			function( oSettings ) {
-				_fnCalculateEnd( oSettings );
-				_fnDraw( oSettings );
-			}
-		);
+		var
+			type   = settings.sPaginationType,
+			plugin = DataTable.ext.oPagination[ type ],
+			redraw = function( settings ) {
+				_fnCalculateEnd( settings );
+				_fnDraw( settings );
+			},
+			node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];
+	
+		plugin.fnInit( settings, node, redraw );
 		
 		/* Add a draw callback for the pagination on first instance, to update the paging display */
-		if ( !oSettings.aanFeatures.p )
+		if ( ! settings.aanFeatures.p )
 		{
-			oSettings.aoDrawCallback.push( {
-				"fn": function( oSettings ) {
-					DataTable.ext.oPagination[ oSettings.sPaginationType ].fnUpdate( oSettings, function( oSettings ) {
-						_fnCalculateEnd( oSettings );
-						_fnDraw( oSettings );
-					} );
+			settings.aoDrawCallback.push( {
+				"fn": function( settings ) {
+					plugin.fnUpdate( settings, redraw );
 				},
 				"sName": "pagination"
 			} );
 		}
-		return nPaginate;
+	
+		return node;
 	}
 	
 	
 	/**
 	 * Alter the display settings to change the page
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
-	 *    or page number to jump to (integer)
-	 *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
+	 *  @param {object} settings DataTables settings object
+	 *  @param {string|int} action Paging action to take: "first", "previous",
+	 *    "next" or "last" or page number to jump to (integer)
+	 *  @returns {bool} true page has changed, false - no change
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnPageChange ( oSettings, mAction )
+	function _fnPageChange ( settings, action )
 	{
-		var iOldStart = oSettings._iDisplayStart;
-		
-		if ( typeof mAction === "number" )
+		var
+			start     = settings._iDisplayStart,
+			len       = settings._iDisplayLength,
+			records   = settings.fnRecordsDisplay();
+	
+		if ( records === 0 || len === -1 )
 		{
-			oSettings._iDisplayStart = mAction * oSettings._iDisplayLength;
-			if ( oSettings._iDisplayStart > oSettings.fnRecordsDisplay() )
+			start = 0;
+		}
+		else if ( typeof action === "number" )
+		{
+			start = action * len;
+	
+			if ( start > records )
 			{
-				oSettings._iDisplayStart = 0;
+				start = 0;
 			}
 		}
-		else if ( mAction == "first" )
+		else if ( action == "first" )
 		{
-			oSettings._iDisplayStart = 0;
+			start = 0;
 		}
-		else if ( mAction == "previous" )
+		else if ( action == "previous" )
 		{
-			oSettings._iDisplayStart = oSettings._iDisplayLength>=0 ?
-				oSettings._iDisplayStart - oSettings._iDisplayLength :
+			start = len >= 0 ?
+				start - len :
 				0;
-			
-			/* Correct for under-run */
-			if ( oSettings._iDisplayStart < 0 )
+	
+			if ( start < 0 )
 			{
-			  oSettings._iDisplayStart = 0;
+			  start = 0;
 			}
 		}
-		else if ( mAction == "next" )
+		else if ( action == "next" )
 		{
-			if ( oSettings._iDisplayLength >= 0 )
+			if ( start + len < records )
 			{
-				/* Make sure we are not over running the display array */
-				if ( oSettings._iDisplayStart + oSettings._iDisplayLength < oSettings.fnRecordsDisplay() )
-				{
-					oSettings._iDisplayStart += oSettings._iDisplayLength;
-				}
-			}
-			else
-			{
-				oSettings._iDisplayStart = 0;
+				start += len;
 			}
 		}
-		else if ( mAction == "last" )
+		else if ( action == "last" )
 		{
-			if ( oSettings._iDisplayLength >= 0 )
-			{
-				var iPages = parseInt( (oSettings.fnRecordsDisplay()-1) / oSettings._iDisplayLength, 10 ) + 1;
-				oSettings._iDisplayStart = (iPages-1) * oSettings._iDisplayLength;
-			}
-			else
-			{
-				oSettings._iDisplayStart = 0;
-			}
+			start = Math.floor( (records-1) / len) * len;
 		}
 		else
 		{
-			_fnLog( oSettings, 0, "Unknown paging action: "+mAction );
+			_fnLog( settings, 0, "Unknown paging action: "+action );
 		}
-		$(oSettings.oInstance).trigger('page', oSettings);
+	
+		var changed = settings._iDisplayStart === start;
+		settings._iDisplayStart = start;
+	
+		$(settings.oInstance).trigger('page', settings);
 		
-		return iOldStart != oSettings._iDisplayStart;
+		return changed;
 	}
 	
 	
@@ -6787,7 +6768,7 @@
 	 * @type object
 	 * @ignore
 	 */
-	var _api;
+	var _Api;
 	
 	
 	/**
@@ -6946,12 +6927,12 @@
 	 *   // Initialisation as a constructor
 	 *   var api = new $.fn.DataTable.Api( 'table.dataTable' );
 	 */
-	DataTable.Api = _api = function ( context, data )
+	DataTable.Api = _Api = function ( context, data )
 	{
-		if ( ! this instanceof _api ) {
+		if ( ! this instanceof _Api ) {
 			throw 'DT API must be constructed as a new object';
 			// or should it do the 'new' for the caller
-			// return new _api.apply( this, arguments );
+			// return new _Api.apply( this, arguments );
 		}
 	
 		var settings = [];
@@ -6979,11 +6960,11 @@
 			this.push.apply( this, data );
 		}
 	
-		_api.extend( this, this, _apiStruct );
+		_Api.extend( this, this, _apiStruct );
 	};
 	
 	
-	_api.prototype = /** @lends DataTables.Api */{
+	_Api.prototype = /** @lends DataTables.Api */{
 		/**
 		 * Return a new Api instance, comprised of the data held in the current
 		 * instance, join with the other array(s) and/or value(s).
@@ -7036,7 +7017,7 @@
 				}
 			}
 	
-			return new _api( this.context, a );
+			return new _Api( this.context, a );
 		},
 	
 	
@@ -7075,7 +7056,7 @@
 				}
 			}
 	
-			return new _api( this.context, a );
+			return new _Api( this.context, a );
 		},
 	
 	
@@ -7165,7 +7146,7 @@
 	
 		unique: function ()
 		{
-			return new _api( this.context, _unique(this) );
+			return new _Api( this.context, _unique(this) );
 		},
 	
 	
@@ -7175,9 +7156,9 @@
 	
 	
 	
-	 _api.extend = function ( scope, obj, ext )
+	 _Api.extend = function ( scope, obj, ext )
 	{
-		if ( ! obj instanceof _api ) {
+		if ( ! obj instanceof _Api ) {
 			return;
 		}
 	
@@ -7190,7 +7171,7 @@
 					var ret = fn.apply( scope, arguments );
 	
 					// Method extension
-					_api.extend( ret, ret, struc.methodExt );
+					_Api.extend( ret, ret, struc.methodExt );
 					return ret;
 				};
 			};
@@ -7207,12 +7188,12 @@
 			}
 	
 			// Property extension
-			_api.extend( scope, obj[ struct.name ], struct.propExt );
+			_Api.extend( scope, obj[ struct.name ], struct.propExt );
 		}
 	};
 	
 	
-	_api.register = function ( name, val )
+	_Api.register = function ( name, val )
 	{
 		var
 			i, ien,
@@ -7257,7 +7238,7 @@
 		}
 	
 		// Rebuild the API with the new construct
-		if ( _api.ready ) {
+		if ( _Api.ready ) {
 			DataTable.api.build();
 		}
 	};
@@ -7269,7 +7250,7 @@
 	
 	(/** @lends <global> */function() {
 	
-	var _api = DataTable.Api;
+	var _Api = DataTable.Api;
 	
 	/**
 	 * Selector for HTML tables. Apply the given selector to the give array of
@@ -7322,7 +7303,7 @@
 	 *   information, if returned, is assigned to the API instance. Otherwise the
 	 *   original API instance is returned for chaining.
 	 */
-	_api.register( 'tables()', function ( selector, fn ) {
+	_Api.register( 'tables()', function ( selector, fn ) {
 		// Argument shifting
 		if ( typeof selector === 'function' ) {
 			fn = selector;
@@ -7346,7 +7327,7 @@
 		// A new instance is created if there was a selector specified, or if
 		// data was returned from the callback
 		var api = selector || a.length ?
-			new _api( context, a ) :
+			new _Api( context, a ) :
 			this;
 	
 		return api;
@@ -7358,9 +7339,150 @@
 	 * @return {DataTable.Api} New Api instance containing the DOM nodes for the
 	 *   tables.
 	 */
-	_api.register( 'tables().nodes()', function () {
+	_Api.register( 'tables().nodes()', function () {
 		return this.tables( function ( settings, i ) {
 			return settings.nTable;
+		} );
+	} );
+	
+	
+	}());
+	
+	
+	
+	(/** @lends <global> */function() {
+	
+	var _api = DataTable.Api;
+	
+	
+	// draw()
+	// draw.standing()
+	
+	/**
+	 * 
+	 */
+	_api.register( 'draw()', function ( full ) {
+		return this.tables( function ( settings ) {
+			if ( full ) {
+				_fnReDraw( settings );
+			}
+			else {
+				_fnCalculateEnd( settings );
+				_fnDraw( settings );
+			}
+		} );
+	} );
+	
+	
+	}());
+	
+	
+	
+	(/** @lends <global> */function() {
+	
+	var _Api = DataTable.Api;
+	
+	
+	
+	/**
+	 * Get the current page index.
+	 *
+	 * @return {integer} Current page index (zero based)
+	 *//**
+	 * Set the current page.
+	 *
+	 * Note that if you attempt to show a page which does not exist, DataTables will
+	 * not throw an error, but rather reset the paging.
+	 *
+	 * @param {integer|string} action The paging action to take. This can be one of:
+	 *  * `integer` - The page index to jump to
+	 *  * `string` - An action to take:
+	 *    * `first` - Jump to first page.
+	 *    * `next` - Jump to the next page
+	 *    * `previous` - Jump to previous page
+	 *    * `last` - Jump to the last page.
+	 * @returns {DataTables.Api} this
+	 */
+	_Api.register( 'page()', function ( action ) {
+		if ( action === undefined ) {
+			return this.page.info().page; // not an expensive call
+		}
+	
+		// else, have an action to take on all tables
+		return this.tables( function ( settings ) {
+			_fnPageChange( settings, action );
+			_fnCalculateEnd( settings );
+		} );
+	} );
+	
+	
+	/**
+	 * Paging information for the first table in the current context.
+	 * 
+	 * If you require paging information for another table, use the `table()` method
+	 * with a suitable selector.
+	 *
+	 * @return {object} Object with the following properties set:
+	 *  * `page` - Current page index (zero based - i.e. the first page is `0`)
+	 *  * `pages` - Total number of pages
+	 *  * `start` - Display index for the first record shown on the current page
+	 *  * `end` - Display index for the last record shown on the current page
+	 *  * `length` - Display length (number of records). Note that generally `start
+	 *    + length = end`, but this is not always true, for example if there are
+	 *    only 2 records to show on the final page, with a length of 10.
+	 *  * `recordsTotal` - Full data set length
+	 *  * `recordsDisplay` - Data set length once the current filtering criterion
+	 *    are applied.
+	 */
+	_Api.register( 'page.info()', function ( action ) {
+		if ( this.context.length === 0 ) {
+			return undefined;
+		}
+	
+		var
+			settings   = this.context[0],
+			start      = settings._iDisplayStart,
+			len        = settings._iDisplayLength,
+			visRecords = settings.fnRecordsDisplay(),
+			all        = len === -1;
+	
+		return {
+			"page":           all ? 0 : Math.ceil( start / len ),
+			"pages":          all ? 1 : Math.ceil( visRecords / len ),
+			"start":          start,
+			"end":            settings.fnDisplayEnd(),
+			"length":         len,
+			"recordsTotal":   settings.fnRecordsTotal(),
+			"recordsDisplay": visRecords
+		};
+	} );
+	
+	
+	/**
+	 * Get the current page length.
+	 *
+	 * @return {integer} Current page length. Note `-1` indicates that all records
+	 *   are to be shown.
+	 *//**
+	 * Set the current page length.
+	 *
+	 * @param {integer} Page length to set. Use `-1` to show all records.
+	 * @returns {DataTables.Api} this
+	 */
+	_Api.register( 'page.len()', function ( len ) {
+		// Note that we can't call this function 'length()' because `length`
+		// is a Javascript property of functions which defines how many arguments
+		// the function expects.
+		if ( len === undefined ) {
+			return this.context.length !== 0 ?
+				this.context[0]._iDisplayLength :
+				undefined;
+		}
+	
+		// else, set the page length
+		return this.tables( function ( settings ) {
+			_fnLengthChange( settings, len );
+			_fnCalculateEnd( settings );
 		} );
 	} );
 	
@@ -12896,6 +13018,16 @@
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Page length change event, fired when number of records to show on each
+	 * page (the length) is changed.
+	 *  @name DataTable#length
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 *  @param {integer} len New length
 	 */
 }));
 

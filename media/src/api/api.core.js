@@ -48,7 +48,7 @@ var _apiStruct = [];
  * @type object
  * @ignore
  */
-var _api;
+var _Api;
 
 
 /**
@@ -207,12 +207,12 @@ var _unique = function ( src )
  *   // Initialisation as a constructor
  *   var api = new $.fn.DataTable.Api( 'table.dataTable' );
  */
-DataTable.Api = _api = function ( context, data )
+DataTable.Api = _Api = function ( context, data )
 {
-	if ( ! this instanceof _api ) {
+	if ( ! this instanceof _Api ) {
 		throw 'DT API must be constructed as a new object';
 		// or should it do the 'new' for the caller
-		// return new _api.apply( this, arguments );
+		// return new _Api.apply( this, arguments );
 	}
 
 	var settings = [];
@@ -240,11 +240,11 @@ DataTable.Api = _api = function ( context, data )
 		this.push.apply( this, data );
 	}
 
-	_api.extend( this, this, _apiStruct );
+	_Api.extend( this, this, _apiStruct );
 };
 
 
-_api.prototype = /** @lends DataTables.Api */{
+_Api.prototype = /** @lends DataTables.Api */{
 	/**
 	 * Return a new Api instance, comprised of the data held in the current
 	 * instance, join with the other array(s) and/or value(s).
@@ -297,7 +297,7 @@ _api.prototype = /** @lends DataTables.Api */{
 			}
 		}
 
-		return new _api( this.context, a );
+		return new _Api( this.context, a );
 	},
 
 
@@ -336,7 +336,7 @@ _api.prototype = /** @lends DataTables.Api */{
 			}
 		}
 
-		return new _api( this.context, a );
+		return new _Api( this.context, a );
 	},
 
 
@@ -426,7 +426,7 @@ _api.prototype = /** @lends DataTables.Api */{
 
 	unique: function ()
 	{
-		return new _api( this.context, _unique(this) );
+		return new _Api( this.context, _unique(this) );
 	},
 
 
@@ -436,9 +436,9 @@ _api.prototype = /** @lends DataTables.Api */{
 
 
 
- _api.extend = function ( scope, obj, ext )
+ _Api.extend = function ( scope, obj, ext )
 {
-	if ( ! obj instanceof _api ) {
+	if ( ! obj instanceof _Api ) {
 		return;
 	}
 
@@ -451,7 +451,7 @@ _api.prototype = /** @lends DataTables.Api */{
 				var ret = fn.apply( scope, arguments );
 
 				// Method extension
-				_api.extend( ret, ret, struc.methodExt );
+				_Api.extend( ret, ret, struc.methodExt );
 				return ret;
 			};
 		};
@@ -468,12 +468,12 @@ _api.prototype = /** @lends DataTables.Api */{
 		}
 
 		// Property extension
-		_api.extend( scope, obj[ struct.name ], struct.propExt );
+		_Api.extend( scope, obj[ struct.name ], struct.propExt );
 	}
 };
 
 
-_api.register = function ( name, val )
+_Api.register = function ( name, val )
 {
 	var
 		i, ien,
@@ -518,7 +518,7 @@ _api.register = function ( name, val )
 	}
 
 	// Rebuild the API with the new construct
-	if ( _api.ready ) {
+	if ( _Api.ready ) {
 		DataTable.api.build();
 	}
 };
