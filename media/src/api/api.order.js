@@ -48,13 +48,9 @@ _Api.register( 'order()', function ( order, dir ) {
 		// Simple column / direction passed in
 		order = [ [ order, dir ] ];
 	}
-	else if ( arguments.length > 1 ) {
+	else if ( ! $.isArray( order[0] ) ) {
 		// Arguments passed in (list of 1D arrays)
 		order = Array.prototype.slice.call( arguments );
-	}
-	else if ( ! $.isArray( order[0] ) ) {
-		// Just a 1D array passed in, convert to 2D to use for sorting
-		order = [ order ];
 	}
 	// otherwise a 2D array was passed in
 
