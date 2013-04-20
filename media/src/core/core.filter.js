@@ -51,6 +51,11 @@ function _fnFeatureHtmlFilter ( oSettings )
 				"bSmart": oPreviousSearch.bSmart ,
 				"bCaseInsensitive": oPreviousSearch.bCaseInsensitive
 			} );
+
+			// Need to redraw, without resorting
+			oSettings._iDisplayStart = 0;
+			_fnCalculateEnd( oSettings );
+			_fnDraw( oSettings );
 		}
 	} );
 
@@ -113,13 +118,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 	/* Tell the draw function we have been filtering */
 	oSettings.bFiltered = true;
 	$(oSettings.oInstance).trigger('filter', oSettings);
-	
-	/* Redraw the table */
-	oSettings._iDisplayStart = 0;
-	_fnCalculateEnd( oSettings );
-	_fnDraw( oSettings );
-	
-	/* Rebuild search array 'offline' */
+
 	_fnBuildSearchArray( oSettings, 0 );
 }
 

@@ -496,25 +496,35 @@ function _fnDraw( oSettings )
 /**
  * Redraw the table - taking account of the various features which are enabled
  *  @param {object} oSettings dataTables settings object
+ *  @param {boolean} [holdPosition] Keep the current paging position. By default
+ *    the paging is reset to the first page
  *  @memberof DataTable#oApi
  */
-function _fnReDraw( oSettings )
+function _fnReDraw( settings, holdPosition )
 {
-	if ( oSettings.oFeatures.bSort )
-	{
-		/* Sorting will refilter and draw for us */
-		_fnSort( oSettings, oSettings.oPreviousSearch );
+	var
+		features = settings.oFeatures,
+		sort     = features.bSort,
+		filter   = features.bFilter;
+
+	if ( sort ) {
+		_fnSort( settings );
 	}
-	else if ( oSettings.oFeatures.bFilter )
-	{
-		/* Filtering will redraw for us */
-		_fnFilterComplete( oSettings, oSettings.oPreviousSearch );
+
+	if ( filter ) {
+		_fnFilterComplete( settings, settings.oPreviousSearch );
 	}
-	else
-	{
-		_fnCalculateEnd( oSettings );
-		_fnDraw( oSettings );
+	else {
+		// No filtering, so we want to just use the display master
+		settings.aiDisplay = settings.aiDisplayMaster.slice();
 	}
+
+	if ( holdPosition === false ) {
+		settings._iDisplayStart = 0;
+	}
+
+	_fnCalculateEnd( settings );
+	_fnDraw( settings );
 }
 
 

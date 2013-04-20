@@ -230,20 +230,6 @@ function _fnSort ( oSettings, bApplyClasses )
 	/* Tell the draw function that we have sorted the data */
 	oSettings.bSorted = true;
 	$(oSettings.oInstance).trigger('sort', oSettings);
-	
-	/* Copy the master data into the draw array and re-draw */
-	if ( oSettings.oFeatures.bFilter )
-	{
-		/* _fnFilter() will redraw the table for us */
-		_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
-	}
-	else
-	{
-		oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-		oSettings._iDisplayStart = 0; /* reset display back to page 0 */
-		_fnCalculateEnd( oSettings );
-		_fnDraw( oSettings );
-	}
 }
 
 
@@ -337,8 +323,8 @@ function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
 				}
 			}
 			
-			/* Run the sort */
-			_fnSort( oSettings );
+			/* Run the sort by calling a full redraw */
+			_fnReDraw( oSettings );
 		}; /* /fnInnerSorting */
 		
 		if ( !oSettings.oFeatures.bProcessing )

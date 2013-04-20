@@ -48,20 +48,7 @@ function _fnInitialise ( oSettings )
 	 * drawing for us. Otherwise we draw the table regardless of the Ajax source - this allows
 	 * the table to look initialised for Ajax sourcing data (show 'loading' message possibly)
 	 */
-	if ( oSettings.oFeatures.bSort )
-	{
-		_fnSort( oSettings );
-	}
-	else if ( oSettings.oFeatures.bFilter )
-	{
-		_fnFilterComplete( oSettings, oSettings.oPreviousSearch );
-	}
-	else
-	{
-		oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-		_fnCalculateEnd( oSettings );
-		_fnDraw( oSettings );
-	}
+	_fnReDraw( oSettings );
 	
 	/* if there is an ajax source load the data */
 	if ( (oSettings.sAjaxSource || oSettings.ajax) && !oSettings.oFeatures.bServerSide )
@@ -81,16 +68,7 @@ function _fnInitialise ( oSettings )
 			 */
 			oSettings.iInitDisplayStart = iAjaxStart;
 			
-			if ( oSettings.oFeatures.bSort )
-			{
-				_fnSort( oSettings );
-			}
-			else
-			{
-				oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-				_fnCalculateEnd( oSettings );
-				_fnDraw( oSettings );
-			}
+			_fnReDraw( oSettings );
 			
 			_fnProcessingDisplay( oSettings, false );
 			_fnInitComplete( oSettings, json );

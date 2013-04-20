@@ -103,7 +103,7 @@ function _fnPageChange ( settings, action )
 		_fnLog( settings, 0, "Unknown paging action: "+action );
 	}
 
-	var changed = settings._iDisplayStart === start;
+	var changed = settings._iDisplayStart !== start;
 	settings._iDisplayStart = start;
 
 	$(settings.oInstance).trigger('page', settings);

@@ -718,6 +718,11 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 		} );
 		_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
 	}
+
+	// tmp hack during transition to new API
+	oSettings._iDisplayStart = 0;
+	_fnCalculateEnd( oSettings );
+	_fnDraw( oSettings );
 };
 
 
@@ -1163,7 +1168,7 @@ this.fnSort = function( aaSort )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	oSettings.aaSorting = aaSort;
-	_fnSort( oSettings );
+	_fnReDraw( oSettings );
 };
 
 
