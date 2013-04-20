@@ -621,6 +621,11 @@ this.fnDraw = function( bComplete )
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	if ( bComplete === false )
 	{
+		// xxx - Note that this is no exact equivalent of this in the new API.
+		// _fnReDraw can now do a static redraw, which is close, but it will
+		// also re-sort and re-filter. Do we need this kind of draw at all
+		// in the new API - I can't see why you'd want to do a draw which
+		// doesn't take into account the latest data.
 		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
 	}

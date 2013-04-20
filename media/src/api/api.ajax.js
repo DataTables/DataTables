@@ -4,9 +4,9 @@
 
 var _Api = DataTable.Api;
 
-var _reload = function ( settings ) {
+var _reload = function ( settings, holdPosition ) {
 	if ( settings.oFeatures.bServerSide ) {
-		_fnDraw( settings );
+		_fnReDraw( settings, holdPosition );
 	}
 	else {
 		// Trigger xhr
@@ -15,11 +15,11 @@ var _reload = function ( settings ) {
 			_fnClearTable( settings );
 
 			var data = _fnAjaxDataSrc( settings, json );
-			for ( i=0 ; i<data.length ; i++ ) {
+			for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 				_fnAddData( settings, data[i] );
 			}
 
-			_fnReDraw( settings );
+			_fnReDraw( settings, holdPosition );
 		} );
 	}
 };
@@ -48,12 +48,18 @@ _Api.register( 'ajax.json()', function () {
 
 
 /**
- * Reload tables from the Ajax data source.
+ * Reload tables from the Ajax data source. Note that this function will
+ * automatically re-draw the table when the remote data has been loaded.
  *
+ * @param {boolean} [reset=true] Reset (default) or hold the current paging
+ *   position. A full re-sort and re-filter is performed when this method is
+ *   called, which is why the pagination reset is the default action.
  * @returns {DataTables.Api} this
  */
-_Api.register( 'ajax.reload()', function () {
-	return this.tables( _reload );
+_Api.register( 'ajax.reload()', function ( resetPaging ) {
+	return this.tables( function (settings) {
+		_reload( settings, resetPaging===false );
+	} );
 } );
 
 
@@ -105,7 +111,8 @@ _Api.register( 'ajax.url()', function ( url ) {
  * Load data from the newly set Ajax URL. Note that this method is only
  * available when `ajax.url()` is used to set a URL. Additionally, this method
  * has the same effect as calling `ajax.reload()` but is provided for
- * convenience when setting a new URL.
+ * convenience when setting a new URL. Like `ajax.reload()` it will
+ * automatically redraw the table once the remote data has been loaded.
  *
  * @returns {DataTables.Api} this
  */

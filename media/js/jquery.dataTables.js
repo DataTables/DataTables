@@ -1581,25 +1581,37 @@
 	/**
 	 * Redraw the table - taking account of the various features which are enabled
 	 *  @param {object} oSettings dataTables settings object
+	 *  @param {boolean} [holdPosition] Keep the current paging position. By default
+	 *    the paging is reset to the first page
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnReDraw( oSettings )
+	function _fnReDraw( settings, holdPosition )
 	{
-		if ( oSettings.oFeatures.bSort )
-		{
-			/* Sorting will refilter and draw for us */
-			_fnSort( oSettings, oSettings.oPreviousSearch );
+		var
+			features = settings.oFeatures,
+			sort     = features.bSort,
+			filter   = features.bFilter;
+	
+		if ( sort ) {
+			_fnSort( settings );
 		}
-		else if ( oSettings.oFeatures.bFilter )
-		{
-			/* Filtering will redraw for us */
-			_fnFilterComplete( oSettings, oSettings.oPreviousSearch );
+	
+		if ( filter ) {
+			_fnFilterComplete( settings, settings.oPreviousSearch );
 		}
-		else
-		{
-			_fnCalculateEnd( oSettings );
-			_fnDraw( oSettings );
+		else {
+			// No filtering, so we want to just use the display master
+			settings.aiDisplay = settings.aiDisplayMaster.slice();
 		}
+	
+			console.log( '_fnReDraw', holdPosition );
+		if ( holdPosition !== true ) {
+			console.log( 'resetting paging' );
+			settings._iDisplayStart = 0;
+		}
+	
+		_fnCalculateEnd( settings );
+		_fnDraw( settings );
 	}
 	
 	
@@ -2195,6 +2207,11 @@
 					"bSmart": oPreviousSearch.bSmart ,
 					"bCaseInsensitive": oPreviousSearch.bCaseInsensitive
 				} );
+	
+				// Need to redraw, without resorting
+				oSettings._iDisplayStart = 0;
+				_fnCalculateEnd( oSettings );
+				_fnDraw( oSettings );
 			}
 		} );
 	
@@ -2257,13 +2274,7 @@
 		/* Tell the draw function we have been filtering */
 		oSettings.bFiltered = true;
 		$(oSettings.oInstance).trigger('filter', oSettings);
-		
-		/* Redraw the table */
-		oSettings._iDisplayStart = 0;
-		_fnCalculateEnd( oSettings );
-		_fnDraw( oSettings );
-		
-		/* Rebuild search array 'offline' */
+	
 		_fnBuildSearchArray( oSettings, 0 );
 	}
 	
@@ -2706,20 +2717,7 @@
 		 * drawing for us. Otherwise we draw the table regardless of the Ajax source - this allows
 		 * the table to look initialised for Ajax sourcing data (show 'loading' message possibly)
 		 */
-		if ( oSettings.oFeatures.bSort )
-		{
-			_fnSort( oSettings );
-		}
-		else if ( oSettings.oFeatures.bFilter )
-		{
-			_fnFilterComplete( oSettings, oSettings.oPreviousSearch );
-		}
-		else
-		{
-			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-			_fnCalculateEnd( oSettings );
-			_fnDraw( oSettings );
-		}
+		_fnReDraw( oSettings );
 		
 		/* if there is an ajax source load the data */
 		if ( (oSettings.sAjaxSource || oSettings.ajax) && !oSettings.oFeatures.bServerSide )
@@ -2739,16 +2737,7 @@
 				 */
 				oSettings.iInitDisplayStart = iAjaxStart;
 				
-				if ( oSettings.oFeatures.bSort )
-				{
-					_fnSort( oSettings );
-				}
-				else
-				{
-					oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-					_fnCalculateEnd( oSettings );
-					_fnDraw( oSettings );
-				}
+				_fnReDraw( oSettings );
 				
 				_fnProcessingDisplay( oSettings, false );
 				_fnInitComplete( oSettings, json );
@@ -2989,7 +2978,7 @@
 			_fnLog( settings, 0, "Unknown paging action: "+action );
 		}
 	
-		var changed = settings._iDisplayStart === start;
+		var changed = settings._iDisplayStart !== start;
 		settings._iDisplayStart = start;
 	
 		$(settings.oInstance).trigger('page', settings);
@@ -4204,20 +4193,6 @@
 		/* Tell the draw function that we have sorted the data */
 		oSettings.bSorted = true;
 		$(oSettings.oInstance).trigger('sort', oSettings);
-		
-		/* Copy the master data into the draw array and re-draw */
-		if ( oSettings.oFeatures.bFilter )
-		{
-			/* _fnFilter() will redraw the table for us */
-			_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
-		}
-		else
-		{
-			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-			oSettings._iDisplayStart = 0; /* reset display back to page 0 */
-			_fnCalculateEnd( oSettings );
-			_fnDraw( oSettings );
-		}
 	}
 	
 	
@@ -4311,8 +4286,8 @@
 					}
 				}
 				
-				/* Run the sort */
-				_fnSort( oSettings );
+				/* Run the sort by calling a full redraw */
+				_fnReDraw( oSettings );
 			}; /* /fnInnerSorting */
 			
 			if ( !oSettings.oFeatures.bProcessing )
@@ -5487,6 +5462,11 @@
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			if ( bComplete === false )
 			{
+				// xxx - Note that this is no exact equivalent of this in the new API.
+				// _fnReDraw can now do a static redraw, which is close, but it will
+				// also re-sort and re-filter. Do we need this kind of draw at all
+				// in the new API - I can't see why you'd want to do a draw which
+				// doesn't take into account the latest data.
 				_fnCalculateEnd( oSettings );
 				_fnDraw( oSettings );
 			}
@@ -5584,6 +5564,11 @@
 				} );
 				_fnFilterComplete( oSettings, oSettings.oPreviousSearch, 1 );
 			}
+		
+			// tmp hack during transition to new API
+			oSettings._iDisplayStart = 0;
+			_fnCalculateEnd( oSettings );
+			_fnDraw( oSettings );
 		};
 		
 		
@@ -6029,7 +6014,7 @@
 		{
 			var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 			oSettings.aaSorting = aaSort;
-			_fnSort( oSettings );
+			_fnReDraw( oSettings );
 		};
 		
 		
@@ -7355,21 +7340,17 @@
 	var _api = DataTable.Api;
 	
 	
-	// draw()
-	// draw.standing()
-	
 	/**
-	 * 
+	 * Redraw the tables in the current context.
+	 *
+	 * @param {boolean} [reset=true] Reset (default) or hold the current paging
+	 *   position. A full re-sort and re-filter is performed when this method is
+	 *   called, which is why the pagination reset is the default action.
+	 * @returns {DataTables.Api} this
 	 */
-	_api.register( 'draw()', function ( full ) {
+	_api.register( 'draw()', function ( resetPaging ) {
 		return this.tables( function ( settings ) {
-			if ( full ) {
-				_fnReDraw( settings );
-			}
-			else {
-				_fnCalculateEnd( settings );
-				_fnDraw( settings );
-			}
+			_fnReDraw( settings, resetPaging===false );
 		} );
 	} );
 	
@@ -7494,9 +7475,9 @@
 	
 	var _Api = DataTable.Api;
 	
-	var _reload = function ( settings ) {
+	var _reload = function ( settings, holdPosition ) {
 		if ( settings.oFeatures.bServerSide ) {
-			_fnDraw( settings );
+			_fnReDraw( settings, holdPosition );
 		}
 		else {
 			// Trigger xhr
@@ -7505,11 +7486,11 @@
 				_fnClearTable( settings );
 	
 				var data = _fnAjaxDataSrc( settings, json );
-				for ( i=0 ; i<data.length ; i++ ) {
+				for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 					_fnAddData( settings, data[i] );
 				}
 	
-				_fnReDraw( settings );
+				_fnReDraw( settings, holdPosition );
 			} );
 		}
 	};
@@ -7538,12 +7519,18 @@
 	
 	
 	/**
-	 * Reload tables from the Ajax data source.
+	 * Reload tables from the Ajax data source. Note that this function will
+	 * automatically re-draw the table when the remote data has been loaded.
 	 *
+	 * @param {boolean} [reset=true] Reset (default) or hold the current paging
+	 *   position. A full re-sort and re-filter is performed when this method is
+	 *   called, which is why the pagination reset is the default action.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'ajax.reload()', function () {
-		return this.tables( _reload );
+	_Api.register( 'ajax.reload()', function ( resetPaging ) {
+		return this.tables( function (settings) {
+			_reload( settings, resetPaging===false );
+		} );
 	} );
 	
 	
@@ -7595,7 +7582,8 @@
 	 * Load data from the newly set Ajax URL. Note that this method is only
 	 * available when `ajax.url()` is used to set a URL. Additionally, this method
 	 * has the same effect as calling `ajax.reload()` but is provided for
-	 * convenience when setting a new URL.
+	 * convenience when setting a new URL. Like `ajax.reload()` it will
+	 * automatically redraw the table once the remote data has been loaded.
 	 *
 	 * @returns {DataTables.Api} this
 	 */

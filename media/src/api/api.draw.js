@@ -5,21 +5,17 @@
 var _api = DataTable.Api;
 
 
-// draw()
-// draw.standing()
-
 /**
- * 
+ * Redraw the tables in the current context.
+ *
+ * @param {boolean} [reset=true] Reset (default) or hold the current paging
+ *   position. A full re-sort and re-filter is performed when this method is
+ *   called, which is why the pagination reset is the default action.
+ * @returns {DataTables.Api} this
  */
-_api.register( 'draw()', function ( full ) {
+_api.register( 'draw()', function ( resetPaging ) {
 	return this.tables( function ( settings ) {
-		if ( full ) {
-			_fnReDraw( settings );
-		}
-		else {
-			_fnCalculateEnd( settings );
-			_fnDraw( settings );
-		}
+		_fnReDraw( settings, resetPaging===false );
 	} );
 } );
 

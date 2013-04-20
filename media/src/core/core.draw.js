@@ -519,7 +519,7 @@ function _fnReDraw( settings, holdPosition )
 		settings.aiDisplay = settings.aiDisplayMaster.slice();
 	}
 
-	if ( holdPosition === false ) {
+	if ( holdPosition !== true ) {
 		settings._iDisplayStart = 0;
 	}
 
