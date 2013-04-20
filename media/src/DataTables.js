@@ -113,6 +113,7 @@
 	require('api.draw.js');
 	require('api.page.js');
 	require('api.ajax.js');
+	require('api.order.js');
 	require('api.static.js');
 
 	/**
