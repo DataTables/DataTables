@@ -494,7 +494,6 @@ function _fnClearTable( oSettings )
 	oSettings.aoData.splice( 0, oSettings.aoData.length );
 	oSettings.aiDisplayMaster.splice( 0, oSettings.aiDisplayMaster.length );
 	oSettings.aiDisplay.splice( 0, oSettings.aiDisplay.length );
-	_fnCalculateEnd( oSettings );
 }
 
 

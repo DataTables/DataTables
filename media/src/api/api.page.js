@@ -32,14 +32,13 @@ _Api.register( 'page()', function ( action ) {
 	// else, have an action to take on all tables
 	return this.tables( function ( settings ) {
 		_fnPageChange( settings, action );
-		_fnCalculateEnd( settings );
 	} );
 } );
 
 
 /**
  * Paging information for the first table in the current context.
- * 
+ *
  * If you require paging information for another table, use the `table()` method
  * with a suitable selector.
  *
@@ -103,7 +102,6 @@ _Api.register( 'page.len()', function ( len ) {
 	// else, set the page length
 	return this.tables( function ( settings ) {
 		_fnLengthChange( settings, len );
-		_fnCalculateEnd( settings );
 	} );
 } );
 

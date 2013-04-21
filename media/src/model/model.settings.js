@@ -705,15 +705,6 @@ DataTable.models.oSettings = {
 	 *  @default 0
 	 */
 	"_iDisplayStart": 0,
-
-	/**
-	 * Paging end point - aiDisplay index. Use fnDisplayEnd rather than
-	 * this property to get the end point
-	 *  @type int
-	 *  @default 10
-	 *  @private
-	 */
-	"_iDisplayEnd": 10,
 	
 	/**
 	 * Server-side processing - number of records in the result set
@@ -804,11 +795,9 @@ DataTable.models.oSettings = {
 	 */
 	"fnRecordsTotal": function ()
 	{
-		if ( this.oFeatures.bServerSide ) {
-			return parseInt(this._iRecordsTotal, 10);
-		} else {
-			return this.aiDisplayMaster.length;
-		}
+		return this.oFeatures.bServerSide ?
+			parseInt(this._iRecordsTotal, 10) :
+			this.aiDisplayMaster.length;
 	},
 	
 	/**
@@ -817,29 +806,34 @@ DataTable.models.oSettings = {
 	 */
 	"fnRecordsDisplay": function ()
 	{
-		if ( this.oFeatures.bServerSide ) {
-			return parseInt(this._iRecordsDisplay, 10);
-		} else {
-			return this.aiDisplay.length;
-		}
+		return this.oFeatures.bServerSide ?
+			parseInt(this._iRecordsDisplay, 10) :
+			this.aiDisplay.length;
 	},
 	
 	/**
-	 * Set the display end point - aiDisplay index
+	 * Get the display end point - aiDisplay index
 	 *  @type function
-	 *  @todo Should do away with _iDisplayEnd and calculate it on-the-fly here
 	 */
 	"fnDisplayEnd": function ()
 	{
-		if ( this.oFeatures.bServerSide ) {
-			if ( this.oFeatures.bPaginate === false || this._iDisplayLength == -1 ) {
-				return this._iDisplayStart+this.aiDisplay.length;
-			} else {
-				return Math.min( this._iDisplayStart+this._iDisplayLength,
-					this._iRecordsDisplay );
-			}
-		} else {
-			return this._iDisplayEnd;
+		var
+			len      = this._iDisplayLength,
+			start    = this._iDisplayStart,
+			calc     = start + len,
+			records  = this.aiDisplay.length,
+			features = this.oFeatures,
+			paginate = features.bPaginate;
+
+		if ( features.bServerSide ) {
+			return paginate === false || len === -1 ?
+				start + records :
+				Math.min( start+len, this._iRecordsDisplay );
+		}
+		else {
+			return ! paginate || calc>records || len===-1 ?
+				records :
+				calc;
 		}
 	},
 	

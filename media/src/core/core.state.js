@@ -16,8 +16,7 @@ function _fnSaveState ( oSettings )
 	var i, iLen, bInfinite=oSettings.oScroll.bInfinite;
 	var oState = {
 		"iCreate":      new Date().getTime(),
-		"iStart":       (bInfinite ? 0 : oSettings._iDisplayStart),
-		"iEnd":         (bInfinite ? oSettings._iDisplayLength : oSettings._iDisplayEnd),
+		"iStart":       bInfinite ? 0 : oSettings._iDisplayStart,
 		"iLength":      oSettings._iDisplayLength,
 		"aaSorting":    $.extend( true, [], oSettings.aaSorting ),
 		"oSearch":      $.extend( true, {}, oSettings.oPreviousSearch ),
@@ -75,7 +74,6 @@ function _fnLoadState ( oSettings, oInit )
 	/* Restore key features */
 	oSettings._iDisplayStart    = oData.iStart;
 	oSettings.iInitDisplayStart = oData.iStart;
-	oSettings._iDisplayEnd      = oData.iEnd;
 	oSettings._iDisplayLength   = oData.iLength;
 	oSettings.aaSorting         = oData.aaSorting.slice();
 	oSettings.saved_aaSorting   = oData.aaSorting.slice();

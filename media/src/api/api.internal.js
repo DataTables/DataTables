@@ -72,7 +72,6 @@ this.oApi = {
 	"_fnColumnIndexToVisible": _fnColumnIndexToVisible,
 	"_fnNodeToDataIndex": _fnNodeToDataIndex,
 	"_fnVisbleColumns": _fnVisbleColumns,
-	"_fnCalculateEnd": _fnCalculateEnd,
 	"_fnConvertToWidth": _fnConvertToWidth,
 	"_fnCalculateColumnWidths": _fnCalculateColumnWidths,
 	"_fnScrollingWidthAdjust": _fnScrollingWidthAdjust,

@@ -54,7 +54,6 @@ function _fnFeatureHtmlFilter ( oSettings )
 
 			// Need to redraw, without resorting
 			oSettings._iDisplayStart = 0;
-			_fnCalculateEnd( oSettings );
 			_fnDraw( oSettings );
 		}
 	} );

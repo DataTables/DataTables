@@ -454,7 +454,6 @@ this.fnDeleteRow = function( mTarget, fnCallBack, bRedraw )
 	
 	if ( bRedraw === undefined || bRedraw )
 	{
-		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
 	}
 	
@@ -626,7 +625,6 @@ this.fnDraw = function( bComplete )
 		// also re-sort and re-filter. Do we need this kind of draw at all
 		// in the new API - I can't see why you'd want to do a draw which
 		// doesn't take into account the latest data.
-		_fnCalculateEnd( oSettings );
 		_fnDraw( oSettings );
 	}
 	else
@@ -726,7 +724,6 @@ this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseIns
 
 	// tmp hack during transition to new API
 	oSettings._iDisplayStart = 0;
-	_fnCalculateEnd( oSettings );
 	_fnDraw( oSettings );
 };
 
@@ -1006,8 +1003,7 @@ this.fnPageChange = function ( mAction, bRedraw )
 {
 	var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
 	_fnPageChange( oSettings, mAction );
-	_fnCalculateEnd( oSettings );
-	
+
 	if ( bRedraw === undefined || bRedraw )
 	{
 		_fnDraw( oSettings );

@@ -9,7 +9,6 @@ function _fnLengthChange ( settings, val )
 
 	/* Redraw the table */
 	settings._iDisplayLength = len;
-	_fnCalculateEnd( settings );
 
 	end = settings.fnDisplayEnd();
 	
@@ -84,23 +83,5 @@ function _fnFeatureHtmlLength ( settings )
 	} );
 
 	return div[0];
-}
-
-
-/**
- * Recalculate the end point based on the start point
- *  @param {object} settings dataTables settings object
- *  @memberof DataTable#oApi
- */
-function _fnCalculateEnd( settings )
-{
-	var
-		len     = settings._iDisplayLength,
-		calc    = settings._iDisplayStart + len,
-		records = settings.aiDisplay.length;
-
-	settings._iDisplayEnd = ! settings.oFeatures.bPaginate || calc>records || len===-1 ?
-		records :
-		calc;
 }
 

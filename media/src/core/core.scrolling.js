@@ -155,7 +155,6 @@ function _fnFeatureHtmlTable ( oSettings )
 					if ( oSettings.fnDisplayEnd() < oSettings.fnRecordsDisplay() )
 					{
 						_fnPageChange( oSettings, 'next' );
-						_fnCalculateEnd( oSettings );
 						_fnDraw( oSettings );
 					}
 				}

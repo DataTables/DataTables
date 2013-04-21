@@ -22,7 +22,6 @@ function _fnFeatureHtmlPaginate ( settings )
 		type   = settings.sPaginationType,
 		plugin = DataTable.ext.oPagination[ type ],
 		redraw = function( settings ) {
-			_fnCalculateEnd( settings );
 			_fnDraw( settings );
 		},
 		node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];

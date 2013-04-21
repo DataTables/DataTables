@@ -320,25 +320,27 @@ function _fnDraw( oSettings )
 	var i, iLen, n;
 	var anRows = [];
 	var iRowCount = 0;
-	var iStripes = oSettings.asStripeClasses.length;
+	var asStripeClasses = oSettings.asStripeClasses;
+	var iStripes = asStripeClasses.length;
 	var iOpenRows = oSettings.aoOpenRows.length;
+	var oLang = oSettings.oLanguage;
+	var iInitDisplayStart = oSettings.iInitDisplayStart;
+	var iDisplayStart = oSettings._iDisplayStart;
+	var bServerSide = oSettings.oFeatures.bServerSide;
 	
 	oSettings.bDrawing = true;
+
 	
 	/* Check and see if we have an initial draw position from state saving */
-	if ( oSettings.iInitDisplayStart !== undefined && oSettings.iInitDisplayStart != -1 )
+	if ( iInitDisplayStart !== undefined && iInitDisplayStart !== -1 )
 	{
-		if ( oSettings.oFeatures.bServerSide )
-		{
-			oSettings._iDisplayStart = oSettings.iInitDisplayStart;
-		}
-		else
-		{
-			oSettings._iDisplayStart = (oSettings.iInitDisplayStart >= oSettings.fnRecordsDisplay()) ?
-				0 : oSettings.iInitDisplayStart;
-		}
+		iDisplayStart = bServerSide ?
+			iInitDisplayStart :
+			iInitDisplayStart >= oSettings.fnRecordsDisplay() ?
+				0 :
+				iInitDisplayStart;
+
 		oSettings.iInitDisplayStart = -1;
-		_fnCalculateEnd( oSettings );
 	}
 	
 	/* Server-side processing draw intercept */
@@ -347,7 +349,7 @@ function _fnDraw( oSettings )
 		oSettings.bDeferLoading = false;
 		oSettings.iDraw++;
 	}
-	else if ( !oSettings.oFeatures.bServerSide )
+	else if ( !bServerSide )
 	{
 		oSettings.iDraw++;
 	}
@@ -358,10 +360,10 @@ function _fnDraw( oSettings )
 	
 	if ( oSettings.aiDisplay.length !== 0 )
 	{
-		var iStart = oSettings._iDisplayStart;
-		var iEnd = oSettings._iDisplayEnd;
+		var iStart = iDisplayStart;
+		var iEnd = oSettings.fnDisplayEnd();
 		
-		if ( oSettings.oFeatures.bServerSide )
+		if ( bServerSide )
 		{
 			iStart = 0;
 			iEnd = oSettings.aoData.length;
@@ -380,7 +382,7 @@ function _fnDraw( oSettings )
 			/* Remove the old striping classes and then add the new one */
 			if ( iStripes !== 0 )
 			{
-				var sStripe = oSettings.asStripeClasses[ iRowCount % iStripes ];
+				var sStripe = asStripeClasses[ iRowCount % iStripes ];
 				if ( aoData._sRowStripe != sStripe )
 				{
 					$(nRow).removeClass( aoData._sRowStripe ).addClass( sStripe );
@@ -409,16 +411,8 @@ function _fnDraw( oSettings )
 	else
 	{
 		/* Table is empty - create a row with an empty message in it */
-		anRows[ 0 ] = document.createElement( 'tr' );
-		
-		if ( oSettings.asStripeClasses[0] )
-		{
-			anRows[ 0 ].className = oSettings.asStripeClasses[0];
-		}
-
-		var oLang = oSettings.oLanguage;
 		var sZero = oLang.sZeroRecords;
-		if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null && !oSettings.oFeatures.bServerSide )
+		if ( oSettings.iDraw == 1 && oSettings.sAjaxSource !== null && !bServerSide )
 		{
 			sZero = oLang.sLoadingRecords;
 		}
@@ -427,21 +421,20 @@ function _fnDraw( oSettings )
 			sZero = oLang.sEmptyTable;
 		}
 
-		var nTd = document.createElement( 'td' );
-		nTd.setAttribute( 'valign', "top" );
-		nTd.colSpan = _fnVisbleColumns( oSettings );
-		nTd.className = oSettings.oClasses.sRowEmpty;
-		nTd.innerHTML = _fnInfoMacros( oSettings, sZero );
-		
-		anRows[ iRowCount ].appendChild( nTd );
+		anRows[ 0 ] = $( '<tr/>', { 'class': iStripes ? asStripeClasses[0] : '' } )
+			.append( $('<td>'+sZero+'</td>', {
+				'valign':  'top',
+				'colspan': _fnVisbleColumns( oSettings ),
+				'class':   oSettings.oClasses.sRowEmpty
+			} ) )[0];
 	}
 	
 	/* Header and footer callbacks */
 	_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
-		_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
+		_fnGetDataMaster( oSettings ), iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 	
 	_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
-		_fnGetDataMaster( oSettings ), oSettings._iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
+		_fnGetDataMaster( oSettings ), iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
 	
 	/*
 	 * Need to remove any old row from the display - note we can't just empty the tbody using
@@ -523,7 +516,6 @@ function _fnReDraw( settings, holdPosition )
 		settings._iDisplayStart = 0;
 	}
 
-	_fnCalculateEnd( settings );
 	_fnDraw( settings );
 }
 
