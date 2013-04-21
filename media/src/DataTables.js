@@ -114,6 +114,9 @@
 	require('api.page.js');
 	require('api.ajax.js');
 	require('api.order.js');
+	require('api._selectors.js');
+	require('api.rows.js');
+	require('api.columns.js');
 	require('api.static.js');
 
 	/**

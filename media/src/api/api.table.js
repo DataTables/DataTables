@@ -4,37 +4,6 @@
 
 var _Api = DataTable.Api;
 
-/**
- * Selector for HTML tables. Apply the given selector to the give array of
- * DataTables settings objects.
- *
- * @param {string|integer} [selector] jQuery selector string or integer
- * @param  {array} Array of DataTables settings objects to be filtered
- * @return {array}
- * @ignore
- */
-var _table_selector = function ( selector, a )
-{
-	// Integer is used to pick out a table by index
-	if ( typeof selector === 'number' ) {
-		return [ a[ selector ] ];
-	}
-
-	// Perform a jQuery selector on the table nodes
-	var nodes = $.map( a, function (el, i) {
-		return el.nTable;
-	} );
-
-	return $(nodes)
-		.filter( selector )
-		.map( function (i) {
-			// Need to translate back from the table node to the settings
-			var idx = $.inArray( this, nodes );
-			return a[ idx ];
-		} )
-		.toArray();
-};
-
 
 /**
  * Context selector and iterator for the API's context (i.e. the tables the
