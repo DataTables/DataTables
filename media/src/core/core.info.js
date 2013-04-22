@@ -4,102 +4,85 @@
  *  @returns {node} Information element
  *  @memberof DataTable#oApi
  */
-function _fnFeatureHtmlInfo ( oSettings )
+function _fnFeatureHtmlInfo ( settings )
 {
-	var nInfo = document.createElement( 'div' );
-	nInfo.className = oSettings.oClasses.sInfo;
+	var
+		tid = settings.sTableId,
+		nodes = settings.aanFeatures.i;
 	
-	/* Actions that are to be taken once only for this feature */
-	if ( !oSettings.aanFeatures.i )
-	{
-		/* Add draw callback */
-		oSettings.aoDrawCallback.push( {
+	if ( ! nodes ) {
+		// Update display on each draw
+		settings.aoDrawCallback.push( {
 			"fn": _fnUpdateInfo,
 			"sName": "information"
 		} );
-		
-		/* Add id */
-		nInfo.id = oSettings.sTableId+'_info';
+
+		// Table is described by our info div
+		$(settings.nTable).attr( 'aria-describedby', tid+'_info' );
 	}
-	oSettings.nTable.setAttribute( 'aria-describedby', oSettings.sTableId+'_info' );
-	
-	return nInfo;
+
+	return $('<div/>', {
+		'class': settings.oClasses.sInfo,
+		'id': ! nodes ? tid+'_info' : null
+	} )[0];
 }
 
 
 /**
  * Update the information elements in the display
- *  @param {object} oSettings dataTables settings object
+ *  @param {object} settings dataTables settings object
  *  @memberof DataTable#oApi
  */
-function _fnUpdateInfo ( oSettings )
+function _fnUpdateInfo ( settings )
 {
 	/* Show information about the table */
-	if ( !oSettings.oFeatures.bInfo || oSettings.aanFeatures.i.length === 0 )
-	{
+	var nodes = settings.aanFeatures.i;
+	if ( nodes.length === 0 ) {
 		return;
 	}
 	
 	var
-		oLang = oSettings.oLanguage,
-		iStart = oSettings._iDisplayStart+1,
-		iEnd = oSettings.fnDisplayEnd(),
-		iMax = oSettings.fnRecordsTotal(),
-		iTotal = oSettings.fnRecordsDisplay(),
-		sOut;
-	
-	if ( iTotal === 0 )
-	{
-		/* Empty record set */
-		sOut = oLang.sInfoEmpty;
-	}
-	else {
-		/* Normal record set */
-		sOut = oLang.sInfo;
-	}
+		lang  = settings.oLanguage,
+		start = settings._iDisplayStart+1,
+		end   = settings.fnDisplayEnd(),
+		max   = settings.fnRecordsTotal(),
+		total = settings.fnRecordsDisplay(),
+		out   = total ?
+			lang.sInfoEmpty :
+			lang.sInfo;
 
-	if ( iTotal != iMax )
-	{
+	if ( total !== max ) {
 		/* Record set after filtering */
-		sOut += ' ' + oLang.sInfoFiltered;
+		out += ' ' + lang.sInfoFiltered;
 	}
 
 	// Convert the macros
-	sOut += oLang.sInfoPostFix;
-	sOut = _fnInfoMacros( oSettings, sOut );
+	out += lang.sInfoPostFix;
+	out = _fnInfoMacros( settings, out );
 	
-	if ( oLang.fnInfoCallback !== null )
-	{
-		sOut = oLang.fnInfoCallback.call( oSettings.oInstance,
-			oSettings, iStart, iEnd, iMax, iTotal, sOut );
+	var callback = lang.fnInfoCallback;
+	if ( callback !== null ) {
+		out = callback.call( settings.oInstance,
+			settings, start, end, max, total, out
+		);
 	}
 	
-	var n = oSettings.aanFeatures.i;
-	for ( var i=0, iLen=n.length ; i<iLen ; i++ )
-	{
-		$(n[i]).html( sOut );
-	}
+	$(nodes).html( out );
 }
 
 
-function _fnInfoMacros ( oSettings, str )
+function _fnInfoMacros ( settings, str )
 {
 	// When infinite scrolling, we are always starting at 1. _iDisplayStart is used only
 	// internally
 	var
-		iStart = oSettings.oScroll.bInfinite ? 1 : oSettings._iDisplayStart+1,
-		sStart = oSettings.fnFormatNumber( iStart ),
-		iEnd = oSettings.fnDisplayEnd(),
-		sEnd = oSettings.fnFormatNumber( iEnd ),
-		iTotal = oSettings.fnRecordsDisplay(),
-		sTotal = oSettings.fnFormatNumber( iTotal ),
-		iMax = oSettings.fnRecordsTotal(),
-		sMax = oSettings.fnFormatNumber( iMax );
+		start = settings.oScroll.bInfinite ? 1 : settings._iDisplayStart+1,
+		formatter = settings.fnFormatNumber;
 
 	return str.
-		replace(/_START_/g, sStart).
-		replace(/_END_/g,   sEnd).
-		replace(/_TOTAL_/g, sTotal).
-		replace(/_MAX_/g,   sMax);
+		replace(/_START_/g, formatter( start ) ).
+		replace(/_END_/g,   formatter( settings.fnDisplayEnd() ) ).
+		replace(/_TOTAL_/g, formatter( settings.fnRecordsDisplay() ) ).
+		replace(/_MAX_/g,   formatter( settings.fnRecordsTotal() ) );
 }
 
