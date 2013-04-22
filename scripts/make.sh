@@ -44,34 +44,21 @@ mv DataTables.js.build $MAIN_FILE
 
 if [ "$CMD" != "debug" ]; then
 	if [ "$CMD" = "jshint" -o "$CMD" = "" -o "$CMD" = "cdn" ]; then
-		echo "  JSHint"
-		jshint $MAIN_FILE --config ../../scripts/jshint.config
-		if [ $? -ne 0 ]; then
-			echo "    Errors occured - exiting"
-			exit 1
-		else
-			echo "    Pass" 
-		fi
+		echo "  -- Skipping JS Hint"
+		# echo "  JSHint"
+		# jshint --config ../../scripts/jshint.config $MAIN_FILE
+		# if [ $? -ne 0 ]; then
+		# 	echo "    Errors occured - exiting"
+		# 	exit 1
+		# else
+		# 	echo "    Pass" 
+		# fi
 	fi
 
 	if [ "$CMD" = "compress" -o "$CMD" = "" -o "$CMD" = "cdn" ]; then
 		echo "  Minification"
-		echo "/*
- * File:        jquery.dataTables.min.js
- * Version:     $VERSION
- * Author:      Allan Jardine (www.sprymedia.co.uk)
- * Info:        www.datatables.net
- * 
- * Copyright 2008-2012 Allan Jardine, all rights reserved.
- *
- * This source file is free software, under either the GPL v2 license or a
- * BSD style license, available at:
- *   http://datatables.net/license_gpl2
- *   http://datatables.net/license_bsd
- * 
- * This source file is distributed in the hope that it will be useful, but 
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
- * or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
+		echo "/*! DataTables $VERSION
+ * ©2008-2013 Allan Jardine - datatables.net/license
  */" > $MIN_FILE 
 
 		java -jar $CLOSURE --js $MAIN_FILE >> $MIN_FILE
