@@ -2,43 +2,33 @@
 
 /**
  * Generate the node required for the processing node
- *  @param {object} oSettings dataTables settings object
+ *  @param {object} settings dataTables settings object
  *  @returns {node} Processing element
  *  @memberof DataTable#oApi
  */
-function _fnFeatureHtmlProcessing ( oSettings )
+function _fnFeatureHtmlProcessing ( settings )
 {
-	var nProcessing = document.createElement( 'div' );
-	
-	if ( !oSettings.aanFeatures.r )
-	{
-		nProcessing.id = oSettings.sTableId+'_processing';
-	}
-	nProcessing.innerHTML = oSettings.oLanguage.sProcessing;
-	nProcessing.className = oSettings.oClasses.sProcessing;
-	oSettings.nTable.parentNode.insertBefore( nProcessing, oSettings.nTable );
-	
-	return nProcessing;
+	return $('<div/>', {
+			'id': ! settings.aanFeatures.r ? settings.sTableId+'_processing' : null,
+			'class': settings.oClasses.sProcessing
+		} )
+		.html( settings.oLanguage.sProcessing )
+		.insertBefore( settings.nTable )[0];
 }
 
 
 /**
  * Display or hide the processing indicator
- *  @param {object} oSettings dataTables settings object
- *  @param {bool} bShow Show the processing indicator (true) or not (false)
+ *  @param {object} settings dataTables settings object
+ *  @param {bool} show Show the processing indicator (true) or not (false)
  *  @memberof DataTable#oApi
  */
-function _fnProcessingDisplay ( oSettings, bShow )
+function _fnProcessingDisplay ( settings, show )
 {
-	if ( oSettings.oFeatures.bProcessing )
-	{
-		var an = oSettings.aanFeatures.r;
-		for ( var i=0, iLen=an.length ; i<iLen ; i++ )
-		{
-			an[i].style.visibility = bShow ? "visible" : "hidden";
-		}
+	if ( settings.oFeatures.bProcessing ) {
+		$(settings.aanFeatures.r).css( 'visibility', show ? 'visible' : 'hidden' );
 	}
 
-	$(oSettings.oInstance).trigger('processing', [oSettings, bShow]);
+	$(settings.oInstance).trigger('processing', [settings, show]);
 }
 
