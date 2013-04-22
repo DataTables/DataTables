@@ -326,10 +326,11 @@ function _fnDraw( oSettings )
 	var oLang = oSettings.oLanguage;
 	var iInitDisplayStart = oSettings.iInitDisplayStart;
 	var iDisplayStart = oSettings._iDisplayStart;
+	var iDisplayEnd = oSettings.fnDisplayEnd();
 	var bServerSide = oSettings.oFeatures.bServerSide;
+	var aiDisplay = oSettings.aiDisplay;
 	
 	oSettings.bDrawing = true;
-
 	
 	/* Check and see if we have an initial draw position from state saving */
 	if ( iInitDisplayStart !== undefined && iInitDisplayStart !== -1 )
@@ -358,23 +359,18 @@ function _fnDraw( oSettings )
 		return;
 	}
 	
-	if ( oSettings.aiDisplay.length !== 0 )
+	if ( aiDisplay.length !== 0 )
 	{
-		var iStart = iDisplayStart;
-		var iEnd = oSettings.fnDisplayEnd();
-		
-		if ( bServerSide )
-		{
-			iStart = 0;
-			iEnd = oSettings.aoData.length;
-		}
+		var iStart = bServerSide ? 0 : iDisplayStart;
+		var iEnd = bServerSide ? oSettings.aoData.length : iDisplayEnd;
 		
 		for ( var j=iStart ; j<iEnd ; j++ )
 		{
-			var aoData = oSettings.aoData[ oSettings.aiDisplay[j] ];
+			var iDataIndex = aiDisplay[j];
+			var aoData = oSettings.aoData[ iDataIndex ];
 			if ( aoData.nTr === null )
 			{
-				_fnCreateTr( oSettings, oSettings.aiDisplay[j] );
+				_fnCreateTr( oSettings, iDataIndex );
 			}
 
 			var nRow = aoData.nTr;
@@ -392,7 +388,7 @@ function _fnDraw( oSettings )
 			
 			/* Row callback functions - might want to manipulate the row */
 			_fnCallbackFire( oSettings, 'aoRowCallback', null,
-				[nRow, oSettings.aoData[ oSettings.aiDisplay[j] ]._aData, iRowCount, j] );
+				[nRow, aoData._aData, iRowCount, j] );
 			
 			anRows.push( nRow );
 			iRowCount++;
@@ -431,50 +427,23 @@ function _fnDraw( oSettings )
 	
 	/* Header and footer callbacks */
 	_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
-		_fnGetDataMaster( oSettings ), iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
+		_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
 	
 	_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
-		_fnGetDataMaster( oSettings ), iDisplayStart, oSettings.fnDisplayEnd(), oSettings.aiDisplay ] );
-	
-	/*
-	 * Need to remove any old row from the display - note we can't just empty the tbody using
-	 * $().html('') since this will unbind the jQuery event handlers (even although the node
-	 * still exists!) - equally we can't use innerHTML, since IE throws an exception.
+		_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
+
+	var body = $(oSettings.nTBody);
+
+	/* When doing infinite scrolling, only remove child rows when sorting, filtering or start
+	 * up. When not infinite scroll, always do it.
 	 */
-	var
-		nAddFrag = document.createDocumentFragment(),
-		nRemoveFrag = document.createDocumentFragment(),
-		nBodyPar;
-	
-	if ( oSettings.nTBody )
+	if ( !oSettings.oScroll.bInfinite || !oSettings._bInitComplete ||
+		oSettings.bSorted || oSettings.bFiltered )
 	{
-		nBodyPar = oSettings.nTBody.parentNode;
-		nRemoveFrag.appendChild( oSettings.nTBody );
-		
-		/* When doing infinite scrolling, only remove child rows when sorting, filtering or start
-		 * up. When not infinite scroll, always do it.
-		 */
-		if ( !oSettings.oScroll.bInfinite || !oSettings._bInitComplete ||
-			oSettings.bSorted || oSettings.bFiltered )
-		{
-			while( (n = oSettings.nTBody.firstChild) )
-			{
-				oSettings.nTBody.removeChild( n );
-			}
-		}
-		
-		/* Put the draw table into the dom */
-		for ( i=0, iLen=anRows.length ; i<iLen ; i++ )
-		{
-			nAddFrag.appendChild( anRows[i] );
-		}
-		
-		oSettings.nTBody.appendChild( nAddFrag );
-		if ( nBodyPar !== null )
-		{
-			nBodyPar.appendChild( oSettings.nTBody );
-		}
+		body.children().detach();
 	}
+
+	body.append( $(anRows) );
 	
 	/* Call all required callback functions for the end of a draw */
 	_fnCallbackFire( oSettings, 'aoDrawCallback', 'draw', [oSettings] );
