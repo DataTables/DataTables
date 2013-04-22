@@ -418,11 +418,11 @@ function _fnDraw( oSettings )
 		}
 
 		anRows[ 0 ] = $( '<tr/>', { 'class': iStripes ? asStripeClasses[0] : '' } )
-			.append( $('<td>'+sZero+'</td>', {
+			.append( $('<td />', {
 				'valign':  'top',
-				'colspan': _fnVisbleColumns( oSettings ),
+				'colSpan': _fnVisbleColumns( oSettings ),
 				'class':   oSettings.oClasses.sRowEmpty
-			} ) )[0];
+			} ).html( sZero ) )[0];
 	}
 	
 	/* Header and footer callbacks */
