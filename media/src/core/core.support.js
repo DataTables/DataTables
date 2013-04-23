@@ -20,27 +20,6 @@ function _fnSettingsFromNode ( nTable )
 
 
 /**
- * Return an array with the TR nodes for the table
- *  @param {object} oSettings dataTables settings object
- *  @returns {array} TR array
- *  @memberof DataTable#oApi
- */
-function _fnGetTrNodes ( oSettings )
-{
-	var aNodes = [];
-	var aoData = oSettings.aoData;
-	for ( var i=0, iLen=aoData.length ; i<iLen ; i++ )
-	{
-		if ( aoData[i].nTr !== null )
-		{
-			aNodes.push( aoData[i].nTr );
-		}
-	}
-	return aNodes;
-}
-
-
-/**
  * Log an error message
  *  @param {object} oSettings dataTables settings object
  *  @param {int} iLevel log error messages, or display them to the user
