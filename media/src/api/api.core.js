@@ -311,6 +311,33 @@ _Api.prototype = /** @lends DataTables.Api */{
 		return -1;
 	},
 
+	// Internal only at the moment - relax?
+	iterator: function ( fn ) {
+		var
+			a = [], ret,
+			i, ien, j, jen, k, ken,
+			context = this.context,
+			items;
+
+		for ( i=0, ien=context.length ; i<ien ; i++ ) {
+			for( j=0, jen=this.length ; j<jen ; j++ ) {
+				items = this[i];
+
+				for ( k=0, ken=items.length ; k<ken ; k++ ) {
+					ret = fn( context[i], items[k], i, j, k );
+
+					if ( ret !== undefined ) {
+						a.push( ret );
+					}
+				}
+			}
+		}
+
+		return a.length ?
+			new _Api( context, a ) :
+			this;
+	},
+
 
 	lastIndexOf: _arrayProto.lastIndexOf || function (obj, start)
 	{

@@ -19,20 +19,20 @@ var _intVal = function ( s ) {
 var _selector_run = function ( selector, select )
 {
 	var
-		out = [],
-		a, i, ien, res;
+		out = [], res,
+		a, i, ien, j, jen;
 	
 	if ( ! $.isArray( selector ) ) {
 		selector = [ selector ];
 	}
 
 	for ( i=0, ien=selector.length ; i<ien ; i++ ) {
-		a = sel.split ?
-			sel.split(',') :
-			[ sel ];
+		a = selector[i].split ?
+			selector[i].split(',') :
+			[ selector[i] ];
 
-		for ( i=0, ien=a.length ; i<ien ; i++ ) {
-			res = select( typeof a[i] === 'string' ? $.trim(a[i]) : a[i] );
+		for ( j=0, jen=a.length ; j<jen ; j++ ) {
+			res = select( typeof a[j] === 'string' ? $.trim(a[j]) : a[j] );
 
 			if ( res && res.length ) {
 				out.push.apply( out, res );
