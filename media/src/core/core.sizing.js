@@ -301,15 +301,14 @@ function _fnGetWidestNode( oSettings, iCol )
 		return null;
 	}
 
-	if ( oSettings.aoData[iMaxIndex].nTr === null )
-	{
-		var n = document.createElement('td');
-		n.innerHTML = _fnGetCellData( oSettings, iMaxIndex, iCol, '' );
-		return n;
-	}
-	return _fnGetTdNodes(oSettings, iMaxIndex)[iCol];
+	var data = oSettings.aoData[ iMaxIndex ];
+	return data.nTr === null ? // Might not have been created when deferred rendering
+		$('<td/>').html( _fnGetCellData( oSettings, iMaxIndex, iCol, 'display' ) )[0] :
+		data.anCells[ iCol ];
 }
 
+
+var __re_html_remove = /<.*?>/g;
 
 /**
  * Get the maximum strlen for each data column
@@ -320,13 +319,13 @@ function _fnGetWidestNode( oSettings, iCol )
  */
 function _fnGetMaxLenString( oSettings, iCol )
 {
-	var iMax = -1;
-	var iMaxIndex = -1;
+	var s, iMax=-1, iMaxIndex = -1;
 	
 	for ( var i=0 ; i<oSettings.aoData.length ; i++ )
 	{
-		var s = _fnGetCellData( oSettings, i, iCol, 'display' )+"";
-		s = s.replace( /<.*?>/g, "" );
+		s = _fnGetCellData( oSettings, i, iCol, 'display' )+'';
+		s = s.replace( __re_html_remove, '' );
+
 		if ( s.length > iMax )
 		{
 			iMax = s.length;

@@ -126,16 +126,7 @@ function _fnNodeToDataIndex( oSettings, n )
  */
 function _fnNodeToColumnIndex( oSettings, iRow, n )
 {
-	var anCells = _fnGetTdNodes( oSettings, iRow );
-
-	for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
-	{
-		if ( anCells[i] === n )
-		{
-			return i;
-		}
-	}
-	return -1;
+	return $.inArray( n, oSettings.aoData[ iRow ].anCells );
 }
 
 

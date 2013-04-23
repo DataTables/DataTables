@@ -13,6 +13,7 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 	var
 		row = oSettings.aoData[iRow],
 		rowData = row._aData,
+		cells = [],
 		nTr, nTd, oCol,
 		i, iLen;
 
@@ -42,6 +43,7 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 			oCol = oSettings.aoColumns[i];
 
 			nTd = nTrIn ? anTds[i] : document.createElement( oCol.sCellType );
+			cells.push( nTd );
 
 			// Need to create the HTML if new, or if a rendering function is defined
 			if ( !nTrIn || oCol.mRender || oCol.mData !== i )
@@ -56,7 +58,6 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 			}
 
 			// Visibility - add or remove as required
-			row._anHidden[i] = oCol.bVisible ? null : nTd;
 			if ( oCol.bVisible && ! nTrIn )
 			{
 				nTr.appendChild( nTd );
@@ -75,6 +76,7 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 		}
 
 		row.nTr = nTr;
+		row.anCells = cells;
 
 		_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
 	}

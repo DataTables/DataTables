@@ -82,7 +82,6 @@ this.oApi = {
 	"_fnSettingsFromNode": _fnSettingsFromNode,
 	"_fnGetDataMaster": _fnGetDataMaster,
 	"_fnGetTrNodes": _fnGetTrNodes,
-	"_fnGetTdNodes": _fnGetTdNodes,
 	"_fnEscapeRegex": _fnEscapeRegex,
 	"_fnDeleteIndex": _fnDeleteIndex,
 	"_fnColumnOrdering": _fnColumnOrdering,

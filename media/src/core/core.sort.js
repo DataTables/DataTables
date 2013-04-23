@@ -434,6 +434,13 @@ function _fnSortingClasses( oSettings )
 			$(oSettings.aoColumns[i].nTh).addClass( oSettings.aoColumns[i].sSortingClass );
 		}
 	}
+
+	// @todo This is totally inefficient. It is accessing the class name of every
+	// cell when it really doesn't need to. It should determine which cells
+	// have classes to be removed (by saving the previous state or doing a check
+	// on the first row), and then add to the required cells. Use _pluck.
+	// DISABLED until this can be done, since _fnGetTdNodes has been removed.
+	return;
 	
 	/*
 	 * Apply the required classes to the table body
