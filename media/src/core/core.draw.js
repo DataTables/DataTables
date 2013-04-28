@@ -225,6 +225,11 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 	var iColumns = oSettings.aoColumns.length;
 	var iRowspan, iColspan;
 
+	if ( ! aoSource )
+	{
+		return;
+	}
+
 	if (  bIncludeHidden === undefined )
 	{
 		bIncludeHidden = false;

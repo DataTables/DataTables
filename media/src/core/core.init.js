@@ -22,10 +22,7 @@ function _fnInitialise ( oSettings )
 	/* Build and draw the header / footer for the table */
 	_fnBuildHead( oSettings );
 	_fnDrawHead( oSettings, oSettings.aoHeader );
-	if ( oSettings.nTFoot )
-	{
-		_fnDrawHead( oSettings, oSettings.aoFooter );
-	}
+	_fnDrawHead( oSettings, oSettings.aoFooter );
 
 	/* Okay to show that something is going on now */
 	_fnProcessingDisplay( oSettings, true );

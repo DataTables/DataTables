@@ -66,5 +66,76 @@ _api.register( 'columns().data()', function () {
 } );
 
 
+
+
+_api.register( 'columns().visible()', function ( vis ) {
+	return this.iterator( 'column', function ( settings, column ) {
+		var
+			cols = settings.aoColumns,
+			col  = cols[ column ],
+			data = settings.aoData,
+			row, cells, i, ien, tr;
+
+		// Get
+		if ( vis === undefined ) {
+			return col.bVisible;
+		}
+
+		// Set
+		// No change
+		if ( col.bVisible === vis ) {
+			return;
+		}
+
+		if ( vis ) {
+			// Insert column
+			// Need to decide if we should use appendChild or insertBefore
+			var insertBefore = $.inArray( true, _pluck(cols, 'bVisible'), column+1 );
+
+			for ( i=0, ien=data.length ; i<ien ; i++ ) {
+				tr = data[i].nTr;
+				cells = data[i].anCells;
+
+				if ( tr ) {
+					// insertBefore can act like appendChild if 2nd arg is null
+					tr.insertBefore( cells[ column ], cells[ insertBefore ] || null );
+				}
+			}
+		}
+		else {
+			// Remove column
+			$( _pluck( settings.aoData, 'anCells', column ) ).remove();
+
+			col.bVisible = false;
+			_fnDrawHead( settings, settings.aoHeader );
+			_fnDrawHead( settings, settings.aoFooter );
+
+			_fnSaveState( settings );
+		}
+
+		// Common actions
+		col.bVisible = vis;
+		_fnDrawHead( settings, settings.aoHeader );
+		_fnDrawHead( settings, settings.aoFooter );
+
+		_fnSaveState( settings );
+	} );
+} );
+
+
+// _api.register( 'columns().show()', function () {
+// 	var selector = this.selector;
+// 	return this.columns( selector.cols, selector.opts ).visible( true );
+// } );
+
+
+// _api.register( 'columns().hide()', function () {
+// 	var selector = this.selector;
+// 	return this.columns( selector.cols, selector.opts ).visible( false );
+// } );
+
+
+
+
 }());
 
