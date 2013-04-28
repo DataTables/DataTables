@@ -135,6 +135,16 @@ _api.register( 'columns().visible()', function ( vis ) {
 // } );
 
 
+_api.register( 'columns.adjust()', function () {
+	this.iterator( 'table', function ( settings ) {
+		_fnAdjustColumnSizing( settings );
+	} );
+} );
+
+// _api.register( 'column.index()', function ( idx, type ) {
+
+// } );
+
 
 
 }());
