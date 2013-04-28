@@ -52,5 +52,19 @@ _api.register( 'columns().cells()', function () {
 } );
 
 
+/**
+ *
+ */
+_api.register( 'columns().data()', function () {
+	return this.iterator( true, 'column-rows', function ( settings, column, i, j, rows ) {
+		var a = [];
+		for ( var row=0, ien=rows.length ; row<ien ; row++ ) {
+			a.push( _fnGetCellData( settings, rows[row], column, '' ) );
+		}
+		return a;
+	} );
+} );
+
+
 }());
 
