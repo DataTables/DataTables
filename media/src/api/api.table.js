@@ -6,52 +6,21 @@ var _Api = DataTable.Api;
 
 
 /**
- * Context selector and iterator for the API's context (i.e. the tables the
- * API instance refers to.
+ * Context selector for the API's context (i.e. the tables the API instance
+ * refers to.
  *
  * @name    DataTable.Api#tables
  * @param {string|integer} [selector] Selector to pick which tables the iterator
  *   should operate on. If not given, all tables in the current context are
  *   used. This can be given as a jQuery selector (for example `':gt(0)'`) to
  *   select multiple tables or as an integer to select a single table.
- * @param {function} [fn] Iterator function. Will be called for every table in
- *   the current context (once the selector has been applied, if one is given).
- *   The function is passed two parameters: 1. the DataTables settings object
- *   for the table in question and 2. the index of that table in the current
- *   context. The execution scope of the function is the API instance.
- * @returns {DataTable.Api} Returns a new API instance if a selector is given,
- *   or the callback function returns information from each loop. The
- *   information, if returned, is assigned to the API instance. Otherwise the
- *   original API instance is returned for chaining.
+ * @returns {DataTable.Api} Returns a new API instance if a selector is given.
  */
-_Api.register( 'tables()', function ( selector, fn ) {
-	// Argument shifting
-	if ( typeof selector === 'function' ) {
-		fn = selector;
-		selector = undefined;
-	}
-
-	var a = [];
-	var context = selector ?
-		_table_selector( selector, this.context ) :
-		this.context;
-
-	if ( fn ) {
-		for ( var i=0, ien=context.length ; i<ien ; i++ ) {
-			var ret = fn.call( this, context[i], i );
-			if ( ret !== undefined ) {
-				a.push( ret );
-			}
-		}
-	}
-
-	// A new instance is created if there was a selector specified, or if
-	// data was returned from the callback
-	var api = selector || a.length ?
-		new _Api( context, a ) :
+_Api.register( 'tables()', function ( selector ) {
+	// A new instance is created if there was a selector specified
+	return selector ?
+		new _Api( _table_selector( selector, this.context ) ) :
 		this;
-
-	return api;
 } );
 
 
@@ -61,7 +30,7 @@ _Api.register( 'tables()', function ( selector, fn ) {
  *   tables.
  */
 _Api.register( 'tables().nodes()', function () {
-	return this.tables( function ( settings, i ) {
+	return this.iterator( 'table', function ( settings, i ) {
 		return settings.nTable;
 	} );
 } );

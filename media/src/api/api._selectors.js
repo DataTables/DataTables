@@ -1,15 +1,49 @@
 
 
 
-var _pluck = function ( a, prop ) {
+var _pluck = function ( a, prop, prop2 ) {
 	var out = [];
+	var i=0, ien=a.length;
 
-	for ( var i=0, ien=a.length ; i<ien ; i++ ) {
-		out.push( a[i][ prop ] );
+	// Could have the test in the loop for slightly smaller code, but speed
+	// is essential here
+	if ( prop2 !== undefined ) {
+		for ( ; i<ien ; i++ ) {
+			out.push( a[i][ prop ][ prop2 ] );
+		}
+	}
+	else {
+		for ( ; i<ien ; i++ ) {
+			out.push( a[i][ prop ] );
+		}
 	}
 
 	return out;
 };
+
+// Basically the same as _pluck, but rather than looping over `a` we use `order`
+// as the indexes to pick from `a`
+var _pluck_order = function ( a, order, prop, prop2 )
+{
+	var out = [];
+	var i=0, ien=order.length;
+
+	// Could have the test in the loop for slightly smaller code, but speed
+	// is essential here
+	if ( prop2 !== undefined ) {
+		for ( ; i<ien ; i++ ) {
+			out.push( a[ order[i] ][ prop ][ prop2 ] );
+		}
+	}
+	else {
+		for ( ; i<ien ; i++ ) {
+			out.push( a[ order[i] ][ prop ] );
+		}
+	}
+
+	return out;
+};
+
 
 var _intVal = function ( s ) {
 	var integer = parseInt( s, 10 );
@@ -21,7 +55,7 @@ var _selector_run = function ( selector, select )
 	var
 		out = [], res,
 		a, i, ien, j, jen;
-	
+
 	if ( ! $.isArray( selector ) ) {
 		selector = [ selector ];
 	}
@@ -38,6 +72,30 @@ var _selector_run = function ( selector, select )
 				out.push.apply( out, res );
 			}
 		}
+	}
+
+	return out;
+};
+
+var _selector_opts = function ( opts )
+{
+	if ( ! opts ) {
+		opts = {};
+	}
+
+	return {
+		filter: opts.filter || 'none',
+		order:  opts.order  || 'current',
+		page:   opts.page   || 'all'
+	};
+};
+
+var _range = function ( len )
+{
+	var out = [];
+
+	for ( var i=0 ; i<len ; i++ ) {
+		out.push( i );
 	}
 
 	return out;
@@ -100,14 +158,10 @@ var _row_selector_indexes = function ( settings, opts )
 		displayFiltered = settings.aiDisplay,
 		displayMaster = settings.aiDisplayMaster;
 
-	if ( ! opts ) {
-		opts = {};
-	}
-
 	var
-		filter = opts.filter  || 'none',    // none, applied, removed
-		order  = opts.order   || 'current', // current, original
-		page   = opts.page    || 'all';     // all, page
+		filter = opts.filter,  // none, applied, removed
+		order  = opts.order,   // current, index (original - compatibility with 1.9)
+		page   = opts.page;    // all, page
 
 	// Current page implies that order=current and fitler=applied, since it is
 	// fairly senseless otherwise, regardless of what order and filter actually
@@ -127,7 +181,7 @@ var _row_selector_indexes = function ( settings, opts )
 					return $.inArray( el, displayFiltered ) === -1 ? el : null;
 				} );
 	}
-	else if ( order == 'original' ) {
+	else if ( order == 'index' || order == 'original' ) {
 		for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 			if ( filter == 'none' ) {
 				a.push( i );
@@ -150,15 +204,6 @@ var _row_selector_indexes = function ( settings, opts )
 
 var _row_selector = function ( settings, selector, opts )
 {
-	// argument shifting
-	if ( selector === undefined ) {
-		selector = '';
-	}
-	else if ( $.isPlainObject( selector ) ) {
-		opts = selector;
-		selector = '';
-	}
-
 	return _selector_run( selector, function ( sel ) {
 		var selInt = _intVal( sel );
 
@@ -180,7 +225,7 @@ var _row_selector = function ( settings, selector, opts )
 			return [ selInt ];
 		}
 
-		// Get nodes in the order from the `rows` array (can't use `pluck`)
+		// Get nodes in the order from the `rows` array (can't use `pluck`) @todo - use pluck_order
 		var nodes = [];
 		for ( var i=0, ien=rows.length ; i<ien ; i++ ) {
 			nodes.push( settings.aoData[ rows[i] ].nTr );
@@ -224,7 +269,7 @@ var _row_selector = function ( settings, selector, opts )
 
 var _re_column_selector = /^(.*):(jq|visIdx)$/;
 
-var _column_selector = function ( settings, selector )
+var _column_selector = function ( settings, selector, opts )
 {
 	var
 		columns = settings.aoColumns,
@@ -234,7 +279,12 @@ var _column_selector = function ( settings, selector )
 	return _selector_run( selector, function ( s ) {
 		var selInt = _intVal( s );
 
-		if ( selInt !== null ) {
+		if ( s === '' ) {
+			// All columns
+			return _range( settings.aoColumns.length );
+		}
+		else if ( selInt !== null ) {
+			// Integer selector
 			return [ selInt ];
 		}
 		else {

@@ -240,6 +240,13 @@ DataTable.Api = _Api = function ( context, data )
 		this.push.apply( this, data );
 	}
 
+	// selector
+	this.selector = {
+		rows: null,
+		cols: null,
+		opts: null
+	};
+
 	_Api.extend( this, this, _apiStruct );
 };
 
@@ -312,19 +319,48 @@ _Api.prototype = /** @lends DataTables.Api */{
 	},
 
 	// Internal only at the moment - relax?
-	iterator: function ( fn ) {
+	iterator: function ( flatten, type, fn ) {
 		var
 			a = [], ret,
-			i, ien, j, jen, k, ken,
+			i, ien, j, jen,
 			context = this.context,
-			items;
+			rows, items,
+			selector = this.selector;
+
+		// Argument shifting
+		if ( typeof flatten === 'string' ) {
+			fn = type;
+			type = flatten;
+			flatten = false;
+		}
 
 		for ( i=0, ien=context.length ; i<ien ; i++ ) {
-			for( j=0, jen=this.length ; j<jen ; j++ ) {
+			if ( type === 'table' ) {
+				ret = fn( context[i] );
+
+				if ( ret !== undefined ) {
+					a.push( ret );
+				}
+			}
+			else if ( type === 'columns' || type === 'rows' ) {
+				// this has same length as context - one entry for each table
+				ret = fn( context[i], this[i] );
+
+				if ( ret !== undefined ) {
+					a.push( ret );
+				}
+			}
+			else if ( type === 'column' || type === 'column-rows' || type === 'row' ) {
+				// columns and rows share the same structure.
+				// 'this' is an array of column indexes for each context
 				items = this[i];
 
-				for ( k=0, ken=items.length ; k<ken ; k++ ) {
-					ret = fn( context[i], items[k], i, j, k );
+				if ( type === 'column-rows' ) {
+					rows = _row_selector_indexes( context[i], selector.opts );
+				}
+
+				for ( j=0, jen=items.length ; j<jen ; j++ ) {
+					ret = fn( context[i], items[j], i, j, rows );
 
 					if ( ret !== undefined ) {
 						a.push( ret );
@@ -333,9 +369,15 @@ _Api.prototype = /** @lends DataTables.Api */{
 			}
 		}
 
-		return a.length ?
-			new _Api( context, a ) :
-			this;
+		if ( a.length ) {
+			var api = new _Api( context, flatten ? a.concat.apply( [], a ) : a );
+			var apiSelector = api.selector;
+			apiSelector.rows = selector.rows;
+			apiSelector.cols = selector.cols;
+			apiSelector.opts = selector.opts;
+			return api;
+		}
+		return this;
 	},
 
 
@@ -434,6 +476,10 @@ _Api.prototype = /** @lends DataTables.Api */{
 	},
 
 	reverse: _arrayProto.reverse,
+
+
+	// Object with rows, columns and opts
+	selector: null,
 
 
 	shift:   _arrayProto.shift,

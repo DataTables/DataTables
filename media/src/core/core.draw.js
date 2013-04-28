@@ -578,6 +578,7 @@ function _fnAddOptionsHtml ( oSettings )
 			/* End container div */
 			nInsertNode = nInsertNode.parentNode;
 		}
+		// @todo Move options into their own plugins?
 		else if ( cOption == 'l' && oSettings.oFeatures.bPaginate && oSettings.oFeatures.bLengthChange )
 		{
 			/* Length */

@@ -57,7 +57,7 @@ _Api.register( 'ajax.json()', function () {
  * @returns {DataTables.Api} this
  */
 _Api.register( 'ajax.reload()', function ( resetPaging ) {
-	return this.tables( function (settings) {
+	return this.iterator( 'table', function (settings) {
 		_reload( settings, resetPaging===false );
 	} );
 } );
@@ -93,7 +93,7 @@ _Api.register( 'ajax.url()', function ( url ) {
 	}
 
 	// set
-	return this.tables( function ( settings ) {
+	return this.iterator( 'table', function ( settings ) {
 		if ( $.isPlainObject( settings.ajax ) ) {
 			settings.ajax.url = url;
 		}
@@ -119,7 +119,7 @@ _Api.register( 'ajax.url()', function ( url ) {
 _Api.register( 'ajax.url().load()', function () {
 	// Same as a reload, but makes sense to present it for easy access after a
 	// url change
-	return this.tables( _reload );
+	return this.iterator( 'table', _reload );
 } );
 
 

@@ -54,8 +54,8 @@ _Api.register( 'order()', function ( order, dir ) {
 	}
 	// otherwise a 2D array was passed in
 
-	return this.tables( function ( settings ) {
-		settings.aaSorting = order;
+	return this.iterator( 'table', function ( settings ) {
+		settings.aaSorting = order.slice();
 	} );
 } );
 
@@ -71,7 +71,7 @@ _Api.register( 'order()', function ( order, dir ) {
  * @returns {DataTables.Api} this
  */
 _Api.register( 'order.listener()', function ( node, column, callback ) {
-	return this.tables( function ( settings ) {
+	return this.iterator( 'table', function ( settings ) {
 		_fnSortAttachListener( settings, node, column, callback );
 	} );
 } );

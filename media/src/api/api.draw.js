@@ -14,7 +14,7 @@ var _api = DataTable.Api;
  * @returns {DataTables.Api} this
  */
 _api.register( 'draw()', function ( resetPaging ) {
-	return this.tables( function ( settings ) {
+	return this.iterator( 'table', function ( settings ) {
 		_fnReDraw( settings, resetPaging===false );
 	} );
 } );

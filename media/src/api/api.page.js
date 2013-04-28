@@ -30,7 +30,7 @@ _Api.register( 'page()', function ( action ) {
 	}
 
 	// else, have an action to take on all tables
-	return this.tables( function ( settings ) {
+	return this.iterator( 'table', function ( settings ) {
 		_fnPageChange( settings, action );
 	} );
 } );
@@ -100,7 +100,7 @@ _Api.register( 'page.len()', function ( len ) {
 	}
 
 	// else, set the page length
-	return this.tables( function ( settings ) {
+	return this.iterator( 'table', function ( settings ) {
 		_fnLengthChange( settings, len );
 	} );
 } );
