@@ -141,9 +141,19 @@ _api.register( 'columns.adjust()', function () {
 	} );
 } );
 
-// _api.register( 'column.index()', function ( idx, type ) {
+// Convert from one column index type, to another type
+_api.register( 'column.index()', function ( type, idx ) {
+	if ( this.context.length !== 0 ) {
+		var ctx = this.context[0];
 
-// } );
+		if ( type === 'fromVisible' || type === 'toIndex' ) {
+			return _fnColumnIndexToVisible( ctx, idx );
+		}
+		else if ( type === 'fromIndex' || type === 'toVisible' ) {
+			return _fnVisibleToColumnIndex( ctx, idx );
+		}
+	}
+} );
 
 
 
