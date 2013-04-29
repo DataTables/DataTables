@@ -1,29 +1,10 @@
 
 function _fnLengthChange ( settings, val )
 {
-	var
-		start = settings._iDisplayStart,
-		records = settings.fnRecordsDisplay(),
-		end,
-		len = parseInt( val, 10 );
-
-	/* Redraw the table */
+	var len = parseInt( val, 10 );
 	settings._iDisplayLength = len;
 
-	end = settings.fnDisplayEnd();
-	
-	/* If we have space to show extra rows (backing up from the end point - then do so */
-	if ( end === records )
-	{
-		start = end - len;
-	}
-	
-	if ( len === -1 || start < 0 )
-	{
-		start = 0;
-	}
-
-	settings._iDisplayStart = start;
+	_fnLengthOverflow( settings );
 
 	// Fire length change event
 	$(settings.oInstance).trigger( 'length', [settings, len] );

@@ -495,7 +495,7 @@ function _fnClearTable( oSettings )
  *  @param {int} iTarget value to find
  *  @memberof DataTable#oApi
  */
-function _fnDeleteIndex( a, iTarget )
+function _fnDeleteIndex( a, iTarget, splice )
 {
 	var iTargetIndex = -1;
 	
@@ -511,7 +511,7 @@ function _fnDeleteIndex( a, iTarget )
 		}
 	}
 	
-	if ( iTargetIndex != -1 )
+	if ( iTargetIndex != -1 && splice === undefined )
 	{
 		a.splice( iTargetIndex, 1 );
 	}

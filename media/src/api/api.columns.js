@@ -135,11 +135,13 @@ _api.register( 'columns().visible()', function ( vis ) {
 // } );
 
 
+
 _api.register( 'columns.adjust()', function () {
-	this.iterator( 'table', function ( settings ) {
+	return this.iterator( 'table', function ( settings ) {
 		_fnAdjustColumnSizing( settings );
 	} );
 } );
+
 
 // Convert from one column index type, to another type
 _api.register( 'column.index()', function ( type, idx ) {

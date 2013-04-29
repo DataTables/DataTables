@@ -99,7 +99,7 @@
 	{
 		require('api.methods.js');
 		require('api.internal.js');
-		
+
 		var _that = this;
 		this.each(function() {
 			require('core.constructor.js');
@@ -117,6 +117,7 @@
 	require('api._selectors.js');
 	require('api.rows.js');
 	require('api.columns.js');
+	require('api.search.js');
 	require('api.static.js');
 
 	/**

@@ -8,12 +8,12 @@
 function _fnFeatureHtmlFilter ( oSettings )
 {
 	var oPreviousSearch = oSettings.oPreviousSearch;
-	
+
 	var sSearchStr = oSettings.oLanguage.sSearch;
 	sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
 	  sSearchStr.replace('_INPUT_', '<input type="search" />') :
 	  sSearchStr==="" ? '<input type="search" />' : sSearchStr+' <input type="search" />';
-	
+
 	var nFilter = document.createElement( 'div' );
 	nFilter.className = oSettings.oClasses.sFilter;
 	nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
@@ -21,7 +21,7 @@ function _fnFeatureHtmlFilter ( oSettings )
 	{
 		nFilter.id = oSettings.sTableId+'_filter';
 	}
-	
+
 	var jqFilter = $('input[type="search"]', nFilter);
 
 	// Store a reference to the input element, so other input elements could be
@@ -41,7 +41,7 @@ function _fnFeatureHtmlFilter ( oSettings )
 				$(n[i]._DT_Input).val( val );
 			}
 		}
-		
+
 		/* Now do the filter */
 		if ( val != oPreviousSearch.sSearch )
 		{
@@ -68,7 +68,7 @@ function _fnFeatureHtmlFilter ( oSettings )
 			}
 		}
 	);
-	
+
 	return nFilter;
 }
 
@@ -100,7 +100,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 		fnSaveFilter( oInput );
 
 		/* Now do the individual column filter */
-		for ( var i=0 ; i<oSettings.aoPreSearchCols.length ; i++ )
+		for ( var i=0 ; i<aoPrevSearch.length ; i++ )
 		{
 			_fnFilterColumn( oSettings, aoPrevSearch[i].sSearch, i, aoPrevSearch[i].bRegex,
 				aoPrevSearch[i].bSmart, aoPrevSearch[i].bCaseInsensitive );

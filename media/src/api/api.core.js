@@ -283,7 +283,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 				fn.call( this, this[i], i, this );
 			}
 		}
-	
+
 		return this;
 	},
 
@@ -336,7 +336,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 		for ( i=0, ien=context.length ; i<ien ; i++ ) {
 			if ( type === 'table' ) {
-				ret = fn( context[i] );
+				ret = fn( context[i], i );
 
 				if ( ret !== undefined ) {
 					a.push( ret );
@@ -344,7 +344,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 			}
 			else if ( type === 'columns' || type === 'rows' ) {
 				// this has same length as context - one entry for each table
-				ret = fn( context[i], this[i] );
+				ret = fn( context[i], this[i], i );
 
 				if ( ret !== undefined ) {
 					a.push( ret );
