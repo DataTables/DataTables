@@ -34,14 +34,6 @@ function _fnFeatureHtmlFilter ( oSettings )
 		var n = oSettings.aanFeatures.f;
 		var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
 
-		for ( var i=0, iLen=n.length ; i<iLen ; i++ )
-		{
-			if ( n[i] != $(this).parents('div.dataTables_filter')[0] )
-			{
-				$(n[i]._DT_Input).val( val );
-			}
-		}
-
 		/* Now do the filter */
 		if ( val != oPreviousSearch.sSearch )
 		{
@@ -68,6 +60,20 @@ function _fnFeatureHtmlFilter ( oSettings )
 			}
 		}
 	);
+
+	// Update the input elements whenever the table is filtered
+	$(oSettings.nTable).on( 'filter.DT', function () {
+		try {
+			// IE9 throws an 'unknown error' if document.activeElement is used
+			// inside an iframe or frame...
+			if ( this._DT_Input !== document.activeElement ) {
+				jqFilter.val( oPreviousSearch.sSearch );
+			}
+		}
+		catch ( e ) {
+			jqFilter.val( oPreviousSearch.sSearch );
+		}
+	} );
 
 	return nFilter;
 }
