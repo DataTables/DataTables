@@ -1270,6 +1270,40 @@ this.fnUpdate = function( mData, mRow, iColumn, bRedraw, bAction )
 	return 0;
 };
 
+/**
+ * This function displays or hide the "Processing" div on demand
+ * @param {boolean} bShow (optional) If nothing is provided, it will toggle between the
+ *    hidden and visible state.  If set to true, will make the _processing div visible
+ *    or hide it if set to false
+ * @returns {boolean} true is everything went well, false if the bProcessing setting is set to false
+ * @method
+ * @example
+ *   $(document).ready(function() {
+ *       var oTable = $('#example').dataTable({bProcessing: true});
+ *       oTable.fnTriggerProcessing();                                 //Shows the 'Processing' div
+ *       setTimeout(function() {oTable.fnTriggerProcessing();}, 1000); //Hide the 'Processing' div in 1 second
+ *   });
+ *
+ */
+	this.fnTriggerProcessing = function(bShow) {
+    var oSettings = _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+    //If the bProcessing setting is set to false, throw an error
+    if(!oSettings.oFeatures.bProcessing) {
+        oSettings.oApi._fnLog( oSettings, 0, "DataTables warning: bProcessing was not set to true" );
+        return false;
+    }
+    
+    if(bShow === undefined) {
+        //bShow was not passed as a parameter, toggle the processing window
+        if($('#' + oSettings.sTableId+'_processing').css('visibility') == 'hidden') bShow = true;
+        else bShow = false;
+    }
+    
+    if(bShow) $('#' + oSettings.sTableId + '_processing').css('visibility', 'visible');
+    else $('#' + oSettings.sTableId + '_processing').css('visibility', 'hidden');
+    return true;
+}
+
 
 /**
  * Provide a common method for plug-ins to check the version of DataTables being used, in order
