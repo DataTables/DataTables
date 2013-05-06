@@ -564,7 +564,7 @@ this.fnDestroy = function ( bRemove )
 	 */
 	oSettings.nTable.style.width = oSettings.sDestroyWidth;
   
-  $(oSettings.nTable).removeClass( oSettings.oClasses.sTable );
+	$(oSettings.nTable).removeClass( oSettings.oClasses.sTable );
 	
 	/* If the were originally stripe classes - then we add them back here. Note
 	 * this is not fool proof (for example if not all rows had stripe classes - but
