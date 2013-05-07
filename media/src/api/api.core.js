@@ -548,6 +548,13 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 _Api.register = function ( name, val )
 {
+	if ( $.isArray( name ) ) {
+		for ( var j=0, jen=name.length ; j<jen ; j++ ) {
+			_Api.register( name[j], val );
+		}
+		return;
+	}
+
 	var
 		i, ien,
 		heir = name.split('.'),
@@ -562,7 +569,7 @@ _Api.register = function ( name, val )
 		}
 		return null;
 	};
-		
+
 	for ( i=0, ien=heir.length ; i<ien ; i++ ) {
 		method = heir[i].indexOf('()') !== -1;
 		key = method ?

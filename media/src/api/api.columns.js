@@ -118,6 +118,8 @@ _api.register( 'columns().visible()', function ( vis ) {
 		_fnDrawHead( settings, settings.aoHeader );
 		_fnDrawHead( settings, settings.aoFooter );
 
+		_fnCallbackFire( settings, null, 'column-visibility', [settings, column, vis] );
+
 		_fnSaveState( settings );
 	} );
 } );

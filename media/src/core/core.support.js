@@ -171,22 +171,21 @@ function _fnCallbackReg( oSettings, sStore, fn, sName )
  *  @param {array} aArgs Array of arguments to pass to the callback function / trigger
  *  @memberof DataTable#oApi
  */
-function _fnCallbackFire( oSettings, sStore, sTrigger, aArgs )
+function _fnCallbackFire( settings, callbackArr, event, args )
 {
-	var aoStore = oSettings[sStore];
-	var aRet =[];
+	var ret = [];
 
-	for ( var i=aoStore.length-1 ; i>=0 ; i-- )
-	{
-		aRet.push( aoStore[i].fn.apply( oSettings.oInstance, aArgs ) );
+	if ( callbackArr ) {
+		ret = $.map( settings[callbackArr].slice().reverse(), function (val, i) {
+			return val.fn.apply( settings.oInstance, args );
+		} );
 	}
 
-	if ( sTrigger !== null )
-	{
-		$(oSettings.oInstance).trigger(sTrigger, aArgs);
+	if ( event !== null ) {
+		$(settings.oInstance).trigger(event, args);
 	}
 
-	return aRet;
+	return ret;
 }
 
 
