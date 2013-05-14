@@ -30,17 +30,15 @@ $.each( [ 'on', 'one', 'off' ], function (i, key) {
 } );
 
 
-_api.register( 'clear()', function ( selector, opts ) {
+_api.register( 'clear()', function () {
 	return this.iterator( 'table', function ( settings ) {
 		_fnClearTable( settings );
 	} );
 } );
 
 
-_api.register( 'settings()', function ( selector, opts ) {
-	return this.iterator( 'table', function ( settings ) {
-		return settings;
-	} );
+_api.register( 'settings()', function () {
+	return new _api( this.context, this.context );
 } );
 
 
