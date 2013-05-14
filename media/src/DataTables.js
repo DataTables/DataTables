@@ -108,7 +108,7 @@
 		return this;
 	};
 
-	require('api.core.js');
+	require('api.base.js');
 	require('api.table.js');
 	require('api.draw.js');
 	require('api.page.js');
@@ -120,6 +120,7 @@
 	require('api.columns.js');
 	require('api.search.js');
 	require('api.static.js');
+	require('api.core.js');
 
 	/**
 	 * Version string for plug-ins to check compatibility. Allowed format is
