@@ -463,15 +463,9 @@ function _fnSetObjectDataFn( mSource )
  *  @returns array {array} aData Master data array
  *  @memberof DataTable#oApi
  */
-function _fnGetDataMaster ( oSettings )
+function _fnGetDataMaster ( settings )
 {
-	var aData = [];
-	var iLen = oSettings.aoData.length;
-	for ( var i=0 ; i<iLen; i++ )
-	{
-		aData.push( oSettings.aoData[i]._aData );
-	}
-	return aData;
+	return _pluck( settings.aoData, '_aData' );
 }
 
 
@@ -480,11 +474,11 @@ function _fnGetDataMaster ( oSettings )
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
  */
-function _fnClearTable( oSettings )
+function _fnClearTable( settings )
 {
-	oSettings.aoData.splice( 0, oSettings.aoData.length );
-	oSettings.aiDisplayMaster.splice( 0, oSettings.aiDisplayMaster.length );
-	oSettings.aiDisplay.splice( 0, oSettings.aiDisplay.length );
+	settings.aoData.length = 0;
+	settings.aiDisplayMaster.length = 0;
+	settings.aiDisplay.length = 0;
 }
 
 
@@ -498,7 +492,7 @@ function _fnClearTable( oSettings )
 function _fnDeleteIndex( a, iTarget, splice )
 {
 	var iTargetIndex = -1;
-	
+
 	for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 	{
 		if ( a[i] == iTarget )
@@ -510,7 +504,7 @@ function _fnDeleteIndex( a, iTarget, splice )
 			a[i]--;
 		}
 	}
-	
+
 	if ( iTargetIndex != -1 && splice === undefined )
 	{
 		a.splice( iTargetIndex, 1 );
