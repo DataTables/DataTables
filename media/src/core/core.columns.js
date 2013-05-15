@@ -1,4 +1,3 @@
-
 /**
  * Add a column to the list used for the table with default values
  *  @param {object} oSettings dataTables settings object
@@ -114,23 +113,24 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	}
 	
 	/* Check that the class assignment is correct for sorting */
-	if ( !oCol.bSortable ||
-		 ($.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1) )
+	var bAsc = $.inArray('asc', oCol.asSorting) !== -1;
+	var bDesc = !bAsc && $.inArray('desc', oCol.asSorting) !== -1;
+	if ( !oCol.bSortable || (!bAsc && !bDesc) )
 	{
 		oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 		oCol.sSortingClassJUI = "";
 	}
-	else if ( $.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) == -1 )
+	else if ( !bAsc && !bDesc )
 	{
 		oCol.sSortingClass = oSettings.oClasses.sSortable;
 		oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
 	}
-	else if ( $.inArray('asc', oCol.asSorting) != -1 && $.inArray('desc', oCol.asSorting) == -1 )
+	else if ( bAsc && !bDesc )
 	{
 		oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
 		oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIAscAllowed;
 	}
-	else if ( $.inArray('asc', oCol.asSorting) == -1 && $.inArray('desc', oCol.asSorting) != -1 )
+	else if ( !bAsc && bDesc )
 	{
 		oCol.sSortingClass = oSettings.oClasses.sSortableDesc;
 		oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIDescAllowed;
