@@ -113,11 +113,11 @@
 	require('api.draw.js');
 	require('api.page.js');
 	require('api.ajax.js');
-	require('api.order.js');
 	require('api._selectors.js');
 	require('api.rows.js');
 	require('api.row.js');
 	require('api.columns.js');
+	require('api.order.js');
 	require('api.search.js');
 	require('api.static.js');
 	require('api.core.js');

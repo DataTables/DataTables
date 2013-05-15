@@ -77,5 +77,22 @@ _Api.register( 'order.listener()', function ( node, column, callback ) {
 } );
 
 
+// Order by the selected column(s)
+_Api.register( 'columns().order()', function ( dir ) {
+	var that = this;
+
+	return this.iterator( 'table', function ( settings, i ) {
+		var sort = [];
+
+		$.each( that[i], function (j, col) {
+			sort.push( [ col, dir ] );
+		} );
+
+		settings.aaSorting = sort;
+	} );
+} );
+
+
+
 }());
 
