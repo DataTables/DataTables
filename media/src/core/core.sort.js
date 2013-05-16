@@ -212,118 +212,89 @@ function _fnSortAria ( settings )
 
 /**
  * Attach a sort handler (click) to a node
- *  @param {object} oSettings dataTables settings object
- *  @param {node} nNode node to attach the handler to
- *  @param {int} iDataIndex column sorting index
- *  @param {function} [fnCallback] callback function
+ *  @param {object} settings dataTables settings object
+ *  @param {node} attachTo node to attach the handler to
+ *  @param {int} colIdx column sorting index
+ *  @param {function} [callback] callback function
  *  @memberof DataTable#oApi
  */
-function _fnSortAttachListener ( oSettings, nNode, iDataIndex, fnCallback )
+function _fnSortAttachListener ( settings, attachTo, colIdx, callback )
 {
-	_fnBindAction( nNode, {}, function (e) {
+	var col = settings.aoColumns[ colIdx ];
+	var sorting = settings.aaSorting;
+	var asSorting = col.asSorting;
+
+	_fnBindAction( attachTo, {}, function (e) {
 		/* If the column is not sortable - don't to anything */
-		if ( oSettings.aoColumns[iDataIndex].bSortable === false )
-		{
+		if ( col.bSortable === false ) {
 			return;
 		}
-		
-		/*
-		 * This is a little bit odd I admit... I declare a temporary function inside the scope of
-		 * _fnBuildHead and the click handler in order that the code presented here can be used
-		 * twice - once for when bProcessing is enabled, and another time for when it is
-		 * disabled, as we need to perform slightly different actions.
-		 *   Basically the issue here is that the Javascript engine in modern browsers don't
-		 * appear to allow the rendering engine to update the display while it is still executing
-		 * it's thread (well - it does but only after long intervals). This means that the
-		 * 'processing' display doesn't appear for a table sort. To break the js thread up a bit
-		 * I force an execution break by using setTimeout - but this breaks the expected
-		 * thread continuation for the end-developer's point of view (their code would execute
-		 * too early), so we only do it when we absolutely have to.
-		 */
-		var fnInnerSorting = function () {
-			var iColumn, iNextSort;
-			
-			/* If the shift key is pressed then we are multiple column sorting */
-			if ( e.shiftKey )
-			{
-				/* Are we already doing some kind of sort on this column? */
-				var bFound = false;
-				for ( var i=0 ; i<oSettings.aaSorting.length ; i++ )
-				{
-					if ( oSettings.aaSorting[i][0] == iDataIndex )
-					{
-						bFound = true;
-						iColumn = oSettings.aaSorting[i][0];
-						iNextSort = oSettings.aaSorting[i][2]+1;
-						
-						if ( !oSettings.aoColumns[iColumn].asSorting[iNextSort] )
-						{
-							/* Reached the end of the sorting options, remove from multi-col sort */
-							oSettings.aaSorting.splice( i, 1 );
+
+		_fnProcessingDisplay( settings, true );
+
+		// Use a timeout to allow the processing display to be shown.
+		setTimeout( function() {
+			var nextSort;
+
+			// If the shift key is pressed then we are multiple column sorting
+			if ( e.shiftKey ) {
+				// Are we already doing some kind of sort on this column?
+				var curr = _pluck( sorting, '0' );
+				var idx = $.inArray( colIdx, curr );
+
+				if ( idx !== -1 ) {
+					// Yes, modify the sort
+					if ( sorting[idx][0] == colIdx ) {
+						nextSort = sorting[idx][2] + 1;
+
+						if ( ! asSorting[ nextSort ] ) {
+							// Reached the end of the sorting options, remove from multi-col sort
+							sorting.splice( idx, 1 );
 						}
-						else
-						{
-							/* Move onto next sorting direction */
-							oSettings.aaSorting[i][1] = oSettings.aoColumns[iColumn].asSorting[iNextSort];
-							oSettings.aaSorting[i][2] = iNextSort;
+						else {
+							// Move onto next sorting direction
+							sorting[idx][1] = asSorting[ nextSort ];
+							sorting[idx][2] = nextSort;
 						}
-						break;
 					}
 				}
-				
-				/* No sort yet - add it in */
-				if ( bFound === false )
-				{
-					oSettings.aaSorting.push( [ iDataIndex,
-						oSettings.aoColumns[iDataIndex].asSorting[0], 0 ] );
+				else {
+					// No sort on this column yet
+					sorting.push( [ colIdx, asSorting[0], 0 ] );
 				}
 			}
 			else
 			{
-				/* If no shift key then single column sort */
-				if ( oSettings.aaSorting.length == 1 && oSettings.aaSorting[0][0] == iDataIndex )
-				{
-					iColumn = oSettings.aaSorting[0][0];
-					iNextSort = oSettings.aaSorting[0][2]+1;
-					if ( !oSettings.aoColumns[iColumn].asSorting[iNextSort] )
-					{
-						iNextSort = 0;
+				// If no shift key then single column sort
+				if ( sorting.length == 1 && sorting[0][0] == colIdx ) {
+					// Already sorting on this column, modify the sort
+					nextSort = sorting[0][2] + 1;
+
+					if ( ! asSorting[ nextSort ] ) {
+						nextSort = 0;
 					}
-					oSettings.aaSorting[0][1] = oSettings.aoColumns[iColumn].asSorting[iNextSort];
-					oSettings.aaSorting[0][2] = iNextSort;
+
+					sorting[0][1] = asSorting[ nextSort ];
+					sorting[0][2] = nextSort;
 				}
-				else
-				{
-					oSettings.aaSorting.splice( 0, oSettings.aaSorting.length );
-					oSettings.aaSorting.push( [ iDataIndex,
-						oSettings.aoColumns[iDataIndex].asSorting[0], 0 ] );
+				else {
+					// Sort only on this column
+					sorting.length = 0;
+					sorting.push( [ colIdx, asSorting[0], 0 ] );
 				}
 			}
-			
-			/* Run the sort by calling a full redraw */
-			_fnReDraw( oSettings );
-		}; /* /fnInnerSorting */
-		
-		if ( !oSettings.oFeatures.bProcessing )
-		{
-			fnInnerSorting();
-		}
-		else
-		{
-			_fnProcessingDisplay( oSettings, true );
-			setTimeout( function() {
-				fnInnerSorting();
-				if ( !oSettings.oFeatures.bServerSide )
-				{
-					_fnProcessingDisplay( oSettings, false );
-				}
-			}, 0 );
-		}
-		
-		/* Call the user specified callback function - used for async user interaction */
-		if ( typeof fnCallback == 'function' )
-		{
-			fnCallback( oSettings );
+
+			// Run the sort by calling a full redraw
+			_fnReDraw( settings );
+
+			if ( !settings.oFeatures.bServerSide ) {
+				_fnProcessingDisplay( settings, false );
+			}
+		}, 0 );
+
+		// callback used for async user interaction
+		if ( typeof callback == 'function' ) {
+			callback( settings );
 		}
 	} );
 }
