@@ -207,6 +207,24 @@ _api.register( 'row().child.isShown()', function () {
 }());
 
 
+_api.register( 'row.add()', function ( row ) {
+	// Allow a jQuery object to be passed in - only a single row is added from
+	// it though - the first element in the set
+	if ( row instanceof $ && row.length ) {
+		row = row[0];
+	}
+
+	return this.iterator( 'table', function ( settings ) {
+		if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
+			_fnAddTr( settings, row );
+		}
+		else {
+			_fnAddData( settings, row );
+		}
+	} );
+} );
+
+
 
 }());
 

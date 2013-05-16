@@ -76,7 +76,7 @@ function _fnAddData ( oSettings, aDataIn, nTr, anTds )
 function _fnAddTr( oSettings, trs )
 {
 	// Allow an individual node to be passed in
-	if ( ! trs instanceof $ ) {
+	if ( ! (trs instanceof $) ) {
 		trs = $(trs);
 	}
 

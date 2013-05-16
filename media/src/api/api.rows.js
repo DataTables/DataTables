@@ -91,5 +91,23 @@ _api.register( 'rows().remove()', function () {
 } );
 
 
+_api.register( 'rows.add()', function ( rows ) {
+	return this.iterator( 'table', function ( settings ) {
+		var row, i, ien;
+
+		for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+			row = rows[i];
+
+			if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
+				_fnAddTr( settings, row );
+			}
+			else {
+				_fnAddData( settings, row );
+			}
+		}
+	} );
+} );
+
+
 }());
 
