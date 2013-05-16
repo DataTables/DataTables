@@ -121,16 +121,11 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	
 	/* Check that the class assignment is correct for sorting */
 	var bAsc = $.inArray('asc', oCol.asSorting) !== -1;
-	var bDesc = !bAsc && $.inArray('desc', oCol.asSorting) !== -1;
+	var bDesc = $.inArray('desc', oCol.asSorting) !== -1;
 	if ( !oCol.bSortable || (!bAsc && !bDesc) )
 	{
 		oCol.sSortingClass = oSettings.oClasses.sSortableNone;
 		oCol.sSortingClassJUI = "";
-	}
-	else if ( !bAsc && !bDesc )
-	{
-		oCol.sSortingClass = oSettings.oClasses.sSortable;
-		oCol.sSortingClassJUI = oSettings.oClasses.sSortJUI;
 	}
 	else if ( bAsc && !bDesc )
 	{
