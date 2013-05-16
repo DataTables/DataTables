@@ -46,19 +46,19 @@ function _fnSort ( oSettings, bApplyClasses )
 		sDataType, nTh,
 		aSort = [],
 		aiOrig = [],
+		oExtSort = DataTable.ext.oSort,
 		aoData = oSettings.aoData,
 		aoColumns = oSettings.aoColumns,
-		oAria = oSettings.oLanguage.oAria,
 		aDataSort, data, iCol, sType, oSort,
 		formatters = 0,
 		nestedSort = oSettings.aaSortingFixed.concat( oSettings.aaSorting ),
 		sortCol,
 		displayMaster = oSettings.aiDisplayMaster;
 
-	aDataSort = _fnSortFlatten( oSettings );
+	aSort = _fnSortFlatten( oSettings );
 
-	for ( i=0, ien=aDataSort.length ; i<ien ; i++ ) {
-		sortCol = aDataSort[i];
+	for ( i=0, ien=aSort.length ; i<ien ; i++ ) {
+		sortCol = aSort[i];
 
 		// Track if we can use the fast sort algorithm
 		if ( sortCol.formatter ) {
@@ -161,40 +161,52 @@ function _fnSort ( oSettings, bApplyClasses )
 		_fnSortingClasses( oSettings );
 	}
 
-	for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
-	{
-		var sTitle = aoColumns[i].sTitle.replace( /<.*?>/g, "" );
-		nTh = aoColumns[i].nTh;
-		nTh.removeAttribute('aria-sort');
-		nTh.removeAttribute('aria-label');
-
-		/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
-		if ( aoColumns[i].bSortable )
-		{
-			if ( aSort.length > 0 && aSort[0].col == i )
-			{
-				nTh.setAttribute('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
-
-				var nextSort = (aoColumns[i].asSorting[ aSort[0].index+1 ]) ?
-					aoColumns[i].asSorting[ aSort[0].index+1 ] : aoColumns[i].asSorting[0];
-				nTh.setAttribute('aria-label', sTitle+
-					(nextSort=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
-			}
-			else
-			{
-				nTh.setAttribute('aria-label', sTitle+
-					(aoColumns[i].asSorting[0]=="asc" ? oAria.sSortAscending : oAria.sSortDescending) );
-			}
-		}
-		else
-		{
-			nTh.setAttribute('aria-label', sTitle);
-		}
-	}
+	_fnSortAria( oSettings );
 
 	/* Tell the draw function that we have sorted the data */
 	oSettings.bSorted = true;
 	$(oSettings.oInstance).trigger('sort', oSettings);
+}
+
+
+function _fnSortAria ( settings )
+{
+	var label;
+	var nextSort;
+	var columns = settings.aoColumns;
+	var aSort = _fnSortFlatten( settings );
+	var oAria = settings.oLanguage.oAria;
+
+	// ARIA attributes - need to loop all columns, to update all (removing old
+	// attributes as needed)
+	for ( var i=0, iLen=columns.length ; i<iLen ; i++ )
+	{
+		var col = columns[i];
+		var asSorting = col.asSorting;
+		var sTitle = col.sTitle.replace( /<.*?>/g, "" );
+		var jqTh = $(col.nTh).removeAttr('aria-sort');
+
+		/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
+		if ( col.bSortable ) {
+			if ( aSort.length > 0 && aSort[0].col == i ) {
+				jqTh.attr('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
+				nextSort = asSorting[ aSort[0].index+1 ] || asSorting[0];
+			}
+			else {
+				nextSort = asSorting[0];
+			}
+
+			label = sTitle + ( nextSort === "asc" ?
+				oAria.sSortAscending :
+				oAria.sSortDescending
+			);
+		}
+		else {
+			label = sTitle;
+		}
+
+		jqTh.attr('aria-label', label);
+	}
 }
 
 
