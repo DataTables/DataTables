@@ -43,10 +43,10 @@ DataTable.models.oRow = {
 	 * per sort. This array should not be read from or written to by anything
 	 * other than the master sorting methods.
 	 *  @type array
-	 *  @default []
+	 *  @default null
 	 *  @private
 	 */
-	"_aSortData": [],
+	"_aSortData": null,
 
 	/**
 	 * Cache of the class name that DataTables has applied to the row, so we

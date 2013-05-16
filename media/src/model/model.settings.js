@@ -360,10 +360,10 @@ DataTable.models.oSettings = {
 	 * aaSorting).
 	 * Note that this parameter will be set by the initialisation routine. To
 	 * set a default use {@link DataTable.defaults}.
-	 *  @type array|null
-	 *  @default null
+	 *  @type array
+	 *  @default []
 	 */
-	"aaSortingFixed": null,
+	"aaSortingFixed": [],
 	
 	/**
 	 * Classes to use for the striping of a table.

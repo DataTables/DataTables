@@ -133,7 +133,7 @@ DataTable.defaults = {
 	 *      } );
 	 *    } )
 	 */
-	"aaSortingFixed": null,
+	"aaSortingFixed": [],
 
 
 	/**

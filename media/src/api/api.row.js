@@ -45,7 +45,13 @@ _api.register( 'row().data()', function ( data ) {
 	// return undefined;
 
 	// @todo - Set operator
+	ctx[0].aoData[ this[0] ]._aData = data;
+
+	// Invalidate the row
 } );
+
+// Should row object have an invalidated flag? Scan the array before doing
+// anything with the data? or better to update at the invalidation point
 
 
 _api.register( 'row().index()', function () {
