@@ -111,7 +111,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 			_fnFilterColumn( oSettings, aoPrevSearch[i].sSearch, i, aoPrevSearch[i].bRegex,
 				aoPrevSearch[i].bSmart, aoPrevSearch[i].bCaseInsensitive );
 		}
-		
+
 		/* Custom filtering */
 		_fnFilterCustom( oSettings );
 	}
@@ -119,7 +119,7 @@ function _fnFilterComplete ( oSettings, oInput, iForce )
 	{
 		fnSaveFilter( oInput );
 	}
-	
+
 	/* Tell the draw function we have been filtering */
 	oSettings.bFiltered = true;
 	$(oSettings.oInstance).trigger('filter', oSettings);
@@ -149,7 +149,7 @@ function _fnFilterCustom( oSettings )
 				_fnGetRowData( oSettings, iDisIndex, 'filter', aiFilterColumns ),
 				iDisIndex
 			);
-			
+
 			/* Check if we should use this row based on the filtering function */
 			if ( !bTest )
 			{
@@ -171,24 +171,21 @@ function _fnFilterCustom( oSettings )
  *  @param {bool} bCaseInsensitive Do case insenstive matching or not
  *  @memberof DataTable#oApi
  */
-function _fnFilterColumn ( oSettings, sInput, iColumn, bRegex, bSmart, bCaseInsensitive )
+function _fnFilterColumn ( settings, searchStr, colIdx, regex, smart, caseInsensitive )
 {
-	if ( sInput === "" )
-	{
+	if ( searchStr === '' ) {
 		return;
 	}
-	
-	var iIndexCorrector = 0;
-	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
-	
-	for ( var i=oSettings.aiDisplay.length-1 ; i>=0 ; i-- )
-	{
-		var sData = _fnDataToSearch( _fnGetCellData( oSettings, oSettings.aiDisplay[i], iColumn, 'filter' ),
-			oSettings.aoColumns[iColumn].sType );
-		if ( ! rpSearch.test( sData ) )
-		{
-			oSettings.aiDisplay.splice( i, 1 );
-			iIndexCorrector++;
+
+	var data;
+	var display = settings.aiDisplay;
+	var rpSearch = _fnFilterCreateSearch( searchStr, regex, smart, caseInsensitive );
+
+	for ( var i=display.length-1 ; i>=0 ; i-- ) {
+		data = settings.aoData[ display[i] ]._aFilterData[ colIdx ];
+
+		if ( ! rpSearch.test( data ) ) {
+			display.splice( i, 1 );
 		}
 	}
 }
@@ -209,19 +206,19 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 	var i;
 	var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
 	var oPrevSearch = oSettings.oPreviousSearch;
-	
+
 	/* Check if we are forcing or not - optional parameter */
 	if ( !iForce )
 	{
 		iForce = 0;
 	}
-	
+
 	/* Need to take account of custom filtering functions - always filter */
 	if ( DataTable.ext.afnFiltering.length !== 0 )
 	{
 		iForce = 1;
 	}
-	
+
 	/*
 	 * If the input is blank - we want the full data set
 	 */
@@ -241,11 +238,11 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 			   sInput.indexOf(oPrevSearch.sSearch) !== 0 )
 		{
 			/* Nuke the old display array - we are going to rebuild it */
-			oSettings.aiDisplay.splice( 0, oSettings.aiDisplay.length);
-			
+			oSettings.aiDisplay.length = 0;
+
 			/* Force a rebuild of the search array */
 			_fnBuildSearchArray( oSettings, 1 );
-			
+
 			/* Search through all records to populate the search array
 			 * The the oSettings.aiDisplayMaster and asDataSearch arrays have 1 to 1
 			 * mapping
@@ -264,7 +261,7 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 			 * Don't have to search the whole master array again
 			 */
 			var iIndexCorrector = 0;
-			
+
 			/* Search the current results */
 			for ( i=0 ; i<oSettings.asDataSearch.length ; i++ )
 			{
@@ -285,62 +282,28 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
  *  @param {int} iMaster use the master data array - optional
  *  @memberof DataTable#oApi
  */
-function _fnBuildSearchArray ( oSettings, iMaster )
+function _fnBuildSearchArray ( settings, master )
 {
-	if ( !oSettings.oFeatures.bServerSide )
-	{
-		/* Clear out the old data */
-		oSettings.asDataSearch = [];
+	var searchData = [];
+	var i, ien, rows;
 
-		var aiFilterColumns = _fnGetColumns( oSettings, 'bSearchable' );
-		var aiIndex = (iMaster===1) ?
-			oSettings.aiDisplayMaster :
-			oSettings.aiDisplay;
-		
-		for ( var i=0, iLen=aiIndex.length ; i<iLen ; i++ )
-		{
-			oSettings.asDataSearch[i] = _fnBuildSearchRow(
-				oSettings,
-				_fnGetRowData( oSettings, aiIndex[i], 'filter', aiFilterColumns )
-			);
+	if ( !settings.oFeatures.bServerSide ) {
+		// Resolve any invalidated rows
+		_fnFilterData( settings );
+
+		// Build the search array from the display arrays
+		rows = master===1 ?
+			settings.aiDisplayMaster :
+			settings.aiDisplay;
+
+		for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+			searchData.push( settings.aoData[ rows[i] ]._aFilterData.join('  ') );
 		}
+
+		settings.asDataSearch = searchData;
 	}
 }
 
-
-/**
- * Create a searchable string from a single data row
- *  @param {object} oSettings dataTables settings object
- *  @param {array} aData Row data array to use for the data to search
- *  @memberof DataTable#oApi
- */
-function _fnBuildSearchRow( oSettings, aData )
-{
-	var
-		idx = 0,
-		aoColumns = oSettings.aoColumns;
-
-	// aData is passed in without the columns which are not searchable, so
-	// we need to be careful in getting the correct column type
-	for ( var i=0, len=aoColumns.length ; i<len ; i++ ) {
-		aData[idx] = _fnDataToSearch( aData[idx], aoColumns[i].sType );
-
-		if ( aoColumns[i].bSearchable ) {
-			idx++;
-		}
-	}
-	
-	var sSearch = aData.join('  ');
-	
-	/* If it looks like there is an HTML entity in the string, attempt to decode it */
-	if ( sSearch.indexOf('&') !== -1 )
-	{
-		sSearch = $('<div>').html(sSearch).text();
-	}
-	
-	// Strip newline characters
-	return sSearch.replace( /[\n\r]/g, " " );
-}
 
 /**
  * Build a regular expression object suitable for searching a table
@@ -355,7 +318,7 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 {
 	var asSearch,
 		sRegExpString = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-	
+
 	if ( bSmart )
 	{
 		/* Generate the regular expression to use. Something along the lines of:
@@ -364,37 +327,8 @@ function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
 		asSearch = sRegExpString.split( ' ' );
 		sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
 	}
-	
+
 	return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
-}
-
-
-/**
- * Convert raw data into something that the user can search on
- *  @param {string} sData data to be modified
- *  @param {string} sType data type
- *  @returns {string} search string
- *  @memberof DataTable#oApi
- */
-function _fnDataToSearch ( sData, sType )
-{
-	if ( typeof DataTable.ext.ofnSearch[sType] === "function" )
-	{
-		return DataTable.ext.ofnSearch[sType]( sData );
-	}
-	else if ( sData === null )
-	{
-		return '';
-	}
-	else if ( sType == "html" )
-	{
-		return sData.replace(/[\r\n]/g," ").replace( /<.*?>/g, "" );
-	}
-	else if ( typeof sData === "string" )
-	{
-		return sData.replace(/[\r\n]/g," ");
-	}
-	return sData;
 }
 
 
@@ -410,4 +344,59 @@ function _fnEscapeRegex ( sVal )
 	var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
 	return sVal.replace(reReplace, '\\$1');
 }
+
+
+
+var __filter_div = $('<div>');
+
+// Update the filtering data for each row if needed (by invalidation or first run)
+function _fnFilterData ( settings )
+{
+	var columns = settings.aoColumns;
+	var column;
+	var i, j, ien, jen, filterData, cellData, row;
+	var fomatters = DataTable.ext.ofnSearch;
+
+	for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
+		row = settings.aoData[i];
+
+		if ( ! row._aFilterData ) {
+			filterData = [];
+
+			for ( j=0, jen=columns.length ; j<jen ; j++ ) {
+				column = columns[j];
+
+				if ( column.bSearchable ) {
+					cellData = _fnGetCellData( settings, i, j, 'filter' );
+
+					cellData = fomatters[ column.sType ] ?
+						fomatters[ column.sType ]( cellData ) :
+						cellData !== null ?
+							cellData :
+							'';
+				}
+				else {
+					cellData = '';
+				}
+
+				// If it looks like there is an HTML entity in the string,
+				// attempt to decode it so sorting works as expected
+				if ( cellData.indexOf('&') !== -1 ) {
+					cellData = __filter_div.html( cellData ).text();
+				}
+
+				filterData.push( cellData );
+			}
+
+			row._aFilterData = filterData;
+		}
+	}
+}
+
+
+function _fnFilterInvalidate( settings, row )
+{
+	row._aFilterData = null;
+}
+
 

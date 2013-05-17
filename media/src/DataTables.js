@@ -176,6 +176,7 @@
 	require('ext.paging.js');
 	require('ext.sorting.js');
 	require('ext.types.js');
+	require('ext.filter.js');
 
 	// jQuery aliases
 	$.fn.dataTable = DataTable;

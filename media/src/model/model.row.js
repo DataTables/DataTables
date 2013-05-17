@@ -49,6 +49,15 @@ DataTable.models.oRow = {
 	"_aSortData": null,
 
 	/**
+	 * Filtering data cache. As per the sort data cache, used to increase the
+	 * performance of the filtering in DataTables
+	 *  @type array
+	 *  @default null
+	 *  @private
+	 */
+	"_aFilterData": null,
+
+	/**
 	 * Cache of the class name that DataTables has applied to the row, so we
 	 * can quickly look at this variable rather than needing to do a DOM check
 	 * on className for the nTr property.

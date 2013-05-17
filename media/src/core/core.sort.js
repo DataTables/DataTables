@@ -66,7 +66,7 @@ function _fnSort ( oSettings, bApplyClasses )
 		}
 
 		// Load the data needed for the sort, for each cell
-		_fnSortColumn( oSettings, sortCol.col );
+		_fnSortData( oSettings, sortCol.col );
 	}
 
 	/* No sorting required if server-side or no sorting array */
@@ -381,7 +381,7 @@ function _fnSortingClasses( settings )
 
 // Get the data to sort a column, be it from cache, fresh (populating the
 // cache), or from a sort formatter
-function _fnSortColumn( settings, idx )
+function _fnSortData( settings, idx )
 {
 	// Custom sorting function - provided by the sort data type
 	var column = settings.aoColumns[ idx ];
