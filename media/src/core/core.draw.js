@@ -145,7 +145,7 @@ function _fnBuildHead( oSettings )
 	
 	/* ARIA role for the rows */
 	$(oSettings.nTHead).children('tr').attr('role', 'row');
-	
+
 	/* Add the extra markup needed by jQuery UI's themes */
 	if ( oSettings.bJUI )
 	{
@@ -158,7 +158,7 @@ function _fnBuildHead( oSettings )
 			$(nTh).contents().appendTo(nDiv);
 			
 			var nSpan = document.createElement('span');
-			nSpan.className = oSettings.oClasses.sSortIcon;
+			nSpan.className = oSettings.oClasses.sSortIcon+' '+oSettings.aoColumns[i].sSortingClassJUI;
 			nDiv.appendChild( nSpan );
 			nTh.appendChild( nDiv );
 		}
@@ -168,13 +168,11 @@ function _fnBuildHead( oSettings )
 	{
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
 		{
+			$(oSettings.aoColumns[i].nTh).addClass( oSettings.aoColumns[i].sSortingClass );
+
 			if ( oSettings.aoColumns[i].bSortable !== false )
 			{
 				_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
-			}
-			else
-			{
-				$(oSettings.aoColumns[i].nTh).addClass( oSettings.oClasses.sSortableNone );
 			}
 		}
 	}

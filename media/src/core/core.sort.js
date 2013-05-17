@@ -306,145 +306,76 @@ function _fnSortAttachListener ( settings, attachTo, colIdx, callback )
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
  */
-function _fnSortingClasses( oSettings )
+function _fnSortingClasses( settings )
 {
-	var i, iLen, j, jLen, iFound;
-	var aaSort, sClass;
-	var iColumns = oSettings.aoColumns.length;
-	var oClasses = oSettings.oClasses;
-	
-	for ( i=0 ; i<iColumns ; i++ )
-	{
-		if ( oSettings.aoColumns[i].bSortable )
-		{
-			$(oSettings.aoColumns[i].nTh).removeClass( oClasses.sSortAsc +" "+ oClasses.sSortDesc +
-				" "+ oSettings.aoColumns[i].sSortingClass );
+	var oldSort = settings.aLastSort;
+	var columns = settings.aoColumns;
+	var classes = settings.oClasses;
+	var sortIcon = classes.sSortIcon;
+	var sort = _fnSortFlatten( settings );
+	var i, ien, col, colIdx, jqTh;
+
+	// Remove old sorting classes
+	for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
+		colIdx = oldSort[i].col;
+		col    = columns[ colIdx ];
+		jqTh   = $(col.nTh);
+
+		// Remove base TH sorting
+		jqTh
+			.removeClass(
+				classes.sSortAsc +" "+
+				classes.sSortDesc +" "
+			)
+			.addClass( col.sSortingClass );
+
+		// Remove icon sorting
+		if ( sortIcon ) {
+			jqTh
+				.find( 'span.'+sortIcon )
+				.removeClass(
+					classes.sSortJUIAsc +" "+
+					classes.sSortJUIDesc +" "+
+					classes.sSortJUI +" "+
+					classes.sSortJUIAscAllowed +" "+
+					classes.sSortJUIDescAllowed
+				)
+				.addClass( col.sSortingClassJUI );
 		}
-	}
-	
-	aaSort = _fnSortFlatten( oSettings );
-	
-	/* Apply the required classes to the header */
-	for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
-	{
-		if ( oSettings.aoColumns[i].bSortable )
-		{
-			sClass = oSettings.aoColumns[i].sSortingClass;
-			iFound = -1;
-			for ( j=0 ; j<aaSort.length ; j++ )
-			{
-				if ( aaSort[j].col == i )
-				{
-					sClass = ( aaSort[j].dir == "asc" ) ?
-						oClasses.sSortAsc : oClasses.sSortDesc;
-					iFound = j;
-					break;
-				}
-			}
-			$(oSettings.aoColumns[i].nTh).addClass( sClass );
-			
-			if ( oSettings.bJUI )
-			{
-				/* jQuery UI uses extra markup */
-				var jqSpan = $("span."+oClasses.sSortIcon,  oSettings.aoColumns[i].nTh);
-				jqSpan.removeClass(oClasses.sSortJUIAsc +" "+ oClasses.sSortJUIDesc +" "+
-					oClasses.sSortJUI +" "+ oClasses.sSortJUIAscAllowed +" "+ oClasses.sSortJUIDescAllowed );
-				
-				var sSpanClass;
-				if ( iFound == -1 )
-				{
-					sSpanClass = oSettings.aoColumns[i].sSortingClassJUI;
-				}
-				else if ( aaSort[iFound].dir == "asc" )
-				{
-					sSpanClass = oClasses.sSortJUIAsc;
-				}
-				else
-				{
-					sSpanClass = oClasses.sSortJUIDesc;
-				}
-				
-				jqSpan.addClass( sSpanClass );
-			}
-		}
-		else
-		{
-			/* No sorting on this column, so add the base class. This will have been assigned by
-			 * _fnAddColumn
-			 */
-			$(oSettings.aoColumns[i].nTh).addClass( oSettings.aoColumns[i].sSortingClass );
-		}
+
+		// Remove column sorting
+		$( _pluck( settings.aoData, 'anCells', colIdx ) )
+			.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
 	}
 
-	// @todo This is totally inefficient. It is accessing the class name of every
-	// cell when it really doesn't need to. It should determine which cells
-	// have classes to be removed (by saving the previous state or doing a check
-	// on the first row), and then add to the required cells. Use _pluck.
-	// DISABLED until this can be done, since _fnGetTdNodes has been removed.
-	return;
-	
-	/*
-	 * Apply the required classes to the table body
-	 * Note that this is given as a feature switch since it can significantly slow down a sort
-	 * on large data sets (adding and removing of classes is always slow at the best of times..)
-	 * Further to this, note that this code is admittedly fairly ugly. It could be made a lot
-	 * simpler using jQuery selectors and add/removeClass, but that is significantly slower
-	 * (on the order of 5 times slower) - hence the direct DOM manipulation here.
-	 * Note that for deferred drawing we do use jQuery - the reason being that taking the first
-	 * row found to see if the whole column needs processed can miss classes since the first
-	 * column might be new.
-	 */
-	sClass = oClasses.sSortColumn;
-	
-	if ( oSettings.oFeatures.bSort && oSettings.oFeatures.bSortClasses )
-	{
-		var nTds = _fnGetTdNodes( oSettings );
-		
-		/* Determine what the sorting class for each column should be */
-		var iClass, iTargetCol;
-		var asClasses = [];
-		for (i = 0; i < iColumns; i++)
-		{
-			asClasses.push("");
+	// Add new ones
+	for ( i=0, ien=sort.length ; i<ien ; i++ ) {
+		colIdx = sort[i].col;
+		col    = columns[ colIdx ];
+		jqTh   = $(col.nTh);
+
+		// Add base TH sorting
+		jqTh
+			.removeClass( col.sSortingClass )
+			.addClass( sort[i].dir == "asc" ?
+				classes.sSortAsc : classes.sSortDesc
+			);
+
+		// Add icon sorting
+		if ( sortIcon ) {
+			jqTh
+				.find( 'span.'+sortIcon )
+				.addClass( sort[i].dir == "asc" ?
+					classes.sSortJUIAsc : classes.sSortJUIDesc
+				);
 		}
-		for (i = 0, iClass = 1; i < aaSort.length; i++)
-		{
-			iTargetCol = parseInt( aaSort[i][0], 10 );
-			asClasses[iTargetCol] = sClass + iClass;
-			
-			if ( iClass < 3 )
-			{
-				iClass++;
-			}
-		}
-		
-		/* Make changes to the classes for each cell as needed */
-		var reClass = new RegExp(sClass + "[123]");
-		var sTmpClass, sCurrentClass, sNewClass;
-		for ( i=0, iLen=nTds.length; i<iLen; i++ )
-		{
-			/* Determine which column we're looking at */
-			iTargetCol = i % iColumns;
-			
-			/* What is the full list of classes now */
-			sCurrentClass = nTds[i].className;
-			/* What sorting class should be applied? */
-			sNewClass = asClasses[iTargetCol];
-			/* What would the new full list be if we did a replacement? */
-			sTmpClass = sCurrentClass.replace(reClass, sNewClass);
-			
-			if ( sTmpClass != sCurrentClass )
-			{
-				/* We changed something */
-				nTds[i].className = $.trim( sTmpClass );
-			}
-			else if ( sNewClass.length > 0 && sCurrentClass.indexOf(sNewClass) == -1 )
-			{
-				/* We need to add a class */
-				nTds[i].className = sCurrentClass + " " + sNewClass;
-			}
-		}
+
+		// Add column sorting
+		$( _pluck( settings.aoData, 'anCells', colIdx ) )
+			.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
 	}
+
+	settings.aLastSort = sort;
 }
 
 

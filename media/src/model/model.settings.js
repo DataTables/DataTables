@@ -867,5 +867,12 @@ DataTable.models.oSettings = {
 	/**
 	 * DIV container for the footer scrolling table if scrolling
 	 */
-	"nScrollFoot": null
+	"nScrollFoot": null,
+
+	/**
+	 * Last applied sort
+	 *  @type array
+	 *  @default []
+	 */
+	"aLastSort": []
 };

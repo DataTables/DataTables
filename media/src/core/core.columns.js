@@ -59,6 +59,7 @@ function _fnAddColumn( oSettings, nTh )
 function _fnColumnOptions( oSettings, iCol, oOptions )
 {
 	var oCol = oSettings.aoColumns[ iCol ];
+	var oClasses = oSettings.oClasses;
 	
 	/* User specified column options */
 	if ( oOptions !== undefined && oOptions !== null )
@@ -112,30 +113,30 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 		return innerData;
 	};
 	oCol.fnSetData = _fnSetObjectDataFn( oCol.mData );
-	
+
 	/* Feature sorting overrides column specific when off */
 	if ( !oSettings.oFeatures.bSort )
 	{
 		oCol.bSortable = false;
 	}
-	
+
 	/* Check that the class assignment is correct for sorting */
 	var bAsc = $.inArray('asc', oCol.asSorting) !== -1;
 	var bDesc = $.inArray('desc', oCol.asSorting) !== -1;
 	if ( !oCol.bSortable || (!bAsc && !bDesc) )
 	{
-		oCol.sSortingClass = oSettings.oClasses.sSortableNone;
+		oCol.sSortingClass = oClasses.sSortableNone;
 		oCol.sSortingClassJUI = "";
 	}
 	else if ( bAsc && !bDesc )
 	{
-		oCol.sSortingClass = oSettings.oClasses.sSortableAsc;
-		oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIAscAllowed;
+		oCol.sSortingClass = oClasses.sSortableAsc;
+		oCol.sSortingClassJUI = oClasses.sSortJUIAscAllowed;
 	}
 	else if ( !bAsc && bDesc )
 	{
-		oCol.sSortingClass = oSettings.oClasses.sSortableDesc;
-		oCol.sSortingClassJUI = oSettings.oClasses.sSortJUIDescAllowed;
+		oCol.sSortingClass = oClasses.sSortableDesc;
+		oCol.sSortingClassJUI = oClasses.sSortJUIDescAllowed;
 	}
 }
 
@@ -153,7 +154,7 @@ function _fnAdjustColumnSizing ( oSettings )
 	{
 		return false;
 	}
-	
+
 	_fnCalculateColumnWidths( oSettings );
 	for ( var i=0 , iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
