@@ -308,7 +308,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 	indexOf: _arrayProto.indexOf || function (obj, start)
 	{
-		for ( var i=(start || 0), ien=this.length ; i<ien ; i++ ) {
+		for ( var i=(start || 0), ien=this.length ; i>=0 && i<ien ; i++ ) {
 			if ( this[i] === obj ) {
 				return i;
 			}
@@ -381,7 +381,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 	lastIndexOf: _arrayProto.lastIndexOf || function (obj, start)
 	{
-		for ( var i=(start || this.length-1) ; i>=0 ; i-- ) {
+		for ( var ien=this.length, i=(start || ien-1) ; i>=0 && i<ien ; i-- ) {
 			if ( this[i] === obj ) {
 				return i;
 			}
