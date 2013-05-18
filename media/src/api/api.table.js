@@ -36,5 +36,28 @@ _Api.register( 'tables().nodes()', function () {
 } );
 
 
+_Api.register( 'table()', function ( selector ) {
+	var tables = this.tables( selector );
+	var ctx = tables.context;
+
+	// Truncate to the first matched table
+	if ( ctx.length ) {
+		ctx.length = 1;
+	}
+
+	return tables;
+} );
+
+
+_Api.register( 'table().node()', function () {
+	var ctx = this.context;
+
+	if ( ctx.length ) {
+		return ctx[0].nTable;
+	}
+	// return undefined;
+} );
+
+
 }());
 

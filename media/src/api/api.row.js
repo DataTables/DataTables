@@ -18,7 +18,7 @@ _api.register( 'row()', function ( selector, opts ) {
 
 _api.register( 'row().node()', function () {
 	var ctx = this.context;
-	
+
 	if ( ctx.length && this.length ) {
 		return ctx[0].aoData[ this[0] ].nTr || undefined;
 	}
