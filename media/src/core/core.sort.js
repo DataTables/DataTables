@@ -417,9 +417,3 @@ function _fnSortData( settings, idx )
 	}
 }
 
-
-function _fnSortInvalidate( settings, row )
-{
-	row._aSortData = false;
-}
-

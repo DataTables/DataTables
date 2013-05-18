@@ -57,13 +57,16 @@ _api.register( 'rows().data()', function ( data ) {
 } );
 
 
+_api.register( 'rows().invalidate()', function ( src ) {
+	return this.iterator( true, 'row', function ( settings, row ) {
+		_fnInvalidateRow( settings, row, src );
+	} );
+} );
+
+
 _api.register( 'rows().remove()', function () {
 	var that = this;
 
-	// Needs either a corrector to correct for deleted row indexes, or
-	// need to order and reverse so indexing is maintained for the row
-	// indexes. Damn
-	// @todo
 	return this.iterator( true, 'row', function ( settings, row, thatIdx ) {
 		var data = settings.aoData;
 
@@ -83,7 +86,7 @@ _api.register( 'rows().remove()', function () {
 		// Delete from the display arrays
 		_fnDeleteIndex( settings.aiDisplayMaster, row );
 		_fnDeleteIndex( settings.aiDisplay, row );
-		_fnDeleteIndex( that[ thatIdx ], row, false );
+		_fnDeleteIndex( that[ thatIdx ], row, false ); // maintain local indexes
 
 		// Check for an 'overflow' they case for displaying the table
 		_fnLengthOverflow( settings );

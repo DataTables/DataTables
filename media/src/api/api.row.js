@@ -40,18 +40,29 @@ _api.register( 'row().data()', function ( data ) {
 	var ctx = this.context;
 
 	if ( ctx.length && this.length ) {
+		// Get
 		return ctx[0].aoData[ this[0] ]._aData;
 	}
-	// return undefined;
 
-	// @todo - Set operator
+	// Set
 	ctx[0].aoData[ this[0] ]._aData = data;
 
-	// Invalidate the row
+	// Automatically invalidate
+	_fnInvalidateRow( ctx[0], this[0], 'data' );
+
+	return this;
 } );
 
-// Should row object have an invalidated flag? Scan the array before doing
-// anything with the data? or better to update at the invalidation point
+
+_api.register( 'row().invalidate()', function ( src ) {
+	var ctx = this.context;
+
+	if ( ctx.length && this.length ) {
+		_fnInvalidateRow( ctx[0], this[0], src );
+	}
+
+	return this;
+} );
 
 
 _api.register( 'row().index()', function () {

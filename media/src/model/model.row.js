@@ -65,5 +65,16 @@ DataTable.models.oRow = {
 	 *  @default <i>Empty string</i>
 	 *  @private
 	 */
-	"_sRowStripe": ""
+	"_sRowStripe": "",
+
+	/**
+	 * Denote if the original data source was from the DOM, or the data source
+	 * object. This is used for invalidating data, so DataTables can
+	 * automatically read data from the original source, unless uninstructed
+	 * otherwise.
+	 *  @type string
+	 *  @default null
+	 *  @private
+	 */
+	"src": null
 };

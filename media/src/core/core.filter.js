@@ -393,10 +393,3 @@ function _fnFilterData ( settings )
 	}
 }
 
-
-function _fnFilterInvalidate( settings, row )
-{
-	row._aFilterData = null;
-}
-
-

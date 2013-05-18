@@ -14,11 +14,13 @@
 function _fnAddData ( oSettings, aDataIn, nTr, anTds )
 {
 	var oCol;
-	
+
 	/* Create the object for storing information about this new row */
 	var iRow = oSettings.aoData.length;
-	var oData = $.extend( true, {}, DataTable.models.oRow );
-	
+	var oData = $.extend( true, {}, DataTable.models.oRow, {
+		src: nTr ? 'dom' : 'data'
+	} );
+
 	oData._aData = aDataIn;
 	oSettings.aoData.push( oData );
 
@@ -75,30 +77,16 @@ function _fnAddData ( oSettings, aDataIn, nTr, anTds )
  */
 function _fnAddTr( oSettings, trs )
 {
+	var row;
+
 	// Allow an individual node to be passed in
 	if ( ! (trs instanceof $) ) {
 		trs = $(trs);
 	}
 
 	trs.each( function () {
-		var
-			d = [],
-			tds = [],
-			td = this.firstChild,
-			name;
-
-		while ( td )
-		{
-			name = td.nodeName.toUpperCase();
-			if ( name == "TD" || name == "TH" )
-			{
-				d.push( $.trim(td.innerHTML) );
-				tds.push( td );
-			}
-			td = td.nextSibling;
-		}
-
-		_fnAddData( oSettings, d, this, tds );
+		row = _fnGetRowData( this );
+		_fnAddData( oSettings, row.data, this, row.cells );
 	} );
 }
 
@@ -511,3 +499,74 @@ function _fnDeleteIndex( a, iTarget, splice )
 	}
 }
 
+
+/**
+ * Mark cached data as invalid such that a re-read of the data will occur when
+ * the cached data is next requested. Also update from the data source object.
+ *
+ * @param {object} settings DataTables settings object
+ * @param  {int}    rowIdx   Row index to invalidate
+ * @memberof DataTable#oApi
+ *
+ * @todo For the modularisation of v1.11 this will need to become a callback, so
+ *   the sort and filter methods can subscribe to it. That will required
+ *   initialisation options for sorting, which is why it is not already baked in
+ */
+function _fnInvalidateRow( settings, rowIdx, src )
+{
+	var row = settings.aoData[ rowIdx ];
+
+	// Are we reading last data from DOM or the data object?
+	if ( src === 'dom' || (! src && row.src === 'dom') ) {
+		// Read the data from the DOM
+		row._aData = _fnGetRowData( row.nTr ).data;
+	}
+	else {
+		// Reading from data object, update the DOM
+		var cells = row.anCells;
+
+		for ( var i=0, ien=cells.length ; i<ien ; i++ ) {
+			cells[i].innerHTML = _fnGetCellData( settings, rowIdx, i, 'display' );
+		}
+	}
+
+	row._aSortData = null;
+	row._aFilterData = null;
+}
+
+
+/**
+ * Build a data source object from an HTML row, reading the contents of the
+ * cells that are in the row.
+ *
+ * @param {node} TR element from which to read data
+ * @returns {object} Object with two parameters: `data` the data read, in
+ *   document order, and `cells` and array of nodes (they can be useful to the
+ *   caller, so rather than needing a second traversal to get them, just return
+ *   them from here).
+ * @memberof DataTable#oApi
+ */
+function _fnGetRowData( row )
+{
+	var
+		d = [],
+		tds = [],
+		td = row.firstChild,
+		name;
+
+	while ( td ) {
+		name = td.nodeName.toUpperCase();
+
+		if ( name == "TD" || name == "TH" ) {
+			d.push( $.trim(td.innerHTML) );
+			tds.push( td );
+		}
+
+		td = td.nextSibling;
+	}
+
+	return {
+		data: d,
+		cells: tds
+	};
+}
