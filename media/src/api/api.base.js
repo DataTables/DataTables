@@ -324,7 +324,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 			a = [], ret,
 			i, ien, j, jen,
 			context = this.context,
-			rows, items,
+			rows, items, item,
 			selector = this.selector;
 
 		// Argument shifting
@@ -350,7 +350,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 					a.push( ret );
 				}
 			}
-			else if ( type === 'column' || type === 'column-rows' || type === 'row' ) {
+			else if ( type === 'column' || type === 'column-rows' || type === 'row' || type === 'cell' ) {
 				// columns and rows share the same structure.
 				// 'this' is an array of column indexes for each context
 				items = this[i];
@@ -360,7 +360,14 @@ _Api.prototype = /** @lends DataTables.Api */{
 				}
 
 				for ( j=0, jen=items.length ; j<jen ; j++ ) {
-					ret = fn( context[i], items[j], i, j, rows );
+					item = items[j];
+
+					if ( type === 'cell' ) {
+						ret = fn( context[i], item.row, item.column, i, j );
+					}
+					else {
+						ret = fn( context[i], item, i, j, rows );
+					}
 
 					if ( ret !== undefined ) {
 						a.push( ret );

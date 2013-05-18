@@ -106,21 +106,20 @@ var _range = function ( len )
 var _selector_first = function ( inst )
 {
 	// Reduce the API instance to the first item found
-	var found = false;
 	for ( var i=0, ien=inst.length ; i<ien ; i++ ) {
-		if ( ! found ) {
-			if ( inst[i].length > 0 ) {
-				inst[i].splice( 1, inst[i].length );
-				inst.context = [ inst.context[i] ];
+		if ( inst[i].length > 0 ) {
+			// Assign the first element to the first item in the instance
+			// and truncate the instance and context
+			inst[0] = inst[i][0];
+			inst.length = 1;
+			inst.context = [ inst.context[i] ];
 
-				found = true;
-			}
-		}
-		else {
-			inst[i].splice( 0, inst[i].length );
+			return inst;
 		}
 	}
 
+	// Not found - return an empty instance
+	inst.length = 0;
 	return inst;
 };
 
