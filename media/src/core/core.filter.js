@@ -1,4 +1,3 @@
-
 /**
  * Generate the node required for filtering text
  *  @returns {node} Filter control element
@@ -233,9 +232,9 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 		 * We are starting a new search or the new search string is smaller
 		 * then the old one (i.e. delete). Search from the master array
 		 */
-		if ( oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
-			   oPrevSearch.sSearch.length > sInput.length || iForce == 1 ||
-			   sInput.indexOf(oPrevSearch.sSearch) !== 0 )
+		if ( iForce == 1 || oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
+			   oPrevSearch.sSearch.length > sInput.length || 
+			   sInput.lastIndexOf(oPrevSearch.sSearch, 0) !== 0 )
 		{
 			/* Nuke the old display array - we are going to rebuild it */
 			oSettings.aiDisplay.length = 0;
