@@ -146,13 +146,12 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
  */
 function _fnAdjustColumnSizing ( oSettings )
 {
-	/* Not interested in doing column width calculation if auto-width is disabled */
-	if ( oSettings.oFeatures.bAutoWidth === false )
+	/* Only perform column width calculations if auto-width is enabled */
+	if ( oSettings.oFeatures.bAutoWidth === true )
 	{
-		return false;
+		_fnCalculateColumnWidths( oSettings );
 	}
-	
-	_fnCalculateColumnWidths( oSettings );
+
 	for ( var i=0 , iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 	{
 		oSettings.aoColumns[i].nTh.style.width = oSettings.aoColumns[i].sWidth;
