@@ -1,5 +1,4 @@
 
-
 (/** @lends <global> */function() {
 
 
@@ -418,7 +417,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 	pluck: function ( prop )
 	{
-		return this.map( function ( el, i ) {
+		return this.map( function ( el ) {
 			return el[ prop ];
 		} );
 	},
