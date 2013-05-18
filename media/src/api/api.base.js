@@ -1,5 +1,4 @@
 
-
 (/** @lends <global> */function() {
 
 
@@ -383,8 +382,12 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 	lastIndexOf: _arrayProto.lastIndexOf || function (obj, start)
 	{
-		// Bit cheeky...
-		return this.indexOf.apply( this.toArray.reverse(), arguments );
+		for ( var i=(start || this.length) ; i>=0 ; i-- ) {
+			if ( this[i] === obj ) {
+				return i;
+			}
+		}
+		return -1;
 	},
 
 
