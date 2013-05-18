@@ -1,6 +1,5 @@
 
 
-
 var _pluck = function ( a, prop, prop2 ) {
 	var out = [];
 	var i=0, ien=a.length;
@@ -107,17 +106,16 @@ var _selector_first = function ( inst )
 {
 	// Reduce the API instance to the first item found
 	var found = false;
-	for ( var i=0, ien=inst.length ; i<ien ; i++ ) {
-		if ( ! found ) {
-			if ( inst[i].length > 0 ) {
-				inst[i].splice( 1, inst[i].length );
-				inst.context = [ inst.context[i] ];
-
-				found = true;
-			}
+	for ( var i=0, ien=inst.length, ilen ; i<ien ; i++ ) {
+		ilen = inst[i].length;
+		if ( found ) {
+			inst[i].splice( 0, ilen );
 		}
-		else {
-			inst[i].splice( 0, inst[i].length );
+		else if ( ilen > 0 ) {
+			inst[i].splice( 1, ilen );
+			inst.context = [ inst.context[i] ];
+
+			found = true;
 		}
 	}
 
