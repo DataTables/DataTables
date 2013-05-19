@@ -36,14 +36,14 @@ _api.register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 
 
 _api.register( 'cells().nodes()', function () {
-	return this.iterator( true, 'cell', function ( settings, row, column ) {
+	return this.iterator( 'cell', function ( settings, row, column ) {
 		return settings.aoData[ row ].anCells[ column ];
 	} );
 } );
 
 
 _api.register( 'cells().data()', function () {
-	return this.iterator( true, 'cell', function ( settings, row, column ) {
+	return this.iterator( 'cell', function ( settings, row, column ) {
 		return _fnGetCellData( settings, row, column );
 	} );
 } );

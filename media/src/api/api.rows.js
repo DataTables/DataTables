@@ -51,7 +51,7 @@ _api.register( 'rows().data()', function ( data ) {
 
 
 _api.register( 'rows().invalidate()', function ( src ) {
-	return this.iterator( true, 'row', function ( settings, row ) {
+	return this.iterator( 'row', function ( settings, row ) {
 		_fnInvalidateRow( settings, row, src );
 	} );
 } );
@@ -60,7 +60,7 @@ _api.register( 'rows().invalidate()', function ( src ) {
 _api.register( 'rows().remove()', function () {
 	var that = this;
 
-	return this.iterator( true, 'row', function ( settings, row, thatIdx ) {
+	return this.iterator( 'row', function ( settings, row, thatIdx ) {
 		var data = settings.aoData;
 
 		data.splice( row, 1 );

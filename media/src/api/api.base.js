@@ -307,6 +307,14 @@ _Api.prototype = /** @lends DataTables.Api */{
 	},
 
 
+	flatten: function ()
+	{
+		return this.reduce( function ( a, b ) {
+			return a.concat( b );
+		} );
+	},
+
+
 	indexOf: _arrayProto.indexOf || function (obj, start)
 	{
 		for ( var i=(start || 0), ien=this.length ; i<ien ; i++ ) {
