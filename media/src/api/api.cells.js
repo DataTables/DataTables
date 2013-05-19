@@ -89,7 +89,10 @@ _api.register( 'cell().data()', function ( data ) {
 	}
 
 	// Set
-	// @todo
+	_fnSetCellData( ctx[0], this[0].row, this[0].column, data );
+	_fnInvalidateRow( ctx[0], this[0].row, 'data' );
+
+	return this;
 } );
 
 
