@@ -43,13 +43,6 @@ _api.register( 'rows().nodes()', function () {
 } );
 
 
-_api.register( 'rows().cells()', function () {
-	return this.iterator( true, 'row', function ( settings, row ) {
-		return settings.aoData[ row ].anCells || undefined;
-	} );
-} );
-
-
 _api.register( 'rows().data()', function ( data ) {
 	return this.iterator( true, 'rows', function ( settings, rows ) {
 		return _pluck_order( settings.aoData, rows, '_aData' );

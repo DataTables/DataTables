@@ -45,16 +45,6 @@ _api.register( 'columns().header()', function ( selector, opts ) {
 /**
  *
  */
-_api.register( 'columns().cells()', function () {
-	return this.iterator( true, 'column-rows', function ( settings, column, i, j, rows ) {
-		return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
-	} );
-} );
-
-
-/**
- *
- */
 _api.register( 'columns().data()', function () {
 	return this.iterator( true, 'column-rows', function ( settings, column, i, j, rows ) {
 		var a = [];

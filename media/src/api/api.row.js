@@ -26,16 +26,6 @@ _api.register( 'row().node()', function () {
 } );
 
 
-_api.register( 'row().cells()', function () {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		return ctx[0].aoData[ this[0] ].anCells || undefined;
-	}
-	// return undefined;
-} );
-
-
 _api.register( 'row().data()', function ( data ) {
 	var ctx = this.context;
 
