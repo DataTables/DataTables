@@ -10,7 +10,7 @@ _api.register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 	var rows = this.rows( rowSelector, opts );
 	var a, i, ien, j, jen;
 
-	return this.iterator( 'table', function ( settings, idx ) {
+	var cells = this.iterator( 'table', function ( settings, idx ) {
 		a = [];
 
 		for ( i=0, ien=rows[idx].length ; i<ien ; i++ ) {
@@ -24,6 +24,14 @@ _api.register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 
 		return a;
 	} );
+
+	$.extend( cells.selector, {
+		cols: columnSelector,
+		rows: rowSelector,
+		opts: opts
+	} );
+
+	return cells;
 } );
 
 
@@ -38,6 +46,18 @@ _api.register( 'cells().data()', function () {
 	return this.iterator( true, 'cell', function ( settings, row, column ) {
 		return _fnGetCellData( settings, row, column );
 	} );
+} );
+
+
+_api.register( 'cells().invalidate()', function ( src ) {
+	var selector = this.selector;
+
+	// Use the rows method of the instance to perform the invalidation, rather
+	// than doing it here. This avoids needing to handle duplicate rows from
+	// the cells.
+	this.rows( selector.rows, selector.opts ).invalidate( src );
+
+	return this;
 } );
 
 
@@ -70,6 +90,17 @@ _api.register( 'cell().data()', function ( data ) {
 
 	// Set
 	// @todo
+} );
+
+
+_api.register( 'cell().invalidate()', function ( src ) {
+	var ctx = this.context;
+
+	if ( ctx.length && this.length ) {
+		_fnInvalidateRow( ctx[0], this[0].row, src );
+	}
+
+	return this;
 } );
 
 

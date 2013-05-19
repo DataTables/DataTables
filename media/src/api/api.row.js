@@ -39,7 +39,7 @@ _api.register( 'row().cells()', function () {
 _api.register( 'row().data()', function ( data ) {
 	var ctx = this.context;
 
-	if ( data === undefined ) ) {
+	if ( data === undefined ) {
 		// Get
 		return ctx.length && this.length ?
 			ctx[0].aoData[ this[0] ]._aData :
