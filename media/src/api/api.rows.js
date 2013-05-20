@@ -57,6 +57,13 @@ _api.registerPlural( 'rows().invalidate()', 'row().invalidate()', function ( src
 } );
 
 
+_api.registerPlural( 'rows().index()', 'row().index()', function ( src ) {
+	return this.iterator( 'row', function ( settings, row ) {
+		return row;
+	} );
+} );
+
+
 _api.registerPlural( 'rows().remove()', 'row().remove()', function () {
 	var that = this;
 
@@ -103,6 +110,56 @@ _api.register( 'rows.add()', function ( rows ) {
 		}
 	} );
 } );
+
+
+
+
+
+/**
+ *
+ */
+_api.register( 'row()', function ( selector, opts ) {
+	return _selector_first( this.rows( selector, opts ) );
+} );
+
+
+_api.register( 'row().data()', function ( data ) {
+	var ctx = this.context;
+
+	if ( data === undefined ) {
+		// Get
+		return ctx.length && this.length ?
+			ctx[0].aoData[ this[0] ]._aData :
+			undefined;
+	}
+
+	// Set
+	ctx[0].aoData[ this[0] ]._aData = data;
+
+	// Automatically invalidate
+	_fnInvalidateRow( ctx[0], this[0], 'data' );
+
+	return this;
+} );
+
+
+_api.register( 'row.add()', function ( row ) {
+	// Allow a jQuery object to be passed in - only a single row is added from
+	// it though - the first element in the set
+	if ( row instanceof $ && row.length ) {
+		row = row[0];
+	}
+
+	return this.iterator( 'table', function ( settings ) {
+		if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
+			_fnAddTr( settings, row );
+		}
+		else {
+			_fnAddData( settings, row );
+		}
+	} );
+} );
+
 
 
 }());
