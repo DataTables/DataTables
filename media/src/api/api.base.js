@@ -618,5 +618,23 @@ _Api.register = function ( name, val )
 };
 
 
+_Api.registerPlural = function ( pluralName, singularName, val ) {
+	_Api.register( pluralName, val );
+
+	_Api.register( singularName, function () {
+		var ret = val.apply( this, arguments );
+
+		if ( ret instanceof _Api ) {
+			return ret.length ?
+				$.isArray( ret[0] ) ?
+					new _Api( ret.context, ret[0] ) : // Array results are 'enhanced'
+					ret[0] :
+				undefined;
+		}
+		return ret;
+	} );
+};
+
+
 }());
 

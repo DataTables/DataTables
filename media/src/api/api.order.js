@@ -77,8 +77,11 @@ _Api.register( 'order.listener()', function ( node, column, callback ) {
 } );
 
 
-// Order by the selected columns
-_Api.register( 'columns().order()', function ( dir ) {
+// Order by the selected column(s)
+_Api.register( [
+	'columns().order()',
+	'column().order()'
+], function ( dir ) {
 	var that = this;
 
 	return this.iterator( 'table', function ( settings, i ) {
@@ -90,17 +93,6 @@ _Api.register( 'columns().order()', function ( dir ) {
 
 		settings.aaSorting = sort;
 	} );
-} );
-
-// Order by the selected columns
-_Api.register( 'column().order()', function ( dir ) {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		ctx[0].aaSorting = [ [ this[0], dir ] ];
-	}
-
-	return this;
 } );
 
 

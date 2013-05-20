@@ -16,16 +16,6 @@ _api.register( 'row()', function ( selector, opts ) {
 } );
 
 
-_api.register( 'row().node()', function () {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		return ctx[0].aoData[ this[0] ].nTr || undefined;
-	}
-	// return undefined;
-} );
-
-
 _api.register( 'row().data()', function ( data ) {
 	var ctx = this.context;
 
@@ -46,31 +36,9 @@ _api.register( 'row().data()', function ( data ) {
 } );
 
 
-_api.register( 'row().invalidate()', function ( src ) {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		_fnInvalidateRow( ctx[0], this[0], src );
-	}
-
-	return this;
-} );
-
-
 _api.register( 'row().index()', function () {
 	return this.length ? this[0] : undefined;
 } );
-
-
-_api.register( 'row().remove()', function () {
-	if ( this.length ) {
-		// Hand off to the rows function
-		this.rows( this[0] ).remove();
-	}
-	return this;
-} );
-
-
 
 
 

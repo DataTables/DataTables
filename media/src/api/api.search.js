@@ -21,7 +21,10 @@ _api.register( 'search()', function ( input, caseInsen, regex, smart ) {
 } );
 
 
-_api.register( 'columns().search()', function ( input, caseInsen, regex, smart ) {
+_api.register( [
+	'columns().search()',
+	'column().search()'
+], function ( input, caseInsen, regex, smart ) {
 	return this.iterator( 'column', function ( settings, column ) {
 		if ( ! settings.oFeatures.bFilter ) {
 			return;

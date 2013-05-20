@@ -35,7 +35,7 @@ _api.register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 } );
 
 
-_api.register( 'cells().nodes()', function () {
+_api.registerPlural( 'cells().nodes()', 'cell().nodes()', function () {
 	return this.iterator( 'cell', function ( settings, row, column ) {
 		return settings.aoData[ row ].anCells[ column ];
 	} );
@@ -49,7 +49,10 @@ _api.register( 'cells().data()', function () {
 } );
 
 
-_api.register( 'cells().invalidate()', function ( src ) {
+_api.register( [
+	'cells().invalidate()',
+	'cell().invalidate()'
+], function ( src ) {
 	var selector = this.selector;
 
 	// Use the rows method of the instance to perform the invalidation, rather
@@ -68,15 +71,6 @@ _api.register( 'cell()', function ( rowSelector, columnSelector, opts ) {
 } );
 
 
-_api.register( 'cell().node()', function () {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		return ctx[0].aoData[ this[0].row ].anCells[ this[0].column ];
-	}
-	// undefined
-} );
-
 
 _api.register( 'cell().data()', function ( data ) {
 	var ctx = this.context;
@@ -91,17 +85,6 @@ _api.register( 'cell().data()', function ( data ) {
 	// Set
 	_fnSetCellData( ctx[0], this[0].row, this[0].column, data );
 	_fnInvalidateRow( ctx[0], this[0].row, 'data' );
-
-	return this;
-} );
-
-
-_api.register( 'cell().invalidate()', function ( src ) {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		_fnInvalidateRow( ctx[0], this[0].row, src );
-	}
 
 	return this;
 } );

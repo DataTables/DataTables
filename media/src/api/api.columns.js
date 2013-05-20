@@ -89,7 +89,7 @@ _api.register( 'columns()', function ( selector, opts ) {
 /**
  *
  */
-_api.register( 'columns().header()', function ( selector, opts ) {
+_api.registerPlural( 'columns().header()', 'column().header()', function ( selector, opts ) {
 	return this.iterator( 'column', function ( settings, column ) {
 		return settings.aoColumns[column].nTh;
 	} );
@@ -99,7 +99,7 @@ _api.register( 'columns().header()', function ( selector, opts ) {
 /**
  *
  */
-_api.register( 'columns().data()', function () {
+_api.registerPlural( 'columns().data()', 'column().data()', function () {
 	return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 		var a = [];
 		for ( var row=0, ien=rows.length ; row<ien ; row++ ) {
@@ -110,7 +110,7 @@ _api.register( 'columns().data()', function () {
 } );
 
 
-_api.register( 'columns().visible()', function ( vis ) {
+_api.registerPlural( 'columns().visible()', 'column().visible()', function ( vis ) {
 	return this.iterator( 'column', function ( settings, column ) {
 		return _setColumnVis( settings, column, vis );
 	} );
@@ -155,43 +155,6 @@ _api.register( 'column.index()', function ( type, idx ) {
 
 _api.register( 'column()', function ( selector, opts ) {
 	return _selector_first( this.columns( selector, opts ) );
-} );
-
-
-_api.register( 'column().data()', function () {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		return this.columns( this[0] ).data().flatten();
-	}
-	// return undefined
-} );
-
-
-_api.register( 'column().header()', function () {
-	var ctx = this.context;
-
-	if ( ctx.length && this.length ) {
-		return this.columns( this[0] ).header().flatten();
-	}
-	// return undefined
-} );
-
-
-_api.register( 'column().visible()', function ( vis ) {
-	var ctx = this.context;
-
-	if ( vis === undefined ) {
-		// Get
-		return ctx.length && this.length ?
-			ctx[0].aoColumns[ this[0] ].bVisible :
-			undefined;
-	}
-
-	// Set
-	_setColumnVis( ctx[0], this[0], vis );
-
-	return this;
 } );
 
 

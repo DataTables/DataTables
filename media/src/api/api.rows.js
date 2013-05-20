@@ -35,7 +35,7 @@ _api.register( 'rows()', function ( selector, opts ) {
 } );
 
 
-_api.register( 'rows().nodes()', function () {
+_api.registerPlural( 'rows().nodes()', 'row().nodes()' , function () {
 	return this.iterator( 'row', function ( settings, row ) {
 		// use pluck order on an array rather - rows gives an array, row gives it individually
 		return settings.aoData[ row ].nTr || undefined;
@@ -50,14 +50,14 @@ _api.register( 'rows().data()', function ( data ) {
 } );
 
 
-_api.register( 'rows().invalidate()', function ( src ) {
+_api.registerPlural( 'rows().invalidate()', 'row().invalidate()', function ( src ) {
 	return this.iterator( 'row', function ( settings, row ) {
 		_fnInvalidateRow( settings, row, src );
 	} );
 } );
 
 
-_api.register( 'rows().remove()', function () {
+_api.registerPlural( 'rows().remove()', 'row().remove()', function () {
 	var that = this;
 
 	return this.iterator( 'row', function ( settings, row, thatIdx ) {
