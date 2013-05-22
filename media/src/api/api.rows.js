@@ -35,7 +35,7 @@ _api.register( 'rows()', function ( selector, opts ) {
 } );
 
 
-_api.registerPlural( 'rows().nodes()', 'row().nodes()' , function () {
+_api.registerPlural( 'rows().nodes()', 'row().node()' , function () {
 	return this.iterator( 'row', function ( settings, row ) {
 		// use pluck order on an array rather - rows gives an array, row gives it individually
 		return settings.aoData[ row ].nTr || undefined;
@@ -95,20 +95,30 @@ _api.registerPlural( 'rows().remove()', 'row().remove()', function () {
 
 
 _api.register( 'rows.add()', function ( rows ) {
-	return this.iterator( 'table', function ( settings ) {
-		var row, i, ien;
+	var newRows = this.iterator( 'table', function ( settings ) {
+			var row, i, ien;
+			var out = [];
 
-		for ( i=0, ien=rows.length ; i<ien ; i++ ) {
-			row = rows[i];
+			for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+				row = rows[i];
 
-			if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
-				_fnAddTr( settings, row );
+				if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
+					out.push( _fnAddTr( settings, row ) )[0];
+				}
+				else {
+					out.push( _fnAddData( settings, row ) );
+				}
 			}
-			else {
-				_fnAddData( settings, row );
-			}
-		}
-	} );
+
+			return out;
+		} );
+
+	// Return an Api.rows() extended instance, so rows().nodes() etc can be used
+	var modRows = this.rows( -1 );
+	modRows.pop();
+	modRows.push.apply( modRows, newRows );
+
+	return modRows;
 } );
 
 
@@ -150,14 +160,15 @@ _api.register( 'row.add()', function ( row ) {
 		row = row[0];
 	}
 
-	return this.iterator( 'table', function ( settings ) {
+	var rows = this.iterator( 'table', function ( settings ) {
 		if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
-			_fnAddTr( settings, row );
+			return _fnAddTr( settings, row )[0];
 		}
-		else {
-			_fnAddData( settings, row );
-		}
+		return _fnAddData( settings, row );
 	} );
+
+	// Return an Api.rows() extended instance, with the newly added row selected
+	return this.row( rows[0] );
 } );
 
 

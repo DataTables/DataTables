@@ -14,8 +14,9 @@ $.extend( DataTable.ext.ofnSearch, {
 	},
 
 	string: function ( data ) {
-		return data
-			.replace( __filter_lines, " " );
+		return data.replace ?
+			data.replace( __filter_lines, " " ) :
+			data;
 	}
 } );
 

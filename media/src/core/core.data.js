@@ -73,6 +73,7 @@ function _fnAddData ( oSettings, aDataIn, nTr, anTds )
  * it is not cloned).
  *  @param {object} oSettings dataTables settings object
  *  @param {array|node|jQuery} trs The TR element(s) to add to the table
+ *  @returns {array} Array of indexes for the added rows
  *  @memberof DataTable#oApi
  */
 function _fnAddTr( oSettings, trs )
@@ -84,9 +85,9 @@ function _fnAddTr( oSettings, trs )
 		trs = $(trs);
 	}
 
-	trs.each( function () {
-		row = _fnGetRowData( this );
-		_fnAddData( oSettings, row.data, this, row.cells );
+	return trs.map( function (el) {
+		row = _fnGetRowData( el );
+		return _fnAddData( oSettings, row.data, this, row.cells );
 	} );
 }
 
