@@ -42,6 +42,13 @@ _api.register( 'settings()', function () {
 } );
 
 
+_api.register( 'data()', function () {
+	return this.iterator( 'table', function ( settings ) {
+		return _pluck( settings.aoData, '_aData' );
+	} ).flatten();
+} );
+
+
 _api.register( 'destroy()', function ( remove ) {
 	remove = remove || false;
 
