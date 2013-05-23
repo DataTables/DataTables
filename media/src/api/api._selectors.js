@@ -61,7 +61,7 @@ var _selector_run = function ( selector, select )
 	}
 
 	for ( i=0, ien=selector.length ; i<ien ; i++ ) {
-		a = selector[i].split ?
+		a = selector[i] && selector[i].split ?
 			selector[i].split(',') :
 			[ selector[i] ];
 
@@ -337,3 +337,56 @@ var _column_selector = function ( settings, selector, opts )
 		}
 	} );
 };
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Cells
+ *
+ * {node}          - cell node
+ * "{string}"      - jquery selector to run on the nodes
+ *
+ */
+
+var _cell_selector = function ( settings, selector, opts )
+{
+	var data = settings.aoData;
+	var rows = _row_selector_indexes( settings, opts );
+	var cells = _pluck_order( data, rows, 'anCells' );
+	var allCells = $( [].concat.apply([], cells) );
+	var row;
+	var columns = settings.aoColumns.length;
+	var a, i, ien, j;
+
+	return _selector_run( selector, function ( s ) {
+		if ( ! s ) {
+			// All cells
+			a = [];
+
+			for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+				row = rows[i];
+
+				for ( j=0 ; j<columns ; j++ ) {
+					a.push( {
+						row: row,
+						column: j
+					} );
+				}
+			}
+
+			return a;
+		}
+
+		// jQuery filtered cells
+		return allCells.filter( s ).map( function (i, el) {
+			row = el.parentNode._DT_RowIndex;
+
+			return {
+				row: row,
+				column: $.inArray( el, data[ row ].anCells )
+			};
+		} );
+	} );
+};
+

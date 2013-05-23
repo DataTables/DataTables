@@ -6,6 +6,24 @@ var _api = DataTable.Api;
 
 
 _api.register( 'cells()', function ( rowSelector, columnSelector, opts ) {
+	// Argument shifting
+	if ( $.isPlainObject( rowSelector ) ) {
+		opts = rowSelector;
+		rowSelector = null;
+	}
+	if ( $.isPlainObject( columnSelector ) ) {
+		opts = columnSelector;
+		columnSelector = null;
+	}
+
+	// Cell selector
+	if ( columnSelector === null || columnSelector === undefined ) {
+		return this.iterator( 'table', function ( settings ) {
+			return _cell_selector( settings, rowSelector, _selector_opts( opts ) );
+		} );
+	}
+
+	// Row + column selector
 	var columns = this.columns( columnSelector, opts );
 	var rows = this.rows( rowSelector, opts );
 	var a, i, ien, j, jen;
@@ -74,17 +92,18 @@ _api.register( 'cell()', function ( rowSelector, columnSelector, opts ) {
 
 _api.register( 'cell().data()', function ( data ) {
 	var ctx = this.context;
+	var cell = this[0];
 
 	if ( data === undefined ) {
 		// Get
-		return ctx.length && this.length ?
-			_fnGetCellData( ctx[0], this[0].row, this[0].column ) :
+		return ctx.length && cell.length ?
+			_fnGetCellData( ctx[0], cell[0].row, cell[0].column ) :
 			undefined;
 	}
 
 	// Set
-	_fnSetCellData( ctx[0], this[0].row, this[0].column, data );
-	_fnInvalidateRow( ctx[0], this[0].row, 'data' );
+	_fnSetCellData( ctx[0], cell[0].row, cell[0].column, data );
+	_fnInvalidateRow( ctx[0], cell[0].row, 'data' );
 
 	return this;
 } );
