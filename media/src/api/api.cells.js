@@ -67,6 +67,17 @@ _api.register( 'cells().data()', function () {
 } );
 
 
+_api.registerPlural( 'cells().index()', 'cell().index()', function () {
+	return this.iterator( 'cell', function ( settings, row, column ) {
+		return {
+			row: row,
+			column: column,
+			columnVisible: _fnColumnIndexToVisible( settings, column )
+		};
+	} );
+} );
+
+
 _api.register( [
 	'cells().invalidate()',
 	'cell().invalidate()'

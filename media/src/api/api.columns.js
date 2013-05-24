@@ -117,6 +117,16 @@ _api.registerPlural( 'columns().visible()', 'column().visible()', function ( vis
 } );
 
 
+
+_api.registerPlural( 'columns().index()', 'column().index()', function ( type ) {
+	return this.iterator( 'column', function ( settings, column ) {
+		return type === 'visible' ?
+			_fnColumnIndexToVisible( settings, column ) :
+			column;
+	} );
+} );
+
+
 // _api.register( 'columns().show()', function () {
 // 	var selector = this.selector;
 // 	return this.columns( selector.cols, selector.opts ).visible( true );
