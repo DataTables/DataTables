@@ -309,9 +309,11 @@ _Api.prototype = /** @lends DataTables.Api */{
 
 	flatten: function ()
 	{
-		return this.reduce( function ( a, b ) {
+		var a = this.reduce( function ( a, b ) {
 			return a.concat( b );
 		} );
+
+		return new _Api( this.context, a );
 	},
 
 
@@ -436,6 +438,7 @@ _Api.prototype = /** @lends DataTables.Api */{
 	push:    _arrayProto.push,
 
 
+	// Does not return an API instance
 	reduce: _arrayProto.reduce || function ( fn, init )
 	{
 		var
