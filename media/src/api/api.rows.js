@@ -103,7 +103,7 @@ _api.register( 'rows.add()', function ( rows ) {
 				row = rows[i];
 
 				if ( row.nodeName && row.nodeName.toUpperCase() === 'TR' ) {
-					out.push( _fnAddTr( settings, row ) )[0];
+					out.push( _fnAddTr( settings, row )[0] );
 				}
 				else {
 					out.push( _fnAddData( settings, row ) );
