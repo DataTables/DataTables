@@ -238,13 +238,13 @@ var _row_selector = function ( settings, selector, opts )
 
 		var rows = _row_selector_indexes( settings, opts );
 
-		if ( ! sel ) {
-			// Selector - none
-			return rows;
-		}
-		else if ( selInt && $.inArray( selInt, rows ) !== -1 ) {
+		if ( selInt !== null && $.inArray( selInt, rows ) !== -1 ) {
 			// Selector - integer
 			return [ selInt ];
+		}
+		else if ( ! sel ) {
+			// Selector - none
+			return rows;
 		}
 
 		// Get nodes in the order from the `rows` array (can't use `pluck`) @todo - use pluck_order
