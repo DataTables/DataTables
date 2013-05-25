@@ -85,9 +85,9 @@ function _fnAddTr( oSettings, trs )
 		trs = $(trs);
 	}
 
-	return trs.map( function (el) {
-		row = _fnGetRowData( el );
-		return _fnAddData( oSettings, row.data, this, row.cells );
+	return trs.map( function (i, el) {
+		row = _fnGetRowElements( el );
+		return _fnAddData( oSettings, row.data, el, row.cells );
 	} );
 }
 
@@ -547,7 +547,7 @@ function _fnInvalidateRow( settings, rowIdx, src )
  *   them from here).
  * @memberof DataTable#oApi
  */
-function _fnGetRowData( row )
+function _fnGetRowElements( row )
 {
 	var
 		d = [],
