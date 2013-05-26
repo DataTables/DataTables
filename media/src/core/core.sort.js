@@ -237,7 +237,7 @@ function _fnSortAttachListener ( settings, attachTo, colIdx, callback )
 			var nextSort;
 
 			// If the shift key is pressed then we are multiple column sorting
-			if ( e.shiftKey ) {
+			if ( e.shiftKey && settings.oFeatures.bSortMulti ) {
 				// Are we already doing some kind of sort on this column?
 				var curr = _pluck( sorting, '0' );
 				var idx = $.inArray( colIdx, curr );

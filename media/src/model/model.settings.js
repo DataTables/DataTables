@@ -114,6 +114,14 @@ DataTable.models.oSettings = {
 		"bSort": null,
 
 		/**
+		 * Multi-column sorting
+		 * Note that this parameter will be set by the initialisation routine. To
+		 * set a default use {@link DataTable.defaults}.
+		 *  @type boolean
+		 */
+		"bSortMulti": null,
+
+		/**
 		 * Apply a class to the columns which are being sorted to provide a
 		 * visual highlight or not. This can slow things down when enabled since
 		 * there is a lot of DOM interaction.

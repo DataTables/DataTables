@@ -103,6 +103,7 @@ _fnMap( oSettings.oFeatures, oInit, "bPaginate" );
 _fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
 _fnMap( oSettings.oFeatures, oInit, "bFilter" );
 _fnMap( oSettings.oFeatures, oInit, "bSort" );
+_fnMap( oSettings.oFeatures, oInit, "bSortMulti" );
 _fnMap( oSettings.oFeatures, oInit, "bInfo" );
 _fnMap( oSettings.oFeatures, oInit, "bProcessing" );
 _fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );

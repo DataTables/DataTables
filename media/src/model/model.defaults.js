@@ -744,6 +744,26 @@ DataTable.defaults = {
 
 
 	/**
+	 * Enable or display DataTables' ability to sort multiple columns at the
+	 * same time (activated by shift-click by the user).
+	 *  @type boolean
+	 *  @default true
+	 *
+	 *  @dtopt Options
+	 *  @name DataTable.defaults.sortMulti
+	 *
+	 *  @example
+	 *    // Disable multiple column sorting ability
+	 *    $(document).ready( function () {
+	 *      $('#example').dataTable( {
+	 *        "sortMulti": false
+	 *      } );
+	 *    } );
+	 */
+	"bSortMulti": true,
+
+
+	/**
 	 * Allows control over whether DataTables should use the top (true) unique
 	 * cell that is found for a single column, or the bottom (false - default).
 	 * This is useful when using complex headers.
