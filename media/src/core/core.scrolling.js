@@ -392,16 +392,9 @@ function _fnScrollDraw ( o )
 		}
 		
 		/* And give the user a warning that we've stopped the table getting too small */
-		if ( o.oScroll.sX === "" )
+		if ( o.oScroll.sX === "" || o.oScroll.sXInner !== "" )
 		{
-			_fnLog( o, 1, "The table cannot fit into the current element which will cause column"+
-				" misalignment. The table has been drawn at its minimum possible width." );
-		}
-		else if ( o.oScroll.sXInner !== "" )
-		{
-			_fnLog( o, 1, "The table cannot fit into the current element which will cause column"+
-				" misalignment. Increase the sScrollXInner value or remove it to allow automatic"+
-				" calculation" );
+			_fnLog( o, 1, 'Possible column misalignment', 6 );
 		}
 	}
 	else

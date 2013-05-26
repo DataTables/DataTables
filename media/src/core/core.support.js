@@ -1,52 +1,49 @@
 
 /**
  * Return the settings object for a particular table
- *  @param {node} nTable table we are using as a dataTable
+ *  @param {node} table table we are using as a dataTable
  *  @returns {object} Settings object - or null if not found
  *  @memberof DataTable#oApi
  */
-function _fnSettingsFromNode ( nTable )
+function _fnSettingsFromNode ( table )
 {
-	for ( var i=0 ; i<DataTable.settings.length ; i++ )
-	{
-		if ( DataTable.settings[i].nTable === nTable )
-		{
-			return DataTable.settings[i];
-		}
-	}
-	
-	return null;
+	var settings = DataTable.settings;
+	var idx = $.inArray( table, _pluck( settings, 'nTable' ) );
+
+	return idx !== -1 ?
+		settings[ idx ] :
+		null;
 }
 
 
 /**
  * Log an error message
- *  @param {object} oSettings dataTables settings object
- *  @param {int} iLevel log error messages, or display them to the user
- *  @param {string} sMesg error message
+ *  @param {object} settings dataTables settings object
+ *  @param {int} level log error messages, or display them to the user
+ *  @param {string} msg error message
+ *  @param {int} tn Technical note id to get more information about the error.
  *  @memberof DataTable#oApi
  */
-function _fnLog( oSettings, iLevel, sMesg )
+function _fnLog( settings, level, msg, tn )
 {
-	var sAlert = (oSettings===null) ?
-		"DataTables warning: "+sMesg :
-		"DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
-	
-	if ( iLevel === 0 )
-	{
-		if ( DataTable.ext.sErrMode == 'alert' )
-		{
-			alert( sAlert );
-		}
-		else
-		{
-			throw new Error(sAlert);
-		}
-		return;
+	msg = 'DataTables warning: '+
+		(settings!==null ? 'table id='+settings.sTableId+' - ' : '')+msg;
+
+	if ( tn ) {
+		msg += '. For more information about this error, please see '+
+		'http://datatables.net/tn/'+tn;
 	}
-	else if ( window.console && console.log )
-	{
-		console.log( sAlert );
+
+	if ( ! level  ) {
+		if ( DataTable.ext.sErrMode == 'alert' ) {
+			alert( msg );
+		}
+		else {
+			throw new Error(msg);
+		}
+	}
+	else if ( window.console && console.log ) {
+		console.log( msg );
 	}
 }
 

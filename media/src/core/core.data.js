@@ -159,8 +159,8 @@ function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
 		if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 		{
 			_fnLog( oSettings, 0, "Requested unknown parameter "+
-				(typeof oCol.mData=='function' ? '{mData function}' : "'"+oCol.mData+"'")+
-				" from the data source for row "+iRow );
+				(typeof oCol.mData=='function' ? '{function}' : "'"+oCol.mData+"'")+
+				" for row "+iRow, 4 );
 			oSettings.iDrawError = oSettings.iDraw;
 		}
 		return oCol.sDefaultContent;

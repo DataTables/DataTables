@@ -99,7 +99,7 @@ function _fnPageChange ( settings, action )
 	}
 	else
 	{
-		_fnLog( settings, 0, "Unknown paging action: "+action );
+		_fnLog( settings, 0, "Unknown paging action: "+action, 5 );
 	}
 
 	var changed = settings._iDisplayStart !== start;

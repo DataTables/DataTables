@@ -50,7 +50,7 @@ function _fnBuildAjax( oSettings, data, fn )
 			if ( json.sError ) {
 				oSettings.oApi._fnLog( oSettings, 0, json.sError );
 			}
-			
+
 			$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
 			fn( json );
 		},
@@ -59,7 +59,7 @@ function _fnBuildAjax( oSettings, data, fn )
 		"type": oSettings.sServerMethod,
 		"error": function (xhr, error, thrown) {
 			if ( error == "parsererror" ) {
-				oSettings.oApi._fnLog( oSettings, 0, "DataTables: invalid JSON response" );
+				oSettings.oApi._fnLog( oSettings, 0, 'Invalid JSON response', 1 );
 			}
 		}
 	};
