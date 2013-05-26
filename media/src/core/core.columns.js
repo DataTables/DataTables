@@ -302,7 +302,7 @@ function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 			var aTargets = aoColDefs[i].targets || aoColDefs[i].aTargets;
 			if ( ! $.isArray( aTargets ) )
 			{
-				_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
+				aTargets = [ aTargets ];
 			}
 
 			for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
