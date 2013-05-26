@@ -3904,6 +3904,11 @@
 			return s+"px";
 		}
 		
+		if ( s === 'falsepx' )
+		{
+			return "";
+		}
+            
 		/* Check if the last character is not 0-9 */
 		var c = s.charCodeAt( s.length-1 );
 		if (c < 0x30 || c > 0x39)
