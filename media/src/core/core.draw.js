@@ -37,6 +37,11 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 			nTr.className += ' '+rowData.DT_RowClass;
 		}
 
+		if ( rowData.DT_RowData )
+		{
+			$(nTr).data( rowData.DT_RowData );
+		}
+
 		/* Process each column */
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
