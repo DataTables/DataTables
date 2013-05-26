@@ -335,8 +335,6 @@ function _fnDraw( oSettings )
 	var iOpenRows = oSettings.aoOpenRows.length;
 	var oLang = oSettings.oLanguage;
 	var iInitDisplayStart = oSettings.iInitDisplayStart;
-	var iDisplayStart = oSettings._iDisplayStart;
-	var iDisplayEnd = oSettings.fnDisplayEnd();
 	var bServerSide = oSettings.oFeatures.bServerSide;
 	var aiDisplay = oSettings.aiDisplay;
 
@@ -345,7 +343,7 @@ function _fnDraw( oSettings )
 	/* Check and see if we have an initial draw position from state saving */
 	if ( iInitDisplayStart !== undefined && iInitDisplayStart !== -1 )
 	{
-		iDisplayStart = bServerSide ?
+		oSettings._iDisplayStart = bServerSide ?
 			iInitDisplayStart :
 			iInitDisplayStart >= oSettings.fnRecordsDisplay() ?
 				0 :
@@ -353,6 +351,9 @@ function _fnDraw( oSettings )
 
 		oSettings.iInitDisplayStart = -1;
 	}
+
+	var iDisplayStart = oSettings._iDisplayStart;
+	var iDisplayEnd = oSettings.fnDisplayEnd();
 
 	/* Server-side processing draw intercept */
 	if ( oSettings.bDeferLoading )
