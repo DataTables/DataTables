@@ -68,6 +68,11 @@ function _fnLoadState ( oSettings, oInit )
 		return;
 	}
 
+	// Number of columns have changed - all bets are off, no restore of settings
+	if ( oSettings.aoColumns.length !== oData.aoSearchCols.length ) {
+		return;
+	}
+
 	/* Store the saved state so it might be accessed at any time */
 	oSettings.oLoadedState = $.extend( true, {}, oData );
 
@@ -76,21 +81,14 @@ function _fnLoadState ( oSettings, oInit )
 	oSettings.iInitDisplayStart = oData.iStart;
 	oSettings._iDisplayLength   = oData.iLength;
 	oSettings.aaSorting         = oData.aaSorting.slice();
-	oSettings.saved_aaSorting   = oData.aaSorting.slice();
 
 	/* Search filtering  */
 	$.extend( oSettings.oPreviousSearch, oData.oSearch );
 	$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
 
-	/* Column visibility state
-	 * Pass back visibility settings to the init handler, but to do not here override
-	 * the init object that the user might have passed in
-	 */
-	oInit.saved_aoColumns = [];
-	for ( var i=0 ; i<oData.abVisCols.length ; i++ )
-	{
-		oInit.saved_aoColumns[i] = {};
-		oInit.saved_aoColumns[i].bVisible = oData.abVisCols[i];
+	/* Column visibility state */
+	for ( var i=0 ; i<oData.abVisCols.length ; i++ ) {
+		oSettings.aoColumns[i].bVisible = oData.abVisCols[i];
 	}
 
 	_fnCallbackFire( oSettings, 'aoStateLoaded', 'stateLoaded', [oSettings, oData] );

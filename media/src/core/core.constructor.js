@@ -199,14 +199,6 @@ if ( oSettings.iInitDisplayStart === undefined )
 	oSettings._iDisplayStart = oInit.iDisplayStart;
 }
 
-/* Must be done after everything which can be overridden by the state saving! */
-if ( oInit.bStateSave )
-{
-	oSettings.oFeatures.bStateSave = true;
-	_fnLoadState( oSettings, oInit );
-	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
-}
-
 if ( oInit.iDeferLoading !== null )
 {
 	oSettings.bDeferLoading = true;
@@ -292,16 +284,6 @@ else
 /* Add the columns */
 for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 {
-	/* Short cut - use the loop to check if we have column visibility state to restore */
-	if ( oInit.saved_aoColumns !== undefined && oInit.saved_aoColumns.length == iLen )
-	{
-		if ( aoColumnsInit[i] === null )
-		{
-			aoColumnsInit[i] = {};
-		}
-		aoColumnsInit[i].bVisible = oInit.saved_aoColumns[i].bVisible;
-	}
-
 	_fnAddColumn( oSettings, anThs ? anThs[i] : null );
 }
 
@@ -309,6 +291,15 @@ for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 _fnApplyColumnDefs( oSettings, oInit.aoColumnDefs, aoColumnsInit, function (iCol, oDef) {
 	_fnColumnOptions( oSettings, iCol, oDef );
 } );
+
+
+/* Must be done after everything which can be overridden by the state saving! */
+if ( oInit.bStateSave )
+{
+	oSettings.oFeatures.bStateSave = true;
+	_fnLoadState( oSettings, oInit );
+	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
+}
 
 
 /*
@@ -330,7 +321,7 @@ for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
 	}
 
 	/* If aaSorting is not defined, then we use the first indicator in asSorting */
-	if ( oInit.aaSorting === undefined && oSettings.saved_aaSorting === undefined )
+	if ( oInit.aaSorting === undefined )
 	{
 		oSettings.aaSorting[i][1] = oColumn.asSorting[0];
 	}
