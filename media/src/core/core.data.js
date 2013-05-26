@@ -31,7 +31,7 @@ function _fnAddData ( oSettings, aDataIn, nTr, anTds )
 		oCol = oSettings.aoColumns[i];
 
 		_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
-		
+
 		/* See if we should auto-detect the column type */
 		if ( oCol._bAutoType && oCol.sType != 'string' )
 		{
@@ -52,7 +52,7 @@ function _fnAddData ( oSettings, aDataIn, nTr, anTds )
 			}
 		}
 	}
-	
+
 	/* Add to the display array */
 	oSettings.aiDisplayMaster.push( iRow );
 
@@ -284,7 +284,7 @@ function _fnGetObjectDataFn( mSource )
 							data = data[ a[i] ];
 						}
 						out = [];
-						
+
 						// Get the remainder of the nested object to get
 						a.splice( 0, i+1 );
 						innerSrc = a.join('.');
@@ -384,7 +384,7 @@ function _fnSetObjectDataFn( mSource )
 				{
 					a[i] = a[i].replace(__reArray, '');
 					data[ a[i] ] = [];
-					
+
 					// Get the remainder of the nested object to set so we can recurse
 					b = a.slice();
 					b.splice( 0, i+1 );

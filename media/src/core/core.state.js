@@ -30,7 +30,7 @@ function _fnSaveState ( oSettings )
 	}
 
 	_fnCallbackFire( oSettings, "aoStateSaveParams", 'stateSaveParams', [oSettings, oState] );
-	
+
 	oSettings.fnStateSaveCallback.call( oSettings.oInstance, oSettings, oState );
 }
 
@@ -53,7 +53,7 @@ function _fnLoadState ( oSettings, oInit )
 	{
 		return;
 	}
-	
+
 	/* Allow custom and plug-in manipulation functions to alter the saved data set and
 	 * cancelling of loading by returning false
 	 */
@@ -67,21 +67,21 @@ function _fnLoadState ( oSettings, oInit )
 	if ( oData.iCreate < new Date().getTime() - (oSettings.iStateDuration*1000) ) {
 		return;
 	}
-	
+
 	/* Store the saved state so it might be accessed at any time */
 	oSettings.oLoadedState = $.extend( true, {}, oData );
-	
+
 	/* Restore key features */
 	oSettings._iDisplayStart    = oData.iStart;
 	oSettings.iInitDisplayStart = oData.iStart;
 	oSettings._iDisplayLength   = oData.iLength;
 	oSettings.aaSorting         = oData.aaSorting.slice();
 	oSettings.saved_aaSorting   = oData.aaSorting.slice();
-	
+
 	/* Search filtering  */
 	$.extend( oSettings.oPreviousSearch, oData.oSearch );
 	$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
-	
+
 	/* Column visibility state
 	 * Pass back visibility settings to the init handler, but to do not here override
 	 * the init object that the user might have passed in

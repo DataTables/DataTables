@@ -50,7 +50,7 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
 			{
 				nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 			}
-		
+
 			/* Add user defined class */
 			if ( oCol.sClass !== null )
 			{
@@ -94,7 +94,7 @@ function _fnBuildHead( oSettings )
 	var iThs = $('th, td', oSettings.nTHead).length;
 	var iCorrector = 0;
 	var jqChildren;
-	
+
 	/* If there is a header in place - then use it - otherwise it's going to get nuked... */
 	if ( iThs !== 0 )
 	{
@@ -113,7 +113,7 @@ function _fnBuildHead( oSettings )
 			{
 				$(nTh).addClass( oSettings.aoColumns[i].sClass );
 			}
-			
+
 			/* Set the title of the column if it is user defined (not what was auto detected) */
 			if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
 			{
@@ -125,24 +125,24 @@ function _fnBuildHead( oSettings )
 	{
 		/* We don't have a header in the DOM - so we are going to have to create one */
 		var nTr = document.createElement( "tr" );
-		
+
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			nTh = oSettings.aoColumns[i].nTh;
 			nTh.innerHTML = oSettings.aoColumns[i].sTitle;
 			nTh.setAttribute('tabindex', '0');
-			
+
 			if ( oSettings.aoColumns[i].sClass !== null )
 			{
 				$(nTh).addClass( oSettings.aoColumns[i].sClass );
 			}
-			
+
 			nTr.appendChild( nTh );
 		}
 		$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
 		_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 	}
-	
+
 	/* ARIA role for the rows */
 	$(oSettings.nTHead).children('tr').attr('role', 'row');
 
@@ -152,18 +152,18 @@ function _fnBuildHead( oSettings )
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			nTh = oSettings.aoColumns[i].nTh;
-			
+
 			var nDiv = document.createElement('div');
 			nDiv.className = oSettings.oClasses.sSortJUIWrapper;
 			$(nTh).contents().appendTo(nDiv);
-			
+
 			var nSpan = document.createElement('span');
 			nSpan.className = oSettings.oClasses.sSortIcon+' '+oSettings.aoColumns[i].sSortingClassJUI;
 			nDiv.appendChild( nSpan );
 			nTh.appendChild( nDiv );
 		}
 	}
-	
+
 	if ( oSettings.oFeatures.bSort )
 	{
 		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
@@ -176,13 +176,13 @@ function _fnBuildHead( oSettings )
 			}
 		}
 	}
-	
+
 	/* Deal with the footer - add classes if required */
 	if ( oSettings.oClasses.sFooterTH !== "" )
 	{
 		$(oSettings.nTFoot).children('tr').children('th').addClass( oSettings.oClasses.sFooterTH );
 	}
-	
+
 	/* Cache the footer elements */
 	if ( oSettings.nTFoot !== null )
 	{
@@ -255,7 +255,7 @@ function _fnDrawHead( oSettings, aoSource, bIncludeHidden )
 	for ( i=0, iLen=aoLocal.length ; i<iLen ; i++ )
 	{
 		nLocalTr = aoLocal[i].nTr;
-		
+
 		/* All cells are going to be replaced, so empty out the row */
 		if ( nLocalTr )
 		{
@@ -321,7 +321,7 @@ function _fnDraw( oSettings )
 		_fnProcessingDisplay( oSettings, false );
 		return;
 	}
-	
+
 	var i, iLen, n;
 	var anRows = [];
 	var iRowCount = 0;
@@ -334,9 +334,9 @@ function _fnDraw( oSettings )
 	var iDisplayEnd = oSettings.fnDisplayEnd();
 	var bServerSide = oSettings.oFeatures.bServerSide;
 	var aiDisplay = oSettings.aiDisplay;
-	
+
 	oSettings.bDrawing = true;
-	
+
 	/* Check and see if we have an initial draw position from state saving */
 	if ( iInitDisplayStart !== undefined && iInitDisplayStart !== -1 )
 	{
@@ -348,7 +348,7 @@ function _fnDraw( oSettings )
 
 		oSettings.iInitDisplayStart = -1;
 	}
-	
+
 	/* Server-side processing draw intercept */
 	if ( oSettings.bDeferLoading )
 	{
@@ -363,12 +363,12 @@ function _fnDraw( oSettings )
 	{
 		return;
 	}
-	
+
 	if ( aiDisplay.length !== 0 )
 	{
 		var iStart = bServerSide ? 0 : iDisplayStart;
 		var iEnd = bServerSide ? oSettings.aoData.length : iDisplayEnd;
-		
+
 		for ( var j=iStart ; j<iEnd ; j++ )
 		{
 			var iDataIndex = aiDisplay[j];
@@ -379,7 +379,7 @@ function _fnDraw( oSettings )
 			}
 
 			var nRow = aoData.nTr;
-			
+
 			/* Remove the old striping classes and then add the new one */
 			if ( iStripes !== 0 )
 			{
@@ -390,11 +390,11 @@ function _fnDraw( oSettings )
 					aoData._sRowStripe = sStripe;
 				}
 			}
-			
+
 			/* Row callback functions - might want to manipulate the row */
 			_fnCallbackFire( oSettings, 'aoRowCallback', null,
 				[nRow, aoData._aData, iRowCount, j] );
-			
+
 			anRows.push( nRow );
 			iRowCount++;
 		}
@@ -419,11 +419,11 @@ function _fnDraw( oSettings )
 				'class':   oSettings.oClasses.sRowEmpty
 			} ).html( sZero ) )[0];
 	}
-	
+
 	/* Header and footer callbacks */
 	_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
 		_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
-	
+
 	_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
 		_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
 
@@ -439,10 +439,10 @@ function _fnDraw( oSettings )
 	}
 
 	body.append( $(anRows) );
-	
+
 	/* Call all required callback functions for the end of a draw */
 	_fnCallbackFire( oSettings, 'aoDrawCallback', 'draw', [oSettings] );
-	
+
 	/* Draw is complete, sorting and filtering must be as well */
 	oSettings.bSorted = false;
 	oSettings.bFiltered = false;
@@ -497,7 +497,7 @@ function _fnAddOptionsHtml ( oSettings )
 	 */
 	var nHolding = $('<div></div>')[0];
 	oSettings.nTable.parentNode.insertBefore( nHolding, oSettings.nTable );
-	
+
 	/*
 	 * All DataTables are wrapped in a div
 	 */
@@ -506,7 +506,7 @@ function _fnAddOptionsHtml ( oSettings )
 
 	/* Track where we want to insert the option */
 	var nInsertNode = oSettings.nTableWrapper;
-	
+
 	/* Loop over the user set positioning and place the elements as needed */
 	var aDom = oSettings.sDom.split('');
 	var nTmp, iPushFeature, cOption, nNewNode, cNext, sAttr, j;
@@ -514,12 +514,12 @@ function _fnAddOptionsHtml ( oSettings )
 	{
 		iPushFeature = 0;
 		cOption = aDom[i];
-		
+
 		if ( cOption == '<' )
 		{
 			/* New container div */
 			nNewNode = $('<div></div>')[0];
-			
+
 			/* Check to see if we should append an id and/or a class name to the container */
 			cNext = aDom[i+1];
 			if ( cNext == "'" || cNext == '"' )
@@ -531,7 +531,7 @@ function _fnAddOptionsHtml ( oSettings )
 					sAttr += aDom[i+j];
 					j++;
 				}
-				
+
 				/* Replace jQuery UI constants */
 				if ( sAttr == "H" )
 				{
@@ -541,7 +541,7 @@ function _fnAddOptionsHtml ( oSettings )
 				{
 					sAttr = oSettings.oClasses.sJUIFooter;
 				}
-				
+
 				/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
 				 * breaks the string into parts and applies them as needed
 				 */
@@ -559,10 +559,10 @@ function _fnAddOptionsHtml ( oSettings )
 				{
 					nNewNode.className = sAttr;
 				}
-				
+
 				i += j; /* Move along the position array */
 			}
-			
+
 			nInsertNode.appendChild( nNewNode );
 			nInsertNode = nNewNode;
 		}
@@ -625,7 +625,7 @@ function _fnAddOptionsHtml ( oSettings )
 				}
 			}
 		}
-		
+
 		/* Add to the 2D features array */
 		if ( iPushFeature == 1 && nTmp !== null )
 		{
@@ -637,7 +637,7 @@ function _fnAddOptionsHtml ( oSettings )
 			nInsertNode.appendChild( nTmp );
 		}
 	}
-	
+
 	/* Built our DOM structure - replace the holding div with what we want */
 	nHolding.parentNode.replaceChild( oSettings.nTableWrapper, nHolding );
 }
@@ -667,19 +667,19 @@ function _fnDetectHeader ( aLayout, nThead )
 	};
 
 	aLayout.splice( 0, aLayout.length );
-	
+
 	/* We know how many rows there are in the layout - so prep it */
 	for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 	{
 		aLayout.push( [] );
 	}
-	
+
 	/* Calculate a layout array */
 	for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 	{
 		nTr = nTrs[i];
 		iColumn = 0;
-		
+
 		/* For every cell in the row... */
 		nCell = nTr.firstChild;
 		while ( nCell ) {
@@ -696,10 +696,10 @@ function _fnDetectHeader ( aLayout, nThead )
 				 * accordingly
 				 */
 				iColShifted = fnShiftCol( aLayout, i, iColumn );
-				
+
 				/* Cache calculation for unique columns */
 				bUnique = iColspan === 1 ? true : false;
-				
+
 				/* If there is col / rowspan, copy the information into the layout grid */
 				for ( l=0 ; l<iColspan ; l++ )
 				{
@@ -751,7 +751,7 @@ function _fnGetUniqueThs ( oSettings, nHeader, aLayout )
 			}
 		}
 	}
-	
+
 	return aReturn;
 }
 

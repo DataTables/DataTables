@@ -17,7 +17,7 @@ function _fnAddColumn( oSettings, nTh )
 		"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
 	} );
 	oSettings.aoColumns.push( oCol );
-	
+
 	/* Add a column specific filter */
 	if ( oSettings.aoPreSearchCols[ iCol ] === undefined || oSettings.aoPreSearchCols[ iCol ] === null )
 	{
@@ -26,24 +26,24 @@ function _fnAddColumn( oSettings, nTh )
 	else
 	{
 		var oPre = oSettings.aoPreSearchCols[ iCol ];
-		
+
 		/* Don't require that the user must specify bRegex, bSmart or bCaseInsensitive */
 		if ( oPre.bRegex === undefined )
 		{
 			oPre.bRegex = true;
 		}
-		
+
 		if ( oPre.bSmart === undefined )
 		{
 			oPre.bSmart = true;
 		}
-		
+
 		if ( oPre.bCaseInsensitive === undefined )
 		{
 			oPre.bCaseInsensitive = true;
 		}
 	}
-	
+
 	/* Use the column options function to initialise classes etc */
 	_fnColumnOptions( oSettings, iCol, null );
 }
@@ -60,13 +60,13 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 {
 	var oCol = oSettings.aoColumns[ iCol ];
 	var oClasses = oSettings.oClasses;
-	
+
 	/* User specified column options */
 	if ( oOptions !== undefined && oOptions !== null )
 	{
 		// Map camel case parameters to their Hungarian counterparts
 		_fnCamelToHungarian( DataTable.defaults.column, oOptions );
-		
+
 		/* Backwards compatibility for mDataProp */
 		if ( oOptions.mDataProp !== undefined && !oOptions.mData )
 		{
@@ -242,7 +242,7 @@ function _fnDetectType( sData )
 {
 	var aTypes = DataTable.ext.aTypes;
 	var iLen = aTypes.length;
-	
+
 	for ( var i=0 ; i<iLen ; i++ )
 	{
 		var sType = aTypes[i]( sData );
@@ -251,7 +251,7 @@ function _fnDetectType( sData )
 			return sType;
 		}
 	}
-	
+
 	return 'string';
 }
 

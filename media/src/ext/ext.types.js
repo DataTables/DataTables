@@ -9,7 +9,7 @@ $.extend( DataTable.ext.aTypes, [
 		return data==='' || data==='-' || (!isNaN( parseFloat(data) ) && isFinite( data )) ?
 			'numeric' : null;
 	},
-	
+
 	// Dates (only those recognised by the browser's Date.parse)
 	function ( data )
 	{
@@ -17,7 +17,7 @@ $.extend( DataTable.ext.aTypes, [
 		return (parsed !== null && !isNaN(parsed)) || (typeof data==='string' && data.length===0) ?
 			'date' : null;
 	},
-	
+
 	// HTML
 	function ( data )
 	{

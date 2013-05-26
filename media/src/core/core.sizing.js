@@ -11,19 +11,19 @@ function _fnConvertToWidth ( sWidth, nParent )
 	{
 		return 0;
 	}
-	
+
 	if ( ! nParent )
 	{
 		nParent = document.body;
 	}
-	
+
 	var n = $('<div/>')
 		.css( 'width', _fnStringToCss( sWidth ) )
 		.appendTo( nParent );
 
 	var width = n[0].offsetWidth;
 	n.remove();
-	
+
 	return width;
 }
 
@@ -44,14 +44,14 @@ function _fnCalculateColumnWidths ( oSettings )
 	var oHeaders = $('th', oSettings.nTHead);
 	var widthAttr = oSettings.nTable.getAttribute('width');
 	var nWrapper = oSettings.nTable.parentNode;
-	
+
 	/* Convert any user input sizes into pixel sizes */
 	for ( i=0 ; i<iColums ; i++ )
 	{
 		if ( oSettings.aoColumns[i].bVisible )
 		{
 			iVisibleColumns++;
-			
+
 			if ( oSettings.aoColumns[i].sWidth !== null )
 			{
 				iTmpWidth = _fnConvertToWidth( oSettings.aoColumns[i].sWidthOrig,
@@ -60,12 +60,12 @@ function _fnCalculateColumnWidths ( oSettings )
 				{
 					oSettings.aoColumns[i].sWidth = _fnStringToCss( iTmpWidth );
 				}
-					
+
 				iUserInputs++;
 			}
 		}
 	}
-	
+
 	/* If the number of columns in the DOM equals the number that we have to process in
 	 * DataTables, then we can use the offsets that are created by the web-browser. No custom
 	 * sizes can be set in order for this to happen, nor scrolling used
@@ -95,7 +95,7 @@ function _fnCalculateColumnWidths ( oSettings )
 			nBody = document.createElement( 'tbody' ),
 			nTr = document.createElement( 'tr' ),
 			nDivSizing;
-		
+
 		nCalcTmp.removeAttribute( "id" );
 		nCalcTmp.appendChild( nTheadClone );
 		if ( oSettings.nTFoot !== null )
@@ -105,10 +105,10 @@ function _fnCalculateColumnWidths ( oSettings )
 				n.style.width = "";
 			}, nCalcTmp.getElementsByTagName('tr') );
 		}
-		
+
 		nCalcTmp.appendChild( nBody );
 		nBody.appendChild( nTr );
-		
+
 		/* Remove any sizing that was previously applied by the styles */
 		var jqColSizing = $('thead th', nCalcTmp);
 		if ( jqColSizing.length === 0 )
@@ -153,10 +153,10 @@ function _fnCalculateColumnWidths ( oSettings )
 				}
 			}
 		}
-		
+
 		/* Build the table and 'display' it */
 		nWrapper.appendChild( nCalcTmp );
-		
+
 		/* When scrolling (X or Y) we want to set the width of the table as appropriate. However,
 		 * when not scrolling leave the table width as it is. This results in slightly different,
 		 * but I think correct behaviour
@@ -182,10 +182,10 @@ function _fnCalculateColumnWidths ( oSettings )
 			nCalcTmp.style.width = _fnStringToCss( widthAttr );
 		}
 		nCalcTmp.style.visibility = "hidden";
-		
+
 		/* Scrolling considerations */
 		_fnScrollingWidthAdjust( oSettings, nCalcTmp );
-		
+
 		/* Read the width's calculated by the browser and store them for use by the caller. We
 		 * first of all try to use the elements in the body, but it is possible that there are
 		 * no elements there, under which circumstances we use the header elements
@@ -221,7 +221,7 @@ function _fnCalculateColumnWidths ( oSettings )
 					iCorrector++;
 				}
 			}
-			
+
 			nCalcTmp.style.width = _fnStringToCss( iTotal );
 			oSettings.nTable.style.width = _fnStringToCss( iTotal );
 		}
@@ -320,7 +320,7 @@ var __re_html_remove = /<.*?>/g;
 function _fnGetMaxLenString( oSettings, iCol )
 {
 	var s, iMax=-1, iMaxIndex = -1;
-	
+
 	for ( var i=0 ; i<oSettings.aoData.length ; i++ )
 	{
 		s = _fnGetCellData( oSettings, i, iCol, 'display' )+'';
@@ -332,7 +332,7 @@ function _fnGetMaxLenString( oSettings, iCol )
 			iMaxIndex = i;
 		}
 	}
-	
+
 	return iMaxIndex;
 }
 
@@ -350,7 +350,7 @@ function _fnStringToCss( s )
 	{
 		return "0px";
 	}
-	
+
 	if ( typeof s == 'number' )
 	{
 		if ( s < 0 )
@@ -359,7 +359,7 @@ function _fnStringToCss( s )
 		}
 		return s+"px";
 	}
-	
+
 	/* Check if the last character is not 0-9 */
 	var c = s.charCodeAt( s.length-1 );
 	if (c < 0x30 || c > 0x39)
@@ -406,7 +406,7 @@ function _fnScrollBarWidth ()
 		{
 			w2 = outer[0].clientWidth;
 		}
-		
+
 		outer.remove();
 
 		DataTable.__scrollbarWidth = w1 - w2;

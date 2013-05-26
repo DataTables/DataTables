@@ -274,7 +274,7 @@ DataTable.models.ext = {
 	 *  @default {}
 	 */
 	"oStdClasses": {},
-	
+
 
 	/**
 	 * Storage for the various classes that DataTables uses - jQuery UI suitable

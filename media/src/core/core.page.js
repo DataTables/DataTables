@@ -17,7 +17,7 @@ function _fnFeatureHtmlPaginate ( settings )
 	{
 		return null;
 	}
-	
+
 	var
 		type   = settings.sPaginationType,
 		plugin = DataTable.ext.oPagination[ type ],
@@ -27,7 +27,7 @@ function _fnFeatureHtmlPaginate ( settings )
 		node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];
 
 	plugin.fnInit( settings, node, redraw );
-	
+
 	/* Add a draw callback for the pagination on first instance, to update the paging display */
 	if ( ! settings.aanFeatures.p )
 	{
@@ -106,7 +106,7 @@ function _fnPageChange ( settings, action )
 	settings._iDisplayStart = start;
 
 	$(settings.oInstance).trigger('page', settings);
-	
+
 	return changed;
 }
 

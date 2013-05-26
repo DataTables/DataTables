@@ -9,7 +9,7 @@ function _fnFeatureHtmlInfo ( settings )
 	var
 		tid = settings.sTableId,
 		nodes = settings.aanFeatures.i;
-	
+
 	if ( ! nodes ) {
 		// Update display on each draw
 		settings.aoDrawCallback.push( {
@@ -40,7 +40,7 @@ function _fnUpdateInfo ( settings )
 	if ( nodes.length === 0 ) {
 		return;
 	}
-	
+
 	var
 		lang  = settings.oLanguage,
 		start = settings._iDisplayStart+1,
@@ -59,14 +59,14 @@ function _fnUpdateInfo ( settings )
 	// Convert the macros
 	out += lang.sInfoPostFix;
 	out = _fnInfoMacros( settings, out );
-	
+
 	var callback = lang.fnInfoCallback;
 	if ( callback !== null ) {
 		out = callback.call( settings.oInstance,
 			settings, start, end, max, total, out
 		);
 	}
-	
+
 	$(nodes).html( out );
 }
 

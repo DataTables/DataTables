@@ -136,7 +136,7 @@ function _fnAjaxParameters( oSettings )
 	var param = function ( name, value ) {
 		aoData.push( { 'name': name, 'value': value } );
 	};
-	
+
 	param( 'sEcho',          oSettings.iDraw );
 	param( 'iColumns',       iColumns );
 	param( 'sColumns',       _fnColumnOrdering(oSettings) );
@@ -144,13 +144,13 @@ function _fnAjaxParameters( oSettings )
 	param( 'iDisplayLength', oSettings.oFeatures.bPaginate !== false ?
 		oSettings._iDisplayLength : -1
 	);
-		
+
 	for ( i=0 ; i<iColumns ; i++ )
 	{
 		mDataProp = aoColumns[i].mData;
 		param( "mDataProp_"+i, typeof(mDataProp)==="function" ? 'function' : mDataProp );
 	}
-	
+
 	/* Filtering */
 	if ( oSettings.oFeatures.bFilter !== false )
 	{
@@ -163,7 +163,7 @@ function _fnAjaxParameters( oSettings )
 			param( 'bSearchable_'+i, aoColumns[i].bSearchable );
 		}
 	}
-	
+
 	/* Sorting */
 	if ( oSettings.oFeatures.bSort !== false )
 	{
@@ -172,11 +172,11 @@ function _fnAjaxParameters( oSettings )
 		aaSort = ( oSettings.aaSortingFixed !== null ) ?
 			oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
 			oSettings.aaSorting.slice();
-		
+
 		for ( i=0 ; i<aaSort.length ; i++ )
 		{
 			aDataSort = aoColumns[ aaSort[i][0] ].aDataSort;
-			
+
 			for ( j=0 ; j<aDataSort.length ; j++ )
 			{
 				param( 'iSortCol_'+iCounter, aDataSort[j] );
@@ -185,13 +185,13 @@ function _fnAjaxParameters( oSettings )
 			}
 		}
 		param( 'iSortingCols', iCounter );
-		
+
 		for ( i=0 ; i<iColumns ; i++ )
 		{
 			param( 'bSortable_'+i, aoColumns[i].bSortable );
 		}
 	}
-	
+
 	return aoData;
 }
 
@@ -220,21 +220,21 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 		}
 		oSettings.iDraw = json.sEcho * 1;
 	}
-	
+
 	if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
 	{
 		_fnClearTable( oSettings );
 	}
 	oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 	oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
-	
+
 	var aData = _fnAjaxDataSrc( oSettings, json );
 	for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 	{
 		_fnAddData( oSettings, aData[i] );
 	}
 	oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-	
+
 	oSettings.bAjaxDataGet = false;
 	_fnDraw( oSettings );
 
@@ -242,7 +242,7 @@ function _fnAjaxUpdateDraw ( oSettings, json )
 	{
 		_fnInitComplete( oSettings, json );
 	}
-	
+
 	oSettings.bAjaxDataGet = true;
 	_fnProcessingDisplay( oSettings, false );
 }

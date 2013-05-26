@@ -933,7 +933,7 @@ DataTable.defaults = {
 		}
 
 		var s=(toFormat+""), a=s.split(""), out="", iLen=s.length;
-		
+
 		for ( var i=0 ; i<iLen ; i++ )
 		{
 			if ( i%3 === 0 && i !== 0 )
@@ -1554,8 +1554,8 @@ DataTable.defaults = {
 			 *    } );
 			 */
 			"sFirst": "First",
-		
-		
+
+
 			/**
 			 * Text to use when using the 'full_numbers' type of pagination for the
 			 * button to take the user to the last page.
@@ -1577,8 +1577,8 @@ DataTable.defaults = {
 			 *    } );
 			 */
 			"sLast": "Last",
-		
-		
+
+
 			/**
 			 * Text to use for the 'next' pagination button (to take the user to the
 			 * next page).
@@ -1600,8 +1600,8 @@ DataTable.defaults = {
 			 *    } );
 			 */
 			"sNext": "Next",
-		
-		
+
+
 			/**
 			 * Text to use for the 'previous' pagination button (to take the user to
 			 * the previous page).
@@ -1624,7 +1624,7 @@ DataTable.defaults = {
 			 */
 			"sPrevious": "Previous"
 		},
-	
+
 		/**
 		 * This string is shown in preference to `zeroRecords` when the table is
 		 * empty of data (regardless of filtering). Note that this is an optional
@@ -1646,8 +1646,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sEmptyTable": "No data available in table",
-	
-	
+
+
 		/**
 		 * This string gives information to the end user about the information that
 		 * is current on display on the page. The _START_, _END_ and _TOTAL_
@@ -1669,8 +1669,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
-	
-	
+
+
 		/**
 		 * Display information string for when the table is empty. Typically the
 		 * format of this string should match `info`.
@@ -1690,8 +1690,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sInfoEmpty": "Showing 0 to 0 of 0 entries",
-	
-	
+
+
 		/**
 		 * When a user filters the information in a table, this string is appended
 		 * to the information (`info`) to give an idea of how strong the filtering
@@ -1712,8 +1712,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sInfoFiltered": "(filtered from _MAX_ total entries)",
-	
-	
+
+
 		/**
 		 * If can be useful to append extra information to the info string at times,
 		 * and this variable does exactly that. This information will be appended to
@@ -1735,8 +1735,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sInfoPostFix": "",
-	
-	
+
+
 		/**
 		 * DataTables has a build in number formatter (`formatNumber`) which is used
 		 * to format large numbers that are used in the table information. By
@@ -1758,8 +1758,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sInfoThousands": ",",
-	
-	
+
+
 		/**
 		 * Detail the action that will be taken when the drop down menu for the
 		 * pagination length option is changed. The '_MENU_' variable is replaced
@@ -1799,8 +1799,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sLengthMenu": "Show _MENU_ entries",
-	
-	
+
+
 		/**
 		 * When using Ajax sourced data and during the first draw when DataTables is
 		 * gathering the data, this message is shown in an empty row in the table to
@@ -1823,8 +1823,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sLoadingRecords": "Loading...",
-	
-	
+
+
 		/**
 		 * Text which is displayed when the table is processing a user action
 		 * (usually a sort command or similar).
@@ -1844,8 +1844,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sProcessing": "Processing...",
-	
-	
+
+
 		/**
 		 * Details the actions that will be taken when the user types into the
 		 * filtering input text box. The variable "_INPUT_", if used in the string,
@@ -1879,8 +1879,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sSearch": "Search:",
-	
-	
+
+
 		/**
 		 * All of the language information can be stored in a file on the
 		 * server-side, which DataTables will look up if this parameter is passed.
@@ -1904,8 +1904,8 @@ DataTable.defaults = {
 		 *    } );
 		 */
 		"sUrl": "",
-	
-	
+
+
 		/**
 		 * Text shown inside the table records when the is no information to be
 		 * displayed after filtering. `emptyTable` is shown when there is simply no

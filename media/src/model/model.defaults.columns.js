@@ -185,8 +185,8 @@ DataTable.defaults.column = {
 	 *    } );
 	 */
 	"bVisible": true,
-	
-	
+
+
 	/**
 	 * Developer definable function that is called whenever a cell is created (Ajax source,
 	 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
@@ -616,7 +616,7 @@ DataTable.defaults.column = {
 	 *    } );
 	 */
 	"sClass": "",
-	
+
 	/**
 	 * When DataTables calculates the column widths to assign to each column,
 	 * it finds the longest string in each column and then constructs a

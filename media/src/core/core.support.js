@@ -83,7 +83,7 @@ function _fnMap( oRet, oSrc, sName, sMappedName )
 function _fnExtend( oOut, oExtender )
 {
 	var val;
-	
+
 	for ( var prop in oExtender )
 	{
 		if ( oExtender.hasOwnProperty(prop) )

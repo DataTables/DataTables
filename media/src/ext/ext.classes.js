@@ -9,7 +9,7 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sPageNextDisabled": "paginate_disabled_next",
 	"sPageJUINext": "",
 	"sPageJUIPrev": "",
-	
+
 	/* Full numbers paging buttons */
 	"sPageButton": "paginate_button",
 	"sPageButtonActive": "paginate_active",
@@ -18,14 +18,14 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sPagePrevious": "previous",
 	"sPageNext": "next",
 	"sPageLast": "last",
-	
+
 	/* Striping classes */
 	"sStripeOdd": "odd",
 	"sStripeEven": "even",
-	
+
 	/* Empty row */
 	"sRowEmpty": "dataTables_empty",
-	
+
 	/* Features */
 	"sWrapper": "dataTables_wrapper",
 	"sFilter": "dataTables_filter",
@@ -33,7 +33,7 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sPaging": "dataTables_paginate paging_", /* Note that the type is postfixed */
 	"sLength": "dataTables_length",
 	"sProcessing": "dataTables_processing",
-	
+
 	/* Sorting */
 	"sSortAsc": "sorting_asc",
 	"sSortDesc": "sorting_desc",
@@ -49,7 +49,7 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sSortJUIDescAllowed": "",
 	"sSortJUIWrapper": "",
 	"sSortIcon": "",
-	
+
 	/* Scrolling */
 	"sScrollWrapper": "dataTables_scroll",
 	"sScrollHead": "dataTables_scrollHead",
@@ -57,7 +57,7 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sScrollBody": "dataTables_scrollBody",
 	"sScrollFoot": "dataTables_scrollFoot",
 	"sScrollFootInner": "dataTables_scrollFootInner",
-	
+
 	/* Misc */
 	"sFooterTH": "",
 	"sJUIHeader": "",
@@ -73,18 +73,18 @@ $.extend( DataTable.ext.oJUIClasses, DataTable.ext.oStdClasses, {
 	"sPageNextDisabled": "fg-button ui-button ui-state-default ui-corner-right ui-state-disabled",
 	"sPageJUINext": "ui-icon ui-icon-circle-arrow-e",
 	"sPageJUIPrev": "ui-icon ui-icon-circle-arrow-w",
-	
+
 	/* Full numbers paging buttons */
 	"sPageButton": "fg-button ui-button ui-state-default",
 	"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-disabled",
 	"sPageButtonStaticDisabled": "fg-button ui-button ui-state-default ui-state-disabled",
 	"sPageFirst": "first ui-corner-tl ui-corner-bl",
 	"sPageLast": "last ui-corner-tr ui-corner-br",
-	
+
 	/* Features */
 	"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
 		"ui-buttonset-multi paging_", /* Note that the type is postfixed */
-	
+
 	/* Sorting */
 	"sSortAsc": "ui-state-default",
 	"sSortDesc": "ui-state-default",
@@ -99,11 +99,11 @@ $.extend( DataTable.ext.oJUIClasses, DataTable.ext.oStdClasses, {
 	"sSortJUIDescAllowed": "css_right ui-icon ui-icon-carat-1-s",
 	"sSortJUIWrapper": "DataTables_sort_wrapper",
 	"sSortIcon": "DataTables_sort_icon",
-	
+
 	/* Scrolling */
 	"sScrollHead": "dataTables_scrollHead ui-state-default",
 	"sScrollFoot": "dataTables_scrollFoot ui-state-default",
-	
+
 	/* Misc */
 	"sFooterTH": "ui-state-default",
 	"sJUIHeader": "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix",
