@@ -225,7 +225,7 @@
 			"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
 		} );
 		oSettings.aoColumns.push( oCol );
-		
+	
 		/* Add a column specific filter */
 		if ( oSettings.aoPreSearchCols[ iCol ] === undefined || oSettings.aoPreSearchCols[ iCol ] === null )
 		{
@@ -234,24 +234,24 @@
 		else
 		{
 			var oPre = oSettings.aoPreSearchCols[ iCol ];
-			
+	
 			/* Don't require that the user must specify bRegex, bSmart or bCaseInsensitive */
 			if ( oPre.bRegex === undefined )
 			{
 				oPre.bRegex = true;
 			}
-			
+	
 			if ( oPre.bSmart === undefined )
 			{
 				oPre.bSmart = true;
 			}
-			
+	
 			if ( oPre.bCaseInsensitive === undefined )
 			{
 				oPre.bCaseInsensitive = true;
 			}
 		}
-		
+	
 		/* Use the column options function to initialise classes etc */
 		_fnColumnOptions( oSettings, iCol, null );
 	}
@@ -268,13 +268,13 @@
 	{
 		var oCol = oSettings.aoColumns[ iCol ];
 		var oClasses = oSettings.oClasses;
-		
+	
 		/* User specified column options */
 		if ( oOptions !== undefined && oOptions !== null )
 		{
 			// Map camel case parameters to their Hungarian counterparts
 			_fnCamelToHungarian( DataTable.defaults.column, oOptions );
-			
+	
 			/* Backwards compatibility for mDataProp */
 			if ( oOptions.mDataProp !== undefined && !oOptions.mData )
 			{
@@ -450,7 +450,7 @@
 	{
 		var aTypes = DataTable.ext.aTypes;
 		var iLen = aTypes.length;
-		
+	
 		for ( var i=0 ; i<iLen ; i++ )
 		{
 			var sType = aTypes[i]( sData );
@@ -459,7 +459,7 @@
 				return sType;
 			}
 		}
-		
+	
 		return 'string';
 	}
 	
@@ -510,7 +510,7 @@
 				var aTargets = aoColDefs[i].targets || aoColDefs[i].aTargets;
 				if ( ! $.isArray( aTargets ) )
 				{
-					_fnLog( oSettings, 1, 'aTargets must be an array of targets, not a '+(typeof aTargets) );
+					aTargets = [ aTargets ];
 				}
 	
 				for ( j=0, jLen=aTargets.length ; j<jLen ; j++ )
@@ -590,7 +590,7 @@
 			oCol = oSettings.aoColumns[i];
 	
 			_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
-			
+	
 			/* See if we should auto-detect the column type */
 			if ( oCol._bAutoType && oCol.sType != 'string' )
 			{
@@ -611,7 +611,7 @@
 				}
 			}
 		}
-		
+	
 		/* Add to the display array */
 		oSettings.aiDisplayMaster.push( iRow );
 	
@@ -718,8 +718,8 @@
 			if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
 			{
 				_fnLog( oSettings, 0, "Requested unknown parameter "+
-					(typeof oCol.mData=='function' ? '{mData function}' : "'"+oCol.mData+"'")+
-					" from the data source for row "+iRow );
+					(typeof oCol.mData=='function' ? '{function}' : "'"+oCol.mData+"'")+
+					" for row "+iRow, 4 );
 				oSettings.iDrawError = oSettings.iDraw;
 			}
 			return oCol.sDefaultContent;
@@ -843,7 +843,7 @@
 								data = data[ a[i] ];
 							}
 							out = [];
-							
+	
 							// Get the remainder of the nested object to get
 							a.splice( 0, i+1 );
 							innerSrc = a.join('.');
@@ -943,7 +943,7 @@
 					{
 						a[i] = a[i].replace(__reArray, '');
 						data[ a[i] ] = [];
-						
+	
 						// Get the remainder of the nested object to set so we can recurse
 						b = a.slice();
 						b.splice( 0, i+1 );
@@ -1169,6 +1169,11 @@
 				nTr.className += ' '+rowData.DT_RowClass;
 			}
 	
+			if ( rowData.DT_RowData )
+			{
+				$(nTr).data( rowData.DT_RowData );
+			}
+	
 			/* Process each column */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
@@ -1182,7 +1187,7 @@
 				{
 					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
 				}
-			
+	
 				/* Add user defined class */
 				if ( oCol.sClass !== null )
 				{
@@ -1226,7 +1231,7 @@
 		var iThs = $('th, td', oSettings.nTHead).length;
 		var iCorrector = 0;
 		var jqChildren;
-		
+	
 		/* If there is a header in place - then use it - otherwise it's going to get nuked... */
 		if ( iThs !== 0 )
 		{
@@ -1245,7 +1250,7 @@
 				{
 					$(nTh).addClass( oSettings.aoColumns[i].sClass );
 				}
-				
+	
 				/* Set the title of the column if it is user defined (not what was auto detected) */
 				if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
 				{
@@ -1257,24 +1262,24 @@
 		{
 			/* We don't have a header in the DOM - so we are going to have to create one */
 			var nTr = document.createElement( "tr" );
-			
+	
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
 				nTh = oSettings.aoColumns[i].nTh;
 				nTh.innerHTML = oSettings.aoColumns[i].sTitle;
 				nTh.setAttribute('tabindex', '0');
-				
+	
 				if ( oSettings.aoColumns[i].sClass !== null )
 				{
 					$(nTh).addClass( oSettings.aoColumns[i].sClass );
 				}
-				
+	
 				nTr.appendChild( nTh );
 			}
 			$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
 			_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
 		}
-		
+	
 		/* ARIA role for the rows */
 		$(oSettings.nTHead).children('tr').attr('role', 'row');
 	
@@ -1284,18 +1289,18 @@
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 			{
 				nTh = oSettings.aoColumns[i].nTh;
-				
+	
 				var nDiv = document.createElement('div');
 				nDiv.className = oSettings.oClasses.sSortJUIWrapper;
 				$(nTh).contents().appendTo(nDiv);
-				
+	
 				var nSpan = document.createElement('span');
 				nSpan.className = oSettings.oClasses.sSortIcon+' '+oSettings.aoColumns[i].sSortingClassJUI;
 				nDiv.appendChild( nSpan );
 				nTh.appendChild( nDiv );
 			}
 		}
-		
+	
 		if ( oSettings.oFeatures.bSort )
 		{
 			for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
@@ -1308,13 +1313,13 @@
 				}
 			}
 		}
-		
+	
 		/* Deal with the footer - add classes if required */
 		if ( oSettings.oClasses.sFooterTH !== "" )
 		{
 			$(oSettings.nTFoot).children('tr').children('th').addClass( oSettings.oClasses.sFooterTH );
 		}
-		
+	
 		/* Cache the footer elements */
 		if ( oSettings.nTFoot !== null )
 		{
@@ -1387,7 +1392,7 @@
 		for ( i=0, iLen=aoLocal.length ; i<iLen ; i++ )
 		{
 			nLocalTr = aoLocal[i].nTr;
-			
+	
 			/* All cells are going to be replaced, so empty out the row */
 			if ( nLocalTr )
 			{
@@ -1453,7 +1458,7 @@
 			_fnProcessingDisplay( oSettings, false );
 			return;
 		}
-		
+	
 		var i, iLen, n;
 		var anRows = [];
 		var iRowCount = 0;
@@ -1462,17 +1467,15 @@
 		var iOpenRows = oSettings.aoOpenRows.length;
 		var oLang = oSettings.oLanguage;
 		var iInitDisplayStart = oSettings.iInitDisplayStart;
-		var iDisplayStart = oSettings._iDisplayStart;
-		var iDisplayEnd = oSettings.fnDisplayEnd();
 		var bServerSide = oSettings.oFeatures.bServerSide;
 		var aiDisplay = oSettings.aiDisplay;
-		
+	
 		oSettings.bDrawing = true;
-		
+	
 		/* Check and see if we have an initial draw position from state saving */
 		if ( iInitDisplayStart !== undefined && iInitDisplayStart !== -1 )
 		{
-			iDisplayStart = bServerSide ?
+			oSettings._iDisplayStart = bServerSide ?
 				iInitDisplayStart :
 				iInitDisplayStart >= oSettings.fnRecordsDisplay() ?
 					0 :
@@ -1480,7 +1483,10 @@
 	
 			oSettings.iInitDisplayStart = -1;
 		}
-		
+	
+		var iDisplayStart = oSettings._iDisplayStart;
+		var iDisplayEnd = oSettings.fnDisplayEnd();
+	
 		/* Server-side processing draw intercept */
 		if ( oSettings.bDeferLoading )
 		{
@@ -1495,12 +1501,12 @@
 		{
 			return;
 		}
-		
+	
 		if ( aiDisplay.length !== 0 )
 		{
 			var iStart = bServerSide ? 0 : iDisplayStart;
 			var iEnd = bServerSide ? oSettings.aoData.length : iDisplayEnd;
-			
+	
 			for ( var j=iStart ; j<iEnd ; j++ )
 			{
 				var iDataIndex = aiDisplay[j];
@@ -1511,7 +1517,7 @@
 				}
 	
 				var nRow = aoData.nTr;
-				
+	
 				/* Remove the old striping classes and then add the new one */
 				if ( iStripes !== 0 )
 				{
@@ -1522,11 +1528,11 @@
 						aoData._sRowStripe = sStripe;
 					}
 				}
-				
+	
 				/* Row callback functions - might want to manipulate the row */
 				_fnCallbackFire( oSettings, 'aoRowCallback', null,
 					[nRow, aoData._aData, iRowCount, j] );
-				
+	
 				anRows.push( nRow );
 				iRowCount++;
 			}
@@ -1551,11 +1557,11 @@
 					'class':   oSettings.oClasses.sRowEmpty
 				} ).html( sZero ) )[0];
 		}
-		
+	
 		/* Header and footer callbacks */
 		_fnCallbackFire( oSettings, 'aoHeaderCallback', 'header', [ $(oSettings.nTHead).children('tr')[0],
 			_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
-		
+	
 		_fnCallbackFire( oSettings, 'aoFooterCallback', 'footer', [ $(oSettings.nTFoot).children('tr')[0],
 			_fnGetDataMaster( oSettings ), iDisplayStart, iDisplayEnd, aiDisplay ] );
 	
@@ -1571,10 +1577,10 @@
 		}
 	
 		body.append( $(anRows) );
-		
+	
 		/* Call all required callback functions for the end of a draw */
 		_fnCallbackFire( oSettings, 'aoDrawCallback', 'draw', [oSettings] );
-		
+	
 		/* Draw is complete, sorting and filtering must be as well */
 		oSettings.bSorted = false;
 		oSettings.bFiltered = false;
@@ -1629,7 +1635,7 @@
 		 */
 		var nHolding = $('<div></div>')[0];
 		oSettings.nTable.parentNode.insertBefore( nHolding, oSettings.nTable );
-		
+	
 		/*
 		 * All DataTables are wrapped in a div
 		 */
@@ -1638,7 +1644,7 @@
 	
 		/* Track where we want to insert the option */
 		var nInsertNode = oSettings.nTableWrapper;
-		
+	
 		/* Loop over the user set positioning and place the elements as needed */
 		var aDom = oSettings.sDom.split('');
 		var nTmp, iPushFeature, cOption, nNewNode, cNext, sAttr, j;
@@ -1646,12 +1652,12 @@
 		{
 			iPushFeature = 0;
 			cOption = aDom[i];
-			
+	
 			if ( cOption == '<' )
 			{
 				/* New container div */
 				nNewNode = $('<div></div>')[0];
-				
+	
 				/* Check to see if we should append an id and/or a class name to the container */
 				cNext = aDom[i+1];
 				if ( cNext == "'" || cNext == '"' )
@@ -1663,7 +1669,7 @@
 						sAttr += aDom[i+j];
 						j++;
 					}
-					
+	
 					/* Replace jQuery UI constants */
 					if ( sAttr == "H" )
 					{
@@ -1673,7 +1679,7 @@
 					{
 						sAttr = oSettings.oClasses.sJUIFooter;
 					}
-					
+	
 					/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
 					 * breaks the string into parts and applies them as needed
 					 */
@@ -1691,10 +1697,10 @@
 					{
 						nNewNode.className = sAttr;
 					}
-					
+	
 					i += j; /* Move along the position array */
 				}
-				
+	
 				nInsertNode.appendChild( nNewNode );
 				nInsertNode = nNewNode;
 			}
@@ -1757,7 +1763,7 @@
 					}
 				}
 			}
-			
+	
 			/* Add to the 2D features array */
 			if ( iPushFeature == 1 && nTmp !== null )
 			{
@@ -1769,7 +1775,7 @@
 				nInsertNode.appendChild( nTmp );
 			}
 		}
-		
+	
 		/* Built our DOM structure - replace the holding div with what we want */
 		nHolding.parentNode.replaceChild( oSettings.nTableWrapper, nHolding );
 	}
@@ -1799,19 +1805,19 @@
 		};
 	
 		aLayout.splice( 0, aLayout.length );
-		
+	
 		/* We know how many rows there are in the layout - so prep it */
 		for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 		{
 			aLayout.push( [] );
 		}
-		
+	
 		/* Calculate a layout array */
 		for ( i=0, iLen=nTrs.length ; i<iLen ; i++ )
 		{
 			nTr = nTrs[i];
 			iColumn = 0;
-			
+	
 			/* For every cell in the row... */
 			nCell = nTr.firstChild;
 			while ( nCell ) {
@@ -1828,10 +1834,10 @@
 					 * accordingly
 					 */
 					iColShifted = fnShiftCol( aLayout, i, iColumn );
-					
+	
 					/* Cache calculation for unique columns */
 					bUnique = iColspan === 1 ? true : false;
-					
+	
 					/* If there is col / rowspan, copy the information into the layout grid */
 					for ( l=0 ; l<iColspan ; l++ )
 					{
@@ -1883,7 +1889,7 @@
 				}
 			}
 		}
-		
+	
 		return aReturn;
 	}
 	
@@ -1939,7 +1945,7 @@
 				if ( json.sError ) {
 					oSettings.oApi._fnLog( oSettings, 0, json.sError );
 				}
-				
+	
 				$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
 				fn( json );
 			},
@@ -1948,7 +1954,7 @@
 			"type": oSettings.sServerMethod,
 			"error": function (xhr, error, thrown) {
 				if ( error == "parsererror" ) {
-					oSettings.oApi._fnLog( oSettings, 0, "DataTables: invalid JSON response" );
+					oSettings.oApi._fnLog( oSettings, 0, 'Invalid JSON response', 1 );
 				}
 			}
 		};
@@ -2025,7 +2031,7 @@
 		var param = function ( name, value ) {
 			aoData.push( { 'name': name, 'value': value } );
 		};
-		
+	
 		param( 'sEcho',          oSettings.iDraw );
 		param( 'iColumns',       iColumns );
 		param( 'sColumns',       _fnColumnOrdering(oSettings) );
@@ -2033,13 +2039,13 @@
 		param( 'iDisplayLength', oSettings.oFeatures.bPaginate !== false ?
 			oSettings._iDisplayLength : -1
 		);
-			
+	
 		for ( i=0 ; i<iColumns ; i++ )
 		{
 			mDataProp = aoColumns[i].mData;
 			param( "mDataProp_"+i, typeof(mDataProp)==="function" ? 'function' : mDataProp );
 		}
-		
+	
 		/* Filtering */
 		if ( oSettings.oFeatures.bFilter !== false )
 		{
@@ -2052,7 +2058,7 @@
 				param( 'bSearchable_'+i, aoColumns[i].bSearchable );
 			}
 		}
-		
+	
 		/* Sorting */
 		if ( oSettings.oFeatures.bSort !== false )
 		{
@@ -2061,11 +2067,11 @@
 			aaSort = ( oSettings.aaSortingFixed !== null ) ?
 				oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
 				oSettings.aaSorting.slice();
-			
+	
 			for ( i=0 ; i<aaSort.length ; i++ )
 			{
 				aDataSort = aoColumns[ aaSort[i][0] ].aDataSort;
-				
+	
 				for ( j=0 ; j<aDataSort.length ; j++ )
 				{
 					param( 'iSortCol_'+iCounter, aDataSort[j] );
@@ -2074,13 +2080,13 @@
 				}
 			}
 			param( 'iSortingCols', iCounter );
-			
+	
 			for ( i=0 ; i<iColumns ; i++ )
 			{
 				param( 'bSortable_'+i, aoColumns[i].bSortable );
 			}
 		}
-		
+	
 		return aoData;
 	}
 	
@@ -2109,21 +2115,21 @@
 			}
 			oSettings.iDraw = json.sEcho * 1;
 		}
-		
+	
 		if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
 		{
 			_fnClearTable( oSettings );
 		}
 		oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 		oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
-		
+	
 		var aData = _fnAjaxDataSrc( oSettings, json );
 		for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 		{
 			_fnAddData( oSettings, aData[i] );
 		}
 		oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-		
+	
 		oSettings.bAjaxDataGet = false;
 		_fnDraw( oSettings );
 	
@@ -2131,7 +2137,7 @@
 		{
 			_fnInitComplete( oSettings, json );
 		}
-		
+	
 		oSettings.bAjaxDataGet = true;
 		_fnProcessingDisplay( oSettings, false );
 	}
@@ -2562,7 +2568,7 @@
 		var
 			tid = settings.sTableId,
 			nodes = settings.aanFeatures.i;
-		
+	
 		if ( ! nodes ) {
 			// Update display on each draw
 			settings.aoDrawCallback.push( {
@@ -2593,7 +2599,7 @@
 		if ( nodes.length === 0 ) {
 			return;
 		}
-		
+	
 		var
 			lang  = settings.oLanguage,
 			start = settings._iDisplayStart+1,
@@ -2612,14 +2618,14 @@
 		// Convert the macros
 		out += lang.sInfoPostFix;
 		out = _fnInfoMacros( settings, out );
-		
+	
 		var callback = lang.fnInfoCallback;
 		if ( callback !== null ) {
 			out = callback.call( settings.oInstance,
 				settings, start, end, max, total, out
 			);
 		}
-		
+	
 		$(nodes).html( out );
 	}
 	
@@ -2649,17 +2655,17 @@
 	function _fnInitialise ( oSettings )
 	{
 		var i, iLen, iAjaxStart=oSettings.iInitDisplayStart;
-		
+	
 		/* Ensure that the table data is fully initialised */
 		if ( oSettings.bInitialised === false )
 		{
 			setTimeout( function(){ _fnInitialise( oSettings ); }, 200 );
 			return;
 		}
-		
+	
 		/* Show the display HTML options */
 		_fnAddOptionsHtml( oSettings );
-		
+	
 		/* Build and draw the header / footer for the table */
 		_fnBuildHead( oSettings );
 		_fnDrawHead( oSettings, oSettings.aoHeader );
@@ -2667,13 +2673,13 @@
 	
 		/* Okay to show that something is going on now */
 		_fnProcessingDisplay( oSettings, true );
-		
+	
 		/* Calculate sizes for columns */
 		if ( oSettings.oFeatures.bAutoWidth )
 		{
 			_fnCalculateColumnWidths( oSettings );
 		}
-		
+	
 		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
 		{
 			if ( oSettings.aoColumns[i].sWidth !== null )
@@ -2681,13 +2687,13 @@
 				oSettings.aoColumns[i].nTh.style.width = _fnStringToCss( oSettings.aoColumns[i].sWidth );
 			}
 		}
-		
+	
 		/* If there is default sorting required - let's do it. The sort function will do the
 		 * drawing for us. Otherwise we draw the table regardless of the Ajax source - this allows
 		 * the table to look initialised for Ajax sourcing data (show 'loading' message possibly)
 		 */
 		_fnReDraw( oSettings );
-		
+	
 		/* if there is an ajax source load the data */
 		if ( (oSettings.sAjaxSource || oSettings.ajax) && !oSettings.oFeatures.bServerSide )
 		{
@@ -2700,20 +2706,20 @@
 				{
 					_fnAddData( oSettings, aData[i] );
 				}
-				
+	
 				/* Reset the init display for cookie saving. We've already done a filter, and
 				 * therefore cleared it before. So we need to make it appear 'fresh'
 				 */
 				oSettings.iInitDisplayStart = iAjaxStart;
-				
+	
 				_fnReDraw( oSettings );
-				
+	
 				_fnProcessingDisplay( oSettings, false );
 				_fnInitComplete( oSettings, json );
 			}, oSettings );
 			return;
 		}
-		
+	
 		/* Server-side processing init complete is done by _fnAjaxUpdateDraw */
 		if ( !oSettings.oFeatures.bServerSide )
 		{
@@ -2823,7 +2829,7 @@
 		{
 			return null;
 		}
-		
+	
 		var
 			type   = settings.sPaginationType,
 			plugin = DataTable.ext.oPagination[ type ],
@@ -2833,7 +2839,7 @@
 			node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];
 	
 		plugin.fnInit( settings, node, redraw );
-		
+	
 		/* Add a draw callback for the pagination on first instance, to update the paging display */
 		if ( ! settings.aanFeatures.p )
 		{
@@ -2905,7 +2911,7 @@
 		}
 		else
 		{
-			_fnLog( settings, 0, "Unknown paging action: "+action );
+			_fnLog( settings, 0, "Unknown paging action: "+action, 5 );
 		}
 	
 		var changed = settings._iDisplayStart !== start;
@@ -2963,7 +2969,7 @@
 		{
 			return oSettings.nTable;
 		}
-		
+	
 		/*
 		 * The HTML structure that we want to generate in this function is:
 		 *  div - nScroller
@@ -2993,7 +2999,7 @@
 		 	nTfoot = oSettings.nTable.getElementsByTagName('tfoot').length === 0 ? null :
 				oSettings.nTable.getElementsByTagName('tfoot')[0],
 			oClasses = oSettings.oClasses;
-		
+	
 		nScrollHead.appendChild( nScrollHeadInner );
 		nScrollFoot.appendChild( nScrollFootInner );
 		nScrollBody.appendChild( oSettings.nTable );
@@ -3007,14 +3013,14 @@
 			nScrollFootInner.appendChild( nScrollFootTable );
 			nScrollFootTable.appendChild( nTfoot );
 		}
-		
+	
 		nScroller.className = oClasses.sScrollWrapper;
 		nScrollHead.className = oClasses.sScrollHead;
 		nScrollHeadInner.className = oClasses.sScrollHeadInner;
 		nScrollBody.className = oClasses.sScrollBody;
 		nScrollFoot.className = oClasses.sScrollFoot;
 		nScrollFootInner.className = oClasses.sScrollFootInner;
-		
+	
 		if ( oSettings.oScroll.bAutoCss )
 		{
 			nScrollHead.style.overflow = "hidden";
@@ -3022,13 +3028,13 @@
 			nScrollFoot.style.overflow = "hidden";
 			nScrollBody.style.overflow = "auto";
 		}
-		
+	
 		nScrollHead.style.border = "0";
 		nScrollHead.style.width = "100%";
 		nScrollFoot.style.border = "0";
 		nScrollHeadInner.style.width = oSettings.oScroll.sXInner !== "" ?
 			oSettings.oScroll.sXInner : "100%"; /* will be overwritten */
-		
+	
 		/* Modify attributes to respect the clones */
 		nScrollHeadTable.removeAttribute('id');
 		nScrollHeadTable.style.marginLeft = "0";
@@ -3038,7 +3044,7 @@
 			nScrollFootTable.removeAttribute('id');
 			nScrollFootTable.style.marginLeft = "0";
 		}
-		
+	
 		/* Move caption elements from the body to the header, footer or leave where it is
 		 * depending on the configuration. Note that the DTD says there can be only one caption */
 		var nCaption = $(oSettings.nTable).children('caption');
@@ -3054,7 +3060,7 @@
 				nScrollFootTable.appendChild( nCaption );
 			}
 		}
-		
+	
 		/*
 		 * Sizing
 		 */
@@ -3063,35 +3069,35 @@
 		{
 			nScrollHead.style.width = _fnStringToCss( oSettings.oScroll.sX );
 			nScrollBody.style.width = _fnStringToCss( oSettings.oScroll.sX );
-			
+	
 			if ( nTfoot !== null )
 			{
-				nScrollFoot.style.width = _fnStringToCss( oSettings.oScroll.sX );	
+				nScrollFoot.style.width = _fnStringToCss( oSettings.oScroll.sX );
 			}
-			
+	
 			/* When the body is scrolled, then we also want to scroll the headers */
 			$(nScrollBody).scroll( function (e) {
 				nScrollHead.scrollLeft = this.scrollLeft;
-				
+	
 				if ( nTfoot !== null )
 				{
 					nScrollFoot.scrollLeft = this.scrollLeft;
 				}
 			} );
 		}
-		
+	
 		/* When yscrolling, add the height */
 		if ( oSettings.oScroll.sY !== "" )
 		{
 			nScrollBody.style.height = _fnStringToCss( oSettings.oScroll.sY );
 		}
-		
+	
 		/* Redraw - align columns across the tables */
 		oSettings.aoDrawCallback.push( {
 			"fn": _fnScrollDraw,
 			"sName": "scrolling"
 		} );
-		
+	
 		/* Infinite scrolling event handlers */
 		if ( oSettings.oScroll.bInfinite )
 		{
@@ -3113,10 +3119,10 @@
 				}
 			} );
 		}
-		
+	
 		oSettings.nScrollHead = nScrollHead;
 		oSettings.nScrollFoot = nScrollFoot;
-		
+	
 		return nScroller;
 	}
 	
@@ -3152,11 +3158,11 @@
 				oStyle.borderBottomWidth = "0";
 				oStyle.height = 0;
 			};
-		
+	
 		/*
 		 * 1. Re-create the table inside the scrolling div
 		 */
-		
+	
 		/* Remove the old minimised thead and tfoot elements in the inner table */
 		$(o.nTable).children('thead, tfoot').remove();
 	
@@ -3166,7 +3172,7 @@
 		anHeadToSize = o.nTHead.getElementsByTagName('tr');
 		anHeadSizers = nTheadSize.getElementsByTagName('tr');
 		$('th, td', nTheadSize).removeAttr('tabindex');
-		
+	
 		if ( o.nTFoot !== null )
 		{
 			nTfootSize = $(o.nTFoot).clone()[0];
@@ -3174,11 +3180,11 @@
 			anFootToSize = o.nTFoot.getElementsByTagName('tr');
 			anFootSizers = nTfootSize.getElementsByTagName('tr');
 		}
-		
+	
 		/*
 		 * 2. Take live measurements from the DOM - do not alter the DOM itself!
 		 */
-		
+	
 		/* Remove old sizing and apply the calculated column widths
 		 * Get the unique column headers in the newly created (cloned) header. We want to apply the
 		 * calculated sizes to this header
@@ -3188,14 +3194,14 @@
 			nScrollBody.style.width = '100%';
 			nScrollHeadInner.parentNode.style.width = '100%';
 		}
-		
+	
 		var nThs = _fnGetUniqueThs( o, nTheadSize );
 		for ( i=0, iLen=nThs.length ; i<iLen ; i++ )
 		{
 			iVis = _fnVisibleToColumnIndex( o, i );
 			nThs[i].style.width = o.aoColumns[iVis].sWidth;
 		}
-		
+	
 		if ( o.nTFoot !== null )
 		{
 			_fnApplyToChildren( function(n) {
@@ -3210,14 +3216,14 @@
 		{
 			nScrollBody.style.height = (nScrollBody.offsetHeight + o.nTHead.offsetHeight)+"px";
 		}
-		
+	
 		/* Size the table as a whole */
 		iSanityWidth = $(o.nTable).outerWidth();
 		if ( o.oScroll.sX === "" )
 		{
 			/* No x scrolling */
 			o.nTable.style.width = "100%";
-			
+	
 			/* I know this is rubbish - but IE7 will make the width of the table when 100% include
 			 * the scrollbar - which is shouldn't. When there is a scrollbar we need to take this
 			 * into account.
@@ -3252,17 +3258,17 @@
 				o.nTable.style.width = _fnStringToCss( iSanityWidth );
 			}
 		}
-		
+	
 		/* Recalculate the sanity width - now that we've applied the required width, before it was
 		 * a temporary variable. This is required because the column width calculation is done
 		 * before this table DOM is created.
 		 */
 		iSanityWidth = $(o.nTable).outerWidth();
-		
+	
 		/* We want the hidden header to have zero height, so remove padding and borders. Then
 		 * set the width based on the real headers
 		 */
-		
+	
 		// Apply all styles in one pass. Invalidates layout only once because we don't read any
 		// DOM properties.
 		_fnApplyToChildren( zeroOut, anHeadSizers );
@@ -3280,7 +3286,7 @@
 		}, anHeadToSize );
 	
 		$(anHeadSizers).height(0);
-		
+	
 		/* Same again with the footer if we have one */
 		if ( o.nTFoot !== null )
 		{
@@ -3296,11 +3302,11 @@
 	
 			$(anFootSizers).height(0);
 		}
-		
+	
 		/*
 		 * 3. Apply the measurements
 		 */
-		
+	
 		/* "Hide" the header and footer that we used for the sizing. We want to also fix their width
 		 * to what they currently are
 		 */
@@ -3308,7 +3314,7 @@
 			nSizer.innerHTML = "";
 			nSizer.style.width = aApplied[i];
 		}, anHeadSizers );
-		
+	
 		if ( o.nTFoot !== null )
 		{
 			_fnApplyToChildren( function(nSizer, i) {
@@ -3316,7 +3322,7 @@
 				nSizer.style.width = aAppliedFooter[i];
 			}, anFootSizers );
 		}
-		
+	
 		/* Sanity check that the table is of a sensible width. If not then we are going to get
 		 * misalignment - try to prevent this by not allowing the table to shrink below its min width
 		 */
@@ -3326,48 +3332,41 @@
 			var iCorrection = ((nScrollBody.scrollHeight > nScrollBody.offsetHeight ||
 				$(nScrollBody).css('overflow-y') == "scroll")) ?
 					iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
-			
+	
 			/* IE6/7 are a law unto themselves... */
 			if ( ie67 && (nScrollBody.scrollHeight >
 				nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
 			{
 				o.nTable.style.width = _fnStringToCss( iCorrection-o.oScroll.iBarWidth );
 			}
-			
+	
 			/* Apply the calculated minimum width to the table wrappers */
 			nScrollBody.style.width = _fnStringToCss( iCorrection );
 			o.nScrollHead.style.width = _fnStringToCss( iCorrection );
-			
+	
 			if ( o.nTFoot !== null )
 			{
 				o.nScrollFoot.style.width = _fnStringToCss( iCorrection );
 			}
-			
+	
 			/* And give the user a warning that we've stopped the table getting too small */
-			if ( o.oScroll.sX === "" )
+			if ( o.oScroll.sX === "" || o.oScroll.sXInner !== "" )
 			{
-				_fnLog( o, 1, "The table cannot fit into the current element which will cause column"+
-					" misalignment. The table has been drawn at its minimum possible width." );
-			}
-			else if ( o.oScroll.sXInner !== "" )
-			{
-				_fnLog( o, 1, "The table cannot fit into the current element which will cause column"+
-					" misalignment. Increase the sScrollXInner value or remove it to allow automatic"+
-					" calculation" );
+				_fnLog( o, 1, 'Possible column misalignment', 6 );
 			}
 		}
 		else
 		{
 			nScrollBody.style.width = _fnStringToCss( '100%' );
 			o.nScrollHead.style.width = _fnStringToCss( '100%' );
-			
+	
 			if ( o.nTFoot !== null )
 			{
 				o.nScrollFoot.style.width = _fnStringToCss( '100%' );
 			}
 		}
-		
-		
+	
+	
 		/*
 		 * 4. Clean up
 		 */
@@ -3382,19 +3381,19 @@
 				nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+o.oScroll.iBarWidth );
 			}
 		}
-		
+	
 		if ( o.oScroll.sY !== "" && o.oScroll.bCollapse )
 		{
 			nScrollBody.style.height = _fnStringToCss( o.oScroll.sY );
-			
+	
 			var iExtra = (o.oScroll.sX !== "" && o.nTable.offsetWidth > nScrollBody.offsetWidth) ?
-			 	o.oScroll.iBarWidth : 0;
+				o.oScroll.iBarWidth : 0;
 			if ( o.nTable.offsetHeight < nScrollBody.offsetHeight )
 			{
 				nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+iExtra );
 			}
 		}
-		
+	
 		/* Finally set the width's of the header and footer tables */
 		var iOuterWidth = $(o.nTable).outerWidth();
 		nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
@@ -3405,7 +3404,7 @@
 		var bScrolling = $(o.nTable).height() > nScrollBody.clientHeight || $(nScrollBody).css('overflow-y') == "scroll";
 		var padding = o.oBrowser.bScrollbarLeft ? 'paddingLeft' : 'paddingRight';
 		nScrollHeadInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
-		
+	
 		if ( o.nTFoot !== null )
 		{
 			nScrollFootTable.style.width = _fnStringToCss( iOuterWidth );
@@ -3415,7 +3414,7 @@
 	
 		/* Adjust the position of the header in case we loose the y-scrollbar */
 		$(nScrollBody).scroll();
-		
+	
 		/* If sorting or filtering has occurred, jump the scrolling back to the top */
 		if ( o.bSorted || o.bFiltered )
 		{
@@ -3475,19 +3474,19 @@
 		{
 			return 0;
 		}
-		
+	
 		if ( ! nParent )
 		{
 			nParent = document.body;
 		}
-		
+	
 		var n = $('<div/>')
 			.css( 'width', _fnStringToCss( sWidth ) )
 			.appendTo( nParent );
 	
 		var width = n[0].offsetWidth;
 		n.remove();
-		
+	
 		return width;
 	}
 	
@@ -3508,14 +3507,14 @@
 		var oHeaders = $('th', oSettings.nTHead);
 		var widthAttr = oSettings.nTable.getAttribute('width');
 		var nWrapper = oSettings.nTable.parentNode;
-		
+	
 		/* Convert any user input sizes into pixel sizes */
 		for ( i=0 ; i<iColums ; i++ )
 		{
 			if ( oSettings.aoColumns[i].bVisible )
 			{
 				iVisibleColumns++;
-				
+	
 				if ( oSettings.aoColumns[i].sWidth !== null )
 				{
 					iTmpWidth = _fnConvertToWidth( oSettings.aoColumns[i].sWidthOrig,
@@ -3524,12 +3523,12 @@
 					{
 						oSettings.aoColumns[i].sWidth = _fnStringToCss( iTmpWidth );
 					}
-						
+	
 					iUserInputs++;
 				}
 			}
 		}
-		
+	
 		/* If the number of columns in the DOM equals the number that we have to process in
 		 * DataTables, then we can use the offsets that are created by the web-browser. No custom
 		 * sizes can be set in order for this to happen, nor scrolling used
@@ -3559,7 +3558,7 @@
 				nBody = document.createElement( 'tbody' ),
 				nTr = document.createElement( 'tr' ),
 				nDivSizing;
-			
+	
 			nCalcTmp.removeAttribute( "id" );
 			nCalcTmp.appendChild( nTheadClone );
 			if ( oSettings.nTFoot !== null )
@@ -3569,10 +3568,10 @@
 					n.style.width = "";
 				}, nCalcTmp.getElementsByTagName('tr') );
 			}
-			
+	
 			nCalcTmp.appendChild( nBody );
 			nBody.appendChild( nTr );
-			
+	
 			/* Remove any sizing that was previously applied by the styles */
 			var jqColSizing = $('thead th', nCalcTmp);
 			if ( jqColSizing.length === 0 )
@@ -3617,10 +3616,10 @@
 					}
 				}
 			}
-			
+	
 			/* Build the table and 'display' it */
 			nWrapper.appendChild( nCalcTmp );
-			
+	
 			/* When scrolling (X or Y) we want to set the width of the table as appropriate. However,
 			 * when not scrolling leave the table width as it is. This results in slightly different,
 			 * but I think correct behaviour
@@ -3646,10 +3645,10 @@
 				nCalcTmp.style.width = _fnStringToCss( widthAttr );
 			}
 			nCalcTmp.style.visibility = "hidden";
-			
+	
 			/* Scrolling considerations */
 			_fnScrollingWidthAdjust( oSettings, nCalcTmp );
-			
+	
 			/* Read the width's calculated by the browser and store them for use by the caller. We
 			 * first of all try to use the elements in the body, but it is possible that there are
 			 * no elements there, under which circumstances we use the header elements
@@ -3685,7 +3684,7 @@
 						iCorrector++;
 					}
 				}
-				
+	
 				nCalcTmp.style.width = _fnStringToCss( iTotal );
 				oSettings.nTable.style.width = _fnStringToCss( iTotal );
 			}
@@ -3784,7 +3783,7 @@
 	function _fnGetMaxLenString( oSettings, iCol )
 	{
 		var s, iMax=-1, iMaxIndex = -1;
-		
+	
 		for ( var i=0 ; i<oSettings.aoData.length ; i++ )
 		{
 			s = _fnGetCellData( oSettings, i, iCol, 'display' )+'';
@@ -3796,7 +3795,7 @@
 				iMaxIndex = i;
 			}
 		}
-		
+	
 		return iMaxIndex;
 	}
 	
@@ -3814,7 +3813,7 @@
 		{
 			return "0px";
 		}
-		
+	
 		if ( typeof s == 'number' )
 		{
 			if ( s < 0 )
@@ -3823,7 +3822,7 @@
 			}
 			return s+"px";
 		}
-		
+	
 		/* Check if the last character is not 0-9 */
 		var c = s.charCodeAt( s.length-1 );
 		if (c < 0x30 || c > 0x39)
@@ -3870,7 +3869,7 @@
 			{
 				w2 = outer[0].clientWidth;
 			}
-			
+	
 			outer.remove();
 	
 			DataTable.__scrollbarWidth = w1 - w2;
@@ -4118,7 +4117,7 @@
 				var nextSort;
 	
 				// If the shift key is pressed then we are multiple column sorting
-				if ( e.shiftKey ) {
+				if ( e.shiftKey && settings.oFeatures.bSortMulti ) {
 					// Are we already doing some kind of sort on this column?
 					var curr = _pluck( sorting, '0' );
 					var idx = $.inArray( colIdx, curr );
@@ -4330,7 +4329,7 @@
 		}
 	
 		_fnCallbackFire( oSettings, "aoStateSaveParams", 'stateSaveParams', [oSettings, oState] );
-		
+	
 		oSettings.fnStateSaveCallback.call( oSettings.oInstance, oSettings, oState );
 	}
 	
@@ -4353,7 +4352,7 @@
 		{
 			return;
 		}
-		
+	
 		/* Allow custom and plug-in manipulation functions to alter the saved data set and
 		 * cancelling of loading by returning false
 		 */
@@ -4367,30 +4366,28 @@
 		if ( oData.iCreate < new Date().getTime() - (oSettings.iStateDuration*1000) ) {
 			return;
 		}
-		
+	
+		// Number of columns have changed - all bets are off, no restore of settings
+		if ( oSettings.aoColumns.length !== oData.aoSearchCols.length ) {
+			return;
+		}
+	
 		/* Store the saved state so it might be accessed at any time */
 		oSettings.oLoadedState = $.extend( true, {}, oData );
-		
+	
 		/* Restore key features */
 		oSettings._iDisplayStart    = oData.iStart;
 		oSettings.iInitDisplayStart = oData.iStart;
 		oSettings._iDisplayLength   = oData.iLength;
 		oSettings.aaSorting         = oData.aaSorting.slice();
-		oSettings.saved_aaSorting   = oData.aaSorting.slice();
-		
+	
 		/* Search filtering  */
 		$.extend( oSettings.oPreviousSearch, oData.oSearch );
 		$.extend( true, oSettings.aoPreSearchCols, oData.aoSearchCols );
-		
-		/* Column visibility state
-		 * Pass back visibility settings to the init handler, but to do not here override
-		 * the init object that the user might have passed in
-		 */
-		oInit.saved_aoColumns = [];
-		for ( var i=0 ; i<oData.abVisCols.length ; i++ )
-		{
-			oInit.saved_aoColumns[i] = {};
-			oInit.saved_aoColumns[i].bVisible = oData.abVisCols[i];
+	
+		/* Column visibility state */
+		for ( var i=0 ; i<oData.abVisCols.length ; i++ ) {
+			oSettings.aoColumns[i].bVisible = oData.abVisCols[i];
 		}
 	
 		_fnCallbackFire( oSettings, 'aoStateLoaded', 'stateLoaded', [oSettings, oData] );
@@ -4400,52 +4397,49 @@
 	
 	/**
 	 * Return the settings object for a particular table
-	 *  @param {node} nTable table we are using as a dataTable
+	 *  @param {node} table table we are using as a dataTable
 	 *  @returns {object} Settings object - or null if not found
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnSettingsFromNode ( nTable )
+	function _fnSettingsFromNode ( table )
 	{
-		for ( var i=0 ; i<DataTable.settings.length ; i++ )
-		{
-			if ( DataTable.settings[i].nTable === nTable )
-			{
-				return DataTable.settings[i];
-			}
-		}
-		
-		return null;
+		var settings = DataTable.settings;
+		var idx = $.inArray( table, _pluck( settings, 'nTable' ) );
+	
+		return idx !== -1 ?
+			settings[ idx ] :
+			null;
 	}
 	
 	
 	/**
 	 * Log an error message
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {int} iLevel log error messages, or display them to the user
-	 *  @param {string} sMesg error message
+	 *  @param {object} settings dataTables settings object
+	 *  @param {int} level log error messages, or display them to the user
+	 *  @param {string} msg error message
+	 *  @param {int} tn Technical note id to get more information about the error.
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnLog( oSettings, iLevel, sMesg )
+	function _fnLog( settings, level, msg, tn )
 	{
-		var sAlert = (oSettings===null) ?
-			"DataTables warning: "+sMesg :
-			"DataTables warning (table id = '"+oSettings.sTableId+"'): "+sMesg;
-		
-		if ( iLevel === 0 )
-		{
-			if ( DataTable.ext.sErrMode == 'alert' )
-			{
-				alert( sAlert );
-			}
-			else
-			{
-				throw new Error(sAlert);
-			}
-			return;
+		msg = 'DataTables warning: '+
+			(settings!==null ? 'table id='+settings.sTableId+' - ' : '')+msg;
+	
+		if ( tn ) {
+			msg += '. For more information about this error, please see '+
+			'http://datatables.net/tn/'+tn;
 		}
-		else if ( window.console && console.log )
-		{
-			console.log( sAlert );
+	
+		if ( ! level  ) {
+			if ( DataTable.ext.sErrMode == 'alert' ) {
+				alert( msg );
+			}
+			else {
+				throw new Error(msg);
+			}
+		}
+		else if ( window.console && console.log ) {
+			console.log( msg );
 		}
 	}
 	
@@ -4485,7 +4479,7 @@
 	function _fnExtend( oOut, oExtender )
 	{
 		var val;
-		
+	
 		for ( var prop in oExtender )
 		{
 			if ( oExtender.hasOwnProperty(prop) )
@@ -5497,8 +5491,7 @@
 			/* Sanity check */
 			if ( this.nodeName.toLowerCase() != 'table' )
 			{
-				_fnLog( null, 0, "Attempted to initialise DataTables on a node which is not a "+
-					"table: "+this.nodeName );
+				_fnLog( null, 0, 'Non-table node initialisation ('+this.nodeName+')', 2 );
 				return;
 			}
 			
@@ -5533,13 +5526,11 @@
 					}
 					else
 					{
-						_fnLog( DataTable.settings[i], 0, "Cannot reinitialise DataTable.\n\n"+
-							"To retrieve the DataTables object for this table, pass no arguments or see "+
-							"the docs for bRetrieve and bDestroy" );
+						_fnLog( DataTable.settings[i], 0, 'Cannot reinitialise DataTable', 3 );
 						return;
 					}
 				}
-				
+			
 				/* If the element we are initialising has the same ID as a table which was previously
 				 * initialised, but the table nodes don't match (from before) then we destroy the old
 				 * instance by simply deleting it. This is under the assumption that the table has been
@@ -5594,6 +5585,7 @@
 			_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
 			_fnMap( oSettings.oFeatures, oInit, "bFilter" );
 			_fnMap( oSettings.oFeatures, oInit, "bSort" );
+			_fnMap( oSettings.oFeatures, oInit, "bSortMulti" );
 			_fnMap( oSettings.oFeatures, oInit, "bInfo" );
 			_fnMap( oSettings.oFeatures, oInit, "bProcessing" );
 			_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
@@ -5663,7 +5655,7 @@
 				 * you want to have multiple tables with multiple independent classes
 				 */
 				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
-				
+			
 				if ( oInit.sDom === DataTable.defaults.sDom && DataTable.defaults.sDom === "lfrtip" )
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
@@ -5687,14 +5679,6 @@
 				/* Display start point, taking into account the save saving */
 				oSettings.iInitDisplayStart = oInit.iDisplayStart;
 				oSettings._iDisplayStart = oInit.iDisplayStart;
-			}
-			
-			/* Must be done after everything which can be overridden by the state saving! */
-			if ( oInit.bStateSave )
-			{
-				oSettings.oFeatures.bStateSave = true;
-				_fnLoadState( oSettings, oInit );
-				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
 			}
 			
 			if ( oInit.iDeferLoading !== null )
@@ -5782,16 +5766,6 @@
 			/* Add the columns */
 			for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 			{
-				/* Short cut - use the loop to check if we have column visibility state to restore */
-				if ( oInit.saved_aoColumns !== undefined && oInit.saved_aoColumns.length == iLen )
-				{
-					if ( aoColumnsInit[i] === null )
-					{
-						aoColumnsInit[i] = {};
-					}
-					aoColumnsInit[i].bVisible = oInit.saved_aoColumns[i].bVisible;
-				}
-				
 				_fnAddColumn( oSettings, anThs ? anThs[i] : null );
 			}
 			
@@ -5799,6 +5773,15 @@
 			_fnApplyColumnDefs( oSettings, oInit.aoColumnDefs, aoColumnsInit, function (iCol, oDef) {
 				_fnColumnOptions( oSettings, iCol, oDef );
 			} );
+			
+			
+			/* Must be done after everything which can be overridden by the state saving! */
+			if ( oInit.bStateSave )
+			{
+				oSettings.oFeatures.bStateSave = true;
+				_fnLoadState( oSettings, oInit );
+				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
+			}
 			
 			
 			/*
@@ -5812,19 +5795,19 @@
 					oSettings.aaSorting[i][0] = 0;
 				}
 				var oColumn = oSettings.aoColumns[ oSettings.aaSorting[i][0] ];
-				
+			
 				/* Add a default sorting index */
 				if ( oSettings.aaSorting[i][2] === undefined )
 				{
 					oSettings.aaSorting[i][2] = 0;
 				}
-				
+			
 				/* If aaSorting is not defined, then we use the first indicator in asSorting */
-				if ( oInit.aaSorting === undefined && oSettings.saved_aaSorting === undefined )
+				if ( oInit.aaSorting === undefined )
 				{
 					oSettings.aaSorting[i][1] = oColumn.asSorting[0];
 				}
-				
+			
 				/* Set the current sorting index based on aoColumns.asSorting */
 				for ( j=0, jLen=oColumn.asSorting.length ; j<jLen ; j++ )
 				{
@@ -5835,7 +5818,7 @@
 					}
 				}
 			}
-				
+			
 			/* Do a first pass on the sorting classes (allows any size changes to be taken into
 			 * account, and also will apply sorting disabled classes if disabled
 			 */
@@ -8259,11 +8242,11 @@
 			var jqWrapper = $(settings.nTableWrapper);
 			var rows      = _pluck( settings.aoData, 'nTr' );
 			var i, ien;
-			
+	
 			// Flag to note that the table is currently being destroyed - no action
 			// should be taken
 			settings.bDestroying = true;
-			
+	
 			// Fire off the destroy callbacks for plug-ins etc
 			_fnCallbackFire( settings, "aoDestroyCallback", "destroy", [settings] );
 	
@@ -8271,32 +8254,32 @@
 			if ( ! remove ) {
 				new _api( settings ).columns().visible( true );
 			}
-			
+	
 			// Blitz all DT events
 			jqWrapper.unbind('.DT').find('*').unbind('.DT');
 			$(window).unbind('.DT-'+settings.sInstance);
-			
+	
 			// When scrolling we had to break the table up - restore it
 			if ( table != thead.parentNode ) {
 				jqTable.children('thead').remove();
 				jqTable( thead );
 			}
-			
+	
 			if ( tfoot && table != tfoot.parentNode ) {
 				jqTable.children('tfoot').remove();
 				jqTable( tfoot );
 			}
-			
+	
 			// Remove the DataTables generated nodes, events and classes
 			jqTable.remove();
 			jqWrapper.remove();
-			
+	
 			settings.aaSorting = [];
 			settings.aaSortingFixed = [];
 			_fnSortingClasses( settings );
-			
+	
 			$( rows ).removeClass( settings.asStripeClasses.join(' ') );
-			
+	
 			$('th, td', thead).removeClass( classes.sSortable+' '+
 				classes.sSortableAsc+' '+classes.sSortableDesc+' '+classes.sSortableNone
 			);
@@ -8318,11 +8301,13 @@
 			// Add the TR elements back into the table in their original order
 			jqTbody.children().detach();
 			jqTbody.append( rows );
-			
+	
 			// Restore the width of the original table - was read from the style property,
 			// so we can restore directly to that
-			jqTable.css( 'width', settings.sDestroyWidth );
-			
+			jqTable
+				.css( 'width', settings.sDestroyWidth )
+				.removeClass( classes.sTable );
+	
 			// If the were originally stripe classes - then we add them back here.
 			// Note this is not fool proof (for example if not all rows had stripe
 			// classes - but it's a good effort without getting carried away
@@ -8333,7 +8318,7 @@
 					$(this).addClass( settings.asDestroyStripes[i % ien] );
 				} );
 			}
-			
+	
 			/* Remove the settings object from the settings array */
 			var idx = $.inArray( settings, DataTable.settings );
 			if ( idx !== -1 ) {
@@ -8654,7 +8639,7 @@
 		 *  @default {}
 		 */
 		"oStdClasses": {},
-		
+	
 	
 		/**
 		 * Storage for the various classes that DataTables uses - jQuery UI suitable
@@ -9047,26 +9032,26 @@
 		 *  @type array
 		 */
 		"asSorting": null,
-		
+	
 		/**
 		 * Flag to indicate if the column is searchable, and thus should be included
 		 * in the filtering or not.
 		 *  @type boolean
 		 */
 		"bSearchable": null,
-		
+	
 		/**
 		 * Flag to indicate if the column is sortable or not.
 		 *  @type boolean
 		 */
 		"bSortable": null,
-		
+	
 		/**
 		 * Flag to indicate if the column is currently visible in the table or not
 		 *  @type boolean
 		 */
 		"bVisible": null,
-		
+	
 		/**
 		 * Flag to indicate to the type detection method if the automatic type
 		 * detection should be used, or if a column type (sType) has been specified
@@ -9075,7 +9060,7 @@
 		 *  @private
 		 */
 		"_bAutoType": true,
-		
+	
 		/**
 		 * Developer definable function that is called whenever a cell is created (Ajax source,
 		 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
@@ -9089,7 +9074,7 @@
 		 *  @default null
 		 */
 		"fnCreatedCell": null,
-		
+	
 		/**
 		 * Function to get data from a cell in a column. You should <b>never</b>
 		 * access data directly through _aData internally in DataTables - always use
@@ -9105,7 +9090,7 @@
 		 *  @default null
 		 */
 		"fnGetData": null,
-		
+	
 		/**
 		 * Function to set data for a cell in the column. You should <b>never</b>
 		 * set the data directly to _aData internally in DataTables - always use
@@ -9118,7 +9103,7 @@
 		 *  @default null
 		 */
 		"fnSetData": null,
-		
+	
 		/**
 		 * Property to read the value for the cells in the column from the data
 		 * source array / object. If null, then the default content is used, if a
@@ -9127,7 +9112,7 @@
 		 *  @default null
 		 */
 		"mData": null,
-		
+	
 		/**
 		 * Partner property to mData which is used (only when defined) to get
 		 * the data - i.e. it is basically the same as mData, but without the
@@ -9137,7 +9122,7 @@
 		 *  @default null
 		 */
 		"mRender": null,
-		
+	
 		/**
 		 * Unique header TH/TD element for this column - this is what the sorting
 		 * listener is attached to (if sorting is enabled.)
@@ -9145,7 +9130,7 @@
 		 *  @default null
 		 */
 		"nTh": null,
-		
+	
 		/**
 		 * Unique footer TH/TD element for this column (if there is one). Not used
 		 * in DataTables as such, but can be used for plug-ins to reference the
@@ -9154,14 +9139,14 @@
 		 *  @default null
 		 */
 		"nTf": null,
-		
+	
 		/**
 		 * The class to apply to all TD elements in the table's TBODY for the column
 		 *  @type string
 		 *  @default null
 		 */
 		"sClass": null,
-		
+	
 		/**
 		 * When DataTables calculates the column widths to assign to each column,
 		 * it finds the longest string in each column and then constructs a
@@ -9174,7 +9159,7 @@
 		 *  @type string
 		 */
 		"sContentPadding": null,
-		
+	
 		/**
 		 * Allows a default value to be given for a column's data, and will be used
 		 * whenever a null data source is encountered (this can be because mData
@@ -9183,14 +9168,14 @@
 		 *  @default null
 		 */
 		"sDefaultContent": null,
-		
+	
 		/**
 		 * Name for the column, allowing reference to the column by name as well as
 		 * by index (needs a lookup to work by name).
 		 *  @type string
 		 */
 		"sName": null,
-		
+	
 		/**
 		 * Custom sorting data type - defines which of the available plug-ins in
 		 * afnSortData the custom sorting will use - if any is defined.
@@ -9198,14 +9183,14 @@
 		 *  @default std
 		 */
 		"sSortDataType": 'std',
-		
+	
 		/**
 		 * Class to be applied to the header element when sorting on this column
 		 *  @type string
 		 *  @default null
 		 */
 		"sSortingClass": null,
-		
+	
 		/**
 		 * Class to be applied to the header element when sorting on this column -
 		 * when jQuery UI theming is used.
@@ -9213,27 +9198,27 @@
 		 *  @default null
 		 */
 		"sSortingClassJUI": null,
-		
+	
 		/**
 		 * Title of the column - what is seen in the TH element (nTh).
 		 *  @type string
 		 */
 		"sTitle": null,
-		
+	
 		/**
 		 * Column sorting and filtering type
 		 *  @type string
 		 *  @default null
 		 */
 		"sType": null,
-		
+	
 		/**
 		 * Width of the column
 		 *  @type string
 		 *  @default null
 		 */
 		"sWidth": null,
-		
+	
 		/**
 		 * Width of the column when it was first "encountered"
 		 *  @type string
@@ -9988,6 +9973,26 @@
 	
 	
 		/**
+		 * Enable or display DataTables' ability to sort multiple columns at the
+		 * same time (activated by shift-click by the user).
+		 *  @type boolean
+		 *  @default true
+		 *
+		 *  @dtopt Options
+		 *  @name DataTable.defaults.sortMulti
+		 *
+		 *  @example
+		 *    // Disable multiple column sorting ability
+		 *    $(document).ready( function () {
+		 *      $('#example').dataTable( {
+		 *        "sortMulti": false
+		 *      } );
+		 *    } );
+		 */
+		"bSortMulti": true,
+	
+	
+		/**
 		 * Allows control over whether DataTables should use the top (true) unique
 		 * cell that is found for a single column, or the bottom (false - default).
 		 * This is useful when using complex headers.
@@ -10177,7 +10182,7 @@
 			}
 	
 			var s=(toFormat+""), a=s.split(""), out="", iLen=s.length;
-			
+	
 			for ( var i=0 ; i<iLen ; i++ )
 			{
 				if ( i%3 === 0 && i !== 0 )
@@ -10798,8 +10803,8 @@
 				 *    } );
 				 */
 				"sFirst": "First",
-			
-			
+	
+	
 				/**
 				 * Text to use when using the 'full_numbers' type of pagination for the
 				 * button to take the user to the last page.
@@ -10821,8 +10826,8 @@
 				 *    } );
 				 */
 				"sLast": "Last",
-			
-			
+	
+	
 				/**
 				 * Text to use for the 'next' pagination button (to take the user to the
 				 * next page).
@@ -10844,8 +10849,8 @@
 				 *    } );
 				 */
 				"sNext": "Next",
-			
-			
+	
+	
 				/**
 				 * Text to use for the 'previous' pagination button (to take the user to
 				 * the previous page).
@@ -10868,7 +10873,7 @@
 				 */
 				"sPrevious": "Previous"
 			},
-		
+	
 			/**
 			 * This string is shown in preference to `zeroRecords` when the table is
 			 * empty of data (regardless of filtering). Note that this is an optional
@@ -10890,8 +10895,8 @@
 			 *    } );
 			 */
 			"sEmptyTable": "No data available in table",
-		
-		
+	
+	
 			/**
 			 * This string gives information to the end user about the information that
 			 * is current on display on the page. The _START_, _END_ and _TOTAL_
@@ -10913,8 +10918,8 @@
 			 *    } );
 			 */
 			"sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
-		
-		
+	
+	
 			/**
 			 * Display information string for when the table is empty. Typically the
 			 * format of this string should match `info`.
@@ -10934,8 +10939,8 @@
 			 *    } );
 			 */
 			"sInfoEmpty": "Showing 0 to 0 of 0 entries",
-		
-		
+	
+	
 			/**
 			 * When a user filters the information in a table, this string is appended
 			 * to the information (`info`) to give an idea of how strong the filtering
@@ -10956,8 +10961,8 @@
 			 *    } );
 			 */
 			"sInfoFiltered": "(filtered from _MAX_ total entries)",
-		
-		
+	
+	
 			/**
 			 * If can be useful to append extra information to the info string at times,
 			 * and this variable does exactly that. This information will be appended to
@@ -10979,8 +10984,8 @@
 			 *    } );
 			 */
 			"sInfoPostFix": "",
-		
-		
+	
+	
 			/**
 			 * DataTables has a build in number formatter (`formatNumber`) which is used
 			 * to format large numbers that are used in the table information. By
@@ -11002,8 +11007,8 @@
 			 *    } );
 			 */
 			"sInfoThousands": ",",
-		
-		
+	
+	
 			/**
 			 * Detail the action that will be taken when the drop down menu for the
 			 * pagination length option is changed. The '_MENU_' variable is replaced
@@ -11043,8 +11048,8 @@
 			 *    } );
 			 */
 			"sLengthMenu": "Show _MENU_ entries",
-		
-		
+	
+	
 			/**
 			 * When using Ajax sourced data and during the first draw when DataTables is
 			 * gathering the data, this message is shown in an empty row in the table to
@@ -11067,8 +11072,8 @@
 			 *    } );
 			 */
 			"sLoadingRecords": "Loading...",
-		
-		
+	
+	
 			/**
 			 * Text which is displayed when the table is processing a user action
 			 * (usually a sort command or similar).
@@ -11088,8 +11093,8 @@
 			 *    } );
 			 */
 			"sProcessing": "Processing...",
-		
-		
+	
+	
 			/**
 			 * Details the actions that will be taken when the user types into the
 			 * filtering input text box. The variable "_INPUT_", if used in the string,
@@ -11123,8 +11128,8 @@
 			 *    } );
 			 */
 			"sSearch": "Search:",
-		
-		
+	
+	
 			/**
 			 * All of the language information can be stored in a file on the
 			 * server-side, which DataTables will look up if this parameter is passed.
@@ -11148,8 +11153,8 @@
 			 *    } );
 			 */
 			"sUrl": "",
-		
-		
+	
+	
 			/**
 			 * Text shown inside the table records when the is no information to be
 			 * displayed after filtering. `emptyTable` is shown when there is simply no
@@ -11590,8 +11595,8 @@
 		 *    } );
 		 */
 		"bVisible": true,
-		
-		
+	
+	
 		/**
 		 * Developer definable function that is called whenever a cell is created (Ajax source,
 		 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
@@ -12021,7 +12026,7 @@
 		 *    } );
 		 */
 		"sClass": "",
-		
+	
 		/**
 		 * When DataTables calculates the column widths to assign to each column,
 		 * it finds the longest string in each column and then constructs a
@@ -12332,7 +12337,7 @@
 		 *  @namespace
 		 */
 		"oFeatures": {
-			
+	
 			/**
 			 * Flag to say if DataTables should automatically try to calculate the
 			 * optimum table and columns widths (true) or not (false).
@@ -12352,7 +12357,7 @@
 			 *  @type boolean
 			 */
 			"bDeferRender": null,
-			
+	
 			/**
 			 * Enable filtering on the table or not. Note that if this is disabled
 			 * then there is no filtering at all on the table, including fnFilter.
@@ -12362,7 +12367,7 @@
 			 *  @type boolean
 			 */
 			"bFilter": null,
-			
+	
 			/**
 			 * Table information element (the 'Showing x of y records' div) enable
 			 * flag.
@@ -12371,7 +12376,7 @@
 			 *  @type boolean
 			 */
 			"bInfo": null,
-			
+	
 			/**
 			 * Present a user control allowing the end user to change the page size
 			 * when pagination is enabled.
@@ -12389,7 +12394,7 @@
 			 *  @type boolean
 			 */
 			"bPaginate": null,
-			
+	
 			/**
 			 * Processing indicator enable flag whenever DataTables is enacting a
 			 * user request - typically an Ajax request for server-side processing.
@@ -12398,7 +12403,7 @@
 			 *  @type boolean
 			 */
 			"bProcessing": null,
-			
+	
 			/**
 			 * Server-side processing enabled flag - when enabled DataTables will
 			 * get all data from the server for every draw - there is no filtering,
@@ -12408,7 +12413,7 @@
 			 *  @type boolean
 			 */
 			"bServerSide": null,
-			
+	
 			/**
 			 * Sorting enablement flag.
 			 * Note that this parameter will be set by the initialisation routine. To
@@ -12416,7 +12421,15 @@
 			 *  @type boolean
 			 */
 			"bSort": null,
-			
+	
+			/**
+			 * Multi-column sorting
+			 * Note that this parameter will be set by the initialisation routine. To
+			 * set a default use {@link DataTable.defaults}.
+			 *  @type boolean
+			 */
+			"bSortMulti": null,
+	
 			/**
 			 * Apply a class to the columns which are being sorted to provide a
 			 * visual highlight or not. This can slow things down when enabled since
@@ -12426,7 +12439,7 @@
 			 *  @type boolean
 			 */
 			"bSortClasses": null,
-			
+	
 			/**
 			 * State saving enablement flag.
 			 * Note that this parameter will be set by the initialisation routine. To
@@ -12435,7 +12448,7 @@
 			 */
 			"bStateSave": null
 		},
-		
+	
 	
 		/**
 		 * Scrolling settings for a table.
@@ -12451,7 +12464,7 @@
 			 *  @type boolean
 			 */
 			"bAutoCss": null,
-			
+	
 			/**
 			 * When the table is shorter in height than sScrollY, collapse the
 			 * table container down to the height of the table (when true).
@@ -12460,7 +12473,7 @@
 			 *  @type boolean
 			 */
 			"bCollapse": null,
-			
+	
 			/**
 			 * Infinite scrolling enablement flag. Now deprecated in favour of
 			 * using the Scroller plug-in.
@@ -12469,7 +12482,7 @@
 			 *  @type boolean
 			 */
 			"bInfinite": null,
-			
+	
 			/**
 			 * Width of the scrollbar for the web-browser's platform. Calculated
 			 * during table initialisation.
@@ -12477,7 +12490,7 @@
 			 *  @default 0
 			 */
 			"iBarWidth": 0,
-			
+	
 			/**
 			 * Space (in pixels) between the bottom of the scrolling container and
 			 * the bottom of the scrolling viewport before the next page is loaded
@@ -12487,7 +12500,7 @@
 			 *  @type int
 			 */
 			"iLoadGap": null,
-			
+	
 			/**
 			 * Viewport width for horizontal scrolling. Horizontal scrolling is
 			 * disabled if an empty string.
@@ -12496,7 +12509,7 @@
 			 *  @type string
 			 */
 			"sX": null,
-			
+	
 			/**
 			 * Width to expand the table to when using x-scrolling. Typically you
 			 * should not need to use this.
@@ -12506,7 +12519,7 @@
 			 *  @deprecated
 			 */
 			"sXInner": null,
-			
+	
 			/**
 			 * Viewport height for vertical scrolling. Vertical scrolling is disabled
 			 * if an empty string.
@@ -12516,7 +12529,7 @@
 			 */
 			"sY": null
 		},
-		
+	
 		/**
 		 * Language information for the table.
 		 *  @namespace
@@ -12531,7 +12544,7 @@
 			 */
 			"fnInfoCallback": null
 		},
-		
+	
 		/**
 		 * Browser support parameters
 		 *  @namespace
@@ -12554,11 +12567,11 @@
 			 */
 			"bScrollbarLeft": false
 		},
-		
+	
 	
 		"ajax": null,
 	
-		
+	
 		/**
 		 * Array referencing the nodes which are used for the features. The
 		 * parameters of this object match what is allowed by sDom - i.e.
@@ -12574,7 +12587,7 @@
 		 *  @default []
 		 */
 		"aanFeatures": [],
-		
+	
 		/**
 		 * Store data information - see {@link DataTable.models.oRow} for detailed
 		 * information.
@@ -12582,49 +12595,49 @@
 		 *  @default []
 		 */
 		"aoData": [],
-		
+	
 		/**
 		 * Array of indexes which are in the current display (after filtering etc)
 		 *  @type array
 		 *  @default []
 		 */
 		"aiDisplay": [],
-		
+	
 		/**
 		 * Array of indexes for display - no filtering
 		 *  @type array
 		 *  @default []
 		 */
 		"aiDisplayMaster": [],
-		
+	
 		/**
 		 * Store information about each column that is in use
 		 *  @type array
 		 *  @default []
 		 */
 		"aoColumns": [],
-		
+	
 		/**
 		 * Store information about the table's header
 		 *  @type array
 		 *  @default []
 		 */
 		"aoHeader": [],
-		
+	
 		/**
 		 * Store information about the table's footer
 		 *  @type array
 		 *  @default []
 		 */
 		"aoFooter": [],
-		
+	
 		/**
 		 * Search data array for regular expression searching
 		 *  @type array
 		 *  @default []
 		 */
 		"asDataSearch": [],
-		
+	
 		/**
 		 * Store the applied global search information in case we want to force a
 		 * research or compare the old search to a new one.
@@ -12634,7 +12647,7 @@
 		 *  @extends DataTable.models.oSearch
 		 */
 		"oPreviousSearch": {},
-		
+	
 		/**
 		 * Store the applied search for each column - see
 		 * {@link DataTable.models.oSearch} for the format that is used for the
@@ -12643,7 +12656,7 @@
 		 *  @default []
 		 */
 		"aoPreSearchCols": [],
-		
+	
 		/**
 		 * Sorting that is applied to the table. Note that the inner arrays are
 		 * used in the following manner:
@@ -12658,7 +12671,7 @@
 		 *  @todo These inner arrays should really be objects
 		 */
 		"aaSorting": null,
-		
+	
 		/**
 		 * Sorting that is always applied to the table (i.e. prefixed in front of
 		 * aaSorting).
@@ -12668,7 +12681,7 @@
 		 *  @default []
 		 */
 		"aaSortingFixed": [],
-		
+	
 		/**
 		 * Classes to use for the striping of a table.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12677,56 +12690,56 @@
 		 *  @default []
 		 */
 		"asStripeClasses": null,
-		
+	
 		/**
 		 * If restoring a table - we should restore its striping classes as well
 		 *  @type array
 		 *  @default []
 		 */
 		"asDestroyStripes": [],
-		
+	
 		/**
 		 * If restoring a table - we should restore its width
 		 *  @type int
 		 *  @default 0
 		 */
 		"sDestroyWidth": 0,
-		
+	
 		/**
 		 * Callback functions array for every time a row is inserted (i.e. on a draw).
 		 *  @type array
 		 *  @default []
 		 */
 		"aoRowCallback": [],
-		
+	
 		/**
 		 * Callback functions for the header on each draw.
 		 *  @type array
 		 *  @default []
 		 */
 		"aoHeaderCallback": [],
-		
+	
 		/**
 		 * Callback function for the footer on each draw.
 		 *  @type array
 		 *  @default []
 		 */
 		"aoFooterCallback": [],
-		
+	
 		/**
 		 * Array of callback functions for draw callback functions
 		 *  @type array
 		 *  @default []
 		 */
 		"aoDrawCallback": [],
-		
+	
 		/**
 		 * Array of callback functions for row created function
 		 *  @type array
 		 *  @default []
 		 */
 		"aoRowCreatedCallback": [],
-		
+	
 		/**
 		 * Callback functions for just before the table is redrawn. A return of
 		 * false will be used to cancel the draw.
@@ -12734,7 +12747,7 @@
 		 *  @default []
 		 */
 		"aoPreDrawCallback": [],
-		
+	
 		/**
 		 * Callback functions for when the table has been initialised.
 		 *  @type array
@@ -12742,7 +12755,7 @@
 		 */
 		"aoInitComplete": [],
 	
-		
+	
 		/**
 		 * Callbacks for modifying the settings to be stored for state saving, prior to
 		 * saving state.
@@ -12750,7 +12763,7 @@
 		 *  @default []
 		 */
 		"aoStateSaveParams": [],
-		
+	
 		/**
 		 * Callbacks for modifying the settings that have been stored for state saving
 		 * prior to using the stored values to restore the state.
@@ -12758,7 +12771,7 @@
 		 *  @default []
 		 */
 		"aoStateLoadParams": [],
-		
+	
 		/**
 		 * Callbacks for operating on the settings object once the saved state has been
 		 * loaded
@@ -12766,49 +12779,49 @@
 		 *  @default []
 		 */
 		"aoStateLoaded": [],
-		
+	
 		/**
 		 * Cache the table ID for quick access
 		 *  @type string
 		 *  @default <i>Empty string</i>
 		 */
 		"sTableId": "",
-		
+	
 		/**
 		 * The TABLE node for the main table
 		 *  @type node
 		 *  @default null
 		 */
 		"nTable": null,
-		
+	
 		/**
 		 * Permanent ref to the thead element
 		 *  @type node
 		 *  @default null
 		 */
 		"nTHead": null,
-		
+	
 		/**
 		 * Permanent ref to the tfoot element - if it exists
 		 *  @type node
 		 *  @default null
 		 */
 		"nTFoot": null,
-		
+	
 		/**
 		 * Permanent ref to the tbody element
 		 *  @type node
 		 *  @default null
 		 */
 		"nTBody": null,
-		
+	
 		/**
 		 * Cache the wrapper node (contains all DataTables controlled elements)
 		 *  @type node
 		 *  @default null
 		 */
 		"nTableWrapper": null,
-		
+	
 		/**
 		 * Indicate if when using server-side processing the loading of data
 		 * should be deferred until the second draw.
@@ -12818,14 +12831,14 @@
 		 *  @default false
 		 */
 		"bDeferLoading": false,
-		
+	
 		/**
 		 * Indicate if all required information has been read in
 		 *  @type boolean
 		 *  @default false
 		 */
 		"bInitialised": false,
-		
+	
 		/**
 		 * Information about open rows. Each object in the array has the parameters
 		 * 'nTr' and 'nParent'
@@ -12833,7 +12846,7 @@
 		 *  @default []
 		 */
 		"aoOpenRows": [],
-		
+	
 		/**
 		 * Dictate the positioning of DataTables' control elements - see
 		 * {@link DataTable.model.oInit.sDom}.
@@ -12843,7 +12856,7 @@
 		 *  @default null
 		 */
 		"sDom": null,
-		
+	
 		/**
 		 * Which type of pagination should be used.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12852,7 +12865,7 @@
 		 *  @default two_button
 		 */
 		"sPaginationType": "two_button",
-		
+	
 		/**
 		 * The state duration (for `stateSave`) in seconds.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12861,7 +12874,7 @@
 		 *  @default 0
 		 */
 		"iStateDuration": 0,
-		
+	
 		/**
 		 * Array of callback functions for state saving. Each array element is an
 		 * object with the following parameters:
@@ -12876,7 +12889,7 @@
 		 *  @default []
 		 */
 		"aoStateSave": [],
-		
+	
 		/**
 		 * Array of callback functions for state loading. Each array element is an
 		 * object with the following parameters:
@@ -12889,14 +12902,14 @@
 		 *  @default []
 		 */
 		"aoStateLoad": [],
-		
+	
 		/**
 		 * State that was loaded. Useful for back reference
 		 *  @type object
 		 *  @default null
 		 */
 		"oLoadedState": null,
-		
+	
 		/**
 		 * Source url for AJAX data for the table.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12905,7 +12918,7 @@
 		 *  @default null
 		 */
 		"sAjaxSource": null,
-		
+	
 		/**
 		 * Property from a given object from which to read the table data from. This
 		 * can be an empty string (when not server-side processing), in which case
@@ -12915,14 +12928,14 @@
 		 *  @type string
 		 */
 		"sAjaxDataProp": null,
-		
+	
 		/**
 		 * Note if draw should be blocked while getting data
 		 *  @type boolean
 		 *  @default true
 		 */
 		"bAjaxDataGet": true,
-		
+	
 		/**
 		 * The last jQuery XHR object that was used for server-side data gathering.
 		 * This can be used for working with the XHR information in one of the
@@ -12931,7 +12944,7 @@
 		 *  @default null
 		 */
 		"jqXHR": null,
-		
+	
 		/**
 		 * Function to get the server-side data.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12939,7 +12952,7 @@
 		 *  @type function
 		 */
 		"fnServerData": null,
-		
+	
 		/**
 		 * Functions which are called prior to sending an Ajax request so extra
 		 * parameters can easily be sent to the server
@@ -12947,7 +12960,7 @@
 		 *  @default []
 		 */
 		"aoServerParams": [],
-		
+	
 		/**
 		 * Send the XHR HTTP method - GET or POST (could be PUT or DELETE if
 		 * required).
@@ -12956,7 +12969,7 @@
 		 *  @type string
 		 */
 		"sServerMethod": null,
-		
+	
 		/**
 		 * Format numbers for display.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12964,7 +12977,7 @@
 		 *  @type function
 		 */
 		"fnFormatNumber": null,
-		
+	
 		/**
 		 * List of options that can be used for the user selectable length menu.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -12973,7 +12986,7 @@
 		 *  @default []
 		 */
 		"aLengthMenu": null,
-		
+	
 		/**
 		 * Counter for the draws that the table does. Also used as a tracker for
 		 * server-side processing
@@ -12981,21 +12994,21 @@
 		 *  @default 0
 		 */
 		"iDraw": 0,
-		
+	
 		/**
 		 * Indicate if a redraw is being done - useful for Ajax
 		 *  @type boolean
 		 *  @default false
 		 */
 		"bDrawing": false,
-		
+	
 		/**
 		 * Draw index (iDraw) of the last error when parsing the returned data
 		 *  @type int
 		 *  @default -1
 		 */
 		"iDrawError": -1,
-		
+	
 		/**
 		 * Paging display length
 		 *  @type int
@@ -13009,7 +13022,7 @@
 		 *  @default 0
 		 */
 		"_iDisplayStart": 0,
-		
+	
 		/**
 		 * Server-side processing - number of records in the result set
 		 * (i.e. before filtering), Use fnRecordsTotal rather than
@@ -13031,7 +13044,7 @@
 		 *  @private
 		 */
 		"_iRecordsDisplay": 0,
-		
+	
 		/**
 		 * Flag to indicate if jQuery UI marking and classes should be used.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -13039,14 +13052,14 @@
 		 *  @type boolean
 		 */
 		"bJUI": null,
-		
+	
 		/**
 		 * The classes to use for the table
 		 *  @type object
 		 *  @default {}
 		 */
 		"oClasses": {},
-		
+	
 		/**
 		 * Flag attached to the settings object so you can check in the draw
 		 * callback if filtering has been done in the draw. Deprecated in favour of
@@ -13056,7 +13069,7 @@
 		 *  @deprecated
 		 */
 		"bFiltered": false,
-		
+	
 		/**
 		 * Flag attached to the settings object so you can check in the draw
 		 * callback if sorting has been done in the draw. Deprecated in favour of
@@ -13066,7 +13079,7 @@
 		 *  @deprecated
 		 */
 		"bSorted": false,
-		
+	
 		/**
 		 * Indicate that if multiple rows are in the header and there is more than
 		 * one unique cell per column, if the top one (true) or bottom one (false)
@@ -13076,14 +13089,14 @@
 		 *  @type boolean
 		 */
 		"bSortCellsTop": null,
-		
+	
 		/**
 		 * Initialisation object that is used for the table
 		 *  @type object
 		 *  @default null
 		 */
 		"oInit": null,
-		
+	
 		/**
 		 * Destroy callback functions - for plug-ins to attach themselves to the
 		 * destroy so they can clean up markup and events.
@@ -13092,7 +13105,7 @@
 		 */
 		"aoDestroyCallback": [],
 	
-		
+	
 		/**
 		 * Get the number of records in the current record set, before filtering
 		 *  @type function
@@ -13103,7 +13116,7 @@
 				parseInt(this._iRecordsTotal, 10) :
 				this.aiDisplayMaster.length;
 		},
-		
+	
 		/**
 		 * Get the number of records in the current record set, after filtering
 		 *  @type function
@@ -13114,7 +13127,7 @@
 				parseInt(this._iRecordsDisplay, 10) :
 				this.aiDisplay.length;
 		},
-		
+	
 		/**
 		 * Get the display end point - aiDisplay index
 		 *  @type function
@@ -13140,14 +13153,14 @@
 					calc;
 			}
 		},
-		
+	
 		/**
 		 * The DataTables object for this table
 		 *  @type object
 		 *  @default null
 		 */
 		"oInstance": null,
-		
+	
 		/**
 		 * Unique identifier for each instance of the DataTables object. If there
 		 * is an ID on the table node, then it takes that value, otherwise an
@@ -13203,7 +13216,7 @@
 		"sPageNextDisabled": "paginate_disabled_next",
 		"sPageJUINext": "",
 		"sPageJUIPrev": "",
-		
+	
 		/* Full numbers paging buttons */
 		"sPageButton": "paginate_button",
 		"sPageButtonActive": "paginate_active",
@@ -13212,14 +13225,14 @@
 		"sPagePrevious": "previous",
 		"sPageNext": "next",
 		"sPageLast": "last",
-		
+	
 		/* Striping classes */
 		"sStripeOdd": "odd",
 		"sStripeEven": "even",
-		
+	
 		/* Empty row */
 		"sRowEmpty": "dataTables_empty",
-		
+	
 		/* Features */
 		"sWrapper": "dataTables_wrapper",
 		"sFilter": "dataTables_filter",
@@ -13227,7 +13240,7 @@
 		"sPaging": "dataTables_paginate paging_", /* Note that the type is postfixed */
 		"sLength": "dataTables_length",
 		"sProcessing": "dataTables_processing",
-		
+	
 		/* Sorting */
 		"sSortAsc": "sorting_asc",
 		"sSortDesc": "sorting_desc",
@@ -13243,7 +13256,7 @@
 		"sSortJUIDescAllowed": "",
 		"sSortJUIWrapper": "",
 		"sSortIcon": "",
-		
+	
 		/* Scrolling */
 		"sScrollWrapper": "dataTables_scroll",
 		"sScrollHead": "dataTables_scrollHead",
@@ -13251,7 +13264,7 @@
 		"sScrollBody": "dataTables_scrollBody",
 		"sScrollFoot": "dataTables_scrollFoot",
 		"sScrollFootInner": "dataTables_scrollFootInner",
-		
+	
 		/* Misc */
 		"sFooterTH": "",
 		"sJUIHeader": "",
@@ -13267,18 +13280,18 @@
 		"sPageNextDisabled": "fg-button ui-button ui-state-default ui-corner-right ui-state-disabled",
 		"sPageJUINext": "ui-icon ui-icon-circle-arrow-e",
 		"sPageJUIPrev": "ui-icon ui-icon-circle-arrow-w",
-		
+	
 		/* Full numbers paging buttons */
 		"sPageButton": "fg-button ui-button ui-state-default",
 		"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-disabled",
 		"sPageButtonStaticDisabled": "fg-button ui-button ui-state-default ui-state-disabled",
 		"sPageFirst": "first ui-corner-tl ui-corner-bl",
 		"sPageLast": "last ui-corner-tr ui-corner-br",
-		
+	
 		/* Features */
 		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
 			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
-		
+	
 		/* Sorting */
 		"sSortAsc": "ui-state-default",
 		"sSortDesc": "ui-state-default",
@@ -13293,11 +13306,11 @@
 		"sSortJUIDescAllowed": "css_right ui-icon ui-icon-carat-1-s",
 		"sSortJUIWrapper": "DataTables_sort_wrapper",
 		"sSortIcon": "DataTables_sort_icon",
-		
+	
 		/* Scrolling */
 		"sScrollHead": "dataTables_scrollHead ui-state-default",
 		"sScrollFoot": "dataTables_scrollFoot ui-state-default",
-		
+	
 		/* Misc */
 		"sFooterTH": "ui-state-default",
 		"sJUIHeader": "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix",
@@ -13342,14 +13355,14 @@
 					'<a class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
 					'<a class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
 				$(nPaging).append( sAppend );
-				
+	
 				var els = $('a', nPaging);
 				var nPrevious = els[0],
 					nNext = els[1];
-				
+	
 				oSettings.oApi._fnBindAction( nPrevious, {action: "previous"}, fnClickHandler );
 				oSettings.oApi._fnBindAction( nNext,     {action: "next"},     fnClickHandler );
-				
+	
 				/* ID the first elements only */
 				if ( !oSettings.aanFeatures.p )
 				{
@@ -13361,7 +13374,7 @@
 					nNext.setAttribute('aria-controls', oSettings.sTableId);
 				}
 			},
-			
+	
 			/*
 			 * Function: oPagination.two_button.fnUpdate
 			 * Purpose:  Update the two button pagination at the end of the draw
@@ -13375,7 +13388,7 @@
 				{
 					return;
 				}
-				
+	
 				var oClasses = oSettings.oClasses;
 				var an = oSettings.aanFeatures.p;
 				var nNode;
@@ -13398,15 +13411,15 @@
 				}
 			}
 		},
-		
-		
+	
+	
 		/*
 		 * Variable: iFullNumbersShowPages
 		 * Purpose:  Change the number of pages which can be seen
 		 * Scope:    jQuery.fn.dataTableExt.oPagination
 		 */
 		"iFullNumbersShowPages": 5,
-		
+	
 		/*
 		 * Variable: full_numbers
 		 * Purpose:  Full numbers pagination
@@ -13444,12 +13457,12 @@
 					nPrev = els[1],
 					nNext = els[2],
 					nLast = els[3];
-				
+	
 				oSettings.oApi._fnBindAction( nFirst, {action: "first"},    fnClickHandler );
 				oSettings.oApi._fnBindAction( nPrev,  {action: "previous"}, fnClickHandler );
 				oSettings.oApi._fnBindAction( nNext,  {action: "next"},     fnClickHandler );
 				oSettings.oApi._fnBindAction( nLast,  {action: "last"},     fnClickHandler );
-				
+	
 				/* ID the first elements only */
 				if ( !oSettings.aanFeatures.p )
 				{
@@ -13460,7 +13473,7 @@
 					nLast.id =oSettings.sTableId+'_last';
 				}
 			},
-			
+	
 			/*
 			 * Function: oPagination.full_numbers.fnUpdate
 			 * Purpose:  Update the list of page buttons shows
@@ -13474,7 +13487,7 @@
 				{
 					return;
 				}
-				
+	
 				var iPageCount = DataTable.ext.oPagination.iFullNumbersShowPages;
 				var iPageCountHalf = Math.floor(iPageCount / 2);
 				var iPages = Math.ceil((oSettings.fnRecordsDisplay()) / oSettings._iDisplayLength);
@@ -13492,7 +13505,7 @@
 						e.preventDefault();
 					} );
 				};
-				
+	
 				/* Pages calculation */
 				if ( oSettings._iDisplayLength === -1 )
 				{
@@ -13521,7 +13534,7 @@
 					iEndButton = iStartButton + iPageCount - 1;
 				}
 	
-				
+	
 				/* Build the dynamic list */
 				for ( i=iStartButton ; i<=iEndButton ; i++ )
 				{
@@ -13529,7 +13542,7 @@
 						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
 						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
 				}
-				
+	
 				/* Loop over each instance of the pager */
 				for ( i=0, iLen=an.length ; i<iLen ; i++ )
 				{
@@ -13538,12 +13551,12 @@
 					{
 						continue;
 					}
-					
+	
 					/* Build up the dynamic list first - html and listeners */
 					$('span:eq(0)', nNode)
 						.html( sList )
 						.children('a').each( fnBind );
-					
+	
 					/* Update the permanent button's classes */
 					anButtons = nNode.getElementsByTagName('a');
 					anStatic = [
@@ -13588,13 +13601,13 @@
 		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		},
-		
+	
 		"string-desc": function ( x, y )
 		{
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 		},
-		
-		
+	
+	
 		/*
 		 * html sorting (ignore html tags)
 		 */
@@ -13602,23 +13615,23 @@
 		{
 			return a.replace( /<.*?>/g, "" ).toLowerCase();
 		},
-		
-		
+	
+	
 		/*
 		 * date sorting
 		 */
 		"date-pre": function ( a )
 		{
 			var x = Date.parse( a );
-			
+	
 			if ( isNaN(x) || x==="" )
 			{
 				x = Date.parse( "01/01/1970 00:00:00" );
 			}
 			return x;
 		},
-		
-		
+	
+	
 		/*
 		 * numerical sorting
 		 */
@@ -13638,7 +13651,7 @@
 			return data==='' || data==='-' || (!isNaN( parseFloat(data) ) && isFinite( data )) ?
 				'numeric' : null;
 		},
-		
+	
 		// Dates (only those recognised by the browser's Date.parse)
 		function ( data )
 		{
@@ -13646,7 +13659,7 @@
 			return (parsed !== null && !isNaN(parsed)) || (typeof data==='string' && data.length===0) ?
 				'date' : null;
 		},
-		
+	
 		// HTML
 		function ( data )
 		{
