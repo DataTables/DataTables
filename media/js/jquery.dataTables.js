@@ -2393,11 +2393,13 @@
 		}
 		else
 		{
+			var invalidated = _fnBuildSearchArray( oSettings, 1 );
+	
 			/*
 			 * We are starting a new search or the new search string is smaller
 			 * then the old one (i.e. delete). Search from the master array
 			 */
-			if ( oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
+			if ( invalidated || oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
 				   oPrevSearch.sSearch.length > sInput.length || iForce == 1 ||
 				   sInput.indexOf(oPrevSearch.sSearch) !== 0 )
 			{
@@ -2450,22 +2452,27 @@
 	{
 		var searchData = [];
 		var i, ien, rows;
+		var wasInvalidated = false;
 	
 		if ( !settings.oFeatures.bServerSide ) {
 			// Resolve any invalidated rows
-			_fnFilterData( settings );
+			wasInvalidated = _fnFilterData( settings );
 	
-			// Build the search array from the display arrays
-			rows = master===1 ?
-				settings.aiDisplayMaster :
-				settings.aiDisplay;
+			if ( wasInvalidated ) {
+				// Build the search array from the display arrays
+				rows = master===1 ?
+					settings.aiDisplayMaster :
+					settings.aiDisplay;
 	
-			for ( i=0, ien=rows.length ; i<ien ; i++ ) {
-				searchData.push( settings.aoData[ rows[i] ]._aFilterData.join('  ') );
+				for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+					searchData.push( settings.aoData[ rows[i] ]._aFilterData.join('  ') );
+				}
+	
+				settings.asDataSearch = searchData;
 			}
-	
-			settings.asDataSearch = searchData;
 		}
+	
+		return wasInvalidated;
 	}
 	
 	
@@ -2520,6 +2527,7 @@
 		var column;
 		var i, j, ien, jen, filterData, cellData, row;
 		var fomatters = DataTable.ext.ofnSearch;
+		var wasInvalidated = false;
 	
 		for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 			row = settings.aoData[i];
@@ -2553,8 +2561,11 @@
 				}
 	
 				row._aFilterData = filterData;
+				wasInvalidated = true;
 			}
 		}
+	
+		return wasInvalidated;
 	}
 	
 	/**
