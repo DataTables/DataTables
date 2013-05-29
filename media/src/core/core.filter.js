@@ -224,18 +224,21 @@ function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive 
 	 */
 	if ( sInput.length <= 0 )
 	{
-		oSettings.aiDisplay.splice( 0, oSettings.aiDisplay.length);
 		oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 	}
 	else
 	{
+		// Check if any of the rows were invalidated - if so, we need to do a
+		// full re-filter
+		var invalidated = _fnBuildSearchArray( oSettings, 1 );
+
 		/*
 		 * We are starting a new search or the new search string is smaller
 		 * then the old one (i.e. delete). Search from the master array
 		 */
-		if ( oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
-			   oPrevSearch.sSearch.length > sInput.length || iForce == 1 ||
-			   sInput.indexOf(oPrevSearch.sSearch) !== 0 )
+		if ( invalidated || iForce == 1 ||
+			 oPrevSearch.sSearch.length > sInput.length ||
+			 sInput.indexOf(oPrevSearch.sSearch) !== 0 )
 		{
 			/* Nuke the old display array - we are going to rebuild it */
 			oSettings.aiDisplay.length = 0;
@@ -286,22 +289,27 @@ function _fnBuildSearchArray ( settings, master )
 {
 	var searchData = [];
 	var i, ien, rows;
+	var wasInvalidated = false;
 
 	if ( !settings.oFeatures.bServerSide ) {
 		// Resolve any invalidated rows
-		_fnFilterData( settings );
+		wasInvalidated = _fnFilterData( settings );
 
-		// Build the search array from the display arrays
-		rows = master===1 ?
-			settings.aiDisplayMaster :
-			settings.aiDisplay;
+		if ( wasInvalidated ) {
+			// Build the search array from the display arrays
+			rows = master===1 ?
+				settings.aiDisplayMaster :
+				settings.aiDisplay;
 
-		for ( i=0, ien=rows.length ; i<ien ; i++ ) {
-			searchData.push( settings.aoData[ rows[i] ]._aFilterData.join('  ') );
+			for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+				searchData.push( settings.aoData[ rows[i] ]._aFilterData.join('  ') );
+			}
+
+			settings.asDataSearch = searchData;
 		}
-
-		settings.asDataSearch = searchData;
 	}
+
+	return wasInvalidated;
 }
 
 
@@ -356,6 +364,7 @@ function _fnFilterData ( settings )
 	var column;
 	var i, j, ien, jen, filterData, cellData, row;
 	var fomatters = DataTable.ext.ofnSearch;
+	var wasInvalidated = false;
 
 	for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 		row = settings.aoData[i];
@@ -389,7 +398,10 @@ function _fnFilterData ( settings )
 			}
 
 			row._aFilterData = filterData;
+			wasInvalidated = true;
 		}
 	}
+
+	return wasInvalidated;
 }
 
