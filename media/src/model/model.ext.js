@@ -285,142 +285,46 @@ DataTable.models.ext = {
 
 
 	/**
-	 * Pagination plug-in methods - The style and controls of the pagination can significantly
-	 * impact on how the end user interacts with the data in your table, and DataTables allows
-	 * the addition of pagination controls by extending this object, which can then be enabled
-	 * through the <i>sPaginationType</i> initialisation parameter. Each pagination type that
-	 * is added is an object (the property name of which is what <i>sPaginationType</i> refers
-	 * to) that has two properties, both methods that are used by DataTables to update the
-	 * control's state.
-	 *   <ul>
-	 *     <li>
-	 *       fnInit -  Initialisation of the paging controls. Called only during initialisation
-	 *         of the table. It is expected that this function will add the required DOM elements
-	 *         to the page for the paging controls to work. The element pointer
-	 *         'oSettings.aanFeatures.p' array is provided by DataTables to contain the paging
-	 *         controls (note that this is a 2D array to allow for multiple instances of each
-	 *         DataTables DOM element). It is suggested that you add the controls to this element
-	 *         as children
-	 *       <ul>
-     *         <li>
-     *           Function input parameters:
-     *           <ul>
-	 *             <li>{object} DataTables settings object: see {@link DataTable.models.oSettings}.</li>
-	 *             <li>{node} Container into which the pagination controls must be inserted</li>
-	 *             <li>{function} Draw callback function - whenever the controls cause a page
-	 *               change, this method must be called to redraw the table.</li>
-     *           </ul>
-     *         </li>
-	 *         <li>
-	 *           Function return:
-	 *           <ul>
-	 *             <li>No return required</li>
-	 *           </ul>
-	 *         </il>
-	 *       </ul>
-	 *     </il>
-	 *     <li>
-	 *       fnInit -  This function is called whenever the paging status of the table changes and is
-	 *         typically used to update classes and/or text of the paging controls to reflex the new
-	 *         status.
-	 *       <ul>
-     *         <li>
-     *           Function input parameters:
-     *           <ul>
-	 *             <li>{object} DataTables settings object: see {@link DataTable.models.oSettings}.</li>
-	 *             <li>{function} Draw callback function - in case you need to redraw the table again
-	 *               or attach new event listeners</li>
-     *           </ul>
-     *         </li>
-	 *         <li>
-	 *           Function return:
-	 *           <ul>
-	 *             <li>No return required</li>
-	 *           </ul>
-	 *         </il>
-	 *       </ul>
-	 *     </il>
-	 *   </ul>
+	 * Pagination plug-in methods. Each entry in this object is a function
+	 * and defines which buttons should be shown by pagination rendering method
+	 * that is used for the table: {@link DataTable.ext.renderer.paging}. The
+	 * renderer addresses how the buttons are displayed in the document, while
+	 * the functions here tell it what buttons to display, in order by returning
+	 * an array of button descriptions (what each button will down).
+	 *
+	 * Pagination types (the four built in options and any additional plug-in
+	 * options) and be used through the `paginationType` initialisation
+	 * parameter.
+	 *
+	 * The functions defined take two parameters:
+	 *
+	 * 1. `{int} page` The current page index
+	 * 2. `{int} pages` The number of pages in the table
+	 *
+	 * Each function is expected to return an array where each element of the
+	 * array can be one of:
+	 *
+	 * * `first` - Jump to first page when activated
+	 * * `last` - Jump to last page when activated
+	 * * `previous` - Show previous page when activated
+	 * * `next` - Show next page when activated
+	 * * `{int}` - Show page of the index given
+	 * * `{array}` - A nested array containing the above elements to add a
+	 *   containing 'DIV' element (might be useful for styling).
+	 *
+	 * Note that DataTables v1.9- used this object slightly differently whereby
+	 * an object with two functions would be defined for each plug-in. That
+	 * ability is still supported by DataTables 1.10+ to provide backwards
+	 * compatibility, but this option of use is now decremented and no longer
+	 * documented in DataTables 1.10+.
+	 *
 	 *  @type object
 	 *  @default {}
 	 *
 	 *  @example
-	 *    $.fn.dataTableExt.oPagination.four_button = {
-	 *      "fnInit": function ( oSettings, nPaging, fnCallbackDraw ) {
-	 *        nFirst = document.createElement( 'span' );
-	 *        nPrevious = document.createElement( 'span' );
-	 *        nNext = document.createElement( 'span' );
-	 *        nLast = document.createElement( 'span' );
-	 *
-	 *        nFirst.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sFirst ) );
-	 *        nPrevious.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sPrevious ) );
-	 *        nNext.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sNext ) );
-	 *        nLast.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sLast ) );
-	 *
-	 *        nFirst.className = "paginate_button first";
-	 *        nPrevious.className = "paginate_button previous";
-	 *        nNext.className="paginate_button next";
-	 *        nLast.className = "paginate_button last";
-	 *
-	 *        nPaging.appendChild( nFirst );
-	 *        nPaging.appendChild( nPrevious );
-	 *        nPaging.appendChild( nNext );
-	 *        nPaging.appendChild( nLast );
-	 *
-	 *        $(nFirst).click( function () {
-	 *          oSettings.oApi._fnPageChange( oSettings, "first" );
-	 *          fnCallbackDraw( oSettings );
-	 *        } );
-	 *
-	 *        $(nPrevious).click( function() {
-	 *          oSettings.oApi._fnPageChange( oSettings, "previous" );
-	 *          fnCallbackDraw( oSettings );
-	 *        } );
-	 *
-	 *        $(nNext).click( function() {
-	 *          oSettings.oApi._fnPageChange( oSettings, "next" );
-	 *          fnCallbackDraw( oSettings );
-	 *        } );
-	 *
-	 *        $(nLast).click( function() {
-	 *          oSettings.oApi._fnPageChange( oSettings, "last" );
-	 *          fnCallbackDraw( oSettings );
-	 *        } );
-	 *
-	 *        $(nFirst).bind( 'selectstart', function () { return false; } );
-	 *        $(nPrevious).bind( 'selectstart', function () { return false; } );
-	 *        $(nNext).bind( 'selectstart', function () { return false; } );
-	 *        $(nLast).bind( 'selectstart', function () { return false; } );
-	 *      },
-	 *
-	 *      "fnUpdate": function ( oSettings, fnCallbackDraw ) {
-	 *        if ( !oSettings.aanFeatures.p ) {
-	 *          return;
-	 *        }
-	 *
-	 *        // Loop over each instance of the pager
-	 *        var an = oSettings.aanFeatures.p;
-	 *        for ( var i=0, iLen=an.length ; i<iLen ; i++ ) {
-	 *          var buttons = an[i].getElementsByTagName('span');
-	 *          if ( oSettings._iDisplayStart === 0 ) {
-	 *            buttons[0].className = "paginate_disabled_previous";
-	 *            buttons[1].className = "paginate_disabled_previous";
-	 *          }
-	 *          else {
-	 *            buttons[0].className = "paginate_enabled_previous";
-	 *            buttons[1].className = "paginate_enabled_previous";
-	 *          }
-	 *
-	 *          if ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) {
-	 *            buttons[2].className = "paginate_disabled_next";
-	 *            buttons[3].className = "paginate_disabled_next";
-	 *          }
-	 *          else {
-	 *            buttons[2].className = "paginate_enabled_next";
-	 *            buttons[3].className = "paginate_enabled_next";
-	 *          }
-	 *        }
-	 *      }
+	 *    // Show previous, next and current page buttons only
+	 *    $.fn.dataTableExt.oPagination.current = function ( page, pages ) {
+	 *      return [ 'previous', page, 'next' ];
 	 *    };
 	 */
 	"oPagination": {},

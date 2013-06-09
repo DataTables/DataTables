@@ -90,11 +90,21 @@ var _selector_opts = function ( opts )
 	};
 };
 
-var _range = function ( len )
+var _range = function ( len, start )
 {
 	var out = [];
+	var end;
 
-	for ( var i=0 ; i<len ; i++ ) {
+	if ( start === undefined ) {
+		start = 0;
+		end = len;
+	}
+	else {
+		end = start;
+		start = len;
+	}
+
+	for ( var i=start ; i<end ; i++ ) {
 		out.push( i );
 	}
 

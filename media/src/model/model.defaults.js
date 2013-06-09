@@ -1547,8 +1547,8 @@ DataTable.defaults = {
 		},
 
 		/**
-		 * Pagination string used by DataTables for the two built-in pagination
-		 * control types ("two_button" and "full_numbers")
+		 * Pagination string used by DataTables for the built-in pagination
+		 * control types.
 		 *  @namespace
 		 *  @name DataTable.defaults.language.paginate
 		 */
@@ -2069,11 +2069,18 @@ DataTable.defaults = {
 
 
 	/**
-	 * DataTables features two different built-in pagination interaction methods
-	 * ('two_button' or 'full_numbers') which present different page controls to
-	 * the end user. Further methods can be added using the API (see below).
+	 * DataTables features four different built-in options for the buttons to
+	 * display for pagination control:
+	 *
+	 * * `simple` - 'Previous' and 'Next' buttons only
+	 * * 'simple_numbers` - 'Previous' and 'Next' buttons, plus page numbers
+	 * * `full` - 'First', 'Previous', 'Next' and 'Last' buttons
+	 * * `full_numbers` - 'First', 'Previous', 'Next' and 'Last' buttons, plus
+	 *   page numbers
+	 *  
+	 * Further methods can be added using {@link DataTable.ext.oPagination}.
 	 *  @type string
-	 *  @default two_button
+	 *  @default simple_numbers
 	 *
 	 *  @dtopt Options
 	 *  @name DataTable.defaults.paginationType
@@ -2085,7 +2092,7 @@ DataTable.defaults = {
 	 *      } );
 	 *    } )
 	 */
-	"sPaginationType": "two_button",
+	"sPaginationType": "simple_numbers",
 
 
 	/**

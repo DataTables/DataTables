@@ -173,6 +173,7 @@
 	 *  @extends DataTable.models.ext
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
+	DataTable.ext.renderer = {};
 	require('ext.classes.js');
 	require('ext.paging.js');
 	require('ext.sorting.js');

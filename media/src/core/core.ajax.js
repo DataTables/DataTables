@@ -51,6 +51,8 @@ function _fnBuildAjax( oSettings, data, fn )
 				oSettings.oApi._fnLog( oSettings, 0, json.sError );
 			}
 
+			// add a transform function call xxx
+
 			$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
 			fn( json );
 		},

@@ -21,19 +21,44 @@ function _fnFeatureHtmlPaginate ( settings )
 	var
 		type   = settings.sPaginationType,
 		plugin = DataTable.ext.oPagination[ type ],
+		modern = typeof plugin === 'function',
 		redraw = function( settings ) {
 			_fnDraw( settings );
 		},
-		node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];
+		node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0],
+		features = settings.aanFeatures;
 
-	plugin.fnInit( settings, node, redraw );
+	if ( ! modern ) {
+		plugin.fnInit( settings, node, redraw );
+	}
 
 	/* Add a draw callback for the pagination on first instance, to update the paging display */
-	if ( ! settings.aanFeatures.p )
+	if ( ! features.p )
 	{
+		node.id = settings.sTableId+'_paginate';
+
 		settings.aoDrawCallback.push( {
 			"fn": function( settings ) {
-				plugin.fnUpdate( settings, redraw );
+				if ( modern ) {
+					var
+						start      = settings._iDisplayStart,
+						len        = settings._iDisplayLength,
+						visRecords = settings.fnRecordsDisplay(),
+						all        = len === -1,
+						page = all ? 0 : Math.ceil( start / len ),
+						pages = all ? 1 : Math.ceil( visRecords / len ),
+						buttons = plugin(page, pages),
+						i, ien;
+
+					for ( i=0, ien=features.p.length ; i<ien ; i++ ) {
+						_fnRenderer( settings, 'paging' )(
+							settings, features.p[i], i, buttons, page, pages
+						);
+					}
+				}
+				else {
+					plugin.fnUpdate( settings, redraw );
+				}
 			},
 			"sName": "pagination"
 		} );
@@ -43,15 +68,37 @@ function _fnFeatureHtmlPaginate ( settings )
 }
 
 
+function _fnRenderer( settings, type )
+{
+	var renderer = settings.renderer;
+	var host = DataTable.ext.renderer[type];
+
+	if ( $.isPlainObject( renderer ) && renderer[type] ) {
+		// Specific renderer for this type. If available use it, otherwise use
+		// the default.
+		return host[renderer[type]] || host._;
+	}
+	else if ( typeof renderer === 'string' ) {
+		// Common renderer - if there is one available for this type use it,
+		// otherwise use the default
+		return host[renderer] || host._;
+	}
+
+	// Use the default
+	return host._;
+}
+
+
 /**
  * Alter the display settings to change the page
  *  @param {object} settings DataTables settings object
  *  @param {string|int} action Paging action to take: "first", "previous",
  *    "next" or "last" or page number to jump to (integer)
+ *  @param [bool] redraw Automatically draw the update or not
  *  @returns {bool} true page has changed, false - no change
  *  @memberof DataTable#oApi
  */
-function _fnPageChange ( settings, action )
+function _fnPageChange ( settings, action, redraw )
 {
 	var
 		start     = settings._iDisplayStart,
@@ -106,6 +153,10 @@ function _fnPageChange ( settings, action )
 	settings._iDisplayStart = start;
 
 	$(settings.oInstance).trigger('page', settings);
+
+	if ( redraw ) {
+		_fnDraw( settings );
+	}
 
 	return changed;
 }
