@@ -6,22 +6,35 @@ table.dataTable {
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
+	border-collapse: separate;
 }
 
-table.dataTable thead th {
-	padding: 3px 18px 3px 10px;
-	border-bottom: 1px solid black;
-	font-weight: bold;
+table.dataTable thead th,
+table.dataTable thead td {
+	padding: 10px 18px;
+	border-bottom: 1px solid #111;
 }
 
+table.dataTable tfoot th,
+table.dataTable tfoot td {
+	padding: 10px 18px;
+	border-top: 1px solid #111;
+}
+
+table.dataTable thead th,
 table.dataTable tfoot th {
-	padding: 3px 18px 3px 10px;
-	border-top: 1px solid black;
 	font-weight: bold;
 }
 
-table.dataTable td {
-	padding: 3px 10px;
+/* Body styles */
+table.dataTable tbody th,
+table.dataTable tbody td {
+	padding: 8px 10px;
+}
+
+table.dataTable tbody tr:first-child th,
+table.dataTable tbody tr:first-child td {
+	border-top: none;
 }
 
 table.dataTable td.center,
@@ -29,15 +42,69 @@ table.dataTable td.dataTables_empty {
 	text-align: center;
 }
 
-table.dataTable tr.odd { background-color: #E2E4FF; }
-table.dataTable tr.even { background-color: white; }
+/* Border classes - add "row-border" or "cell-border" class to the table to activate */
+table.dataTable.row-border tbody th,
+table.dataTable.row-border tbody td {
+	padding: 8px 10px;
+	border-top: 1px solid #ddd;
+}
 
-table.dataTable tr.odd td.sorting_1 { background-color: #D3D6FF; }
-table.dataTable tr.odd td.sorting_2 { background-color: #DADCFF; }
-table.dataTable tr.odd td.sorting_3 { background-color: #E0E2FF; }
-table.dataTable tr.even td.sorting_1 { background-color: #EAEBFF; }
-table.dataTable tr.even td.sorting_2 { background-color: #F2F3FF; }
-table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
+table.dataTable.cell-border tbody th,
+table.dataTable.cell-border tbody td {
+	padding: 8px 10px;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+table.dataTable tbody>:last-child th,
+table.dataTable tbody tr:last-child td {
+	border-bottom: none;
+}
+
+table.dataTable.cell-border tbody tr th:first-child,
+table.dataTable.cell-border tbody tr td:first-child {
+	border-left: 1px solid #ddd;
+}
+
+
+/* Stripe classes - add "stripe" class to the table to activate */
+table.dataTable.stripe tbody tr.odd { background-color: #f9f9f9; }
+table.dataTable.stripe tbody tr.even { background-color: white; }
+
+
+/* Hover classes - add "hover" class to the table to activate */
+table.dataTable.hover tbody tr:hover,
+table.dataTable.hover tbody tr.odd:hover,
+table.dataTable.hover tbody tr.even:hover {
+	background-color: #f5f5f5;
+}
+
+/* Sort column highlighting */
+table.dataTable.stripe.sort-column tbody tr.odd td.sorting_1 { background-color: #f1f1f1; }
+table.dataTable.stripe.sort-column tbody tr.odd td.sorting_2 { background-color: #f3f3f3; }
+table.dataTable.stripe.sort-column tbody tr.odd td.sorting_3 { background-color: #f5f5f5; }
+
+table.dataTable.stripe.sort-column tbody tr.even td.sorting_1 { background-color: #fafafa; }
+table.dataTable.stripe.sort-column tbody tr.even td.sorting_2 { background-color: #fcfcfc; }
+table.dataTable.stripe.sort-column tbody tr.even td.sorting_3 { background-color: #fefefe; }
+
+table.dataTable.hover.sort-column tbody tr:hover td.sorting_1,
+table.dataTable.hover.sort-column tbody tr.odd:hover td.sorting_1,
+table.dataTable.hover.sort-column tbody tr.even:hover td.sorting_1 {
+	background-color: #eaeaea;
+}
+
+table.dataTable.hover.sort-column tbody tr:hover td.sorting_2,
+table.dataTable.hover.sort-column tbody tr.odd:hover td.sorting_2,
+table.dataTable.hover.sort-column tbody tr.even:hover td.sorting_2 {
+	background-color: #eaeaea;
+}
+
+table.dataTable.hover.sort-column tbody tr:hover td.sorting_3,
+table.dataTable.hover.sort-column tbody tr.odd:hover td.sorting_3,
+table.dataTable.hover.sort-column tbody tr.even:hover td.sorting_3 {
+	background-color: #eaeaea;
+}
 
 
 /*
@@ -55,6 +122,7 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
  */
 .dataTables_length {
 	float: left;
+	color: #333;
 }
 
 
@@ -64,6 +132,7 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 .dataTables_filter {
 	float: right;
 	text-align: right;
+	color: #333;
 }
 
 
@@ -73,6 +142,8 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 .dataTables_info {
 	clear: both;
 	float: left;
+	color: #333;
+	padding-top: 0.55em;
 }
 
 
@@ -84,109 +155,68 @@ table.dataTable tr.even td.sorting_3 { background-color: #F9F9FF; }
 	text-align: right;
 }
 
-/* Two button pagination - previous / next */
-.paginate_disabled_previous,
-.paginate_enabled_previous,
-.paginate_disabled_next,
-.paginate_enabled_next {
-	height: 19px;
-	float: left;
-	cursor: pointer;
-	*cursor: hand;
-	color: #111 !important;
-}
-.paginate_disabled_previous:hover,
-.paginate_enabled_previous:hover,
-.paginate_disabled_next:hover,
-.paginate_enabled_next:hover {
-	text-decoration: none !important;
-}
-.paginate_disabled_previous:active,
-.paginate_enabled_previous:active,
-.paginate_disabled_next:active,
-.paginate_enabled_next:active {
-	outline: none;
-}
-
-.paginate_disabled_previous,
-.paginate_disabled_next {
-	color: #666 !important;
-}
-.paginate_disabled_previous,
-.paginate_enabled_previous {
-	padding-left: 23px;
-}
-.paginate_disabled_next,
-.paginate_enabled_next {
-	padding-right: 23px;
-	margin-left: 10px;
-}
-
-.paginate_enabled_previous { background: url('../images/back_enabled.png') no-repeat top left; }
-.paginate_enabled_previous:hover { background: url('../images/back_enabled_hover.png') no-repeat top left; }
-.paginate_disabled_previous { background: url('../images/back_disabled.png') no-repeat top left; }
-
-.paginate_enabled_next { background: url('../images/forward_enabled.png') no-repeat top right; }
-.paginate_enabled_next:hover { background: url('../images/forward_enabled_hover.png') no-repeat top right; }
-.paginate_disabled_next { background: url('../images/forward_disabled.png') no-repeat top right; }
-
-/* Full number pagination */
-.paging_full_numbers {
-	height: 22px;
-	line-height: 22px;
-}
-.paging_full_numbers a:active {
-	outline: none
-}
-.paging_full_numbers a:hover {
-	text-decoration: none;
-}
-
-.paging_full_numbers a.paginate_button,
-.paging_full_numbers a.paginate_active {
-	border: 1px solid #aaa;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	padding: 2px 5px;
-	margin: 0 3px;
-	cursor: pointer;
-	*cursor: hand;
+.paginate_button {
+	box-sizing: border-box;
+	display: inline-block;
+	min-width: 1.5em;
+	padding: 0.5em 1em;
 	color: #333 !important;
-}
-
-.paging_full_numbers a.paginate_button {
-	background-color: #ddd;
-}
-
-.paging_full_numbers a.paginate_button:hover {
-	background-color: #ccc;
+	margin-left: 2px;
+	text-align: center;
 	text-decoration: none !important;
+	cursor: pointer;
+	*cursor: hand;
+	border: 1px solid transparent;
 }
 
-.paging_full_numbers a.paginate_active {
-	background-color: #99B3FF;
+.paginate_button.current {
+	color: white !important;
+	background-color: black;
+	border: 1px solid black !important;
+	background: -webkit-linear-gradient(top, rgba(72,72,72,1) 0%, rgba(0,0,0,1) 100%) !important;
+}
+
+.paginate_button:hover {
+	border: 1px solid #dcdcdc;
+	background: -webkit-linear-gradient(top, rgba(250,250,250,1) 0%, rgba(226,226,226,1) 100%);
+}
+
+.paginate_button.disabled {
+	color: #666 !important;
+	border: 1px solid transparent !important;
+	background: transparent !important;
+}
+
+.paginate_button:active {
+	outline: none;
 }
 
 
 /*
  * Processing indicator
  */
-.dataTables_processing {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 250px;
-	height: 30px;
-	margin-left: -125px;
-	margin-top: -15px;
-	padding: 14px 0 2px 0;
-	border: 1px solid #ddd;
-	text-align: center;
-	color: #999;
-	font-size: 14px;
-	background-color: white;
-}
+
+	.dataTables_processing {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 100%;
+		height: 40px;
+		margin-left: -50%;
+		margin-top: -25px;
+		padding-top: 20px;
+
+		text-align: center;
+		font-size: 1.2em;
+
+		background-color: white;
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(25%,rgba(255,255,255,0.9)), color-stop(75%,rgba(255,255,255,0.9)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(left,     rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 25%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+		background:    -moz-linear-gradient(left,     rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 25%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+		background:     -ms-linear-gradient(left,     rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 25%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%); /* IE10+ */
+		background:      -o-linear-gradient(left,     rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 25%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+		background:         linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 25%, rgba(255,255,255,0.9) 75%, rgba(255,255,255,0) 100%); /* W3C */
+	}
 
 
 /*
