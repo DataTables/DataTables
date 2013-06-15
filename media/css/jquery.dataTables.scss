@@ -1,10 +1,38 @@
 
+ //
+ // Colour customisation
+ //
+
+// Border between the header (and footer) and the table body
+$table-header-border: 1px solid #111;
+
+// Border of rows / cells
+$table-body-border: 1px solid #ddd;
+
+// Row background colour (hover, striping etc are all based on this colour and
+// calculated automatically)
+$table-row-background: #ffffff;
+
+// Text colour of the interaction control elements (info, filter, paging etc)
+$table-control-color: #333;
+
+// Highlight colour of the paging button for the current page
+$table-paging-button-active: #000;
+
+// Hover colour of paging buttons on mouse over
+$table-paging-button-hover: #dcdcdc;
+
+
+
+//
+// Functions / mixins
+//
 @function tint( $color, $percent ) {
-  @return mix(white, $color, $percent);
+	@return mix(white, $color, $percent);
 }
 
 @function shade( $color, $percent ) {
-  @return mix(black, $color, $percent);
+	@return mix(black, $color, $percent);
 }
 
 @mixin gradient( $from, $to ) {
@@ -18,19 +46,18 @@
 }
 
 
-$table-header-border: 1px solid #111;
-$table-body-border: 1px solid #ddd;
-$table-row-background: #ffffff;
-$table-control-color: #333;
-
-
+/*
+ * Table styles
+ */
 table.dataTable {
 	width: 100%;
 	margin: 0 auto;
 	clear: both;
 	border-collapse: separate;
 
-	// Header and footer styles
+	/*
+	 * Header and footer styles
+	 */
 	thead,
 	tfoot {
 		th,
@@ -46,6 +73,10 @@ table.dataTable {
 	thead th,
 	thead td {
 		border-bottom: $table-header-border;
+
+		&:active {
+			outline: none;
+		}
 	}
 
 	tfoot th,
@@ -53,7 +84,36 @@ table.dataTable {
 		border-top: $table-header-border;
 	}
 
-	// Body styles
+	// Sorting
+	thead {
+		.sorting_asc,
+		.sorting_desc,
+		.sorting {
+			cursor: pointer;
+			*cursor: hand;
+		}
+
+		.sorting {
+			background: url('../images/sort_both.png') no-repeat center right;
+		}
+		.sorting_asc {
+			background: url('../images/sort_asc.png') no-repeat center right;
+		}
+		.sorting_desc {
+			background: url('../images/sort_desc.png') no-repeat center right;
+		}
+		.sorting_asc_disabled {
+			background: url('../images/sort_asc_disabled.png') no-repeat center right;
+		}
+		.sorting_desc_disabled {
+			background: url('../images/sort_desc_disabled.png') no-repeat center right;
+		}
+	}
+
+
+	/*
+	 * Body styles
+	 */
 	tbody {
 		th,
 		td {
@@ -184,7 +244,6 @@ table.dataTable {
 
 
 
-
 /*
  * Control feature layout
  */
@@ -193,22 +252,25 @@ table.dataTable {
 	clear: both;
 	*zoom: 1;
 
-
+	// Page length options
 	.dataTables_length {
 		float: left;
 	}
 
+	// Filtering input
 	.dataTables_filter {
 		float: right;
 		text-align: right;
 	}
 
+	// Table info
 	.dataTables_info {
 		clear: both;
 		float: left;
 		padding-top: 0.55em;
 	}
 
+	// Paging
 	.dataTables_paginate {
 		float: right;
 		text-align: right;
@@ -230,28 +292,42 @@ table.dataTable {
 			&.current,
 			&.current:hover {
 				color: white !important;
-				border: 1px solid black;
-				@include gradient( rgba(72,72,72,1), rgba(0,0,0,1) );
+				border: 1px solid $table-paging-button-active;
+				@include gradient(
+					lighten($table-paging-button-active, 28%),
+					$table-paging-button-active
+				);
 			}
 
 			&.disabled,
-			&.disabled:hover {
+			&.disabled:hover,
+			&.disabled:active {
 				color: #666 !important;
 				border: 1px solid transparent;
 				background: transparent;
+				box-shadow: none;
 			}
 
 			&:hover {
-				border: 1px solid #dcdcdc;
-				@include gradient( rgba(250,250,250,1), rgba(226,226,226,1) );
+				border: 1px solid $table-paging-button-hover;
+				@include gradient(
+					lighten($table-paging-button-hover, 28%),
+					$table-paging-button-hover
+				);
 			}
 
 			&:active {
 				outline: none;
+				@include gradient(
+					lighten($table-paging-button-hover, 10%),
+					darken($table-paging-button-hover, 2%)
+				);
+				box-shadow: inset 0 0 3px #111;
 			}
 		}
 	}
 
+	// Processing
 	.dataTables_processing {
 		position: absolute;
 		top: 50%;
@@ -281,57 +357,15 @@ table.dataTable {
 	.dataTables_paginate {
 		color: $table-control-color;
 	}
-}
 
+	// Scrolling
+	.dataTables_scroll {
+		clear: both;
+	}
 
-
-.paginate_button {
-	display: inline-block;
-	min-width: 1em;
-	padding: 0.25em;
-}
-
-.paginate_button.current {
-
-}
-
-.paginate_button.disabled {
-
-}
-
-
-/*
- * Sorting
- */
-table.dataTable thead th.sorting_asc,
-table.dataTable thead th.sorting_desc,
-table.dataTable thead th.sorting {
-	cursor: pointer;
-	*cursor: hand;
-}
-
-.sorting { background: url('../images/sort_both.png') no-repeat center right; }
-.sorting_asc { background: url('../images/sort_asc.png') no-repeat center right; }
-.sorting_desc { background: url('../images/sort_desc.png') no-repeat center right; }
-
-.sorting_asc_disabled { background: url('../images/sort_asc_disabled.png') no-repeat center right; }
-.sorting_desc_disabled { background: url('../images/sort_desc_disabled.png') no-repeat center right; }
- 
-table.dataTable thead th:active,
-table.dataTable thead td:active {
-	outline: none;
-}
-
-
-/*
- * Scrolling
- */
-.dataTables_scroll {
-	clear: both;
-}
-
-.dataTables_scrollBody {
-	*margin-top: -1px;
-	-webkit-overflow-scrolling: touch;
+	.dataTables_scrollBody {
+		*margin-top: -1px;
+		-webkit-overflow-scrolling: touch;
+	}
 }
 
