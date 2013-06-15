@@ -15,10 +15,12 @@ function _fnBuildAjax( oSettings, data, fn )
 	_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
 
 	var ajaxData;
+	var ajax = oSettings.ajax;
+	var instance = oSettings.oInstance;
 
-	if ( $.isPlainObject( oSettings.ajax ) && oSettings.ajax.data )
+	if ( $.isPlainObject( ajax ) && ajax.data )
 	{
-		ajaxData = oSettings.ajax.data;
+		ajaxData = ajax.data;
 		var newData = $.isFunction( ajaxData ) ?
 			ajaxData( data ) :  // fn can manipulate data or return an object or array
 			ajaxData;           // object or array to merge
@@ -41,7 +43,7 @@ function _fnBuildAjax( oSettings, data, fn )
 		}
 
 		// Remove the data property as we've resolved it already
-		delete oSettings.ajax.data;
+		delete ajax.data;
 	}
 
 	var baseAjax = {
@@ -51,9 +53,7 @@ function _fnBuildAjax( oSettings, data, fn )
 				oSettings.oApi._fnLog( oSettings, 0, json.sError );
 			}
 
-			// add a transform function call xxx
-
-			$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
+			$(instance).trigger('xhr', [oSettings, json]);
 			fn( json );
 		},
 		"dataType": "json",
@@ -69,31 +69,29 @@ function _fnBuildAjax( oSettings, data, fn )
 	if ( oSettings.fnServerData )
 	{
 		// DataTables 1.9- compatibility
-		oSettings.fnServerData.call( oSettings.oInstance,
+		oSettings.fnServerData.call( instance,
 			oSettings.sAjaxSource, data, fn, oSettings
 		);
 	}
-	else if ( oSettings.sAjaxSource || typeof oSettings.ajax === 'string' )
+	else if ( oSettings.sAjaxSource || typeof ajax === 'string' )
 	{
 		// DataTables 1.9- compatibility
 		oSettings.jqXHR = $.ajax( $.extend( baseAjax, {
-			url: oSettings.ajax || oSettings.sAjaxSource
+			url: ajax || oSettings.sAjaxSource
 		} ) );
 	}
-	else if ( $.isFunction( oSettings.ajax ) )
+	else if ( $.isFunction( ajax ) )
 	{
 		// Is a function - let the caller define what needs to be done
-		oSettings.jqXHR = oSettings.ajax.call( oSettings.oInstance,
-			data, fn, oSettings
-		);
+		oSettings.jqXHR = ajax.call( instance, data, fn, oSettings );
 	}
 	else
 	{
 		// Object to extend the base settings
-		oSettings.jqXHR = $.ajax( $.extend( baseAjax, oSettings.ajax ) );
+		oSettings.jqXHR = $.ajax( $.extend( baseAjax, ajax ) );
 
 		// Restore for next time around
-		oSettings.ajax.data = ajaxData;
+		ajax.data = ajaxData;
 	}
 }
 
