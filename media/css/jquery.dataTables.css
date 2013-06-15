@@ -1,8 +1,4 @@
 /*
- * THIS IS A GENREATED FILE FROM jquery.dataTables.scss
- */
-
-/*
  * Table styles
  */
 table.dataTable {
@@ -58,10 +54,11 @@ table.dataTable {
   table.dataTable th.right,
   table.dataTable td.right {
     text-align: right; }
-  table.dataTable.row-border tbody th, table.dataTable.row-border tbody td {
+  table.dataTable.row-border tbody th, table.dataTable.row-border tbody td, table.dataTable.display tbody th, table.dataTable.display tbody td {
     border-top: 1px solid #dddddd; }
   table.dataTable.row-border tbody tr:first-child th,
-  table.dataTable.row-border tbody tr:first-child td {
+  table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th,
+  table.dataTable.display tbody tr:first-child td {
     border-top: none; }
   table.dataTable.cell-border tbody th, table.dataTable.cell-border tbody td {
     border-top: 1px solid #dddddd;
@@ -74,41 +71,51 @@ table.dataTable {
   table.dataTable.cell-border tbody tr:last-child th,
   table.dataTable.cell-border tbody tr:last-child td {
     border-top: none; }
-  table.dataTable.stripe tr.odd {
+  table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
     background-color: #f9f9f9; }
-  table.dataTable.stripe tr.even {
+  table.dataTable.stripe tbody tr.even, table.dataTable.display tbody tr.even {
     background-color: white; }
   table.dataTable.hover tbody tr:hover,
   table.dataTable.hover tbody tr.odd:hover,
-  table.dataTable.hover tbody tr.even:hover {
+  table.dataTable.hover tbody tr.even:hover, table.dataTable.display tbody tr:hover,
+  table.dataTable.display tbody tr.odd:hover,
+  table.dataTable.display tbody tr.even:hover {
     background-color: whitesmoke; }
   table.dataTable.sort-column tbody tr > .sorting_1,
   table.dataTable.sort-column tbody tr > .sorting_2,
-  table.dataTable.sort-column tbody tr > .sorting_3 {
+  table.dataTable.sort-column tbody tr > .sorting_3, table.dataTable.display tbody tr > .sorting_1,
+  table.dataTable.display tbody tr > .sorting_2,
+  table.dataTable.display tbody tr > .sorting_3 {
     background-color: #f9f9f9; }
-  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_1 {
+  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_1, table.dataTable.display.stripe tbody tr.odd > .sorting_1 {
     background-color: #f1f1f1; }
-  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_2 {
+  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_2, table.dataTable.display.stripe tbody tr.odd > .sorting_2 {
     background-color: #f3f3f3; }
-  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_3 {
+  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_3, table.dataTable.display.stripe tbody tr.odd > .sorting_3 {
     background-color: whitesmoke; }
-  table.dataTable.sort-column.stripe tbody tr.even > .sorting_1 {
+  table.dataTable.sort-column.stripe tbody tr.even > .sorting_1, table.dataTable.display.stripe tbody tr.even > .sorting_1 {
     background-color: #f9f9f9; }
-  table.dataTable.sort-column.stripe tbody tr.even > .sorting_2 {
+  table.dataTable.sort-column.stripe tbody tr.even > .sorting_2, table.dataTable.display.stripe tbody tr.even > .sorting_2 {
     background-color: #fbfbfb; }
-  table.dataTable.sort-column.stripe tbody tr.even > .sorting_3 {
+  table.dataTable.sort-column.stripe tbody tr.even > .sorting_3, table.dataTable.display.stripe tbody tr.even > .sorting_3 {
     background-color: #fdfdfd; }
   table.dataTable.sort-column.hover tbody tr:hover > .sorting_1,
   table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_1,
-  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_1 {
+  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_1, table.dataTable.display.hover tbody tr:hover > .sorting_1,
+  table.dataTable.display.hover tbody tr.odd:hover > .sorting_1,
+  table.dataTable.display.hover tbody tr.even:hover > .sorting_1 {
     background-color: #eaeaea; }
   table.dataTable.sort-column.hover tbody tr:hover > .sorting_2,
   table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_2,
-  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_2 {
+  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_2, table.dataTable.display.hover tbody tr:hover > .sorting_2,
+  table.dataTable.display.hover tbody tr.odd:hover > .sorting_2,
+  table.dataTable.display.hover tbody tr.even:hover > .sorting_2 {
     background-color: #ebebeb; }
   table.dataTable.sort-column.hover tbody tr:hover > .sorting_3,
   table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_3,
-  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
+  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3, table.dataTable.display.hover tbody tr:hover > .sorting_3,
+  table.dataTable.display.hover tbody tr.odd:hover > .sorting_3,
+  table.dataTable.display.hover tbody tr.even:hover > .sorting_3 {
     background-color: #eeeeee; }
 
 /*

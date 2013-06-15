@@ -134,7 +134,8 @@ table.dataTable {
 
 
 	// Stripe classes - add "row-border" class to the table to activate
-	&.row-border tbody {
+	&.row-border tbody,
+	&.display tbody {
 		th, td {
 			border-top: $table-body-border;
 		}
@@ -168,7 +169,8 @@ table.dataTable {
 
 
 	// Stripe classes - add "stripe" class to the table to activate
-	&.stripe {
+	&.stripe tbody,
+	&.display tbody {
 		tr.odd {
 			background-color: shade($table-row-background, 2.35%); // shade by f9
 		}
@@ -179,7 +181,8 @@ table.dataTable {
 
 
 	// Hover classes - add "hover" class to the table to activate
-	&.hover tbody {
+	&.hover tbody,
+	&.display tbody {
 		tr:hover,
 		tr.odd:hover,
 		tr.even:hover {
@@ -189,7 +192,8 @@ table.dataTable {
 
 
 	// Sort column highlighting - add "hover" class to the table to activate
-	&.sort-column {
+	&.sort-column,
+	&.display {
 		tbody {
 			tr>.sorting_1,
 			tr>.sorting_2,
