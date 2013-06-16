@@ -100,8 +100,16 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 	}
 
 	/* Cache the data get and set functions for speed */
+	var mDataSrc = oCol.mData;
+	var mData = _fnGetObjectDataFn( mDataSrc );
 	var mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
-	var mData = _fnGetObjectDataFn( oCol.mData );
+
+	var attrTest = function( src ) {
+		return typeof src === 'string' && src.indexOf('@') !== -1;
+	};
+	oCol._bAttrSrc = $.isPlainObject( mDataSrc ) && (
+		attrTest(mDataSrc.sort) || attrTest(mDataSrc.type) || attrTest(mDataSrc.filter)
+	);
 
 	oCol.fnGetData = function (oData, sSpecific) {
 		var innerData = mData( oData, sSpecific );
@@ -112,7 +120,7 @@ function _fnColumnOptions( oSettings, iCol, oOptions )
 		}
 		return innerData;
 	};
-	oCol.fnSetData = _fnSetObjectDataFn( oCol.mData );
+	oCol.fnSetData = _fnSetObjectDataFn( mDataSrc );
 
 	/* Feature sorting overrides column specific when off */
 	if ( !oSettings.oFeatures.bSort )

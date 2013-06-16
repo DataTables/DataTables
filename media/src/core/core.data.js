@@ -71,12 +71,12 @@ function _fnAddData ( oSettings, aDataIn, nTr, anTds )
  * use this for reading data from a DOM sourced table, but it could be
  * used for an TR element. Note that if a TR is given, it is used (i.e.
  * it is not cloned).
- *  @param {object} oSettings dataTables settings object
+ *  @param {object} settings dataTables settings object
  *  @param {array|node|jQuery} trs The TR element(s) to add to the table
  *  @returns {array} Array of indexes for the added rows
  *  @memberof DataTable#oApi
  */
-function _fnAddTr( oSettings, trs )
+function _fnAddTr( settings, trs )
 {
 	var row;
 
@@ -86,8 +86,8 @@ function _fnAddTr( oSettings, trs )
 	}
 
 	return trs.map( function (i, el) {
-		row = _fnGetRowElements( el );
-		return _fnAddData( oSettings, row.data, el, row.cells );
+		row = _fnGetRowElements( settings, el );
+		return _fnAddData( settings, row.data, el, row.cells );
 	} );
 }
 
@@ -520,7 +520,7 @@ function _fnInvalidateRow( settings, rowIdx, src )
 	// Are we reading last data from DOM or the data object?
 	if ( src === 'dom' || (! src && row.src === 'dom') ) {
 		// Read the data from the DOM
-		row._aData = _fnGetRowData( row.nTr ).data;
+		row._aData = _fnGetRowElements( settings, row.nTr ).data;
 	}
 	else {
 		// Reading from data object, update the DOM
@@ -540,6 +540,7 @@ function _fnInvalidateRow( settings, rowIdx, src )
  * Build a data source object from an HTML row, reading the contents of the
  * cells that are in the row.
  *
+ * @param {object} settings DataTables settings object
  * @param {node} TR element from which to read data
  * @returns {object} Object with two parameters: `data` the data read, in
  *   document order, and `cells` and array of nodes (they can be useful to the
@@ -547,20 +548,47 @@ function _fnInvalidateRow( settings, rowIdx, src )
  *   them from here).
  * @memberof DataTable#oApi
  */
-function _fnGetRowElements( row )
+function _fnGetRowElements( settings, row )
 {
 	var
 		d = [],
 		tds = [],
 		td = row.firstChild,
-		name;
+		name, col, o, i=0, contents,
+		columns = settings.aoColumns;
+
+	var attr = function ( str, data, td  ) {
+		var idx = str.indexOf('@');
+		if ( typeof str === 'string' && idx !== -1 ) {
+			var src = str.substring( idx+1 );
+			o[ '@'+src ] = td.getAttribute( src );
+		}
+	};
 
 	while ( td ) {
 		name = td.nodeName.toUpperCase();
 
 		if ( name == "TD" || name == "TH" ) {
-			d.push( $.trim(td.innerHTML) );
+			col = columns[i];
+			contents = $.trim(td.innerHTML);
+
+			if ( col._bAttrSrc ) {
+				o = {
+					display: contents
+				};
+
+				attr( col.mData.sort, o, td );
+				attr( col.mData.type, o, td );
+				attr( col.mData.filter, o, td );
+
+				d.push( o );
+			}
+			else {
+				d.push( contents );
+			}
+
 			tds.push( td );
+			i++;
 		}
 
 		td = td.nextSibling;

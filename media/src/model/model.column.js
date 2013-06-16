@@ -63,6 +63,15 @@ DataTable.models.oColumn = {
 	"_bAutoType": true,
 
 	/**
+	 * Flag to indicate if HTML5 data attributes should be used as the data
+	 * source for filtering or sorting. True is either are.
+	 *  @type boolean
+	 *  @default false
+	 *  @private
+	 */
+	"_bAttrSrc": false,
+
+	/**
 	 * Developer definable function that is called whenever a cell is created (Ajax source,
 	 * etc) or processed for input (DOM source). This can be used as a compliment to mRender
 	 * allowing you to modify the DOM element (add background colour for example) when the
