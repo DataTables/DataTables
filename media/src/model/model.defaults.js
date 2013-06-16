@@ -183,8 +183,8 @@ DataTable.defaults = {
 	 *   `sAjaxDataProp` from DataTables 1.9-.
 	 *
 	 * * `success` - Should not be overridden it is used internally in
-	 *   DataTables. To manipulate the data returned by the server use
-	 *   `ajax.dataSrc`, or use `ajax` as a function (see below).
+	 *   DataTables. To manipulate / transform the data returned by the server
+	 *   use `ajax.dataSrc`, or use `ajax` as a function (see below).
 	 *
 	 * `function`
 	 * ----------
