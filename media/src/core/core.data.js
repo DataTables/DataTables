@@ -558,10 +558,13 @@ function _fnGetRowElements( settings, row )
 		columns = settings.aoColumns;
 
 	var attr = function ( str, data, td  ) {
-		var idx = str.indexOf('@');
-		if ( typeof str === 'string' && idx !== -1 ) {
-			var src = str.substring( idx+1 );
-			o[ '@'+src ] = td.getAttribute( src );
+		if ( typeof str === 'string' ) {
+			var idx = str.indexOf('@');
+
+			if ( idx !== -1 ) {
+				var src = str.substring( idx+1 );
+				o[ '@'+src ] = td.getAttribute( src );
+			}
 		}
 	};
 
@@ -572,7 +575,7 @@ function _fnGetRowElements( settings, row )
 			col = columns[i];
 			contents = $.trim(td.innerHTML);
 
-			if ( col._bAttrSrc ) {
+			if ( col && col._bAttrSrc ) {
 				o = {
 					display: contents
 				};

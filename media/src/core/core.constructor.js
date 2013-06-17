@@ -247,8 +247,9 @@ if ( oInit.asStripeClasses === null )
 
 /* Remove row stripe classes if they are already on the table row */
 var stripeClasses = oSettings.asStripeClasses;
+var rowOne = $('tbody tr:eq(0)', this);
 if ( $.inArray( true, $.map( stripeClasses, function(el, i) {
-	return $('tbody tr:eq(0)', this).hasClass(el);
+	return rowOne.hasClass(el);
 } ) ) !== -1 ) {
 	$('tbody tr', this).removeClass( stripeClasses.join(' ') );
 	oSettings.asDestroyStripes = stripeClasses.slice();
@@ -291,6 +292,31 @@ for ( i=0, iLen=aoColumnsInit.length ; i<iLen ; i++ )
 _fnApplyColumnDefs( oSettings, oInit.aoColumnDefs, aoColumnsInit, function (iCol, oDef) {
 	_fnColumnOptions( oSettings, iCol, oDef );
 } );
+
+/* HTML5 attribute detection - build an mData object automatically if the
+ * attributes are found
+ */
+if ( rowOne.length ) {
+	$.each( _fnGetRowElements( oSettings, rowOne[0] ).cells, function (i, cell) {
+		var col = oSettings.aoColumns[i];
+
+		if ( col.mData === i ) {
+			var sort = cell.getAttribute('data-sort');
+			var filter = cell.getAttribute('data-filter');
+
+			if ( sort !== null || filter !== null ) {
+				col.mData = {
+					_:      i+'.display',
+					sort:   sort !== null   ? i+'.@data-sort'   : undefined,
+					type:   sort !== null   ? i+'.@data-sort'   : undefined,
+					filter: filter !== null ? i+'.@data-filter' : undefined
+				};
+
+				_fnColumnOptions( oSettings, i );
+			}
+		}
+	} );
+}
 
 
 /* Must be done after everything which can be overridden by the state saving! */
