@@ -80,9 +80,9 @@ function _fnInfoMacros ( settings, str )
 		formatter = settings.fnFormatNumber;
 
 	return str.
-		replace(/_START_/g, formatter( start ) ).
-		replace(/_END_/g,   formatter( settings.fnDisplayEnd() ) ).
-		replace(/_TOTAL_/g, formatter( settings.fnRecordsDisplay() ) ).
-		replace(/_MAX_/g,   formatter( settings.fnRecordsTotal() ) );
+		replace(/_START_/g, formatter.call( settings, start ) ).
+		replace(/_END_/g,   formatter.call( settings, settings.fnDisplayEnd() ) ).
+		replace(/_TOTAL_/g, formatter.call( settings, settings.fnRecordsDisplay() ) ).
+		replace(/_MAX_/g,   formatter.call( settings, settings.fnRecordsTotal() ) );
 }
 
