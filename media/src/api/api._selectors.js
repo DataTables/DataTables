@@ -9,12 +9,16 @@ var _pluck = function ( a, prop, prop2 ) {
 	// is essential here
 	if ( prop2 !== undefined ) {
 		for ( ; i<ien ; i++ ) {
-			out.push( a[i][ prop ][ prop2 ] );
+			if ( a[i] && a[i][ prop ] ) {
+				out.push( a[i][ prop ][ prop2 ] );
+			}
 		}
 	}
 	else {
 		for ( ; i<ien ; i++ ) {
-			out.push( a[i][ prop ] );
+			if ( a[i] ) {
+				out.push( a[i][ prop ] );
+			}
 		}
 	}
 
