@@ -99,30 +99,32 @@ function _fnBuildHead( oSettings )
 	var iThs = $('th, td', oSettings.nTHead).length;
 	var iCorrector = 0;
 	var jqChildren;
+	var classes = oSettings.oClasses;
+	var columns = oSettings.aoColumns;
 
 	/* If there is a header in place - then use it - otherwise it's going to get nuked... */
 	if ( iThs !== 0 )
 	{
 		/* We've got a thead from the DOM, so remove hidden columns and apply width to vis cols */
-		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
-			nTh = oSettings.aoColumns[i].nTh;
+			nTh = columns[i].nTh;
 			nTh.setAttribute('role', 'columnheader');
-			if ( oSettings.aoColumns[i].bSortable )
+			if ( columns[i].bSortable )
 			{
 				nTh.setAttribute('tabindex', oSettings.iTabIndex);
 				nTh.setAttribute('aria-controls', oSettings.sTableId);
 			}
 
-			if ( oSettings.aoColumns[i].sClass !== null )
+			if ( columns[i].sClass !== null )
 			{
-				$(nTh).addClass( oSettings.aoColumns[i].sClass );
+				$(nTh).addClass( columns[i].sClass );
 			}
 
 			/* Set the title of the column if it is user defined (not what was auto detected) */
-			if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
+			if ( columns[i].sTitle != nTh.innerHTML )
 			{
-				nTh.innerHTML = oSettings.aoColumns[i].sTitle;
+				nTh.innerHTML = columns[i].sTitle;
 			}
 		}
 	}
@@ -131,15 +133,15 @@ function _fnBuildHead( oSettings )
 		/* We don't have a header in the DOM - so we are going to have to create one */
 		var nTr = document.createElement( "tr" );
 
-		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
-			nTh = oSettings.aoColumns[i].nTh;
-			nTh.innerHTML = oSettings.aoColumns[i].sTitle;
+			nTh = columns[i].nTh;
+			nTh.innerHTML = columns[i].sTitle;
 			nTh.setAttribute('tabindex', '0');
 
-			if ( oSettings.aoColumns[i].sClass !== null )
+			if ( columns[i].sClass !== null )
 			{
-				$(nTh).addClass( oSettings.aoColumns[i].sClass );
+				$(nTh).addClass( columns[i].sClass );
 			}
 
 			nTr.appendChild( nTh );
@@ -154,16 +156,16 @@ function _fnBuildHead( oSettings )
 	/* Add the extra markup needed by jQuery UI's themes */
 	if ( oSettings.bJUI )
 	{
-		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
-			nTh = oSettings.aoColumns[i].nTh;
+			nTh = columns[i].nTh;
 
 			var nDiv = document.createElement('div');
-			nDiv.className = oSettings.oClasses.sSortJUIWrapper;
+			nDiv.className = classes.sSortJUIWrapper;
 			$(nTh).contents().appendTo(nDiv);
 
 			var nSpan = document.createElement('span');
-			nSpan.className = oSettings.oClasses.sSortIcon+' '+oSettings.aoColumns[i].sSortingClassJUI;
+			nSpan.className = classes.sSortIcon+' '+columns[i].sSortingClassJUI;
 			nDiv.appendChild( nSpan );
 			nTh.appendChild( nDiv );
 		}
@@ -171,35 +173,33 @@ function _fnBuildHead( oSettings )
 
 	if ( oSettings.oFeatures.bSort )
 	{
-		for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+		for ( i=0 ; i<columns.length ; i++ )
 		{
-			$(oSettings.aoColumns[i].nTh).addClass( oSettings.aoColumns[i].sSortingClass );
+			$(columns[i].nTh).addClass( columns[i].sSortingClass );
 
-			if ( oSettings.aoColumns[i].bSortable !== false )
+			if ( columns[i].bSortable !== false )
 			{
-				_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
+				_fnSortAttachListener( oSettings, columns[i].nTh, i );
 			}
 		}
 	}
 
 	/* Deal with the footer - add classes if required */
-	if ( oSettings.oClasses.sFooterTH !== "" )
-	{
-		$(oSettings.nTFoot).children('tr').children('th').addClass( oSettings.oClasses.sFooterTH );
-	}
+	$(oSettings.nTHead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
+	$(oSettings.nTFoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 
 	/* Cache the footer elements */
 	if ( oSettings.nTFoot !== null )
 	{
 		var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
-		for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
 			if ( anCells[i] )
 			{
-				oSettings.aoColumns[i].nTf = anCells[i];
-				if ( oSettings.aoColumns[i].sClass )
+				columns[i].nTf = anCells[i];
+				if ( columns[i].sClass )
 				{
-					$(anCells[i]).addClass( oSettings.aoColumns[i].sClass );
+					$(anCells[i]).addClass( columns[i].sClass );
 				}
 			}
 		}
