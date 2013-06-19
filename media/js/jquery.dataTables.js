@@ -308,8 +308,16 @@
 		}
 	
 		/* Cache the data get and set functions for speed */
+		var mDataSrc = oCol.mData;
+		var mData = _fnGetObjectDataFn( mDataSrc );
 		var mRender = oCol.mRender ? _fnGetObjectDataFn( oCol.mRender ) : null;
-		var mData = _fnGetObjectDataFn( oCol.mData );
+	
+		var attrTest = function( src ) {
+			return typeof src === 'string' && src.indexOf('@') !== -1;
+		};
+		oCol._bAttrSrc = $.isPlainObject( mDataSrc ) && (
+			attrTest(mDataSrc.sort) || attrTest(mDataSrc.type) || attrTest(mDataSrc.filter)
+		);
 	
 		oCol.fnGetData = function (oData, sSpecific) {
 			var innerData = mData( oData, sSpecific );
@@ -320,7 +328,7 @@
 			}
 			return innerData;
 		};
-		oCol.fnSetData = _fnSetObjectDataFn( oCol.mData );
+		oCol.fnSetData = _fnSetObjectDataFn( mDataSrc );
 	
 		/* Feature sorting overrides column specific when off */
 		if ( !oSettings.oFeatures.bSort )
@@ -630,12 +638,12 @@
 	 * use this for reading data from a DOM sourced table, but it could be
 	 * used for an TR element. Note that if a TR is given, it is used (i.e.
 	 * it is not cloned).
-	 *  @param {object} oSettings dataTables settings object
+	 *  @param {object} settings dataTables settings object
 	 *  @param {array|node|jQuery} trs The TR element(s) to add to the table
 	 *  @returns {array} Array of indexes for the added rows
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnAddTr( oSettings, trs )
+	function _fnAddTr( settings, trs )
 	{
 		var row;
 	
@@ -645,8 +653,8 @@
 		}
 	
 		return trs.map( function (i, el) {
-			row = _fnGetRowElements( el );
-			return _fnAddData( oSettings, row.data, el, row.cells );
+			row = _fnGetRowElements( settings, el );
+			return _fnAddData( settings, row.data, el, row.cells );
 		} );
 	}
 	
@@ -1079,7 +1087,7 @@
 		// Are we reading last data from DOM or the data object?
 		if ( src === 'dom' || (! src && row.src === 'dom') ) {
 			// Read the data from the DOM
-			row._aData = _fnGetRowData( row.nTr ).data;
+			row._aData = _fnGetRowElements( settings, row.nTr ).data;
 		}
 		else {
 			// Reading from data object, update the DOM
@@ -1099,6 +1107,7 @@
 	 * Build a data source object from an HTML row, reading the contents of the
 	 * cells that are in the row.
 	 *
+	 * @param {object} settings DataTables settings object
 	 * @param {node} TR element from which to read data
 	 * @returns {object} Object with two parameters: `data` the data read, in
 	 *   document order, and `cells` and array of nodes (they can be useful to the
@@ -1106,20 +1115,50 @@
 	 *   them from here).
 	 * @memberof DataTable#oApi
 	 */
-	function _fnGetRowElements( row )
+	function _fnGetRowElements( settings, row )
 	{
 		var
 			d = [],
 			tds = [],
 			td = row.firstChild,
-			name;
+			name, col, o, i=0, contents,
+			columns = settings.aoColumns;
+	
+		var attr = function ( str, data, td  ) {
+			if ( typeof str === 'string' ) {
+				var idx = str.indexOf('@');
+	
+				if ( idx !== -1 ) {
+					var src = str.substring( idx+1 );
+					o[ '@'+src ] = td.getAttribute( src );
+				}
+			}
+		};
 	
 		while ( td ) {
 			name = td.nodeName.toUpperCase();
 	
 			if ( name == "TD" || name == "TH" ) {
-				d.push( $.trim(td.innerHTML) );
+				col = columns[i];
+				contents = $.trim(td.innerHTML);
+	
+				if ( col && col._bAttrSrc ) {
+					o = {
+						display: contents
+					};
+	
+					attr( col.mData.sort, o, td );
+					attr( col.mData.type, o, td );
+					attr( col.mData.filter, o, td );
+	
+					d.push( o );
+				}
+				else {
+					d.push( contents );
+				}
+	
 				tds.push( td );
+				i++;
 			}
 	
 			td = td.nextSibling;
@@ -1231,30 +1270,32 @@
 		var iThs = $('th, td', oSettings.nTHead).length;
 		var iCorrector = 0;
 		var jqChildren;
+		var classes = oSettings.oClasses;
+		var columns = oSettings.aoColumns;
 	
 		/* If there is a header in place - then use it - otherwise it's going to get nuked... */
 		if ( iThs !== 0 )
 		{
 			/* We've got a thead from the DOM, so remove hidden columns and apply width to vis cols */
-			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 			{
-				nTh = oSettings.aoColumns[i].nTh;
+				nTh = columns[i].nTh;
 				nTh.setAttribute('role', 'columnheader');
-				if ( oSettings.aoColumns[i].bSortable )
+				if ( columns[i].bSortable )
 				{
 					nTh.setAttribute('tabindex', oSettings.iTabIndex);
 					nTh.setAttribute('aria-controls', oSettings.sTableId);
 				}
 	
-				if ( oSettings.aoColumns[i].sClass !== null )
+				if ( columns[i].sClass !== null )
 				{
-					$(nTh).addClass( oSettings.aoColumns[i].sClass );
+					$(nTh).addClass( columns[i].sClass );
 				}
 	
 				/* Set the title of the column if it is user defined (not what was auto detected) */
-				if ( oSettings.aoColumns[i].sTitle != nTh.innerHTML )
+				if ( columns[i].sTitle != nTh.innerHTML )
 				{
-					nTh.innerHTML = oSettings.aoColumns[i].sTitle;
+					nTh.innerHTML = columns[i].sTitle;
 				}
 			}
 		}
@@ -1263,15 +1304,15 @@
 			/* We don't have a header in the DOM - so we are going to have to create one */
 			var nTr = document.createElement( "tr" );
 	
-			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 			{
-				nTh = oSettings.aoColumns[i].nTh;
-				nTh.innerHTML = oSettings.aoColumns[i].sTitle;
+				nTh = columns[i].nTh;
+				nTh.innerHTML = columns[i].sTitle;
 				nTh.setAttribute('tabindex', '0');
 	
-				if ( oSettings.aoColumns[i].sClass !== null )
+				if ( columns[i].sClass !== null )
 				{
-					$(nTh).addClass( oSettings.aoColumns[i].sClass );
+					$(nTh).addClass( columns[i].sClass );
 				}
 	
 				nTr.appendChild( nTh );
@@ -1286,16 +1327,16 @@
 		/* Add the extra markup needed by jQuery UI's themes */
 		if ( oSettings.bJUI )
 		{
-			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 			{
-				nTh = oSettings.aoColumns[i].nTh;
+				nTh = columns[i].nTh;
 	
 				var nDiv = document.createElement('div');
-				nDiv.className = oSettings.oClasses.sSortJUIWrapper;
+				nDiv.className = classes.sSortJUIWrapper;
 				$(nTh).contents().appendTo(nDiv);
 	
 				var nSpan = document.createElement('span');
-				nSpan.className = oSettings.oClasses.sSortIcon+' '+oSettings.aoColumns[i].sSortingClassJUI;
+				nSpan.className = classes.sSortIcon+' '+columns[i].sSortingClassJUI;
 				nDiv.appendChild( nSpan );
 				nTh.appendChild( nDiv );
 			}
@@ -1303,35 +1344,33 @@
 	
 		if ( oSettings.oFeatures.bSort )
 		{
-			for ( i=0 ; i<oSettings.aoColumns.length ; i++ )
+			for ( i=0 ; i<columns.length ; i++ )
 			{
-				$(oSettings.aoColumns[i].nTh).addClass( oSettings.aoColumns[i].sSortingClass );
+				$(columns[i].nTh).addClass( columns[i].sSortingClass );
 	
-				if ( oSettings.aoColumns[i].bSortable !== false )
+				if ( columns[i].bSortable !== false )
 				{
-					_fnSortAttachListener( oSettings, oSettings.aoColumns[i].nTh, i );
+					_fnSortAttachListener( oSettings, columns[i].nTh, i );
 				}
 			}
 		}
 	
 		/* Deal with the footer - add classes if required */
-		if ( oSettings.oClasses.sFooterTH !== "" )
-		{
-			$(oSettings.nTFoot).children('tr').children('th').addClass( oSettings.oClasses.sFooterTH );
-		}
+		$(oSettings.nTHead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
+		$(oSettings.nTFoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 	
 		/* Cache the footer elements */
 		if ( oSettings.nTFoot !== null )
 		{
 			var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
-			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
 			{
 				if ( anCells[i] )
 				{
-					oSettings.aoColumns[i].nTf = anCells[i];
-					if ( oSettings.aoColumns[i].sClass )
+					columns[i].nTf = anCells[i];
+					if ( columns[i].sClass )
 					{
-						$(anCells[i]).addClass( oSettings.aoColumns[i].sClass );
+						$(anCells[i]).addClass( columns[i].sClass );
 					}
 				}
 			}
@@ -1910,10 +1949,12 @@
 		_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
 	
 		var ajaxData;
+		var ajax = oSettings.ajax;
+		var instance = oSettings.oInstance;
 	
-		if ( $.isPlainObject( oSettings.ajax ) && oSettings.ajax.data )
+		if ( $.isPlainObject( ajax ) && ajax.data )
 		{
-			ajaxData = oSettings.ajax.data;
+			ajaxData = ajax.data;
 			var newData = $.isFunction( ajaxData ) ?
 				ajaxData( data ) :  // fn can manipulate data or return an object or array
 				ajaxData;           // object or array to merge
@@ -1936,7 +1977,7 @@
 			}
 	
 			// Remove the data property as we've resolved it already
-			delete oSettings.ajax.data;
+			delete ajax.data;
 		}
 	
 		var baseAjax = {
@@ -1946,7 +1987,7 @@
 					oSettings.oApi._fnLog( oSettings, 0, json.sError );
 				}
 	
-				$(oSettings.oInstance).trigger('xhr', [oSettings, json]);
+				$(instance).trigger('xhr', [oSettings, json]);
 				fn( json );
 			},
 			"dataType": "json",
@@ -1962,31 +2003,29 @@
 		if ( oSettings.fnServerData )
 		{
 			// DataTables 1.9- compatibility
-			oSettings.fnServerData.call( oSettings.oInstance,
+			oSettings.fnServerData.call( instance,
 				oSettings.sAjaxSource, data, fn, oSettings
 			);
 		}
-		else if ( oSettings.sAjaxSource || typeof oSettings.ajax === 'string' )
+		else if ( oSettings.sAjaxSource || typeof ajax === 'string' )
 		{
 			// DataTables 1.9- compatibility
 			oSettings.jqXHR = $.ajax( $.extend( baseAjax, {
-				url: oSettings.ajax || oSettings.sAjaxSource
+				url: ajax || oSettings.sAjaxSource
 			} ) );
 		}
-		else if ( $.isFunction( oSettings.ajax ) )
+		else if ( $.isFunction( ajax ) )
 		{
 			// Is a function - let the caller define what needs to be done
-			oSettings.jqXHR = oSettings.ajax.call( oSettings.oInstance,
-				data, fn, oSettings
-			);
+			oSettings.jqXHR = ajax.call( instance, data, fn, oSettings );
 		}
 		else
 		{
 			// Object to extend the base settings
-			oSettings.jqXHR = $.ajax( $.extend( baseAjax, oSettings.ajax ) );
+			oSettings.jqXHR = $.ajax( $.extend( baseAjax, ajax ) );
 	
 			// Restore for next time around
-			oSettings.ajax.data = ajaxData;
+			ajax.data = ajaxData;
 		}
 	}
 	
@@ -2388,20 +2427,21 @@
 		 */
 		if ( sInput.length <= 0 )
 		{
-			oSettings.aiDisplay.splice( 0, oSettings.aiDisplay.length);
 			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
 		}
 		else
 		{
+			// Check if any of the rows were invalidated - if so, we need to do a
+			// full re-filter
 			var invalidated = _fnBuildSearchArray( oSettings, 1 );
 	
 			/*
 			 * We are starting a new search or the new search string is smaller
 			 * then the old one (i.e. delete). Search from the master array
 			 */
-			if ( invalidated || oSettings.aiDisplay.length == oSettings.aiDisplayMaster.length ||
-				   oPrevSearch.sSearch.length > sInput.length || iForce == 1 ||
-				   sInput.indexOf(oPrevSearch.sSearch) !== 0 )
+			if ( invalidated || iForce == 1 ||
+				 oPrevSearch.sSearch.length > sInput.length ||
+				 sInput.indexOf(oPrevSearch.sSearch) !== 0 )
 			{
 				/* Nuke the old display array - we are going to rebuild it */
 				oSettings.aiDisplay.length = 0;
@@ -2650,10 +2690,10 @@
 			formatter = settings.fnFormatNumber;
 	
 		return str.
-			replace(/_START_/g, formatter( start ) ).
-			replace(/_END_/g,   formatter( settings.fnDisplayEnd() ) ).
-			replace(/_TOTAL_/g, formatter( settings.fnRecordsDisplay() ) ).
-			replace(/_MAX_/g,   formatter( settings.fnRecordsTotal() ) );
+			replace(/_START_/g, formatter.call( settings, start ) ).
+			replace(/_END_/g,   formatter.call( settings, settings.fnDisplayEnd() ) ).
+			replace(/_TOTAL_/g, formatter.call( settings, settings.fnRecordsDisplay() ) ).
+			replace(/_MAX_/g,   formatter.call( settings, settings.fnRecordsTotal() ) );
 	}
 	
 	
@@ -2844,19 +2884,44 @@
 		var
 			type   = settings.sPaginationType,
 			plugin = DataTable.ext.oPagination[ type ],
+			modern = typeof plugin === 'function',
 			redraw = function( settings ) {
 				_fnDraw( settings );
 			},
-			node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0];
+			node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0],
+			features = settings.aanFeatures;
 	
-		plugin.fnInit( settings, node, redraw );
+		if ( ! modern ) {
+			plugin.fnInit( settings, node, redraw );
+		}
 	
 		/* Add a draw callback for the pagination on first instance, to update the paging display */
-		if ( ! settings.aanFeatures.p )
+		if ( ! features.p )
 		{
+			node.id = settings.sTableId+'_paginate';
+	
 			settings.aoDrawCallback.push( {
 				"fn": function( settings ) {
-					plugin.fnUpdate( settings, redraw );
+					if ( modern ) {
+						var
+							start      = settings._iDisplayStart,
+							len        = settings._iDisplayLength,
+							visRecords = settings.fnRecordsDisplay(),
+							all        = len === -1,
+							page = all ? 0 : Math.ceil( start / len ),
+							pages = all ? 1 : Math.ceil( visRecords / len ),
+							buttons = plugin(page, pages),
+							i, ien;
+	
+						for ( i=0, ien=features.p.length ; i<ien ; i++ ) {
+							_fnRenderer( settings, 'paging' )(
+								settings, features.p[i], i, buttons, page, pages
+							);
+						}
+					}
+					else {
+						plugin.fnUpdate( settings, redraw );
+					}
 				},
 				"sName": "pagination"
 			} );
@@ -2866,15 +2931,37 @@
 	}
 	
 	
+	function _fnRenderer( settings, type )
+	{
+		var renderer = settings.renderer;
+		var host = DataTable.ext.renderer[type];
+	
+		if ( $.isPlainObject( renderer ) && renderer[type] ) {
+			// Specific renderer for this type. If available use it, otherwise use
+			// the default.
+			return host[renderer[type]] || host._;
+		}
+		else if ( typeof renderer === 'string' ) {
+			// Common renderer - if there is one available for this type use it,
+			// otherwise use the default
+			return host[renderer] || host._;
+		}
+	
+		// Use the default
+		return host._;
+	}
+	
+	
 	/**
 	 * Alter the display settings to change the page
 	 *  @param {object} settings DataTables settings object
 	 *  @param {string|int} action Paging action to take: "first", "previous",
 	 *    "next" or "last" or page number to jump to (integer)
+	 *  @param [bool] redraw Automatically draw the update or not
 	 *  @returns {bool} true page has changed, false - no change
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnPageChange ( settings, action )
+	function _fnPageChange ( settings, action, redraw )
 	{
 		var
 			start     = settings._iDisplayStart,
@@ -2929,6 +3016,10 @@
 		settings._iDisplayStart = start;
 	
 		$(settings.oInstance).trigger('page', settings);
+	
+		if ( redraw ) {
+			_fnDraw( settings );
+		}
 	
 		return changed;
 	}
@@ -4204,6 +4295,9 @@
 		var classes = settings.oClasses;
 		var sortIcon = classes.sSortIcon;
 		var sort = _fnSortFlatten( settings );
+		var features = settings.oFeatures;
+		var sortFeature = features.bSort;
+		var sortClasses = features.bSortClasses;
 		var i, ien, col, colIdx, jqTh;
 	
 		// Remove old sorting classes
@@ -4235,35 +4329,41 @@
 			}
 	
 			// Remove column sorting
-			$( _pluck( settings.aoData, 'anCells', colIdx ) )
-				.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+			if ( sortClasses ) {
+				$( _pluck( settings.aoData, 'anCells', colIdx ) )
+					.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+			}
 		}
 	
 		// Add new ones
-		for ( i=0, ien=sort.length ; i<ien ; i++ ) {
-			colIdx = sort[i].col;
-			col    = columns[ colIdx ];
-			jqTh   = $(col.nTh);
+		if ( sortFeature ) {
+			for ( i=0, ien=sort.length ; i<ien ; i++ ) {
+				colIdx = sort[i].col;
+				col    = columns[ colIdx ];
+				jqTh   = $(col.nTh);
 	
-			// Add base TH sorting
-			jqTh
-				.removeClass( col.sSortingClass )
-				.addClass( sort[i].dir == "asc" ?
-					classes.sSortAsc : classes.sSortDesc
-				);
-	
-			// Add icon sorting
-			if ( sortIcon ) {
+				// Add base TH sorting
 				jqTh
-					.find( 'span.'+sortIcon )
+					.removeClass( col.sSortingClass )
 					.addClass( sort[i].dir == "asc" ?
-						classes.sSortJUIAsc : classes.sSortJUIDesc
+						classes.sSortAsc : classes.sSortDesc
 					);
-			}
 	
-			// Add column sorting
-			$( _pluck( settings.aoData, 'anCells', colIdx ) )
-				.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+				// Add icon sorting
+				if ( sortIcon ) {
+					jqTh
+						.find( 'span.'+sortIcon )
+						.addClass( sort[i].dir == "asc" ?
+							classes.sSortJUIAsc : classes.sSortJUIDesc
+						);
+				}
+	
+				// Add column sorting
+				if ( sortClasses ) {
+					$( _pluck( settings.aoData, 'anCells', colIdx ) )
+						.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+				}
+			}
 		}
 	
 		settings.aLastSort = sort;
@@ -5665,7 +5765,7 @@
 				/* Use the JUI classes object for display. You could clone the oStdClasses object if
 				 * you want to have multiple tables with multiple independent classes
 				 */
-				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses );
+				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
 			
 				if ( oInit.sDom === DataTable.defaults.sDom && DataTable.defaults.sDom === "lfrtip" )
 				{
@@ -5675,7 +5775,7 @@
 			}
 			else
 			{
-				$.extend( oSettings.oClasses, DataTable.ext.oStdClasses );
+				$.extend( oSettings.oClasses, DataTable.ext.oStdClasses, oInit.oClasses );
 			}
 			$(this).addClass( oSettings.oClasses.sTable );
 			
@@ -5740,8 +5840,9 @@
 			
 			/* Remove row stripe classes if they are already on the table row */
 			var stripeClasses = oSettings.asStripeClasses;
+			var rowOne = $('tbody tr:eq(0)', this);
 			if ( $.inArray( true, $.map( stripeClasses, function(el, i) {
-				return $('tbody tr:eq(0)', this).hasClass(el);
+				return rowOne.hasClass(el);
 			} ) ) !== -1 ) {
 				$('tbody tr', this).removeClass( stripeClasses.join(' ') );
 				oSettings.asDestroyStripes = stripeClasses.slice();
@@ -5784,6 +5885,31 @@
 			_fnApplyColumnDefs( oSettings, oInit.aoColumnDefs, aoColumnsInit, function (iCol, oDef) {
 				_fnColumnOptions( oSettings, iCol, oDef );
 			} );
+			
+			/* HTML5 attribute detection - build an mData object automatically if the
+			 * attributes are found
+			 */
+			if ( rowOne.length ) {
+				$.each( _fnGetRowElements( oSettings, rowOne[0] ).cells, function (i, cell) {
+					var col = oSettings.aoColumns[i];
+			
+					if ( col.mData === i ) {
+						var sort = cell.getAttribute('data-sort');
+						var filter = cell.getAttribute('data-filter');
+			
+						if ( sort !== null || filter !== null ) {
+							col.mData = {
+								_:      i+'.display',
+								sort:   sort !== null   ? i+'.@data-sort'   : undefined,
+								type:   sort !== null   ? i+'.@data-sort'   : undefined,
+								filter: filter !== null ? i+'.@data-filter' : undefined
+							};
+			
+							_fnColumnOptions( oSettings, i );
+						}
+					}
+				} );
+			}
 			
 			
 			/* Must be done after everything which can be overridden by the state saving! */
@@ -6937,12 +7063,16 @@
 		// is essential here
 		if ( prop2 !== undefined ) {
 			for ( ; i<ien ; i++ ) {
-				out.push( a[i][ prop ][ prop2 ] );
+				if ( a[i] && a[i][ prop ] ) {
+					out.push( a[i][ prop ][ prop2 ] );
+				}
 			}
 		}
 		else {
 			for ( ; i<ien ; i++ ) {
-				out.push( a[i][ prop ] );
+				if ( a[i] ) {
+					out.push( a[i][ prop ] );
+				}
 			}
 		}
 	
@@ -7018,11 +7148,21 @@
 		};
 	};
 	
-	var _range = function ( len )
+	var _range = function ( len, start )
 	{
 		var out = [];
+		var end;
 	
-		for ( var i=0 ; i<len ; i++ ) {
+		if ( start === undefined ) {
+			start = 0;
+			end = len;
+		}
+		else {
+			end = start;
+			start = len;
+		}
+	
+		for ( var i=start ; i<end ; i++ ) {
 			out.push( i );
 		}
 	
@@ -8661,142 +8801,46 @@
 	
 	
 		/**
-		 * Pagination plug-in methods - The style and controls of the pagination can significantly
-		 * impact on how the end user interacts with the data in your table, and DataTables allows
-		 * the addition of pagination controls by extending this object, which can then be enabled
-		 * through the <i>sPaginationType</i> initialisation parameter. Each pagination type that
-		 * is added is an object (the property name of which is what <i>sPaginationType</i> refers
-		 * to) that has two properties, both methods that are used by DataTables to update the
-		 * control's state.
-		 *   <ul>
-		 *     <li>
-		 *       fnInit -  Initialisation of the paging controls. Called only during initialisation
-		 *         of the table. It is expected that this function will add the required DOM elements
-		 *         to the page for the paging controls to work. The element pointer
-		 *         'oSettings.aanFeatures.p' array is provided by DataTables to contain the paging
-		 *         controls (note that this is a 2D array to allow for multiple instances of each
-		 *         DataTables DOM element). It is suggested that you add the controls to this element
-		 *         as children
-		 *       <ul>
-	     *         <li>
-	     *           Function input parameters:
-	     *           <ul>
-		 *             <li>{object} DataTables settings object: see {@link DataTable.models.oSettings}.</li>
-		 *             <li>{node} Container into which the pagination controls must be inserted</li>
-		 *             <li>{function} Draw callback function - whenever the controls cause a page
-		 *               change, this method must be called to redraw the table.</li>
-	     *           </ul>
-	     *         </li>
-		 *         <li>
-		 *           Function return:
-		 *           <ul>
-		 *             <li>No return required</li>
-		 *           </ul>
-		 *         </il>
-		 *       </ul>
-		 *     </il>
-		 *     <li>
-		 *       fnInit -  This function is called whenever the paging status of the table changes and is
-		 *         typically used to update classes and/or text of the paging controls to reflex the new
-		 *         status.
-		 *       <ul>
-	     *         <li>
-	     *           Function input parameters:
-	     *           <ul>
-		 *             <li>{object} DataTables settings object: see {@link DataTable.models.oSettings}.</li>
-		 *             <li>{function} Draw callback function - in case you need to redraw the table again
-		 *               or attach new event listeners</li>
-	     *           </ul>
-	     *         </li>
-		 *         <li>
-		 *           Function return:
-		 *           <ul>
-		 *             <li>No return required</li>
-		 *           </ul>
-		 *         </il>
-		 *       </ul>
-		 *     </il>
-		 *   </ul>
+		 * Pagination plug-in methods. Each entry in this object is a function
+		 * and defines which buttons should be shown by pagination rendering method
+		 * that is used for the table: {@link DataTable.ext.renderer.paging}. The
+		 * renderer addresses how the buttons are displayed in the document, while
+		 * the functions here tell it what buttons to display, in order by returning
+		 * an array of button descriptions (what each button will down).
+		 *
+		 * Pagination types (the four built in options and any additional plug-in
+		 * options) and be used through the `paginationType` initialisation
+		 * parameter.
+		 *
+		 * The functions defined take two parameters:
+		 *
+		 * 1. `{int} page` The current page index
+		 * 2. `{int} pages` The number of pages in the table
+		 *
+		 * Each function is expected to return an array where each element of the
+		 * array can be one of:
+		 *
+		 * * `first` - Jump to first page when activated
+		 * * `last` - Jump to last page when activated
+		 * * `previous` - Show previous page when activated
+		 * * `next` - Show next page when activated
+		 * * `{int}` - Show page of the index given
+		 * * `{array}` - A nested array containing the above elements to add a
+		 *   containing 'DIV' element (might be useful for styling).
+		 *
+		 * Note that DataTables v1.9- used this object slightly differently whereby
+		 * an object with two functions would be defined for each plug-in. That
+		 * ability is still supported by DataTables 1.10+ to provide backwards
+		 * compatibility, but this option of use is now decremented and no longer
+		 * documented in DataTables 1.10+.
+		 *
 		 *  @type object
 		 *  @default {}
 		 *
 		 *  @example
-		 *    $.fn.dataTableExt.oPagination.four_button = {
-		 *      "fnInit": function ( oSettings, nPaging, fnCallbackDraw ) {
-		 *        nFirst = document.createElement( 'span' );
-		 *        nPrevious = document.createElement( 'span' );
-		 *        nNext = document.createElement( 'span' );
-		 *        nLast = document.createElement( 'span' );
-		 *
-		 *        nFirst.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sFirst ) );
-		 *        nPrevious.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sPrevious ) );
-		 *        nNext.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sNext ) );
-		 *        nLast.appendChild( document.createTextNode( oSettings.oLanguage.oPaginate.sLast ) );
-		 *
-		 *        nFirst.className = "paginate_button first";
-		 *        nPrevious.className = "paginate_button previous";
-		 *        nNext.className="paginate_button next";
-		 *        nLast.className = "paginate_button last";
-		 *
-		 *        nPaging.appendChild( nFirst );
-		 *        nPaging.appendChild( nPrevious );
-		 *        nPaging.appendChild( nNext );
-		 *        nPaging.appendChild( nLast );
-		 *
-		 *        $(nFirst).click( function () {
-		 *          oSettings.oApi._fnPageChange( oSettings, "first" );
-		 *          fnCallbackDraw( oSettings );
-		 *        } );
-		 *
-		 *        $(nPrevious).click( function() {
-		 *          oSettings.oApi._fnPageChange( oSettings, "previous" );
-		 *          fnCallbackDraw( oSettings );
-		 *        } );
-		 *
-		 *        $(nNext).click( function() {
-		 *          oSettings.oApi._fnPageChange( oSettings, "next" );
-		 *          fnCallbackDraw( oSettings );
-		 *        } );
-		 *
-		 *        $(nLast).click( function() {
-		 *          oSettings.oApi._fnPageChange( oSettings, "last" );
-		 *          fnCallbackDraw( oSettings );
-		 *        } );
-		 *
-		 *        $(nFirst).bind( 'selectstart', function () { return false; } );
-		 *        $(nPrevious).bind( 'selectstart', function () { return false; } );
-		 *        $(nNext).bind( 'selectstart', function () { return false; } );
-		 *        $(nLast).bind( 'selectstart', function () { return false; } );
-		 *      },
-		 *
-		 *      "fnUpdate": function ( oSettings, fnCallbackDraw ) {
-		 *        if ( !oSettings.aanFeatures.p ) {
-		 *          return;
-		 *        }
-		 *
-		 *        // Loop over each instance of the pager
-		 *        var an = oSettings.aanFeatures.p;
-		 *        for ( var i=0, iLen=an.length ; i<iLen ; i++ ) {
-		 *          var buttons = an[i].getElementsByTagName('span');
-		 *          if ( oSettings._iDisplayStart === 0 ) {
-		 *            buttons[0].className = "paginate_disabled_previous";
-		 *            buttons[1].className = "paginate_disabled_previous";
-		 *          }
-		 *          else {
-		 *            buttons[0].className = "paginate_enabled_previous";
-		 *            buttons[1].className = "paginate_enabled_previous";
-		 *          }
-		 *
-		 *          if ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) {
-		 *            buttons[2].className = "paginate_disabled_next";
-		 *            buttons[3].className = "paginate_disabled_next";
-		 *          }
-		 *          else {
-		 *            buttons[2].className = "paginate_enabled_next";
-		 *            buttons[3].className = "paginate_enabled_next";
-		 *          }
-		 *        }
-		 *      }
+		 *    // Show previous, next and current page buttons only
+		 *    $.fn.dataTableExt.oPagination.current = function ( page, pages ) {
+		 *      return [ 'previous', page, 'next' ];
 		 *    };
 		 */
 		"oPagination": {},
@@ -9071,6 +9115,15 @@
 		 *  @private
 		 */
 		"_bAutoType": true,
+	
+		/**
+		 * Flag to indicate if HTML5 data attributes should be used as the data
+		 * source for filtering or sorting. True is either are.
+		 *  @type boolean
+		 *  @default false
+		 *  @private
+		 */
+		"_bAttrSrc": false,
 	
 		/**
 		 * Developer definable function that is called whenever a cell is created (Ajax source,
@@ -9423,8 +9476,8 @@
 		 *   `sAjaxDataProp` from DataTables 1.9-.
 		 *
 		 * * `success` - Should not be overridden it is used internally in
-		 *   DataTables. To manipulate the data returned by the server use
-		 *   `ajax.dataSrc`, or use `ajax` as a function (see below).
+		 *   DataTables. To manipulate / transform the data returned by the server
+		 *   use `ajax.dataSrc`, or use `ajax` as a function (see below).
 		 *
 		 * `function`
 		 * ----------
@@ -10724,6 +10777,17 @@
 	
 	
 		/**
+		 * Classes that DataTables assigns to the various components and features
+		 * that it adds to the HTML table. This allows classes to be configured
+		 * during initialisation in addition to through the static
+		 * {@link DataTable.ext.oStdClasses} object).
+		 *  @namespace
+		 *  @name DataTable.defaults.classes
+		 */
+		"oClasses": {},
+	
+	
+		/**
 		 * All strings that DataTables uses in the user interface that it creates
 		 * are defined in this object, allowing you to modified them individually or
 		 * completely replace them all as required.
@@ -10787,8 +10851,8 @@
 			},
 	
 			/**
-			 * Pagination string used by DataTables for the two built-in pagination
-			 * control types ("two_button" and "full_numbers")
+			 * Pagination string used by DataTables for the built-in pagination
+			 * control types.
 			 *  @namespace
 			 *  @name DataTable.defaults.language.paginate
 			 */
@@ -11309,11 +11373,18 @@
 	
 	
 		/**
-		 * DataTables features two different built-in pagination interaction methods
-		 * ('two_button' or 'full_numbers') which present different page controls to
-		 * the end user. Further methods can be added using the API (see below).
+		 * DataTables features four different built-in options for the buttons to
+		 * display for pagination control:
+		 *
+		 * * `simple` - 'Previous' and 'Next' buttons only
+		 * * 'simple_numbers` - 'Previous' and 'Next' buttons, plus page numbers
+		 * * `full` - 'First', 'Previous', 'Next' and 'Last' buttons
+		 * * `full_numbers` - 'First', 'Previous', 'Next' and 'Last' buttons, plus
+		 *   page numbers
+		 *  
+		 * Further methods can be added using {@link DataTable.ext.oPagination}.
 		 *  @type string
-		 *  @default two_button
+		 *  @default simple_numbers
 		 *
 		 *  @dtopt Options
 		 *  @name DataTable.defaults.paginationType
@@ -11325,7 +11396,7 @@
 		 *      } );
 		 *    } )
 		 */
-		"sPaginationType": "two_button",
+		"sPaginationType": "simple_numbers",
 	
 	
 		/**
@@ -13216,26 +13287,15 @@
 	 *  @extends DataTable.models.ext
 	 */
 	DataTable.ext = $.extend( true, {}, DataTable.models.ext );
+	DataTable.ext.renderer = {};
 	
 	$.extend( DataTable.ext.oStdClasses, {
 		"sTable": "dataTable",
 	
-		/* Two buttons buttons */
-		"sPagePrevEnabled": "paginate_enabled_previous",
-		"sPagePrevDisabled": "paginate_disabled_previous",
-		"sPageNextEnabled": "paginate_enabled_next",
-		"sPageNextDisabled": "paginate_disabled_next",
-		"sPageJUINext": "",
-		"sPageJUIPrev": "",
-	
-		/* Full numbers paging buttons */
+		/* Paging buttons */
 		"sPageButton": "paginate_button",
-		"sPageButtonActive": "paginate_active",
-		"sPageButtonStaticDisabled": "paginate_button paginate_button_disabled",
-		"sPageFirst": "first",
-		"sPagePrevious": "previous",
-		"sPageNext": "next",
-		"sPageLast": "last",
+		"sPageButtonActive": "current",
+		"sPageButtonDisabled": "disabled",
 	
 		/* Striping classes */
 		"sStripeOdd": "odd",
@@ -13277,319 +13337,213 @@
 		"sScrollFootInner": "dataTables_scrollFootInner",
 	
 		/* Misc */
+		"sHeaderTH": "",
 		"sFooterTH": "",
 		"sJUIHeader": "",
 		"sJUIFooter": ""
 	} );
 	
 	
-	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.oStdClasses, {
-		/* Two buttons buttons */
-		"sPagePrevEnabled": "fg-button ui-button ui-state-default ui-corner-left",
-		"sPagePrevDisabled": "fg-button ui-button ui-state-default ui-corner-left ui-state-disabled",
-		"sPageNextEnabled": "fg-button ui-button ui-state-default ui-corner-right",
-		"sPageNextDisabled": "fg-button ui-button ui-state-default ui-corner-right ui-state-disabled",
-		"sPageJUINext": "ui-icon ui-icon-circle-arrow-e",
-		"sPageJUIPrev": "ui-icon ui-icon-circle-arrow-w",
+	(function() {
 	
+	// Reused strings for better compression
+	var _empty;
+	_empty = '';
+	
+	var _stateDefault = _empty + 'ui-state-default';
+	var _sortIcon     = _empty + 'css_right ui-icon ui-icon-';
+	var _headerFooter = _empty + 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix';
+	
+	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.oStdClasses, {
 		/* Full numbers paging buttons */
-		"sPageButton": "fg-button ui-button ui-state-default",
-		"sPageButtonActive": "fg-button ui-button ui-state-default ui-state-disabled",
-		"sPageButtonStaticDisabled": "fg-button ui-button ui-state-default ui-state-disabled",
-		"sPageFirst": "first ui-corner-tl ui-corner-bl",
-		"sPageLast": "last ui-corner-tr ui-corner-br",
+		"sPageButton":         "fg-button ui-button "+_stateDefault,
+		"sPageButtonActive":   "ui-state-disabled",
+		"sPageButtonDisabled": "ui-state-disabled",
 	
 		/* Features */
 		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
 			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
 	
 		/* Sorting */
-		"sSortAsc": "ui-state-default",
-		"sSortDesc": "ui-state-default",
-		"sSortable": "ui-state-default",
-		"sSortableAsc": "ui-state-default",
-		"sSortableDesc": "ui-state-default",
-		"sSortableNone": "ui-state-default",
-		"sSortJUIAsc": "css_right ui-icon ui-icon-triangle-1-n",
-		"sSortJUIDesc": "css_right ui-icon ui-icon-triangle-1-s",
-		"sSortJUI": "css_right ui-icon ui-icon-carat-2-n-s",
-		"sSortJUIAscAllowed": "css_right ui-icon ui-icon-carat-1-n",
-		"sSortJUIDescAllowed": "css_right ui-icon ui-icon-carat-1-s",
-		"sSortJUIWrapper": "DataTables_sort_wrapper",
-		"sSortIcon": "DataTables_sort_icon",
+		"sSortAsc":            _stateDefault+" sorting_asc",
+		"sSortDesc":           _stateDefault+" sorting_desc",
+		"sSortable":           _stateDefault+" sorting",
+		"sSortableAsc":        _stateDefault+" sorting_asc_disabled",
+		"sSortableDesc":       _stateDefault+" sorting_desc_disabled",
+		"sSortableNone":       _stateDefault+" sorting_disabled",
+		"sSortJUIAsc":         _sortIcon+"triangle-1-n",
+		"sSortJUIDesc":        _sortIcon+"triangle-1-s",
+		"sSortJUI":            _sortIcon+"carat-2-n-s",
+		"sSortJUIAscAllowed":  _sortIcon+"carat-1-n",
+		"sSortJUIDescAllowed": _sortIcon+"carat-1-s",
+		"sSortJUIWrapper":     "DataTables_sort_wrapper",
+		"sSortIcon":           "DataTables_sort_icon",
 	
 		/* Scrolling */
-		"sScrollHead": "dataTables_scrollHead ui-state-default",
-		"sScrollFoot": "dataTables_scrollFoot ui-state-default",
+		"sScrollHead": "dataTables_scrollHead "+_stateDefault,
+		"sScrollFoot": "dataTables_scrollFoot "+_stateDefault,
 	
 		/* Misc */
-		"sFooterTH": "ui-state-default",
-		"sJUIHeader": "fg-toolbar ui-toolbar ui-widget-header ui-corner-tl ui-corner-tr ui-helper-clearfix",
-		"sJUIFooter": "fg-toolbar ui-toolbar ui-widget-header ui-corner-bl ui-corner-br ui-helper-clearfix"
+		"sHeaderTH":  _stateDefault,
+		"sFooterTH":  _stateDefault,
+		"sJUIHeader": _headerFooter+" ui-corner-tl ui-corner-tr",
+		"sJUIFooter": _headerFooter+" ui-corner-bl ui-corner-br"
 	} );
 	
-	/*
-	 * Variable: oPagination
-	 * Purpose:
-	 * Scope:    jQuery.fn.dataTableExt
-	 */
-	$.extend( DataTable.ext.oPagination, {
-		/*
-		 * Variable: two_button
-		 * Purpose:  Standard two button (forward/back) pagination
-		 * Scope:    jQuery.fn.dataTableExt.oPagination
-		 */
-		"two_button": {
-			/*
-			 * Function: oPagination.two_button.fnInit
-			 * Purpose:  Initialise dom elements required for pagination with forward/back buttons only
-			 * Returns:  -
-			 * Inputs:   object:oSettings - dataTables settings object
-			 *           node:nPaging - the DIV which contains this pagination control
-			 *           function:fnCallbackDraw - draw function which must be called on update
-			 */
-			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
-			{
-				var oLang = oSettings.oLanguage.oPaginate;
-				var oClasses = oSettings.oClasses;
-				var fnClickHandler = function ( e ) {
-					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
-					{
-						fnCallbackDraw( oSettings );
-					}
-				};
+	}());
 	
-				var sAppend = (!oSettings.bJUI) ?
-					'<a class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sPrevious+'</a>'+
-					'<a class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button">'+oLang.sNext+'</a>'
-					:
-					'<a class="'+oSettings.oClasses.sPagePrevDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button"><span class="'+oSettings.oClasses.sPageJUIPrev+'"></span></a>'+
-					'<a class="'+oSettings.oClasses.sPageNextDisabled+'" tabindex="'+oSettings.iTabIndex+'" role="button"><span class="'+oSettings.oClasses.sPageJUINext+'"></span></a>';
-				$(nPaging).append( sAppend );
 	
-				var els = $('a', nPaging);
-				var nPrevious = els[0],
-					nNext = els[1];
 	
-				oSettings.oApi._fnBindAction( nPrevious, {action: "previous"}, fnClickHandler );
-				oSettings.oApi._fnBindAction( nNext,     {action: "next"},     fnClickHandler );
+	(function() {
 	
-				/* ID the first elements only */
-				if ( !oSettings.aanFeatures.p )
-				{
-					nPaging.id = oSettings.sTableId+'_paginate';
-					nPrevious.id = oSettings.sTableId+'_previous';
-					nNext.id = oSettings.sTableId+'_next';
 	
-					nPrevious.setAttribute('aria-controls', oSettings.sTableId);
-					nNext.setAttribute('aria-controls', oSettings.sTableId);
-				}
-			},
+	var extPagination = DataTable.ext.oPagination;
 	
-			/*
-			 * Function: oPagination.two_button.fnUpdate
-			 * Purpose:  Update the two button pagination at the end of the draw
-			 * Returns:  -
-			 * Inputs:   object:oSettings - dataTables settings object
-			 *           function:fnCallbackDraw - draw function to call on page change
-			 */
-			"fnUpdate": function ( oSettings, fnCallbackDraw )
-			{
-				if ( !oSettings.aanFeatures.p )
-				{
-					return;
-				}
+	function _numbers ( page, pages ) {
+		var
+			numbers = [],
+			buttons = extPagination.numbers_length,
+			half = Math.floor( buttons / 2 ),
+			i = 1;
 	
-				var oClasses = oSettings.oClasses;
-				var an = oSettings.aanFeatures.p;
-				var nNode;
+		if ( pages <= buttons ) {
+			numbers = _range( 0, pages );
+		}
+		else if ( page <= half ) {
+			numbers = _range( 0, buttons-2 );
+			numbers.push( 'ellipsis' );
+			numbers.push( pages-1 );
+		}
+		else if ( page >= pages - 1 - half ) {
+			numbers = _range( pages-(buttons-2), pages );
+			numbers.splice( 0, 0, 'ellipsis' ); // no unshift in ie6
+			numbers.splice( 0, 0, 0 );
+		}
+		else {
+			numbers = _range( page-1, page+2 );
+			numbers.push( 'ellipsis' );
+			numbers.push( pages-1 );
+			numbers.splice( 0, 0, 'ellipsis' );
+			numbers.splice( 0, 0, 0 );
+		}
 	
-				/* Loop over each instance of the pager */
-				for ( var i=0, iLen=an.length ; i<iLen ; i++ )
-				{
-					nNode = an[i].firstChild;
-					if ( nNode )
-					{
-						/* Previous page */
-						nNode.className = ( oSettings._iDisplayStart === 0 ) ?
-						    oClasses.sPagePrevDisabled : oClasses.sPagePrevEnabled;
+		numbers.DT_el = 'span';
+		return numbers;
+	}
 	
-						/* Next page */
-						nNode = nNode.nextSibling;
-						nNode.className = ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() ) ?
-						    oClasses.sPageNextDisabled : oClasses.sPageNextEnabled;
-					}
-				}
-			}
+	
+	$.extend( extPagination, {
+		simple: function ( page, pages ) {
+			return [ 'previous', 'next' ];
 		},
 	
+		full: function ( page, pages ) {
+			return [  'previous', 'previous', 'next', 'next' ];
+		},
 	
-		/*
-		 * Variable: iFullNumbersShowPages
-		 * Purpose:  Change the number of pages which can be seen
-		 * Scope:    jQuery.fn.dataTableExt.oPagination
-		 */
-		"iFullNumbersShowPages": 5,
+		simple_numbers: function ( page, pages ) {
+			return [ 'previous', _numbers(page, pages), 'next' ];
+		},
 	
-		/*
-		 * Variable: full_numbers
-		 * Purpose:  Full numbers pagination
-		 * Scope:    jQuery.fn.dataTableExt.oPagination
-		 */
-		"full_numbers": {
-			/*
-			 * Function: oPagination.full_numbers.fnInit
-			 * Purpose:  Initialise dom elements required for pagination with a list of the pages
-			 * Returns:  -
-			 * Inputs:   object:oSettings - dataTables settings object
-			 *           node:nPaging - the DIV which contains this pagination control
-			 *           function:fnCallbackDraw - draw function which must be called on update
-			 */
-			"fnInit": function ( oSettings, nPaging, fnCallbackDraw )
-			{
-				var oLang = oSettings.oLanguage.oPaginate;
-				var oClasses = oSettings.oClasses;
-				var fnClickHandler = function ( e ) {
-					if ( oSettings.oApi._fnPageChange( oSettings, e.data.action ) )
-					{
-						fnCallbackDraw( oSettings );
+		full_numbers: function ( page, pages ) {
+			return [ 'first', 'previous', _numbers(page, pages), 'next', 'last' ];
+		},
+	
+		// For testing and plug-ins to use
+		_numbers: _numbers,
+		numbers_length: 7
+	} );
+	
+	
+	$.extend( true, DataTable.ext.renderer, {
+		paging: {
+			_: function ( settings, host, idx, buttons, page, pages ) {
+				var classes = settings.oClasses;
+				var lang = settings.oLanguage.oPaginate;
+				var btnDisplay, btnClass;
+	
+				var attach = function( container, buttons ) {
+					var i, ien, node, button;
+					var clickHandler = function ( e ) {
+						_fnPageChange( settings, e.data.action, true );
+					};
+	
+					for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
+						button = buttons[i];
+	
+						if ( $.isArray( button ) ) {
+							var inner = $( '<'+(button.DT_el || 'div')+'/>' )
+								.appendTo( container );
+							attach( inner, button );
+						}
+						else {
+							btnDisplay = '';
+							btnClass = '';
+	
+							switch ( button ) {
+								case 'ellipsis':
+									container.append('<span>&hellip;</span>');
+									break;
+	
+								case 'first':
+									btnDisplay = lang.sFirst;
+									btnClass = button + (page > 0 ?
+										'' : ' '+classes.sPageButtonDisabled);
+									break;
+	
+								case 'previous':
+									btnDisplay = lang.sPrevious;
+									btnClass = button + (page > 0 ?
+										'' : ' '+classes.sPageButtonDisabled);
+									break;
+	
+								case 'next':
+									btnDisplay = lang.sNext;
+									btnClass = button + (page < pages-1 ?
+										'' : ' '+classes.sPageButtonDisabled);
+									break;
+	
+								case 'last':
+									btnDisplay = lang.sLast;
+									btnClass = button + (page < pages-1 ?
+										'' : ' '+classes.sPageButtonDisabled);
+									break;
+	
+								default:
+									btnDisplay = button + 1;
+									btnClass = page === button ?
+										classes.sPageButtonActive : '';
+									break;
+							}
+	
+							if ( btnDisplay ) {
+								node = $('<a>', {
+										'class': classes.sPageButton+' '+btnClass,
+										'aria-controls': settings.sTableId,
+										'tabindex': settings.iTabIndex,
+										'id': idx === 0 && typeof button === 'string' ?
+											settings.sTableId +'_'+ button :
+											null
+									} )
+									.html( btnDisplay )
+									.appendTo( container );
+	
+								_fnBindAction(
+									node, {action: button}, clickHandler
+								);
+							}
+						}
 					}
 				};
 	
-				$(nPaging).append(
-					'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageFirst+'">'+oLang.sFirst+'</a>'+
-					'<a  tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPagePrevious+'">'+oLang.sPrevious+'</a>'+
-					'<span></span>'+
-					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageNext+'">'+oLang.sNext+'</a>'+
-					'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+" "+oClasses.sPageLast+'">'+oLang.sLast+'</a>'
-				);
-				var els = $('a', nPaging);
-				var nFirst = els[0],
-					nPrev = els[1],
-					nNext = els[2],
-					nLast = els[3];
-	
-				oSettings.oApi._fnBindAction( nFirst, {action: "first"},    fnClickHandler );
-				oSettings.oApi._fnBindAction( nPrev,  {action: "previous"}, fnClickHandler );
-				oSettings.oApi._fnBindAction( nNext,  {action: "next"},     fnClickHandler );
-				oSettings.oApi._fnBindAction( nLast,  {action: "last"},     fnClickHandler );
-	
-				/* ID the first elements only */
-				if ( !oSettings.aanFeatures.p )
-				{
-					nPaging.id = oSettings.sTableId+'_paginate';
-					nFirst.id =oSettings.sTableId+'_first';
-					nPrev.id =oSettings.sTableId+'_previous';
-					nNext.id =oSettings.sTableId+'_next';
-					nLast.id =oSettings.sTableId+'_last';
-				}
-			},
-	
-			/*
-			 * Function: oPagination.full_numbers.fnUpdate
-			 * Purpose:  Update the list of page buttons shows
-			 * Returns:  -
-			 * Inputs:   object:oSettings - dataTables settings object
-			 *           function:fnCallbackDraw - draw function to call on page change
-			 */
-			"fnUpdate": function ( oSettings, fnCallbackDraw )
-			{
-				if ( !oSettings.aanFeatures.p )
-				{
-					return;
-				}
-	
-				var iPageCount = DataTable.ext.oPagination.iFullNumbersShowPages;
-				var iPageCountHalf = Math.floor(iPageCount / 2);
-				var iPages = Math.ceil((oSettings.fnRecordsDisplay()) / oSettings._iDisplayLength);
-				var iCurrentPage = Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength) + 1;
-				var sList = "";
-				var iStartButton, iEndButton, i, iLen;
-				var oClasses = oSettings.oClasses;
-				var anButtons, anStatic, nPaginateList, nNode;
-				var an = oSettings.aanFeatures.p;
-				var fnBind = function (j) {
-					oSettings.oApi._fnBindAction( this, {"page": j+iStartButton-1}, function(e) {
-						/* Use the information in the element to jump to the required page */
-						oSettings.oApi._fnPageChange( oSettings, e.data.page );
-						fnCallbackDraw( oSettings );
-						e.preventDefault();
-					} );
-				};
-	
-				/* Pages calculation */
-				if ( oSettings._iDisplayLength === -1 )
-				{
-					iStartButton = 1;
-					iEndButton = 1;
-					iCurrentPage = 1;
-				}
-				else if (iPages < iPageCount)
-				{
-					iStartButton = 1;
-					iEndButton = iPages;
-				}
-				else if (iCurrentPage <= iPageCountHalf)
-				{
-					iStartButton = 1;
-					iEndButton = iPageCount;
-				}
-				else if (iCurrentPage >= (iPages - iPageCountHalf))
-				{
-					iStartButton = iPages - iPageCount + 1;
-					iEndButton = iPages;
-				}
-				else
-				{
-					iStartButton = iCurrentPage - Math.ceil(iPageCount / 2) + 1;
-					iEndButton = iStartButton + iPageCount - 1;
-				}
-	
-	
-				/* Build the dynamic list */
-				for ( i=iStartButton ; i<=iEndButton ; i++ )
-				{
-					sList += (iCurrentPage !== i) ?
-						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButton+'">'+oSettings.fnFormatNumber(i)+'</a>' :
-						'<a tabindex="'+oSettings.iTabIndex+'" class="'+oClasses.sPageButtonActive+'">'+oSettings.fnFormatNumber(i)+'</a>';
-				}
-	
-				/* Loop over each instance of the pager */
-				for ( i=0, iLen=an.length ; i<iLen ; i++ )
-				{
-					nNode = an[i];
-					if ( !nNode.hasChildNodes() )
-					{
-						continue;
-					}
-	
-					/* Build up the dynamic list first - html and listeners */
-					$('span:eq(0)', nNode)
-						.html( sList )
-						.children('a').each( fnBind );
-	
-					/* Update the permanent button's classes */
-					anButtons = nNode.getElementsByTagName('a');
-					anStatic = [
-						anButtons[0], anButtons[1],
-						anButtons[anButtons.length-2], anButtons[anButtons.length-1]
-					];
-	
-					$(anStatic).removeClass( oClasses.sPageButton+" "+oClasses.sPageButtonActive+" "+oClasses.sPageButtonStaticDisabled );
-					$([anStatic[0], anStatic[1]]).addClass(
-						(iCurrentPage==1) ?
-							oClasses.sPageButtonStaticDisabled :
-							oClasses.sPageButton
-					);
-					$([anStatic[2], anStatic[3]]).addClass(
-						(iPages===0 || iCurrentPage===iPages || oSettings._iDisplayLength===-1) ?
-							oClasses.sPageButtonStaticDisabled :
-							oClasses.sPageButton
-					);
-				}
+				attach( $(host).empty(), buttons );
 			}
 		}
 	} );
+	
+	
+	}());
+	
 	$.extend( DataTable.ext.oSort, {
 		/*
 		 * text sorting
