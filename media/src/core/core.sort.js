@@ -313,6 +313,9 @@ function _fnSortingClasses( settings )
 	var classes = settings.oClasses;
 	var sortIcon = classes.sSortIcon;
 	var sort = _fnSortFlatten( settings );
+	var features = settings.oFeatures;
+	var sortFeature = features.bSort;
+	var sortClasses = features.bSortClasses;
 	var i, ien, col, colIdx, jqTh;
 
 	// Remove old sorting classes
@@ -344,35 +347,41 @@ function _fnSortingClasses( settings )
 		}
 
 		// Remove column sorting
-		$( _pluck( settings.aoData, 'anCells', colIdx ) )
-			.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+		if ( sortClasses ) {
+			$( _pluck( settings.aoData, 'anCells', colIdx ) )
+				.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+		}
 	}
 
 	// Add new ones
-	for ( i=0, ien=sort.length ; i<ien ; i++ ) {
-		colIdx = sort[i].col;
-		col    = columns[ colIdx ];
-		jqTh   = $(col.nTh);
+	if ( sortFeature ) {
+		for ( i=0, ien=sort.length ; i<ien ; i++ ) {
+			colIdx = sort[i].col;
+			col    = columns[ colIdx ];
+			jqTh   = $(col.nTh);
 
-		// Add base TH sorting
-		jqTh
-			.removeClass( col.sSortingClass )
-			.addClass( sort[i].dir == "asc" ?
-				classes.sSortAsc : classes.sSortDesc
-			);
-
-		// Add icon sorting
-		if ( sortIcon ) {
+			// Add base TH sorting
 			jqTh
-				.find( 'span.'+sortIcon )
+				.removeClass( col.sSortingClass )
 				.addClass( sort[i].dir == "asc" ?
-					classes.sSortJUIAsc : classes.sSortJUIDesc
+					classes.sSortAsc : classes.sSortDesc
 				);
-		}
 
-		// Add column sorting
-		$( _pluck( settings.aoData, 'anCells', colIdx ) )
-			.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+			// Add icon sorting
+			if ( sortIcon ) {
+				jqTh
+					.find( 'span.'+sortIcon )
+					.addClass( sort[i].dir == "asc" ?
+						classes.sSortJUIAsc : classes.sSortJUIDesc
+					);
+			}
+
+			// Add column sorting
+			if ( sortClasses ) {
+				$( _pluck( settings.aoData, 'anCells', colIdx ) )
+					.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+			}
+		}
 	}
 
 	settings.aLastSort = sort;
