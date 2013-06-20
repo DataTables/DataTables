@@ -201,47 +201,49 @@ table.dataTable {
 				background-color: shade($table-row-background, 2%); // shade by fa
 			}
 		}
+	}
 
-		&.stripe tbody {
-			tr.odd > .sorting_1 {
-				background-color: shade($table-row-background, 5.4%); // shade by f1
-			}
-			tr.odd > .sorting_2 {
-				background-color: shade($table-row-background, 4.7%); // shade by f3;
-			}
-			tr.odd > .sorting_3 {
-				background-color: shade($table-row-background, 3.9%); // shade by f5
-			}
-
-			tr.even > .sorting_1 {
-				background-color: shade($table-row-background, 2%); // shade by fa
-			}
-			tr.even > .sorting_2 {
-				background-color: shade($table-row-background, 1.2%); // shade by fc
-			}
-			tr.even > .sorting_3 {
-				background-color: shade($table-row-background, 0.4%); // shade by fe
-			}
+	&.display tbody,
+	&.sort-column.stripe tbody {
+		tr.odd > .sorting_1 {
+			background-color: shade($table-row-background, 5.4%); // shade by f1
+		}
+		tr.odd > .sorting_2 {
+			background-color: shade($table-row-background, 4.7%); // shade by f3;
+		}
+		tr.odd > .sorting_3 {
+			background-color: shade($table-row-background, 3.9%); // shade by f5
 		}
 
-		&.hover tbody {
-			tr:hover > .sorting_1,
-			tr.odd:hover > .sorting_1,
-			tr.even:hover > .sorting_1 {
-				background-color: shade($table-row-background, 8.2%); // shade by ea
-			}
+		tr.even > .sorting_1 {
+			background-color: shade($table-row-background, 2%); // shade by fa
+		}
+		tr.even > .sorting_2 {
+			background-color: shade($table-row-background, 1.2%); // shade by fc
+		}
+		tr.even > .sorting_3 {
+			background-color: shade($table-row-background, 0.4%); // shade by fe
+		}
+	}
 
-			tr:hover > .sorting_2,
-			tr.odd:hover > .sorting_2,
-			tr.even:hover > .sorting_2 {
-				background-color: shade($table-row-background, 7.5%); // shade by ec
-			}
+	&.display tbody,
+	&.sort-column.hover tbody {
+		tr:hover > .sorting_1,
+		tr.odd:hover > .sorting_1,
+		tr.even:hover > .sorting_1 {
+			background-color: shade($table-row-background, 8.2%); // shade by ea
+		}
 
-			tr:hover > .sorting_3,
-			tr.odd:hover > .sorting_3,
-			tr.even:hover > .sorting_3 {
-				background-color: shade($table-row-background, 6.3%); // shade by ef
-			}
+		tr:hover > .sorting_2,
+		tr.odd:hover > .sorting_2,
+		tr.even:hover > .sorting_2 {
+			background-color: shade($table-row-background, 7.5%); // shade by ec
+		}
+
+		tr:hover > .sorting_3,
+		tr.odd:hover > .sorting_3,
+		tr.even:hover > .sorting_3 {
+			background-color: shade($table-row-background, 6.3%); // shade by ef
 		}
 	}
 }

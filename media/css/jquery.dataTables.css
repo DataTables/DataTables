@@ -87,35 +87,35 @@ table.dataTable {
   table.dataTable.display tbody tr > .sorting_2,
   table.dataTable.display tbody tr > .sorting_3 {
     background-color: #f9f9f9; }
-  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_1, table.dataTable.display.stripe tbody tr.odd > .sorting_1 {
+  table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.sort-column.stripe tbody tr.odd > .sorting_1 {
     background-color: #f1f1f1; }
-  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_2, table.dataTable.display.stripe tbody tr.odd > .sorting_2 {
+  table.dataTable.display tbody tr.odd > .sorting_2, table.dataTable.sort-column.stripe tbody tr.odd > .sorting_2 {
     background-color: #f3f3f3; }
-  table.dataTable.sort-column.stripe tbody tr.odd > .sorting_3, table.dataTable.display.stripe tbody tr.odd > .sorting_3 {
+  table.dataTable.display tbody tr.odd > .sorting_3, table.dataTable.sort-column.stripe tbody tr.odd > .sorting_3 {
     background-color: whitesmoke; }
-  table.dataTable.sort-column.stripe tbody tr.even > .sorting_1, table.dataTable.display.stripe tbody tr.even > .sorting_1 {
+  table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.sort-column.stripe tbody tr.even > .sorting_1 {
     background-color: #f9f9f9; }
-  table.dataTable.sort-column.stripe tbody tr.even > .sorting_2, table.dataTable.display.stripe tbody tr.even > .sorting_2 {
+  table.dataTable.display tbody tr.even > .sorting_2, table.dataTable.sort-column.stripe tbody tr.even > .sorting_2 {
     background-color: #fbfbfb; }
-  table.dataTable.sort-column.stripe tbody tr.even > .sorting_3, table.dataTable.display.stripe tbody tr.even > .sorting_3 {
+  table.dataTable.display tbody tr.even > .sorting_3, table.dataTable.sort-column.stripe tbody tr.even > .sorting_3 {
     background-color: #fdfdfd; }
-  table.dataTable.sort-column.hover tbody tr:hover > .sorting_1,
+  table.dataTable.display tbody tr:hover > .sorting_1,
+  table.dataTable.display tbody tr.odd:hover > .sorting_1,
+  table.dataTable.display tbody tr.even:hover > .sorting_1, table.dataTable.sort-column.hover tbody tr:hover > .sorting_1,
   table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_1,
-  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_1, table.dataTable.display.hover tbody tr:hover > .sorting_1,
-  table.dataTable.display.hover tbody tr.odd:hover > .sorting_1,
-  table.dataTable.display.hover tbody tr.even:hover > .sorting_1 {
+  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_1 {
     background-color: #eaeaea; }
-  table.dataTable.sort-column.hover tbody tr:hover > .sorting_2,
+  table.dataTable.display tbody tr:hover > .sorting_2,
+  table.dataTable.display tbody tr.odd:hover > .sorting_2,
+  table.dataTable.display tbody tr.even:hover > .sorting_2, table.dataTable.sort-column.hover tbody tr:hover > .sorting_2,
   table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_2,
-  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_2, table.dataTable.display.hover tbody tr:hover > .sorting_2,
-  table.dataTable.display.hover tbody tr.odd:hover > .sorting_2,
-  table.dataTable.display.hover tbody tr.even:hover > .sorting_2 {
+  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_2 {
     background-color: #ebebeb; }
-  table.dataTable.sort-column.hover tbody tr:hover > .sorting_3,
+  table.dataTable.display tbody tr:hover > .sorting_3,
+  table.dataTable.display tbody tr.odd:hover > .sorting_3,
+  table.dataTable.display tbody tr.even:hover > .sorting_3, table.dataTable.sort-column.hover tbody tr:hover > .sorting_3,
   table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_3,
-  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3, table.dataTable.display.hover tbody tr:hover > .sorting_3,
-  table.dataTable.display.hover tbody tr.odd:hover > .sorting_3,
-  table.dataTable.display.hover tbody tr.even:hover > .sorting_3 {
+  table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
     background-color: #eeeeee; }
 
 /*
