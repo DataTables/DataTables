@@ -49,13 +49,24 @@ DataTable.models.oRow = {
 	"_aSortData": null,
 
 	/**
-	 * Filtering data cache. As per the sort data cache, used to increase the
-	 * performance of the filtering in DataTables
+	 * Per cell filtering data cache. As per the sort data cache, used to
+	 * increase the performance of the filtering in DataTables
 	 *  @type array
 	 *  @default null
 	 *  @private
 	 */
-	"_aFilterData": null,
+	"_aFilterCells": null,
+
+	/**
+	 * Filtering data cache. This is the same as the cell filtering cache, but
+	 * in this case a string rather than an array. This is easily computed with
+	 * a join on `_aFilterCells`, but is provided as a cache so the join isn't
+	 * needed on every search (memory traded for performance)
+	 *  @type array
+	 *  @default null
+	 *  @private
+	 */
+	"_sFilterRow": null,
 
 	/**
 	 * Cache of the class name that DataTables has applied to the row, so we

@@ -54,7 +54,6 @@ this.oApi = {
 	"_fnFilterCustom": _fnFilterCustom,
 	"_fnFilterColumn": _fnFilterColumn,
 	"_fnFilter": _fnFilter,
-	"_fnBuildSearchArray": _fnBuildSearchArray,
 	"_fnFilterCreateSearch": _fnFilterCreateSearch,
 	"_fnSort": _fnSort,
 	"_fnSortAttachListener": _fnSortAttachListener,

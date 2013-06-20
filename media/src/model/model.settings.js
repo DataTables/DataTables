@@ -323,13 +323,6 @@ DataTable.models.oSettings = {
 	"aoFooter": [],
 
 	/**
-	 * Search data array for regular expression searching
-	 *  @type array
-	 *  @default []
-	 */
-	"asDataSearch": [],
-
-	/**
 	 * Store the applied global search information in case we want to force a
 	 * research or compare the old search to a new one.
 	 * Note that this parameter will be set by the initialisation routine. To
