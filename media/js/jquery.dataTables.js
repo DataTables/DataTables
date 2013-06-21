@@ -2326,8 +2326,6 @@
 		/* Tell the draw function we have been filtering */
 		oSettings.bFiltered = true;
 		$(oSettings.oInstance).trigger('filter', oSettings);
-	
-		_fnBuildSearchArray( oSettings, 0 );
 	}
 	
 	
@@ -2396,123 +2394,52 @@
 	
 	/**
 	 * Filter the data table based on user input and draw the table
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {string} sInput string to filter on
-	 *  @param {int} iForce optional - force a research of the master array (1) or not (undefined or 0)
-	 *  @param {bool} bRegex treat as a regular expression or not
-	 *  @param {bool} bSmart perform smart filtering or not
-	 *  @param {bool} bCaseInsensitive Do case insenstive matching or not
+	 *  @param {object} settings dataTables settings object
+	 *  @param {string} input string to filter on
+	 *  @param {int} force optional - force a research of the master array (1) or not (undefined or 0)
+	 *  @param {bool} regex treat as a regular expression or not
+	 *  @param {bool} smart perform smart filtering or not
+	 *  @param {bool} caseInsensitive Do case insenstive matching or not
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnFilter( oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive )
+	function _fnFilter( settings, input, force, regex, smart, caseInsensitive )
 	{
-		var i;
-		var rpSearch = _fnFilterCreateSearch( sInput, bRegex, bSmart, bCaseInsensitive );
-		var oPrevSearch = oSettings.oPreviousSearch;
+		var rpSearch = _fnFilterCreateSearch( input, regex, smart, caseInsensitive );
+		var prevSearch = settings.oPreviousSearch.sSearch;
+		var displayMaster = settings.aiDisplayMaster;
+		var display, invalidated, i;
 	
-		/* Check if we are forcing or not - optional parameter */
-		if ( !iForce )
-		{
-			iForce = 0;
+		// Need to take account of custom filtering functions - always filter
+		if ( DataTable.ext.afnFiltering.length !== 0 ) {
+			force = true;
 		}
 	
-		/* Need to take account of custom filtering functions - always filter */
-		if ( DataTable.ext.afnFiltering.length !== 0 )
-		{
-			iForce = 1;
+		// If the input is blank - we just want the full data set
+		if ( input.length <= 0 ) {
+			settings.aiDisplay = displayMaster.slice();
 		}
+		else {
+			// Check if any of the rows were invalidated
+			invalidated = _fnFilterData( settings );
 	
-		/*
-		 * If the input is blank - we want the full data set
-		 */
-		if ( sInput.length <= 0 )
-		{
-			oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
-		}
-		else
-		{
-			// Check if any of the rows were invalidated - if so, we need to do a
-			// full re-filter
-			var invalidated = _fnBuildSearchArray( oSettings, 1 );
-	
-			/*
-			 * We are starting a new search or the new search string is smaller
-			 * then the old one (i.e. delete). Search from the master array
-			 */
-			if ( invalidated || iForce == 1 ||
-				 oPrevSearch.sSearch.length > sInput.length ||
-				 sInput.indexOf(oPrevSearch.sSearch) !== 0 )
+			// New search - start from the master array
+			if ( invalidated ||
+				 force ||
+				 prevSearch.length > input.length ||
+				 input.indexOf(prevSearch) !== 0 )
 			{
-				/* Nuke the old display array - we are going to rebuild it */
-				oSettings.aiDisplay.length = 0;
-	
-				/* Force a rebuild of the search array */
-				_fnBuildSearchArray( oSettings, 1 );
-	
-				/* Search through all records to populate the search array
-				 * The the oSettings.aiDisplayMaster and asDataSearch arrays have 1 to 1
-				 * mapping
-				 */
-				for ( i=0 ; i<oSettings.aiDisplayMaster.length ; i++ )
-				{
-					if ( rpSearch.test(oSettings.asDataSearch[i]) )
-					{
-						oSettings.aiDisplay.push( oSettings.aiDisplayMaster[i] );
-					}
-				}
+				settings.aiDisplay = displayMaster.slice();
 			}
-			else
-			{
-				/* Using old search array - refine it - do it this way for speed
-				 * Don't have to search the whole master array again
-				 */
-				var iIndexCorrector = 0;
 	
-				/* Search the current results */
-				for ( i=0 ; i<oSettings.asDataSearch.length ; i++ )
-				{
-					if ( ! rpSearch.test(oSettings.asDataSearch[i]) )
-					{
-						oSettings.aiDisplay.splice( i-iIndexCorrector, 1 );
-						iIndexCorrector++;
-					}
+			// Search the display array
+			display = settings.aiDisplay;
+	
+			for ( i=display.length-1 ; i>=0 ; i-- ) {
+				if ( ! rpSearch.test( settings.aoData[ display[i] ]._sFilterRow ) ) {
+					display.splice( i, 1 );
 				}
 			}
 		}
-	}
-	
-	
-	/**
-	 * Create an array which can be quickly search through
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {int} iMaster use the master data array - optional
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnBuildSearchArray ( settings, master )
-	{
-		var searchData = [];
-		var i, ien, rows;
-		var wasInvalidated = false;
-	
-		if ( !settings.oFeatures.bServerSide ) {
-			// Resolve any invalidated rows
-			wasInvalidated = _fnFilterData( settings );
-	
-			if ( wasInvalidated ) {
-				// Build the search array from the display arrays
-				rows = master===1 ?
-					settings.aiDisplayMaster :
-					settings.aiDisplay;
-	
-				for ( i=0, ien=rows.length ; i<ien ; i++ ) {
-					searchData.push( settings.aoData[ rows[i] ]._aFilterData.join('  ') );
-				}
-	
-				settings.asDataSearch = searchData;
-			}
-		}
-	
-		return wasInvalidated;
 	}
 	
 	
@@ -2600,7 +2527,8 @@
 					filterData.push( cellData );
 				}
 	
-				row._aFilterData = filterData;
+				row._aFilterCells = filterData;
+				row._sFilterRow = filterData.join('  ');
 				wasInvalidated = true;
 			}
 		}
@@ -5521,7 +5449,6 @@
 			"_fnFilterCustom": _fnFilterCustom,
 			"_fnFilterColumn": _fnFilterColumn,
 			"_fnFilter": _fnFilter,
-			"_fnBuildSearchArray": _fnBuildSearchArray,
 			"_fnFilterCreateSearch": _fnFilterCreateSearch,
 			"_fnSort": _fnSort,
 			"_fnSortAttachListener": _fnSortAttachListener,
@@ -9023,13 +8950,24 @@
 		"_aSortData": null,
 	
 		/**
-		 * Filtering data cache. As per the sort data cache, used to increase the
-		 * performance of the filtering in DataTables
+		 * Per cell filtering data cache. As per the sort data cache, used to
+		 * increase the performance of the filtering in DataTables
 		 *  @type array
 		 *  @default null
 		 *  @private
 		 */
-		"_aFilterData": null,
+		"_aFilterCells": null,
+	
+		/**
+		 * Filtering data cache. This is the same as the cell filtering cache, but
+		 * in this case a string rather than an array. This is easily computed with
+		 * a join on `_aFilterCells`, but is provided as a cache so the join isn't
+		 * needed on every search (memory traded for performance)
+		 *  @type array
+		 *  @default null
+		 *  @private
+		 */
+		"_sFilterRow": null,
 	
 		/**
 		 * Cache of the class name that DataTables has applied to the row, so we
@@ -12714,13 +12652,6 @@
 		"aoFooter": [],
 	
 		/**
-		 * Search data array for regular expression searching
-		 *  @type array
-		 *  @default []
-		 */
-		"asDataSearch": [],
-	
-		/**
 		 * Store the applied global search information in case we want to force a
 		 * research or compare the old search to a new one.
 		 * Note that this parameter will be set by the initialisation routine. To
@@ -13346,8 +13277,11 @@
 	
 	(function() {
 	
-	// Reused strings for better compression
-	var _empty;
+	// Reused strings for better compression. Closure compiler appears to have a
+	// weird edge case where it is trying to expand strings rather than use the
+	// variable version. This results in about 200 bytes being added, for very
+	// little preference benefit since it this run on script load only.
+	var _empty = '';
 	_empty = '';
 	
 	var _stateDefault = _empty + 'ui-state-default';
