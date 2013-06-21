@@ -95,111 +95,84 @@ function _fnCreateTr ( oSettings, iRow, nTrIn, anTds )
  */
 function _fnBuildHead( oSettings )
 {
-	var i, nTh, iLen, j, jLen;
-	var iThs = $('th, td', oSettings.nTHead).length;
-	var iCorrector = 0;
-	var jqChildren;
+	var i, ien, cell, row, column;
+	var thead = oSettings.nTHead;
+	var tfoot = oSettings.nTFoot;
+	var createHeader = $('th, td', thead).length === 0;
 	var classes = oSettings.oClasses;
 	var columns = oSettings.aoColumns;
 
-	/* If there is a header in place - then use it - otherwise it's going to get nuked... */
-	if ( iThs !== 0 )
-	{
-		/* We've got a thead from the DOM, so remove hidden columns and apply width to vis cols */
-		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-		{
-			nTh = columns[i].nTh;
-			nTh.setAttribute('role', 'columnheader');
-			if ( columns[i].bSortable )
-			{
-				nTh.setAttribute('tabindex', oSettings.iTabIndex);
-				nTh.setAttribute('aria-controls', oSettings.sTableId);
-			}
-
-			if ( columns[i].sClass !== null )
-			{
-				$(nTh).addClass( columns[i].sClass );
-			}
-
-			/* Set the title of the column if it is user defined (not what was auto detected) */
-			if ( columns[i].sTitle != nTh.innerHTML )
-			{
-				nTh.innerHTML = columns[i].sTitle;
-			}
-		}
-	}
-	else
-	{
-		/* We don't have a header in the DOM - so we are going to have to create one */
-		var nTr = document.createElement( "tr" );
-
-		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-		{
-			nTh = columns[i].nTh;
-			nTh.innerHTML = columns[i].sTitle;
-			nTh.setAttribute('tabindex', '0');
-
-			if ( columns[i].sClass !== null )
-			{
-				$(nTh).addClass( columns[i].sClass );
-			}
-
-			nTr.appendChild( nTh );
-		}
-		$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
-		_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
+	if ( createHeader ) {
+		row = $('tr').appendTo( thead );
 	}
 
-	/* ARIA role for the rows */
-	$(oSettings.nTHead).children('tr').attr('role', 'row');
+	for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+		column = columns[i];
+		cell = $( column.nTh ).addClass( column.sClass );
+
+		if ( createHeader ) {
+			cell.appendTo( row );
+		}
+
+		// 1.11 move into sorting
+		if ( oSettings.oFeatures.bSort ) {
+			cell.addClass( column.sSortingClass );
+
+			if ( column.bSortable !== false ) {
+				cell
+					.attr( 'tabindex', oSettings.iTabIndex )
+					.attr( 'aria-controls', oSettings.sTableId );
+
+				_fnSortAttachListener( oSettings, column.nTh, i );
+			}
+		}
+
+		if ( column.sTitle != cell.html() ) {
+			cell.html( column.sTitle );
+		}
+	}
+
+	if ( createHeader ) {
+		_fnDetectHeader( oSettings.aoHeader, thead );
+	}
 
 	/* Add the extra markup needed by jQuery UI's themes */
 	if ( oSettings.bJUI )
 	{
-		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
+		for ( i=0, ien=columns.length ; i<ien ; i++ )
 		{
-			nTh = columns[i].nTh;
+			cell = columns[i].nTh;
 
 			var nDiv = document.createElement('div');
 			nDiv.className = classes.sSortJUIWrapper;
-			$(nTh).contents().appendTo(nDiv);
+			$(cell).contents().appendTo(nDiv);
 
 			var nSpan = document.createElement('span');
 			nSpan.className = classes.sSortIcon+' '+columns[i].sSortingClassJUI;
 			nDiv.appendChild( nSpan );
-			nTh.appendChild( nDiv );
+			cell.appendChild( nDiv );
 		}
 	}
 
-	if ( oSettings.oFeatures.bSort )
-	{
-		for ( i=0 ; i<columns.length ; i++ )
-		{
-			$(columns[i].nTh).addClass( columns[i].sSortingClass );
-
-			if ( columns[i].bSortable !== false )
-			{
-				_fnSortAttachListener( oSettings, columns[i].nTh, i );
-			}
-		}
-	}
+	/* ARIA role for the rows */
+	$(thead).find('>tr').attr('role', 'row');
 
 	/* Deal with the footer - add classes if required */
-	$(oSettings.nTHead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
-	$(oSettings.nTFoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
+	$(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
+	$(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 
 	/* Cache the footer elements */
-	if ( oSettings.nTFoot !== null )
-	{
+	if ( tfoot !== null ) {
 		var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
-		for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-		{
-			if ( anCells[i] )
-			{
-				columns[i].nTf = anCells[i];
-				if ( columns[i].sClass )
-				{
-					$(anCells[i]).addClass( columns[i].sClass );
+
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			column = columns[i];
+
+			if ( anCells[i] ) {
+				column.nTf = anCells[i];
+
+				if ( column.sClass ) {
+					$(anCells[i]).addClass( column.sClass );
 				}
 			}
 		}
