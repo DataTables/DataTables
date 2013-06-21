@@ -318,7 +318,7 @@ function _fnScrollDraw ( o )
 	// Read all widths in next pass. Forces layout only once because we do not change
 	// any DOM properties.
 	_fnApplyToChildren( function(nSizer) {
-		aApplied.push( _fnStringToCss( $(nSizer).width() ) );
+		aApplied.push( _fnStringToCss( $(nSizer).css('width') ) );
 	}, anHeadSizers );
 
 	// Apply all widths in final pass. Invalidates layout only once because we do not
@@ -335,7 +335,7 @@ function _fnScrollDraw ( o )
 		_fnApplyToChildren( zeroOut, anFootSizers );
 
 		_fnApplyToChildren( function(nSizer) {
-			aAppliedFooter.push( _fnStringToCss( $(nSizer).width() ) );
+			aAppliedFooter.push( _fnStringToCss( $(nSizer).css('width') ) );
 		}, anFootSizers );
 
 		_fnApplyToChildren( function(nToSize, i) {
