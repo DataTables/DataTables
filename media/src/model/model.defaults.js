@@ -164,13 +164,14 @@ DataTable.defaults = {
 	 * the following parameters provide additional options in DataTables or
 	 * require special consideration:
 	 *
-	 * * `data` - As with jQuery, `data` can be provided as an object or array
-	 *   of name/value pairs, but it can also be used as a function to
-	 *   manipulate the data DataTables sends to the server. The function takes
-	 *   a single parameter, an array of name/value pairs that DataTables has
-	 *   readied for sending. An object or array can be returned which will be
-	 *   merged into the DataTables defaults, or you can add the items to the
-	 *   array passed in. This supersedes `fnServerParams` from DataTables 1.9-.
+	 * * `data` - As with jQuery, `data` can be provided as an object, but it
+	 *   can also be used as a function to manipulate the data DataTables sends
+	 *   to the server. The function takes a single parameter, an object of
+	 *   parameters with the values that DataTables has readied for sending. An
+	 *   object may be returned which will be merged into the DataTables
+	 *   defaults, or you can add the items to the object that was passed in and
+	 *   not return anything from the function. This supersedes `fnServerParams`
+	 *   from DataTables 1.9-.
 	 *
 	 * * `dataSrc` - By default DataTables will look for the property 'aaData'
 	 *   when obtaining data from an Ajax source or for server-side processing -

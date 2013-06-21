@@ -14,6 +14,13 @@ function _fnBuildAjax( oSettings, data, fn )
 	// Compatibility with 1.9-, allow fnServerData and event to manipulate
 	_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
 
+	// Convert to object based for 1.10+
+	var tmp = {};
+	$.each( data, function (key, val) {
+		tmp[val.name] = val.value;
+	} );
+	data = tmp;
+
 	var ajaxData;
 	var ajax = oSettings.ajax;
 	var instance = oSettings.oInstance;
@@ -21,28 +28,18 @@ function _fnBuildAjax( oSettings, data, fn )
 	if ( $.isPlainObject( ajax ) && ajax.data )
 	{
 		ajaxData = ajax.data;
+
 		var newData = $.isFunction( ajaxData ) ?
-			ajaxData( data ) :  // fn can manipulate data or return an object or array
+			ajaxData( data ) :  // fn can manipulate data or return an object
 			ajaxData;           // object or array to merge
 
-		if ( $.isArray( newData ) )
-		{
-			// name value pair objects in an array
-			data = data.concat( newData );
-		}
-		else if ( $.isPlainObject( newData ) )
-		{
-			// aData is an array of name value pairs at this point - convert to
-			// an object to easily merge data - jQuery will cope with the switch
-			var oData = {};
-			$.each( data, function (key, val) {
-				oData[val.name] = val.value;
-			} );
+		// If the function returned an object, use that alone
+		data = $.isFunction( ajaxData ) && newData ?
+			newData :
+			$.extend( true, data, newData );
 
-			data = $.extend( true, oData, newData );
-		}
-
-		// Remove the data property as we've resolved it already
+		// Remove the data property as we've resolved it already and don't want
+		// jQuery to do it again (it is restored at the end of the function)
 		delete ajax.data;
 	}
 
