@@ -30,6 +30,8 @@ $.extend( DataTable.ext.oStdClasses, {
 	"sSortableDesc": "sorting_desc_disabled",
 	"sSortableNone": "sorting_disabled",
 	"sSortColumn": "sorting_", /* Note that an int is postfixed for the sorting order */
+
+	// Deprecated
 	"sSortJUIAsc": "",
 	"sSortJUIDesc": "",
 	"sSortJUI": "",
@@ -49,6 +51,8 @@ $.extend( DataTable.ext.oStdClasses, {
 	/* Misc */
 	"sHeaderTH": "",
 	"sFooterTH": "",
+
+	// Deprecated
 	"sJUIHeader": "",
 	"sJUIFooter": ""
 } );

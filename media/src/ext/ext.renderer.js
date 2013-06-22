@@ -8,7 +8,11 @@ $.extend( true, DataTable.ext.renderer, {
 			// Attach a sort listener to update on sort
 			$(settings.nTable).on( 'sort', function ( e, settings, sorting, columns ) {
 				cell
-					.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
+					.removeClass(
+						column.sSortingClass +' '+
+						classes.sSortAsc +' '+
+						classes.sSortDesc
+					)
 					.addClass( columns[ idx ] == 'asc' ?
 						classes.sSortAsc : columns[ idx ] == 'desc' ?
 							classes.sSortDesc :

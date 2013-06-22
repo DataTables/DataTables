@@ -154,19 +154,7 @@ _fnCallbackReg( oSettings, 'aoFooterCallback',     oInit.fnFooterCallback,    'u
 _fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 _fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
 
-if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
-	   oSettings.oFeatures.bSortClasses )
-{
-	/* Enable sort classes for server-side processing. Safe to do it here, since server-side
-	 * processing must be enabled by the developer
-	 */
-	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'server_side_sort_classes' );
-}
-else if ( oSettings.oFeatures.bDeferRender )
-{
-	_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'defer_sort_classes' );
-}
-
+// @todo Remove in 1.11
 if ( oInit.bJQueryUI )
 {
 	/* Use the JUI classes object for display. You could clone the oStdClasses object if
@@ -338,6 +326,7 @@ if ( oInit.bStateSave )
 /*
  * Sorting
  * Check the aaSorting array
+ * @todo For modularisation (1.11) this needs to do into a sort start up handler
  */
 for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
 {
@@ -374,6 +363,26 @@ for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
  * account, and also will apply sorting disabled classes if disabled
  */
 _fnSortingClasses( oSettings );
+
+if ( oSettings.oFeatures.bSort )
+{
+	_fnCallbackReg( oSettings, 'aoDrawCallback', function () {
+		if ( oSettings.bSorted ) {
+			var aSort = _fnSortFlatten( oSettings );
+			var sortedColumns = {};
+
+			$.each( aSort, function (i, val) {
+				sortedColumns[ val.col ] = val.dir;
+			} );
+
+			$(oSettings.nTable).trigger('sort', [oSettings, aSort, sortedColumns]);
+
+			_fnSortingClasses( oSettings );
+			_fnSortAria( oSettings );
+		}
+	} );
+}
+
 
 
 /*

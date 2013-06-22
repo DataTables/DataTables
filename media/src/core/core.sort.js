@@ -35,14 +35,13 @@ function _fnSortFlatten ( settings )
 /**
  * Change the order of the table
  *  @param {object} oSettings dataTables settings object
- *  @param {bool} bApplyClasses optional - should we apply classes or not
  *  @memberof DataTable#oApi
  *  @todo This really needs split up!
  */
-function _fnSort ( oSettings, bApplyClasses )
+function _fnSort ( oSettings )
 {
 	var
-		i, ien, iLen, j, jLen, k, kLen, sortedColumns={},
+		i, ien, iLen, j, jLen, k, kLen,
 		sDataType, nTh,
 		aSort = [],
 		aiOrig = [],
@@ -59,7 +58,6 @@ function _fnSort ( oSettings, bApplyClasses )
 
 	for ( i=0, ien=aSort.length ; i<ien ; i++ ) {
 		sortCol = aSort[i];
-		sortedColumns[ sortCol.col ] = sortCol.dir;
 
 		// Track if we can use the fast sort algorithm
 		if ( sortCol.formatter ) {
@@ -156,17 +154,8 @@ function _fnSort ( oSettings, bApplyClasses )
 		}
 	}
 
-	/* Alter the sorting classes to take account of the changes */
-	if ( (bApplyClasses === undefined || bApplyClasses) && !oSettings.oFeatures.bDeferRender )
-	{
-		_fnSortingClasses( oSettings );
-	}
-
-	_fnSortAria( oSettings );
-
 	/* Tell the draw function that we have sorted the data */
 	oSettings.bSorted = true;
-	$(oSettings.nTable).trigger('sort', [oSettings, aSort, sortedColumns]);
 }
 
 
