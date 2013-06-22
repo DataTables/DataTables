@@ -103,7 +103,7 @@ function _fnBuildHead( oSettings )
 	var columns = oSettings.aoColumns;
 
 	if ( createHeader ) {
-		row = $('tr').appendTo( thead );
+		row = $('<tr/>').appendTo( thead );
 	}
 
 	for ( i=0, ien=columns.length ; i<ien ; i++ ) {
