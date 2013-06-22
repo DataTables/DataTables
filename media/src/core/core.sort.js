@@ -42,7 +42,7 @@ function _fnSortFlatten ( settings )
 function _fnSort ( oSettings, bApplyClasses )
 {
 	var
-		i, ien, iLen, j, jLen, k, kLen,
+		i, ien, iLen, j, jLen, k, kLen, sortedColumns={},
 		sDataType, nTh,
 		aSort = [],
 		aiOrig = [],
@@ -59,6 +59,7 @@ function _fnSort ( oSettings, bApplyClasses )
 
 	for ( i=0, ien=aSort.length ; i<ien ; i++ ) {
 		sortCol = aSort[i];
+		sortedColumns[ sortCol.col ] = sortCol.dir;
 
 		// Track if we can use the fast sort algorithm
 		if ( sortCol.formatter ) {
@@ -165,7 +166,7 @@ function _fnSort ( oSettings, bApplyClasses )
 
 	/* Tell the draw function that we have sorted the data */
 	oSettings.bSorted = true;
-	$(oSettings.oInstance).trigger('sort', oSettings);
+	$(oSettings.nTable).trigger('sort', [oSettings, aSort, sortedColumns]);
 }
 
 
@@ -301,7 +302,7 @@ function _fnSortAttachListener ( settings, attachTo, colIdx, callback )
 
 
 /**
- * Set the sorting classes on the header, Note: it is safe to call this function
+ * Set the sorting classes on table's body, Note: it is safe to call this function
  * when bSort and bSortClasses are false
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
@@ -309,78 +310,27 @@ function _fnSortAttachListener ( settings, attachTo, colIdx, callback )
 function _fnSortingClasses( settings )
 {
 	var oldSort = settings.aLastSort;
-	var columns = settings.aoColumns;
-	var classes = settings.oClasses;
-	var sortIcon = classes.sSortIcon;
+	var sortClass = settings.oClasses.sSortColumn;
 	var sort = _fnSortFlatten( settings );
 	var features = settings.oFeatures;
-	var sortFeature = features.bSort;
-	var sortClasses = features.bSortClasses;
-	var i, ien, col, colIdx, jqTh;
+	var i, ien, colIdx;
 
-	// Remove old sorting classes
-	for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
-		colIdx = oldSort[i].col;
-		col    = columns[ colIdx ];
-		jqTh   = $(col.nTh);
+	if ( features.bSort && features.bSortClasses ) {
+		// Remove old sorting classes
+		for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
+			colIdx = oldSort[i].col;
 
-		// Remove base TH sorting
-		jqTh
-			.removeClass(
-				classes.sSortAsc +" "+
-				classes.sSortDesc +" "
-			)
-			.addClass( col.sSortingClass );
-
-		// Remove icon sorting
-		if ( sortIcon ) {
-			jqTh
-				.find( 'span.'+sortIcon )
-				.removeClass(
-					classes.sSortJUIAsc +" "+
-					classes.sSortJUIDesc +" "+
-					classes.sSortJUI +" "+
-					classes.sSortJUIAscAllowed +" "+
-					classes.sSortJUIDescAllowed
-				)
-				.addClass( col.sSortingClassJUI );
-		}
-
-		// Remove column sorting
-		if ( sortClasses ) {
+			// Remove column sorting
 			$( _pluck( settings.aoData, 'anCells', colIdx ) )
-				.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+				.removeClass( sortClass + (i<2 ? i+1 : 3) );
 		}
-	}
 
-	// Add new ones
-	if ( sortFeature ) {
+		// Add new column sorting
 		for ( i=0, ien=sort.length ; i<ien ; i++ ) {
 			colIdx = sort[i].col;
-			col    = columns[ colIdx ];
-			jqTh   = $(col.nTh);
 
-			// Add base TH sorting
-			jqTh
-				.removeClass( col.sSortingClass )
-				.addClass( sort[i].dir == "asc" ?
-					classes.sSortAsc : classes.sSortDesc
-				);
-
-			// Add icon sorting
-			if ( sortIcon ) {
-				jqTh
-					.find( 'span.'+sortIcon )
-					.addClass( sort[i].dir == "asc" ?
-						classes.sSortJUIAsc : classes.sSortJUIDesc
-					);
-			}
-
-			// Add column sorting
-			if ( sortClasses ) {
-				$( _pluck( settings.aoData, 'anCells', colIdx ) )
-					.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
-			}
+			$( _pluck( settings.aoData, 'anCells', colIdx ) )
+				.addClass( sortClass + (i<2 ? i+1 : 3) );
 		}
 	}
 

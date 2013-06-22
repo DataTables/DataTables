@@ -130,28 +130,14 @@ function _fnBuildHead( oSettings )
 		if ( column.sTitle != cell.html() ) {
 			cell.html( column.sTitle );
 		}
+
+		_fnRenderer( oSettings, 'header' )(
+			oSettings, cell, column, i, classes
+		);
 	}
 
 	if ( createHeader ) {
 		_fnDetectHeader( oSettings.aoHeader, thead );
-	}
-
-	/* Add the extra markup needed by jQuery UI's themes */
-	if ( oSettings.bJUI )
-	{
-		for ( i=0, ien=columns.length ; i<ien ; i++ )
-		{
-			cell = columns[i].nTh;
-
-			var nDiv = document.createElement('div');
-			nDiv.className = classes.sSortJUIWrapper;
-			$(cell).contents().appendTo(nDiv);
-
-			var nSpan = document.createElement('span');
-			nSpan.className = classes.sSortIcon+' '+columns[i].sSortingClassJUI;
-			nDiv.appendChild( nSpan );
-			cell.appendChild( nDiv );
-		}
 	}
 
 	/* ARIA role for the rows */
@@ -511,7 +497,7 @@ function _fnAddOptionsHtml ( oSettings )
 					j++;
 				}
 
-				/* Replace jQuery UI constants */
+				/* Replace jQuery UI constants @todo depreciated */
 				if ( sAttr == "H" )
 				{
 					sAttr = oSettings.oClasses.sJUIHeader;

@@ -179,6 +179,13 @@ if ( oInit.bJQueryUI )
 		/* Set the DOM to use a layout suitable for jQuery UI's theming */
 		oSettings.sDom = '<"H"lfr>t<"F"ip>';
 	}
+
+	if ( ! oSettings.renderer ) {
+		oSettings.renderer = 'jqueryui';
+	}
+	else if ( $.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
+		oSettings.renderer.header = 'jqueryui';
+	}
 }
 else
 {
