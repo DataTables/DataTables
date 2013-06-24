@@ -50,21 +50,33 @@ function _fnLog( settings, level, msg, tn )
 
 /**
  * See if a property is defined on one object, if so assign it to the other object
- *  @param {object} oRet target object
- *  @param {object} oSrc source object
- *  @param {string} sName property
- *  @param {string} [sMappedName] name to map too - optional, sName used if not given
+ *  @param {object} ret target object
+ *  @param {object} src source object
+ *  @param {string} name property
+ *  @param {string} [mappedName] name to map too - optional, name used if not given
  *  @memberof DataTable#oApi
  */
-function _fnMap( oRet, oSrc, sName, sMappedName )
+function _fnMap( ret, src, name, mappedName )
 {
-	if ( sMappedName === undefined )
-	{
-		sMappedName = sName;
+	if ( $.isArray( name ) ) {
+		$.each( name, function (i, val) {
+			if ( $.isArray( val ) ) {
+				_fnMap( ret, src, val[0], val[1] );
+			}
+			else {
+				_fnMap( ret, src, val[0] );
+			}
+		} );
+
+		return;
 	}
-	if ( oSrc[sName] !== undefined )
-	{
-		oRet[sMappedName] = oSrc[sName];
+
+	if ( mappedName === undefined ) {
+		mappedName = name;
+	}
+
+	if ( src[name] !== undefined ) {
+		ret[mappedName] = src[name];
 	}
 }
 
