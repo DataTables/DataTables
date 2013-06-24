@@ -1266,111 +1266,70 @@
 	 */
 	function _fnBuildHead( oSettings )
 	{
-		var i, nTh, iLen, j, jLen;
-		var iThs = $('th, td', oSettings.nTHead).length;
-		var iCorrector = 0;
-		var jqChildren;
+		var i, ien, cell, row, column;
+		var thead = oSettings.nTHead;
+		var tfoot = oSettings.nTFoot;
+		var createHeader = $('th, td', thead).length === 0;
 		var classes = oSettings.oClasses;
 		var columns = oSettings.aoColumns;
 	
-		/* If there is a header in place - then use it - otherwise it's going to get nuked... */
-		if ( iThs !== 0 )
-		{
-			/* We've got a thead from the DOM, so remove hidden columns and apply width to vis cols */
-			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-			{
-				nTh = columns[i].nTh;
-				nTh.setAttribute('role', 'columnheader');
-				if ( columns[i].bSortable )
-				{
-					nTh.setAttribute('tabindex', oSettings.iTabIndex);
-					nTh.setAttribute('aria-controls', oSettings.sTableId);
-				}
-	
-				if ( columns[i].sClass !== null )
-				{
-					$(nTh).addClass( columns[i].sClass );
-				}
-	
-				/* Set the title of the column if it is user defined (not what was auto detected) */
-				if ( columns[i].sTitle != nTh.innerHTML )
-				{
-					nTh.innerHTML = columns[i].sTitle;
-				}
-			}
+		if ( createHeader ) {
+			row = $('<tr/>').appendTo( thead );
 		}
-		else
-		{
-			/* We don't have a header in the DOM - so we are going to have to create one */
-			var nTr = document.createElement( "tr" );
 	
-			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-			{
-				nTh = columns[i].nTh;
-				nTh.innerHTML = columns[i].sTitle;
-				nTh.setAttribute('tabindex', '0');
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			column = columns[i];
+			cell = $( column.nTh ).addClass( column.sClass );
 	
-				if ( columns[i].sClass !== null )
-				{
-					$(nTh).addClass( columns[i].sClass );
-				}
-	
-				nTr.appendChild( nTh );
+			if ( createHeader ) {
+				cell.appendTo( row );
 			}
-			$(oSettings.nTHead).html( '' )[0].appendChild( nTr );
-			_fnDetectHeader( oSettings.aoHeader, oSettings.nTHead );
+	
+			// 1.11 move into sorting
+			if ( oSettings.oFeatures.bSort ) {
+				cell.addClass( column.sSortingClass );
+	
+				if ( column.bSortable !== false ) {
+					cell
+						.attr( 'tabindex', oSettings.iTabIndex )
+						.attr( 'aria-controls', oSettings.sTableId );
+	
+					_fnSortAttachListener( oSettings, column.nTh, i );
+				}
+			}
+	
+			if ( column.sTitle != cell.html() ) {
+				cell.html( column.sTitle );
+			}
+	
+			_fnRenderer( oSettings, 'header' )(
+				oSettings, cell, column, i, classes
+			);
+		}
+	
+		if ( createHeader ) {
+			_fnDetectHeader( oSettings.aoHeader, thead );
 		}
 	
 		/* ARIA role for the rows */
-		$(oSettings.nTHead).children('tr').attr('role', 'row');
-	
-		/* Add the extra markup needed by jQuery UI's themes */
-		if ( oSettings.bJUI )
-		{
-			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-			{
-				nTh = columns[i].nTh;
-	
-				var nDiv = document.createElement('div');
-				nDiv.className = classes.sSortJUIWrapper;
-				$(nTh).contents().appendTo(nDiv);
-	
-				var nSpan = document.createElement('span');
-				nSpan.className = classes.sSortIcon+' '+columns[i].sSortingClassJUI;
-				nDiv.appendChild( nSpan );
-				nTh.appendChild( nDiv );
-			}
-		}
-	
-		if ( oSettings.oFeatures.bSort )
-		{
-			for ( i=0 ; i<columns.length ; i++ )
-			{
-				$(columns[i].nTh).addClass( columns[i].sSortingClass );
-	
-				if ( columns[i].bSortable !== false )
-				{
-					_fnSortAttachListener( oSettings, columns[i].nTh, i );
-				}
-			}
-		}
+		$(thead).find('>tr').attr('role', 'row');
 	
 		/* Deal with the footer - add classes if required */
-		$(oSettings.nTHead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
-		$(oSettings.nTFoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
+		$(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
+		$(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 	
 		/* Cache the footer elements */
-		if ( oSettings.nTFoot !== null )
-		{
+		if ( tfoot !== null ) {
 			var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
-			for ( i=0, iLen=columns.length ; i<iLen ; i++ )
-			{
-				if ( anCells[i] )
-				{
-					columns[i].nTf = anCells[i];
-					if ( columns[i].sClass )
-					{
-						$(anCells[i]).addClass( columns[i].sClass );
+	
+			for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+				column = columns[i];
+	
+				if ( anCells[i] ) {
+					column.nTf = anCells[i];
+	
+					if ( column.sClass ) {
+						$(anCells[i]).addClass( column.sClass );
 					}
 				}
 			}
@@ -1709,7 +1668,7 @@
 						j++;
 					}
 	
-					/* Replace jQuery UI constants */
+					/* Replace jQuery UI constants @todo depreciated */
 					if ( sAttr == "H" )
 					{
 						sAttr = oSettings.oClasses.sJUIHeader;
@@ -1948,6 +1907,13 @@
 		// Compatibility with 1.9-, allow fnServerData and event to manipulate
 		_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
 	
+		// Convert to object based for 1.10+
+		var tmp = {};
+		$.each( data, function (key, val) {
+			tmp[val.name] = val.value;
+		} );
+		data = tmp;
+	
 		var ajaxData;
 		var ajax = oSettings.ajax;
 		var instance = oSettings.oInstance;
@@ -1955,28 +1921,18 @@
 		if ( $.isPlainObject( ajax ) && ajax.data )
 		{
 			ajaxData = ajax.data;
+	
 			var newData = $.isFunction( ajaxData ) ?
-				ajaxData( data ) :  // fn can manipulate data or return an object or array
+				ajaxData( data ) :  // fn can manipulate data or return an object
 				ajaxData;           // object or array to merge
 	
-			if ( $.isArray( newData ) )
-			{
-				// name value pair objects in an array
-				data = data.concat( newData );
-			}
-			else if ( $.isPlainObject( newData ) )
-			{
-				// aData is an array of name value pairs at this point - convert to
-				// an object to easily merge data - jQuery will cope with the switch
-				var oData = {};
-				$.each( data, function (key, val) {
-					oData[val.name] = val.value;
-				} );
+			// If the function returned an object, use that alone
+			data = $.isFunction( ajaxData ) && newData ?
+				newData :
+				$.extend( true, data, newData );
 	
-				data = $.extend( true, oData, newData );
-			}
-	
-			// Remove the data property as we've resolved it already
+			// Remove the data property as we've resolved it already and don't want
+			// jQuery to do it again (it is restored at the end of the function)
 			delete ajax.data;
 		}
 	
@@ -2859,27 +2815,6 @@
 	}
 	
 	
-	function _fnRenderer( settings, type )
-	{
-		var renderer = settings.renderer;
-		var host = DataTable.ext.renderer[type];
-	
-		if ( $.isPlainObject( renderer ) && renderer[type] ) {
-			// Specific renderer for this type. If available use it, otherwise use
-			// the default.
-			return host[renderer[type]] || host._;
-		}
-		else if ( typeof renderer === 'string' ) {
-			// Common renderer - if there is one available for this type use it,
-			// otherwise use the default
-			return host[renderer] || host._;
-		}
-	
-		// Use the default
-		return host._;
-	}
-	
-	
 	/**
 	 * Alter the display settings to change the page
 	 *  @param {object} settings DataTables settings object
@@ -3306,7 +3241,7 @@
 		// Read all widths in next pass. Forces layout only once because we do not change
 		// any DOM properties.
 		_fnApplyToChildren( function(nSizer) {
-			aApplied.push( _fnStringToCss( $(nSizer).width() ) );
+			aApplied.push( _fnStringToCss( $(nSizer).css('width') ) );
 		}, anHeadSizers );
 	
 		// Apply all widths in final pass. Invalidates layout only once because we do not
@@ -3323,7 +3258,7 @@
 			_fnApplyToChildren( zeroOut, anFootSizers );
 	
 			_fnApplyToChildren( function(nSizer) {
-				aAppliedFooter.push( _fnStringToCss( $(nSizer).width() ) );
+				aAppliedFooter.push( _fnStringToCss( $(nSizer).css('width') ) );
 			}, anFootSizers );
 	
 			_fnApplyToChildren( function(nToSize, i) {
@@ -3945,11 +3880,10 @@
 	/**
 	 * Change the order of the table
 	 *  @param {object} oSettings dataTables settings object
-	 *  @param {bool} bApplyClasses optional - should we apply classes or not
 	 *  @memberof DataTable#oApi
 	 *  @todo This really needs split up!
 	 */
-	function _fnSort ( oSettings, bApplyClasses )
+	function _fnSort ( oSettings )
 	{
 		var
 			i, ien, iLen, j, jLen, k, kLen,
@@ -4065,17 +3999,8 @@
 			}
 		}
 	
-		/* Alter the sorting classes to take account of the changes */
-		if ( (bApplyClasses === undefined || bApplyClasses) && !oSettings.oFeatures.bDeferRender )
-		{
-			_fnSortingClasses( oSettings );
-		}
-	
-		_fnSortAria( oSettings );
-	
 		/* Tell the draw function that we have sorted the data */
 		oSettings.bSorted = true;
-		$(oSettings.oInstance).trigger('sort', oSettings);
 	}
 	
 	
@@ -4211,7 +4136,7 @@
 	
 	
 	/**
-	 * Set the sorting classes on the header, Note: it is safe to call this function
+	 * Set the sorting classes on table's body, Note: it is safe to call this function
 	 * when bSort and bSortClasses are false
 	 *  @param {object} oSettings dataTables settings object
 	 *  @memberof DataTable#oApi
@@ -4219,78 +4144,27 @@
 	function _fnSortingClasses( settings )
 	{
 		var oldSort = settings.aLastSort;
-		var columns = settings.aoColumns;
-		var classes = settings.oClasses;
-		var sortIcon = classes.sSortIcon;
+		var sortClass = settings.oClasses.sSortColumn;
 		var sort = _fnSortFlatten( settings );
 		var features = settings.oFeatures;
-		var sortFeature = features.bSort;
-		var sortClasses = features.bSortClasses;
-		var i, ien, col, colIdx, jqTh;
+		var i, ien, colIdx;
 	
-		// Remove old sorting classes
-		for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
-			colIdx = oldSort[i].col;
-			col    = columns[ colIdx ];
-			jqTh   = $(col.nTh);
+		if ( features.bSort && features.bSortClasses ) {
+			// Remove old sorting classes
+			for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
+				colIdx = oldSort[i].col;
 	
-			// Remove base TH sorting
-			jqTh
-				.removeClass(
-					classes.sSortAsc +" "+
-					classes.sSortDesc +" "
-				)
-				.addClass( col.sSortingClass );
-	
-			// Remove icon sorting
-			if ( sortIcon ) {
-				jqTh
-					.find( 'span.'+sortIcon )
-					.removeClass(
-						classes.sSortJUIAsc +" "+
-						classes.sSortJUIDesc +" "+
-						classes.sSortJUI +" "+
-						classes.sSortJUIAscAllowed +" "+
-						classes.sSortJUIDescAllowed
-					)
-					.addClass( col.sSortingClassJUI );
-			}
-	
-			// Remove column sorting
-			if ( sortClasses ) {
+				// Remove column sorting
 				$( _pluck( settings.aoData, 'anCells', colIdx ) )
-					.removeClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
+					.removeClass( sortClass + (i<2 ? i+1 : 3) );
 			}
-		}
 	
-		// Add new ones
-		if ( sortFeature ) {
+			// Add new column sorting
 			for ( i=0, ien=sort.length ; i<ien ; i++ ) {
 				colIdx = sort[i].col;
-				col    = columns[ colIdx ];
-				jqTh   = $(col.nTh);
 	
-				// Add base TH sorting
-				jqTh
-					.removeClass( col.sSortingClass )
-					.addClass( sort[i].dir == "asc" ?
-						classes.sSortAsc : classes.sSortDesc
-					);
-	
-				// Add icon sorting
-				if ( sortIcon ) {
-					jqTh
-						.find( 'span.'+sortIcon )
-						.addClass( sort[i].dir == "asc" ?
-							classes.sSortJUIAsc : classes.sSortJUIDesc
-						);
-				}
-	
-				// Add column sorting
-				if ( sortClasses ) {
-					$( _pluck( settings.aoData, 'anCells', colIdx ) )
-						.addClass( classes.sSortColumn + (i<2 ? i+1 : 3) );
-				}
+				$( _pluck( settings.aoData, 'anCells', colIdx ) )
+					.addClass( sortClass + (i<2 ? i+1 : 3) );
 			}
 		}
 	
@@ -4641,6 +4515,28 @@
 	
 		settings._iDisplayStart = start;
 	}
+	
+	
+	function _fnRenderer( settings, type )
+	{
+		var renderer = settings.renderer;
+		var host = DataTable.ext.renderer[type];
+	
+		if ( $.isPlainObject( renderer ) && renderer[type] ) {
+			// Specific renderer for this type. If available use it, otherwise use
+			// the default.
+			return host[renderer[type]] || host._;
+		}
+		else if ( typeof renderer === 'string' ) {
+			// Common renderer - if there is one available for this type use it,
+			// otherwise use the default
+			return host[renderer] || host._;
+		}
+	
+		// Use the default
+		return host._;
+	}
+	
 
 	DataTable = function( oInit )
 	{
@@ -5674,19 +5570,7 @@
 			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
 			
-			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
-				   oSettings.oFeatures.bSortClasses )
-			{
-				/* Enable sort classes for server-side processing. Safe to do it here, since server-side
-				 * processing must be enabled by the developer
-				 */
-				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'server_side_sort_classes' );
-			}
-			else if ( oSettings.oFeatures.bDeferRender )
-			{
-				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'defer_sort_classes' );
-			}
-			
+			// @todo Remove in 1.11
 			if ( oInit.bJQueryUI )
 			{
 				/* Use the JUI classes object for display. You could clone the oStdClasses object if
@@ -5698,6 +5582,13 @@
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
 					oSettings.sDom = '<"H"lfr>t<"F"ip>';
+				}
+			
+				if ( ! oSettings.renderer ) {
+					oSettings.renderer = 'jqueryui';
+				}
+				else if ( $.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
+					oSettings.renderer.header = 'jqueryui';
 				}
 			}
 			else
@@ -5851,6 +5742,7 @@
 			/*
 			 * Sorting
 			 * Check the aaSorting array
+			 * @todo For modularisation (1.11) this needs to do into a sort start up handler
 			 */
 			for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
 			{
@@ -5887,6 +5779,26 @@
 			 * account, and also will apply sorting disabled classes if disabled
 			 */
 			_fnSortingClasses( oSettings );
+			
+			if ( oSettings.oFeatures.bSort )
+			{
+				_fnCallbackReg( oSettings, 'aoDrawCallback', function () {
+					if ( oSettings.bSorted ) {
+						var aSort = _fnSortFlatten( oSettings );
+						var sortedColumns = {};
+			
+						$.each( aSort, function (i, val) {
+							sortedColumns[ val.col ] = val.dir;
+						} );
+			
+						$(oSettings.nTable).trigger('sort', [oSettings, aSort, sortedColumns]);
+			
+						_fnSortingClasses( oSettings );
+						_fnSortAria( oSettings );
+					}
+				} );
+			}
+			
 			
 			
 			/*
@@ -7468,7 +7380,6 @@
 	
 			// Remove the target row from the search array
 			var displayIndex = $.inArray( row, settings.aiDisplay );
-			settings.asDataSearch.splice( displayIndex, 1 );
 	
 			// Delete from the display arrays
 			_fnDeleteIndex( settings.aiDisplayMaster, row );
@@ -9395,13 +9306,14 @@
 		 * the following parameters provide additional options in DataTables or
 		 * require special consideration:
 		 *
-		 * * `data` - As with jQuery, `data` can be provided as an object or array
-		 *   of name/value pairs, but it can also be used as a function to
-		 *   manipulate the data DataTables sends to the server. The function takes
-		 *   a single parameter, an array of name/value pairs that DataTables has
-		 *   readied for sending. An object or array can be returned which will be
-		 *   merged into the DataTables defaults, or you can add the items to the
-		 *   array passed in. This supersedes `fnServerParams` from DataTables 1.9-.
+		 * * `data` - As with jQuery, `data` can be provided as an object, but it
+		 *   can also be used as a function to manipulate the data DataTables sends
+		 *   to the server. The function takes a single parameter, an object of
+		 *   parameters with the values that DataTables has readied for sending. An
+		 *   object may be returned which will be merged into the DataTables
+		 *   defaults, or you can add the items to the object that was passed in and
+		 *   not return anything from the function. This supersedes `fnServerParams`
+		 *   from DataTables 1.9-.
 		 *
 		 * * `dataSrc` - By default DataTables will look for the property 'aaData'
 		 *   when obtaining data from an Ajax source or for server-side processing -
@@ -13251,6 +13163,8 @@
 		"sSortableDesc": "sorting_desc_disabled",
 		"sSortableNone": "sorting_disabled",
 		"sSortColumn": "sorting_", /* Note that an int is postfixed for the sorting order */
+	
+		// Deprecated
 		"sSortJUIAsc": "",
 		"sSortJUIDesc": "",
 		"sSortJUI": "",
@@ -13270,6 +13184,8 @@
 		/* Misc */
 		"sHeaderTH": "",
 		"sFooterTH": "",
+	
+		// Deprecated
 		"sJUIHeader": "",
 		"sJUIFooter": ""
 	} );
@@ -13586,6 +13502,67 @@
 			return data.replace ?
 				data.replace( __filter_lines, " " ) :
 				data;
+		}
+	} );
+	
+	
+	
+	$.extend( true, DataTable.ext.renderer, {
+		header: {
+			_: function ( settings, cell, column, idx, classes ) {
+				// No additional mark-up required
+	
+				// Attach a sort listener to update on sort
+				$(settings.nTable).on( 'sort', function ( e, settings, sorting, columns ) {
+					cell
+						.removeClass(
+							column.sSortingClass +' '+
+							classes.sSortAsc +' '+
+							classes.sSortDesc
+						)
+						.addClass( columns[ idx ] == 'asc' ?
+							classes.sSortAsc : columns[ idx ] == 'desc' ?
+								classes.sSortDesc :
+								column.sSortingClass
+						);
+				} );
+			},
+	
+			jqueryui: function ( settings, cell, column, idx, classes ) {
+				$('<div/>')
+					.addClass( classes.sSortJUIWrapper )
+					.append( cell.contents() )
+					.append( $('<span/>')
+						.addClass( classes.sSortIcon+' '+column.sSortingClassJUI )
+					)
+					.appendTo( cell );
+	
+				// Attach a sort listener to update on sort
+				$(settings.nTable).on( 'sort', function ( e, settings, sorting, columns ) {
+					cell
+						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
+						.addClass( columns[ idx ] == 'asc' ?
+							classes.sSortAsc : columns[ idx ] == 'desc' ?
+								classes.sSortDesc :
+								column.sSortingClass
+						);
+	
+					cell
+						.find( 'span' )
+						.removeClass(
+							classes.sSortJUIAsc +" "+
+							classes.sSortJUIDesc +" "+
+							classes.sSortJUI +" "+
+							classes.sSortJUIAscAllowed +" "+
+							classes.sSortJUIDescAllowed
+						)
+						.addClass( columns[ idx ] == 'asc' ?
+							classes.sSortJUIAsc : columns[ idx ] == 'desc' ?
+								classes.sSortJUIDesc :
+								column.sSortingClassJUI
+						);
+				} );
+			}
 		}
 	} );
 	
