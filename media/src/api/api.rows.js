@@ -81,7 +81,6 @@ _api.registerPlural( 'rows().remove()', 'row().remove()', function () {
 
 		// Remove the target row from the search array
 		var displayIndex = $.inArray( row, settings.aiDisplay );
-		settings.asDataSearch.splice( displayIndex, 1 );
 
 		// Delete from the display arrays
 		_fnDeleteIndex( settings.aiDisplayMaster, row );
