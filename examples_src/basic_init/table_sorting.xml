@@ -14,8 +14,14 @@ $(document).ready(function() {
 } );
 ]]></js>
 
-<info>
-With DataTables you can alter the sorting characteristics of the table at initialisation time. Using the <init>sorting</init> initialisation parameter, you can get the table exactly how you want to present the information. The <init>sorting</init> parameter is an array of arrays where the first value is the column to sort on, and the second is 'asc' or 'desc' as required (it is a double array for <a href="../basic_init/multi_col_sort.html">multi-column sorting</a>). The table below is sorted (descending) by the CSS grade. Note also that the 'Engine version' column is automatically detected as a numeric column and sorted accordingly.
-</info>
+<info><![CDATA[
+
+With DataTables you can alter the sorting characteristics of the table at initialisation time. Using the `dt-init sorting` initialisation parameter, you can set the table to display the data exactly how you want.
+
+The `dt-init sorting` parameter is an array of arrays where the first value of the inner array is the column to sort on, and the second is 'asc' or 'desc' as required (it is a 2D array to allow multi-column sorting to be defined).
+
+The table below is sorted (descending) by the CSS grade. Note also that the 'Engine version' column is automatically detected as a numeric column and sorted accordingly.
+
+]]></info>
 
 </dt-example>

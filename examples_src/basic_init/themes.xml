@@ -16,8 +16,14 @@ $(document).ready(function() {
 } );
 ]]></js>
 
-<info>
-Styling widgets such as DataTables can often take a considerable amount of time to fully integrate it into your site / application, with the demo styles as a base. This holds true for all widgets, and the jQuery UI team have addressed this issue by introducing themes through their excellent <a href="http://jqueryui.com/themeroller/">ThemeRoller</a>. DataTables has full support for ThemeRoller created themes, all you need to do is enable the <init>jQueryUI</init> flag in the initialisation object, and the required mark-up and classes will be added by DataTables.
-</info>
+<info><![CDATA[
+
+Styling widgets such as DataTables can often take a considerable amount of time to fully integrate it into your site / application, with the demo styles as a base. This holds true for all widgets, and the jQuery UI team have addressed this issue by introducing themes through their (ThemeRoller)[http://jqueryui.com/themeroller/].
+
+DataTables has built-in support for ThemeRoller created themes, all you need to do is enable the `dt-init jQueryUI` flag in the initialisation object, and the required mark-up and classes will be added by DataTables.
+
+Please note that the `dt-init jQueryUI` option is deprecated in DataTables 1.10 and will be removed in 1.11. jQuery UI theme integration will still be fully supported, but in future as a plug-in, matching that of the Bootstrap and Foundation integration options for DataTables.
+
+]]></info>
 
 </dt-example>

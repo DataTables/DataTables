@@ -14,10 +14,23 @@ $(document).ready(function() {
 } );
 ]]></js>
 
-<info>
-	<p>The page controls which are used by default in DataTables (forward and backward buttons only) are great for most situations, but there are cases where you may wish to customise the controls presented to the end user. This is made simple by DataTables through its extensible pagination mechanism. There are two types of pagination controls built into DataTables: <value>two_button</value> (default) and <value>full_numbers</value>. To switch between these two types, use the <init>paginationType</init> initialisation parameter. You can add additional types of pagination control by extending the <code>$.fn.dataTableExt.oPagination</code> object.</p>
+<info><![CDATA[
 
-	<p>The example below shows the <value>full_numbers</value> type of pagination, where 'first', 'previous', 'next' and 'last' buttons are presented, as well as the five pages around the current page.</p>
-</info>
+The default page control presented by DataTables (forward and backward buttons with up to 7 page numbers in-between) is fine for most situations, but there are cases where you may wish to customise the options presented to the end user. This is done through DataTables' extensible pagination mechanism, the `dt-init paginationType` option.
+
+There are four built-in options for which pagination controls DataTables should show:
+
+* `simple` - 'Previous' and 'Next' buttons only
+* 'simple_numbers` - 'Previous' and 'Next' buttons, plus page numbers
+* `full` - 'First', 'Previous', 'Next' and 'Last' buttons
+* `full_numbers` - 'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers
+
+The language strings of 'First', 'Previous' etc can be optionally through the internationalisation options of DataTables; `dt-init first`, `dt-init previous` etc.
+
+Additional options for the buttons that are shown can be added through the use of pagination type plug-ins. Furthermore, how the buttons are actually shown can be altered through the use of plug-in pagination renderers.
+
+The example below shows the `full_numbers` type of pagination.
+
+]]></info>
 
 </dt-example>

@@ -2,23 +2,29 @@
 <dt-example table-type="html">
 
 <css lib="datatables" />
+<css>
+	th, td { white-space: nowrap; }
+	#demo { width: 600px; }
+</css>
 <js lib="jquery" />
 <js lib="datatables" />
 
-<title></title>
+<title>Scroll - horizontal</title>
 <js><![CDATA[
 $(document).ready(function() {
 	$('#example').dataTable( {
-		"scrollX": "100%",
-		"scrollXInner": "110%",
-		"scrollCollapse": true
+		"scrollX": "100%"
 	} );
 } );
 ]]></js>
 
-<info>
-	<p>This DataTables horizontal scrolling example shows horizontal scrolling on a DataTable, which is very useful for when you have a wide table, with a large number of columns to display, but want to constrain it to a limited horizontal display area. To enable x-scrolling simply set the <init>scrollX</init> parameter to be whatever you want the container wrapper's width to be (any CSS measurement is acceptable, or just a number which is treated as pixels). Note also that sScrollXInner is used here to force the table to be wider than is strictly needed. You may or may not want to include this parameter depending on your application.</p>
-	<p>Also shown in this example is the use of a 'collapsing scroll table' by using <init>scrollCollapse</init>. When this parameter is set to true, the table size will 'collapse' down to match the number of rows, if the table height is smaller than the scrollable area.</p>
-</info>
+<info><![CDATA[
+
+DataTables has the ability to show tables with horizontal scrolling, which is very useful for when you have a wide table, but want to constrain it to a limited horizontal display area. To enable x-scrolling simply set the `dt-init scrollX` parameter to be whatever you want the container wrapper's width to be (this should be 100% in almost all cases with the width being constrained by the container element).
+
+The example below shows a table too wide for the containing element with x-scrolling enabled. The CSS option of `th, td { white-space: nowrap; }` is also set to have the text content of each row on a single line (otherwise the browser will line break the text to have it fit into the available area).
+
+
+]]></info>
 
 </dt-example>

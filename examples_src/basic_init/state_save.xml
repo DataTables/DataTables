@@ -12,8 +12,17 @@ $('#example').dataTable( {
 } );
 ]]></js>
 
-<info>
-DataTables can use cookies in the end user's web-browser in order to store it's state after each change in drawing. What this means is that if the user were to reload the page, the table should remain exactly as it was (length, filtering, pagination and sorting). This feature is disabled by default, but can be easily enabled using the <init>stateSave</init> initialisation parameter as shown in this example. Note also that the duration of the cookie can be set using the <init>stateDuration</init> initialisation parameter (which is in seconds).
-</info>
+<info><![CDATA[
+
+
+DataTables has the option of being able to save the state of a table (its paging position, sorting state etc) so that is can be restored when the user reloads a page, or comes back to it after visiting a sub-page. This state saving ability is enabled by the `dt-init stateSave` option.
+
+The built in state saving method uses the HTML5 `localStorage` API for efficient storage of the data. PLease note that this means that the built in state saving option will not work with IE6/7 as these browsers do not support this API. Alternative options of using cookies or saving the state on the server through Ajax can be used through the `dt-init stateSaveCallback` and `dt-init stateLoadCallback` options.
+
+Additionally, note also that the duration for which the saved state is valid and can be used to restore the table state can be set using the `dt-init stateDuration` initialisation parameter (2 hours by default).
+
+The example below simply shows state saving enabled in DataTables with the `dt-init saveSave` option.
+
+]]></info>
 
 </dt-example>

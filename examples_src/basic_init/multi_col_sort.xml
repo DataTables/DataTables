@@ -5,39 +5,32 @@
 <js lib="jquery" />
 <js lib="datatables" />
 
-<title>Multi-column and custom sort</title>
+<title>Multi-column sorting</title>
 <js><![CDATA[
-/* Define custom sorting plug-in */
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-    "string-case-pre": function ( a ) {
-        return a;
-    },
-     
-    "string-case-asc": function( a, b ) {
-        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-    },
- 
-    "string-case-desc": function(a,b) {
-        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
-    }
-} );
 
 $(document).ready(function() {
-	/* Build the DataTable with third column using our custom sort function */
 	$('#example').dataTable( {
-		"sorting": [ [0,'asc'], [1,'asc'] ],
-		"columnDefs": [ {
-			"targets": [ 2 ],
-			"type": 'string-case'
+		columnDefs: [ {
+			targets: [ 0 ],
+			dataSort: [ 0, 1 ]
 		} ]
 	} );
 } );
 ]]></js>
 
-<info>
-	<p>As you would expect with a desktop application, DataTables allows you to sort by multiple columns at the same time. This multiple sorting mechanism is always active if the <init>sort</init> initialiser is <code>true</code> (it is by default) and the end user can activate it by 'shift' clicking on the column they want to add to the sort. You can also pass in an array of information using the <init>sorting</init> initialiser, as I have done in the example below there the first column is sorted as the primary column and the second one then used if the elements in the first column match. As many columns as you wish can be added to the sort.</p>
+<info><![CDATA[
 
-	<p>DataTables also provides a method to add your own sorting functions, to extend those built into DataTables. This can be very useful if you wish to sort on data formats such as currency and non-Javascript standard date formats (<a href="http://www.overset.com/2008/09/01/javascript-natural-sort-algorithm/">this natural sort</a> algorithm is a popular option). This is achieved by extending the <code>jQuery.fn.dataTableExt</code> object with ascending and descending sort functions. In the example below I've added case sensitive sorting functions.</p>
-</info>
+DataTables allows sorting by multiple columns at the same time, which can be activated in a number of different ways:
+
+* User shift click on a column (added the clicked column as a secondary, tertiary etc sorting column).
+* On a per-column basis (i.e. sort by a specific column and then a secondary column if the data in the first column is identical), through the `dt-init dataSort` option.
+* Using the `dt-init sorting` option to specify a multiple column sort by default (for example `[ [0,'asc'], [1,'asc'] ]`).
+* Through the `dt-api order()` API method.
+
+The ability for the user to shift click to sort multiple columns can be disabled through the `dt-init sortMulti` option.
+
+The example below shows the first column having a secondary sort applied to the second column in the table.
+
+]]></info>
 
 </dt-example>
