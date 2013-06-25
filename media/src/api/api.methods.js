@@ -278,7 +278,8 @@ this.fnClose = function( nTr )
  */
 this.fnDeleteRow = function( target, callback, redraw )
 {
-	var rows = this.api( true ).rows( target );
+	var api = this.api( true );
+	var rows = api.rows( target );
 	var settings = rows.settings()[0];
 	var data = settings.aoData[ rows[0][0] ];
 
