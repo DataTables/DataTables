@@ -10,15 +10,30 @@
 $(document).ready(function() {
 	$('#example').dataTable( {
 		"columnDefs": [ 
-			{ "targets": [ 2 ], "visible": false, "searchable": false },
-			{ "targets": [ 3 ], "visible": false }
+			{
+				"targets": [ 2 ],
+				"visible": false,
+				"searchable": false
+			},
+			{
+				"targets": [ 3 ],
+				"visible": false
+			}
 		]
 	} );
 } );
 ]]></js>
 
-<info>
-There are times when you might find it useful to display only a sub-set of the information that was available in the original table. For example you might want to reduce the amount of data shown on screen to make it clearer for the user. This hidden data can still be filtered upon allowing the user access to that data (for example 'tag' information for a row entry), or this can be disabled. In the table below both the platform and engine version columns have been hidden, the former is searchable, the latter is not.
-</info>
+<info><![CDATA[
+
+There are times when you might find it useful to display only a sub-set of the information that was available in the original table. For example you might want to reduce the amount of data shown on screen to make it clearer for the user. This is done through the `dt-init visible` column option.
+
+The column that is hidden is still part of the table and can be made visible through the `api column().visible()` API method at a future time if you wish to have columns which can be shown and hidden.
+
+Furthermore, as the hidden data is still part of the table, it can still, optionally, be filtered upon allowing the user access to that data (for example 'tag' information for a row entry might used).
+
+In the table below both the platform and engine version columns have been hidden, the former is searchable, the latter is not.
+
+]]></info>
 
 </dt-example>

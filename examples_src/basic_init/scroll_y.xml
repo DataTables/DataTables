@@ -5,19 +5,25 @@
 <js lib="jquery" />
 <js lib="datatables" />
 
-<title></title>
+<title>Scroll - vertical</title>
 <js><![CDATA[
 $(document).ready(function() {
 	$('#example').dataTable( {
-		"scrollY": "200px",
-		"paginate": false,
-		"scrollCollapse": true
+		"scrollY":        "200px",
+		"scrollCollapse": true,
+		"paginate":       false
 	} );
 } );
 ]]></js>
 
-<info>
-This example shows the DataTables table body scrolling in the vertical direction. This can generally be seen as an alternative method to pagination for displaying a large table in a fairly small vertical area, and as such pagination has been disabled here (note that this is not mandatory, it will work just fine with pagination enabled as well!). The example is set up to show grid lines using CSS, which is useful for alignment, both for testing and end user usability. To enable y scrolling simply set the <init>scrollY</init> parameter to be whatever you want the container wrapper's height to be (any CSS measurement is acceptable, or just a number which is treated as pixels).
-</info>
+<info><![CDATA[
+
+This example shows the DataTables table body scrolling in the vertical direction. This can generally be seen as an alternative method to pagination for displaying a large table in a fairly small vertical area, and as such pagination has been disabled here (note that this is not mandatory, it will work just fine with pagination enabled as well!).
+
+To enable y-scrolling simply set the `dt-init scrollY` parameter to be whatever you want the container wrapper's height to be (any CSS measurement is acceptable, or just a number which is treated as pixels).
+
+Note also that the `dt-init scrollCollapse` option is enabled in this example. This will have the container match the height of the rows shown in the table if that height is smaller than the given height by the `dt-init scrollY`.
+
+]]></info>
 
 </dt-example>

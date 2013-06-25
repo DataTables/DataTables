@@ -14,20 +14,71 @@ $(document).ready(function() {
 } );
 ]]></js>
 
-<info>
-	<p>When customising DataTables for your own usage, you might find that the default position of the feature elements (filter input etc) is not quite to your liking. To address this issue DataTables takes inspiration from the CSS 3 Advanced Layout Module and provides the <init>dom</init> initialisation parameter which can be set to indicate where you which particular features to appear in the DOM. You can also specify <code>div</code> wrapping containers (with classes) to provide complete layout flexibility. The syntax available is:</p>
-	<ul>
-		<li><b>l</b> - Length changing</li>
-		<li><b>f</b> - Filtering input</li>
-		<li><b>t</b> - The table!</li>
-		<li><b>i</b> - Information</li>
-		<li><b>p</b> - Pagination</li>
-		<li><b>r</b> - pRocessing</li>
-		<li><b>&lt;</b> and <b>&gt;</b> - div elements</li>
-		<li><b>&lt;"class"</b> and <b>&gt;</b> - div with a class</li>
-		<li>Examples: <b>&lt;"wrapper"flipt&gt;</b>, <b>&lt;lf&lt;t&gt;ip&gt;</b></li>
-	</ul>
-	<p>In the example below I've moved the table information to the top of the table, and all the interaction elements to the bottom, each wrapper in a container <code>div</code>.</p>
-</info>
+<info><![CDATA[
+
+When customising DataTables for your own usage, you might find that the default position of the feature elements (filter input etc) is not quite to your liking. To address this issue DataTables takes inspiration from the CSS 3 Advanced Layout Module and provides the `dt-init dom` initialisation parameter which can be set to indicate where you which particular features to appear in the DOM. You can also specify `div` wrapping containers (with an id and / or class) to provide complete layout flexibility.
+
+Each HTML control element presented by DataTables is denoted by a single character in the `dt-init dom` option. For example the `l` option is used for the `L`ength changing input option.
+
+The built-in options available are:
+
+* `l` - `L`ength changing
+* `f` - `F`iltering input
+* `t` - The `T`able!
+* `i` - `I`nformation
+* `p` - `P`agination
+* `r` - p`R`ocessing
+* `<` and `>` - div elements
+* `<"#id"` and `>` - div with an id
+* `<"class"` and `>` - div with a class
+* `<"#id.class"` and `>` - div with an id and class
+
+Example 1:
+
+```
+<"wrapper"flipt>
+```
+
+This results in the following DOM structure:
+
+```
+<div class="wrapper">
+	{filter}
+	{length}
+	{info}
+	{paging}
+	{table}
+</div>
+```
+
+
+Example 2:
+
+```
+<lf<t>ip>
+```
+
+This results in the following DOM structure:
+
+```
+<div>
+	{length}
+	{filter}
+	<div>
+		{table}
+	</div>
+	{info}
+	{paging}
+</div>
+```
+
+All options (with the exception of the `t` (table) option can be specified multiple times, for if you want to show the same control multiple times (pagination at the top and bottom of the table for example).
+
+Furthermore, note that additional `dt-init dom` options can be added to DataTables through the use of plug-ins.
+
+In the example below, the table information is moved to the top of the table, and all the interaction elements to the bottom, each wrapper in a container `div`.</p>
+
+
+]]></info>
 
 </dt-example>

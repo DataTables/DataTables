@@ -9,18 +9,17 @@
 <js><![CDATA[
 $(document).ready(function() {
 	$('#example').dataTable( {
-		"filter":       true,
-		"paginate":     false,
-		"lengthChange": false,
-		"sort":         false,
-		"info":         false,
-		"autoWidth":    false
+		"paginate": false,
+		"sort":     false,
+		"info":     false
 	} );
 } );
 ]]></js>
 
-<info>
-Disabling features that you don't wish to use for a particular table is easily done by setting a variable in the initialisation object. In the following example only the filter feature is left enabled (although I've explicitly declared it as enabled).
-</info>
+<info><![CDATA[
+
+Disabling features that you don't wish to use for a particular table is easily done by setting a variable in the initialisation object. In the following example only the filter feature is left enabled (which is enabled by default).
+
+]]></info>
 
 </dt-example>

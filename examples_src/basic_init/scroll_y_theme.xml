@@ -6,19 +6,21 @@
 <js lib="jquery" />
 <js lib="datatables" />
 
-<title>Vertical scrolling with jQuery UI ThemeRoller</title>
+<title>Scroll - vertical with jQuery UI ThemeRoller</title>
 <js><![CDATA[
 $(document).ready(function() {
 	$('#example').dataTable( {
-		"scrollY": 200,
-		"jQueryUI": true,
-		"paginationType": "full_numbers"
+		"scrollY":        200,
+		"scrollCollapse": true,
+		"jQueryUI":       true
 	} );
 } );
 ]]></js>
 
-<info>
+<info><![CDATA[
+
 This example is an extension of the vertical scrolling example, showing DataTables ability to be themed by jQuery UI's ThemeRoller.
-</info>
+
+]]></info>
 
 </dt-example>

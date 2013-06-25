@@ -20,8 +20,12 @@ $(document).ready(function() {
 } );
 ]]></js>
 
-<info>
-Changing the language information displayed by DataTables is as simple as passing in a language object to the dataTable constructor. The example above shows a different set of English language definitions to be used, rather than the defaults.
-</info>
+<info><![CDATA[
+
+Changing the language information displayed by DataTables is as simple as passing in a `dt-init language` object to the DataTable constructor.
+
+The example above shows a different set of English string being used, rather than the defaults.
+
+]]></info>
 
 </dt-example>
