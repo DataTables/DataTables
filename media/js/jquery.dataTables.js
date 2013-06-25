@@ -7736,6 +7736,14 @@
 	} );
 	
 	
+	_api.registerPlural( 'columns().nodes()', 'columns().nodes()', function () {
+		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
+			return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
+		} );
+	} );
+	
+	
+	
 	_api.registerPlural( 'columns().visible()', 'column().visible()', function ( vis ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return _setColumnVis( settings, column, vis );
