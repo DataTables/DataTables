@@ -64,7 +64,7 @@ function _fnMap( ret, src, name, mappedName )
 				_fnMap( ret, src, val[0], val[1] );
 			}
 			else {
-				_fnMap( ret, src, val[0] );
+				_fnMap( ret, src, val );
 			}
 		} );
 
