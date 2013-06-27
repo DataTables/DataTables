@@ -13,18 +13,7 @@
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
-				api = $('#example').DataTable( {
-					columnDefs: [ {
-						data: {
-							_: '3.display',
-							sort: '3.@data-sort', // is also type detection (when auto detected)
-							type: '3.@data-sort',
-							filter: '3.@data-filter'
-						},
-						targets: [ 3 ]
-					} ]
-				} );
-				t = $('#example').dataTable();
+				api = $('#example').DataTable();
 			} );
 		</script>
 	</head>
@@ -54,14 +43,14 @@
 			<td>Trident</td>
 			<td>Internet Explorer 4.0</td>
 			<td>Win 95+</td>
-			<td data-sort="4" data-filter="allan">4</td>
+			<td data-sort="6" data-filter="allan">4</td>
 			<td>X</td>
 		</tr>
 		<tr class="even gradeC">
 			<td>Trident</td>
 			<td>Internet Explorer 5.0</td>
 			<td>Win 95+</td>
-			<td data-sort="5" data-filter="lottie">5</td>
+			<td data-sort="5" data-filter="datatables">5</td>
 			<td>C</td>
 		</tr>
 	</tbody>

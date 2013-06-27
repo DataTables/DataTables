@@ -4359,21 +4359,33 @@
 	
 	/**
 	 * See if a property is defined on one object, if so assign it to the other object
-	 *  @param {object} oRet target object
-	 *  @param {object} oSrc source object
-	 *  @param {string} sName property
-	 *  @param {string} [sMappedName] name to map too - optional, sName used if not given
+	 *  @param {object} ret target object
+	 *  @param {object} src source object
+	 *  @param {string} name property
+	 *  @param {string} [mappedName] name to map too - optional, name used if not given
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnMap( oRet, oSrc, sName, sMappedName )
+	function _fnMap( ret, src, name, mappedName )
 	{
-		if ( sMappedName === undefined )
-		{
-			sMappedName = sName;
+		if ( $.isArray( name ) ) {
+			$.each( name, function (i, val) {
+				if ( $.isArray( val ) ) {
+					_fnMap( ret, src, val[0], val[1] );
+				}
+				else {
+					_fnMap( ret, src, val );
+				}
+			} );
+	
+			return;
 		}
-		if ( oSrc[sName] !== undefined )
-		{
-			oRet[sMappedName] = oSrc[sName];
+	
+		if ( mappedName === undefined ) {
+			mappedName = name;
+		}
+	
+		if ( src[name] !== undefined ) {
+			ret[mappedName] = src[name];
 		}
 	}
 	
@@ -4820,7 +4832,8 @@
 		 */
 		this.fnDeleteRow = function( target, callback, redraw )
 		{
-			var rows = this.api( true ).rows( target );
+			var api = this.api( true );
+			var rows = api.rows( target );
 			var settings = rows.settings()[0];
 			var data = settings.aoData[ rows[0][0] ];
 		
@@ -5418,7 +5431,7 @@
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
-			var bUsePassedData = false;
+			var defaults = DataTable.defaults
 			var oInitEmpty = oInit === undefined ? true : false;
 			
 			
@@ -5430,37 +5443,38 @@
 			}
 			
 			/* Convert the camel-case defaults to Hungarian */
-			_fnCamelToHungarian( DataTable.defaults, DataTable.defaults, true );
-			_fnCamelToHungarian( DataTable.defaults.column, DataTable.defaults.column, true );
+			_fnCamelToHungarian( defaults, defaults, true );
+			_fnCamelToHungarian( defaults.column, defaults.column, true );
 			
 			/* Setting up the initialisation object */
 			if ( !oInit )
 			{
 				oInit = {};
 			}
-			_fnCamelToHungarian( DataTable.defaults, oInit );
+			_fnCamelToHungarian( defaults, oInit );
 			
 			/* Check to see if we are re-initialising a table */
-			for ( i=0, iLen=DataTable.settings.length ; i<iLen ; i++ )
+			var allSettings = DataTable.settings;
+			for ( i=0, iLen=allSettings.length ; i<iLen ; i++ )
 			{
 				/* Base check on table node */
-				if ( DataTable.settings[i].nTable == this )
+				if ( allSettings[i].nTable == this )
 				{
-					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : DataTable.defaults.bRetrieve;
-					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : DataTable.defaults.bDestroy;
+					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
+					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : defaults.bDestroy;
 			
 					if ( oInitEmpty || bRetrieve )
 					{
-						return DataTable.settings[i].oInstance;
+						return allSettings[i].oInstance;
 					}
 					else if ( bDestroy )
 					{
-						DataTable.settings[i].oInstance.fnDestroy();
+						allSettings[i].oInstance.fnDestroy();
 						break;
 					}
 					else
 					{
-						_fnLog( DataTable.settings[i], 0, 'Cannot reinitialise DataTable', 3 );
+						_fnLog( allSettings[i], 0, 'Cannot reinitialise DataTable', 3 );
 						return;
 					}
 				}
@@ -5470,9 +5484,9 @@
 				 * instance by simply deleting it. This is under the assumption that the table has been
 				 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 				 */
-				if ( DataTable.settings[i].sTableId == this.id )
+				if ( allSettings[i].sTableId == this.id )
 				{
-					DataTable.settings.splice( i, 1 );
+					allSettings.splice( i, 1 );
 					break;
 				}
 			}
@@ -5493,7 +5507,7 @@
 				"sInstance":     sId,
 				"sTableId":      sId
 			} );
-			DataTable.settings.push( oSettings );
+			allSettings.push( oSettings );
 			
 			// Need to add the instance after the instance after the settings object has been added
 			// to the settings array, so we can self reference the table instance if more than one
@@ -5512,49 +5526,55 @@
 					oInit.aLengthMenu[0][0] : oInit.aLengthMenu[0];
 			}
 			
-			oInit = _fnExtend( $.extend(true, {}, DataTable.defaults), oInit );
+			oInit = _fnExtend( $.extend(true, {}, defaults), oInit );
 			
 			// Map the initialisation options onto the settings object
-			_fnMap( oSettings.oFeatures, oInit, "bPaginate" );
-			_fnMap( oSettings.oFeatures, oInit, "bLengthChange" );
-			_fnMap( oSettings.oFeatures, oInit, "bFilter" );
-			_fnMap( oSettings.oFeatures, oInit, "bSort" );
-			_fnMap( oSettings.oFeatures, oInit, "bSortMulti" );
-			_fnMap( oSettings.oFeatures, oInit, "bInfo" );
-			_fnMap( oSettings.oFeatures, oInit, "bProcessing" );
-			_fnMap( oSettings.oFeatures, oInit, "bAutoWidth" );
-			_fnMap( oSettings.oFeatures, oInit, "bSortClasses" );
-			_fnMap( oSettings.oFeatures, oInit, "bServerSide" );
-			_fnMap( oSettings.oFeatures, oInit, "bDeferRender" );
-			_fnMap( oSettings.oScroll, oInit, "sScrollX", "sX" );
-			_fnMap( oSettings.oScroll, oInit, "sScrollXInner", "sXInner" );
-			_fnMap( oSettings.oScroll, oInit, "sScrollY", "sY" );
-			_fnMap( oSettings.oScroll, oInit, "bScrollCollapse", "bCollapse" );
-			_fnMap( oSettings.oScroll, oInit, "bScrollInfinite", "bInfinite" );
-			_fnMap( oSettings.oScroll, oInit, "iScrollLoadGap", "iLoadGap" );
-			_fnMap( oSettings.oScroll, oInit, "bScrollAutoCss", "bAutoCss" );
-			_fnMap( oSettings, oInit, "asStripeClasses" );
-			_fnMap( oSettings, oInit, "ajax" );
-			_fnMap( oSettings, oInit, "fnServerData" );
-			_fnMap( oSettings, oInit, "fnFormatNumber" );
-			_fnMap( oSettings, oInit, "sServerMethod" );
-			_fnMap( oSettings, oInit, "aaSorting" );
-			_fnMap( oSettings, oInit, "aaSortingFixed" );
-			_fnMap( oSettings, oInit, "aLengthMenu" );
-			_fnMap( oSettings, oInit, "sPaginationType" );
-			_fnMap( oSettings, oInit, "sAjaxSource" );
-			_fnMap( oSettings, oInit, "sAjaxDataProp" );
-			_fnMap( oSettings, oInit, "iCookieDuration", "iStateDuration" ); // backwards compat
-			_fnMap( oSettings, oInit, "iStateDuration" );
-			_fnMap( oSettings, oInit, "sDom" );
-			_fnMap( oSettings, oInit, "bSortCellsTop" );
-			_fnMap( oSettings, oInit, "iTabIndex" );
-			_fnMap( oSettings, oInit, "oSearch", "oPreviousSearch" );
-			_fnMap( oSettings, oInit, "aoSearchCols", "aoPreSearchCols" );
-			_fnMap( oSettings, oInit, "iDisplayLength", "_iDisplayLength" );
-			_fnMap( oSettings, oInit, "bJQueryUI", "bJUI" );
-			_fnMap( oSettings, oInit, "fnStateLoadCallback" );
-			_fnMap( oSettings, oInit, "fnStateSaveCallback" );
+			_fnMap( oSettings.oFeatures, oInit, [
+				"bPaginate",
+				"bLengthChange",
+				"bFilter",
+				"bSort",
+				"bSortMulti",
+				"bInfo",
+				"bProcessing",
+				"bAutoWidth",
+				"bSortClasses",
+				"bServerSide",
+				"bDeferRender"
+			] );
+			_fnMap( oSettings, oInit, [
+				"asStripeClasses",
+				"ajax",
+				"fnServerData",
+				"fnFormatNumber",
+				"sServerMethod",
+				"aaSorting",
+				"aaSortingFixed",
+				"aLengthMenu",
+				"sPaginationType",
+				"sAjaxSource",
+				"sAjaxDataProp",
+				"iStateDuration",
+				"sDom",
+				"bSortCellsTop",
+				"iTabIndex",
+				"fnStateLoadCallback",
+				"fnStateSaveCallback",
+				[ "iCookieDuration", "iStateDuration" ], // backwards compat
+				[ "oSearch", "oPreviousSearch" ],
+				[ "aoSearchCols", "aoPreSearchCols" ],
+				[ "iDisplayLength", "_iDisplayLength" ],
+				[ "bJQueryUI", "bJUI" ]
+			] );
+			_fnMap( oSettings.oScroll, oInit, [
+				[ "sScrollX", "sX" ],
+				[ "sScrollXInner", "sXInner" ],
+				[ "sScrollY", "sY" ],
+				[ "bScrollCollapse", "bCollapse" ],
+				[ "bScrollInfinite", "bInfinite" ],
+				[ "iScrollLoadGap", "iLoadGap" ],
+				[ "bScrollAutoCss", "bAutoCss" ]
+			] );
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
 			/* Callback functions which are array driven */
@@ -5578,7 +5598,7 @@
 				 */
 				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
 			
-				if ( oInit.sDom === DataTable.defaults.sDom && DataTable.defaults.sDom === "lfrtip" )
+				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
 					oSettings.sDom = '<"H"lfr>t<"F"ip>';
@@ -5618,11 +5638,6 @@
 				oSettings._iRecordsTotal = tmp ? oInit.iDeferLoading[1] : oInit.iDeferLoading;
 			}
 			
-			if ( oInit.aaData !== null )
-			{
-				bUsePassedData = true;
-			}
-			
 			/* Language definitions */
 			if ( oInit.oLanguage.sUrl !== "" )
 			{
@@ -5633,7 +5648,7 @@
 				oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
 				$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) {
 					_fnLanguageCompat( json );
-					_fnCamelToHungarian( DataTable.defaults.oLanguage, json );
+					_fnCamelToHungarian( defaults.oLanguage, json );
 					$.extend( true, oSettings.oLanguage, oInit.oLanguage, json );
 					_fnInitialise( oSettings );
 				} );
@@ -5849,7 +5864,7 @@
 			}
 			
 			/* Check if there is data passing into the constructor */
-			if ( bUsePassedData )
+			if ( oInit.aaData )
 			{
 				for ( i=0 ; i<oInit.aaData.length ; i++ )
 				{

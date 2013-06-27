@@ -7,7 +7,11 @@
 		<title>DataTables example</title>
 		<style type="text/css" title="currentStyle">
 			@import "../../media/css/demo_page.css";
-			@import "../../media/css/demo_table.css";
+			@import "../../media/css/jquery.dataTables.css";
+
+			td, th {
+				white-space: nowrap;
+			}
 		</style>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 		<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
@@ -15,7 +19,6 @@
 			$(document).ready(function() {
 				$('#example').dataTable( {
 					"sScrollX": "100%",
-					"sScrollXInner": "110%",
 					"bScrollCollapse": true
 				} );
 			} );
@@ -32,8 +35,8 @@
 			<p>Also shown in this example is the use of a 'collapsing scroll table' by using <b>bScrollCollapse</b>. When this parameter is set to true, the table size will 'collapse' down to match the number of rows, if the table height is smaller than the scrollable area.</p>
 			
 			<h1>Live example</h1>
-			<div id="demo">
-<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+			<div id="demo" style="width:600px">
+<table cellpadding="0" cellspacing="0" border="0" class="display cell-border" id="example">
 	<thead>
 		<tr>
 			<th>Rendering engine</th>
