@@ -7,5 +7,8 @@
 	],
 	"dependencies": {
 		"jquery": "~1.8.0"
-	}
+	},
+	"ignore": [
+	    "media/unit_testing/*"
+	]
 }
