@@ -2472,9 +2472,8 @@
 		// aData is passed in without the columns which are not searchable, so
 		// we need to be careful in getting the correct column type
 		for ( var i=0, len=aoColumns.length ; i<len ; i++ ) {
-			aData[idx] = _fnDataToSearch( aData[idx], aoColumns[i].sType );
-	
 			if ( aoColumns[i].bSearchable ) {
+				aData[idx] = _fnDataToSearch( aData[idx], aoColumns[i].sType );
 				idx++;
 			}
 		}
