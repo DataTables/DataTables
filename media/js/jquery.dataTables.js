@@ -13007,7 +13007,7 @@
 		 */
 		"html-pre": function ( a )
 		{
-			return a.replace( /<.*?>/g, "" ).toLowerCase();
+			return (a==null)? a : a.replace( /<.*?>/g, "" ).toLowerCase();
 		},
 		
 		
