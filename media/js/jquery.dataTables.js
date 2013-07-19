@@ -2148,6 +2148,7 @@
 	 */
 	function _fnAjaxDataSrc ( oSettings, json )
 	{
+		// @todo data and callback to aaData
 		var dataSrc = $.isPlainObject( oSettings.ajax ) && oSettings.ajax.dataSrc !== undefined ?
 			oSettings.ajax.dataSrc :
 			oSettings.sAjaxDataProp; // Compatibility with 1.9-.
@@ -2370,14 +2371,14 @@
 			force = true;
 		}
 	
+		// Check if any of the rows were invalidated
+		invalidated = _fnFilterData( settings );
+	
 		// If the input is blank - we just want the full data set
 		if ( input.length <= 0 ) {
 			settings.aiDisplay = displayMaster.slice();
 		}
 		else {
-			// Check if any of the rows were invalidated
-			invalidated = _fnFilterData( settings );
-	
 			// New search - start from the master array
 			if ( invalidated ||
 				 force ||
@@ -2483,7 +2484,7 @@
 					filterData.push( cellData );
 				}
 	
-				row._aFilterCells = filterData;
+				row._aFilterData = filterData;
 				row._sFilterRow = filterData.join('  ');
 				wasInvalidated = true;
 			}
@@ -4200,7 +4201,7 @@
 	
 			if ( ! row._aSortData[idx] || customSort ) {
 				cellData = customSort ?
-					customData : // If there was a custom sort function, use data from there
+					customData[i] : // If there was a custom sort function, use data from there
 					_fnGetCellData( settings, i, idx, 'sort' );
 	
 				row._aSortData[ idx ] = formatter ?
@@ -4976,7 +4977,7 @@
 					api.row( src ).data();
 			}
 		
-			return api.data();
+			return api.data().toArray();
 		};
 		
 		
@@ -6192,7 +6193,7 @@
 			var a = [];
 	
 			if ( _arrayProto.filter ) {
-				a = _arrayProto.filter( this, fn, this );
+				a = _arrayProto.filter.call( this, fn, this );
 			}
 			else {
 				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
@@ -6312,7 +6313,7 @@
 			var a = [];
 	
 			if ( _arrayProto.map ) {
-				a = _arrayProto.map( this, fn, this );
+				a = _arrayProto.map.call( this, fn, this );
 			}
 			else {
 				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
@@ -7116,7 +7117,7 @@
 				a.push( displayFiltered[i] );
 			}
 		}
-		else if ( order == 'current' ) {
+		else if ( order == 'current' || order == 'applied' ) {
 			a = filter == 'none' ?
 				displayMaster.slice() :                      // no filter
 				filter == 'applied' ?
@@ -7747,6 +7748,15 @@
 				a.push( _fnGetCellData( settings, rows[row], column, '' ) );
 			}
 			return a;
+		} );
+	} );
+	
+	
+	_api.registerPlural( 'columns().cache()', 'column().cache()', function ( type ) {
+		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
+			return _pluck_order( settings.aoData, rows,
+				type === 'filter' ? '_aFilterData' : '_aSortData', column
+			);
 		} );
 	} );
 	
@@ -8890,12 +8900,12 @@
 		 *  @default null
 		 *  @private
 		 */
-		"_aFilterCells": null,
+		"_aFilterData": null,
 	
 		/**
 		 * Filtering data cache. This is the same as the cell filtering cache, but
 		 * in this case a string rather than an array. This is easily computed with
-		 * a join on `_aFilterCells`, but is provided as a cache so the join isn't
+		 * a join on `_aFilterData`, but is provided as a cache so the join isn't
 		 * needed on every search (memory traded for performance)
 		 *  @type array
 		 *  @default null
