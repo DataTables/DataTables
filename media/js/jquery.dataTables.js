@@ -7201,18 +7201,19 @@
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Columns
 	 *
-	 * {integer}          - column index
-	 * "{integer}"        - column index
-	 * "{integer}:visIdx" - visible column index (i.e. translate to column index)
-	 * "{string}"         - column name
-	 * "{string}:jq"      - jQuery selector on column header nodes
+	 * {integer}           - column index
+	 * "{integer}"         - column index
+	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)
+	 * "{integer}:visible" - alias for {integer}:visIdx
+	 * "{string}"          - column name
+	 * "{string}:jq"       - jQuery selector on column header nodes
 	 *
 	 */
 	
 	// can be an array of these items, comma separated list, or an array of comma
 	// separated lists
 	
-	var _re_column_selector = /^(.*):(jq|visIdx)$/;
+	var _re_column_selector = /^(.*):(jq|visIdx|visible)$/;
 	
 	var _column_selector = function ( settings, selector, opts )
 	{
@@ -7238,6 +7239,7 @@
 				if ( match ) {
 					switch( match[2] ) {
 						case 'visIdx':
+						case 'visible':
 							// Visible index given, convert to column index
 							return [ _fnVisibleToColumnIndex( settings, parseInt( match[1], 10 ) ) ];
 	
