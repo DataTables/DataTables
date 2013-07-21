@@ -1,7 +1,11 @@
 {
 	"name": "DataTables",
 	"version": "1.10.0-dev",
-	"title": "DataTables",
+	"description": "DataTables enhances HTML tables with the ability to sort, filter and page the data in the table very easily. It provides a comprehensive API and set of configuration options, allowing you to consume data from virtually any data source.",
+	"homepage": "http://datatables.net/",
+	"docs": "http://datatables.net/",
+	"demo": "http://datatables.net/examples",
+	"download": "http://datatables.net/download",
 	"author": {
 		"name": "Allan Jardine",
 		"url": "http://sprymedia.co.uk"
@@ -19,7 +23,6 @@
 	"dependencies": {
 		"jquery": ">=1.7"
 	},
-	"description": "DataTables enhances HTML tables with the ability to sort, filter and page the data in the table very easily. It provides a comprehensive API and set of configuration options, allowing you to consume data from virtually any data source.",
 	"keywords": [
 		"DataTables",
 		"DataTable",
@@ -29,6 +32,5 @@
 		"sort",
 		"page",
 		"internationalisable"
-	],
-	"homepage": "http://datatables.net"
+	]
 }
