@@ -506,7 +506,7 @@
 	 */
 	function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 	{
-		var i, iLen, j, jLen, k, kLen;
+		var i, iLen, j, jLen, k, kLen, def;
 	
 		// Column definitions with aTargets
 		if ( aoColDefs )
@@ -514,8 +514,13 @@
 			/* Loop over the definitions array - loop in reverse so first instance has priority */
 			for ( i=aoColDefs.length-1 ; i>=0 ; i-- )
 			{
+				def = aoColDefs[i];
+	
 				/* Each definition can target multiple columns, as it is an array */
-				var aTargets = aoColDefs[i].targets || aoColDefs[i].aTargets;
+				var aTargets = def.targets !== undefined ?
+					def.targets :
+					def.aTargets;
+	
 				if ( ! $.isArray( aTargets ) )
 				{
 					aTargets = [ aTargets ];
@@ -532,12 +537,12 @@
 						}
 	
 						/* Integer, basic index */
-						fn( aTargets[j], aoColDefs[i] );
+						fn( aTargets[j], def );
 					}
 					else if ( typeof aTargets[j] === 'number' && aTargets[j] < 0 )
 					{
 						/* Negative integer, right to left column counting */
-						fn( oSettings.aoColumns.length+aTargets[j], aoColDefs[i] );
+						fn( oSettings.aoColumns.length+aTargets[j], def );
 					}
 					else if ( typeof aTargets[j] === 'string' )
 					{
@@ -547,7 +552,7 @@
 							if ( aTargets[j] == "_all" ||
 							     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
 							{
-								fn( k, aoColDefs[i] );
+								fn( k, def );
 							}
 						}
 					}
@@ -6599,18 +6604,6 @@
 	} );
 	
 	
-	/**
-	 * Get the DOM nodes for the `table` elements from the current API context.
-	 * @return {DataTable.Api} New Api instance containing the DOM nodes for the
-	 *   tables.
-	 */
-	_Api.register( 'tables().nodes()', function () {
-		return this.iterator( 'table', function ( settings, i ) {
-			return settings.nTable;
-		} );
-	} );
-	
-	
 	_Api.register( 'table()', function ( selector ) {
 		var tables = this.tables( selector );
 		var ctx = tables.context;
@@ -6624,13 +6617,31 @@
 	} );
 	
 	
-	_Api.register( 'table().node()', function () {
-		var ctx = this.context;
+	_Api.registerPlural( 'tables().nodes()', 'table().node()' , function () {
+		return this.iterator( 'table', function ( ctx ) {
+			return ctx.nTable;
+		} );
+	} );
 	
-		if ( ctx.length ) {
-			return ctx[0].nTable;
-		}
-		// return undefined;
+	
+	_Api.registerPlural( 'tables().body()', 'table().body()' , function () {
+		return this.iterator( 'table', function ( ctx ) {
+			return ctx.nTBody;
+		} );
+	} );
+	
+	
+	_Api.registerPlural( 'tables().head()', 'table().head()' , function () {
+		return this.iterator( 'table', function ( ctx ) {
+			return ctx.nTHead;
+		} );
+	} );
+	
+	
+	_Api.registerPlural( 'tables().foot()', 'table().foot()' , function () {
+		return this.iterator( 'table', function ( ctx ) {
+			return ctx.nTFoot;
+		} );
 	} );
 	
 	
