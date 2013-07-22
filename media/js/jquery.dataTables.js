@@ -7367,6 +7367,11 @@
 		} );
 	} );
 	
+	_api.registerPlural( 'rows().cache()', 'row().cache()', function ( type ) {
+		return this.iterator( 'row', function ( settings, row ) {
+			return type === 'filter' ? row._aFilterData : row._aSortData;
+		} );
+	} );
 	
 	_api.registerPlural( 'rows().invalidate()', 'row().invalidate()', function ( src ) {
 		return this.iterator( 'row', function ( settings, row ) {
@@ -7897,6 +7902,15 @@
 	_api.register( 'cells().data()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return _fnGetCellData( settings, row, column );
+		} );
+	} );
+	
+	
+	_api.registerPlural( 'cells().cache()', 'cell().cache()', function ( type ) {
+		type = type === 'filter' ? '_aFilterData' : '_aSortData';
+	
+		return this.iterator( 'cell', function ( settings, row, column ) {
+			return settings.aoData[ row ][ type ][ column ];
 		} );
 	} );
 	
