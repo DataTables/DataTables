@@ -2677,10 +2677,17 @@
 	 *    with client-side processing (optional)
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnInitComplete ( oSettings, json )
+	function _fnInitComplete ( settings, json )
 	{
-		oSettings._bInitComplete = true;
-		_fnCallbackFire( oSettings, 'aoInitComplete', 'init', [oSettings, json] );
+		settings._bInitComplete = true;
+	
+		// On an Ajax load we now have data and therefore want to apply the column
+		// sizing
+		if ( json ) {
+			_fnAdjustColumnSizing( settings );
+		}
+	
+		_fnCallbackFire( settings, 'aoInitComplete', 'init', [settings, json] );
 	}
 	
 	
