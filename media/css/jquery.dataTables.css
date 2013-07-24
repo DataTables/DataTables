@@ -185,33 +185,11 @@ table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
   text-decoration: none !important;
   cursor: pointer;
   *cursor: hand;
-  color: #333 !important;
+  color: #333333 !important;
   border: 1px solid transparent;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-  color: white !important;
-  border: 1px solid black;
-  background-color: #474747;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #474747), color-stop(100%, black));
-  /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #474747 0%, black 100%);
-  /* Chrome10+,Safari5.1+ */
-  background: -moz-linear-gradient(top, #474747 0%, black 100%);
-  /* FF3.6+ */
-  background: -ms-linear-gradient(top, #474747 0%, black 100%);
-  /* IE10+ */
-  background: -o-linear-gradient(top, #474747 0%, black 100%);
-  /* Opera 11.10+ */
-  background: linear-gradient(to bottom, #474747 0%, black 100%);
-  /* W3C */
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
-  color: #666 !important;
-  border: 1px solid transparent;
-  background: transparent;
-  box-shadow: none;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  color: #333333 !important;
   border: 1px solid gainsboro;
   background-color: white;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, gainsboro));
@@ -227,20 +205,43 @@ table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
   background: linear-gradient(to bottom, white 0%, gainsboro 100%);
   /* W3C */
 }
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+  color: #666 !important;
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  color: white !important;
+  border: 1px solid #111111;
+  background-color: #585858;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #585858), color-stop(100%, #111111));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #585858 0%, #111111 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -moz-linear-gradient(top, #585858 0%, #111111 100%);
+  /* FF3.6+ */
+  background: -ms-linear-gradient(top, #585858 0%, #111111 100%);
+  /* IE10+ */
+  background: -o-linear-gradient(top, #585858 0%, #111111 100%);
+  /* Opera 11.10+ */
+  background: linear-gradient(to bottom, #585858 0%, #111111 100%);
+  /* W3C */
+}
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
   outline: none;
-  background-color: #f6f6f6;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f6f6f6), color-stop(100%, #d7d7d7));
+  background-color: #2b2b2b;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2b2b2b), color-stop(100%, #0c0c0c));
   /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #f6f6f6 0%, #d7d7d7 100%);
+  background: -webkit-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
   /* Chrome10+,Safari5.1+ */
-  background: -moz-linear-gradient(top, #f6f6f6 0%, #d7d7d7 100%);
+  background: -moz-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
   /* FF3.6+ */
-  background: -ms-linear-gradient(top, #f6f6f6 0%, #d7d7d7 100%);
+  background: -ms-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
   /* IE10+ */
-  background: -o-linear-gradient(top, #f6f6f6 0%, #d7d7d7 100%);
+  background: -o-linear-gradient(top, #2b2b2b 0%, #0c0c0c 100%);
   /* Opera 11.10+ */
-  background: linear-gradient(to bottom, #f6f6f6 0%, #d7d7d7 100%);
+  background: linear-gradient(to bottom, #2b2b2b 0%, #0c0c0c 100%);
   /* W3C */
   box-shadow: inset 0 0 3px #111;
 }
