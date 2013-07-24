@@ -4105,6 +4105,7 @@
 			// Single column - already sorting on this column, modify the sort
 			nextSortIdx = next( sorting[0] );
 	
+			sorting.length = 1;
 			sorting[0][1] = asSorting[ nextSortIdx ];
 			sorting[0]._idx = nextSortIdx;
 		}
