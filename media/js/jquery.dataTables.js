@@ -281,11 +281,7 @@
 				oOptions.mData = oOptions.mDataProp;
 			}
 	
-			if ( oOptions.sType !== undefined )
-			{
-				oCol.sType = oOptions.sType;
-				oCol._bAutoType = false;
-			}
+			oCol._sManualType = oOptions.sType;
 	
 			// `class` is a reserved word in Javascript, so we need to provide
 			// the ability to use a valid name for the camel case input
@@ -448,28 +444,56 @@
 	}
 	
 	
-	/**
-	 * Get the sort type based on an input string
-	 *  @param {string} sData data we wish to know the type of
-	 *  @returns {string} type (defaults to 'string' if no type can be detected)
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnDetectType( sData )
+	function _fnColumnTypes ( settings )
 	{
-		var aTypes = DataTable.ext.type.detect;
-		var iLen = aTypes.length;
+		var columns = settings.aoColumns;
+		var data = settings.aoData;
+		var types = DataTable.ext.type.detect;
+		var i, ien, j, jen, k, ken;
+		var col, cell, detectedType, cache;
 	
-		for ( var i=0 ; i<iLen ; i++ )
-		{
-			var sType = aTypes[i]( sData );
-			if ( sType !== null )
-			{
-				return sType;
+		// For each column, spin over the 
+		for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			col = columns[i];
+			cache = [];
+	
+			if ( ! col.sType && col._sManualType ) {
+				col.sType = col._sManualType;
+			}
+			else if ( ! col.sType ) {
+				for ( j=0, jen=types.length ; j<jen ; j++ ) {
+					for ( k=0, ken=data.length ; k<ken ; k++ ) {
+						// Use a cache array so we only need to get the type data
+						// from the formatter once (when using multiple detectors)
+						if ( cache[k] === undefined ) {
+							cache[k] = _fnGetCellData( settings, k, i, 'type' );
+						}
+	
+						detectedType = types[j]( cache[k] );
+	
+						// Doesn't match, so break early, since this type can't
+						// apply to this column
+						if ( ! detectedType ) {
+							break;
+						}
+					}
+	
+					// Type is valid for all data points in the column - use this
+					// type
+					if ( detectedType ) {
+						col.sType = detectedType;
+						break;
+					}
+				}
+	
+				// Fall back - if no type was detected, always use string
+				if ( ! col.sType ) {
+					col.sType = 'string';
+				}
 			}
 		}
-	
-		return 'string';
 	}
+	
 	
 	
 	/**
@@ -585,8 +609,6 @@
 	 */
 	function _fnAddData ( oSettings, aDataIn, nTr, anTds )
 	{
-		var oCol;
-	
 		/* Create the object for storing information about this new row */
 		var iRow = oSettings.aoData.length;
 		var oData = $.extend( true, {}, DataTable.models.oRow, {
@@ -598,31 +620,11 @@
 	
 		/* Create the cells */
 		var nTd, sThisType;
-		for ( var i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
+		var columns = oSettings.aoColumns;
+		for ( var i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
-			oCol = oSettings.aoColumns[i];
-	
 			_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
-	
-			/* See if we should auto-detect the column type */
-			if ( oCol._bAutoType && oCol.sType != 'string' )
-			{
-				/* Attempt to auto detect the type - same as _fnGatherData() */
-				var sVarType = _fnGetCellData( oSettings, iRow, i, 'type' );
-				if ( sVarType !== null && sVarType !== '' )
-				{
-					sThisType = _fnDetectType( sVarType );
-					if ( oCol.sType === null )
-					{
-						oCol.sType = sThisType;
-					}
-					else if ( oCol.sType != sThisType && oCol.sType != "html" )
-					{
-						/* String is always the 'fallback' option */
-						oCol.sType = 'string';
-					}
-				}
-			}
+			columns[i].sType = null;
 		}
 	
 		/* Add to the display array */
@@ -1085,9 +1087,10 @@
 	 *   the sort and filter methods can subscribe to it. That will required
 	 *   initialisation options for sorting, which is why it is not already baked in
 	 */
-	function _fnInvalidateRow( settings, rowIdx, src )
+	function _fnInvalidateRow( settings, rowIdx, src, column )
 	{
 		var row = settings.aoData[ rowIdx ];
+		var i, ien;
 	
 		// Are we reading last data from DOM or the data object?
 		if ( src === 'dom' || (! src && row.src === 'dom') ) {
@@ -1098,13 +1101,25 @@
 			// Reading from data object, update the DOM
 			var cells = row.anCells;
 	
-			for ( var i=0, ien=cells.length ; i<ien ; i++ ) {
+			for ( i=0, ien=cells.length ; i<ien ; i++ ) {
 				cells[i].innerHTML = _fnGetCellData( settings, rowIdx, i, 'display' );
 			}
 		}
 	
 		row._aSortData = null;
 		row._aFilterData = null;
+	
+		// Invalidate the type for a specific column (if given) or all columns since
+		// the data might have changed
+		var cols = settings.aoColumns;
+		if ( column !== undefined ) {
+			cols[ column ].sType = null;
+		}
+		else {
+			for ( i=0, ien=cols.length ; i<ien ; i++ ) {
+				cols[i].sType = null;
+			}
+		}
 	}
 	
 	
@@ -2262,6 +2277,10 @@
 			oPrevSearch.bSmart = oFilter.bSmart;
 			oPrevSearch.bCaseInsensitive = oFilter.bCaseInsensitive;
 		};
+	
+		// Resolve any column types that are unknown due to addition or invalidation
+		// @todo As per sort - can this be moved into an event handler?
+		_fnColumnTypes( oSettings );
 	
 		/* In server-side processing all filtering is done by the server, so no point hanging around here */
 		if ( !oSettings.oFeatures.bServerSide )
@@ -3901,7 +3920,6 @@
 		var
 			i, ien, iLen, j, jLen, k, kLen,
 			sDataType, nTh,
-			aSort = [],
 			aiOrig = [],
 			oExtSort = DataTable.ext.type.sort,
 			aoData = oSettings.aoData,
@@ -3910,9 +3928,13 @@
 			formatters = 0,
 			nestedSort = oSettings.aaSortingFixed.concat( oSettings.aaSorting ),
 			sortCol,
-			displayMaster = oSettings.aiDisplayMaster;
+			displayMaster = oSettings.aiDisplayMaster,
+			aSort = _fnSortFlatten( oSettings );
 	
-		aSort = _fnSortFlatten( oSettings );
+		// Resolve any column types that are unknown due to addition or invalidation
+		// @todo Can this be moved into a 'data-ready' handler which is called when
+		//   data is going to be used in the table?
+		_fnColumnTypes( oSettings );
 	
 		for ( i=0, ien=aSort.length ; i<ien ; i++ ) {
 			sortCol = aSort[i];
@@ -5408,7 +5430,6 @@
 			"_fnGetWidestNode": _fnGetWidestNode,
 			"_fnGetMaxLenString": _fnGetMaxLenString,
 			"_fnStringToCss": _fnStringToCss,
-			"_fnDetectType": _fnDetectType,
 			"_fnSettingsFromNode": _fnSettingsFromNode,
 			"_fnGetDataMaster": _fnGetDataMaster,
 			"_fnEscapeRegex": _fnEscapeRegex,
@@ -7982,7 +8003,7 @@
 	
 		// Set
 		_fnSetCellData( ctx[0], cell[0].row, cell[0].column, data );
-		_fnInvalidateRow( ctx[0], cell[0].row, 'data' );
+		_fnInvalidateRow( ctx[0], cell[0].row, 'data', cell[0].column );
 	
 		return this;
 	} );
@@ -8613,13 +8634,13 @@
 		"bVisible": null,
 	
 		/**
-		 * Flag to indicate to the type detection method if the automatic type
-		 * detection should be used, or if a column type (sType) has been specified
-		 *  @type boolean
-		 *  @default true
+		 * Store for manual type assignment using the `column.type` option. This
+		 * is held in store so we can manipulate the column's `sType` property.
+		 *  @type string
+		 *  @default null
 		 *  @private
 		 */
-		"_bAutoType": true,
+		"_sManualType": null,
 	
 		/**
 		 * Flag to indicate if HTML5 data attributes should be used as the data
@@ -13534,7 +13555,8 @@
 			return a.toLowerCase();
 		},
 	
-		// string-asc and -desc are retained only for compatibility with
+		// string-asc and -desc are retained only for compatibility with the old
+		// sort methods
 		"string-asc": function ( x, y )
 		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -13606,6 +13628,17 @@
 		}
 	] );
 	
+	// date
+	// numeric (inc. formatted)
+	// html numbers (inc. formatted)
+	// html
+	
+	
+	
+	
+	
+	add sort types (currency, html numbers, formatted numbers, formatted html numbers)
+	currency is just formatted numbers
 	
 	
 	// Filter formatting functions. See model.ext.ofnSearch for information about
