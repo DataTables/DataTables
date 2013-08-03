@@ -222,7 +222,7 @@
 			"nTh": nTh ? nTh : document.createElement('th'),
 			"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
 			"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
-			"mData": oDefaults.mData ? oDefaults.oDefaults : iCol
+			"mData": oDefaults.mData ? oDefaults.mData : iCol
 		} );
 		oSettings.aoColumns.push( oCol );
 	
@@ -13533,8 +13533,7 @@
 			return a.toLowerCase();
 		},
 	
-		// string-asc and -desc are retained only for compatibility with the old
-		// sort methods
+		// string-asc and -desc are retained only for compatibility with
 		"string-asc": function ( x, y )
 		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -13606,17 +13605,6 @@
 		}
 	] );
 	
-	// date
-	// numeric (inc. formatted)
-	// html numbers (inc. formatted)
-	// html
-	
-	
-	
-	
-	
-	add sort types (currency, html numbers, formatted numbers, formatted html numbers)
-	currency is just formatted numbers
 	
 	
 	// Filter formatting functions. See model.ext.ofnSearch for information about
