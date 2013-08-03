@@ -472,8 +472,10 @@
 						detectedType = types[j]( cache[k] );
 	
 						// Doesn't match, so break early, since this type can't
-						// apply to this column
-						if ( ! detectedType ) {
+						// apply to this column. Also, HTML is a special case since
+						// it is so similar to `string`. Just a single match is
+						// needed for a column to be html type
+						if ( ! detectedType || detectedType === 'html' ) {
 							break;
 						}
 					}
@@ -13516,24 +13518,77 @@
 	
 	}());
 	
-	$.extend( DataTable.ext.type.sort, {
-		/*
-		 * text sorting
-		 */
-		"string-pre": function ( a )
-		{
-			if ( typeof a != 'string' )
-			{
-				if (a === null || a === undefined || !a.toString)
-				{
-					return '';
-				}
-				a = a.toString();
+	
+	var _numericReplace = function ( d, re1, re2 ) {
+		if ( !d || d === '-' ) {
+			return -Infinity;
+		}
+	
+		if ( d.replace ) {
+			if ( re1 ) {
+				d = d.replace( re1, '' );
 			}
-			return a.toLowerCase();
+	
+			if ( re2 ) {
+				d = d.replace( re2, '' );
+			}
+		}
+	
+		return d * 1;
+	};
+	
+	
+	$.extend( DataTable.ext.type.sort, {
+		// Dates
+		"date-pre": function ( d )
+		{
+			return Date.parse( d ) || 0;
 		},
 	
-		// string-asc and -desc are retained only for compatibility with
+		// Plain numbers
+		"numeric-pre": function ( d )
+		{
+			return _numericReplace( d );
+		},
+	
+		// Formatted numbers
+		"numeric-fmt-pre": function ( d )
+		{
+			return _numericReplace( d, _re_formatted_numeric );
+		},
+	
+		// HTML numeric
+		"html-numeric-pre": function ( d )
+		{
+			return _numericReplace( d, _re_html );
+		},
+	
+		// HTML numeric, formatted
+		"html-numeric-fmt-pre": function ( d )
+		{
+			return _numericReplace( d, _re_html, _re_formatted_numeric );
+		},
+	
+		// html
+		"html-pre": function ( a )
+		{
+			return a.replace ?
+				a.replace( /<.*?>/g, "" ).toLowerCase() :
+				a+'';
+		},
+	
+		// string
+		"string-pre": function ( a )
+		{
+			return typeof a === 'string' ?
+				a.toLowerCase() :
+				! a || ! a.toString ?
+					'' :
+					a.toString();
+		},
+	
+		// string-asc and -desc are retained only for compatibility with the old
+		// sort methods
 		"string-asc": function ( x, y )
 		{
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -13542,65 +13597,84 @@
 		"string-desc": function ( x, y )
 		{
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
-		},
-	
-	
-		/*
-		 * html sorting (ignore html tags)
-		 */
-		"html-pre": function ( a )
-		{
-			return a.replace( /<.*?>/g, "" ).toLowerCase();
-		},
-	
-	
-		/*
-		 * date sorting
-		 */
-		"date-pre": function ( a )
-		{
-			var x = Date.parse( a );
-	
-			if ( isNaN(x) || x==="" )
-			{
-				x = Date.parse( "01/01/1970 00:00:00" );
-			}
-			return x;
-		},
-	
-	
-		/*
-		 * numerical sorting
-		 */
-		"numeric-pre": function ( a )
-		{
-			return (a=="-" || a==="") ? -Infinity : a*1;
 		}
 	} );
+	
+	
+	var _re_formatted_numeric = /[',$£€¥]/g;
+	var _re_html = /<.*?>/g;
+	
+	
+	var _empty = function ( d ) {
+		return !d || d === '-' ? true : false;
+	};
+	
+	
+	var _isNumber = function ( d, formatted ) {
+		if ( formatted && typeof d === 'string' ) {
+			d = d.replace( _re_formatted_numeric, '' );
+		}
+	
+		return !d || d==='-' || (!isNaN( parseFloat(d) ) && isFinite( d ));
+	};
+	
+	// A string without HTML in it can be considered to be HTML still
+	var _isHtml = function ( d ) {
+		return !d || typeof d === 'string';
+	};
+	
+	var _stripHtml = function ( d ) {
+		return d.replace( _re_html, '' );
+	};
+	
+	var _htmlNumeric = function ( d, formatted ) {
+		var html = _isHtml( d );
+		return ! html ?
+			null :
+			_isNumber( _stripHtml( d ), formatted ) ?
+				true :
+				null;
+	};
 	
 	
 	// Built in type detection. See model.ext.aTypes for information about
 	// what is required from this methods.
 	$.extend( DataTable.ext.type.detect, [
-		// Numeric data type
-		function ( data )
-		{
-			return data==='' || data==='-' || (!isNaN( parseFloat(data) ) && isFinite( data )) ?
-				'numeric' : null;
-		},
-	
 		// Dates (only those recognised by the browser's Date.parse)
-		function ( data )
+		function ( d )
 		{
-			var parsed = Date.parse(data);
-			return (parsed !== null && !isNaN(parsed)) || (typeof data==='string' && data.length===0) ?
-				'date' : null;
+			var parsed = Date.parse(d);
+			return (parsed !== null && !isNaN(parsed)) || _empty(d) ? 'date' : null;
 		},
 	
-		// HTML
-		function ( data )
+		// Plain numbers
+		function ( d )
 		{
-			return typeof data === 'string' && data.indexOf('<') != -1 && data.indexOf('>') != -1 ?
+			return _isNumber( d ) ? 'numeric' : null;
+		},
+	
+		// Formatted numbers
+		function ( d )
+		{
+			return _isNumber( d, true ) ? 'numeric-fmt' : null;
+		},
+	
+		// HTML numeric
+		function ( d )
+		{
+			return _htmlNumeric( d ) ? 'html-numeric' : null;
+		},
+	
+		// HTML numeric, formatted
+		function ( d )
+		{
+			return _htmlNumeric( d, true ) ? 'html-numeric-fmt' : null;
+		},
+	
+		// HTML (this is strict checking - there much be html)
+		function ( d )
+		{
+			return _empty( d ) || (typeof d === 'string' && d.indexOf('<') !== -1) ?
 				'html' : null;
 		}
 	] );
