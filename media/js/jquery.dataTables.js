@@ -3009,6 +3009,7 @@
 		nScrollHead.style.border = "0";
 		nScrollHead.style.width = "100%";
 		nScrollFoot.style.border = "0";
+		nScrollHeadInner.style.boxSizing = 'content-box';
 		nScrollHeadInner.style.width = oSettings.oScroll.sXInner !== "" ?
 			oSettings.oScroll.sXInner : "100%"; /* will be overwritten */
 	
