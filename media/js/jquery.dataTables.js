@@ -229,7 +229,7 @@
 		/* Add a column specific filter */
 		if ( oSettings.aoPreSearchCols[ iCol ] === undefined || oSettings.aoPreSearchCols[ iCol ] === null )
 		{
-			oSettings.aoPreSearchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch );
+			oSettings.aoPreSearchCols[ iCol ] = $.extend( true, {}, DataTable.models.oSearch );
 		}
 		else
 		{
