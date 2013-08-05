@@ -4424,46 +4424,6 @@
 	
 	
 	/**
-	 * Extend objects - very similar to jQuery.extend, but deep copy objects, and shallow
-	 * copy arrays. The reason we need to do this, is that we don't want to deep copy array
-	 * init values (such as aaSorting) since the dev wouldn't be able to override them, but
-	 * we do want to deep copy objects.
-	 *  @param {object} oOut Object to extend
-	 *  @param {object} oExtender Object from which the properties will be applied to oOut
-	 *  @returns {object} oOut Reference, just for convenience - oOut === the return.
-	 *  @memberof DataTable#oApi
-	 *  @todo This doesn't take account of arrays inside the deep copied objects.
-	 */
-	function _fnExtend( oOut, oExtender )
-	{
-		var val;
-	
-		for ( var prop in oExtender )
-		{
-			if ( oExtender.hasOwnProperty(prop) )
-			{
-				val = oExtender[prop];
-	
-				if ( $.isPlainObject( val ) )
-				{
-					if ( ! oOut[prop] )
-					{
-						oOut[prop] = {};
-					}
-					$.extend( true, oOut[prop], val );
-				}
-				else
-				{
-					oOut[prop] = val;
-				}
-			}
-		}
-	
-		return oOut;
-	}
-	
-	
-	/**
 	 * Bind an event handers to allow a click or return key to activate the callback.
 	 * This is good for accessibility since a return on the keyboard will have the
 	 * same effect as a click, if the element has focus.
@@ -5432,7 +5392,6 @@
 			"_fnSetObjectDataFn": _fnSetObjectDataFn,
 			"_fnApplyColumnDefs": _fnApplyColumnDefs,
 			"_fnBindAction": _fnBindAction,
-			"_fnExtend": _fnExtend,
 			"_fnCallbackReg": _fnCallbackReg,
 			"_fnCallbackFire": _fnCallbackFire,
 			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
@@ -5557,7 +5516,14 @@
 					oInit.aLengthMenu[0][0] : oInit.aLengthMenu[0];
 			}
 			
-			oInit = _fnExtend( $.extend(true, {}, defaults), oInit );
+			// Apply the defaults and init options to make a single init object will all
+			// options defined from defaults and instance options. Note that the aaData
+			// option is removed then re-added to ensure the original data reference is
+			// retained. Even if undefined the code below is safe
+			var tmpData = oInit.aaData;
+			delete oInit.aaData;
+			oInit = $.extend( true, {}, defaults, oInit );
+			oInit.aaData = tmpData;
 			
 			// Map the initialisation options onto the settings object
 			_fnMap( oSettings.oFeatures, oInit, [
