@@ -4319,9 +4319,15 @@
 		oSettings._iDisplayStart    = oData.iStart;
 		oSettings.iInitDisplayStart = oData.iStart;
 		oSettings._iDisplayLength   = oData.iLength;
-		oSettings.aaSorting         = $.map( oData.aaSorting, function (d) {
-			return d[0] >= columns.length ? [ 0, columns[i].asSorting[0] ] : d;
-		} );
+		oSettings.aaSorting         = [];
+	
+		var savedSort = oData.aaSorting;
+		for ( i=0, ien=savedSort.length ; i<ien ; i++ ) {
+			oSettings.aaSorting.push( savedSort[i][0] >= columns.length ?
+				[ 0, savedSort[i][1] ] :
+				savedSort[i]
+			);
+		}
 	
 		/* Search filtering  */
 		$.extend( oSettings.oPreviousSearch, oData.oSearch );
