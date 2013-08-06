@@ -13890,6 +13890,24 @@
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
 	 *  @param {integer} len New length
 	 */
+
+	/**
+	 * Column sizing has changed.
+	 *  @name DataTable#column-sizing
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 */
+
+	/**
+	 * Column visibility has changes.
+	 *  @name DataTable#column-visibility
+	 *  @event
+	 *  @param {event} e jQuery event object
+	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
+	 *  @param {int} column Column index
+	 *  @param {bool} vis `false` if column now hidden, or `true` if visible
+	 */
 }));
 
 }(window, document));
