@@ -13164,7 +13164,7 @@
 		 * @type int
 		 * @private
 		 */
-		_unqiue: 0,
+		_unique: 0,
 	
 	
 		//
