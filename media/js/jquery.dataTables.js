@@ -4748,7 +4748,7 @@
 			var scroll = settings.oScroll;
 		
 			if ( bRedraw === undefined || bRedraw ) {
-				api.draw( true );
+				api.draw( false );
 			}
 			else if ( scroll.sX !== "" || scroll.sY !== "" ) {
 				/* If not redrawing, but scrolling, we want to apply the new column sizes anyway */
