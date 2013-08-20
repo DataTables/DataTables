@@ -2515,7 +2515,11 @@
 	{
 		var
 			tid = settings.sTableId,
-			nodes = settings.aanFeatures.i;
+			nodes = settings.aanFeatures.i,
+			n = $('<div/>', {
+				'class': settings.oClasses.sInfo,
+				'id': ! nodes ? tid+'_info' : null
+			} );
 	
 		if ( ! nodes ) {
 			// Update display on each draw
@@ -2524,14 +2528,16 @@
 				"sName": "information"
 			} );
 	
+			n
+				.attr( 'role', 'alert' )
+				.attr( 'aria-live', 'polite' )
+				.attr( 'aria-relevant', 'all' );
+	
 			// Table is described by our info div
 			$(settings.nTable).attr( 'aria-describedby', tid+'_info' );
 		}
 	
-		return $('<div/>', {
-			'class': settings.oClasses.sInfo,
-			'id': ! nodes ? tid+'_info' : null
-		} )[0];
+		return n[0];
 	}
 	
 	
@@ -5878,9 +5884,6 @@
 				this.appendChild( tbody[0] );
 			}
 			oSettings.nTBody = tbody[0];
-			oSettings.nTBody.setAttribute( "role", "alert" );
-			oSettings.nTBody.setAttribute( "aria-live", "polite" );
-			oSettings.nTBody.setAttribute( "aria-relevant", "all" );
 			
 			var tfoot = $(this).children('tfoot');
 			if ( tfoot.length === 0 && captions.length > 0 && (oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "") )
