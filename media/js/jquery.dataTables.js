@@ -13662,6 +13662,10 @@
 	};
 	
 	var _htmlNumeric = function ( d, formatted ) {
+		if ( _empty( d ) ) {
+			return true;
+		}
+	
 		var html = _isHtml( d );
 		return ! html ?
 			null :
@@ -13723,17 +13727,21 @@
 	
 	$.extend( DataTable.ext.type.filter, {
 		html: function ( data ) {
-			return typeof data === 'string' ?
-				data
-					.replace( __filter_lines, " " )
-					.replace( __filter_html, "" ) :
-				'';
+			return _empty(data) ?
+				'' :
+				typeof data === 'string' ?
+					data
+						.replace( __filter_lines, " " )
+						.replace( __filter_html, "" ) :
+					'';
 		},
 	
 		string: function ( data ) {
-			return typeof data === 'string' ?
-				data.replace( __filter_lines, " " ) :
-				data;
+			return _empty(data) ?
+				'' :
+				typeof data === 'string' ?
+					data.replace( __filter_lines, " " ) :
+					data;
 		}
 	} );
 	
