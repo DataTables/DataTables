@@ -31,7 +31,7 @@
 	// Define as an AMD module if possible
 	if ( typeof define === 'function' && define.amd )
 	{
-		define( 'datatables', ['jquery'], factory );
+		define( ['jquery'], factory );
 	}
 	/* Define using browser globals otherwise
 	 * Prevent multiple instantiations if the script is loaded twice
@@ -6773,7 +6773,7 @@
 			all        = len === -1;
 	
 		return {
-			"page":           all ? 0 : Math.ceil( start / len ),
+			"page":           all ? 0 : Math.floor( start / len ),
 			"pages":          all ? 1 : Math.ceil( visRecords / len ),
 			"start":          start,
 			"end":            settings.fnDisplayEnd(),
