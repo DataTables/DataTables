@@ -2454,7 +2454,8 @@
 	
 	
 	
-	var __filter_div = $('<div>');
+	var __filter_div = $('<div>')[0];
+	var __filter_div_textContent = __filter_div.textContent !== undefined;
 	
 	// Update the filtering data for each row if needed (by invalidation or first run)
 	function _fnFilterData ( settings )
@@ -2488,9 +2489,15 @@
 					}
 	
 					// If it looks like there is an HTML entity in the string,
-					// attempt to decode it so sorting works as expected
+					// attempt to decode it so sorting works as expected. Note that
+					// we could use a single line of jQuery to do this, but the DOM
+					// method used here is much faster http://jsperf.com/html-decode
 					if ( cellData.indexOf && cellData.indexOf('&') !== -1 ) {
-						cellData = __filter_div.html( cellData ).text();
+						__filter_div.innerHTML = cellData;
+						cellData = __filter_div_textContent ?
+							__filter_div.textContent :
+							__filter_div.innerText;
+						cellData = cellData.replace(/[\r\n]/g, '');
 					}
 	
 					filterData.push( cellData );
