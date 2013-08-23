@@ -8355,7 +8355,7 @@
 			}
 	
 			// Blitz all DT events
-			jqWrapper.unbind('.DT').find('*').unbind('.DT');
+			jqWrapper.unbind('.DT').find(':not(tbody *)').unbind('.DT');
 			$(window).unbind('.DT-'+settings.sInstance);
 	
 			// When scrolling we had to break the table up - restore it
