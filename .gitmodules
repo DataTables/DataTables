@@ -1,0 +1,3 @@
+[submodule "extras/scroller"]
+	path = extras/scroller
+	url = git@github.com:Tekserve/Scroller.git
