@@ -2751,6 +2751,7 @@
 			'name':          tableId+'_length',
 			'aria-controls': tableId
 		} );
+        select.addClass( settings.oClasses.sLengthMenu);
 	
 		for ( var i=0, ien=lengths.length ; i<ien ; i++ ) {
 			select[0][ i ] = new Option( language[i], lengths[i] );
@@ -13321,6 +13322,7 @@
 		"sInfo": "dataTables_info",
 		"sPaging": "dataTables_paginate paging_", /* Note that the type is postfixed */
 		"sLength": "dataTables_length",
+        "sLengthMenu": "", /* Length menu element */
 		"sProcessing": "dataTables_processing",
 	
 		/* Sorting */
