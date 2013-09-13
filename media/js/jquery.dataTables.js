@@ -4211,6 +4211,10 @@
 				return;
 			}
 			
+			/* Don't sort for clicks on input, select, or links */
+			if ($(e.target).is("input") || $(e.target).is("select") || $(e.target).is("a"))
+				return;
+			
 			/*
 			 * This is a little bit odd I admit... I declare a temporary function inside the scope of
 			 * _fnBuildHead and the click handler in order that the code presented here can be used
@@ -4776,11 +4780,18 @@
 			.bind( 'keypress.DT', oData, function (e){
 				if ( e.which === 13 ) {
 					fn(e);
-				} } )
-			.bind( 'selectstart.DT', function () {
-				/* Take the brutal approach to cancelling text selection */
-				return false;
-				} );
+				} } );
+				
+		/*
+                 * Cancel text selection
+                 * Still allows selecting text inside any input boxes
+                 * Bind 'selectstart.DT' approach works for most browsers, but not for IE, which still disables select in input. Hence below css only approach works much better.
+            	*/
+		n.style.UserSelect = "none"; //CSS 3
+		n.setAttribute('unselectable', 'on'); //IE
+		n.style.MozUserSelect = "-moz-none"; //Firefox - "none" restricts input select. We now use "-moz-none", which is consistent in behavior with the other browsers.
+		n.style.KhtmlUserSelect = "none"; //Webkit
+		n.style.OUserSelect = "none"; //Opera
 	}
 	
 	
