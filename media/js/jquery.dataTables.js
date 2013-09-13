@@ -4212,7 +4212,8 @@
 			}
 			
 			/* Don't sort for clicks on input, select, or links */
-			if ($(e.target).is("input") || $(e.target).is("select") || $(e.target).is("a"))
+			var sortTarget = $(e.target);
+			if (sortTarget.is("input") || sortTarget.is("select") || sortTarget.is("a"))
 				return;
 			
 			/*
@@ -4787,10 +4788,11 @@
                  * Still allows selecting text inside any input boxes
                  * Bind 'selectstart.DT' approach works for most browsers, but not for IE, which still disables select in input. Hence below css only approach works much better.
             	*/
-		n.style.UserSelect = "none"; //CSS 3
-		n.setAttribute('unselectable', 'on'); //IE
-		n.style.MozUserSelect = "-moz-none"; //Firefox - "none" restricts input select. We now use "-moz-none", which is consistent in behavior with the other browsers.
-		n.style.KhtmlUserSelect = "none"; //Webkit
+		n.style.UserSelect = "none"; //CSS Future
+		n.style.WebkitUserSelect = "none"; //Webkit / Chrome
+		n.style.MozUserSelect = "none"; //Firefox
+		n.style.MsUserSelect = "-none"; //IE 10+
+		n.setAttribute('unselectable', 'on'); //IE 6+
 		n.style.OUserSelect = "none"; //Opera
 	}
 	
