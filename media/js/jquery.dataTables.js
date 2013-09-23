@@ -795,7 +795,9 @@
 			/* Build an object of get functions, and wrap them in a single call */
 			var o = {};
 			$.each( mSource, function (key, val) {
-				o[key] = _fnGetObjectDataFn( val );
+				if ( val ) {
+					o[key] = _fnGetObjectDataFn( val );
+				}
 			} );
 	
 			return function (data, type, extra) {
