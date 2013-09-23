@@ -9757,47 +9757,23 @@
 		 *  @name DataTable.defaults.formatNumber
 		 *
 		 *  @example
+		 *    // Format a number using a single quote for the separator (note that
+		 *    // this can also be done with the language.infoThousands option)
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "formatNumber": function ( toFormat ) {
-		 *          if ( toFormat &lt; 1000 ) {
-		 *            return toFormat;
-		 *          } else {
-		 *            var
-		 *              s=(toFormat+""),
-		 *              a=s.split(""), out="",
-		 *              iLen=s.length;
-		 *
-		 *            for ( var i=0 ; i&lt;iLen ; i++ ) {
-		 *              if ( i%3 === 0 &amp;&amp; i !== 0 ) {
-		 *                out = "'"+out;
-		 *              }
-		 *              out = a[iLen-i-1]+out;
-		 *            }
-		 *          }
-		 *          return out;
+		 *          return toFormat.toString().replace(
+		 *            /\B(?=(\d{3})+(?!\d))/g, "'"
+		 *          );
 		 *        };
 		 *      } );
 		 *    } );
 		 */
 		"fnFormatNumber": function ( toFormat ) {
-			if ( toFormat < 1000 )
-			{
-				// A small optimisation for what is likely to be the majority of use cases
-				return toFormat;
-			}
-	
-			var s=(toFormat+""), a=s.split(""), out="", iLen=s.length;
-	
-			for ( var i=0 ; i<iLen ; i++ )
-			{
-				if ( i%3 === 0 && i !== 0 )
-				{
-					out = this.oLanguage.sInfoThousands+out;
-				}
-				out = a[iLen-i-1]+out;
-			}
-			return out;
+			return toFormat.toString().replace(
+				/\B(?=(\d{3})+(?!\d))/g,
+				this.oLanguage.sInfoThousands
+			);
 		},
 	
 	
