@@ -1953,6 +1953,7 @@
 					oSettings.oApi._fnLog( oSettings, 0, json.sError );
 				}
 	
+				oSettings.json = json;
 				$(instance).trigger('xhr', [oSettings, json]);
 				fn( json );
 			},
@@ -6869,11 +6870,7 @@
 		var ctx = this.context;
 	
 		if ( ctx.length > 0 ) {
-			var xhr = ctx[0].jqXHR;
-	
-			if ( xhr ) {
-				return $.parseJSON( xhr.responseText );
-			}
+			return this.context.json;
 		}
 	
 		// else return undefined;
@@ -12547,6 +12544,13 @@
 		 *  @default null
 		 */
 		"jqXHR": null,
+	
+		/**
+		 * JSON returned from the server in the last Ajax request
+		 *  @type object
+		 *  @default undefined
+		 */
+		"json": undefined,
 	
 		/**
 		 * Function to get the server-side data.
