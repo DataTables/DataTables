@@ -48,8 +48,8 @@ function _fnUpdateInfo ( settings )
 		max   = settings.fnRecordsTotal(),
 		total = settings.fnRecordsDisplay(),
 		out   = total ?
-			lang.sInfoEmpty :
-			lang.sInfo;
+			lang.sInfo :
+			lang.sInfoEmpty;
 
 	if ( total !== max ) {
 		/* Record set after filtering */
