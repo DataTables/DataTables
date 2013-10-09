@@ -17,7 +17,7 @@ table.dataTable thead th,
 table.dataTable thead td,
 table.dataTable tfoot th,
 table.dataTable tfoot td {
-  padding: 10px 10px;
+  padding: 4px 10px;
 }
 table.dataTable thead th,
 table.dataTable tfoot th {
