@@ -296,7 +296,7 @@
 			/* iDataSort to be applied (backwards compatibility), but aDataSort will take
 			 * priority if defined
 			 */
-			if ( oOptions.iDataSort !== undefined )
+			if ( typeof oOptions.iDataSort === 'number' )
 			{
 				oCol.aDataSort = [ oOptions.iDataSort ];
 			}
