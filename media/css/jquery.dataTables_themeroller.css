@@ -210,6 +210,7 @@ table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_3 {
   position: relative;
   clear: both;
   *zoom: 1;
+  zoom: 1;
 }
 .dataTables_wrapper .dataTables_length {
   float: left;
@@ -295,4 +296,11 @@ table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_3 {
 }
 .dataTables_wrapper .ui-toolbar {
   padding: 8px;
+}
+.dataTables_wrapper:after {
+  visibility: hidden;
+  display: block;
+  content: "";
+  clear: both;
+  height: 0;
 }
