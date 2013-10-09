@@ -2180,10 +2180,14 @@
 	{
 		var oPreviousSearch = oSettings.oPreviousSearch;
 	
+		// @todo Surely this can be cleaned up!?!
+		var klass = 'class="'+oSettings.oClasses.sFilterInput+'"';
 		var sSearchStr = oSettings.oLanguage.sSearch;
 		sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
 		  sSearchStr.replace('_INPUT_', '<input type="search" />') :
-		  sSearchStr==="" ? '<input type="search" />' : sSearchStr+' <input type="search" />';
+		  sSearchStr==="" ?
+			'<input type="search" '+klass+' />' :
+			sSearchStr+' <input type="search" '+klass+'/>';
 	
 		var nFilter = document.createElement( 'div' );
 		nFilter.className = oSettings.oClasses.sFilter;
@@ -2746,6 +2750,7 @@
 		}
 	
 		var
+			classes  = settings.oClasses,
 			tableId  = settings.sTableId,
 			menu     = settings.aLengthMenu,
 			d2       = $.isArray( menu[0] ),
@@ -2754,14 +2759,15 @@
 	
 		var select = $('<select/>', {
 			'name':          tableId+'_length',
-			'aria-controls': tableId
+			'aria-controls': tableId,
+			'class':         classes.sLengthSelect
 		} );
 	
 		for ( var i=0, ien=lengths.length ; i<ien ; i++ ) {
 			select[0][ i ] = new Option( language[i], lengths[i] );
 		}
 	
-		var div = $('<div><label/></div>').addClass( settings.oClasses.sLength );
+		var div = $('<div><label/></div>').addClass( classes.sLength );
 		if ( ! settings.aanFeatures.l ) {
 			div[0].id = tableId+'_length';
 		}
@@ -13321,14 +13327,11 @@
 		"sSortableNone": "sorting_disabled",
 		"sSortColumn": "sorting_", /* Note that an int is postfixed for the sorting order */
 	
-		// Deprecated
-		"sSortJUIAsc": "",
-		"sSortJUIDesc": "",
-		"sSortJUI": "",
-		"sSortJUIAscAllowed": "",
-		"sSortJUIDescAllowed": "",
-		"sSortJUIWrapper": "",
-		"sSortIcon": "",
+		/* Filtering */
+		"sFilterInput": "",
+	
+		/* Page length */
+		"sLengthSelect": "",
 	
 		/* Scrolling */
 		"sScrollWrapper": "dataTables_scroll",
@@ -13343,6 +13346,13 @@
 		"sFooterTH": "",
 	
 		// Deprecated
+		"sSortJUIAsc": "",
+		"sSortJUIDesc": "",
+		"sSortJUI": "",
+		"sSortJUIAscAllowed": "",
+		"sSortJUIDescAllowed": "",
+		"sSortJUIWrapper": "",
+		"sSortIcon": "",
 		"sJUIHeader": "",
 		"sJUIFooter": ""
 	} );
