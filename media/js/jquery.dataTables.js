@@ -1581,15 +1581,7 @@
 	
 		var body = $(oSettings.nTBody);
 	
-		/* When doing infinite scrolling, only remove child rows when sorting, filtering or start
-		 * up. When not infinite scroll, always do it.
-		 */
-		if ( !oSettings.oScroll.bInfinite || !oSettings._bInitComplete ||
-			oSettings.bSorted || oSettings.bFiltered )
-		{
-			body.children().detach();
-		}
-	
+		body.children().detach();
 		body.append( $(anRows) );
 	
 		/* Call all required callback functions for the end of a draw */
@@ -2128,10 +2120,7 @@
 			oSettings.iDraw = json.sEcho * 1;
 		}
 	
-		if ( !oSettings.oScroll.bInfinite || oSettings.bSorted || oSettings.bFiltered )
-		{
-			_fnClearTable( oSettings );
-		}
+		_fnClearTable( oSettings );
 		oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 		oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
 	
@@ -2602,7 +2591,7 @@
 		// internally
 		var
 			formatter  = settings.fnFormatNumber,
-			start      = settings.oScroll.bInfinite ? 1 : settings._iDisplayStart+1,
+			start      = settings._iDisplayStart+1,
 			len        = settings._iDisplayLength,
 			vis        = settings.fnRecordsDisplay(),
 			all        = len === -1;
@@ -2741,10 +2730,6 @@
 	 */
 	function _fnFeatureHtmlLength ( settings )
 	{
-		if ( settings.oScroll.bInfinite ) {
-			return null;
-		}
-	
 		var
 			classes  = settings.oClasses,
 			tableId  = settings.sTableId,
@@ -2805,11 +2790,6 @@
 	 */
 	function _fnFeatureHtmlPaginate ( settings )
 	{
-		if ( settings.oScroll.bInfinite )
-		{
-			return null;
-		}
-	
 		var
 			type   = settings.sPaginationType,
 			plugin = DataTable.ext.pager[ type ],
@@ -3108,28 +3088,6 @@
 			"fn": _fnScrollDraw,
 			"sName": "scrolling"
 		} );
-	
-		/* Infinite scrolling event handlers */
-		if ( oSettings.oScroll.bInfinite )
-		{
-			$(nScrollBody).scroll( function() {
-				/* Use a blocker to stop scrolling from loading more data while other data is still loading */
-				if ( !oSettings.bDrawing && $(this).scrollTop() !== 0 )
-				{
-					/* Check if we should load the next data set */
-					if ( $(this).scrollTop() + $(this).height() >
-						$(oSettings.nTable).height() - oSettings.oScroll.iLoadGap )
-					{
-						/* Only do the redraw if we have to - we might be at the end of the data */
-						if ( oSettings.fnDisplayEnd() < oSettings.fnRecordsDisplay() )
-						{
-							_fnPageChange( oSettings, 'next' );
-							_fnDraw( oSettings );
-						}
-					}
-				}
-			} );
-		}
 	
 		oSettings.nScrollHead = nScrollHead;
 		oSettings.nScrollFoot = nScrollFoot;
@@ -4321,10 +4279,10 @@
 		}
 	
 		/* Store the interesting variables */
-		var i, iLen, bInfinite=oSettings.oScroll.bInfinite;
+		var i, iLen;
 		var oState = {
 			"iCreate":      new Date().getTime(),
-			"iStart":       bInfinite ? 0 : oSettings._iDisplayStart,
+			"iStart":       oSettings._iDisplayStart,
 			"iLength":      oSettings._iDisplayLength,
 			"aaSorting":    $.extend( true, [], oSettings.aaSorting ),
 			"oSearch":      $.extend( true, {}, oSettings.oPreviousSearch ),
@@ -5646,8 +5604,6 @@
 				[ "sScrollXInner", "sXInner" ],
 				[ "sScrollY", "sY" ],
 				[ "bScrollCollapse", "bCollapse" ],
-				[ "bScrollInfinite", "bInfinite" ],
-				[ "iScrollLoadGap", "iLoadGap" ],
 				[ "bScrollAutoCss", "bAutoCss" ]
 			] );
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
@@ -9520,31 +9476,6 @@
 	
 	
 		/**
-		 * Enable infinite scrolling for DataTables (to be used in combination with
-		 * `scrollY`). Infinite scrolling means that DataTables will continually load
-		 * data as a user scrolls through a table, which is very useful for large
-		 * dataset. This cannot be used with pagination, which is automatically
-		 * disabled. *Note*: the Scroller extra for DataTables is recommended in
-		 * in preference to this option.
-		 *  @type boolean
-		 *  @default false
-		 *
-		 *  @dtopt Features
-		 *  @name DataTable.defaults.scrollInfinite
-		 *
-		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "scrollInfinite": true,
-		 *        "scrollCollapse": true,
-		 *        "scrollY": "200px"
-		 *      } );
-		 *    } );
-		 */
-		"bScrollInfinite": false,
-	
-	
-		/**
 		 * Configure DataTables to use server-side processing. Note that the
 		 * `ajaxSource` parameter must also be given in order to give DataTables a
 		 * source to obtain the required data for each draw.
@@ -10251,31 +10182,6 @@
 		 *    } )
 		 */
 		"iDisplayStart": 0,
-	
-	
-		/**
-		 * The scroll gap is the amount of scrolling that is left to go before
-		 * DataTables will load the next 'page' of data automatically when using
-		 * `scrollInfinite`. You typically want a gap which is big enough that the
-		 * scrolling will be smooth for the user, while not so large that it will
-		 * load more data than need.
-		 *  @type int
-		 *  @default 100
-		 *
-		 *  @dtopt Options
-		 *  @name DataTable.defaults.scrollLoadGap
-		 *
-		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "scrollInfinite": true,
-		 *        "scrollCollapse": true,
-		 *        "scrollY": "200px",
-		 *        "scrollLoadGap": 50
-		 *      } );
-		 *    } );
-		 */
-		"iScrollLoadGap": 100,
 	
 	
 		/**
@@ -12092,31 +11998,12 @@
 			"bCollapse": null,
 	
 			/**
-			 * Infinite scrolling enablement flag. Now deprecated in favour of
-			 * using the Scroller plug-in.
-			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.defaults}.
-			 *  @type boolean
-			 */
-			"bInfinite": null,
-	
-			/**
 			 * Width of the scrollbar for the web-browser's platform. Calculated
 			 * during table initialisation.
 			 *  @type int
 			 *  @default 0
 			 */
 			"iBarWidth": 0,
-	
-			/**
-			 * Space (in pixels) between the bottom of the scrolling container and
-			 * the bottom of the scrolling viewport before the next page is loaded
-			 * when using infinite scrolling.
-			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.defaults}.
-			 *  @type int
-			 */
-			"iLoadGap": null,
 	
 			/**
 			 * Viewport width for horizontal scrolling. Horizontal scrolling is
