@@ -611,7 +611,12 @@
 		var columns = oSettings.aoColumns;
 		for ( var i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
-			_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
+			// When working with a row, the data source object must be populated. In
+			// all other cases, the data source object is already populated, so we
+			// don't overwrite it, which might break bindings etc
+			if ( nTr ) {
+				_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
+			}
 			columns[i].sType = null;
 		}
 	
@@ -827,11 +832,12 @@
 			 * be used if defined, rather than throwing an error
 			 */
 			var fetchData = function (data, type, src) {
-				var a = _fnSplitObjNotation( src );
 				var arrayNotation, funcNotation, out, innerSrc;
 	
 				if ( src !== "" )
 				{
+					var a = _fnSplitObjNotation( src );
+	
 					for ( var i=0, iLen=a.length ; i<iLen ; i++ )
 					{
 						// Check if we are dealing with special notation
