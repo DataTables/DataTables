@@ -2948,448 +2948,432 @@
 	
 	/**
 	 * Add any control elements for the table - specifically scrolling
-	 *  @param {object} oSettings dataTables settings object
+	 *  @param {object} settings dataTables settings object
 	 *  @returns {node} Node to add to the DOM
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnFeatureHtmlTable ( oSettings )
+	function _fnFeatureHtmlTable ( settings )
 	{
-		/* Check if scrolling is enabled or not - if not then leave the DOM unaltered */
-		if ( oSettings.oScroll.sX === "" && oSettings.oScroll.sY === "" )
-		{
-			return oSettings.nTable;
+		var scroll = settings.oScroll;
+	
+		if ( scroll.sX === '' && scroll.sY === '' ) {
+			return;
+		}
+	
+		var scrollX = scroll.sX;
+		var scrollY = scroll.sY;
+		var classes = settings.oClasses;
+		var table = $(settings.nTable);
+		var caption = table.children('caption');
+		var captionSide = caption.length ? caption[0]._captionSide : null;
+		var headerClone = $( table[0].cloneNode(false) );
+		var footerClone = $( table[0].cloneNode(false) );
+		var footer = table.children('tfoot');
+		var _div = '<div/>';
+		var size = function ( s ) {
+			return !s ? null : _fnStringToCss( s );
+		};
+	
+		if ( ! footer.length ) {
+			footer = null;
 		}
 	
 		/*
 		 * The HTML structure that we want to generate in this function is:
-		 *  div - nScroller
-		 *    div - nScrollHead
-		 *      div - nScrollHeadInner
-		 *        table - nScrollHeadTable
-		 *          thead - nThead
-		 *    div - nScrollBody
-		 *      table - oSettings.nTable
-		 *        thead - nTheadSize
-		 *        tbody - nTbody
-		 *    div - nScrollFoot
-		 *      div - nScrollFootInner
-		 *        table - nScrollFootTable
-		 *          tfoot - nTfoot
+		 *  div - scroller
+		 *    div - scroll head
+		 *      div - scroll head inner
+		 *        table - scroll head table
+		 *          thead - thead
+		 *    div - scroll body
+		 *      table - table (master table)
+		 *        thead - thead clone for sizing
+		 *        tbody - tbody
+		 *    div - scroll foot
+		 *      div - scroll foot inner
+		 *        table - scroll foot table
+		 *          tfoot - tfoot
 		 */
-		var
-		 	nScroller = document.createElement('div'),
-		 	nScrollHead = document.createElement('div'),
-		 	nScrollHeadInner = document.createElement('div'),
-		 	nScrollBody = document.createElement('div'),
-		 	nScrollFoot = document.createElement('div'),
-		 	nScrollFootInner = document.createElement('div'),
-		 	nScrollHeadTable = oSettings.nTable.cloneNode(false),
-		 	nScrollFootTable = oSettings.nTable.cloneNode(false),
-			nThead = oSettings.nTable.getElementsByTagName('thead')[0],
-		 	nTfoot = oSettings.nTable.getElementsByTagName('tfoot').length === 0 ? null :
-				oSettings.nTable.getElementsByTagName('tfoot')[0],
-			oClasses = oSettings.oClasses;
+		var scroller = $( _div, { 'class': classes.sScrollWrapper } )
+			.append(
+				$(_div, { 'class': classes.sScrollHead } )
+					.css( {
+						overflow: 'hidden',
+						position: 'relative',
+						border: 0,
+						width: scrollX ? size(scrollX) : '100%'
+					} )
+					.append(
+						$(_div, { 'class': classes.sScrollHeadInner } )
+							.css( {
+								'box-sizing': 'content-box',
+								width: scroll.sXInner || '100%'
+							} )
+							.append(
+								headerClone
+									.removeAttr('id')
+									.css( 'margin-left', 0 )
+									.append(
+										table.children('thead')
+									)
+							)
+					)
+					.append( captionSide === 'top' ? caption : null )
+			)
+			.append(
+				$(_div, { 'class': classes.sScrollBody } )
+					.css( {
+						overflow: 'auto',
+						height: size( scrollY ),
+						width: size( scrollX )
+					} )
+					.append( table )
+			);
 	
-		nScrollHead.appendChild( nScrollHeadInner );
-		nScrollFoot.appendChild( nScrollFootInner );
-		nScrollBody.appendChild( oSettings.nTable );
-		nScroller.appendChild( nScrollHead );
-		nScroller.appendChild( nScrollBody );
-		nScrollHeadInner.appendChild( nScrollHeadTable );
-		nScrollHeadTable.appendChild( nThead );
-		if ( nTfoot !== null )
-		{
-			nScroller.appendChild( nScrollFoot );
-			nScrollFootInner.appendChild( nScrollFootTable );
-			nScrollFootTable.appendChild( nTfoot );
+		if ( footer ) {
+			scroller.append(
+				$(_div, { 'class': classes.sScrollFoot } )
+					.css( {
+						overflow: 'hidden',
+						border: 0,
+						width: scrollX ? size(scrollX) : '100%'
+					} )
+					.append(
+						$(_div, { 'class': classes.sScrollFootInner } )
+							.append(
+								footerClone
+									.removeAttr('id')
+									.css( 'margin-left', 0 )
+									.append(
+										table.children('tfoot')
+									)
+							)
+					)
+					.append( captionSide === 'bottom' ? caption : null )
+			);
 		}
 	
-		nScroller.className = oClasses.sScrollWrapper;
-		nScrollHead.className = oClasses.sScrollHead;
-		nScrollHeadInner.className = oClasses.sScrollHeadInner;
-		nScrollBody.className = oClasses.sScrollBody;
-		nScrollFoot.className = oClasses.sScrollFoot;
-		nScrollFootInner.className = oClasses.sScrollFootInner;
+		var children = scroller.children();
+		var scrollHead = children[0];
+		var scrollBody = children[1];
+		var scrollFoot = footer ? children[2] : null;
 	
-		if ( oSettings.oScroll.bAutoCss )
-		{
-			nScrollHead.style.overflow = "hidden";
-			nScrollHead.style.position = "relative";
-			nScrollFoot.style.overflow = "hidden";
-			nScrollBody.style.overflow = "auto";
-		}
+		// When the body is scrolled, then we also want to scroll the headers
+		if ( scrollX ) {
+			$(scrollBody).scroll( function (e) {
+				var scrollLeft = this.scrollLeft;
 	
-		nScrollHead.style.border = "0";
-		nScrollHead.style.width = "100%";
-		nScrollFoot.style.border = "0";
-		$(nScrollHeadInner).css('box-sizing', 'content-box');
-		nScrollHeadInner.style.width = oSettings.oScroll.sXInner !== "" ?
-			oSettings.oScroll.sXInner : "100%"; /* will be overwritten */
+				scrollHead.scrollLeft = scrollLeft;
 	
-		/* Modify attributes to respect the clones */
-		nScrollHeadTable.removeAttribute('id');
-		nScrollHeadTable.style.marginLeft = "0";
-		oSettings.nTable.style.marginLeft = "0";
-		if ( nTfoot !== null )
-		{
-			nScrollFootTable.removeAttribute('id');
-			nScrollFootTable.style.marginLeft = "0";
-		}
-	
-		/* Move caption elements from the body to the header, footer or leave where it is
-		 * depending on the configuration. Note that the DTD says there can be only one caption */
-		var nCaption = $(oSettings.nTable).children('caption');
-		if ( nCaption.length > 0 )
-		{
-			nCaption = nCaption[0];
-			if ( nCaption._captionSide === "top" )
-			{
-				nScrollHeadTable.appendChild( nCaption );
-			}
-			else if ( nCaption._captionSide === "bottom" && nTfoot )
-			{
-				nScrollFootTable.appendChild( nCaption );
-			}
-		}
-	
-		/*
-		 * Sizing
-		 */
-		/* When x-scrolling add the width and a scroller to move the header with the body */
-		if ( oSettings.oScroll.sX !== "" )
-		{
-			nScrollHead.style.width = _fnStringToCss( oSettings.oScroll.sX );
-			nScrollBody.style.width = _fnStringToCss( oSettings.oScroll.sX );
-	
-			if ( nTfoot !== null )
-			{
-				nScrollFoot.style.width = _fnStringToCss( oSettings.oScroll.sX );
-			}
-	
-			/* When the body is scrolled, then we also want to scroll the headers */
-			$(nScrollBody).scroll( function (e) {
-				nScrollHead.scrollLeft = this.scrollLeft;
-	
-				if ( nTfoot !== null )
-				{
-					nScrollFoot.scrollLeft = this.scrollLeft;
+				if ( footer ) {
+					scrollFoot.scrollLeft = scrollLeft;
 				}
 			} );
 		}
 	
-		/* When yscrolling, add the height */
-		if ( oSettings.oScroll.sY !== "" )
-		{
-			nScrollBody.style.height = _fnStringToCss( oSettings.oScroll.sY );
-		}
+		settings.nScrollHead = scrollHead;
+		settings.nScrollBody = scrollBody;
+		settings.nScrollFoot = scrollFoot;
 	
-		/* Redraw - align columns across the tables */
-		oSettings.aoDrawCallback.push( {
+		// On redraw - align columns
+		settings.aoDrawCallback.push( {
 			"fn": _fnScrollDraw,
 			"sName": "scrolling"
 		} );
 	
-		oSettings.nScrollHead = nScrollHead;
-		oSettings.nScrollFoot = nScrollFoot;
-	
-		return nScroller;
+		return scroller[0];
 	}
 	
 	
+	
 	/**
-	 * Update the various tables for resizing. It's a bit of a pig this function, but
-	 * basically the idea to:
+	 * Update the header, footer and body tables for resizing - i.e. column
+	 * alignment.
+	 *
+	 * Welcome to the most horrible function DataTables. The process that this
+	 * function follows is basically:
 	 *   1. Re-create the table inside the scrolling div
 	 *   2. Take live measurements from the DOM
-	 *   3. Apply the measurements
+	 *   3. Apply the measurements to align the columns
 	 *   4. Clean up
-	 *  @param {object} o dataTables settings object
-	 *  @returns {node} Node to add to the DOM
+	 *
+	 *  @param {object} settings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnScrollDraw ( o )
+	function _fnScrollDraw ( settings )
 	{
+		// Given that this is such a monster function, a lot of variables are use
+		// to try and keep the minimised size as small as possible
 		var
-			nScrollHeadInner = o.nScrollHead.getElementsByTagName('div')[0],
-			nScrollHeadTable = nScrollHeadInner.getElementsByTagName('table')[0],
-			nScrollBody = o.nTable.parentNode,
-			i, iLen, j, jLen, anHeadToSize, anHeadSizers, anFootSizers, anFootToSize, oStyle, iVis,
-			nTheadSize, nTfootSize,
-			iWidth, aApplied=[], aAppliedFooter=[], iSanityWidth,
-			nScrollFootInner = (o.nTFoot !== null) ? o.nScrollFoot.getElementsByTagName('div')[0] : null,
-			nScrollFootTable = (o.nTFoot !== null) ? nScrollFootInner.getElementsByTagName('table')[0] : null,
-			ie67 = o.oBrowser.bScrollOversize,
+			scroll         = settings.oScroll,
+			scrollX        = scroll.sX,
+			scrollXInner   = scroll.sXInner,
+			scrollY        = scroll.sY,
+			barWidth       = scroll.iBarWidth,
+			divHeader      = $(settings.nScrollHead),
+			divHeaderStyle = divHeader[0].style,
+			divHeaderInner = divHeader.children('div'),
+			divHeaderInnerStyle = divHeaderInner[0].style,
+			divHeaderTable = divHeaderInner.children('table'),
+			divBodyEl      = settings.nScrollBody,
+			divBody        = $(divBodyEl),
+			divBodyStyle   = divBodyEl.style,
+			divFooter      = $(settings.nScrollFoot),
+			divFooterInner = divFooter.children('div'),
+			divFooterTable = divFooterInner.children('table'),
+			header         = $(settings.nTHead),
+			table          = $(settings.nTable),
+			tableEl        = table[0],
+			tableStyle     = tableEl.style,
+			footer         = settings.nTFoot ? $(settings.nTFoot) : null,
+			browser        = settings.oBrowser,
+			ie67           = browser.bScrollOversize,
+			headerTrgEls, footerTrgEls,
+			headerSrcEls, footerSrcEls,
+			headerCopy, footerCopy,
+			headerWidths=[], footerWidths=[],
+			idx, correction, sanityWidth,
 			zeroOut = function(nSizer) {
-				oStyle = nSizer.style;
-				oStyle.paddingTop = "0";
-				oStyle.paddingBottom = "0";
-				oStyle.borderTopWidth = "0";
-				oStyle.borderBottomWidth = "0";
-				oStyle.height = 0;
+				var style = nSizer.style;
+				style.paddingTop = "0";
+				style.paddingBottom = "0";
+				style.borderTopWidth = "0";
+				style.borderBottomWidth = "0";
+				style.height = 0;
 			};
 	
 		/*
 		 * 1. Re-create the table inside the scrolling div
 		 */
 	
-		/* Remove the old minimised thead and tfoot elements in the inner table */
-		$(o.nTable).children('thead, tfoot').remove();
+		// Remove the old minimised thead and tfoot elements in the inner table
+		table.children('thead, tfoot').remove();
 	
-		/* Clone the current header and footer elements and then place it into the inner table */
-		nTheadSize = $(o.nTHead).clone()[0];
-		o.nTable.insertBefore( nTheadSize, o.nTable.childNodes[0] );
-		anHeadToSize = o.nTHead.getElementsByTagName('tr');
-		anHeadSizers = nTheadSize.getElementsByTagName('tr');
-		$('th, td', nTheadSize).removeAttr('tabindex');
+		// Clone the current header and footer elements and then place it into the inner table
+		headerCopy = header.clone().prependTo( table );
+		headerTrgEls = header.find('tr'); // original header is in its own table
+		headerSrcEls = headerCopy.find('tr');
+		headerCopy.find('th, td').removeAttr('tabindex');
 	
-		if ( o.nTFoot !== null )
-		{
-			nTfootSize = $(o.nTFoot).clone()[0];
-			o.nTable.insertBefore( nTfootSize, o.nTable.childNodes[1] );
-			anFootToSize = o.nTFoot.getElementsByTagName('tr');
-			anFootSizers = nTfootSize.getElementsByTagName('tr');
+		if ( footer ) {
+			footerCopy = footer.clone().prependTo( table );
+			footerTrgEls = footer.find('tr'); // the original tfoot is in its own table and must be sized
+			footerSrcEls = footerCopy.find('tr');
 		}
+	
 	
 		/*
 		 * 2. Take live measurements from the DOM - do not alter the DOM itself!
 		 */
 	
-		/* Remove old sizing and apply the calculated column widths
-		 * Get the unique column headers in the newly created (cloned) header. We want to apply the
-		 * calculated sizes to this header
-		 */
-		if ( o.oScroll.sX === "" )
+		// Remove old sizing and apply the calculated column widths
+		// Get the unique column headers in the newly created (cloned) header. We want to apply the
+		// calculated sizes to this header
+		if ( ! scrollX )
 		{
-			nScrollBody.style.width = '100%';
-			nScrollHeadInner.parentNode.style.width = '100%';
+			divBodyStyle.width = '100%';
+			divHeader[0].style.width = '100%';
 		}
 	
-		var nThs = _fnGetUniqueThs( o, nTheadSize );
-		for ( i=0, iLen=nThs.length ; i<iLen ; i++ )
-		{
-			iVis = _fnVisibleToColumnIndex( o, i );
-			nThs[i].style.width = o.aoColumns[iVis].sWidth;
-		}
+		$.each( _fnGetUniqueThs( settings, headerCopy ), function ( i, el ) {
+			idx = _fnVisibleToColumnIndex( settings, i );
+			el.style.width = settings.aoColumns[idx].sWidth;
+		} );
 	
-		if ( o.nTFoot !== null )
-		{
+		if ( footer ) {
 			_fnApplyToChildren( function(n) {
 				n.style.width = "";
-			}, anFootSizers );
+			}, footerSrcEls );
 		}
 	
 		// If scroll collapse is enabled, when we put the headers back into the body for sizing, we
 		// will end up forcing the scrollbar to appear, making our measurements wrong for when we
 		// then hide it (end of this function), so add the header height to the body scroller.
-		if ( o.oScroll.bCollapse && o.oScroll.sY !== "" )
-		{
-			nScrollBody.style.height = (nScrollBody.offsetHeight + o.nTHead.offsetHeight)+"px";
+		if ( scroll.bCollapse && scrollY !== "" ) {
+			divBodyStyle.height = (divBody.offsetHeight + header[0].offsetHeight)+"px";
 		}
 	
-		/* Size the table as a whole */
-		iSanityWidth = $(o.nTable).outerWidth();
-		if ( o.oScroll.sX === "" )
-		{
-			/* No x scrolling */
-			o.nTable.style.width = "100%";
+		// Size the table as a whole
+		sanityWidth = table.outerWidth();
+		if ( scrollX === "" ) {
+			// No x scrolling
+			tableStyle.width = "100%";
 	
-			/* I know this is rubbish - but IE7 will make the width of the table when 100% include
-			 * the scrollbar - which is shouldn't. When there is a scrollbar we need to take this
-			 * into account.
-			 */
-			if ( ie67 && ($('tbody', nScrollBody).height() > nScrollBody.offsetHeight ||
-				$(nScrollBody).css('overflow-y') == "scroll")  )
-			{
-				o.nTable.style.width = _fnStringToCss( $(o.nTable).outerWidth() - o.oScroll.iBarWidth);
+			// IE7 will make the width of the table when 100% include the scrollbar
+			// - which is shouldn't. When there is a scrollbar we need to take this
+			// into account.
+			if ( ie67 && (table.find('tbody').height() > divBodyEl.offsetHeight ||
+				divBody.css('overflow-y') == "scroll")
+			) {
+				tableStyle.width = _fnStringToCss( table.outerWidth() - barWidth);
 			}
 		}
 		else
 		{
-			if ( o.oScroll.sXInner !== "" )
-			{
-				/* x scroll inner has been given - use it */
-				o.nTable.style.width = _fnStringToCss(o.oScroll.sXInner);
+			// x scrolling
+			if ( scrollXInner !== "" ) {
+				// x scroll inner has been given - use it
+				tableStyle.width = _fnStringToCss(scrollXInner);
 			}
-			else if ( iSanityWidth == $(nScrollBody).width() &&
-			   $(nScrollBody).height() < $(o.nTable).height() )
-			{
-				/* There is y-scrolling - try to take account of the y scroll bar */
-				o.nTable.style.width = _fnStringToCss( iSanityWidth-o.oScroll.iBarWidth );
-				if ( $(o.nTable).outerWidth() > iSanityWidth-o.oScroll.iBarWidth )
-				{
-					/* Not possible to take account of it */
-					o.nTable.style.width = _fnStringToCss( iSanityWidth );
+			else if ( sanityWidth == divBody.width() && divBody.height() < table.height() ) {
+				// There is y-scrolling - try to take account of the y scroll bar
+				tableStyle.width = _fnStringToCss( sanityWidth-barWidth );
+				if ( table.outerWidth() > sanityWidth-barWidth ) {
+					// Not possible to take account of it
+					tableStyle.width = _fnStringToCss( sanityWidth );
 				}
 			}
-			else
-			{
-				/* All else fails */
-				o.nTable.style.width = _fnStringToCss( iSanityWidth );
+			else {
+				// When all else fails
+				tableStyle.width = _fnStringToCss( sanityWidth );
 			}
 		}
 	
-		/* Recalculate the sanity width - now that we've applied the required width, before it was
-		 * a temporary variable. This is required because the column width calculation is done
-		 * before this table DOM is created.
-		 */
-		iSanityWidth = $(o.nTable).outerWidth();
+		// Recalculate the sanity width - now that we've applied the required width,
+		// before it was a temporary variable. This is required because the column
+		// width calculation is done before this table DOM is created.
+		sanityWidth = table.outerWidth();
 	
-		/* We want the hidden header to have zero height, so remove padding and borders. Then
-		 * set the width based on the real headers
-		 */
+		// Hidden header should have zero height, so remove padding and borders. Then
+		// set the width based on the real headers
 	
-		// Apply all styles in one pass. Invalidates layout only once because we don't read any
-		// DOM properties.
-		_fnApplyToChildren( zeroOut, anHeadSizers );
+		// Apply all styles in one pass
+		_fnApplyToChildren( zeroOut, headerSrcEls );
 	
-		// Read all widths in next pass. Forces layout only once because we do not change
-		// any DOM properties.
+		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
-			aApplied.push( _fnStringToCss( $(nSizer).css('width') ) );
-		}, anHeadSizers );
+			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+		}, headerSrcEls );
 	
-		// Apply all widths in final pass. Invalidates layout only once because we do not
-		// read any DOM properties.
+		// Apply all widths in final pass
 		_fnApplyToChildren( function(nToSize, i) {
-			nToSize.style.width = aApplied[i];
-		}, anHeadToSize );
+			nToSize.style.width = headerWidths[i];
+		}, headerTrgEls );
 	
-		$(anHeadSizers).height(0);
+		$(headerSrcEls).height(0);
 	
 		/* Same again with the footer if we have one */
-		if ( o.nTFoot !== null )
+		if ( footer )
 		{
-			_fnApplyToChildren( zeroOut, anFootSizers );
+			_fnApplyToChildren( zeroOut, footerSrcEls );
 	
 			_fnApplyToChildren( function(nSizer) {
-				aAppliedFooter.push( _fnStringToCss( $(nSizer).css('width') ) );
-			}, anFootSizers );
+				footerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+			}, footerSrcEls );
 	
 			_fnApplyToChildren( function(nToSize, i) {
-				nToSize.style.width = aAppliedFooter[i];
-			}, anFootToSize );
+				nToSize.style.width = footerWidths[i];
+			}, footerTrgEls );
 	
-			$(anFootSizers).height(0);
+			$(footerSrcEls).height(0);
 		}
 	
 		/*
 		 * 3. Apply the measurements
 		 */
 	
-		/* "Hide" the header and footer that we used for the sizing. We want to also fix their width
-		 * to what they currently are
-		 */
+		// "Hide" the header and footer that we used for the sizing. We want to also fix their width
+		// to what they currently are
 		_fnApplyToChildren( function(nSizer, i) {
 			nSizer.innerHTML = "";
-			nSizer.style.width = aApplied[i];
-		}, anHeadSizers );
+			nSizer.style.width = headerWidths[i];
+		}, headerSrcEls );
 	
-		if ( o.nTFoot !== null )
+		if ( footer )
 		{
 			_fnApplyToChildren( function(nSizer, i) {
 				nSizer.innerHTML = "";
-				nSizer.style.width = aAppliedFooter[i];
-			}, anFootSizers );
+				nSizer.style.width = footerWidths[i];
+			}, footerSrcEls );
 		}
 	
-		/* Sanity check that the table is of a sensible width. If not then we are going to get
-		 * misalignment - try to prevent this by not allowing the table to shrink below its min width
-		 */
-		if ( $(o.nTable).outerWidth() < iSanityWidth )
+		// Sanity check that the table is of a sensible width. If not then we are going to get
+		// misalignment - try to prevent this by not allowing the table to shrink below its min width
+		if ( table.outerWidth() < sanityWidth )
 		{
-			/* The min width depends upon if we have a vertical scrollbar visible or not */
-			var iCorrection = ((nScrollBody.scrollHeight > nScrollBody.offsetHeight ||
-				$(nScrollBody).css('overflow-y') == "scroll")) ?
-					iSanityWidth+o.oScroll.iBarWidth : iSanityWidth;
+			// The min width depends upon if we have a vertical scrollbar visible or not */
+			correction = ((divBodyEl.scrollHeight > divBodyEl.offsetHeight ||
+				divBody.css('overflow-y') == "scroll")) ?
+					sanityWidth+barWidth :
+					sanityWidth;
 	
-			/* IE6/7 are a law unto themselves... */
-			if ( ie67 && (nScrollBody.scrollHeight >
-				nScrollBody.offsetHeight || $(nScrollBody).css('overflow-y') == "scroll")  )
-			{
-				o.nTable.style.width = _fnStringToCss( iCorrection-o.oScroll.iBarWidth );
+			// IE6/7 are a law unto themselves...
+			if ( ie67 && (divBodyEl.scrollHeight >
+				divBodyEl.offsetHeight || divBody.css('overflow-y') == "scroll")
+			) {
+				tableStyle.width = _fnStringToCss( correction-barWidth );
 			}
 	
-			/* Apply the calculated minimum width to the table wrappers */
-			nScrollBody.style.width = _fnStringToCss( iCorrection );
-			o.nScrollHead.style.width = _fnStringToCss( iCorrection );
-	
-			if ( o.nTFoot !== null )
-			{
-				o.nScrollFoot.style.width = _fnStringToCss( iCorrection );
-			}
-	
-			/* And give the user a warning that we've stopped the table getting too small */
-			if ( o.oScroll.sX === "" || o.oScroll.sXInner !== "" )
-			{
-				_fnLog( o, 1, 'Possible column misalignment', 6 );
+			// And give the user a warning that we've stopped the table getting too small
+			if ( scrollX === "" || scrollXInner !== "" ) {
+				_fnLog( settings, 1, 'Possible column misalignment', 6 );
 			}
 		}
 		else
 		{
-			nScrollBody.style.width = _fnStringToCss( '100%' );
-			o.nScrollHead.style.width = _fnStringToCss( '100%' );
+			correction = '100%';
+		}
 	
-			if ( o.nTFoot !== null )
-			{
-				o.nScrollFoot.style.width = _fnStringToCss( '100%' );
-			}
+		// Apply to the container elements
+		divBodyStyle.width = _fnStringToCss( correction );
+		divHeaderStyle.width = _fnStringToCss( correction );
+	
+		if ( footer ) {
+			settings.nScrollFoot.style.width = _fnStringToCss( correction );
 		}
 	
 	
 		/*
 		 * 4. Clean up
 		 */
-		if ( o.oScroll.sY === "" )
-		{
+		if ( ! scrollY ) {
 			/* IE7< puts a vertical scrollbar in place (when it shouldn't be) due to subtracting
 			 * the scrollbar height from the visible display, rather than adding it on. We need to
 			 * set the height in order to sort this. Don't want to do it in any other browsers.
 			 */
-			if ( ie67 )
-			{
-				nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+o.oScroll.iBarWidth );
+			if ( ie67 ) {
+				divBodyStyle.height = _fnStringToCss( tableEl.offsetHeight+barWidth );
 			}
 		}
 	
-		if ( o.oScroll.sY !== "" && o.oScroll.bCollapse )
-		{
-			nScrollBody.style.height = _fnStringToCss( o.oScroll.sY );
+		if ( scrollY && scroll.bCollapse ) {
+			divBodyStyle.height = _fnStringToCss( scrollY );
 	
-			var iExtra = (o.oScroll.sX !== "" && o.nTable.offsetWidth > nScrollBody.offsetWidth) ?
-				o.oScroll.iBarWidth : 0;
-			if ( o.nTable.offsetHeight < nScrollBody.offsetHeight )
-			{
-				nScrollBody.style.height = _fnStringToCss( o.nTable.offsetHeight+iExtra );
+			var iExtra = (scrollX && tableEl.offsetWidth > divBodyEl.offsetWidth) ?
+				barWidth :
+				0;
+	
+			if ( tableEl.offsetHeight < divBodyEl.offsetHeight ) {
+				divBodyStyle.height = _fnStringToCss( tableEl.offsetHeight+iExtra );
 			}
 		}
 	
 		/* Finally set the width's of the header and footer tables */
-		var iOuterWidth = $(o.nTable).outerWidth();
-		nScrollHeadTable.style.width = _fnStringToCss( iOuterWidth );
-		nScrollHeadInner.style.width = _fnStringToCss( iOuterWidth );
+		var iOuterWidth = table.outerWidth();
+		divHeaderTable[0].style.width = _fnStringToCss( iOuterWidth );
+		divHeaderInnerStyle.width = _fnStringToCss( iOuterWidth );
 	
 		// Figure out if there are scrollbar present - if so then we need a the header and footer to
 		// provide a bit more space to allow "overflow" scrolling (i.e. past the scrollbar)
-		var bScrolling = $(o.nTable).height() > nScrollBody.clientHeight || $(nScrollBody).css('overflow-y') == "scroll";
-		var padding = o.oBrowser.bScrollbarLeft ? 'paddingLeft' : 'paddingRight';
-		nScrollHeadInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
+		var bScrolling = table.height() > divBodyEl.clientHeight || divBody.css('overflow-y') == "scroll";
+		var padding = 'padding' + (browser.bScrollbarLeft ? 'Left' : 'Right' );
+		divHeaderInnerStyle[ padding ] = bScrolling ? barWidth+"px" : "0px";
 	
-		if ( o.nTFoot !== null )
-		{
-			nScrollFootTable.style.width = _fnStringToCss( iOuterWidth );
-			nScrollFootInner.style.width = _fnStringToCss( iOuterWidth );
-			nScrollFootInner.style[padding] = bScrolling ? o.oScroll.iBarWidth+"px" : "0px";
+		if ( footer ) {
+			divFooterTable[0].style.width = _fnStringToCss( iOuterWidth );
+			divFooterInner[0].style.width = _fnStringToCss( iOuterWidth );
+			divFooterInner[0].style[padding] = bScrolling ? barWidth+"px" : "0px";
 		}
 	
 		/* Adjust the position of the header in case we loose the y-scrollbar */
-		$(nScrollBody).scroll();
+		divBody.scroll();
 	
 		/* If sorting or filtering has occurred, jump the scrolling back to the top */
-		if ( o.bSorted || o.bFiltered )
-		{
-			nScrollBody.scrollTop = 0;
+		if ( settings.bSorted || settings.bFiltered ) {
+			divBodyEl.scrollTop = 0;
 		}
 	}
+	
 	
 	
 	/**
@@ -3405,27 +3389,26 @@
 		var index=0, i=0, iLen=an1.length;
 		var nNode1, nNode2;
 	
-		while ( i < iLen )
-		{
+		while ( i < iLen ) {
 			nNode1 = an1[i].firstChild;
 			nNode2 = an2 ? an2[i].firstChild : null;
-			while ( nNode1 )
-			{
-				if ( nNode1.nodeType === 1 )
-				{
-					if ( an2 )
-					{
+	
+			while ( nNode1 ) {
+				if ( nNode1.nodeType === 1 ) {
+					if ( an2 ) {
 						fn( nNode1, nNode2, index );
 					}
-					else
-					{
+					else {
 						fn( nNode1, index );
 					}
+	
 					index++;
 				}
+	
 				nNode1 = nNode1.nextSibling;
 				nNode2 = an2 ? nNode2.nextSibling : null;
 			}
+	
 			i++;
 		}
 	}
@@ -5603,8 +5586,7 @@
 				[ "sScrollX", "sX" ],
 				[ "sScrollXInner", "sXInner" ],
 				[ "sScrollY", "sY" ],
-				[ "bScrollCollapse", "bCollapse" ],
-				[ "bScrollAutoCss", "bAutoCss" ]
+				[ "bScrollCollapse", "bCollapse" ]
 			] );
 			_fnMap( oSettings.oLanguage, oInit, "fnInfoCallback" );
 			
@@ -9431,27 +9413,6 @@
 	
 	
 		/**
-		 * Indicate if DataTables should be allowed to set the padding / margin
-		 * etc for the scrolling header elements or not. Typically you will want
-		 * this.
-		 *  @type boolean
-		 *  @default true
-		 *
-		 *  @dtopt Options
-		 *  @name DataTable.defaults.scrollAutoCss
-		 *
-		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "scrollAutoCss": false,
-		 *        "scrollY": "200px"
-		 *      } );
-		 *    } );
-		 */
-		"bScrollAutoCss": true,
-	
-	
-		/**
 		 * When vertical (y) scrolling is enabled, DataTables will force the height of
 		 * the table's viewport to the given height at all times (useful for layout).
 		 * However, this can look odd when filtering data down to a small data set,
@@ -11978,16 +11939,6 @@
 		 *  @namespace
 		 */
 		"oScroll": {
-			/**
-			 * Indicate if DataTables should be allowed to set the padding / margin
-			 * etc for the scrolling header elements or not. Typically you will want
-			 * this.
-			 * Note that this parameter will be set by the initialisation routine. To
-			 * set a default use {@link DataTable.defaults}.
-			 *  @type boolean
-			 */
-			"bAutoCss": null,
-	
 			/**
 			 * When the table is shorter in height than sScrollY, collapse the
 			 * table container down to the height of the table (when true).
