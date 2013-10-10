@@ -2187,81 +2187,66 @@
 	 *  @param {object} oSettings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnFeatureHtmlFilter ( oSettings )
+	function _fnFeatureHtmlFilter ( settings )
 	{
-		var oPreviousSearch = oSettings.oPreviousSearch;
+		var classes = settings.oClasses;
+		var tableId = settings.sTableId;
+		var previousSearch = settings.oPreviousSearch;
+		var features = settings.aanFeatures;
 	
-		// @todo Surely this can be cleaned up!?!
-		var klass = 'class="'+oSettings.oClasses.sFilterInput+'"';
-		var sSearchStr = oSettings.oLanguage.sSearch;
-		sSearchStr = (sSearchStr.indexOf('_INPUT_') !== -1) ?
-		  sSearchStr.replace('_INPUT_', '<input type="search" />') :
-		  sSearchStr==="" ?
-			'<input type="search" '+klass+' />' :
-			sSearchStr+' <input type="search" '+klass+'/>';
+		var str = settings.oLanguage.sSearch;
+		str = str.match(/_INPUT_/) ?
+			str.replace('_INPUT_', '<input type="search" />') :
+			str+'<input type="search" class="'+classes.sFilterInput+'"/>';
 	
-		var nFilter = document.createElement( 'div' );
-		nFilter.className = oSettings.oClasses.sFilter;
-		nFilter.innerHTML = '<label>'+sSearchStr+'</label>';
-		if ( !oSettings.aanFeatures.f )
-		{
-			nFilter.id = oSettings.sTableId+'_filter';
-		}
+		var filter = $('<div/>', {
+				'id': ! features.f ? tableId+'_filter' : null,
+				'class': classes.sFilter
+			} )
+			.append( $('<label/>' ).append( str ) );
 	
-		var jqFilter = $('input[type="search"]', nFilter);
+		var jqFilter = $('input[type="search"]', filter)
+			.val( previousSearch.sSearch.replace('"','&quot;') )
+			.bind( 'keyup.DT search.DT input.DT paste.DT cut.DT', function(e) {
+				/* Update all other filter input elements for the new display */
+				var n = features.f;
+				var val = !this.value ? "" : this.value; // mental IE8 fix :-(
 	
-		// Store a reference to the input element, so other input elements could be
-		// added to the filter wrapper if needed (submit button for example)
-		nFilter._DT_Input = jqFilter[0];
+				/* Now do the filter */
+				if ( val != previousSearch.sSearch ) {
+					_fnFilterComplete( settings, {
+						"sSearch": val,
+						"bRegex": previousSearch.bRegex,
+						"bSmart": previousSearch.bSmart ,
+						"bCaseInsensitive": previousSearch.bCaseInsensitive
+					} );
 	
-		jqFilter.val( oPreviousSearch.sSearch.replace('"','&quot;') );
-		jqFilter.bind( 'keyup.DT search.DT input.DT paste.DT cut.DT', function(e) {
-			/* Update all other filter input elements for the new display */
-			var n = oSettings.aanFeatures.f;
-			var val = this.value==="" ? "" : this.value; // mental IE8 fix :-(
-	
-			/* Now do the filter */
-			if ( val != oPreviousSearch.sSearch )
-			{
-				_fnFilterComplete( oSettings, {
-					"sSearch": val,
-					"bRegex": oPreviousSearch.bRegex,
-					"bSmart": oPreviousSearch.bSmart ,
-					"bCaseInsensitive": oPreviousSearch.bCaseInsensitive
-				} );
-	
-				// Need to redraw, without resorting
-				oSettings._iDisplayStart = 0;
-				_fnDraw( oSettings );
-			}
-		} );
-	
-		jqFilter
-			.attr('aria-controls', oSettings.sTableId)
+					// Need to redraw, without resorting
+					settings._iDisplayStart = 0;
+					_fnDraw( settings );
+				}
+			} )
 			.bind( 'keypress.DT', function(e) {
 				/* Prevent form submission */
-				if ( e.keyCode == 13 )
-				{
+				if ( e.keyCode == 13 ) {
 					return false;
 				}
-			}
-		);
+			} )
+			.attr('aria-controls', tableId);
 	
 		// Update the input elements whenever the table is filtered
-		$(oSettings.nTable).on( 'filter.DT', function () {
+		$(settings.nTable).on( 'filter.DT', function () {
+			// IE9 throws an 'unknown error' if document.activeElement is used
+			// inside an iframe or frame...
 			try {
-				// IE9 throws an 'unknown error' if document.activeElement is used
-				// inside an iframe or frame...
-				if ( this._DT_Input !== document.activeElement ) {
-					jqFilter.val( oPreviousSearch.sSearch );
+				if ( jqFilter[0] !== document.activeElement ) {
+					jqFilter.val( previousSearch.sSearch );
 				}
 			}
-			catch ( e ) {
-				jqFilter.val( oPreviousSearch.sSearch );
-			}
+			catch ( e ) {}
 		} );
 	
-		return nFilter;
+		return filter[0];
 	}
 	
 	

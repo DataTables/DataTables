@@ -226,6 +226,9 @@ table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_3 {
   float: right;
   text-align: right;
 }
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 0.5em;
+}
 .dataTables_wrapper .dataTables_info {
   clear: both;
   float: left;
