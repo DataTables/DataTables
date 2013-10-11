@@ -3414,34 +3414,9 @@
 		}
 	}
 	
-	/**
-	 * Convert a CSS unit width to pixels (e.g. 2em)
-	 *  @param {string} sWidth width to be converted
-	 *  @param {node} nParent parent to get the with for (required for relative widths) - optional
-	 *  @returns {int} iWidth width in pixels
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnConvertToWidth ( sWidth, nParent )
-	{
-		if ( ! sWidth )
-		{
-			return 0;
-		}
 	
-		if ( ! nParent )
-		{
-			nParent = document.body;
-		}
 	
-		var n = $('<div/>')
-			.css( 'width', _fnStringToCss( sWidth ) )
-			.appendTo( nParent );
-	
-		var width = n[0].offsetWidth;
-		n.remove();
-	
-		return width;
-	}
+	var __re_html_remove = /<.*?>/g;
 	
 	
 	/**
@@ -3451,235 +3426,159 @@
 	 */
 	function _fnCalculateColumnWidths ( oSettings )
 	{
-		var table = oSettings.nTable;
-		var columns = oSettings.aoColumns;
-		var column;
-		var iTableWidth = table.offsetWidth;
-		var iUserInputs = 0;
-		var iTmpWidth;
-		var iVisibleColumns = 0;
-		var iColums = columns.length;
-		var i, iIndex, iCorrector, iWidth;
-		var oHeaders = $('th', oSettings.nTHead);
-		var widthAttr = table.getAttribute('width');
-		var nWrapper = table.parentNode;
+		var
+			table = oSettings.nTable,
+			columns = oSettings.aoColumns,
+			scroll = oSettings.oScroll,
+			scrollY = scroll.sY,
+			scrollX = scroll.sX,
+			scrollXInner = scroll.sXInner,
+			columnCount = columns.length,
+			visibleColumns = _fnGetColumns( oSettings, 'bVisible' ),
+			headerCells = $('th', oSettings.nTHead),
+			tableWidthAttr = table.getAttribute('width'),
+			tableContainer = table.parentNode,
+			userInputs = false,
+			i, column, columnIdx, width, outerWidth;
 	
 		/* Convert any user input sizes into pixel sizes */
-		for ( i=0 ; i<iColums ; i++ )
-		{
-			if ( columns[i].bVisible )
-			{
-				iVisibleColumns++;
+		for ( i=0 ; i<visibleColumns.length ; i++ ) {
+			column = columns[ visibleColumns[i] ];
 	
-				if ( columns[i].sWidth !== null )
-				{
-					iTmpWidth = _fnConvertToWidth( columns[i].sWidthOrig,
-						nWrapper );
-					if ( iTmpWidth !== null )
-					{
-						columns[i].sWidth = _fnStringToCss( iTmpWidth );
-					}
+			if ( column.sWidth !== null ) {
+				column.sWidth = _fnConvertToWidth( column.sWidthOrig, tableContainer );
 	
-					iUserInputs++;
-				}
+				userInputs = true;
 			}
 		}
 	
-		/* If the number of columns in the DOM equals the number that we have to process in
-		 * DataTables, then we can use the offsets that are created by the web-browser. No custom
-		 * sizes can be set in order for this to happen, nor scrolling used
+		/* If the number of columns in the DOM equals the number that we have to
+		 * process in DataTables, then we can use the offsets that are created by
+		 * the web- browser. No custom sizes can be set in order for this to happen,
+		 * nor scrolling used
 		 */
-		if ( iColums == oHeaders.length && iUserInputs === 0 && iVisibleColumns == iColums &&
-			oSettings.oScroll.sX === "" && oSettings.oScroll.sY === "" )
-		{
-			for ( i=0 ; i<columns.length ; i++ )
-			{
-				iTmpWidth = $(oHeaders[i]).width();
-				if ( iTmpWidth !== null )
-				{
-					columns[i].sWidth = _fnStringToCss( iTmpWidth );
-				}
+		if ( ! userInputs && ! scrollX && ! scrollY &&
+		    columnCount == _fnVisbleColumns( oSettings ) &&
+			columnCount == headerCells.length
+		) {
+			for ( i=0 ; i<columnCount ; i++ ) {
+				columns[i].sWidth = _fnStringToCss( headerCells.eq(i).width() );
 			}
 		}
 		else
 		{
-			/* Otherwise we are going to have to do some calculations to get the width of each column.
-			 * Construct a 1 row table with the widest node in the data, and any user defined widths,
-			 * then insert it into the DOM and allow the browser to do all the hard work of
-			 * calculating table widths.
-			 */
-			var
-				nCalcTmp = table.cloneNode( false ),
-				nTheadClone = oSettings.nTHead.cloneNode(true),
-				nBody = document.createElement( 'tbody' ),
-				nTr = document.createElement( 'tr' ),
-				nDivSizing;
+			// Otherwise construct a single row table with the widest node in the
+			// data, assign any user defined widths, then insert it into the DOM and
+			// allow the browser to do all the hard work of calculating table widths
+			var tmpTable = $( table.cloneNode( false ) )
+				.css( 'visibility', 'hidden' )
+				.removeAttr( 'id' )
+				.append( $(oSettings.nTHead).clone( false ) )
+				.append( $(oSettings.nTFoot).clone( false ) )
+				.append( $('<tbody><tr/></tbody>') );
 	
-			nCalcTmp.removeAttribute( "id" );
-			nCalcTmp.appendChild( nTheadClone );
-			if ( oSettings.nTFoot !== null )
-			{
-				nCalcTmp.appendChild( oSettings.nTFoot.cloneNode(true) );
-				_fnApplyToChildren( function(n) {
-					n.style.width = "";
-				}, nCalcTmp.getElementsByTagName('tr') );
+			// Remove any assigned widths from the footer (from scrolling)
+			tmpTable.find('tfoot th, tfoot td').css('width', '');
+	
+			var tr = tmpTable.find( 'tbody tr' );
+	
+			// Apply custom sizing to the cloned header
+			headerCells = _fnGetUniqueThs( oSettings, tmpTable.find('thead')[0] );
+	
+			for ( i=0 ; i<visibleColumns.length ; i++ ) {
+				column = columns[ visibleColumns[i] ];
+	
+				headerCells[i].style.width = column.sWidthOrig !== null && column.sWidthOrig !== '' ?
+					_fnStringToCss( column.sWidthOrig ) :
+					'';
 			}
 	
-			nCalcTmp.appendChild( nBody );
-			nBody.appendChild( nTr );
+			// Find the widest cell for each column and put it into the table
+			if ( oSettings.aoData.length ) {
+				for ( i=0 ; i<visibleColumns.length ; i++ ) {
+					columnIdx = visibleColumns[i];
+					column = columns[ columnIdx ];
 	
-			/* Remove any sizing that was previously applied by the styles */
-			var jqColSizing = $('thead th', nCalcTmp);
-			if ( jqColSizing.length === 0 )
-			{
-				jqColSizing = $('tbody tr:eq(0)>td', nCalcTmp);
-			}
-	
-			/* Apply custom sizing to the cloned header */
-			var nThs = _fnGetUniqueThs( oSettings, nTheadClone );
-			iCorrector = 0;
-			for ( i=0 ; i<iColums ; i++ )
-			{
-				column = columns[i];
-	
-				if ( column.bVisible && column.sWidthOrig !== null && column.sWidthOrig !== "" )
-				{
-					nThs[i-iCorrector].style.width = _fnStringToCss( column.sWidthOrig );
-				}
-				else if ( column.bVisible )
-				{
-					nThs[i-iCorrector].style.width = "";
-				}
-				else
-				{
-					iCorrector++;
+					$( _fnGetWidestNode( oSettings, columnIdx ) )
+						.clone( false )
+						.append( column.sContentPadding )
+						.appendTo( tr );
 				}
 			}
 	
-			/* Find the biggest td for each column and put it into the table */
-			for ( i=0 ; i<iColums ; i++ )
-			{
-				column = columns[i];
+			// Table has been built, attach to the document so we can work with it
+			tmpTable.appendTo( tableContainer );
 	
-				if ( column.bVisible )
-				{
-					var nTd = _fnGetWidestNode( oSettings, i );
-					if ( nTd !== null )
-					{
-						nTd = nTd.cloneNode(true);
-						if ( column.sContentPadding !== "" )
-						{
-							nTd.innerHTML += column.sContentPadding;
-						}
-						nTr.appendChild( nTd );
-					}
+			// When scrolling (X or Y) we want to set the width of the table as 
+			// appropriate. However, when not scrolling leave the table width as it
+			// is. This results in slightly different, but I think correct behaviour
+			if ( scrollX && scrollXInner ) {
+				tmpTable.width( scrollXInner );
+			}
+			else if ( scrollX ) {
+				tmpTable.css( 'width', 'auto' );
+	
+				if ( tmpTable.width() < tableContainer.offsetWidth ) {
+					tmpTable.width( tableContainer.offsetWidth );
+				}
+			}
+			else if ( scrollY ) {
+				tmpTable.width( tableContainer.offsetWidth );
+			}
+			else if ( tableWidthAttr ) {
+				tmpTable.width( tableWidthAttr );
+			}
+	
+			// Take into account the y scrollbar
+			_fnScrollingWidthAdjust( oSettings, tmpTable[0] );
+	
+			// Browsers need a bit of a hand when a width is assigned to any columns
+			// when x-scrolling as they tend to collapse the table to the min-width,
+			// even if we sent the column widths. So we need to keep track of what
+			// the table width should be by summing the user given values, and the
+			// automatic values
+			if ( scrollX )
+			{
+				var total = 0;
+	
+				for ( i=0 ; i<visibleColumns.length ; i++ ) {
+					column = columns[ visibleColumns[i] ];
+					outerWidth = $(headerCells[i]).outerWidth();
+	
+					total += column.sWidthOrig === null ?
+						outerWidth :
+						parseInt( column.sWidth, 10 ) + outerWidth - $(headerCells[i]).width();
+				}
+	
+				tmpTable.width( _fnStringToCss( total ) );
+				table.style.width = _fnStringToCss( total );
+			}
+	
+			// Get the width of each column in the constructed table
+			for ( i=0 ; i<visibleColumns.length ; i++ ) {
+				column = columns[ visibleColumns[i] ];
+				width = $(headerCells[i]).width();
+	
+				if ( width ) {
+					column.sWidth = _fnStringToCss( width );
 				}
 			}
 	
-			/* Build the table and 'display' it */
-			nWrapper.appendChild( nCalcTmp );
+			table.style.width = _fnStringToCss( tmpTable.css('width') );
 	
-			/* When scrolling (X or Y) we want to set the width of the table as appropriate. However,
-			 * when not scrolling leave the table width as it is. This results in slightly different,
-			 * but I think correct behaviour
-			 */
-			if ( oSettings.oScroll.sX !== "" && oSettings.oScroll.sXInner !== "" )
-			{
-				nCalcTmp.style.width = _fnStringToCss(oSettings.oScroll.sXInner);
-			}
-			else if ( oSettings.oScroll.sX !== "" )
-			{
-				nCalcTmp.style.width = "";
-				if ( $(nCalcTmp).width() < nWrapper.offsetWidth )
-				{
-					nCalcTmp.style.width = _fnStringToCss( nWrapper.offsetWidth );
-				}
-			}
-			else if ( oSettings.oScroll.sY !== "" )
-			{
-				nCalcTmp.style.width = _fnStringToCss( nWrapper.offsetWidth );
-			}
-			else if ( widthAttr )
-			{
-				nCalcTmp.style.width = _fnStringToCss( widthAttr );
-			}
-			nCalcTmp.style.visibility = "hidden";
-	
-			/* Scrolling considerations */
-			_fnScrollingWidthAdjust( oSettings, nCalcTmp );
-	
-			/* Read the width's calculated by the browser and store them for use by the caller. We
-			 * first of all try to use the elements in the body, but it is possible that there are
-			 * no elements there, under which circumstances we use the header elements
-			 */
-			var oNodes = $("tbody tr:eq(0)", nCalcTmp).children();
-			if ( oNodes.length === 0 )
-			{
-				oNodes = _fnGetUniqueThs( oSettings, $('thead', nCalcTmp)[0] );
-			}
-	
-			/* Browsers need a bit of a hand when a width is assigned to any columns when
-			 * x-scrolling as they tend to collapse the table to the min-width, even if
-			 * we sent the column widths. So we need to keep track of what the table width
-			 * should be by summing the user given values, and the automatic values
-			 */
-			if ( oSettings.oScroll.sX !== "" )
-			{
-				var iTotal = 0;
-				iCorrector = 0;
-				for ( i=0 ; i<columns.length ; i++ )
-				{
-					column = columns[i];
-	
-					if ( column.bVisible )
-					{
-						if ( column.sWidthOrig === null )
-						{
-							iTotal += $(oNodes[iCorrector]).outerWidth();
-						}
-						else
-						{
-							iTotal += parseInt(column.sWidth.replace('px',''), 10) +
-								($(oNodes[iCorrector]).outerWidth() - $(oNodes[iCorrector]).width());
-						}
-						iCorrector++;
-					}
-				}
-	
-				nCalcTmp.style.width = _fnStringToCss( iTotal );
-				table.style.width = _fnStringToCss( iTotal );
-			}
-	
-			iCorrector = 0;
-			for ( i=0 ; i<columns.length ; i++ )
-			{
-				column = columns[i];
-	
-				if ( column.bVisible )
-				{
-					iWidth = $(oNodes[iCorrector]).width();
-	
-					if ( iWidth !== null && iWidth > 0 )
-					{
-						column.sWidth = _fnStringToCss( iWidth );
-					}
-					iCorrector++;
-				}
-			}
-	
-			var cssWidth = $(nCalcTmp).css('width');
-			table.style.width = (cssWidth.indexOf('%') !== -1) ?
-			    cssWidth : _fnStringToCss( $(nCalcTmp).outerWidth() );
-			nCalcTmp.parentNode.removeChild( nCalcTmp );
+			// Finished with the table - ditch it
+			tmpTable.remove();
 		}
 	
-		if ( widthAttr )
-		{
-			table.style.width = _fnStringToCss( widthAttr );
+		// If there is a width attr, we want to attach an event listener which
+		// allows the table sizing to automatically adjust when the window is
+		// resized. Use the width attr rather than CSS, since we can't know if the
+		// CSS is a relative value or absolute - DOM read is always px.
+		if ( tableWidthAttr ) {
+			table.style.width = _fnStringToCss( tableWidthAttr );
 	
-			if ( ! oSettings._reszEvt )
-			{
-				$(window).bind('resize.DT-'+oSettings.sInstance, throttle( function () {
+			if ( ! oSettings._reszEvt ) {
+				$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
 					_fnAdjustColumnSizing( oSettings );
 				} ) );
 	
@@ -3689,8 +3588,7 @@
 	}
 	
 	
-	// @todo Move into a private functions file or make a proper DT function of it
-	function throttle( fn ) {
+	function _fnThrottle( fn ) {
 		var
 			frequency = 200,
 			last,
@@ -3718,110 +3616,118 @@
 	
 	
 	/**
-	 * Adjust a table's width to take account of scrolling
+	 * Convert a CSS unit width to pixels (e.g. 2em)
+	 *  @param {string} width width to be converted
+	 *  @param {node} parent parent to get the with for (required for relative widths) - optional
+	 *  @returns {int} width in pixels
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnConvertToWidth ( width, parent )
+	{
+		if ( ! width ) {
+			return 0;
+		}
+	
+		var n = $('<div/>')
+			.css( 'width', _fnStringToCss( width ) )
+			.appendTo( parent || document.body );
+	
+		var val = n[0].offsetWidth;
+		n.remove();
+	
+		return val;
+	}
+	
+	
+	/**
+	 * Adjust a table's width to take account of vertical scroll bar
 	 *  @param {object} oSettings dataTables settings object
 	 *  @param {node} n table node
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnScrollingWidthAdjust ( oSettings, n )
+	
+	function _fnScrollingWidthAdjust ( settings, n )
 	{
-		if ( oSettings.oScroll.sX === "" && oSettings.oScroll.sY !== "" )
-		{
-			/* When y-scrolling only, we want to remove the width of the scroll bar so the table
-			 * + scroll bar will fit into the area avaialble.
-			 */
-			var iOrigWidth = $(n).width();
-			n.style.width = _fnStringToCss( $(n).outerWidth()-oSettings.oScroll.iBarWidth );
-		}
-		else if ( oSettings.oScroll.sX !== "" )
-		{
-			/* When x-scrolling both ways, fix the table at it's current size, without adjusting */
-			n.style.width = _fnStringToCss( $(n).outerWidth() );
+		var scroll = settings.oScroll;
+	
+		if ( scroll.sX || scroll.sY ) {
+			// When y-scrolling only, we want to remove the width of the scroll bar
+			// so the table + scroll bar will fit into the area available, otherwise
+			// we fix the table at its current size with no adjustment
+			var correction = ! scroll.sX ? scroll.iBarWidth : 0;
+			n.style.width = _fnStringToCss( $(n).outerWidth() - correction );
 		}
 	}
 	
 	
 	/**
 	 * Get the widest node
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {int} iCol column of interest
+	 *  @param {object} settings dataTables settings object
+	 *  @param {int} colIdx column of interest
 	 *  @returns {node} widest table node
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnGetWidestNode( oSettings, iCol )
+	function _fnGetWidestNode( settings, colIdx )
 	{
-		var iMaxIndex = _fnGetMaxLenString( oSettings, iCol );
-		if ( iMaxIndex < 0 )
-		{
+		var idx = _fnGetMaxLenString( settings, colIdx );
+		if ( idx < 0 ) {
 			return null;
 		}
 	
-		var data = oSettings.aoData[ iMaxIndex ];
-		return data.nTr === null ? // Might not have been created when deferred rendering
-			$('<td/>').html( _fnGetCellData( oSettings, iMaxIndex, iCol, 'display' ) )[0] :
-			data.anCells[ iCol ];
+		var data = settings.aoData[ idx ];
+		return ! data.nTr ? // Might not have been created when deferred rendering
+			$('<td/>').html( _fnGetCellData( settings, idx, colIdx, 'display' ) )[0] :
+			data.anCells[ colIdx ];
 	}
 	
 	
-	var __re_html_remove = /<.*?>/g;
-	
 	/**
 	 * Get the maximum strlen for each data column
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {int} iCol column of interest
+	 *  @param {object} settings dataTables settings object
+	 *  @param {int} colIdx column of interest
 	 *  @returns {string} max string length for each column
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnGetMaxLenString( oSettings, iCol )
+	function _fnGetMaxLenString( settings, colIdx )
 	{
-		var s, iMax=-1, iMaxIndex = -1;
+		var s, max=-1, maxIdx = -1;
 	
-		for ( var i=0 ; i<oSettings.aoData.length ; i++ )
-		{
-			s = _fnGetCellData( oSettings, i, iCol, 'display' )+'';
+		for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
+			s = _fnGetCellData( settings, i, colIdx, 'display' )+'';
 			s = s.replace( __re_html_remove, '' );
 	
-			if ( s.length > iMax )
-			{
-				iMax = s.length;
-				iMaxIndex = i;
+			if ( s.length > max ) {
+				max = s.length;
+				maxIdx = i;
 			}
 		}
 	
-		return iMaxIndex;
+		return maxIdx;
 	}
 	
 	
 	/**
 	 * Append a CSS unit (only if required) to a string
-	 *  @param {array} aArray1 first array
-	 *  @param {array} aArray2 second array
-	 *  @returns {int} 0 if match, 1 if length is different, 2 if no match
+	 *  @param {string} value to css-ify
+	 *  @returns {string} value with css unit
 	 *  @memberof DataTable#oApi
 	 */
 	function _fnStringToCss( s )
 	{
-		if ( s === null )
-		{
-			return "0px";
+		if ( s === null ) {
+			return '0px';
 		}
 	
-		if ( typeof s == 'number' )
-		{
-			if ( s < 0 )
-			{
-				return "0px";
-			}
-			return s+"px";
+		if ( typeof s == 'number' ) {
+			return s < 0 ?
+				'0px' :
+				s+'px';
 		}
 	
-		/* Check if the last character is not 0-9 */
-		var c = s.charCodeAt( s.length-1 );
-		if (c < 0x30 || c > 0x39)
-		{
-			return s;
-		}
-		return s+"px";
+		// Check it has a unit character already
+		return s.match(/\d$/) ?
+			s+'px' :
+			s;
 	}
 	
 	
@@ -3832,8 +3738,9 @@
 	 */
 	function _fnScrollBarWidth ()
 	{
-		if ( ! DataTable.__scrollbarWidth )
-		{
+		// On first run a static variable is set, since this is only needed once.
+		// Subsequent runs will just use the previously calculated value
+		if ( ! DataTable.__scrollbarWidth ) {
 			var inner = $('<p/>').css( {
 				width: '100%',
 				height: 200,
@@ -3857,8 +3764,8 @@
 			var w1 = inner.offsetWidth;
 			outer.css( 'overflow', 'scroll' );
 			var w2 = inner.offsetWidth;
-			if ( w1 === w2 )
-			{
+	
+			if ( w1 === w2 ) {
 				w2 = outer[0].clientWidth;
 			}
 	
