@@ -160,18 +160,19 @@
 	function _fnLanguageCompat( oLanguage )
 	{
 		var oDefaults = DataTable.defaults.oLanguage;
+		var zeroRecords = oLanguage.sZeroRecords;
 	
 		/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
 		 * sZeroRecords - assuming that is given.
 		 */
-		if ( !oLanguage.sEmptyTable && oLanguage.sZeroRecords &&
+		if ( !oLanguage.sEmptyTable && zeroRecords &&
 			oDefaults.sEmptyTable === "No data available in table" )
 		{
 			_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
 		}
 	
 		/* Likewise with loading records */
-		if ( !oLanguage.sLoadingRecords && oLanguage.sZeroRecords &&
+		if ( !oLanguage.sLoadingRecords && zeroRecords &&
 			oDefaults.sLoadingRecords === "Loading..." )
 		{
 			_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
@@ -181,29 +182,54 @@
 	
 	/**
 	 * Browser feature detection for capabilities, quirks
-	 *  @param {object} oSettings dataTables settings object
+	 *  @param {object} settings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnBrowserDetect( oSettings )
+	function _fnBrowserDetect( settings )
 	{
-		// Scrolling feature / quirks detection
-		var n = $(
-			'<div style="position:absolute; top:0; left:0; height:1px; width:1px; overflow:hidden">'+
-				'<div style="position:absolute; top:1px; left:1px; width:100px; overflow:scroll;">'+
-					'<div id="DT_BrowserTest" style="width:100%; height:10px;"></div>'+
-				'</div>'+
-			'</div>')[0];
+		var browser = settings.oBrowser;
 	
-		document.body.appendChild( n );
+		// Scrolling feature / quirks detection
+		var n = $('<div/>')
+			.css( {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				height: 1,
+				width: 1,
+				overflow: 'hidden'
+			} )
+			.append(
+				$('<div/>')
+					.css( {
+						position: 'absolute',
+						top: 1,
+						left: 1,
+						width: 100,
+						overflow: 'scroll'
+					} )
+					.append(
+						$('<div class="test"/>')
+							.css( {
+								width: '100%',
+								height: 10
+							} )
+					)
+			)
+			.appendTo( 'body' );
+	
+		var test = n.find('.test');
+	
 		// IE6/7 will oversize a width 100% element inside a scrolling element, to
 		// include the width of the scrollbar, while other browsers ensure the inner
 		// element is contained without forcing scrolling
-		oSettings.oBrowser.bScrollOversize = $('#DT_BrowserTest', n)[0].offsetWidth === 100 ? true : false;
+		browser.bScrollOversize = test[0].offsetWidth === 100;
 	
 		// In rtl text layout, some browsers (most, but not all) will place the
 		// scrollbar on the left, rather than the right.
-		oSettings.oBrowser.bScrollbarLeft = $('#DT_BrowserTest', n).offset().left !== 1 ? true : false;
-		document.body.removeChild( n );
+		browser.bScrollbarLeft = test.offset().left !== 1;
+	
+		n.remove();
 	}
 	
 	/**
