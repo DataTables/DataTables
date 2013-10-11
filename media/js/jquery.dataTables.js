@@ -1915,12 +1915,14 @@
 		// Compatibility with 1.9-, allow fnServerData and event to manipulate
 		_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
 	
-		// Convert to object based for 1.10+
-		var tmp = {};
-		$.each( data, function (key, val) {
-			tmp[val.name] = val.value;
-		} );
-		data = tmp;
+		// Convert to object based for 1.10+ if using the old scheme
+		if ( data && data.__legacy ) {
+			var tmp = {};
+			$.each( data, function (key, val) {
+				tmp[val.name] = val.value;
+			} );
+			data = tmp;
+		}
 	
 		var ajaxData;
 		var ajax = oSettings.ajax;
@@ -2021,64 +2023,103 @@
 	
 	
 	/**
-	 * Build up the parameters in an object needed for a server-side processing request
+	 * Build up the parameters in an object needed for a server-side processing
+	 * request. Note that this is basically done twice, is different ways - a modern
+	 * method which is used by default in DataTables 1.10 which uses objects and
+	 * arrays, or the 1.9- method with is name / value pairs. 1.9 method is used if
+	 * the sAjaxSource option is used in the initialisation, or the legacyAjax
+	 * option is set.
 	 *  @param {object} oSettings dataTables settings object
 	 *  @returns {bool} block the table drawing or not
 	 *  @memberof DataTable#oApi
 	 */
 	function _fnAjaxParameters( settings )
 	{
-		var columns = settings.aoColumns;
-		var columnCount = columns.length;
-		var features = settings.oFeatures;
-		var preSearch = settings.oPreviousSearch;
-		var preColSearch = settings.aoPreSearchCols;
-		var i, data = [], mDataProp;
+		var
+			columns = settings.aoColumns,
+			columnCount = columns.length,
+			features = settings.oFeatures,
+			preSearch = settings.oPreviousSearch,
+			preColSearch = settings.aoPreSearchCols,
+			i, data = [], dataProp, column, columnSearch,
+			sort = _fnSortFlatten( settings ),
+			displayStart = settings._iDisplayStart,
+			displayLength = features.bPaginate !== false ?
+				settings._iDisplayLength :
+				-1;
+	
 		var param = function ( name, value ) {
 			data.push( { 'name': name, 'value': value } );
 		};
 	
+		// DataTables 1.9- compatible method
 		param( 'sEcho',          settings.iDraw );
 		param( 'iColumns',       columnCount );
 		param( 'sColumns',       _pluck( columns, 'sName' ).join(',') );
-		param( 'iDisplayStart',  settings._iDisplayStart );
-		param( 'iDisplayLength', settings.oFeatures.bPaginate !== false ?
-			settings._iDisplayLength : -1
-		);
+		param( 'iDisplayStart',  displayStart );
+		param( 'iDisplayLength', displayLength );
+	
+		// DataTables 1.10+ method
+		var d = {
+			draw:    settings.iDraw,
+			columns: [],
+			sort:    [],
+			start:   displayStart,
+			length:  displayLength,
+			filter:  {
+				value: preSearch.sSearch,
+				regex: preSearch.bRegex
+			}
+		};
 	
 		for ( i=0 ; i<columnCount ; i++ ) {
-			mDataProp = columns[i].mData;
-			param( "mDataProp_"+i, typeof mDataProp==="function" ? 'function' : mDataProp );
+			column = columns[i];
+			columnSearch = preColSearch[i];
+			dataProp = typeof column.mData=="function" ? 'function' : column.mData ;
+	
+			d.columns.push( {
+				data:       dataProp,
+				name:       column.sName,
+				searchable: column.bSearchable,
+				sortable:   column.bSortable,
+				filter:     {
+					value: columnSearch.sSearch,
+					regex: columnSearch.bRegex
+				}
+			} );
+	
+			param( "mDataProp_"+i, dataProp );
+	
+			if ( features.bFilter ) {
+				param( 'sSearch_'+i,     columnSearch.sSearch );
+				param( 'bRegex_'+i,      columnSearch.bRegex );
+				param( 'bSearchable_'+i, column.bSearchable );
+			}
+	
+			if ( features.bSort ) {
+				param( 'bSortable_'+i, column.bSortable );
+			}
 		}
 	
-		/* Filtering */
+		$.each( sort, function ( i, val ) {
+			d.sort.push( { column: val.col, dir: val.dir } );
+	
+			param( 'iSortCol_'+i, val.col );
+			param( 'sSortDir_'+i, val.dir );
+		} );
+	
 		if ( features.bFilter ) {
 			param( 'sSearch', preSearch.sSearch );
 			param( 'bRegex', preSearch.bRegex );
-	
-			for ( i=0 ; i<columnCount ; i++ ) {
-				param( 'sSearch_'+i,     preColSearch[i].sSearch );
-				param( 'bRegex_'+i,      preColSearch[i].bRegex );
-				param( 'bSearchable_'+i, columns[i].bSearchable );
-			}
 		}
 	
-		/* Sorting */
 		if ( features.bSort ) {
-			var aaSort = _fnSortFlatten( settings );
-	
-			for ( i=0 ; i<aaSort.length ; i++ ) {
-				param( 'iSortCol_'+i, aaSort[i].col );
-				param( 'sSortDir_'+i, aaSort[i].dir );
-			}
-			param( 'iSortingCols', aaSort.length );
-	
-			for ( i=0 ; i<columnCount ; i++ ) {
-				param( 'bSortable_'+i, columns[i].bSortable );
-			}
+			param( 'iSortingCols', sort.length );
 		}
 	
-		return data;
+		data.__legacy = true;
+		return settings.sAjaxSource || DataTable.ext.legacy.ajax ?
+			data : d;
 	}
 	
 	
@@ -12690,11 +12731,28 @@
 		 * anything other than a plug-in (and even then, try to avoid if possible).
 		 * The internal function may change between releases.
 		 *
-		 * externally
 		 *  @type object
 		 *  @default {}
 		 */
 		internal: {},
+	
+	
+		/**
+		 * Legacy configuration options. Enable and disable legacy options that
+		 * are available in DataTables.
+		 *
+		 *  @type object
+		 */
+		legacy: {
+			/**
+			 * Enable / disable DataTables 1.9 compatible server-side processing
+			 * requests
+			 *
+			 *  @type boolean
+			 *  @default false
+			 */
+			ajax: false
+		},
 	
 	
 		/**
