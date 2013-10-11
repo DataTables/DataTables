@@ -2615,7 +2615,7 @@
 	function _fnInitialise ( settings )
 	{
 		var i, iLen, iAjaxStart=settings.iInitDisplayStart;
-		var columns = settings.aoColumn, column;
+		var columns = settings.aoColumns, column;
 		var features = settings.oFeatures;
 	
 		/* Ensure that the table data is fully initialised */
