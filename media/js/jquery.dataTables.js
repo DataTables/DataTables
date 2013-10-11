@@ -2026,72 +2026,59 @@
 	 *  @returns {bool} block the table drawing or not
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnAjaxParameters( oSettings )
+	function _fnAjaxParameters( settings )
 	{
-		var aoColumns = oSettings.aoColumns;
-		var iColumns = aoColumns.length;
-		var aoData = [], mDataProp, aaSort, aDataSort;
-		var i, j;
+		var columns = settings.aoColumns;
+		var columnCount = columns.length;
+		var features = settings.oFeatures;
+		var preSearch = settings.oPreviousSearch;
+		var preColSearch = settings.aoPreSearchCols;
+		var i, data = [], mDataProp;
 		var param = function ( name, value ) {
-			aoData.push( { 'name': name, 'value': value } );
+			data.push( { 'name': name, 'value': value } );
 		};
 	
-		param( 'sEcho',          oSettings.iDraw );
-		param( 'iColumns',       iColumns );
-		param( 'sColumns',       _pluck( aoColumns, 'sName' ).join(',') );
-		param( 'iDisplayStart',  oSettings._iDisplayStart );
-		param( 'iDisplayLength', oSettings.oFeatures.bPaginate !== false ?
-			oSettings._iDisplayLength : -1
+		param( 'sEcho',          settings.iDraw );
+		param( 'iColumns',       columnCount );
+		param( 'sColumns',       _pluck( columns, 'sName' ).join(',') );
+		param( 'iDisplayStart',  settings._iDisplayStart );
+		param( 'iDisplayLength', settings.oFeatures.bPaginate !== false ?
+			settings._iDisplayLength : -1
 		);
 	
-		for ( i=0 ; i<iColumns ; i++ )
-		{
-			mDataProp = aoColumns[i].mData;
-			param( "mDataProp_"+i, typeof(mDataProp)==="function" ? 'function' : mDataProp );
+		for ( i=0 ; i<columnCount ; i++ ) {
+			mDataProp = columns[i].mData;
+			param( "mDataProp_"+i, typeof mDataProp==="function" ? 'function' : mDataProp );
 		}
 	
 		/* Filtering */
-		if ( oSettings.oFeatures.bFilter !== false )
-		{
-			param( 'sSearch', oSettings.oPreviousSearch.sSearch );
-			param( 'bRegex', oSettings.oPreviousSearch.bRegex );
-			for ( i=0 ; i<iColumns ; i++ )
-			{
-				param( 'sSearch_'+i,     oSettings.aoPreSearchCols[i].sSearch );
-				param( 'bRegex_'+i,      oSettings.aoPreSearchCols[i].bRegex );
-				param( 'bSearchable_'+i, aoColumns[i].bSearchable );
+		if ( features.bFilter ) {
+			param( 'sSearch', preSearch.sSearch );
+			param( 'bRegex', preSearch.bRegex );
+	
+			for ( i=0 ; i<columnCount ; i++ ) {
+				param( 'sSearch_'+i,     preColSearch[i].sSearch );
+				param( 'bRegex_'+i,      preColSearch[i].bRegex );
+				param( 'bSearchable_'+i, columns[i].bSearchable );
 			}
 		}
 	
 		/* Sorting */
-		if ( oSettings.oFeatures.bSort !== false )
-		{
-			var iCounter = 0;
+		if ( features.bSort ) {
+			var aaSort = _fnSortFlatten( settings );
 	
-			aaSort = ( oSettings.aaSortingFixed !== null ) ?
-				oSettings.aaSortingFixed.concat( oSettings.aaSorting ) :
-				oSettings.aaSorting.slice();
-	
-			for ( i=0 ; i<aaSort.length ; i++ )
-			{
-				aDataSort = aoColumns[ aaSort[i][0] ].aDataSort;
-	
-				for ( j=0 ; j<aDataSort.length ; j++ )
-				{
-					param( 'iSortCol_'+iCounter, aDataSort[j] );
-					param( 'sSortDir_'+iCounter, aaSort[i][1] );
-					iCounter++;
-				}
+			for ( i=0 ; i<aaSort.length ; i++ ) {
+				param( 'iSortCol_'+i, aaSort[i].col );
+				param( 'sSortDir_'+i, aaSort[i].dir );
 			}
-			param( 'iSortingCols', iCounter );
+			param( 'iSortingCols', aaSort.length );
 	
-			for ( i=0 ; i<iColumns ; i++ )
-			{
-				param( 'bSortable_'+i, aoColumns[i].bSortable );
+			for ( i=0 ; i<columnCount ; i++ ) {
+				param( 'bSortable_'+i, columns[i].bSortable );
 			}
 		}
 	
-		return aoData;
+		return data;
 	}
 	
 	
