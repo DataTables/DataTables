@@ -2957,7 +2957,7 @@
 		var scroll = settings.oScroll;
 	
 		if ( scroll.sX === '' && scroll.sY === '' ) {
-			return;
+			return settings.nTable;
 		}
 	
 		var scrollX = scroll.sX;
