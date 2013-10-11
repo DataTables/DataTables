@@ -6038,7 +6038,7 @@
 	{
 		if ( ! this instanceof _Api ) {
 			throw 'DT API must be constructed as a new object';
-			// or should it do the 'new' for the caller
+			// or should it do the 'new' for the caller?
 			// return new _Api.apply( this, arguments );
 		}
 	
@@ -8238,6 +8238,49 @@
 		return this.iterator( 'table', function ( settings ) {
 			return _pluck( settings.aoData, '_aData' );
 		} ).flatten();
+	} );
+	
+	
+	_api.register( 'plugin()', function ( type ) {
+		var ctx = this.context;
+	
+		if ( ! ctx.length ) {
+			return null;
+		}
+	
+		var plugins = ctx[0].oPlugins[ type ];
+	
+		return ! plugins ?
+			null :
+			plugins.length == 1 ?
+				plugins[0] :
+				plugins;
+	} );
+	
+	_api.register( 'plugin.register()', function ( type, inst ) {
+		return this.iterator( 'table', function ( settings ) {
+			var plugins = settings.oPlugins;
+	
+			if ( ! plugins[ type ] ) {
+				plugins[ type ] = [];
+			}
+	
+			plugins[ type ].push( inst );
+		} );
+	} );
+	
+	_api.register( 'plugin.deregister()', function ( type, inst ) {
+		return this.iterator( 'table', function ( settings ) {
+			var plugins = settings.oPlugins[ type ];
+	
+			if ( plugins ) {
+				var idx = $.inArray( inst, plugins );
+	
+				if ( idx >= 0 ) {
+					plugins.splice( idx, 1 );
+				}
+			}
+		} );
 	} );
 	
 	
@@ -12616,7 +12659,14 @@
 		 *  @type array
 		 *  @default []
 		 */
-		"aLastSort": []
+		"aLastSort": [],
+	
+		/**
+		 * Stored plug-in instances
+		 *  @type object
+		 *  @default {}
+		 */
+		"oPlugins": {}
 	};
 
 	/**
