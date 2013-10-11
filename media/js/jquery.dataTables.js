@@ -6715,7 +6715,7 @@
 	
 	var _Api = DataTable.Api;
 	
-	var _reload = function ( settings, holdPosition ) {
+	var _reload = function ( settings, holdPosition, callback ) {
 		if ( settings.oFeatures.bServerSide ) {
 			_fnReDraw( settings, holdPosition );
 		}
@@ -6731,6 +6731,10 @@
 				}
 	
 				_fnReDraw( settings, holdPosition );
+	
+				if ( callback ) {
+					callback( json );
+				}
 			} );
 		}
 	};
@@ -6763,9 +6767,9 @@
 	 *   called, which is why the pagination reset is the default action.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'ajax.reload()', function ( resetPaging ) {
+	_Api.register( 'ajax.reload()', function ( callback, resetPaging ) {
 		return this.iterator( 'table', function (settings) {
-			_reload( settings, resetPaging===false );
+			_reload( settings, resetPaging===false, callback );
 		} );
 	} );
 	
@@ -6823,10 +6827,12 @@
 	 *
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'ajax.url().load()', function () {
+	_Api.register( 'ajax.url().load()', function ( callback ) {
 		// Same as a reload, but makes sense to present it for easy access after a
 		// url change
-		return this.iterator( 'table', _reload );
+		return this.iterator( 'table', function ( ctx ) {
+			_reload( ctx, undefined, callback );
+		} );
 	} );
 	
 	
