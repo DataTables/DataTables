@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_fnExternApiFunc,_fnInitialise,_fnInitComplete,_fnLanguageCompat,_fnAddColumn,_fnColumnOptions,_fnAddData,_fnCreateTr,_fnGatherData,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAddOptionsHtml,_fnFeatureHtmlTable,_fnScrollDraw,_fnAdjustColumnSizing,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnBuildSearchArray,_fnBuildSearchRow,_fnFilterCreateSearch,_fnDataToSearch,_fnSort,_fnSortAttachListener,_fnSortingClasses,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnFeatureHtmlLength,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnNodeToDataIndex,_fnVisbleColumns,_fnConvertToWidth,_fnCalculateColumnWidths,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnDetectType,_fnSettingsFromNode,_fnGetDataMaster,_fnEscapeRegex,_fnDeleteIndex,_fnColumnOrdering,_fnLog,_fnClearTable,_fnSaveState,_fnLoadState,_fnDetectHeader,_fnGetUniqueThs,_fnScrollBarWidth,_fnApplyToChildren,_fnMap,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnApplyColumnDefs,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnNodeToColumnIndex,_fnInfoMacros,_fnBrowserDetect,_fnGetColumns,_fnHungarianMap,_fnCamelToHungarian,_fnBuildAjax,_fnAjaxDataSrc*/
+/*globals $,require,jQuery,define,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -5285,113 +5285,125 @@
 		
 		/**
 		 * Create a wrapper function for exporting an internal functions to an external API.
-		 *  @param {string} sFunc API function name
+		 *  @param {string} fn API function name
 		 *  @returns {function} wrapped function
 		 *  @memberof DataTable#internal
 		 */
-		function _fnExternApiFunc (sFunc)
+		function _fnExternApiFunc (fn)
 		{
 			return function() {
-				var aArgs = [_fnSettingsFromNode(this[DataTable.ext.iApiIndex])].concat(
-					Array.prototype.slice.call(arguments) );
-				return DataTable.ext.internal[sFunc].apply( this, aArgs );
+				var args = [_fnSettingsFromNode( this[DataTable.ext.iApiIndex] )].concat(
+					Array.prototype.slice.call(arguments)
+				);
+				return DataTable.ext.internal[fn].apply( this, args );
 			};
 		}
 		
 		
 		/**
-		 * Reference to internal functions for use by plug-in developers. Note that these
-		 * methods are references to internal functions and are considered to be private.
-		 * If you use these methods, be aware that they are liable to change between versions
-		 * (check the upgrade notes).
+		 * Reference to internal functions for use by plug-in developers. Note that
+		 * these methods are references to internal functions and are considered to be
+		 * private. If you use these methods, be aware that they are liable to change
+		 * between versions.
 		 *  @namespace
 		 */
 		this.oApi = this.internal = {
-			"_fnExternApiFunc": _fnExternApiFunc,
-			"_fnInitialise": _fnInitialise,
-			"_fnInitComplete": _fnInitComplete,
-			"_fnLanguageCompat": _fnLanguageCompat,
-			"_fnAddColumn": _fnAddColumn,
-			"_fnColumnOptions": _fnColumnOptions,
-			"_fnAddData": _fnAddData,
-			"_fnCreateTr": _fnCreateTr,
-			"_fnAddTr": _fnAddTr,
-			"_fnBuildHead": _fnBuildHead,
-			"_fnDrawHead": _fnDrawHead,
-			"_fnDraw": _fnDraw,
-			"_fnReDraw": _fnReDraw,
-			"_fnAjaxUpdate": _fnAjaxUpdate,
-			"_fnAjaxParameters": _fnAjaxParameters,
-			"_fnAjaxUpdateDraw": _fnAjaxUpdateDraw,
-			"_fnAddOptionsHtml": _fnAddOptionsHtml,
-			"_fnFeatureHtmlTable": _fnFeatureHtmlTable,
-			"_fnScrollDraw": _fnScrollDraw,
-			"_fnAdjustColumnSizing": _fnAdjustColumnSizing,
-			"_fnFeatureHtmlFilter": _fnFeatureHtmlFilter,
-			"_fnFilterComplete": _fnFilterComplete,
-			"_fnFilterCustom": _fnFilterCustom,
-			"_fnFilterColumn": _fnFilterColumn,
-			"_fnFilter": _fnFilter,
-			"_fnFilterCreateSearch": _fnFilterCreateSearch,
-			"_fnSort": _fnSort,
-			"_fnSortAttachListener": _fnSortAttachListener,
-			"_fnSortingClasses": _fnSortingClasses,
-			"_fnFeatureHtmlPaginate": _fnFeatureHtmlPaginate,
-			"_fnPageChange": _fnPageChange,
-			"_fnFeatureHtmlInfo": _fnFeatureHtmlInfo,
-			"_fnUpdateInfo": _fnUpdateInfo,
-			"_fnFeatureHtmlLength": _fnFeatureHtmlLength,
-			"_fnFeatureHtmlProcessing": _fnFeatureHtmlProcessing,
-			"_fnProcessingDisplay": _fnProcessingDisplay,
-			"_fnVisibleToColumnIndex": _fnVisibleToColumnIndex,
-			"_fnColumnIndexToVisible": _fnColumnIndexToVisible,
-			"_fnNodeToDataIndex": _fnNodeToDataIndex,
-			"_fnVisbleColumns": _fnVisbleColumns,
-			"_fnConvertToWidth": _fnConvertToWidth,
-			"_fnCalculateColumnWidths": _fnCalculateColumnWidths,
-			"_fnScrollingWidthAdjust": _fnScrollingWidthAdjust,
-			"_fnGetWidestNode": _fnGetWidestNode,
-			"_fnGetMaxLenString": _fnGetMaxLenString,
-			"_fnStringToCss": _fnStringToCss,
-			"_fnSettingsFromNode": _fnSettingsFromNode,
-			"_fnGetDataMaster": _fnGetDataMaster,
-			"_fnEscapeRegex": _fnEscapeRegex,
-			"_fnDeleteIndex": _fnDeleteIndex,
-			"_fnLog": _fnLog,
-			"_fnClearTable": _fnClearTable,
-			"_fnSaveState": _fnSaveState,
-			"_fnLoadState": _fnLoadState,
-			"_fnDetectHeader": _fnDetectHeader,
-			"_fnGetUniqueThs": _fnGetUniqueThs,
-			"_fnScrollBarWidth": _fnScrollBarWidth,
-			"_fnApplyToChildren": _fnApplyToChildren,
-			"_fnMap": _fnMap,
-			"_fnGetRowData": _fnGetRowData,
-			"_fnGetCellData": _fnGetCellData,
-			"_fnSetCellData": _fnSetCellData,
-			"_fnGetObjectDataFn": _fnGetObjectDataFn,
-			"_fnSetObjectDataFn": _fnSetObjectDataFn,
-			"_fnApplyColumnDefs": _fnApplyColumnDefs,
-			"_fnBindAction": _fnBindAction,
-			"_fnCallbackReg": _fnCallbackReg,
-			"_fnCallbackFire": _fnCallbackFire,
-			"_fnNodeToColumnIndex": _fnNodeToColumnIndex,
-			"_fnInfoMacros": _fnInfoMacros,
-			"_fnBrowserDetect": _fnBrowserDetect,
-			"_fnGetColumns": _fnGetColumns,
-			"_fnHungarianMap": _fnHungarianMap,
-			"_fnCamelToHungarian": _fnCamelToHungarian,
-			"_fnBuildAjax": _fnBuildAjax,
-			"_fnAjaxDataSrc": _fnAjaxDataSrc
+			_fnExternApiFunc: _fnExternApiFunc,
+			_fnBuildAjax: _fnBuildAjax,
+			_fnAjaxUpdate: _fnAjaxUpdate,
+			_fnAjaxParameters: _fnAjaxParameters,
+			_fnAjaxUpdateDraw: _fnAjaxUpdateDraw,
+			_fnAjaxDataSrc: _fnAjaxDataSrc,
+			_fnAddColumn: _fnAddColumn,
+			_fnColumnOptions: _fnColumnOptions,
+			_fnAdjustColumnSizing: _fnAdjustColumnSizing,
+			_fnVisibleToColumnIndex: _fnVisibleToColumnIndex,
+			_fnColumnIndexToVisible: _fnColumnIndexToVisible,
+			_fnVisbleColumns: _fnVisbleColumns,
+			_fnGetColumns: _fnGetColumns,
+			_fnColumnTypes: _fnColumnTypes,
+			_fnApplyColumnDefs: _fnApplyColumnDefs,
+			_fnHungarianMap: _fnHungarianMap,
+			_fnCamelToHungarian: _fnCamelToHungarian,
+			_fnLanguageCompat: _fnLanguageCompat,
+			_fnBrowserDetect: _fnBrowserDetect,
+			_fnAddData: _fnAddData,
+			_fnAddTr: _fnAddTr,
+			_fnNodeToDataIndex: _fnNodeToDataIndex,
+			_fnNodeToColumnIndex: _fnNodeToColumnIndex,
+			_fnGetRowData: _fnGetRowData,
+			_fnGetCellData: _fnGetCellData,
+			_fnSetCellData: _fnSetCellData,
+			_fnSplitObjNotation: _fnSplitObjNotation,
+			_fnGetObjectDataFn: _fnGetObjectDataFn,
+			_fnSetObjectDataFn: _fnSetObjectDataFn,
+			_fnGetDataMaster: _fnGetDataMaster,
+			_fnClearTable: _fnClearTable,
+			_fnDeleteIndex: _fnDeleteIndex,
+			_fnInvalidateRow: _fnInvalidateRow,
+			_fnGetRowElements: _fnGetRowElements,
+			_fnCreateTr: _fnCreateTr,
+			_fnBuildHead: _fnBuildHead,
+			_fnDrawHead: _fnDrawHead,
+			_fnDraw: _fnDraw,
+			_fnReDraw: _fnReDraw,
+			_fnAddOptionsHtml: _fnAddOptionsHtml,
+			_fnDetectHeader: _fnDetectHeader,
+			_fnGetUniqueThs: _fnGetUniqueThs,
+			_fnFeatureHtmlFilter: _fnFeatureHtmlFilter,
+			_fnFilterComplete: _fnFilterComplete,
+			_fnFilterCustom: _fnFilterCustom,
+			_fnFilterColumn: _fnFilterColumn,
+			_fnFilter: _fnFilter,
+			_fnFilterCreateSearch: _fnFilterCreateSearch,
+			_fnEscapeRegex: _fnEscapeRegex,
+			_fnFilterData: _fnFilterData,
+			_fnFeatureHtmlInfo: _fnFeatureHtmlInfo,
+			_fnUpdateInfo: _fnUpdateInfo,
+			_fnInfoMacros: _fnInfoMacros,
+			_fnInitialise: _fnInitialise,
+			_fnInitComplete: _fnInitComplete,
+			_fnLengthChange: _fnLengthChange,
+			_fnFeatureHtmlLength: _fnFeatureHtmlLength,
+			_fnFeatureHtmlPaginate: _fnFeatureHtmlPaginate,
+			_fnPageChange: _fnPageChange,
+			_fnFeatureHtmlProcessing: _fnFeatureHtmlProcessing,
+			_fnProcessingDisplay: _fnProcessingDisplay,
+			_fnFeatureHtmlTable: _fnFeatureHtmlTable,
+			_fnScrollDraw: _fnScrollDraw,
+			_fnApplyToChildren: _fnApplyToChildren,
+			_fnCalculateColumnWidths: _fnCalculateColumnWidths,
+			_fnThrottle: _fnThrottle,
+			_fnConvertToWidth: _fnConvertToWidth,
+			_fnScrollingWidthAdjust: _fnScrollingWidthAdjust,
+			_fnGetWidestNode: _fnGetWidestNode,
+			_fnGetMaxLenString: _fnGetMaxLenString,
+			_fnStringToCss: _fnStringToCss,
+			_fnScrollBarWidth: _fnScrollBarWidth,
+			_fnSortFlatten: _fnSortFlatten,
+			_fnSort: _fnSort,
+			_fnSortAria: _fnSortAria,
+			_fnSortListener: _fnSortListener,
+			_fnSortAttachListener: _fnSortAttachListener,
+			_fnSortingClasses: _fnSortingClasses,
+			_fnSortData: _fnSortData,
+			_fnSaveState: _fnSaveState,
+			_fnLoadState: _fnLoadState,
+			_fnSettingsFromNode: _fnSettingsFromNode,
+			_fnLog: _fnLog,
+			_fnMap: _fnMap,
+			_fnBindAction: _fnBindAction,
+			_fnCallbackReg: _fnCallbackReg,
+			_fnCallbackFire: _fnCallbackFire,
+			_fnLengthOverflow: _fnLengthOverflow,
+			_fnRenderer: _fnRenderer
 		};
 		
 		$.extend( DataTable.ext.internal, this.internal );
 		
-		for ( var sFunc in DataTable.ext.internal )
-		{
-			if ( sFunc )
-			{
-				this[sFunc] = _fnExternApiFunc(sFunc);
+		for ( var fn in DataTable.ext.internal ) {
+			if ( fn ) {
+				this[fn] = _fnExternApiFunc(fn);
 			}
 		}
 		
