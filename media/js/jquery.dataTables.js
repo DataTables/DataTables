@@ -21,7 +21,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer*/
+/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_empty,_intVal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -78,6 +78,187 @@
 	 */
 	var DataTable;
 
+	
+	/*
+	 * It is useful to have variables which are scoped locally so only the
+	 * DataTables functions can access them and they don't leak into global space.
+	 * At the same time these functions are often useful over multiple files in the
+	 * core and API, so we list, or at least document, all variables which are used
+	 * by DataTables as private variables here. This also ensures that there is no
+	 * clashing of variable names and that they can easily referenced for reuse.
+	 */
+	
+	
+	// Defined else where
+	// 	_selector_run
+	// 	_selector_opts
+	// 	_selector_first
+	// 	_selector_row_indexes
+	
+	var _ext; // DataTable.ext
+	var _Api; // DataTable.Api
+	var _api_register; // DataTable.Api.register
+	var _api_registerPlural; // DataTable.Api.registerPlural
+	
+	var _re_new_lines = /[\r\n]/g;
+	var _re_html = /<.*?>/g;
+	var _re_formatted_numeric = /[',$£€¥]/g;
+	
+	
+	
+	
+	var _empty = function ( d ) {
+		return !d || d === '-' ? true : false;
+	};
+	
+	
+	var _intVal = function ( s ) {
+		var integer = parseInt( s, 10 );
+		return !isNaN(integer) && isFinite(s) ? integer : null;
+	};
+	
+	
+	var _isNumber = function ( d, formatted ) {
+		if ( formatted && typeof d === 'string' ) {
+			d = d.replace( _re_formatted_numeric, '' );
+		}
+	
+		return !d || d==='-' || (!isNaN( parseFloat(d) ) && isFinite( d ));
+	};
+	
+	
+	// A string without HTML in it can be considered to be HTML still
+	var _isHtml = function ( d ) {
+		return !d || typeof d === 'string';
+	};
+	
+	
+	var _htmlNumeric = function ( d, formatted ) {
+		if ( _empty( d ) ) {
+			return true;
+		}
+	
+		var html = _isHtml( d );
+		return ! html ?
+			null :
+			_isNumber( _stripHtml( d ), formatted ) ?
+				true :
+				null;
+	};
+	
+	
+	var _pluck = function ( a, prop, prop2 ) {
+		var out = [];
+		var i=0, ien=a.length;
+	
+		// Could have the test in the loop for slightly smaller code, but speed
+		// is essential here
+		if ( prop2 !== undefined ) {
+			for ( ; i<ien ; i++ ) {
+				if ( a[i] && a[i][ prop ] ) {
+					out.push( a[i][ prop ][ prop2 ] );
+				}
+			}
+		}
+		else {
+			for ( ; i<ien ; i++ ) {
+				if ( a[i] ) {
+					out.push( a[i][ prop ] );
+				}
+			}
+		}
+	
+		return out;
+	};
+	
+	
+	// Basically the same as _pluck, but rather than looping over `a` we use `order`
+	// as the indexes to pick from `a`
+	var _pluck_order = function ( a, order, prop, prop2 )
+	{
+		var out = [];
+		var i=0, ien=order.length;
+	
+		// Could have the test in the loop for slightly smaller code, but speed
+		// is essential here
+		if ( prop2 !== undefined ) {
+			for ( ; i<ien ; i++ ) {
+				out.push( a[ order[i] ][ prop ][ prop2 ] );
+			}
+		}
+		else {
+			for ( ; i<ien ; i++ ) {
+				out.push( a[ order[i] ][ prop ] );
+			}
+		}
+	
+		return out;
+	};
+	
+	
+	var _range = function ( len, start )
+	{
+		var out = [];
+		var end;
+	
+		if ( start === undefined ) {
+			start = 0;
+			end = len;
+		}
+		else {
+			end = start;
+			start = len;
+		}
+	
+		for ( var i=start ; i<end ; i++ ) {
+			out.push( i );
+		}
+	
+		return out;
+	};
+	
+	
+	var _stripHtml = function ( d ) {
+		return d.replace( _re_html, '' );
+	};
+	
+	
+	/**
+	 * Find the unique elements in a source array.
+	 *
+	 * @param  {array} src Source array
+	 * @return {array} Array of unique items
+	 * @ignore
+	 */
+	var _unique = function ( src )
+	{
+		// A faster unique method is to use object keys to identify used values,
+		// but this doesn't work with arrays or objects, which we must also
+		// consider. See jsperf.com/compare-array-unique-versions/4 for more
+		// information.
+		var
+			out = [],
+			val,
+			i, ien=src.length,
+			j, k=0;
+	
+		again: for ( i=0 ; i<ien ; i++ ) {
+			val = src[i];
+	
+			for ( j=0 ; j<k ; j++ ) {
+				if ( out[j] === val ) {
+					continue again;
+				}
+			}
+	
+			out.push( val );
+			k++;
+		}
+	
+		return out;
+	};
+	
+	
 	
 	
 	/**
@@ -4633,10 +4814,10 @@
 		this.api = function ( traditional )
 		{
 			return traditional ?
-				new DataTable.Api(
-					_fnSettingsFromNode( this[DataTable.ext.iApiIndex] )
+				new _Api(
+					_fnSettingsFromNode( this[ _ext.iApiIndex ] )
 				) :
-				new DataTable.Api( this );
+				new _Api( this );
 		};
 		
 		
@@ -5166,7 +5347,7 @@
 		 */
 		this.fnSettings = function()
 		{
-			return _fnSettingsFromNode( this[DataTable.ext.iApiIndex] );
+			return _fnSettingsFromNode( this[_ext.iApiIndex] );
 		};
 		
 		
@@ -5274,7 +5455,7 @@
 		 *      alert( oTable.fnVersionCheck( '1.9.0' ) );
 		 *    } );
 		 */
-		this.fnVersionCheck = DataTable.ext.fnVersionCheck;
+		this.fnVersionCheck = _ext.fnVersionCheck;
 		
 		
 		/*
@@ -5414,7 +5595,7 @@
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
-			var defaults = DataTable.defaults
+			var defaults = DataTable.defaults;
 			var oInitEmpty = oInit === undefined ? true : false;
 			
 			
@@ -5430,8 +5611,7 @@
 			_fnCamelToHungarian( defaults.column, defaults.column, true );
 			
 			/* Setting up the initialisation object */
-			if ( !oInit )
-			{
+			if ( !oInit ) {
 				oInit = {};
 			}
 			_fnCamelToHungarian( defaults, oInit );
@@ -5865,8 +6045,6 @@
 	};
 
 	
-	(/** @lends <global> */function() {
-	
 	
 	/**
 	 * Computed structure of the DataTables API, defined by the options passed to
@@ -5904,16 +6082,7 @@
 	 * @type {Array}
 	 * @ignore
 	 */
-	var _apiStruct = [];
-	
-	
-	/**
-	 * Api object reference.
-	 *
-	 * @type object
-	 * @ignore
-	 */
-	var _Api;
+	var __apiStruct = [];
 	
 	
 	/**
@@ -5922,7 +6091,7 @@
 	 * @type object
 	 * @ignore
 	 */
-	var _arrayProto = Array.prototype;
+	var __arrayProto = Array.prototype;
 	
 	
 	
@@ -5979,43 +6148,6 @@
 			} );
 		}
 	};
-	
-	
-	/**
-	 * Find the unique elements in a source array.
-	 *
-	 * @param  {array} src Source array
-	 * @return {array} Array of unique items
-	 * @ignore
-	 */
-	var _unique = function ( src )
-	{
-		// A faster unique method is to use object keys to identify used values,
-		// but this doesn't work with arrays or objects, which we must also
-		// consider. See jsperf.com/compare-array-unique-versions/4 for more
-		// information.
-		var
-			out = [],
-			val,
-			i, ien=src.length,
-			j, k=0;
-	
-		again: for ( i=0 ; i<ien ; i++ ) {
-			val = src[i];
-	
-			for ( j=0 ; j<k ; j++ ) {
-				if ( out[j] === val ) {
-					continue again;
-				}
-			}
-	
-			out.push( val );
-			k++;
-		}
-	
-		return out;
-	};
-	
 	
 	
 	/**
@@ -6112,7 +6244,7 @@
 			opts: null
 		};
 	
-		_Api.extend( this, this, _apiStruct );
+		_Api.extend( this, this, __apiStruct );
 	};
 	
 	
@@ -6129,7 +6261,7 @@
 		 * @returns {DataTables.Api} New API instance, comprising of the combined
 		 *   array.
 		 */
-		concat:  _arrayProto.concat,
+		concat:  __arrayProto.concat,
 	
 	
 		context: [], // array of table settings objects
@@ -6137,9 +6269,9 @@
 	
 		each: function ( fn )
 		{
-			if ( _arrayProto.forEach ) {
+			if ( __arrayProto.forEach ) {
 				// Where possible, use the built-in forEach
-				_arrayProto.forEach.call( this, fn, this );
+				__arrayProto.forEach.call( this, fn, this );
 			}
 			else {
 				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
@@ -6157,8 +6289,8 @@
 		{
 			var a = [];
 	
-			if ( _arrayProto.filter ) {
-				a = _arrayProto.filter.call( this, fn, this );
+			if ( __arrayProto.filter ) {
+				a = __arrayProto.filter.call( this, fn, this );
 			}
 			else {
 				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
@@ -6183,7 +6315,7 @@
 		},
 	
 	
-		indexOf: _arrayProto.indexOf || function (obj, start)
+		indexOf: __arrayProto.indexOf || function (obj, start)
 		{
 			for ( var i=(start || 0), ien=this.length ; i<ien ; i++ ) {
 				if ( this[i] === obj ) {
@@ -6231,7 +6363,7 @@
 					items = this[i];
 	
 					if ( type === 'column-rows' ) {
-						rows = _row_selector_indexes( context[i], selector.opts );
+						rows = _selector_row_indexes( context[i], selector.opts );
 					}
 	
 					for ( j=0, jen=items.length ; j<jen ; j++ ) {
@@ -6263,7 +6395,7 @@
 		},
 	
 	
-		lastIndexOf: _arrayProto.lastIndexOf || function (obj, start)
+		lastIndexOf: __arrayProto.lastIndexOf || function (obj, start)
 		{
 			// Bit cheeky...
 			return this.indexOf.apply( this.toArray.reverse(), arguments );
@@ -6277,8 +6409,8 @@
 		{
 			var a = [];
 	
-			if ( _arrayProto.map ) {
-				a = _arrayProto.map.call( this, fn, this );
+			if ( __arrayProto.map ) {
+				a = __arrayProto.map.call( this, fn, this );
 			}
 			else {
 				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
@@ -6298,14 +6430,14 @@
 			} );
 		},
 	
-		pop:     _arrayProto.pop,
+		pop:     __arrayProto.pop,
 	
 	
-		push:    _arrayProto.push,
+		push:    __arrayProto.push,
 	
 	
 		// Does not return an API instance
-		reduce: _arrayProto.reduce || function ( fn, init )
+		reduce: __arrayProto.reduce || function ( fn, init )
 		{
 			var
 				value,
@@ -6332,7 +6464,7 @@
 		},
 	
 	
-		reduceRight: _arrayProto.reduceRight || function ( fn, init )
+		reduceRight: __arrayProto.reduceRight || function ( fn, init )
 		{
 			var
 				value,
@@ -6358,25 +6490,25 @@
 			return value;
 		},
 	
-		reverse: _arrayProto.reverse,
+		reverse: __arrayProto.reverse,
 	
 	
 		// Object with rows, columns and opts
 		selector: null,
 	
 	
-		shift:   _arrayProto.shift,
+		shift:   __arrayProto.shift,
 	
 	
-		sort:    _arrayProto.sort, // ? name - order?
+		sort:    __arrayProto.sort, // ? name - order?
 	
 	
-		splice:  _arrayProto.splice,
+		splice:  __arrayProto.splice,
 	
 	
 		toArray: function ()
 		{
-			return _arrayProto.slice.call( this );
+			return __arrayProto.slice.call( this );
 		},
 	
 	
@@ -6386,7 +6518,7 @@
 		},
 	
 	
-		unshift: _arrayProto.unshift
+		unshift: __arrayProto.unshift
 	};
 	
 	
@@ -6462,7 +6594,7 @@
 	//       }
 	//     ]
 	
-	_Api.register = function ( name, val )
+	_Api.register = _api_register = function ( name, val )
 	{
 		if ( $.isArray( name ) ) {
 			for ( var j=0, jen=name.length ; j<jen ; j++ ) {
@@ -6474,7 +6606,7 @@
 		var
 			i, ien,
 			heir = name.split('.'),
-			struct = _apiStruct,
+			struct = __apiStruct,
 			key, method;
 	
 		var find = function ( src, name ) {
@@ -6520,7 +6652,7 @@
 	};
 	
 	
-	_Api.registerPlural = function ( pluralName, singularName, val ) {
+	_Api.registerPlural = _api_registerPlural = function ( pluralName, singularName, val ) {
 		_Api.register( pluralName, val );
 	
 		_Api.register( singularName, function () {
@@ -6546,13 +6678,37 @@
 	};
 	
 	
-	}());
+	/**
+	 * Selector for HTML tables. Apply the given selector to the give array of
+	 * DataTables settings objects.
+	 *
+	 * @param {string|integer} [selector] jQuery selector string or integer
+	 * @param  {array} Array of DataTables settings objects to be filtered
+	 * @return {array}
+	 * @ignore
+	 */
+	var __table_selector = function ( selector, a )
+	{
+		// Integer is used to pick out a table by index
+		if ( typeof selector === 'number' ) {
+			return [ a[ selector ] ];
+		}
 	
+		// Perform a jQuery selector on the table nodes
+		var nodes = $.map( a, function (el, i) {
+			return el.nTable;
+		} );
 	
+		return $(nodes)
+			.filter( selector )
+			.map( function (i) {
+				// Need to translate back from the table node to the settings
+				var idx = $.inArray( this, nodes );
+				return a[ idx ];
+			} )
+			.toArray();
+	};
 	
-	(/** @lends <global> */function() {
-	
-	var _Api = DataTable.Api;
 	
 	
 	/**
@@ -6566,15 +6722,15 @@
 	 *   select multiple tables or as an integer to select a single table.
 	 * @returns {DataTable.Api} Returns a new API instance if a selector is given.
 	 */
-	_Api.register( 'tables()', function ( selector ) {
+	_api_register( 'tables()', function ( selector ) {
 		// A new instance is created if there was a selector specified
 		return selector ?
-			new _Api( _table_selector( selector, this.context ) ) :
+			new _Api( __table_selector( selector, this.context ) ) :
 			this;
 	} );
 	
 	
-	_Api.register( 'table()', function ( selector ) {
+	_api_register( 'table()', function ( selector ) {
 		var tables = this.tables( selector );
 		var ctx = tables.context;
 	
@@ -6587,41 +6743,33 @@
 	} );
 	
 	
-	_Api.registerPlural( 'tables().nodes()', 'table().node()' , function () {
+	_api_registerPlural( 'tables().nodes()', 'table().node()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTable;
 		} );
 	} );
 	
 	
-	_Api.registerPlural( 'tables().body()', 'table().body()' , function () {
+	_api_registerPlural( 'tables().body()', 'table().body()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTBody;
 		} );
 	} );
 	
 	
-	_Api.registerPlural( 'tables().head()', 'table().head()' , function () {
+	_api_registerPlural( 'tables().head()', 'table().head()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTHead;
 		} );
 	} );
 	
 	
-	_Api.registerPlural( 'tables().foot()', 'table().foot()' , function () {
+	_api_registerPlural( 'tables().foot()', 'table().foot()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTFoot;
 		} );
 	} );
 	
-	
-	}());
-	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _api = DataTable.Api;
 	
 	
 	/**
@@ -6632,20 +6780,12 @@
 	 *   called, which is why the pagination reset is the default action.
 	 * @returns {DataTables.Api} this
 	 */
-	_api.register( 'draw()', function ( resetPaging ) {
+	_api_register( 'draw()', function ( resetPaging ) {
 		return this.iterator( 'table', function ( settings ) {
 			_fnReDraw( settings, resetPaging===false );
 		} );
 	} );
 	
-	
-	}());
-	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _Api = DataTable.Api;
 	
 	
 	/**
@@ -6667,7 +6807,7 @@
 	 *    * `last` - Jump to the last page.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'page()', function ( action ) {
+	_api_register( 'page()', function ( action ) {
 		if ( action === undefined ) {
 			return this.page.info().page; // not an expensive call
 		}
@@ -6697,7 +6837,7 @@
 	 *  * `recordsDisplay` - Data set length once the current filtering criterion
 	 *    are applied.
 	 */
-	_Api.register( 'page.info()', function ( action ) {
+	_api_register( 'page.info()', function ( action ) {
 		if ( this.context.length === 0 ) {
 			return undefined;
 		}
@@ -6732,7 +6872,7 @@
 	 * @param {integer} Page length to set. Use `-1` to show all records.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'page.len()', function ( len ) {
+	_api_register( 'page.len()', function ( len ) {
 		// Note that we can't call this function 'length()' because `length`
 		// is a Javascript property of functions which defines how many arguments
 		// the function expects.
@@ -6749,15 +6889,8 @@
 	} );
 	
 	
-	}());
 	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _Api = DataTable.Api;
-	
-	var _reload = function ( settings, holdPosition, callback ) {
+	var __reload = function ( settings, holdPosition, callback ) {
 		if ( settings.oFeatures.bServerSide ) {
 			_fnReDraw( settings, holdPosition );
 		}
@@ -6789,7 +6922,7 @@
 	 *
 	 * @return {object} JSON received from the server.
 	 */
-	_Api.register( 'ajax.json()', function () {
+	_api_register( 'ajax.json()', function () {
 		var ctx = this.context;
 	
 		if ( ctx.length > 0 ) {
@@ -6809,9 +6942,9 @@
 	 *   called, which is why the pagination reset is the default action.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'ajax.reload()', function ( callback, resetPaging ) {
+	_api_register( 'ajax.reload()', function ( callback, resetPaging ) {
 		return this.iterator( 'table', function (settings) {
-			_reload( settings, resetPaging===false, callback );
+			__reload( settings, resetPaging===false, callback );
 		} );
 	} );
 	
@@ -6828,7 +6961,7 @@
 	 * @param {string} url URL to set.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'ajax.url()', function ( url ) {
+	_api_register( 'ajax.url()', function ( url ) {
 		var ctx = this.context;
 	
 		if ( url === undefined ) {
@@ -6869,72 +7002,16 @@
 	 *
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'ajax.url().load()', function ( callback ) {
+	_api_register( 'ajax.url().load()', function ( callback ) {
 		// Same as a reload, but makes sense to present it for easy access after a
 		// url change
 		return this.iterator( 'table', function ( ctx ) {
-			_reload( ctx, undefined, callback );
+			__reload( ctx, undefined, callback );
 		} );
 	} );
 	
 	
-	}());
 	
-	
-	
-	
-	var _pluck = function ( a, prop, prop2 ) {
-		var out = [];
-		var i=0, ien=a.length;
-	
-		// Could have the test in the loop for slightly smaller code, but speed
-		// is essential here
-		if ( prop2 !== undefined ) {
-			for ( ; i<ien ; i++ ) {
-				if ( a[i] && a[i][ prop ] ) {
-					out.push( a[i][ prop ][ prop2 ] );
-				}
-			}
-		}
-		else {
-			for ( ; i<ien ; i++ ) {
-				if ( a[i] ) {
-					out.push( a[i][ prop ] );
-				}
-			}
-		}
-	
-		return out;
-	};
-	
-	// Basically the same as _pluck, but rather than looping over `a` we use `order`
-	// as the indexes to pick from `a`
-	var _pluck_order = function ( a, order, prop, prop2 )
-	{
-		var out = [];
-		var i=0, ien=order.length;
-	
-		// Could have the test in the loop for slightly smaller code, but speed
-		// is essential here
-		if ( prop2 !== undefined ) {
-			for ( ; i<ien ; i++ ) {
-				out.push( a[ order[i] ][ prop ][ prop2 ] );
-			}
-		}
-		else {
-			for ( ; i<ien ; i++ ) {
-				out.push( a[ order[i] ][ prop ] );
-			}
-		}
-	
-		return out;
-	};
-	
-	
-	var _intVal = function ( s ) {
-		var integer = parseInt( s, 10 );
-		return !isNaN(integer) && isFinite(s) ? integer : null;
-	};
 	
 	var _selector_run = function ( selector, select )
 	{
@@ -6963,6 +7040,7 @@
 		return out;
 	};
 	
+	
 	var _selector_opts = function ( opts )
 	{
 		if ( ! opts ) {
@@ -6975,28 +7053,6 @@
 			page:   opts.page   || 'all'
 		};
 	};
-	
-	var _range = function ( len, start )
-	{
-		var out = [];
-		var end;
-	
-		if ( start === undefined ) {
-			start = 0;
-			end = len;
-		}
-		else {
-			end = start;
-			start = len;
-		}
-	
-		for ( var i=start ; i<end ; i++ ) {
-			out.push( i );
-		}
-	
-		return out;
-	};
-	
 	
 	
 	var _selector_first = function ( inst )
@@ -7020,56 +7076,7 @@
 	};
 	
 	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Tables
-	 */
-	
-	/**
-	 * Selector for HTML tables. Apply the given selector to the give array of
-	 * DataTables settings objects.
-	 *
-	 * @param {string|integer} [selector] jQuery selector string or integer
-	 * @param  {array} Array of DataTables settings objects to be filtered
-	 * @return {array}
-	 * @ignore
-	 */
-	var _table_selector = function ( selector, a )
-	{
-		// Integer is used to pick out a table by index
-		if ( typeof selector === 'number' ) {
-			return [ a[ selector ] ];
-		}
-	
-		// Perform a jQuery selector on the table nodes
-		var nodes = $.map( a, function (el, i) {
-			return el.nTable;
-		} );
-	
-		return $(nodes)
-			.filter( selector )
-			.map( function (i) {
-				// Need to translate back from the table node to the settings
-				var idx = $.inArray( this, nodes );
-				return a[ idx ];
-			} )
-			.toArray();
-	};
-	
-	
-	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Rows
-	 *
-	 * {}          - no selector - use all available rows
-	 * {integer}   - row aoData index
-	 * {node}      - TR node
-	 * {string}    - jQuery selector to apply to the TR elements
-	 * {array}     - jQuery array of nodes, or simply an array of TR nodes
-	 *
-	 */
-	
-	
-	var _row_selector_indexes = function ( settings, opts )
+	var _selector_row_indexes = function ( settings, opts )
 	{
 		var
 			i, ien, tmp, a=[],
@@ -7120,7 +7127,19 @@
 	};
 	
 	
-	var _row_selector = function ( settings, selector, opts )
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Rows
+	 *
+	 * {}          - no selector - use all available rows
+	 * {integer}   - row aoData index
+	 * {node}      - TR node
+	 * {string}    - jQuery selector to apply to the TR elements
+	 * {array}     - jQuery array of nodes, or simply an array of TR nodes
+	 *
+	 */
+	
+	
+	var __row_selector = function ( settings, selector, opts )
 	{
 		return _selector_run( selector, function ( sel ) {
 			var selInt = _intVal( sel );
@@ -7132,7 +7151,7 @@
 				return [ selInt ];
 			}
 	
-			var rows = _row_selector_indexes( settings, opts );
+			var rows = _selector_row_indexes( settings, opts );
 	
 			if ( selInt !== null && $.inArray( selInt, rows ) !== -1 ) {
 				// Selector - integer
@@ -7170,138 +7189,10 @@
 	};
 	
 	
-	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Columns
-	 *
-	 * {integer}           - column index
-	 * "{integer}"         - column index
-	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)
-	 * "{integer}:visible" - alias for {integer}:visIdx
-	 * "{string}"          - column name
-	 * "{string}:jq"       - jQuery selector on column header nodes
-	 *
-	 */
-	
-	// can be an array of these items, comma separated list, or an array of comma
-	// separated lists
-	
-	var _re_column_selector = /^(.*):(jq|visIdx|visible)$/;
-	
-	var _column_selector = function ( settings, selector, opts )
-	{
-		var
-			columns = settings.aoColumns,
-			names = _pluck( columns, 'sName' ),
-			nodes = _pluck( columns, 'nTh' );
-	
-		return _selector_run( selector, function ( s ) {
-			var selInt = _intVal( s );
-	
-			if ( s === '' ) {
-				// All columns
-				return _range( settings.aoColumns.length );
-			}
-			else if ( selInt !== null ) {
-				// Integer selector
-				return [ selInt ];
-			}
-			else {
-				var match = s.match( _re_column_selector );
-	
-				if ( match ) {
-					switch( match[2] ) {
-						case 'visIdx':
-						case 'visible':
-							// Visible index given, convert to column index
-							return [ _fnVisibleToColumnIndex( settings, parseInt( match[1], 10 ) ) ];
-	
-						case 'jq':
-							// jQuery selector on the TH elements for the columns
-							return $( nodes )
-								.filter( match[1] )
-								.map( function () {
-									return $.inArray( this, nodes ); // `nodes` is column index complete and in order
-								} )
-								.toArray();
-					}
-				}
-				else {
-					// match by name. `names` is column index complete and in order
-					return $.map( names, function (name, i) {
-						return name === s ? i : null;
-					} );
-				}
-			}
-		} );
-	};
-	
-	
-	
-	
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	 * Cells
-	 *
-	 * {node}          - cell node
-	 * "{string}"      - jquery selector to run on the nodes
-	 *
-	 */
-	
-	var _cell_selector = function ( settings, selector, opts )
-	{
-		var data = settings.aoData;
-		var rows = _row_selector_indexes( settings, opts );
-		var cells = _pluck_order( data, rows, 'anCells' );
-		var allCells = $( [].concat.apply([], cells) );
-		var row;
-		var columns = settings.aoColumns.length;
-		var a, i, ien, j;
-	
-		return _selector_run( selector, function ( s ) {
-			if ( ! s ) {
-				// All cells
-				a = [];
-	
-				for ( i=0, ien=rows.length ; i<ien ; i++ ) {
-					row = rows[i];
-	
-					for ( j=0 ; j<columns ; j++ ) {
-						a.push( {
-							row: row,
-							column: j
-						} );
-					}
-				}
-	
-				return a;
-			}
-	
-			// jQuery filtered cells
-			return allCells.filter( s ).map( function (i, el) {
-				row = el.parentNode._DT_RowIndex;
-	
-				return {
-					row: row,
-					column: $.inArray( el, data[ row ].anCells )
-				};
-			} );
-		} );
-	};
-	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _api = DataTable.Api;
-	
-	
-	
-	
-	
 	/**
 	 *
 	 */
-	_api.register( 'rows()', function ( selector, opts ) {
+	_api_register( 'rows()', function ( selector, opts ) {
 		// argument shifting
 		if ( selector === undefined ) {
 			selector = '';
@@ -7314,10 +7205,10 @@
 		opts = _selector_opts( opts );
 	
 		var inst = this.iterator( 'table', function ( settings ) {
-			return _row_selector( settings, selector, opts );
+			return __row_selector( settings, selector, opts );
 		} );
 	
-		// Want argument shifting here and in _row_selector?
+		// Want argument shifting here and in __row_selector?
 		inst.selector.rows = selector;
 		inst.selector.opts = opts;
 	
@@ -7325,7 +7216,7 @@
 	} );
 	
 	
-	_api.registerPlural( 'rows().nodes()', 'row().node()' , function () {
+	_api_registerPlural( 'rows().nodes()', 'row().node()' , function () {
 		return this.iterator( 'row', function ( settings, row ) {
 			// use pluck order on an array rather - rows gives an array, row gives it individually
 			return settings.aoData[ row ].nTr || undefined;
@@ -7333,33 +7224,33 @@
 	} );
 	
 	
-	_api.register( 'rows().data()', function ( data ) {
+	_api_register( 'rows().data()', function ( data ) {
 		return this.iterator( true, 'rows', function ( settings, rows ) {
 			return _pluck_order( settings.aoData, rows, '_aData' );
 		} );
 	} );
 	
-	_api.registerPlural( 'rows().cache()', 'row().cache()', function ( type ) {
+	_api_registerPlural( 'rows().cache()', 'row().cache()', function ( type ) {
 		return this.iterator( 'row', function ( settings, row ) {
 			return type === 'filter' ? row._aFilterData : row._aSortData;
 		} );
 	} );
 	
-	_api.registerPlural( 'rows().invalidate()', 'row().invalidate()', function ( src ) {
+	_api_registerPlural( 'rows().invalidate()', 'row().invalidate()', function ( src ) {
 		return this.iterator( 'row', function ( settings, row ) {
 			_fnInvalidateRow( settings, row, src );
 		} );
 	} );
 	
 	
-	_api.registerPlural( 'rows().index()', 'row().index()', function ( src ) {
+	_api_registerPlural( 'rows().index()', 'row().index()', function ( src ) {
 		return this.iterator( 'row', function ( settings, row ) {
 			return row;
 		} );
 	} );
 	
 	
-	_api.registerPlural( 'rows().remove()', 'row().remove()', function () {
+	_api_registerPlural( 'rows().remove()', 'row().remove()', function () {
 		var that = this;
 	
 		return this.iterator( 'row', function ( settings, row, thatIdx ) {
@@ -7388,7 +7279,7 @@
 	} );
 	
 	
-	_api.register( 'rows.add()', function ( rows ) {
+	_api_register( 'rows.add()', function ( rows ) {
 		var newRows = this.iterator( 'table', function ( settings ) {
 				var row, i, ien;
 				var out = [];
@@ -7422,12 +7313,12 @@
 	/**
 	 *
 	 */
-	_api.register( 'row()', function ( selector, opts ) {
+	_api_register( 'row()', function ( selector, opts ) {
 		return _selector_first( this.rows( selector, opts ) );
 	} );
 	
 	
-	_api.register( 'row().data()', function ( data ) {
+	_api_register( 'row().data()', function ( data ) {
 		var ctx = this.context;
 	
 		if ( data === undefined ) {
@@ -7447,7 +7338,7 @@
 	} );
 	
 	
-	_api.register( 'row.add()', function ( row ) {
+	_api_register( 'row.add()', function ( row ) {
 		// Allow a jQuery object to be passed in - only a single row is added from
 		// it though - the first element in the set
 		if ( row instanceof $ && row.length ) {
@@ -7467,16 +7358,7 @@
 	
 	
 	
-	}());
-	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _api = DataTable.Api;
-	
-	
-	var details_add = function ( ctx, row, data, klass )
+	var __details_add = function ( ctx, row, data, klass )
 	{
 		// Convert to array of TR elements
 		var rows = [];
@@ -7511,7 +7393,7 @@
 	};
 	
 	
-	var details_display = function ( show ) {
+	var __details_display = function ( show ) {
 		var ctx = this.context;
 	
 		if ( ctx.length && this.length ) {
@@ -7526,7 +7408,7 @@
 					row._details.remove();
 				}
 	
-				details_events( ctx[0] );
+				__details_events( ctx[0] );
 			}
 		}
 	
@@ -7534,7 +7416,7 @@
 	};
 	
 	
-	var details_events = function ( settings )
+	var __details_events = function ( settings )
 	{
 		var table = $(settings.nTable);
 	
@@ -7576,7 +7458,7 @@
 	//  tr
 	//  string
 	//  jQuery or array of any of the above
-	_api.register( 'row().child()', function ( data, klass ) {
+	_api_register( 'row().child()', function ( data, klass ) {
 		var ctx = this.context;
 	
 		if ( ! data ) {
@@ -7587,27 +7469,27 @@
 		}
 		else if ( ctx.length && this.length ) {
 			// set
-			details_add( ctx[0], ctx[0].aoData[ this[0] ], data, klass );
+			__details_add( ctx[0], ctx[0].aoData[ this[0] ], data, klass );
 		}
 	
 		return this;
 	} );
 	
-	_api.register( [
+	_api_register( [
 		'row().child.show()',
 		'row().child().show()'
 	], function () {
-		details_display.call( this, true );
+		__details_display.call( this, true );
 	} );
 	
-	_api.register( [
+	_api_register( [
 		'row().child.hide()',
 		'row().child().hide()'
 	], function () {
-		details_display.call( this, false );
+		__details_display.call( this, false );
 	} );
 	
-	_api.register( 'row().child.isShown()', function () {
+	_api_register( 'row().child.isShown()', function () {
 		var ctx = this.context;
 	
 		if ( ctx.length && this.length ) {
@@ -7618,15 +7500,77 @@
 	} );
 	
 	
-	}());
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Columns
+	 *
+	 * {integer}           - column index
+	 * "{integer}"         - column index
+	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)
+	 * "{integer}:visible" - alias for {integer}:visIdx
+	 * "{string}"          - column name
+	 * "{string}:jq"       - jQuery selector on column header nodes
+	 *
+	 */
+	
+	// can be an array of these items, comma separated list, or an array of comma
+	// separated lists
+	
+	var __re_column_selector = /^(.*):(jq|visIdx|visible)$/;
+	
+	var __column_selector = function ( settings, selector, opts )
+	{
+		var
+			columns = settings.aoColumns,
+			names = _pluck( columns, 'sName' ),
+			nodes = _pluck( columns, 'nTh' );
+	
+		return _selector_run( selector, function ( s ) {
+			var selInt = _intVal( s );
+	
+			if ( s === '' ) {
+				// All columns
+				return _range( settings.aoColumns.length );
+			}
+			else if ( selInt !== null ) {
+				// Integer selector
+				return [ selInt ];
+			}
+			else {
+				var match = s.match( __re_column_selector );
+	
+				if ( match ) {
+					switch( match[2] ) {
+						case 'visIdx':
+						case 'visible':
+							// Visible index given, convert to column index
+							return [ _fnVisibleToColumnIndex( settings, parseInt( match[1], 10 ) ) ];
+	
+						case 'jq':
+							// jQuery selector on the TH elements for the columns
+							return $( nodes )
+								.filter( match[1] )
+								.map( function () {
+									return $.inArray( this, nodes ); // `nodes` is column index complete and in order
+								} )
+								.toArray();
+					}
+				}
+				else {
+					// match by name. `names` is column index complete and in order
+					return $.map( names, function (name, i) {
+						return name === s ? i : null;
+					} );
+				}
+			}
+		} );
+	};
 	
 	
 	
-	(/** @lends <global> */function() {
 	
-	var _api = DataTable.Api;
 	
-	var _setColumnVis = function ( settings, column, vis ) {
+	var __setColumnVis = function ( settings, column, vis ) {
 		var
 			cols = settings.aoColumns,
 			col  = cols[ column ],
@@ -7692,7 +7636,7 @@
 	/**
 	 *
 	 */
-	_api.register( 'columns()', function ( selector, opts ) {
+	_api_register( 'columns()', function ( selector, opts ) {
 		// argument shifting
 		if ( selector === undefined ) {
 			selector = '';
@@ -7705,7 +7649,7 @@
 		opts = _selector_opts( opts );
 	
 		var inst = this.iterator( 'table', function ( settings ) {
-			return _column_selector( settings, selector, opts );
+			return __column_selector( settings, selector, opts );
 		} );
 	
 		// Want argument shifting here and in _row_selector?
@@ -7719,7 +7663,7 @@
 	/**
 	 *
 	 */
-	_api.registerPlural( 'columns().header()', 'column().header()', function ( selector, opts ) {
+	_api_registerPlural( 'columns().header()', 'column().header()', function ( selector, opts ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return settings.aoColumns[column].nTh;
 		} );
@@ -7729,7 +7673,7 @@
 	/**
 	 *
 	 */
-	_api.registerPlural( 'columns().data()', 'column().data()', function () {
+	_api_registerPlural( 'columns().data()', 'column().data()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			var a = [];
 			for ( var row=0, ien=rows.length ; row<ien ; row++ ) {
@@ -7740,7 +7684,7 @@
 	} );
 	
 	
-	_api.registerPlural( 'columns().cache()', 'column().cache()', function ( type ) {
+	_api_registerPlural( 'columns().cache()', 'column().cache()', function ( type ) {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows,
 				type === 'filter' ? '_aFilterData' : '_aSortData', column
@@ -7749,7 +7693,7 @@
 	} );
 	
 	
-	_api.registerPlural( 'columns().nodes()', 'columns().nodes()', function () {
+	_api_registerPlural( 'columns().nodes()', 'columns().nodes()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
 		} );
@@ -7757,15 +7701,15 @@
 	
 	
 	
-	_api.registerPlural( 'columns().visible()', 'column().visible()', function ( vis ) {
+	_api_registerPlural( 'columns().visible()', 'column().visible()', function ( vis ) {
 		return this.iterator( 'column', function ( settings, column ) {
-			return _setColumnVis( settings, column, vis );
+			return __setColumnVis( settings, column, vis );
 		} );
 	} );
 	
 	
 	
-	_api.registerPlural( 'columns().index()', 'column().index()', function ( type ) {
+	_api_registerPlural( 'columns().index()', 'column().index()', function ( type ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return type === 'visible' ?
 				_fnColumnIndexToVisible( settings, column ) :
@@ -7774,20 +7718,20 @@
 	} );
 	
 	
-	// _api.register( 'columns().show()', function () {
+	// _api_register( 'columns().show()', function () {
 	// 	var selector = this.selector;
 	// 	return this.columns( selector.cols, selector.opts ).visible( true );
 	// } );
 	
 	
-	// _api.register( 'columns().hide()', function () {
+	// _api_register( 'columns().hide()', function () {
 	// 	var selector = this.selector;
 	// 	return this.columns( selector.cols, selector.opts ).visible( false );
 	// } );
 	
 	
 	
-	_api.register( 'columns.adjust()', function () {
+	_api_register( 'columns.adjust()', function () {
 		return this.iterator( 'table', function ( settings ) {
 			_fnAdjustColumnSizing( settings );
 		} );
@@ -7795,7 +7739,7 @@
 	
 	
 	// Convert from one column index type, to another type
-	_api.register( 'column.index()', function ( type, idx ) {
+	_api_register( 'column.index()', function ( type, idx ) {
 		if ( this.context.length !== 0 ) {
 			var ctx = this.context[0];
 	
@@ -7809,22 +7753,58 @@
 	} );
 	
 	
-	
-	_api.register( 'column()', function ( selector, opts ) {
+	_api_register( 'column()', function ( selector, opts ) {
 		return _selector_first( this.columns( selector, opts ) );
 	} );
 	
 	
-	}());
+	
+	
+	var __cell_selector = function ( settings, selector, opts )
+	{
+		var data = settings.aoData;
+		var rows = _selector_row_indexes( settings, opts );
+		var cells = _pluck_order( data, rows, 'anCells' );
+		var allCells = $( [].concat.apply([], cells) );
+		var row;
+		var columns = settings.aoColumns.length;
+		var a, i, ien, j;
+	
+		return _selector_run( selector, function ( s ) {
+			if ( ! s ) {
+				// All cells
+				a = [];
+	
+				for ( i=0, ien=rows.length ; i<ien ; i++ ) {
+					row = rows[i];
+	
+					for ( j=0 ; j<columns ; j++ ) {
+						a.push( {
+							row: row,
+							column: j
+						} );
+					}
+				}
+	
+				return a;
+			}
+	
+			// jQuery filtered cells
+			return allCells.filter( s ).map( function (i, el) {
+				row = el.parentNode._DT_RowIndex;
+	
+				return {
+					row: row,
+					column: $.inArray( el, data[ row ].anCells )
+				};
+			} );
+		} );
+	};
 	
 	
 	
-	(/** @lends <global> */function() {
 	
-	var _api = DataTable.Api;
-	
-	
-	_api.register( 'cells()', function ( rowSelector, columnSelector, opts ) {
+	_api_register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 		// Argument shifting
 		if ( $.isPlainObject( rowSelector ) ) {
 			opts = rowSelector;
@@ -7838,7 +7818,7 @@
 		// Cell selector
 		if ( columnSelector === null || columnSelector === undefined ) {
 			return this.iterator( 'table', function ( settings ) {
-				return _cell_selector( settings, rowSelector, _selector_opts( opts ) );
+				return __cell_selector( settings, rowSelector, _selector_opts( opts ) );
 			} );
 		}
 	
@@ -7872,21 +7852,21 @@
 	} );
 	
 	
-	_api.registerPlural( 'cells().nodes()', 'cell().nodes()', function () {
+	_api_registerPlural( 'cells().nodes()', 'cell().nodes()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return settings.aoData[ row ].anCells[ column ];
 		} );
 	} );
 	
 	
-	_api.register( 'cells().data()', function () {
+	_api_register( 'cells().data()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return _fnGetCellData( settings, row, column );
 		} );
 	} );
 	
 	
-	_api.registerPlural( 'cells().cache()', 'cell().cache()', function ( type ) {
+	_api_registerPlural( 'cells().cache()', 'cell().cache()', function ( type ) {
 		type = type === 'filter' ? '_aFilterData' : '_aSortData';
 	
 		return this.iterator( 'cell', function ( settings, row, column ) {
@@ -7895,7 +7875,7 @@
 	} );
 	
 	
-	_api.registerPlural( 'cells().index()', 'cell().index()', function () {
+	_api_registerPlural( 'cells().index()', 'cell().index()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return {
 				row: row,
@@ -7906,7 +7886,7 @@
 	} );
 	
 	
-	_api.register( [
+	_api_register( [
 		'cells().invalidate()',
 		'cell().invalidate()'
 	], function ( src ) {
@@ -7923,13 +7903,13 @@
 	
 	
 	
-	_api.register( 'cell()', function ( rowSelector, columnSelector, opts ) {
+	_api_register( 'cell()', function ( rowSelector, columnSelector, opts ) {
 		return _selector_first( this.cells( rowSelector, columnSelector, opts ) );
 	} );
 	
 	
 	
-	_api.register( 'cell().data()', function ( data ) {
+	_api_register( 'cell().data()', function ( data ) {
 		var ctx = this.context;
 		var cell = this[0];
 	
@@ -7947,15 +7927,6 @@
 		return this;
 	} );
 	
-	
-	
-	}());
-	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _Api = DataTable.Api;
 	
 	
 	/**
@@ -7986,7 +7957,7 @@
 	 * @param {array} order 2D array of sorting information to be applied.
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'order()', function ( order, dir ) {
+	_api_register( 'order()', function ( order, dir ) {
 		var ctx = this.context;
 	
 		if ( order === undefined ) {
@@ -8023,7 +7994,7 @@
 	 * @param {function} [callback] callback function when sort is run
 	 * @returns {DataTables.Api} this
 	 */
-	_Api.register( 'order.listener()', function ( node, column, callback ) {
+	_api_register( 'order.listener()', function ( node, column, callback ) {
 		return this.iterator( 'table', function ( settings ) {
 			_fnSortAttachListener( settings, node, column, callback );
 		} );
@@ -8031,7 +8002,7 @@
 	
 	
 	// Order by the selected column(s)
-	_Api.register( [
+	_api_register( [
 		'columns().order()',
 		'column().order()'
 	], function ( dir ) {
@@ -8049,19 +8020,8 @@
 	} );
 	
 	
-	}());
 	
-	
-	
-	(/** @lends <global> */function() {
-	
-	var _api = DataTable.Api;
-	var _null_or_undefined = function ( param ) {
-		return param === null || param === undefined;
-	};
-	
-	
-	_api.register( 'search()', function ( input, regex, smart, caseInsen ) {
+	_api_register( 'search()', function ( input, regex, smart, caseInsen ) {
 		return this.iterator( 'table', function ( settings ) {
 			if ( ! settings.oFeatures.bFilter ) {
 				return;
@@ -8077,7 +8037,7 @@
 	} );
 	
 	
-	_api.register( [
+	_api_register( [
 		'columns().search()',
 		'column().search()'
 	], function ( input, regex, smart, caseInsen ) {
@@ -8096,9 +8056,6 @@
 			_fnFilterComplete( settings, settings.oPreviousSearch, 1 );
 		} );
 	} );
-	
-	
-	}());
 	
 	
 	
@@ -8230,15 +8187,10 @@
 	
 	
 	
-	(/** @lends <global> */function() {
-	
-	var _api = DataTable.Api;
-	
-	
 	/**
 	 *
 	 */
-	_api.register( '$()', function ( selector, opts ) {
+	_api_register( '$()', function ( selector, opts ) {
 		var
 			rows   = this.rows( opts ).nodes(), // Get all rows
 			jqRows = $(rows);
@@ -8252,7 +8204,7 @@
 	
 	// jQuery functions to operate on the tables
 	$.each( [ 'on', 'one', 'off' ], function (i, key) {
-		_api.register( key+'()', function ( /* ... */ ) {
+		_api_register( key+'()', function ( /* ... */ ) {
 			var inst = $( this.tables().nodes() );
 			inst[key].apply( inst, arguments );
 			return this;
@@ -8260,26 +8212,26 @@
 	} );
 	
 	
-	_api.register( 'clear()', function () {
+	_api_register( 'clear()', function () {
 		return this.iterator( 'table', function ( settings ) {
 			_fnClearTable( settings );
 		} );
 	} );
 	
 	
-	_api.register( 'settings()', function () {
+	_api_register( 'settings()', function () {
 		return new _api( this.context, this.context );
 	} );
 	
 	
-	_api.register( 'data()', function () {
+	_api_register( 'data()', function () {
 		return this.iterator( 'table', function ( settings ) {
 			return _pluck( settings.aoData, '_aData' );
 		} ).flatten();
 	} );
 	
 	
-	_api.register( 'plugin()', function ( type ) {
+	_api_register( 'plugin()', function ( type ) {
 		var ctx = this.context;
 	
 		if ( ! ctx.length ) {
@@ -8295,7 +8247,7 @@
 				plugins;
 	} );
 	
-	_api.register( 'plugin.register()', function ( type, inst ) {
+	_api_register( 'plugin.register()', function ( type, inst ) {
 		return this.iterator( 'table', function ( settings ) {
 			var plugins = settings.oPlugins;
 	
@@ -8307,7 +8259,7 @@
 		} );
 	} );
 	
-	_api.register( 'plugin.deregister()', function ( type, inst ) {
+	_api_register( 'plugin.deregister()', function ( type, inst ) {
 		return this.iterator( 'table', function ( settings ) {
 			var plugins = settings.oPlugins[ type ];
 	
@@ -8322,7 +8274,7 @@
 	} );
 	
 	
-	_api.register( 'destroy()', function ( remove ) {
+	_api_register( 'destroy()', function ( remove ) {
 		remove = remove || false;
 	
 		return this.iterator( 'table', function ( settings ) {
@@ -8347,7 +8299,7 @@
 	
 			// If not being removed from the document, make all columns visible
 			if ( ! remove ) {
-				new _api( settings ).columns().visible( true );
+				new _Api( settings ).columns().visible( true );
 			}
 	
 			// Blitz all DT events
@@ -8421,10 +8373,6 @@
 			}
 		} );
 	} );
-	
-	
-	
-	}());
 	
 
 	/**
@@ -12732,7 +12680,7 @@
 	 *
 	 *  @namespace
 	 */
-	DataTable.ext = {
+	DataTable.ext = _ext = {
 		/**
 		 * Element class names
 		 *
@@ -13186,23 +13134,17 @@
 	//
 	// Backwards compatibility. Alias to pre 1.10 Hungarian notation counter parts
 	//
-	(function () {
-	
-	var ext = DataTable.ext;
-	
-	$.extend( ext, {
-		afnFiltering: ext.filter,
-		aTypes:       ext.type.detect,
-		ofnSearch:    ext.type.filter,
-		oSort:        ext.type.sort,
-		afnSortData:  ext.sort,
-		aoFeatures:   ext.feature,
-		oApi:         ext.internal,
-		oStdClasses:  ext.classes,
-		oPagination:  ext.pager
+	$.extend( _ext, {
+		afnFiltering: _ext.filter,
+		aTypes:       _ext.type.detect,
+		ofnSearch:    _ext.type.filter,
+		oSort:        _ext.type.sort,
+		afnSortData:  _ext.sort,
+		aoFeatures:   _ext.feature,
+		oApi:         _ext.internal,
+		oStdClasses:  _ext.classes,
+		oPagination:  _ext.pager
 	} );
-	
-	}());
 	
 	
 	$.extend( DataTable.ext.classes, {
@@ -13319,9 +13261,6 @@
 	
 	}());
 	
-	
-	
-	(function() {
 	
 	
 	var extPagination = DataTable.ext.pager;
@@ -13469,10 +13408,8 @@
 	} );
 	
 	
-	}());
 	
-	
-	var _numericReplace = function ( d, re1, re2 ) {
+	var __numericReplace = function ( d, re1, re2 ) {
 		if ( !d || d === '-' ) {
 			return -Infinity;
 		}
@@ -13501,25 +13438,25 @@
 		// Plain numbers
 		"numeric-pre": function ( d )
 		{
-			return _numericReplace( d );
+			return __numericReplace( d );
 		},
 	
 		// Formatted numbers
 		"numeric-fmt-pre": function ( d )
 		{
-			return _numericReplace( d, _re_formatted_numeric );
+			return __numericReplace( d, _re_formatted_numeric );
 		},
 	
 		// HTML numeric
 		"html-numeric-pre": function ( d )
 		{
-			return _numericReplace( d, _re_html );
+			return __numericReplace( d, _re_html );
 		},
 	
 		// HTML numeric, formatted
 		"html-numeric-fmt-pre": function ( d )
 		{
-			return _numericReplace( d, _re_html, _re_formatted_numeric );
+			return __numericReplace( d, _re_html, _re_formatted_numeric );
 		},
 	
 		// html
@@ -13552,46 +13489,6 @@
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 		}
 	} );
-	
-	
-	var _re_formatted_numeric = /[',$£€¥]/g;
-	var _re_html = /<.*?>/g;
-	
-	
-	var _empty = function ( d ) {
-		return !d || d === '-' ? true : false;
-	};
-	
-	
-	var _isNumber = function ( d, formatted ) {
-		if ( formatted && typeof d === 'string' ) {
-			d = d.replace( _re_formatted_numeric, '' );
-		}
-	
-		return !d || d==='-' || (!isNaN( parseFloat(d) ) && isFinite( d ));
-	};
-	
-	// A string without HTML in it can be considered to be HTML still
-	var _isHtml = function ( d ) {
-		return !d || typeof d === 'string';
-	};
-	
-	var _stripHtml = function ( d ) {
-		return d.replace( _re_html, '' );
-	};
-	
-	var _htmlNumeric = function ( d, formatted ) {
-		if ( _empty( d ) ) {
-			return true;
-		}
-	
-		var html = _isHtml( d );
-		return ! html ?
-			null :
-			_isNumber( _stripHtml( d ), formatted ) ?
-				true :
-				null;
-	};
 	
 	
 	// Built in type detection. See model.ext.aTypes for information about
@@ -13641,8 +13538,6 @@
 	// Filter formatting functions. See model.ext.ofnSearch for information about
 	// what is required from these methods.
 	
-	var __filter_lines = /[\r\n]/g;
-	var __filter_html = /[\r\n]/g;
 	
 	$.extend( DataTable.ext.type.filter, {
 		html: function ( data ) {
@@ -13650,8 +13545,8 @@
 				'' :
 				typeof data === 'string' ?
 					data
-						.replace( __filter_lines, " " )
-						.replace( __filter_html, "" ) :
+						.replace( _re_new_lines, " " )
+						.replace( _re_html, "" ) :
 					'';
 		},
 	
@@ -13659,7 +13554,7 @@
 			return _empty(data) ?
 				'' :
 				typeof data === 'string' ?
-					data.replace( __filter_lines, " " ) :
+					data.replace( _re_new_lines, " " ) :
 					data;
 		}
 	} );
