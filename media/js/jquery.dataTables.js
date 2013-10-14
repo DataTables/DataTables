@@ -2531,7 +2531,7 @@
 		{
 			return DataTable.ext.ofnSearch[sType]( sData );
 		}
-		else if ( sData === null )
+		else if ( sData === null || typeof sData === "undefined" )
 		{
 			return '';
 		}
