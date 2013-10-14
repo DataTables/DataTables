@@ -2156,8 +2156,9 @@
 		var baseAjax = {
 			"data": data,
 			"success": function (json) {
-				if ( json.sError ) {
-					oSettings.oApi._fnLog( oSettings, 0, json.sError );
+				var error = json.error || json.sError;
+				if ( error ) {
+					oSettings.oApi._fnLog( oSettings, 0, error );
 				}
 	
 				oSettings.json = json;
@@ -2341,41 +2342,45 @@
 	 *  @param {string} [json.sColumns] Column ordering (sName, comma separated)
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnAjaxUpdateDraw ( oSettings, json )
+	function _fnAjaxUpdateDraw ( settings, json )
 	{
-		if ( json.sEcho !== undefined )
-		{
-			/* Protect against old returns over-writing a new one. Possible when you get
-			 * very fast interaction, and later queries are completed much faster
-			 */
-			if ( json.sEcho*1 < oSettings.iDraw )
-			{
+		// v1.10 uses camelCase variables, while 1.9 uses Hungarian notation.
+		// Support both
+		var compat = function ( old, modern ) {
+			return json[old] !== undefined ? json[old] : json[modern];
+		};
+	
+		var draw            = compat( 'sEcho',                'draw' );
+		var recordsTotal    = compat( 'iTotalRecords',        'recordsTotal' );
+		var rocordsFiltered = compat( 'iTotalDisplayRecords', 'recordsFiltered' );
+	
+		if ( draw ) {
+			// Protect against out of sequence returns
+			if ( draw*1 < settings.iDraw ) {
 				return;
 			}
-			oSettings.iDraw = json.sEcho * 1;
+			settings.iDraw = draw * 1;
 		}
 	
-		_fnClearTable( oSettings );
-		oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
-		oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
+		_fnClearTable( settings );
+		settings._iRecordsTotal   = parseInt(recordsTotal, 10);
+		settings._iRecordsDisplay = parseInt(rocordsFiltered, 10);
 	
-		var aData = _fnAjaxDataSrc( oSettings, json );
-		for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
-		{
-			_fnAddData( oSettings, aData[i] );
+		var data = _fnAjaxDataSrc( settings, json );
+		for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+			_fnAddData( settings, data[i] );
 		}
-		oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+		settings.aiDisplay = settings.aiDisplayMaster.slice();
 	
-		oSettings.bAjaxDataGet = false;
-		_fnDraw( oSettings );
+		settings.bAjaxDataGet = false;
+		_fnDraw( settings );
 	
-		if ( ! oSettings._bInitComplete )
-		{
-			_fnInitComplete( oSettings, json );
+		if ( ! settings._bInitComplete ) {
+			_fnInitComplete( settings, json );
 		}
 	
-		oSettings.bAjaxDataGet = true;
-		_fnProcessingDisplay( oSettings, false );
+		settings.bAjaxDataGet = true;
+		_fnProcessingDisplay( settings, false );
 	}
 	
 	
