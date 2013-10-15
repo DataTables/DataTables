@@ -90,10 +90,10 @@
 	
 	
 	// Defined else where
-	// 	_selector_run
-	// 	_selector_opts
-	// 	_selector_first
-	// 	_selector_row_indexes
+	//  _selector_run
+	//  _selector_opts
+	//  _selector_first
+	//  _selector_row_indexes
 	
 	var _ext; // DataTable.ext
 	var _Api; // DataTable.Api
@@ -8244,7 +8244,7 @@
 	
 	
 	_api_register( 'settings()', function () {
-		return new _api( this.context, this.context );
+		return new _Api( this.context, this.context );
 	} );
 	
 	
