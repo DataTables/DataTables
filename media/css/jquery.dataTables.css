@@ -94,8 +94,14 @@ table.dataTable.cell-border tbody tr:last-child td {
 table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
   background-color: #f9f9f9;
 }
+table.dataTable.stripe tbody tr.odd.selected, table.dataTable.display tbody tr.odd.selected {
+  background-color: #abb9d3;
+}
 table.dataTable.stripe tbody tr.even, table.dataTable.display tbody tr.even {
   background-color: white;
+}
+table.dataTable.stripe tbody tr.even.selected, table.dataTable.display tbody tr.even.selected {
+  background-color: #b0bed9;
 }
 table.dataTable.hover tbody tr:hover,
 table.dataTable.hover tbody tr.odd:hover,
@@ -104,12 +110,26 @@ table.dataTable.display tbody tr.odd:hover,
 table.dataTable.display tbody tr.even:hover {
   background-color: whitesmoke;
 }
+table.dataTable.hover tbody tr:hover.selected,
+table.dataTable.hover tbody tr.odd:hover.selected,
+table.dataTable.hover tbody tr.even:hover.selected, table.dataTable.display tbody tr:hover.selected,
+table.dataTable.display tbody tr.odd:hover.selected,
+table.dataTable.display tbody tr.even:hover.selected {
+  background-color: #a9b7d1;
+}
 table.dataTable.sort-column tbody tr > .sorting_1,
 table.dataTable.sort-column tbody tr > .sorting_2,
 table.dataTable.sort-column tbody tr > .sorting_3, table.dataTable.display tbody tr > .sorting_1,
 table.dataTable.display tbody tr > .sorting_2,
 table.dataTable.display tbody tr > .sorting_3 {
   background-color: #f9f9f9;
+}
+table.dataTable.sort-column tbody tr.selected > .sorting_1,
+table.dataTable.sort-column tbody tr.selected > .sorting_2,
+table.dataTable.sort-column tbody tr.selected > .sorting_3, table.dataTable.display tbody tr.selected > .sorting_1,
+table.dataTable.display tbody tr.selected > .sorting_2,
+table.dataTable.display tbody tr.selected > .sorting_3 {
+  background-color: #acbad4;
 }
 table.dataTable.display tbody tr.odd > .sorting_1, table.dataTable.sort-column.stripe tbody tr.odd > .sorting_1 {
   background-color: #f1f1f1;
@@ -120,6 +140,15 @@ table.dataTable.display tbody tr.odd > .sorting_2, table.dataTable.sort-column.s
 table.dataTable.display tbody tr.odd > .sorting_3, table.dataTable.sort-column.stripe tbody tr.odd > .sorting_3 {
   background-color: whitesmoke;
 }
+table.dataTable.display tbody tr.odd.selected > .sorting_1, table.dataTable.sort-column.stripe tbody tr.odd.selected > .sorting_1 {
+  background-color: #a6b3cd;
+}
+table.dataTable.display tbody tr.odd.selected > .sorting_2, table.dataTable.sort-column.stripe tbody tr.odd.selected > .sorting_2 {
+  background-color: #a7b5ce;
+}
+table.dataTable.display tbody tr.odd.selected > .sorting_3, table.dataTable.sort-column.stripe tbody tr.odd.selected > .sorting_3 {
+  background-color: #a9b6d0;
+}
 table.dataTable.display tbody tr.even > .sorting_1, table.dataTable.sort-column.stripe tbody tr.even > .sorting_1 {
   background-color: #f9f9f9;
 }
@@ -128,6 +157,15 @@ table.dataTable.display tbody tr.even > .sorting_2, table.dataTable.sort-column.
 }
 table.dataTable.display tbody tr.even > .sorting_3, table.dataTable.sort-column.stripe tbody tr.even > .sorting_3 {
   background-color: #fdfdfd;
+}
+table.dataTable.display tbody tr.even.selected > .sorting_1, table.dataTable.sort-column.stripe tbody tr.even.selected > .sorting_1 {
+  background-color: #acbad4;
+}
+table.dataTable.display tbody tr.even.selected > .sorting_2, table.dataTable.sort-column.stripe tbody tr.even.selected > .sorting_2 {
+  background-color: #adbbd6;
+}
+table.dataTable.display tbody tr.even.selected > .sorting_3, table.dataTable.sort-column.stripe tbody tr.even.selected > .sorting_3 {
+  background-color: #afbdd8;
 }
 table.dataTable.display tbody tr:hover > .sorting_1,
 table.dataTable.display tbody tr.odd:hover > .sorting_1,
@@ -150,6 +188,27 @@ table.dataTable.sort-column.hover tbody tr.odd:hover > .sorting_3,
 table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
   background-color: #eeeeee;
 }
+table.dataTable.display tbody tr:hover.selected > .sorting_1,
+table.dataTable.display tbody tr.odd:hover.selected > .sorting_1,
+table.dataTable.display tbody tr.even:hover.selected > .sorting_1, table.dataTable.sort-column.hover tbody tr:hover.selected > .sorting_1,
+table.dataTable.sort-column.hover tbody tr.odd:hover.selected > .sorting_1,
+table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_1 {
+  background-color: #a1aec7;
+}
+table.dataTable.display tbody tr:hover.selected > .sorting_2,
+table.dataTable.display tbody tr.odd:hover.selected > .sorting_2,
+table.dataTable.display tbody tr.even:hover.selected > .sorting_2, table.dataTable.sort-column.hover tbody tr:hover.selected > .sorting_2,
+table.dataTable.sort-column.hover tbody tr.odd:hover.selected > .sorting_2,
+table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_2 {
+  background-color: #a2afc8;
+}
+table.dataTable.display tbody tr:hover.selected > .sorting_3,
+table.dataTable.display tbody tr.odd:hover.selected > .sorting_3,
+table.dataTable.display tbody tr.even:hover.selected > .sorting_3, table.dataTable.sort-column.hover tbody tr:hover.selected > .sorting_3,
+table.dataTable.sort-column.hover tbody tr.odd:hover.selected > .sorting_3,
+table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_3 {
+  background-color: #a4b2cb;
+}
 
 /*
  * Control feature layout
@@ -158,6 +217,7 @@ table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
   position: relative;
   clear: both;
   *zoom: 1;
+  zoom: 1;
 }
 .dataTables_wrapper .dataTables_length {
   float: left;
@@ -165,6 +225,9 @@ table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
 .dataTables_wrapper .dataTables_filter {
   float: right;
   text-align: right;
+}
+.dataTables_wrapper .dataTables_filter input {
+  margin-left: 0.5em;
 }
 .dataTables_wrapper .dataTables_info {
   clear: both;
@@ -190,7 +253,7 @@ table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
   color: #333333 !important;
-  border: 1px solid gainsboro;
+  border: 1px solid #cacaca;
   background-color: white;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, gainsboro));
   /* Chrome,Safari4+ */
@@ -283,4 +346,11 @@ table.dataTable.sort-column.hover tbody tr.even:hover > .sorting_3 {
 .dataTables_wrapper .dataTables_scrollBody {
   *margin-top: -1px;
   -webkit-overflow-scrolling: touch;
+}
+.dataTables_wrapper:after {
+  visibility: hidden;
+  display: block;
+  content: "";
+  clear: both;
+  height: 0;
 }
