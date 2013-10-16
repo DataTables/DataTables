@@ -4,7 +4,7 @@ DataTables is a table enhancing plug-in for the [jQuery](//jquery.com) Javascrip
 
 > To enhance the accessibility of data in HTML tables.
 
-To met this goal, DataTables is developed with two distinct groups of users in mind:
+To meet this goal, DataTables is developed with two distinct groups of users in mind:
 
 * You the developers using DataTables. For developers DataTables provides a wide array of options for how data should be obtained, displayed and acted upon, along with an extensive API for accessing and manipulating the table.
 
