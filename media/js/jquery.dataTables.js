@@ -6932,7 +6932,7 @@
 		var ctx = this.context;
 	
 		if ( ctx.length > 0 ) {
-			return this.context.json;
+			return ctx[0].json;
 		}
 	
 		// else return undefined;
