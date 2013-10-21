@@ -1,4 +1,4 @@
-/**
+/*!
  * @summary     DataTables
  * @description Paginate, search and sort HTML tables
  * @version     1.10.0-dev
