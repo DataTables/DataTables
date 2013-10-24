@@ -203,6 +203,14 @@ table.dataTable.sort-column.hover tbody tr.even:hover.selected > .sorting_3 {
   background-color: #a4b2cb;
 }
 
+table.dataTable,
+table.dataTable th,
+table.dataTable td {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
 /*
  * Control feature layout
  */
