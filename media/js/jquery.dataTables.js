@@ -2112,7 +2112,8 @@
 		}
 		oSettings._iRecordsTotal = parseInt(json.iTotalRecords, 10);
 		oSettings._iRecordsDisplay = parseInt(json.iTotalDisplayRecords, 10);
-		
+		oSettings._iDisplayStart = parseInt(json.iDisplayStart, 10);
+
 		var aData = _fnAjaxDataSrc( oSettings, json );
 		for ( var i=0, iLen=aData.length ; i<iLen ; i++ )
 		{
