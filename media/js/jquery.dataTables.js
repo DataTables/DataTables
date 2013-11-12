@@ -10080,7 +10080,7 @@
 		/**
 		 * Duration for which the saved state information is considered valid. After this period
 		 * has elapsed the state will be returned to the default.
-		 * value is given in seconds.
+		 * Value is given in seconds.
 		 *  @type int
 		 *  @default 7200 <i>(2 hours)</i>
 		 *
