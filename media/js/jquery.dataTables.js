@@ -7682,6 +7682,16 @@
 	/**
 	 *
 	 */
+	_api_registerPlural( 'columns().footer()', 'column().footer()', function ( selector, opts ) {
+		return this.iterator( 'column', function ( settings, column ) {
+			return settings.aoColumns[column].nTf;
+		} );
+	} );
+	
+	
+	/**
+	 *
+	 */
 	_api_registerPlural( 'columns().data()', 'column().data()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			var a = [];
@@ -9243,7 +9253,7 @@
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "ajaxSource": "sources/arrays.txt",
+		 *        "ajax": "sources/arrays.txt",
 		 *        "deferRender": true
 		 *      } );
 		 *    } );
@@ -9465,7 +9475,7 @@
 	
 		/**
 		 * Configure DataTables to use server-side processing. Note that the
-		 * `ajaxSource` parameter must also be given in order to give DataTables a
+		 * `ajax` parameter must also be given in order to give DataTables a
 		 * source to obtain the required data for each draw.
 		 *  @type boolean
 		 *  @default false
@@ -9631,7 +9641,7 @@
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "fnDrawCallback": function( settings ) {
+		 *        "drawCallback": function( settings ) {
 		 *          alert( 'DataTables has redrawn the table' );
 		 *        }
 		 *      } );
@@ -9642,7 +9652,7 @@
 	
 		/**
 		 * Identical to fnHeaderCallback() but for the table footer this function
-		 * allows you to modify the table footer on every 'draw' even.
+		 * allows you to modify the table footer on every 'draw' event.
 		 *  @type function
 		 *  @param {node} foot "TR" element for the footer
 		 *  @param {array} data Full table data (as derived from the original HTML)
@@ -9659,8 +9669,8 @@
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "footerCallback": function( foot, data, start, end, display ) {
-		 *          foot.getElementsByTagName('th')[0].innerHTML = "Starting index is "+start;
+		 *        "footerCallback": function( tfoot, data, start, end, display ) {
+		 *          tfoot.getElementsByTagName('th')[0].innerHTML = "Starting index is "+start;
 		 *        }
 		 *      } );
 		 *    } )
@@ -9754,7 +9764,7 @@
 		 *
 		 *  @example
 		 *    $('#example').dataTable( {
-		 *      "infoCallback": function( settings, start, end, nax, total, pre ) {
+		 *      "infoCallback": function( settings, start, end, max, total, pre ) {
 		 *        return start +" to "+ end;
 		 *      }
 		 *    } );
