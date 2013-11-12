@@ -21,14 +21,14 @@
 $(document).ready(function() {
 	var t = $('#example').DataTable( {
 		"columnDefs": [ {
-			"filterable": false,
-			"sortable": false,
+			"searchable": false,
+			"orderable": false,
 			"targets": 0
 		} ],
-		"sorting": [[ 1, 'asc' ]]
+		"order": [[ 1, 'asc' ]]
 	} );
 
-	t.on( 'sort filter', function () {
+	t.on( 'order search', function () {
 		t.column(0, {filter:'applied', order:'applied'}).nodes().each( function (cell, i) {
 			cell.innerHTML = i+1;
 		} );
@@ -47,12 +47,14 @@ $(document).ready(function() {
 			<div class="info">
 				<p>A fairly common requirement for highly interactive tables which are displayed on the web is to have
 				a column which with a 'counter' for the row number. This column should not be sortable, and will change
-				dynamically as the sorting and filtering applied to the table is altered by the end user.</p>
+				dynamically as the ordering and searching applied to the table is altered by the end user.</p>
 
 				<p>This example shows how this can be achieved with DataTables, where the first column is the counter
-				column, and is updated when sorting or filtering occurs. This is done by listening for the
-				<code>sort</code> and <code>filter</code> events emitted by the table. When these events are detected
-				the <a href="//datatables.net/api/column%28%29.nodes%28%29"><code class="api" title=
+				column, and is updated when ordering or searching occurs. This is done by listening for the <a href=
+				"//datatables.net/event/order"><code class="event" title="Event">order</code></a> and <a href=
+				"//datatables.net/event/search"><code class="event" title="Event">search</code></a> events emitted by
+				the table. When these events are detected the <a href=
+				"//datatables.net/api/column%28%29.nodes%28%29"><code class="api" title=
 				"API method">column().nodes()</code></a> method is used to get the TD/TH nodes for the target column
 				and the <code>each()</code> helper function used to iterate over each, which have their contents
 				updated as needed. Note that the <code>filter</code> and <code>order</code> options are using in the
@@ -557,14 +559,14 @@ $(document).ready(function() {
 $(document).ready(function() {
 	var t = $('#example').DataTable( {
 		&quot;columnDefs&quot;: [ {
-			&quot;filterable&quot;: false,
-			&quot;sortable&quot;: false,
+			&quot;searchable&quot;: false,
+			&quot;orderable&quot;: false,
 			&quot;targets&quot;: 0
 		} ],
-		&quot;sorting&quot;: [[ 1, 'asc' ]]
+		&quot;order&quot;: [[ 1, 'asc' ]]
 	} );
 
-	t.on( 'sort filter', function () {
+	t.on( 'order search', function () {
 		t.column(0, {filter:'applied', order:'applied'}).nodes().each( function (cell, i) {
 			cell.innerHTML = i+1;
 		} );
@@ -626,8 +628,8 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -663,7 +665,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -675,7 +678,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -748,10 +751,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

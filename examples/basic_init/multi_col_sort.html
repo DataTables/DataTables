@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 
-	<title>DataTables example - Multi-column sorting</title>
+	<title>DataTables example - Multi-column ordering</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -22,13 +22,13 @@ $(document).ready(function() {
 	$('#example').dataTable( {
 		columnDefs: [ {
 			targets: [ 0 ],
-			dataSort: [ 0, 1 ]
+			orderData: [ 0, 1 ]
 		}, {
 			targets: [ 1 ],
-			dataSort: [ 1, 0 ]
+			orderData: [ 1, 0 ]
 		}, {
 			targets: [ 4 ],
-			dataSort: [ 4, 0 ]
+			orderData: [ 4, 0 ]
 		} ]
 	} );
 } );
@@ -39,33 +39,33 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>- Multi-column sorting</span></h1>
+			<h1>DataTables example <span>- Multi-column ordering</span></h1>
 
 			<div class="info">
-				<p>DataTables allows sorting by multiple columns at the same time, which can be activated in a number
+				<p>DataTables allows ordering by multiple columns at the same time, which can be activated in a number
 				of different ways:</p>
 
 				<ul>
-					<li>User shift click on a column (added the clicked column as a secondary, tertiary etc sorting
+					<li>User shift click on a column (added the clicked column as a secondary, tertiary etc ordering
 					column).</li>
-					<li>On a per-column basis (i.e. sort by a specific column and then a secondary column if the data
+					<li>On a per-column basis (i.e. order by a specific column and then a secondary column if the data
 					in the first column is identical), through the <a href=
-					"//datatables.net/init/dataSort"><code class="option" title=
-					"Initialisation option">dataSort</code></a> option.</li>
-					<li>Using the <a href="//datatables.net/init/sorting"><code class="option" title=
-					"Initialisation option">sorting</code></a> option to specify a multiple column sort by default (for
-					example <code>[ [0,'asc'], [1,'asc'] ]</code>).</li>
+					"//datatables.net/init/orderData"><code class="option" title=
+					"Initialisation option">orderData</code></a> option.</li>
+					<li>Using the <a href="//datatables.net/init/orderData"><code class="option" title=
+					"Initialisation option">orderData</code></a> option to specify a multiple column order by default
+					(for example <code>[ [0,'asc'], [1,'asc'] ]</code>).</li>
 					<li>Through the <a href="//datatables.net/api/order%28%29"><code class="api" title=
 					"API method">order()</code></a> API method.</li>
 				</ul>
 
-				<p>Note that, the ability for the user to shift click to sort multiple columns can be disabled through
-				the <a href="//datatables.net/init/sortMulti"><code class="option" title=
-				"Initialisation option">sortMulti</code></a> option.</p>
+				<p>Note that, the ability for the user to shift click to order multiple columns can be disabled through
+				the <a href="//datatables.net/init/orderMutli"><code class="option" title=
+				"Initialisation option">orderMutli</code></a> option.</p>
 
-				<p>The example below shows the first column having a secondary sort applied to the second column in the
-				table, vice-versa for the second column being tied directly to the first and the salary column to the
-				first name column.</p>
+				<p>The example below shows the first column having a secondary order applied to the second column in
+				the table, vice-versa for the second column being tied directly to the first and the salary column to
+				the first name column.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -497,13 +497,13 @@ $(document).ready(function() {
 	$('#example').dataTable( {
 		columnDefs: [ {
 			targets: [ 0 ],
-			dataSort: [ 0, 1 ]
+			orderData: [ 0, 1 ]
 		}, {
 			targets: [ 1 ],
-			dataSort: [ 1, 0 ]
+			orderData: [ 1, 0 ]
 		}, {
 			targets: [ 4 ],
-			dataSort: [ 4, 0 ]
+			orderData: [ 4, 0 ]
 		} ]
 	} );
 } );
@@ -563,8 +563,8 @@ $(document).ready(function() {
 						<ul class="toc active">
 							<li><a href="./zero_configuration.html">Zero configuration</a></li>
 							<li><a href="./filter_only.html">Feature enable / disable</a></li>
-							<li><a href="./table_sorting.html">Default sorting</a></li>
-							<li class="active"><a href="./multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="./table_sorting.html">Default ordering (sorting)</a></li>
+							<li class="active"><a href="./multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="./multiple_tables.html">Multiple tables</a></li>
 							<li><a href="./hidden_columns.html">Hidden columns</a></li>
 							<li><a href="./complex_header.html">Complex headers (rowspan and colspan)</a></li>
@@ -598,7 +598,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -610,7 +611,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -685,10 +686,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

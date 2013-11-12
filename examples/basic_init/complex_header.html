@@ -32,12 +32,12 @@ $(document).ready(function() {
 			<div class="info">
 				<p>When using tables to display data, you will often wish to display column information in groups.
 				DataTables fully supports <code>colspan</code> and <code>rowspan</code> in the table's header,
-				assigning the required sort listeners to the TH element suitable for that column.</p>
+				assigning the required order listeners to the TH element suitable for that column.</p>
 
 				<p>Each column must have one TH cell which is unique to it for the listeners to be added. By default
-				DataTables will use the bottom unique cell for the column to attach the sort listener, if more than one
-				cell for a column if found. The <a href="//datatables.net/init/sortCellsTop"><code class="option"
-				title="Initialisation option">sortCellsTop</code></a> option can be used to tell DataTables to use the
+				DataTables will use the bottom unique cell for the column to attach the irder listener, if more than
+				one cell for a column if found. The <a href="//datatables.net/init/orderCellsTop"><code class="option"
+				title="Initialisation option">orderCellsTop</code></a> option can be used to tell DataTables to use the
 				top cell if you prefer.</p>
 
 				<p>The example shown below has two sets of grouped information, grouped by colspan in the header.</p>
@@ -600,8 +600,8 @@ $(document).ready(function() {
 						<ul class="toc active">
 							<li><a href="./zero_configuration.html">Zero configuration</a></li>
 							<li><a href="./filter_only.html">Feature enable / disable</a></li>
-							<li><a href="./table_sorting.html">Default sorting</a></li>
-							<li><a href="./multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="./table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="./multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="./multiple_tables.html">Multiple tables</a></li>
 							<li><a href="./hidden_columns.html">Hidden columns</a></li>
 							<li class="active"><a href="./complex_header.html">Complex headers (rowspan and
@@ -636,7 +636,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -648,7 +649,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -723,10 +724,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

@@ -51,20 +51,20 @@ class SSP {
 	{
 		$order = '';
 
-		if ( isset($request['sort']) && count($request['sort']) ) {
+		if ( isset($request['order']) && count($request['order']) ) {
 			$orderBy = array();
 			$dtColumns = SSP::pluck( $columns, 'dt' );
 
-			for ( $i=0, $ien=count($request['sort']) ; $i<$ien ; $i++ ) {
+			for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
 				// Convert the column index into the column data property
-				$columnIdx = intval($request['sort'][$i]['column']);
+				$columnIdx = intval($request['order'][$i]['column']);
 				$requestColumn = $request['columns'][$columnIdx];
 
 				$columnIdx = array_search( $requestColumn['data'], $dtColumns );
 				$column = $columns[ $columnIdx ];
 
-				if ( $requestColumn['sortable'] == 'true' ) {
-					$dir = $request['sort'][$i]['dir'] === 'asc' ?
+				if ( $requestColumn['orderable'] == 'true' ) {
+					$dir = $request['order'][$i]['dir'] === 'asc' ?
 						'ASC' :
 						'DESC';
 
@@ -80,7 +80,7 @@ class SSP {
 
 
 	/**
-	 * Filtering
+	 * Searching / Filtering
 	 *
 	 * Construct the WHERE clause for server-side processing SQL query.
 	 *
@@ -96,12 +96,12 @@ class SSP {
 	 */
 	static function filter ( $request, $columns, &$bindings )
 	{
-		$globalFilter = array();
-		$columnFilter = array();
+		$globalSearch = array();
+		$columnSearch = array();
 		$dtColumns = SSP::pluck( $columns, 'dt' );
 
-		if ( isset($request['filter']) && $request['filter']['value'] != '' ) {
-			$str = $request['filter']['value'];
+		if ( isset($request['search']) && $request['search']['value'] != '' ) {
+			$str = $request['search']['value'];
 
 			for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
 				$requestColumn = $request['columns'][$i];
@@ -110,7 +110,7 @@ class SSP {
 
 				if ( $requestColumn['searchable'] == 'true' ) {
 					$binding = SSP::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-					$globalFilter[] = "`".$column['db']."` LIKE ".$binding;
+					$globalSearch[] = "`".$column['db']."` LIKE ".$binding;
 				}
 			}
 		}
@@ -121,26 +121,26 @@ class SSP {
 			$columnIdx = array_search( $requestColumn['data'], $dtColumns );
 			$column = $columns[ $columnIdx ];
 
-			$str = $requestColumn['filter']['value'];
+			$str = $requestColumn['search']['value'];
 
 			if ( $requestColumn['searchable'] == 'true' &&
 			 $str != '' ) {
 				$binding = SSP::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-				$columnFilter[] = "`".$column['db']."` LIKE ".$binding;
+				$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
 			}
 		}
 
 		// Combine the filters into a single string
 		$where = '';
 
-		if ( count( $globalFilter ) ) {
-			$where = '('.implode(' OR ', $globalFilter).')';
+		if ( count( $globalSearch ) ) {
+			$where = '('.implode(' OR ', $globalSearch).')';
 		}
 
-		if ( count( $columnFilter ) ) {
+		if ( count( $columnSearch ) ) {
 			$where = $where === '' ?
-				implode(' AND ', $globalFilter) :
-				$where .' AND '. implode(' AND ', $globalFilter);
+				implode(' AND ', $globalSearch) :
+				$where .' AND '. implode(' AND ', $globalSearch);
 		}
 
 		if ( $where !== '' ) {

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 
-	<title>DataTables example - Sorting plug-ins (no type detection)</title>
+	<title>DataTables example - Ordering plug-ins (no type detection)</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -18,7 +18,7 @@
 	<script type="text/javascript" language="javascript" class="init">
 
 
-$.fn.dataTable.ext.type.sort['numeric-comma-pre'] = function ( d ) {
+$.fn.dataTable.ext.type.order['numeric-comma-pre'] = function ( d ) {
 	return parseFloat( d.replace(/,/g, '.') ) || 0;
 };
 
@@ -38,25 +38,25 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>- Sorting plug-ins (no type detection)</span></h1>
+			<h1>DataTables example <span>- Ordering plug-ins (no type detection)</span></h1>
 
 			<div class="info">
-				<p>Although DataTables will sort a number of data types using the built in methods, When dealing with
-				more complex formatted data, it can be desirable to define the sorting order yourself. Using plug-in
-				sorting functions, you have have DataTables sort data in any manner you wish.</p>
+				<p>Although DataTables will order a number of data types using the built in methods, When dealing with
+				more complex formatted data, it can be desirable to define the ordering order yourself. Using plug-in
+				ordering functions, you have have DataTables order data in any manner you wish.</p>
 
 				<p>This is done by using the <a href="//datatables.net/init/columns.type"><code class="option" title=
-				"Initialisation option">columns.type</code></a> parameter, in combination with a sorting plug-in. The
-				sorting plug-in can be be of any level of complexity (natural sorting for example can be fairly complex
-				while also very powerful), and is defined by attaching to the <code>$.fn.dataTable.ext.type.sort</code>
-				object. For more information about sorting plug-ins; creating them and their requirements, please refer
-				to the plug-in development documentation.</p>
+				"Initialisation option">columns.type</code></a> parameter, in combination with a ordering plug-in. The
+				ordering plug-in can be be of any level of complexity (natural ordering for example can be fairly
+				complex while also very powerful), and is defined by attaching to the
+				<code>$.fn.dataTable.ext.type.order</code> object. For more information about ordering plug-ins;
+				creating them and their requirements, please refer to the plug-in development documentation.</p>
 
-				<p>This example shows sorting with a comma for a decimal place, as is often used in parts of
+				<p>This example shows ordering with a comma for a decimal place, as is often used in parts of
 				Europe.</p>
 
-				<p>A wide variety of ready made sorting plug-ins can be found on <a href=
-				"//datatables.net/plug-ins/sorting">the DataTables plug-ins page</a>.</p>
+				<p>A wide variety of ready made ordering plug-ins can be found on <a href=
+				"//datatables.net/plug-ins/order">the DataTables plug-ins page</a>.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -553,7 +553,7 @@ $(document).ready(function() {
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
 					<pre class="brush: js;">
-$.fn.dataTable.ext.type.sort['numeric-comma-pre'] = function ( d ) {
+$.fn.dataTable.ext.type.order['numeric-comma-pre'] = function ( d ) {
 	return parseFloat( d.replace(/,/g, '.') ) || 0;
 };
 
@@ -621,8 +621,8 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -658,7 +658,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -670,7 +671,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -745,11 +746,11 @@ $(document).ready(function() {
 						<h3><a href="./index.html">Plug-ins</a></h3>
 						<ul class="toc active">
 							<li><a href="./api.html">API plug-in methods</a></li>
-							<li><a href="./sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li class="active"><a href="./sorting_manual.html">Sorting plug-ins (no type
+							<li><a href="./sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
+							<li class="active"><a href="./sorting_manual.html">Ordering plug-ins (no type
 							detection)</a></li>
 							<li><a href="./range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="./dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="./dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

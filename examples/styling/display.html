@@ -38,14 +38,15 @@ $(document).ready(function() {
 					<li><code>cell-border</code> - Cells with a border</li>
 					<li><code>row-border</code> - Rows with a border (only one of <code>cell-border</code> and
 					<code>row-border</code> should be used for a single table.</li>
-					<li><code>sort-column</code> - Highlight the cells in the column currently being sorted upon</li>
+					<li><code>order-column</code> - Highlight the cells in the column currently being ordering
+					upon</li>
 					<li><code>hover</code> - Highlight a row when hovered over</li>
 				</ul>
 
 				<p>These classes can be combined (simply assign multiple classes to the table) to build up the styling
 				that you want for your table.</p>
 
-				<p>The <code>display</code> class is a short-cut for specifying the <code>stripe hover sort-column
+				<p>The <code>display</code> class is a short-cut for specifying the <code>stripe hover order-column
 				row-border</code> as the class name for a table. This is shown in the example below.</p>
 			</div>
 
@@ -602,8 +603,8 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -639,7 +640,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -651,7 +653,7 @@ $(document).ready(function() {
 							<li><a href="./row-border.html">Base style - row borders</a></li>
 							<li><a href="./cell-border.html">Base style - cell borders</a></li>
 							<li><a href="./hover.html">Base style - hover</a></li>
-							<li><a href="./sort-column.html">Base style - sort-column</a></li>
+							<li><a href="./order-column.html">Base style - order-column</a></li>
 							<li><a href="./stripe.html">Base style - stripe</a></li>
 							<li><a href="./jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="./bootstrap.html">Bootstrap</a></li>
@@ -726,10 +728,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

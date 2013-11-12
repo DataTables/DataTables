@@ -32,28 +32,29 @@ $(document).ready(function() {
 			<h1>DataTables example <span>- HTML5 data-* attributes</span></h1>
 
 			<div class="info">
-				<p>DataTables can use different data for different actions (display, sorting and filtering) which can
+				<p>DataTables can use different data for different actions (display, ordering and searcgubg) which can
 				be immensely powerful for transforming data in the display to be intuitive for the end user, while
 				using different, or more complex data, for other actions. For example, if a table contains a formatted
 				telephone number in the format <code>xxx-xxxx</code>, intuitively a user might search for the number
-				but without a dash. Using orthogonal data for filtering allows both forms of the telephone number to be
+				but without a dash. Using orthogonal data for searching allows both forms of the telephone number to be
 				used, while only the nicely formatted number is displayed in the table.</p>
 
 				<p>One method in which DataTables can obtain this orthogonal data for its different actions is through
 				<a href=
 				"http://www.w3.org/html/wg/drafts/html/master/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes">
-				custom HTML5 data attributes</a>. DataTables will automatically detect two different attributes on the
+				custom HTML5 data attributes</a>. DataTables will automatically detect four different attributes on the
 				HTML elements:</p>
 
 				<ul>
-					<li><code>data-sort</code> - for sorting data</li>
-					<li><code>data-filter</code> - for filtering data</li>
+					<li><code>data-sort</code> or <code>data-order</code> - for ordering data</li>
+					<li><code>data-filter</code> or <code>data-search</code> - for search data</li>
 				</ul>
 
-				<p>This example shows both options. In this case the first column has been formatted so the first name
-				has abbreviated, but the full name is still searchable (search for "Bruno" for example). Additionally,
-				although the last column contains non-numeric data in it (<code>/m</code>) the column will correctly
-				sort numerically as the <code>data-sort</code> attribute is set on the column with plain numeric
+				<p>This example shows the use of <code>data-sort</code> and <code>data-filter</code> attributes. In
+				this case the first column has been formatted so the first name has abbreviated, but the full name is
+				still searchable (search for "Bruno" for example). Additionally, although the last column contains
+				non-numeric data in it (<code>/m</code>) the column will correctly order numerically as the
+				<code>data-sort</code> / <code>data-order</code> attribute is set on the column with plain numeric
 				data.</p>
 			</div>
 
@@ -610,8 +611,8 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -645,7 +646,7 @@ $(document).ready(function() {
 							<li><a href="./row_grouping.html">Row grouping</a></li>
 							<li><a href="./footer_callback.html">Footer callback</a></li>
 							<li><a href="./dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="./sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="./sort_direction_control.html">Order direction sequence control</a></li>
 						</ul>
 					</div>
 
@@ -657,7 +658,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -732,10 +733,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 
-	<title>DataTables example - Sort direction control</title>
+	<title>DataTables example - Order direction sequence control</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -23,9 +23,9 @@ $(document).ready(function() {
 		"aoColumns": [
 			null,
 			null,
-			{ "sorting": [ "asc" ] },
-			{ "sorting": [ "desc", "asc", "asc" ] },
-			{ "sorting": [ "desc" ] },
+			{ "orderSequence": [ "asc" ] },
+			{ "orderSequence": [ "desc", "asc", "asc" ] },
+			{ "orderSequence": [ "desc" ] },
 			null
 		]
 	} );
@@ -38,30 +38,30 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>- Sort direction control</span></h1>
+			<h1>DataTables example <span>- Order direction sequence control</span></h1>
 
 			<div class="info">
-				<p>At times you may wish to change the default sorting direction for columns (some or all of them) to
-				be 'descending' rather than DataTables' default ascending. This can be done through the use of the
-				<a href="//datatables.net/init/columns.sorting"><code class="option" title=
-				"Initialisation option">columns.sorting</code></a> initialisation parameter. This parameter also allows
-				you to limit the sorting to a single direction, or you could add complex behaviour to the sorting
-				interaction.</p>
+				<p>At times you may wish to change the default ordering direction sequence for columns (some or all of
+				them) to be 'descending' rather than DataTables' default ascending. This can be done through the use of
+				the <a href="//datatables.net/init/columns.orderSequence"><code class="option" title=
+				"Initialisation option">columns.orderSequence</code></a> initialisation parameter. This parameter also
+				allows you to limit the ordering to a single direction, or you could add complex behaviour to the
+				ordering interaction.</p>
 
 				<p>The example below shows:</p>
 
 				<ul>
-					<li>Column 1 - default sorting</li>
-					<li>Column 2 - default sorting</li>
-					<li>Column 3 - ascending sorting only</li>
-					<li>Column 4 - descending sorting, followed by ascending and then ascending again</li>
-					<li>Column 5 - descending sorting only</li>
-					<li>Column 6 - default sorting</li>
+					<li>Column 1 - default ordering</li>
+					<li>Column 2 - default ordering</li>
+					<li>Column 3 - ascending ordering only</li>
+					<li>Column 4 - descending ordering, followed by ascending and then ascending again</li>
+					<li>Column 5 - descending ordering only</li>
+					<li>Column 6 - default ordering</li>
 				</ul>
 
 				<p>It's worth noting that I don't have a good use case for when you might what to mix such complex
-				sorting behaviour into a single table, but the example shows how these options can be use and therefore
-				applied across all columns.</p>
+				ordering behaviour into a single table, but the example shows how these options can be use and
+				therefore applied across all columns.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -563,9 +563,9 @@ $(document).ready(function() {
 		&quot;aoColumns&quot;: [
 			null,
 			null,
-			{ &quot;sorting&quot;: [ &quot;asc&quot; ] },
-			{ &quot;sorting&quot;: [ &quot;desc&quot;, &quot;asc&quot;, &quot;asc&quot; ] },
-			{ &quot;sorting&quot;: [ &quot;desc&quot; ] },
+			{ &quot;orderSequence&quot;: [ &quot;asc&quot; ] },
+			{ &quot;orderSequence&quot;: [ &quot;desc&quot;, &quot;asc&quot;, &quot;asc&quot; ] },
+			{ &quot;orderSequence&quot;: [ &quot;desc&quot; ] },
 			null
 		]
 	} );
@@ -626,8 +626,8 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -661,7 +661,8 @@ $(document).ready(function() {
 							<li><a href="./row_grouping.html">Row grouping</a></li>
 							<li><a href="./footer_callback.html">Footer callback</a></li>
 							<li><a href="./dom_toolbar.html">Custom toolbar elements</a></li>
-							<li class="active"><a href="./sort_direction_control.html">Sort direction control</a></li>
+							<li class="active"><a href="./sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -673,7 +674,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -748,10 +749,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

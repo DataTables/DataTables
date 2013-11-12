@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 
-	<title>DataTables example - Default sorting</title>
+	<title>DataTables example - Default ordering (sorting)</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -19,7 +19,7 @@
 
 $(document).ready(function() {
 	$('#example').dataTable( {
-		"sorting": [[ 3, "desc" ]]
+		"order": [[ 3, "desc" ]]
 	} );
 } );
 
@@ -29,23 +29,23 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>- Default sorting</span></h1>
+			<h1>DataTables example <span>- Default ordering (sorting)</span></h1>
 
 			<div class="info">
-				<p>With DataTables you can alter the sorting characteristics of the table at initialisation time. Using
-				the <a href="//datatables.net/init/sorting"><code class="option" title=
-				"Initialisation option">sorting</code></a> initialisation parameter, you can set the table to display
-				the data in exactly the order that you want.</p>
+				<p>With DataTables you can alter the ordering characteristics of the table at initialisation time.
+				Using the <a href="//datatables.net/init/order"><code class="option" title=
+				"Initialisation option">order</code></a> initialisation parameter, you can set the table to display the
+				data in exactly the order that you want.</p>
 
-				<p>The <a href="//datatables.net/init/sorting"><code class="option" title=
-				"Initialisation option">sorting</code></a> parameter is an array of arrays where the first value of the
-				inner array is the column to sort on, and the second is <code class="string" title=
-				"String">'asc'</code> (ascending sorting) or <code class="string" title="String">'desc'</code>
-				(descending sorting) as required. <a href="//datatables.net/init/sorting"><code class="option" title=
-				"Initialisation option">sorting</code></a> is a 2D array to allow multi-column sorting to be
+				<p>The <a href="//datatables.net/init/order"><code class="option" title=
+				"Initialisation option">order</code></a> parameter is an array of arrays where the first value of the
+				inner array is the column to order on, and the second is <code class="string" title=
+				"String">'asc'</code> (ascending ordering) or <code class="string" title="String">'desc'</code>
+				(descending ordering) as required. <a href="//datatables.net/init/order"><code class="option" title=
+				"Initialisation option">order</code></a> is a 2D array to allow multi-column ordering to be
 				defined.</p>
 
-				<p>The table below is sorted (descending) by the Age column.</p>
+				<p>The table below is ordered (descending) by the Age column.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -544,7 +544,7 @@ $(document).ready(function() {
 					<pre class="brush: js;">
 $(document).ready(function() {
 	$('#example').dataTable( {
-		&quot;sorting&quot;: [[ 3, &quot;desc&quot; ]]
+		&quot;order&quot;: [[ 3, &quot;desc&quot; ]]
 	} );
 } );
 </pre>
@@ -603,8 +603,8 @@ $(document).ready(function() {
 						<ul class="toc active">
 							<li><a href="./zero_configuration.html">Zero configuration</a></li>
 							<li><a href="./filter_only.html">Feature enable / disable</a></li>
-							<li class="active"><a href="./table_sorting.html">Default sorting</a></li>
-							<li><a href="./multi_col_sort.html">Multi-column sorting</a></li>
+							<li class="active"><a href="./table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="./multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="./multiple_tables.html">Multiple tables</a></li>
 							<li><a href="./hidden_columns.html">Hidden columns</a></li>
 							<li><a href="./complex_header.html">Complex headers (rowspan and colspan)</a></li>
@@ -638,7 +638,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -650,7 +651,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -725,10 +726,12 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

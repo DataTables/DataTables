@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 
-	<title>DataTables example - Live DOM sorting</title>
+	<title>DataTables example - Live DOM ordering</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -19,7 +19,7 @@
 
 
 /* Create an array with the values of all the input boxes in a column */
-$.fn.dataTable.ext.sort['dom-text'] = function  ( settings, col )
+$.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		return $('input', td).val();
@@ -27,7 +27,7 @@ $.fn.dataTable.ext.sort['dom-text'] = function  ( settings, col )
 }
 
 /* Create an array with the values of all the select options in a column */
-$.fn.dataTable.ext.sort['dom-select'] = function  ( settings, col )
+$.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		return $('select', td).val();
@@ -35,21 +35,21 @@ $.fn.dataTable.ext.sort['dom-select'] = function  ( settings, col )
 }
 
 /* Create an array with the values of all the checkboxes in a column */
-$.fn.dataTable.ext.sort['dom-checkbox'] = function  ( settings, col )
+$.fn.dataTable.ext.order['dom-checkbox'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		return $('input', td).prop('checked') ? '1' : '0';
 	} );
 }
 
-/* Initialise the table with the required column sorting data types */
+/* Initialise the table with the required column ordering data types */
 $(document).ready(function() {
 	$('#example').dataTable( {
 		"columns": [
 			null,
-			{ "sortDataType": "dom-text", "type": "numeric" },
-			{ "sortDataType": "dom-text" },
-			{ "sortDataType": "dom-select" }
+			{ "orderDataType": "dom-text", "type": "numeric" },
+			{ "orderDataType": "dom-text" },
+			{ "orderDataType": "dom-select" }
 		]
 	} );
 } );
@@ -61,23 +61,23 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>- Live DOM sorting</span></h1>
+			<h1>DataTables example <span>- Live DOM ordering</span></h1>
 
 			<div class="info">
-				<p>This example shows how you can use information available in the DOM to sort columns. Typically
-				DataTables will read information to be sorted during it's initialisation phase, and this will not be
-				updated based on user interaction, so sorting on columns which have, for example, form elements in
+				<p>This example shows how you can use information available in the DOM to order columns. Typically
+				DataTables will read information to be ordered during it's initialisation phase, and this will not be
+				updated based on user interaction, so ordering on columns which have, for example, form elements in
 				them, may not reflect the current value of the input. To overcome this problem, you must update the
-				data that DataTables will sort on, just prior to the sort. This method is much more efficient than
-				actually sorting using the DOM, since only one DOM query is needed for each cell to be sorted.</p>
+				data that DataTables will order on, just prior to the order. This method is much more efficient than
+				actually ordering using the DOM, since only one DOM query is needed for each cell to be ordered.</p>
 
-				<p>The example below shows the first two columns as normal text with sorting as you would expect. The
+				<p>The example below shows the first two columns as normal text with ordering as you would expect. The
 				following columns all have a form input element of different kinds, and the information contained
-				within is what DataTables will perform the sort on, based on the value at the time of the sort.</p>
+				within is what DataTables will perform the order on, based on the value at the time of the order.</p>
 
 				<p>This is a fairly simple example, but it you aren't constrained to just using form input elements,
 				you could use anything and customise your DOM queries to suit yourself. You could also update the
-				sorting live as a user in entered data into a form using an event handler calling <a href=
+				ordering live as a user in entered data into a form using an event handler calling <a href=
 				"//datatables.net/api/order%28%29"><code class="api" title="API method">order()</code></a> or <a href=
 				"//datatables.net/api/draw%28%29"><code class="api" title="API method">draw()</code></a> methods.</p>
 			</div>
@@ -1645,7 +1645,7 @@ $(document).ready(function() {
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
 					<pre class="brush: js;">
 /* Create an array with the values of all the input boxes in a column */
-$.fn.dataTable.ext.sort['dom-text'] = function  ( settings, col )
+$.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		return $('input', td).val();
@@ -1653,7 +1653,7 @@ $.fn.dataTable.ext.sort['dom-text'] = function  ( settings, col )
 }
 
 /* Create an array with the values of all the select options in a column */
-$.fn.dataTable.ext.sort['dom-select'] = function  ( settings, col )
+$.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		return $('select', td).val();
@@ -1661,21 +1661,21 @@ $.fn.dataTable.ext.sort['dom-select'] = function  ( settings, col )
 }
 
 /* Create an array with the values of all the checkboxes in a column */
-$.fn.dataTable.ext.sort['dom-checkbox'] = function  ( settings, col )
+$.fn.dataTable.ext.order['dom-checkbox'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		return $('input', td).prop('checked') ? '1' : '0';
 	} );
 }
 
-/* Initialise the table with the required column sorting data types */
+/* Initialise the table with the required column ordering data types */
 $(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;columns&quot;: [
 			null,
-			{ &quot;sortDataType&quot;: &quot;dom-text&quot;, &quot;type&quot;: &quot;numeric&quot; },
-			{ &quot;sortDataType&quot;: &quot;dom-text&quot; },
-			{ &quot;sortDataType&quot;: &quot;dom-select&quot; }
+			{ &quot;orderDataType&quot;: &quot;dom-text&quot;, &quot;type&quot;: &quot;numeric&quot; },
+			{ &quot;orderDataType&quot;: &quot;dom-text&quot; },
+			{ &quot;orderDataType&quot;: &quot;dom-select&quot; }
 		]
 	} );
 } );
@@ -1735,8 +1735,8 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -1772,7 +1772,8 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
+							control</a></li>
 						</ul>
 					</div>
 
@@ -1784,7 +1785,7 @@ $(document).ready(function() {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -1859,10 +1860,10 @@ $(document).ready(function() {
 						<h3><a href="./index.html">Plug-ins</a></h3>
 						<ul class="toc active">
 							<li><a href="./api.html">API plug-in methods</a></li>
-							<li><a href="./sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="./sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="./sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
+							<li><a href="./sorting_manual.html">Ordering plug-ins (no type detection)</a></li>
 							<li><a href="./range_filtering.html">Custom filtering - range filter</a></li>
-							<li class="active"><a href="./dom_sort.html">Live DOM sorting</a></li>
+							<li class="active"><a href="./dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>

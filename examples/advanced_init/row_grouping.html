@@ -28,7 +28,7 @@ $(document).ready(function() {
 		"columnDefs": [
 			{ "visible": false, "targets": 2 }
 		],
-		"sorting": [[ 2, 'asc' ]],
+		"order": [[ 2, 'asc' ]],
 		"displayLength": 25,
 		"drawCallback": function ( settings ) {
 			var api = this.api();
@@ -47,7 +47,7 @@ $(document).ready(function() {
 		}
 	} );
 
-	// Sort by the grouping
+	// Order by the grouping
 	$('#example tbody').on( 'click', 'tr.group', function () {
 		var currentOrder = table.order()[0];
 		if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
@@ -78,8 +78,8 @@ $(document).ready(function() {
 				"//datatables.net/init/drawCallback"><code class="option" title=
 				"Initialisation option">drawCallback</code></a> function, which will parse through the rows which are
 				displayed, and enter a grouping TR element where a new group is found. A <code>click</code> event
-				handler is added for the grouping rows to allow the grouping sort to be restored as well as sorting by
-				any other column.</p>
+				handler is added for the grouping rows to allow the grouping order to be restored as well as ordering
+				by any other column.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -581,7 +581,7 @@ $(document).ready(function() {
 		&quot;columnDefs&quot;: [
 			{ &quot;visible&quot;: false, &quot;targets&quot;: 2 }
 		],
-		&quot;sorting&quot;: [[ 2, 'asc' ]],
+		&quot;order&quot;: [[ 2, 'asc' ]],
 		&quot;displayLength&quot;: 25,
 		&quot;drawCallback&quot;: function ( settings ) {
 			var api = this.api();
@@ -600,7 +600,7 @@ $(document).ready(function() {
 		}
 	} );
 
-	// Sort by the grouping
+	// Order by the grouping
 	$('#example tbody').on( 'click', 'tr.group', function () {
 		var currentOrder = table.order()[0];
 		if ( currentOrder[0] === 2 &amp;&amp; currentOrder[1] === 'asc' ) {
@@ -670,8 +670,8 @@ tr.group:hover {
 						<ul class="toc">
 							<li><a href="../basic_init/zero_configuration.html">Zero configuration</a></li>
 							<li><a href="../basic_init/filter_only.html">Feature enable / disable</a></li>
-							<li><a href="../basic_init/table_sorting.html">Default sorting</a></li>
-							<li><a href="../basic_init/multi_col_sort.html">Multi-column sorting</a></li>
+							<li><a href="../basic_init/table_sorting.html">Default ordering (sorting)</a></li>
+							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
 							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
@@ -705,7 +705,7 @@ tr.group:hover {
 							<li class="active"><a href="./row_grouping.html">Row grouping</a></li>
 							<li><a href="./footer_callback.html">Footer callback</a></li>
 							<li><a href="./dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="./sort_direction_control.html">Sort direction control</a></li>
+							<li><a href="./sort_direction_control.html">Order direction sequence control</a></li>
 						</ul>
 					</div>
 
@@ -717,7 +717,7 @@ tr.group:hover {
 							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
-							<li><a href="../styling/sort-column.html">Base style - sort-column</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
 							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
@@ -792,10 +792,12 @@ tr.group:hover {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Sorting plug-ins (with type detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Sorting plug-ins (no type detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
+							detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
+							detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range filter</a></li>
-							<li><a href="../plug-ins/dom_sort.html">Live DOM sorting</a></li>
+							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
 				</div>
