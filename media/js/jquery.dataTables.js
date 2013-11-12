@@ -1544,19 +1544,19 @@
 		$(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
 		$(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
 	
-		/* Cache the footer elements */
+		// Cache the footer cells. Note that we only take the cells from the first
+		// row in the footer. If there is more than one row the user wants to
+		// interact with, they need to use the table().foot() method. Note also this
+		// allows cells to be used for multiple columns using colspan
 		if ( tfoot !== null ) {
-			var anCells = _fnGetUniqueThs( oSettings, null, oSettings.aoFooter );
+			var cells = oSettings.aoFooter[0];
 	
 			for ( i=0, ien=columns.length ; i<ien ; i++ ) {
 				column = columns[i];
+				column.nTf = cells[i].cell;
 	
-				if ( anCells[i] ) {
-					column.nTf = anCells[i];
-	
-					if ( column.sClass ) {
-						$(anCells[i]).addClass( column.sClass );
-					}
+				if ( column.sClass ) {
+					$(column.nTf).addClass( column.sClass );
 				}
 			}
 		}
