@@ -4,7 +4,7 @@
 
 /**
  * @summary     DataTables
- * @description Paginate, search and sort HTML tables
+ * @description Paginate, search and order HTML tables
  * @version     1.10.0-dev
  * @file        jquery.dataTables.js
  * @author      Allan Jardine (www.sprymedia.co.uk)
@@ -365,6 +365,54 @@
 	
 	
 	/**
+	 * Map one parameter onto another
+	 *  @param {object} o Object to map
+	 *  @param {*} knew The new parameter name
+	 *  @param {*} old The old parameter name
+	 */
+	var _fnCompatMap = function ( o, knew, old ) {
+		if ( o[ knew ] !== undefined ) {
+			o[ old ] = o[ knew ];
+		}
+	};
+	
+	
+	/**
+	 * Provide backwards compatibility for the main DT options. Note that the new
+	 * options are mapped onto the old parameters, so this is an external interface
+	 * change only.
+	 *  @param {object} init Object to map
+	 */
+	function _fnCompatOpts ( init )
+	{
+		_fnCompatMap( init, 'ordering',      'bSort' );
+		_fnCompatMap( init, 'orderMulti',    'bSortMulti' );
+		_fnCompatMap( init, 'orderClasses',  'bSortClasses' );
+		_fnCompatMap( init, 'orderCellsTop', 'bSortCellsTop' );
+		_fnCompatMap( init, 'order',         'aaSorting' );
+		_fnCompatMap( init, 'orderFixed',    'aaSortingFixed' );
+		_fnCompatMap( init, 'paging',        'bPaginate' );
+		_fnCompatMap( init, 'pagingType',    'sPaginationType' );
+		_fnCompatMap( init, 'searching',     'bFilter' );
+	}
+	
+	
+	/**
+	 * Provide backwards compatibility for column options. Note that the new options
+	 * are mapped onto the old parameters, so this is an external interface change
+	 * only.
+	 *  @param {object} init Object to map
+	 */
+	function _fnCompatCols ( init )
+	{
+		_fnCompatMap( init, 'orderable',     'bSortable' );
+		_fnCompatMap( init, 'orderData',     'aDataSort' );
+		_fnCompatMap( init, 'orderSequence', 'asSorting' );
+		_fnCompatMap( init, 'orderDataType', 'sortDataType' );
+	}
+	
+	
+	/**
 	 * Browser feature detection for capabilities, quirks
 	 *  @param {object} settings dataTables settings object
 	 *  @memberof DataTable#oApi
@@ -482,6 +530,9 @@
 		/* User specified column options */
 		if ( oOptions !== undefined && oOptions !== null )
 		{
+			// Backwards compatibility
+			_fnCompatCols( oOptions );
+	
 			// Map camel case parameters to their Hungarian counterparts
 			_fnCamelToHungarian( DataTable.defaults.column, oOptions );
 	
@@ -2275,10 +2326,10 @@
 		var d = {
 			draw:    settings.iDraw,
 			columns: [],
-			sort:    [],
+			order:   [],
 			start:   displayStart,
 			length:  displayLength,
-			filter:  {
+			search:  {
 				value: preSearch.sSearch,
 				regex: preSearch.bRegex
 			}
@@ -2293,8 +2344,8 @@
 				data:       dataProp,
 				name:       column.sName,
 				searchable: column.bSearchable,
-				sortable:   column.bSortable,
-				filter:     {
+				orderable:  column.bSortable,
+				search:     {
 					value: columnSearch.sSearch,
 					regex: columnSearch.bRegex
 				}
@@ -2314,7 +2365,7 @@
 		}
 	
 		$.each( sort, function ( i, val ) {
-			d.sort.push( { column: val.col, dir: val.dir } );
+			d.order.push( { column: val.col, dir: val.dir } );
 	
 			param( 'iSortCol_'+i, val.col );
 			param( 'sSortDir_'+i, val.dir );
@@ -2530,7 +2581,7 @@
 	
 		/* Tell the draw function we have been filtering */
 		oSettings.bFiltered = true;
-		$(oSettings.oInstance).trigger('filter', oSettings);
+		$(oSettings.oInstance).trigger('filter search', oSettings);
 	}
 	
 	
@@ -2541,7 +2592,7 @@
 	 */
 	function _fnFilterCustom( oSettings )
 	{
-		var afnFilters = DataTable.ext.filter;
+		var afnFilters = DataTable.ext.search;
 		var aiFilterColumns = _fnGetColumns( oSettings, 'bSearchable' );
 	
 		for ( var i=0, iLen=afnFilters.length ; i<iLen ; i++ )
@@ -2615,7 +2666,7 @@
 		var display, invalidated, i;
 	
 		// Need to take account of custom filtering functions - always filter
-		if ( DataTable.ext.filter.length !== 0 ) {
+		if ( DataTable.ext.search.length !== 0 ) {
 			force = true;
 		}
 	
@@ -2701,7 +2752,7 @@
 		var columns = settings.aoColumns;
 		var column;
 		var i, j, ien, jen, filterData, cellData, row;
-		var fomatters = DataTable.ext.type.filter;
+		var fomatters = DataTable.ext.type.search;
 		var wasInvalidated = false;
 	
 		for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
@@ -4047,7 +4098,7 @@
 					dir:       nestedSort[i][1],
 					index:     nestedSort[i][2],
 					type:      sType,
-					formatter: DataTable.ext.type.sort[ sType+"-pre" ]
+					formatter: DataTable.ext.type.order[ sType+"-pre" ]
 				} );
 			}
 		}
@@ -4067,7 +4118,7 @@
 			i, ien, iLen, j, jLen, k, kLen,
 			sDataType, nTh,
 			aiOrig = [],
-			oExtSort = DataTable.ext.type.sort,
+			oExtSort = DataTable.ext.type.order,
 			aoData = oSettings.aoData,
 			aoColumns = oSettings.aoColumns,
 			aDataSort, data, iCol, sType, oSort,
@@ -4183,6 +4234,7 @@
 	
 		/* Tell the draw function that we have sorted the data */
 		oSettings.bSorted = true;
+		_fnCallbackFire( oSettings, null, 'order', [oSettings] );
 	}
 	
 	
@@ -4367,7 +4419,7 @@
 	{
 		// Custom sorting function - provided by the sort data type
 		var column = settings.aoColumns[ idx ];
-		var customSort = DataTable.ext.sort[ column.sSortDataType ];
+		var customSort = DataTable.ext.order[ column.sSortDataType ];
 		var customData;
 	
 		if ( customSort ) {
@@ -4378,7 +4430,7 @@
 	
 		// Use / populate cache
 		var row, cellData;
-		var formatter = DataTable.ext.type.sort[ column.sType+"-pre" ];
+		var formatter = DataTable.ext.type.order[ column.sType+"-pre" ];
 	
 		for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 			row = settings.aoData[i];
@@ -5615,6 +5667,10 @@
 				return;
 			}
 			
+			/* Backwards compatibility for the defaults */
+			_fnCompatOpts( defaults );
+			_fnCompatCols( defaults.column );
+			
 			/* Convert the camel-case defaults to Hungarian */
 			_fnCamelToHungarian( defaults, defaults, true );
 			_fnCamelToHungarian( defaults.column, defaults.column, true );
@@ -5686,6 +5742,8 @@
 			oSettings.oInstance = (_that.length===1) ? _that : $(this).dataTable();
 			
 			// Backwards compatibility, before we apply all the defaults
+			_fnCompatOpts( oInit );
+			
 			if ( oInit.oLanguage )
 			{
 				_fnLanguageCompat( oInit.oLanguage );
@@ -5902,19 +5960,23 @@
 			 * attributes are found
 			 */
 			if ( rowOne.length ) {
+				var a = function ( cell, name ) {
+					return cell.getAttribute( 'data-'+name ) ? name : null;
+				};
+			
 				$.each( _fnGetRowElements( oSettings, rowOne[0] ).cells, function (i, cell) {
 					var col = oSettings.aoColumns[i];
 			
 					if ( col.mData === i ) {
-						var sort = cell.getAttribute('data-sort');
-						var filter = cell.getAttribute('data-filter');
+						var sort = a( cell, 'sort' ) || a( cell, 'order' );
+						var filter = a( cell, 'filter' ) || a( cell, 'search' );
 			
 						if ( sort !== null || filter !== null ) {
 							col.mData = {
 								_:      i+'.display',
-								sort:   sort !== null   ? i+'.@data-sort'   : undefined,
-								type:   sort !== null   ? i+'.@data-sort'   : undefined,
-								filter: filter !== null ? i+'.@data-filter' : undefined
+								sort:   sort !== null   ? i+'.@data-'+sort   : undefined,
+								type:   sort !== null   ? i+'.@data-'+sort   : undefined,
+								filter: filter !== null ? i+'.@data-'+filter : undefined
 							};
 			
 							_fnColumnOptions( oSettings, i );
@@ -8899,29 +8961,29 @@
 	
 	
 		/**
-		 * If sorting is enabled, then DataTables will perform a first pass sort on
-		 * initialisation. You can define which column(s) the sort is performed upon,
-		 * and the sorting direction, with this variable. The `sorting` array should
-		 * contain an array for each column to be sorted initially containing the
-		 * column's index and a direction string ('asc' or 'desc').
+		 * If ordering is enabled, then DataTables will perform a first pass sort on
+		 * initialisation. You can define which column(s) the sort is performed
+		 * upon, and the sorting direction, with this variable. The `sorting` array
+		 * should contain an array for each column to be sorted initially containing
+		 * the column's index and a direction string ('asc' or 'desc').
 		 *  @type array
 		 *  @default [[0,'asc']]
 		 *
 		 *  @dtopt Option
-		 *  @name DataTable.defaults.sorting
+		 *  @name DataTable.defaults.order
 		 *
 		 *  @example
 		 *    // Sort by 3rd column first, and then 4th column
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "sorting": [[2,'asc'], [3,'desc']]
+		 *        "order": [[2,'asc'], [3,'desc']]
 		 *      } );
 		 *    } );
 		 *
 		 *    // No initial sorting
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "sorting": []
+		 *        "order": []
 		 *      } );
 		 *    } );
 		 */
@@ -8931,20 +8993,20 @@
 		/**
 		 * This parameter is basically identical to the `sorting` parameter, but
 		 * cannot be overridden by user interaction with the table. What this means
-		 * is that you could have a column (visible or hidden) which the sorting will
-		 * always be forced on first - any sorting after that (from the user) will
-		 * then be performed as required. This can be useful for grouping rows
+		 * is that you could have a column (visible or hidden) which the sorting
+		 * will always be forced on first - any sorting after that (from the user)
+		 * will then be performed as required. This can be useful for grouping rows
 		 * together.
 		 *  @type array
 		 *  @default null
 		 *
 		 *  @dtopt Option
-		 *  @name DataTable.defaults.sortingFixed
+		 *  @name DataTable.defaults.orderFixed
 		 *
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "sortingFixed": [[0,'asc']]
+		 *        "orderFixed": [[0,'asc']]
 		 *      } );
 		 *    } )
 		 */
@@ -9301,12 +9363,12 @@
 		 *  @default true
 		 *
 		 *  @dtopt Features
-		 *  @name DataTable.defaults.filter
+		 *  @name DataTable.defaults.searching
 		 *
 		 *  @example
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
-		 *        "filter": false
+		 *        "searching": false
 		 *      } );
 		 *    } );
 		 */
@@ -9378,12 +9440,12 @@
 		 *  @default true
 		 *
 		 *  @dtopt Features
-		 *  @name DataTable.defaults.paginate
+		 *  @name DataTable.defaults.paging
 		 *
 		 *  @example
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
-		 *        "paginate": false
+		 *        "paging": false
 		 *      } );
 		 *    } );
 		 */
@@ -9502,12 +9564,12 @@
 		 *  @default true
 		 *
 		 *  @dtopt Features
-		 *  @name DataTable.defaults.sort
+		 *  @name DataTable.defaults.ordering
 		 *
 		 *  @example
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
-		 *        "sort": false
+		 *        "ordering": false
 		 *      } );
 		 *    } );
 		 */
@@ -9521,13 +9583,13 @@
 		 *  @default true
 		 *
 		 *  @dtopt Options
-		 *  @name DataTable.defaults.sortMulti
+		 *  @name DataTable.defaults.orderMulti
 		 *
 		 *  @example
 		 *    // Disable multiple column sorting ability
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
-		 *        "sortMulti": false
+		 *        "orderMulti": false
 		 *      } );
 		 *    } );
 		 */
@@ -9542,12 +9604,12 @@
 		 *  @default false
 		 *
 		 *  @dtopt Options
-		 *  @name DataTable.defaults.sortCellsTop
+		 *  @name DataTable.defaults.orderCellsTop
 		 *
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "sortCellsTop": true
+		 *        "orderCellsTop": true
 		 *      } );
 		 *    } );
 		 */
@@ -9564,12 +9626,12 @@
 		 *  @default true
 		 *
 		 *  @dtopt Features
-		 *  @name DataTable.defaults.sortClasses
+		 *  @name DataTable.defaults.orderClasses
 		 *
 		 *  @example
 		 *    $(document).ready( function () {
 		 *      $('#example').dataTable( {
-		 *        "sortClasses": false
+		 *        "orderClasses": false
 		 *      } );
 		 *    } );
 		 */
@@ -10824,12 +10886,12 @@
 		 *  @default simple_numbers
 		 *
 		 *  @dtopt Options
-		 *  @name DataTable.defaults.paginationType
+		 *  @name DataTable.defaults.pagingType
 		 *
 		 *  @example
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
-		 *        "paginationType": "full_numbers"
+		 *        "pagingType": "full_numbers"
 		 *      } );
 		 *    } )
 		 */
@@ -10942,13 +11004,15 @@
 	 */
 	DataTable.defaults.column = {
 		/**
-		 * Allows a column's sorting to take multiple columns into account when
-		 * doing a sort. For example first name / last name columns make sense to
-		 * do a multi-column sort over the two columns.
-		 *  @type array
+		 * Define which column(s) an order will occur on for this column. This
+		 * allows a column's ordering to take multiple columns into account when
+		 * doing a sort or use the data from a different column. For example first
+		 * name / last name columns make sense to do a multi-column sort over the
+		 * two columns.
+		 *  @type array|int
 		 *  @default null <i>Takes the value of the column index automatically</i>
 		 *
-		 *  @name DataTable.defaults.column.dataSort
+		 *  @name DataTable.defaults.column.orderData
 		 *  @dtopt Columns
 		 *
 		 *  @example
@@ -10956,9 +11020,9 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "columnDefs": [
-		 *          { "dataSort": [ 0, 1 ], "targets": [ 0 ] },
-		 *          { "dataSort": [ 1, 0 ], "targets": [ 1 ] },
-		 *          { "dataSort": [ 2, 3, 4 ], "targets": [ 2 ] }
+		 *          { "orderData": [ 0, 1 ], "targets": [ 0 ] },
+		 *          { "orderData": [ 1, 0 ], "targets": [ 1 ] },
+		 *          { "orderData": 2, "targets": [ 2 ] }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -10968,9 +11032,9 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "columns": [
-		 *          { "dataSort": [ 0, 1 ] },
-		 *          { "dataSort": [ 1, 0 ] },
-		 *          { "dataSort": [ 2, 3, 4 ] },
+		 *          { "orderData": [ 0, 1 ] },
+		 *          { "orderData": [ 1, 0 ] },
+		 *          { "orderData": 2 },
 		 *          null,
 		 *          null
 		 *        ]
@@ -10978,16 +11042,17 @@
 		 *    } );
 		 */
 		"aDataSort": null,
+		"iDataSort": -1,
 	
 	
 		/**
-		 * You can control the default sorting direction, and even alter the behaviour
-		 * of the sort handler (i.e. only allow ascending sorting etc) using this
-		 * parameter.
+		 * You can control the default ordering direction, and even alter the
+		 * behaviour of the sort handler (i.e. only allow ascending ordering etc)
+		 * using this parameter.
 		 *  @type array
 		 *  @default [ 'asc', 'desc' ]
 		 *
-		 *  @name DataTable.defaults.column.sorting
+		 *  @name DataTable.defaults.column.orderSequence
 		 *  @dtopt Columns
 		 *
 		 *  @example
@@ -10995,9 +11060,9 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "columnDefs": [
-		 *          { "sorting": [ "asc" ], "targets": [ 1 ] },
-		 *          { "sorting": [ "desc", "asc", "asc" ], "targets": [ 2 ] },
-		 *          { "sorting": [ "desc" ], "targets": [ 3 ] }
+		 *          { "orderSequence": [ "asc" ], "targets": [ 1 ] },
+		 *          { "orderSequence": [ "desc", "asc", "asc" ], "targets": [ 2 ] },
+		 *          { "orderSequence": [ "desc" ], "targets": [ 3 ] }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -11008,9 +11073,9 @@
 		 *      $('#example').dataTable( {
 		 *        "columns": [
 		 *          null,
-		 *          { "sorting": [ "asc" ] },
-		 *          { "sorting": [ "desc", "asc", "asc" ] },
-		 *          { "sorting": [ "desc" ] },
+		 *          { "orderSequence": [ "asc" ] },
+		 *          { "orderSequence": [ "desc", "asc", "asc" ] },
+		 *          { "orderSequence": [ "desc" ] },
 		 *          null
 		 *        ]
 		 *      } );
@@ -11053,11 +11118,11 @@
 	
 	
 		/**
-		 * Enable or disable sorting on this column.
+		 * Enable or disable ordering on this column.
 		 *  @type boolean
 		 *  @default true
 		 *
-		 *  @name DataTable.defaults.column.sortable
+		 *  @name DataTable.defaults.column.orderable
 		 *  @dtopt Columns
 		 *
 		 *  @example
@@ -11065,7 +11130,7 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "columnDefs": [
-		 *          { "sortable": false, "targets": [ 0 ] }
+		 *          { "orderable": false, "targets": [ 0 ] }
 		 *        ] } );
 		 *    } );
 		 *
@@ -11074,7 +11139,7 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "columns": [
-		 *          { "sortable": false },
+		 *          { "orderable": false },
 		 *          null,
 		 *          null,
 		 *          null,
@@ -11148,43 +11213,6 @@
 		 *    } );
 		 */
 		"fnCreatedCell": null,
-	
-	
-		/**
-		 * The column index (starting from 0!) that you wish a sort to be performed
-		 * upon when this column is selected for sorting. This can be used for sorting
-		 * on hidden columns for example.
-		 *  @type int
-		 *  @default -1 <i>Use automatically calculated column index</i>
-		 *
-		 *  @name DataTable.defaults.column.dataSort
-		 *  @dtopt Columns
-		 *
-		 *  @example
-		 *    // Using `columnDefs`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "columnDefs": [
-		 *          { "dataSort": 1, "targets": [ 0 ] }
-		 *        ]
-		 *      } );
-		 *    } );
-		 *
-		 *  @example
-		 *    // Using `columns`
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "columns": [
-		 *          { "dataSort": 1 },
-		 *          null,
-		 *          null,
-		 *          null,
-		 *          null
-		 *        ]
-		 *      } );
-		 *    } );
-		 */
-		"iDataSort": -1,
 	
 	
 		/**
@@ -11670,14 +11698,14 @@
 	
 	
 		/**
-		 * Defines a data source type for the sorting which can be used to read
+		 * Defines a data source type for the ordering which can be used to read
 		 * real-time information from the table (updating the internally cached
-		 * version) prior to sorting. This allows sorting to occur on user editable
-		 * elements such as form inputs.
+		 * version) prior to ordering. This allows ordering to occur on user
+		 * editable elements such as form inputs.
 		 *  @type string
 		 *  @default std
 		 *
-		 *  @name DataTable.defaults.column.sortDataType
+		 *  @name DataTable.defaults.column.orderDataType
 		 *  @dtopt Columns
 		 *
 		 *  @example
@@ -11685,10 +11713,10 @@
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "columnDefs": [
-		 *          { "sortDataType": "dom-text", "targets": [ 2, 3 ] },
+		 *          { "orderDataType": "dom-text", "targets": [ 2, 3 ] },
 		 *          { "type": "numeric", "targets": [ 3 ] },
-		 *          { "sortDataType": "dom-select", "targets": [ 4 ] },
-		 *          { "sortDataType": "dom-checkbox", "targets": [ 5 ] }
+		 *          { "orderDataType": "dom-select", "targets": [ 4 ] },
+		 *          { "orderDataType": "dom-checkbox", "targets": [ 5 ] }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -11700,10 +11728,10 @@
 		 *        "columns": [
 		 *          null,
 		 *          null,
-		 *          { "sortDataType": "dom-text" },
-		 *          { "sortDataType": "dom-text", "type": "numeric" },
-		 *          { "sortDataType": "dom-select" },
-		 *          { "sortDataType": "dom-checkbox" }
+		 *          { "orderDataType": "dom-text" },
+		 *          { "orderDataType": "dom-text", "type": "numeric" },
+		 *          { "orderDataType": "dom-select" },
+		 *          { "orderDataType": "dom-checkbox" }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -11748,13 +11776,13 @@
 	
 	
 		/**
-		 * The type allows you to specify how the data for this column will be sorted.
-		 * Four types (string, numeric, date and html (which will strip HTML tags
-		 * before sorting)) are currently available. Note that only date formats
-		 * understood by Javascript's Date() object will be accepted as type date. For
-		 * example: "Mar 26, 2008 5:03 PM". May take the values: 'string', 'numeric',
-		 * 'date' or 'html' (by default). Further types can be adding through
-		 * plug-ins.
+		 * The type allows you to specify how the data for this column will be
+		 * ordered. Four types (string, numeric, date and html (which will strip
+		 * HTML tags before ordering)) are currently available. Note that only date
+		 * formats understood by Javascript's Date() object will be accepted as type
+		 * date. For example: "Mar 26, 2008 5:03 PM". May take the values: 'string',
+		 * 'numeric', 'date' or 'html' (by default). Further types can be adding
+		 * through plug-ins.
 		 *  @type string
 		 *  @default null <i>Auto-detected from raw data</i>
 		 *
@@ -12780,16 +12808,16 @@
 	
 	
 		/**
-		 * Row filtering.
+		 * Row searching.
 		 * 
-		 * This method of filtering is complimentary to the default type based
-		 * filtering, and a lot more comprehensive as it allows you complete control
-		 * over the filtering logic. Each element in this array is a function
+		 * This method of searching is complimentary to the default type based
+		 * searching, and a lot more comprehensive as it allows you complete control
+		 * over the searching logic. Each element in this array is a function
 		 * (parameters described below) that is called for every row in the table,
-		 * and your logic decides if it should be included in the filtered data set
+		 * and your logic decides if it should be included in the searching data set
 		 * or not.
 		 *
-		 * Filtering functions have the following input parameters:
+		 * Searching functions have the following input parameters:
 		 *
 		 * 1. `{object}` DataTables settings object: see
 		 *    {@link DataTable.models.oSettings}
@@ -12801,17 +12829,21 @@
 		 *
 		 * And the following return is expected:
 		 *
-		 * * {boolean} Include the row in the filtered result set (true) or not
+		 * * {boolean} Include the row in the searched result set (true) or not
 		 *   (false)
+		 *
+		 * Note that as with the main search ability in DataTables, technically this
+		 * is "filtering", since it is subtractive. However, for consistency in
+		 * naming we call it searching here.
 		 *
 		 *  @type array
 		 *  @default []
 		 *
 		 *  @example
-		 *    // The following example shows custom filtering being applied to the
+		 *    // The following example shows custom search being applied to the
 		 *    // fourth column (i.e. the data[3] index) based on two input values
 		 *    // from the end-user, matching the data in a certain range.
-		 *    $.fn.dataTable.ext.filter.push(
+		 *    $.fn.dataTable.ext.search.push(
 		 *      function( settings, data, dataIndex ) {
 		 *        var min = document.getElementById('min').value * 1;
 		 *        var max = document.getElementById('max').value * 1;
@@ -12833,7 +12865,7 @@
 		 *      }
 		 *    );
 		 */
-		filter: [],
+		search: [],
 	
 	
 		/**
@@ -12922,23 +12954,23 @@
 	
 	
 		/**
-		 * Sorting plug-ins - custom data source
+		 * Ordering plug-ins - custom data source
 		 * 
-		 * The extension options for sorting of data available here is complimentary
-		 * to the default type based sorting that DataTables typically uses. It
+		 * The extension options for ordering of data available here is complimentary
+		 * to the default type based ordering that DataTables typically uses. It
 		 * allows much greater control over the the data that is being used to
-		 * sort a column, but is necessarily therefore more complex.
+		 * order a column, but is necessarily therefore more complex.
 		 * 
-		 * This type of sorting is useful if you want to do sorting based on data
+		 * This type of ordering is useful if you want to do ordering based on data
 		 * live from the DOM (for example the contents of an 'input' element) rather
 		 * than just the static string that DataTables knows of.
 		 * 
 		 * The way these plug-ins work is that you create an array of the values you
-		 * wish to be sorted for the column in question and then return that array.
-		 * The data in the array much be in the index order of the rows in the table
-		 * (not the currently sorted order!). Which sort data gathering function is
-		 * run here depends on the `sortDataType` parameter that is used for the
-		 * column (if any).
+		 * wish to be ordering for the column in question and then return that
+		 * array. The data in the array much be in the index order of the rows in
+		 * the table (not the currently ordering order!). Which order data gathering
+		 * function is run here depends on the `dt-init columns.orderDataType`
+		 * parameter that is used for the column (if any).
 		 *
 		 * The functions defined take two parameters:
 		 *
@@ -12948,20 +12980,20 @@
 		 *
 		 * Each function is expected to return an array:
 		 *
-		 * * `{array}` Data for the column to be sorted upon
+		 * * `{array}` Data for the column to be ordering upon
 		 *
 		 *  @type array
 		 *
 		 *  @example
-		 *    // Sort using `input` node values
-		 *    $.fn.dataTable.ext.sort['dom-text'] = function  ( settings, col )
+		 *    // Ordering using `input` node values
+		 *    $.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
 		 *    {
 		 *      return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
 		 *        return $('input', td).val();
 		 *      } );
 		 *    }
 		 */
-		sort: [],
+		order: [],
 	
 	
 		/**
@@ -12969,7 +13001,7 @@
 		 *
 		 * Each column in DataTables has a type assigned to it, either by automatic
 		 * detection or by direct assignment using the `type` option for the column.
-		 * The type of a column will effect how it is sorted and filtered (plug-ins
+		 * The type of a column will effect how it is ordering and search (plug-ins
 		 * can also make use of the column type if required).
 		 *
 		 * @namespace
@@ -13014,57 +13046,57 @@
 	
 	
 			/**
-			 * Type based filter formatting.
+			 * Type based search formatting.
 			 *
-			 * The type based filtering functions can be used to pre-format the
-			 * data to be filtered up. For example, it can be used to strip HTML
-			 * tags or to de-format telephone numbers for numeric only filtering.
+			 * The type based searching functions can be used to pre-format the
+			 * data to be search on. For example, it can be used to strip HTML
+			 * tags or to de-format telephone numbers for numeric only searching.
 			 *
-			 * Note that is a filter is not defined for a column of a given type,
-			 * no filter formatting will be performed.
+			 * Note that is a search is not defined for a column of a given type,
+			 * no search formatting will be performed.
 			 * 
-			 * Pre-processing of filtering data plug-ins - When you assign the sType
+			 * Pre-processing of searching data plug-ins - When you assign the sType
 			 * for a column (or have it automatically detected for you by DataTables
 			 * or a type detection plug-in), you will typically be using this for
-			 * custom sorting, but it can also be used to provide custom filtering
+			 * custom sorting, but it can also be used to provide custom searching
 			 * by allowing you to pre-processing the data and returning the data in
-			 * the format that should be filtered upon. This is done by adding
+			 * the format that should be searched upon. This is done by adding
 			 * functions this object with a parameter name which matches the sType
 			 * for that target column. This is the corollary of <i>afnSortData</i>
-			 * for filtering data.
+			 * for searching data.
 			 *
 			 * The functions defined take a single parameter:
 			 *
-		     *  1. `{*}` Data from the column cell to be prepared for filtering
+		     *  1. `{*}` Data from the column cell to be prepared for searching
 			 *
 			 * Each function is expected to return:
 			 *
-			 * * `{string|null}` Formatted string that will be used for the filtering.
+			 * * `{string|null}` Formatted string that will be used for the searching.
 			 *
 			 *  @type object
 			 *  @default {}
 			 *
 			 *  @example
-			 *    $.fn.dataTable.ext.type.filter['title-numeric'] = function ( d ) {
+			 *    $.fn.dataTable.ext.type.search['title-numeric'] = function ( d ) {
 			 *      return d.replace(/\n/g," ").replace( /<.*?>/g, "" );
 			 *    }
 			 */
-			filter: {},
+			search: {},
 	
 	
 			/**
-			 * Type based sorting.
+			 * Type based ordering.
 			 *
-			 * The column type tells DataTables what sorting to apply to the table
-			 * when a column is sorted upon. The sort for each type that is defined,
+			 * The column type tells DataTables what ordering to apply to the table
+			 * when a column is sorted upon. The order for each type that is defined,
 			 * is defined by the functions available in this object.
 			 *
-			 * Each sorting option can be described by three properties added to
+			 * Each ordering option can be described by three properties added to
 			 * this object:
 			 *
 			 * * `{type}-pre` - Pre-formatting function
-			 * * `{type}-asc` - Ascending sort function
-			 * * `{type}-desc` - Descending sort function
+			 * * `{type}-asc` - Ascending order function
+			 * * `{type}-desc` - Descending order function
 			 *
 			 * All three can be used together, only `{type}-pre` or only
 			 * `{type}-asc` and `{type}-desc` together. It is generally recommended
@@ -13074,7 +13106,7 @@
 			 *
 			 * `{type}-pre`: Functions defined take a single parameter:
 			 *
-		     *  1. `{*}` Data from the column cell to be prepared for sorting
+		     *  1. `{*}` Data from the column cell to be prepared for ordering
 			 *
 			 * And return:
 			 *
@@ -13088,7 +13120,7 @@
 			 *
 			 * And returning:
 			 *
-			 * * `{*}` Sorting match: <0 if first parameter should be sorted lower
+			 * * `{*}` Ordering match: <0 if first parameter should be sorted lower
 			 *   than the second parameter, ===0 if the two parameters are equal and
 			 *   >0 if the first parameter should be sorted height than the second
 			 *   parameter.
@@ -13097,8 +13129,8 @@
 			 *  @default {}
 			 *
 			 *  @example
-			 *    // Numeric sorting of formatted numbers with a pre-formatter
-			 *    $.extend( $.fn.dataTable.ext.type.sort, {
+			 *    // Numeric ordering of formatted numbers with a pre-formatter
+			 *    $.extend( $.fn.dataTable.ext.type.order, {
 			 *      "string-pre": function(x) {
 			 *        a = (a === "-" || a === "") ? 0 : a.replace( /[^\d\-\.]/g, "" );
 			 *        return parseFloat( a );
@@ -13106,8 +13138,8 @@
 			 *    } );
 			 *
 			 *  @example
-			 *    // Case-sensitive string sorting, with no pre-formatting method
-			 *    $.extend( $.fn.dataTable.ext.sort, {
+			 *    // Case-sensitive string ordering, with no pre-formatting method
+			 *    $.extend( $.fn.dataTable.ext.order, {
 			 *      "string-case-asc": function(x,y) {
 			 *        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 			 *      },
@@ -13116,7 +13148,7 @@
 			 *      }
 			 *    } );
 			 */
-			sort: {}
+			order: {}
 		},
 	
 		/**
@@ -13174,8 +13206,8 @@
 	$.extend( _ext, {
 		afnFiltering: _ext.filter,
 		aTypes:       _ext.type.detect,
-		ofnSearch:    _ext.type.filter,
-		oSort:        _ext.type.sort,
+		ofnSearch:    _ext.type.search,
+		oSort:        _ext.type.order,
 		afnSortData:  _ext.sort,
 		aoFeatures:   _ext.feature,
 		oApi:         _ext.internal,
@@ -13465,7 +13497,7 @@
 	};
 	
 	
-	$.extend( DataTable.ext.type.sort, {
+	$.extend( DataTable.ext.type.order, {
 		// Dates
 		"date-pre": function ( d )
 		{
@@ -13576,7 +13608,7 @@
 	// what is required from these methods.
 	
 	
-	$.extend( DataTable.ext.type.filter, {
+	$.extend( DataTable.ext.type.search, {
 		html: function ( data ) {
 			return _empty(data) ?
 				'' :
@@ -13679,9 +13711,9 @@
 	 */
 
 	/**
-	 * Filter event, fired when the filtering applied to the table (using the
-	 * built-in global filter, or column filters) is altered.
-	 *  @name DataTable#filter
+	 * Search event, fired when the searching applied to the table (using the
+	 * built-in global search, or column filters) is altered.
+	 *  @name DataTable#search
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
@@ -13696,8 +13728,8 @@
 	 */
 
 	/**
-	 * Sort event, fired when the sorting applied to the table is altered.
-	 *  @name DataTable#sort
+	 * Order event, fired when the ordering applied to the table is altered.
+	 *  @name DataTable#order
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}
@@ -13750,8 +13782,8 @@
 
 	/**
 	 * Processing event, fired when DataTables is doing some kind of processing
-	 * (be it, sort, filter or anything else). It can be used to indicate to the
-	 * end user that there is something happening, or that something has
+	 * (be it, order, searcg or anything else). It can be used to indicate to
+	 * the end user that there is something happening, or that something has
 	 * finished.
 	 *  @name DataTable#processing
 	 *  @event
