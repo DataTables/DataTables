@@ -10764,7 +10764,7 @@
 		 *   <ul>
 		 *     <li>The following options are allowed:
 		 *       <ul>
-		 *         <li>'l' - Length changing</li
+		 *         <li>'l' - Length changing</li>
 		 *         <li>'f' - Filtering input</li>
 		 *         <li>'t' - The table!</li>
 		 *         <li>'i' - Information</li>
