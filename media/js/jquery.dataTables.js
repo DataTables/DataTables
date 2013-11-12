@@ -13680,7 +13680,7 @@
 
 	/**
 	 * Filter event, fired when the filtering applied to the table (using the
-	 * built-in global filter, or column filters) is altered.
+	 * build in global global filter, or column filters) is altered.
 	 *  @name DataTable#filter
 	 *  @event
 	 *  @param {event} e jQuery event object
@@ -13716,7 +13716,7 @@
 
 	/**
 	 * State save event, fired when the table has changed state a new state save
-	 * is required. This event allows modification of the state saving object
+	 * is required. This method allows modification of the state saving object
 	 * prior to actually doing the save, including addition or other state
 	 * properties (for plug-ins) or modification of a DataTables core property.
 	 *  @name DataTable#stateSaveParams
@@ -13750,7 +13750,7 @@
 
 	/**
 	 * Processing event, fired when DataTables is doing some kind of processing
-	 * (be it, sort, filter or anything else). It can be used to indicate to the
+	 * (be it, sort, filter or anything else). Can be used to indicate to the
 	 * end user that there is something happening, or that something has
 	 * finished.
 	 *  @name DataTable#processing
@@ -13820,7 +13820,7 @@
 	 */
 
 	/**
-	 * Column visibility has changed.
+	 * Column visibility has changes.
 	 *  @name DataTable#column-visibility
 	 *  @event
 	 *  @param {event} e jQuery event object
