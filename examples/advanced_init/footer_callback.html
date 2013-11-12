@@ -24,6 +24,7 @@ $(document).ready(function() {
 	$('#example').dataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
 			var api = this.api();
+			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
 				return typeof i === 'string' ?
 					i.replace(/[\$,]/g, '')*1 :
@@ -48,7 +49,7 @@ $(document).ready(function() {
 				} );
 
 			// Update footer
-			$('th:eq(1)', row).html(
+			$( api.column( 4 ).footer() ).html(
 				'$'+pageTotal +' ( $'+ total +' total)'
 			);
 		}
@@ -73,7 +74,11 @@ $(document).ready(function() {
 				data manipulation functions, such as summarising data in the table.</p>
 
 				<p>The example below shows a footer callback being used to total the data for a column (both the
-				visible and the hidden data) using the `dt-api column().data() API method.</p>
+				visible and the hidden data) using the <a href=
+				"//datatables.net/api/column%28%29.data%28%29"><code class="api" title=
+				"API method">column().data()</code></a> API method and <a href=
+				"//datatables.net/api/column%28%29.footer%28%29"><code class="api" title=
+				"API method">column().footer()</code></a> for writing the value into the footer.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -512,6 +517,7 @@ $(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;footerCallback&quot;: function ( row, data, start, end, display ) {
 			var api = this.api();
+			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
 				return typeof i === 'string' ?
 					i.replace(/[\$,]/g, '')*1 :
@@ -536,7 +542,7 @@ $(document).ready(function() {
 				} );
 
 			// Update footer
-			$('th:eq(1)', row).html(
+			$( api.column( 4 ).footer() ).html(
 				'$'+pageTotal +' ( $'+ total +' total)'
 			);
 		}
