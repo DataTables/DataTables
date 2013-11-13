@@ -7329,7 +7329,7 @@
 	} );
 	
 	
-	_api_registerPlural( 'rows().index()', 'row().index()', function ( src ) {
+	_api_registerPlural( 'rows().indexes()', 'row().index()', function ( src ) {
 		return this.iterator( 'row', function ( settings, row ) {
 			return row;
 		} );
@@ -7805,7 +7805,7 @@
 	
 	
 	
-	_api_registerPlural( 'columns().index()', 'column().index()', function ( type ) {
+	_api_registerPlural( 'columns().indexes()', 'column().index()', function ( type ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return type === 'visible' ?
 				_fnColumnIndexToVisible( settings, column ) :
@@ -7948,7 +7948,7 @@
 	} );
 	
 	
-	_api_registerPlural( 'cells().nodes()', 'cell().nodes()', function () {
+	_api_registerPlural( 'cells().nodes()', 'cell().node()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return settings.aoData[ row ].anCells[ column ];
 		} );
@@ -7963,7 +7963,7 @@
 	
 	
 	_api_registerPlural( 'cells().cache()', 'cell().cache()', function ( type ) {
-		type = type === 'filter' ? '_aFilterData' : '_aSortData';
+		type = type === 'search' ? '_aFilterData' : '_aSortData';
 	
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return settings.aoData[ row ][ type ][ column ];
@@ -7971,7 +7971,7 @@
 	} );
 	
 	
-	_api_registerPlural( 'cells().index()', 'cell().index()', function () {
+	_api_registerPlural( 'cells().indexes()', 'cell().index()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return {
 				row: row,
