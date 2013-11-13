@@ -6386,6 +6386,9 @@
 		},
 	
 	
+		join:    __arrayProto.join,
+	
+	
 		indexOf: __arrayProto.indexOf || function (obj, start)
 		{
 			for ( var i=(start || 0), ien=this.length ; i<ien ; i++ ) {
@@ -6580,6 +6583,18 @@
 		toArray: function ()
 		{
 			return __arrayProto.slice.call( this );
+		},
+	
+	
+		to$: function ()
+		{
+			return $( this );
+		},
+	
+	
+		toJQuery: function ()
+		{
+			return $( this );
 		},
 	
 	
