@@ -7318,7 +7318,7 @@
 	
 	_api_registerPlural( 'rows().cache()', 'row().cache()', function ( type ) {
 		return this.iterator( 'row', function ( settings, row ) {
-			return type === 'filter' ? row._aFilterData : row._aSortData;
+			return type === 'search' ? row._aFilterData : row._aSortData;
 		} );
 	} );
 	
