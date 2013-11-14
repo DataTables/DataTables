@@ -6843,14 +6843,14 @@
 	} );
 	
 	
-	_api_registerPlural( 'tables().head()', 'table().head()' , function () {
+	_api_registerPlural( 'tables().header()', 'table().header()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTHead;
 		} );
 	} );
 	
 	
-	_api_registerPlural( 'tables().foot()', 'table().foot()' , function () {
+	_api_registerPlural( 'tables().footer()', 'table().footer()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTFoot;
 		} );
