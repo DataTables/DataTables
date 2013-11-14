@@ -7783,13 +7783,13 @@
 	_api_registerPlural( 'columns().cache()', 'column().cache()', function ( type ) {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows,
-				type === 'filter' ? '_aFilterData' : '_aSortData', column
+				type === 'search' ? '_aFilterData' : '_aSortData', column
 			);
 		} );
 	} );
 	
 	
-	_api_registerPlural( 'columns().nodes()', 'columns().nodes()', function () {
+	_api_registerPlural( 'columns().nodes()', 'column().nodes()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
 		} );
@@ -7839,10 +7839,10 @@
 		if ( this.context.length !== 0 ) {
 			var ctx = this.context[0];
 	
-			if ( type === 'fromVisible' || type === 'toIndex' ) {
+			if ( type === 'fromVisible' || type === 'toData' ) {
 				return _fnColumnIndexToVisible( ctx, idx );
 			}
-			else if ( type === 'fromIndex' || type === 'toVisible' ) {
+			else if ( type === 'fromData' || type === 'toVisible' ) {
 				return _fnVisibleToColumnIndex( ctx, idx );
 			}
 		}
