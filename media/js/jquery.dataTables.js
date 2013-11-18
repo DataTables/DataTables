@@ -4787,6 +4787,7 @@
 		 *    'current' and filter is 'applied', regardless of what they might be given as.
 		 *  @returns {object} jQuery object, filtered by the given selector.
 		 *  @dtopt API
+		 *  @deprecated Since v1.10
 		 *
 		 *  @example
 		 *    $(document).ready(function() {
@@ -4803,7 +4804,7 @@
 		 *      // Filter to rows with 'Webkit' in them, add a background colour and then
 		 *      // remove the filter, thus highlighting the 'Webkit' rows only.
 		 *      oTable.fnFilter('Webkit');
-		 *      oTable.$('tr', {"filter": "applied"}).css('backgroundColor', 'blue');
+		 *      oTable.$('tr', {"search": "applied"}).css('backgroundColor', 'blue');
 		 *      oTable.fnFilter('');
 		 *    } );
 		 */
@@ -4855,10 +4856,10 @@
 		 *
 		 *      // Filter to 'Webkit' and get all data for
 		 *      oTable.fnFilter('Webkit');
-		 *      var data = oTable._('tr', {"filter": "applied"});
+		 *      var data = oTable._('tr', {"search": "applied"});
 		 *
 		 *      // Do something with the data
-		 *      alert( data.length+" rows matched the filter" );
+		 *      alert( data.length+" rows matched the search" );
 		 *    } );
 		 */
 		this._ = function ( sSelector, oOpts )
