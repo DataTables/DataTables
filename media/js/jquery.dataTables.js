@@ -8331,50 +8331,6 @@
 	} );
 	
 	
-	// Remove plugin methods
-	_api_register( 'plugin()', function ( type ) {
-		var ctx = this.context;
-	
-		if ( ! ctx.length ) {
-			return null;
-		}
-	
-		var plugins = ctx[0].oPlugins[ type ];
-	
-		return ! plugins ?
-			null :
-			plugins.length == 1 ?
-				plugins[0] :
-				plugins;
-	} );
-	
-	_api_register( 'plugin.register()', function ( type, inst ) {
-		return this.iterator( 'table', function ( settings ) {
-			var plugins = settings.oPlugins;
-	
-			if ( ! plugins[ type ] ) {
-				plugins[ type ] = [];
-			}
-	
-			plugins[ type ].push( inst );
-		} );
-	} );
-	
-	_api_register( 'plugin.deregister()', function ( type, inst ) {
-		return this.iterator( 'table', function ( settings ) {
-			var plugins = settings.oPlugins[ type ];
-	
-			if ( plugins ) {
-				var idx = $.inArray( inst, plugins );
-	
-				if ( idx >= 0 ) {
-					plugins.splice( idx, 1 );
-				}
-			}
-		} );
-	} );
-	
-	
 	_api_register( 'destroy()', function ( remove ) {
 		remove = remove || false;
 	
