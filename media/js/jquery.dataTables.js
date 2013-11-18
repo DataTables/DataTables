@@ -2224,8 +2224,13 @@
 			"cache": false,
 			"type": oSettings.sServerMethod,
 			"error": function (xhr, error, thrown) {
+				var log = oSettings.oApi._fnLog;
+	
 				if ( error == "parsererror" ) {
-					oSettings.oApi._fnLog( oSettings, 0, 'Invalid JSON response', 1 );
+					log( oSettings, 0, 'Invalid JSON response', 1 );
+				}
+				else {
+					log( oSettings, 0, 'Ajax error', 7 );
 				}
 			}
 		};
