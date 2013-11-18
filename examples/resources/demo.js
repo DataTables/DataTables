@@ -31,7 +31,7 @@ $(document).ready( function () {
 	// json
 	var ajaxTab = $('ul.tabs li').eq(3).css('display', 'none');
 
-	$.fn.dataTable.on( 'construct', function ( settings ) {
+	$(document).on( 'init.dt', function ( e, settings ) {
 		var api = new $.fn.dataTable.Api( settings );
 
 		var show = function ( str ) {
@@ -56,7 +56,7 @@ $(document).ready( function () {
 		}
 
 		// Subsequent draws
-		api.on( 'xhr', function ( e, settings, json ) {
+		api.on( 'xhr.dt', function ( e, settings, json ) {
 			show( json );
 		} );
 	} );
