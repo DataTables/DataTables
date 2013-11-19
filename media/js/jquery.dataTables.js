@@ -6678,14 +6678,13 @@
 	
 		for ( i=0, ien=ext.length ; i<ien ; i++ ) {
 			struct = ext[i];
-			inner = obj[ struct.name ];
 	
 			// Value
-			inner = typeof struct.val === 'function' ?
+			obj[ struct.name ] = typeof struct.val === 'function' ?
 				methodScoping( struct.val, struct ) :
 				struct.val;
 	
-			inner.__dt_wrapper = true;
+			obj[ struct.name ].__dt_wrapper = true;
 	
 			// Property extension
 			_Api.extend( scope, obj[ struct.name ], struct.propExt );
