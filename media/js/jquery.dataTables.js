@@ -7642,12 +7642,9 @@
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	 * Columns
 	 *
-	 * {integer}           - column index >= 0 (count from left)
-	 * "{integer}"         - column index >= 0 (count from left)
-	 * {integer}           - column index < 0 (count from right)
-	 * "{integer}"         - column index < 0 (count from right)
-	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)
-	 * "{integer}:visible" - alias for {integer}:visIdx
+	 * {integer}           - column index (>=0 count from left, <0 count from right)
+	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)  (>=0 count from left, <0 count from right)
+	 * "{integer}:visible" - alias for {integer}:visIdx  (>=0 count from left, <0 count from right)
 	 * "{string}:name"     - column name
 	 * "{string}"          - jQuery selector on column header nodes
 	 *
@@ -7686,8 +7683,17 @@
 					switch( match[2] ) {
 						case 'visIdx':
 						case 'visible':
+							var idx = parseInt( match[1], 10 );
 							// Visible index given, convert to column index
-							return [ _fnVisibleToColumnIndex( settings, parseInt( match[1], 10 ) ) ];
+							if ( idx < 0 ) {
+								// Counting from the right
+								var visColumns = $.map( columns, function (col,i) {
+									return col.bVisible ? i : null;
+								} );
+								return [ visColumns[ visColumns.length + idx ] ];
+							}
+							// Counting from the left
+							return [ _fnVisibleToColumnIndex( settings, idx ) ];
 	
 						case 'name':
 							// match by name. `names` is column index complete and in order
