@@ -7361,7 +7361,7 @@
 	} );
 	
 	
-	_api_register( 'rows().data()', function ( data ) {
+	_api_register( 'rows().data()', function () {
 		return this.iterator( true, 'rows', function ( settings, rows ) {
 			return _pluck_order( settings.aoData, rows, '_aData' );
 		} );
@@ -7369,7 +7369,8 @@
 	
 	_api_registerPlural( 'rows().cache()', 'row().cache()', function ( type ) {
 		return this.iterator( 'row', function ( settings, row ) {
-			return type === 'search' ? row._aFilterData : row._aSortData;
+			var r = settings.aoData[ row ];
+			return type === 'search' ? r._aFilterData : r._aSortData;
 		} );
 	} );
 	
@@ -7380,7 +7381,7 @@
 	} );
 	
 	
-	_api_registerPlural( 'rows().indexes()', 'row().index()', function ( src ) {
+	_api_registerPlural( 'rows().indexes()', 'row().index()', function () {
 		return this.iterator( 'row', function ( settings, row ) {
 			return row;
 		} );
