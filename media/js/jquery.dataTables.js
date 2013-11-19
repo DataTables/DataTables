@@ -1381,7 +1381,7 @@
 		var i, ien;
 	
 		// Are we reading last data from DOM or the data object?
-		if ( src === 'dom' || (! src && row.src === 'dom') ) {
+		if ( src === 'dom' || ((! src || src === 'auto') && row.src === 'dom') ) {
 			// Read the data from the DOM
 			row._aData = _fnGetRowElements( settings, row.nTr ).data;
 		}
