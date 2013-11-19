@@ -262,6 +262,36 @@
 	};
 	
 	
+	/**
+	 * Clone an object (the clone is done in the callback so the parameters can be
+	 * defined externally and with a closure), while preserving the references to
+	 * the parameters `data` and `aaData`. This is required during the
+	 * initialisation of DataTables so that each table that is initialisation (if
+	 * multiple are at the same time) get clean objects, while keeping the data
+	 * reference if there is one).
+	 *
+	 * @param  {object} src Source object to preserve the data property of
+	 * @param  {function} fn Cloning function
+	 * @return {object} Copied object
+	 * @ignore
+	 */
+	var _save_data = function ( o, fn ) {
+		var d1 = o.aaData;
+		var d2 = o.data;
+	
+		delete o.aaData;
+		delete o.data;
+	
+		var out = fn();
+	
+		o.aaData = d1;
+		out.aaData = d1;
+		o.data = d2;
+		out.data = d2;
+	
+		return out;
+	};
+	
 	
 	
 	/**
@@ -4771,7 +4801,7 @@
 	}
 	
 
-	DataTable = function( oInit )
+	DataTable = function( options )
 	{
 		/**
 		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
@@ -5657,13 +5687,27 @@
 		
 
 		var _that = this;
+		var emptyInit = options === undefined;
+		var len = this.length;
+
+		if ( emptyInit ) {
+			options = {};
+		}
+
 		this.each(function() {
-			/*global oInit,_that*/
+			// For each initialisation we want to give it a clean initialisation
+			// object that can be bashed around
+			var oInit = len > 1 ? // optimisation for single table case
+				_save_data( options, function () {
+					return $.extend( true, {}, options );
+				} ) :
+				options;
+
+			/*global oInit,_that,emptyInit*/
 			var i=0, iLen, j, jLen, k, kLen;
 			var sId = this.getAttribute( 'id' );
 			var bInitHandedOff = false;
 			var defaults = DataTable.defaults;
-			var oInitEmpty = oInit === undefined ? true : false;
 			
 			
 			/* Sanity check */
@@ -5682,9 +5726,6 @@
 			_fnCamelToHungarian( defaults.column, defaults.column, true );
 			
 			/* Setting up the initialisation object */
-			if ( !oInit ) {
-				oInit = {};
-			}
 			_fnCamelToHungarian( defaults, oInit );
 			
 			/* Check to see if we are re-initialising a table */
@@ -5697,7 +5738,7 @@
 					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
 					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : defaults.bDestroy;
 			
-					if ( oInitEmpty || bRetrieve )
+					if ( emptyInit || bRetrieve )
 					{
 						return allSettings[i].oInstance;
 					}
@@ -5763,13 +5804,12 @@
 			}
 			
 			// Apply the defaults and init options to make a single init object will all
-			// options defined from defaults and instance options. Note that the aaData
-			// option is removed then re-added to ensure the original data reference is
-			// retained. Even if undefined the code below is safe
-			var tmpData = oInit.aaData;
-			delete oInit.aaData;
-			oInit = $.extend( true, {}, defaults, oInit );
-			oInit.aaData = tmpData;
+			// options defined from defaults and instance options. Note that the aaData must
+			// be retained to keep data reference. All other references are broken
+			oInit = _save_data( oInit, function () {
+				return $.extend( true, {}, defaults, oInit );
+			} );
+			
 			
 			// Map the initialisation options onto the settings object
 			_fnMap( oSettings.oFeatures, oInit, [
