@@ -6657,14 +6657,15 @@
 	
 	_Api.extend = function ( scope, obj, ext )
 	{
-		if ( ! obj instanceof _Api ) {
+		// Only extend API instances and static properties of the API
+		if ( ! obj || ( ! (obj instanceof _Api) && ! obj.__dt_wrapper ) ) {
 			return;
 		}
 	
 		var
 			i, ien,
 			j, jen,
-			struct,
+			struct, inner,
 			methodScoping = function ( fn, struc ) {
 				return function () {
 					var ret = fn.apply( scope, arguments );
@@ -6677,14 +6678,14 @@
 	
 		for ( i=0, ien=ext.length ; i<ien ; i++ ) {
 			struct = ext[i];
+			inner = obj[ struct.name ];
 	
 			// Value
-			if ( typeof struct.val === 'function' ) {
-				obj[ struct.name ] = methodScoping( struct.val, struct );
-			}
-			else {
-				obj[ struct.name ] = struct.val;
-			}
+			inner = typeof struct.val === 'function' ?
+				methodScoping( struct.val, struct ) :
+				struct.val;
+	
+			inner.__dt_wrapper = true;
 	
 			// Property extension
 			_Api.extend( scope, obj[ struct.name ], struct.propExt );
