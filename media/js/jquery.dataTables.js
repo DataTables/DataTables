@@ -7648,15 +7648,15 @@
 	 * "{integer}"         - column index < 0 (count from right)
 	 * "{integer}:visIdx"  - visible column index (i.e. translate to column index)
 	 * "{integer}:visible" - alias for {integer}:visIdx
-	 * "{string}"          - column name
-	 * "{string}:jq"       - jQuery selector on column header nodes
+	 * "{string}:name"     - column name
+	 * "{string}"          - jQuery selector on column header nodes
 	 *
 	 */
 	
 	// can be an array of these items, comma separated list, or an array of comma
 	// separated lists
 	
-	var __re_column_selector = /^(.*):(jq|visIdx|visible)$/;
+	var __re_column_selector = /^(.*):(name|visIdx|visible)$/;
 	
 	var __column_selector = function ( settings, selector, opts )
 	{
@@ -7689,21 +7689,21 @@
 							// Visible index given, convert to column index
 							return [ _fnVisibleToColumnIndex( settings, parseInt( match[1], 10 ) ) ];
 	
-						case 'jq':
-							// jQuery selector on the TH elements for the columns
-							return $( nodes )
-								.filter( match[1] )
-								.map( function () {
-									return $.inArray( this, nodes ); // `nodes` is column index complete and in order
-								} )
-								.toArray();
+						case 'name':
+							// match by name. `names` is column index complete and in order
+							return $.map( names, function (name, i) {
+								return name === match[1] ? i : null;
+							} );
 					}
 				}
 				else {
-					// match by name. `names` is column index complete and in order
-					return $.map( names, function (name, i) {
-						return name === s ? i : null;
-					} );
+					// jQuery selector on the TH elements for the columns
+					return $( nodes )
+						.filter( s )
+						.map( function () {
+							return $.inArray( this, nodes ); // `nodes` is column index complete and in order
+						} )
+						.toArray();
 				}
 			}
 		} );
