@@ -4266,7 +4266,6 @@
 	
 		/* Tell the draw function that we have sorted the data */
 		oSettings.bSorted = true;
-		_fnCallbackFire( oSettings, null, 'order', [oSettings] );
 	}
 	
 	
@@ -6072,7 +6071,7 @@
 							sortedColumns[ val.col ] = val.dir;
 						} );
 			
-						_fnCallbackFire( oSettings, null, 'sort', [oSettings, aSort, sortedColumns] );
+						_fnCallbackFire( oSettings, null, 'order', [oSettings, aSort, sortedColumns] );
 						_fnSortingClasses( oSettings );
 						_fnSortAria( oSettings );
 					}
@@ -13649,7 +13648,7 @@
 				// No additional mark-up required
 	
 				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'sort', function ( e, settings, sorting, columns ) {
+				$(settings.nTable).on( 'order.dt', function ( e, settings, sorting, columns ) {
 					cell
 						.removeClass(
 							column.sSortingClass +' '+
@@ -13674,7 +13673,7 @@
 					.appendTo( cell );
 	
 				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'sort', function ( e, settings, sorting, columns ) {
+				$(settings.nTable).on( 'order.dt', function ( e, settings, sorting, columns ) {
 					cell
 						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
 						.addClass( columns[ idx ] == 'asc' ?
