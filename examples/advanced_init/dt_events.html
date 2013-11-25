@@ -26,9 +26,9 @@ $(document).ready(function() {
 	}
 
 	$('#example')
-		.on( 'order',  function () { eventFired( 'order' ); } )
-		.on( 'search', function () { eventFired( 'Filter' ); } )
-		.on( 'page',   function () { eventFired( 'Page' ); } )
+		.on( 'order.dt',  function () { eventFired( 'Order' ); } )
+		.on( 'search.dt', function () { eventFired( 'Search' ); } )
+		.on( 'page.dt',   function () { eventFired( 'Page' ); } )
 		.dataTable();
 } );
 
@@ -42,8 +42,15 @@ $(document).ready(function() {
 			<h1>DataTables example <span>- DataTables events</span></h1>
 
 			<div class="info">
-				<p>DataTables fires a number of custom events which you can bind to in the standard jQuery fashion,
-				allowing your code to perform custom actions when these events occur.</p>
+				<p>DataTables fires a number of custom events which you can bind to in the standard jQuery fashion
+				(although note that the namespace <code>dt</code> <em>must</em> be used), allowing your code to perform
+				custom actions when these events occur.</p>
+
+				<p>All custom events fired by DataTables are fired with the namespace <code>dt</code> in order to
+				prevent conflicts arising with other jQuery plug-ins which also fire events. The DataTables <a href=
+				"//datatables.net/api/on%28%29"><code class="api" title="API method">on()</code></a> method can be used
+				like the jQuery <code>on()</code> method, but will automatically append the <code>dt</code> namespace
+				if required.</p>
 
 				<p>This example shows the use of the <a href="//datatables.net/event/sort"><code class="event" title=
 				"Event">sort</code></a>, <a href="//datatables.net/event/search"><code class="event" title=
@@ -556,9 +563,9 @@ $(document).ready(function() {
 	}
 
 	$('#example')
-		.on( 'order',  function () { eventFired( 'order' ); } )
-		.on( 'search', function () { eventFired( 'Filter' ); } )
-		.on( 'page',   function () { eventFired( 'Page' ); } )
+		.on( 'order.dt',  function () { eventFired( 'Order' ); } )
+		.on( 'search.dt', function () { eventFired( 'Search' ); } )
+		.on( 'page.dt',   function () { eventFired( 'Page' ); } )
 		.dataTable();
 } );
 </pre>
