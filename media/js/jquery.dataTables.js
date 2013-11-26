@@ -2212,7 +2212,13 @@
 		if ( data && data.__legacy ) {
 			var tmp = {};
 			$.each( data, function (key, val) {
-				tmp[val.name] = val.value;
+				if(typeof tmp[val.name] == "undefined") {
+					tmp[val.name] = val.value;
+				} else if ($.isPlainObject( tmp[val.name] )) {
+					tmp[val.name].push(val.value);
+				} else {
+					tmp[val.name] = new Array(tmp[val.name],val.value);
+				}
 			} );
 			data = tmp;
 		}
