@@ -2211,8 +2211,23 @@
 		// Convert to object based for 1.10+ if using the old scheme
 		if ( data && data.__legacy ) {
 			var tmp = {};
+			var rbracket = /(.*?)\[\]$/;
+	
 			$.each( data, function (key, val) {
-				tmp[val.name] = val.value;
+				var match = val.name.match(rbracket);
+	
+				if ( match ) {
+					// Support for arrays
+					var name = match[0];
+	
+					if ( ! tmp[ name ] ) {
+						tmp[ name ] = [];
+					}
+					tmp[ name ].push( val.value );
+				}
+				else {
+					tmp[val.name] = val.value;
+				}
 			} );
 			data = tmp;
 		}
