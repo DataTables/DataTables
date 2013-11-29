@@ -13717,13 +13717,24 @@
 	} );
 	
 
-	// jQuery aliases
+	// jQuery access
 	$.fn.dataTable = DataTable;
+
+	// Legacy aliases
+	$.fn.dataTableSettings = DataTable.settings;
+	$.fn.dataTableExt = DataTable.ext;
+
+	// With a capital `D` we return a DataTables API instance rather than a
+	// jQuery object
 	$.fn.DataTable = function ( opts ) {
 		return $(this).dataTable( opts ).api();
 	};
-	$.fn.dataTableSettings = DataTable.settings;
-	$.fn.dataTableExt = DataTable.ext;
+
+	// All properties that are available to $.fn.dataTable should also be
+	// available on $.fn.DataTable
+	$.each( DataTable, function ( prop, val ) {
+		$.fn.DataTable[ prop ] = val;
+	} );
 
 
 	// Information about events fired by DataTables - for documentation.
