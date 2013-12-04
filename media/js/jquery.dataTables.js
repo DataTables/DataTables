@@ -8435,12 +8435,12 @@
 			// When scrolling we had to break the table up - restore it
 			if ( table != thead.parentNode ) {
 				jqTable.children('thead').remove();
-				jqTable( thead );
+				jqTable.append( thead );
 			}
 	
 			if ( tfoot && table != tfoot.parentNode ) {
 				jqTable.children('tfoot').remove();
-				jqTable( tfoot );
+				jqTable.append( tfoot );
 			}
 	
 			// Remove the DataTables generated nodes, events and classes
