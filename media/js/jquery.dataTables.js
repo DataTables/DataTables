@@ -4368,7 +4368,7 @@
 				sorting[sorting.length-1]._idx = 0;
 			}
 		}
-		else if ( sorting[0][0] == colIdx ) {
+		else if ( sorting.length && sorting[0][0] == colIdx ) {
 			// Single column - already sorting on this column, modify the sort
 			nextSortIdx = next( sorting[0] );
 	
