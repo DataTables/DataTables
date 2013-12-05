@@ -262,37 +262,6 @@
 	};
 	
 	
-	/**
-	 * Clone an object (the clone is done in the callback so the parameters can be
-	 * defined externally and with a closure), while preserving the references to
-	 * the parameters `data` and `aaData`. This is required during the
-	 * initialisation of DataTables so that each table that is initialisation (if
-	 * multiple are at the same time) get clean objects, while keeping the data
-	 * reference if there is one).
-	 *
-	 * @param  {object} src Source object to preserve the data property of
-	 * @param  {function} fn Cloning function
-	 * @return {object} Copied object
-	 * @ignore
-	 */
-	var _save_data = function ( o, fn ) {
-		var d1 = o.aaData;
-		var d2 = o.data;
-	
-		delete o.aaData;
-		delete o.data;
-	
-		var out = fn();
-	
-		o.aaData = d1;
-		out.aaData = d1;
-		o.data = d2;
-		out.data = d2;
-	
-		return out;
-	};
-	
-	
 	
 	/**
 	 * Create a mapping object that allows camel case parameters to be looked up
@@ -4693,6 +4662,47 @@
 	
 	
 	/**
+	 * Extend objects - very similar to jQuery.extend, but deep copy objects, and
+	 * shallow copy arrays. The reason we need to do this, is that we don't want to
+	 * deep copy array init values (such as aaSorting) since the dev wouldn't be
+	 * able to override them, but we do want to deep copy arrays.
+	 *  @param {object} out Object to extend
+	 *  @param {object} extender Object from which the properties will be applied to
+	 *      out
+	 *  @param {boolean} breakRefs If true, then arrays will be sliced to take an
+	 *      independent copy with the exception of the `data` or `aaData` parameters
+	 *      if they are present. This is so you can pass in a collection to
+	 *      DataTables and have that used as your data source without breaking the
+	 *      references
+	 *  @returns {object} out Reference, just for convenience - out === the return.
+	 *  @memberof DataTable#oApi
+	 *  @todo This doesn't take account of arrays inside the deep copied objects.
+	 */
+	function _fnExtend( out, extender, breakRefs )
+	{
+		var val;
+	
+		for ( var prop in extender ) {
+			if ( extender.hasOwnProperty(prop) ) {
+				val = extender[prop];
+	
+				if ( $.isPlainObject( val ) ) {
+					$.extend( true, out[prop], val );
+				}
+				else if ( breakRefs && prop !== 'data' && prop !== 'aaData' && $.isArray(val) ) {
+					out[prop] = val.slice();
+				}
+				else {
+					out[prop] = val;
+				}
+			}
+		}
+	
+		return out;
+	}
+	
+	
+	/**
 	 * Bind an event handers to allow a click or return key to activate the callback.
 	 * This is good for accessibility since a return on the keyboard will have the
 	 * same effect as a click, if the element has focus.
@@ -5711,10 +5721,9 @@
 		this.each(function() {
 			// For each initialisation we want to give it a clean initialisation
 			// object that can be bashed around
+			var o = {};
 			var oInit = len > 1 ? // optimisation for single table case
-				_save_data( options, function () {
-					return $.extend( true, {}, options );
-				} ) :
+				_fnExtend( o, options, true ) :
 				options;
 
 			/*global oInit,_that,emptyInit*/
@@ -5818,11 +5827,8 @@
 			}
 			
 			// Apply the defaults and init options to make a single init object will all
-			// options defined from defaults and instance options. Note that the aaData must
-			// be retained to keep data reference. All other references are broken
-			oInit = _save_data( oInit, function () {
-				return $.extend( true, {}, defaults, oInit );
-			} );
+			// options defined from defaults and instance options.
+			oInit = _fnExtend( $.extend( true, {}, defaults ), oInit );
 			
 			
 			// Map the initialisation options onto the settings object
