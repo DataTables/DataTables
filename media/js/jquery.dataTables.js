@@ -1602,7 +1602,7 @@
 		if ( tfoot !== null ) {
 			var cells = oSettings.aoFooter[0];
 	
-			for ( i=0, ien=columns.length ; i<ien ; i++ ) {
+			for ( i=0, ien=cells.length ; i<ien ; i++ ) {
 				column = columns[i];
 				column.nTf = cells[i].cell;
 	
@@ -6147,16 +6147,14 @@
 			var thead = $(this).children('thead');
 			if ( thead.length === 0 )
 			{
-				thead = [ document.createElement( 'thead' ) ];
-				this.appendChild( thead[0] );
+				thead = $('<thead/>').appendTo(this);
 			}
 			oSettings.nTHead = thead[0];
 			
 			var tbody = $(this).children('tbody');
 			if ( tbody.length === 0 )
 			{
-				tbody = [ document.createElement( 'tbody' ) ];
-				this.appendChild( tbody[0] );
+				tbody = $('<tbody/>').appendTo(this);
 			}
 			oSettings.nTBody = tbody[0];
 			
@@ -6165,12 +6163,13 @@
 			{
 				// If we are a scrolling table, and no footer has been given, then we need to create
 				// a tfoot element for the caption element to be appended to
-				tfoot = [ document.createElement( 'tfoot' ) ];
-				this.appendChild( tfoot[0] );
+				tfoot = $('<tfoot/>').appendTo(this);
 			}
 			
-			if ( tfoot.length > 0 )
-			{
+			if ( tfoot.length === 0 || tfoot.children().length === 0 ) {
+				$(this).addClass( oSettings.oClasses.sNoFooter );
+			}
+			else if ( tfoot.length > 0 ) {
 				oSettings.nTFoot = tfoot[0];
 				_fnDetectHeader( oSettings.aoFooter, oSettings.nTFoot );
 			}
@@ -13281,6 +13280,7 @@
 	
 	$.extend( DataTable.ext.classes, {
 		"sTable": "dataTable",
+		"sNoFooter": "no-footer",
 	
 		/* Paging buttons */
 		"sPageButton": "paginate_button",

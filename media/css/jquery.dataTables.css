@@ -210,6 +210,10 @@ table.dataTable.order-column.hover tbody tr.odd:hover.selected > .sorting_3,
 table.dataTable.order-column.hover tbody tr.even:hover.selected > .sorting_3 {
   background-color: #a4b2cb;
 }
+table.dataTable.no-footer {
+  border-bottom: 1px solid #111111;
+  margin-bottom: 0.5em;
+}
 
 table.dataTable,
 table.dataTable th,
