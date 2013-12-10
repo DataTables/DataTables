@@ -7649,7 +7649,7 @@
 	_api_register( 'row().child()', function ( data, klass ) {
 		var ctx = this.context;
 	
-		if ( ! data ) {
+		if ( data === undefined ) {
 			// get
 			return ctx.length && this.length ?
 				ctx[0].aoData[ this[0] ]._details :
