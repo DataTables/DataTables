@@ -5,8 +5,7 @@
 	"homepage": "http://www.datatables.net/",
 	"author": "SpryMedia", 
 	"license": [
-		"BSD-3-Clause",
-		"GPL-2.0"
+		"MIT"
 	],
 	"prefer-stable": true,
 	"support": {

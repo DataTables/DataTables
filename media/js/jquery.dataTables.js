@@ -11,10 +11,8 @@
  * @contact     www.sprymedia.co.uk/contact
  * @copyright   Copyright 2008-2013 Allan Jardine.
  *
- * This source file is free software, available under the following licenses:
- *   GPL v2 license        - http://datatables.net/license_gpl2
- *   BSD (3 point) license - http://datatables.net/license_bsd
- *   MIT license           - http://datatables.net/license_mit
+ * This source file is free software, available under the following license:
+ *   MIT license - http://datatables.net/license
  *
  * This source file is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY

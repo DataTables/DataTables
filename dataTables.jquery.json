@@ -12,12 +12,8 @@
 	},
 	"licenses": [
 		{
-			"type": "BSD",
+			"type": "MIT",
 			"url": "http://datatables.net/license_bsd"
-		},
-		{
-			"type": "GPLv2",
-			"url": "http://datatables.net/license_gpl2"
 		}
 	],
 	"dependencies": {
