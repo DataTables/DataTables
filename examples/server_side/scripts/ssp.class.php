@@ -18,6 +18,39 @@
 
 class SSP {
 	/**
+	 * Create the data output array for the DataTables rows
+	 *
+	 *  @param  array $columns Column information array
+	 *  @param  array $data    Data from the SQL get
+	 *  @return array          Formatted data in a row based format
+	 */
+	static function data_output ( $columns, $data )
+	{
+		$out = array();
+
+		for ( $i=0, $ien=count($data) ; $i<$ien ; $i++ ) {
+			$row = array();
+
+			for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
+				$column = $columns[$j];
+
+				// Is there a formatter?
+				if ( isset( $column['formatter'] ) ) {
+					$row[ $column['dt'] ] = $column['formatter']( $data[$i][ $column['db'] ], $data[$i] );
+				}
+				else {
+					$row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
+				}
+			}
+
+			$out[] = $row;
+		}
+
+		return $out;
+	}
+
+
+	/**
 	 * Paging
 	 *
 	 * Construct the LIMIT clause for server-side processing SQL query
@@ -148,6 +181,65 @@ class SSP {
 		}
 
 		return $where;
+	}
+
+
+	/**
+	 * Perform the SQL queries needed for an server-side processing requested,
+	 * utilising the helper functions of this class, limit(), order() and
+	 * filter() among others. The returned array is ready to be encoded as JSON
+	 * in response to an SSP request, or can be modified if needed before
+	 * sending back to the client.
+	 *
+	 *  @param  array $request Data sent to server by DataTables
+	 *  @param  array $sql_details SQL connection details - see sql_connect()
+	 *  @param  string $table SQL table to query
+	 *  @param  string $primaryKey Primary key of the table
+	 *  @param  array $columns Column information array
+	 *  @return array          Server-side processing response array
+	 */
+	static function simple ( $request, $sql_details, $table, $primaryKey, $columns )
+	{
+		$bindings = array();
+		$db = SSP::sql_connect( $sql_details );
+
+		// Build the SQL query string from the request
+		$limit = SSP::limit( $request, $columns );
+		$order = SSP::order( $request, $columns );
+		$where = SSP::filter( $request, $columns, $bindings );
+
+		// Main query to actually get the data
+		$data = SSP::sql_exec( $db, $bindings,
+			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", SSP::pluck($columns, 'db'))."`
+			 FROM `$table`
+			 $where
+			 $order
+			 $limit"
+		);
+
+		// Data set length after filtering
+		$resFilterLength = SSP::sql_exec( $db,
+			"SELECT FOUND_ROWS()"
+		);
+		$recordsFiltered = $resFilterLength[0][0];
+
+		// Total data set length
+		$resTotalLength = SSP::sql_exec( $db,
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`"
+		);
+		$recordsTotal = $resTotalLength[0][0];
+
+
+		/*
+		 * Output
+		 */
+		return array(
+			"draw"            => intval( $request['draw'] ),
+			"recordsTotal"    => intval( $recordsTotal ),
+			"recordsFiltered" => intval( $recordsFiltered ),
+			"data"            => SSP::data_output( $columns, $data )
+		);
 	}
 
 

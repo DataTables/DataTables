@@ -34,8 +34,20 @@ $columns = array(
 	array( 'db' => 'last_name',  'dt' => 1 ),
 	array( 'db' => 'position',   'dt' => 2 ),
 	array( 'db' => 'office',     'dt' => 3 ),
-	array( 'db' => 'start_date', 'dt' => 4 ),
-	array( 'db' => 'salary',     'dt' => 5 )
+	array(
+		'db'        => 'start_date',
+		'dt'        => 4,
+		'formatter' => function( $d, $row ) {
+			return date( 'jS M y', strtotime($d));
+		}
+	),
+	array(
+		'db'        => 'salary',
+		'dt'        => 5,
+		'formatter' => function( $d, $row ) {
+			return '$'.number_format($d);
+		}
+	)
 );
 
 // SQL server connection information
@@ -61,71 +73,8 @@ if ( is_file( $file ) ) {
 }
 
 require( 'ssp.class.php' );
-$bindings = array();
-$db = SSP::sql_connect( $sql_details );
 
-// Main query to actually get the data
-$limit = SSP::limit( $_GET, $columns );
-$order = SSP::order( $_GET, $columns );
-$where = SSP::filter( $_GET, $columns, $bindings );
-
-// Main query to actually get the data
-$data = SSP::sql_exec( $db, $bindings,
-	"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", SSP::pluck($columns, 'db'))."`
-	 FROM `$table`
-	 $where
-	 $order
-	 $limit"
+echo json_encode(
+	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
 );
-
-// Data set length after filtering
-$resFilterLength = SSP::sql_exec( $db,
-	"SELECT FOUND_ROWS()"
-);
-$recordsFiltered = $resFilterLength[0][0];
-
-// Total data set length
-$resTotalLength = SSP::sql_exec( $db,
-	"SELECT COUNT(`{$primaryKey}`)
-	 FROM   `$table`"
-);
-$recordsTotal = $resTotalLength[0][0];
-
-
-/*
- * Output
- */
-$output = array(
-	"draw"            => intval( $_GET['draw'] ),
-	"recordsTotal"    => intval( $recordsTotal ),
-	"recordsFiltered" => intval( $recordsFiltered ),
-	"data" => array()
-);
-
-for ( $i=0, $ien=count($data) ; $i<$ien ; $i++ ) {
-	$row = array();
-
-	for ( $j=0, $jen=count($columns) ; $j<$jen ; $j++ ) {
-		$column = $columns[$j];
-
-		// Formatting of data for specific columns
-		switch ( $columns[$j]['db'] ) {
-			case 'salary':
-				$row[ $column['dt'] ] = '$'.number_format($data[$i]['salary']);
-				break;
-
-			case 'start_date':
-				$row[ $column['dt'] ] = date( 'jS M y', strtotime($data[$i]['start_date']));
-				break;
-
-			default:
-				$row[ $column['dt'] ] = $data[$i][ $columns[$j]['db'] ];
-				break;
-		}
-	}
-
-	$output['data'][] = $row;
-}
-
-echo json_encode( $output );
 
