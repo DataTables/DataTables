@@ -24,7 +24,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_empty,_intVal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer*/
+/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_empty,_intVal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -1742,7 +1742,7 @@
 		var iOpenRows = oSettings.aoOpenRows.length;
 		var oLang = oSettings.oLanguage;
 		var iInitDisplayStart = oSettings.iInitDisplayStart;
-		var bServerSide = oSettings.oFeatures.bServerSide;
+		var bServerSide = _fnDataSource( oSettings ) == 'ssp';
 		var aiDisplay = oSettings.aiDisplay;
 	
 		oSettings.bDrawing = true;
@@ -1817,7 +1817,7 @@
 		{
 			/* Table is empty - create a row with an empty message in it */
 			var sZero = oLang.sZeroRecords;
-			if ( oSettings.iDraw == 1 && (oSettings.sAjaxSource || oSettings.ajax) && !bServerSide )
+			if ( oSettings.iDraw == 1 &&  _fnDataSource( oSettings ) == 'ajax' )
 			{
 				sZero = oLang.sLoadingRecords;
 			}
@@ -2578,7 +2578,7 @@
 		_fnColumnTypes( oSettings );
 	
 		/* In server-side processing all filtering is done by the server, so no point hanging around here */
-		if ( !oSettings.oFeatures.bServerSide )
+		if ( _fnDataSource( oSettings ) != 'ssp' )
 		{
 			/* Global filter */
 			_fnFilter( oSettings, oInput.sSearch, iForce, oInput.bRegex, oInput.bSmart, oInput.bCaseInsensitive );
@@ -2970,9 +2970,10 @@
 		_fnReDraw( settings );
 	
 		// Server-side processing init complete is done by _fnAjaxUpdateDraw
-		if ( ! features.bServerSide ) {
+		var dataSrc = _fnDataSource( settings );
+		if ( dataSrc != 'ssp' ) {
 			// if there is an ajax source load the data
-			if ( settings.sAjaxSource || settings.ajax ) {
+			if ( dataSrc == 'ajax' ) {
 				_fnBuildAjax( settings, [], function(json) {
 					var aData = _fnAjaxDataSrc( settings, json );
 	
@@ -4189,7 +4190,7 @@
 		}
 	
 		/* No sorting required if server-side or no sorting array */
-		if ( !oSettings.oFeatures.bServerSide && aSort.length !== 0 )
+		if ( _fnDataSource( oSettings ) != 'ssp' && aSort.length !== 0 )
 		{
 			// Create a value - key array of the current row positions such that we can use their
 			// current position during the sort, if values match, in order to perform stable sorting
@@ -4852,6 +4853,26 @@
 	
 		// Use the default
 		return host._;
+	}
+	
+	
+	/**
+	 * Detect the data source being used for the table. Used to simplify the code
+	 * a little (ajax) and to make it compress a little smaller.
+	 *
+	 *  @param {object} settings dataTables settings object
+	 *  @returns {string} Data source
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnDataSource ( settings )
+	{
+		if ( settings.oFeatures.bServerSide ) {
+			return 'ssp';
+		}
+		else if ( settings.ajax || settings.sAjaxSource ) {
+			return 'ajax';
+		}
+		return 'dom';
 	}
 	
 
@@ -5728,7 +5749,8 @@
 			_fnCallbackReg: _fnCallbackReg,
 			_fnCallbackFire: _fnCallbackFire,
 			_fnLengthOverflow: _fnLengthOverflow,
-			_fnRenderer: _fnRenderer
+			_fnRenderer: _fnRenderer,
+			_fnDataSource: _fnDataSource
 		};
 		
 		$.extend( DataTable.ext.internal, this.internal );
@@ -6182,7 +6204,7 @@
 					_fnAddData( oSettings, oInit.aaData[ i ] );
 				}
 			}
-			else if ( oSettings.bDeferLoading || (oSettings.sAjaxSource === null && oSettings.ajax === null) )
+			else if ( oSettings.bDeferLoading || _fnDataSource( oSettings ) == 'dom' )
 			{
 				/* Grab the data from the page - only do this when deferred loading or no Ajax
 				 * source since there is no point in reading the DOM data if we are then going
@@ -7071,7 +7093,7 @@
 	
 	
 	var __reload = function ( settings, holdPosition, callback ) {
-		if ( settings.oFeatures.bServerSide ) {
+		if ( _fnDataSource( settings ) == 'ssp' ) {
 			_fnReDraw( settings, holdPosition );
 		}
 		else {
@@ -12693,8 +12715,8 @@
 		 */
 		"fnRecordsTotal": function ()
 		{
-			return this.oFeatures.bServerSide ?
-				parseInt(this._iRecordsTotal, 10) :
+			return _fnDataSource( this ) == 'ssp' ?
+				this._iRecordsTotal * 1 :
 				this.aiDisplayMaster.length;
 		},
 	
@@ -12704,8 +12726,8 @@
 		 */
 		"fnRecordsDisplay": function ()
 		{
-			return this.oFeatures.bServerSide ?
-				parseInt(this._iRecordsDisplay, 10) :
+			return _fnDataSource( this ) == 'ssp' ?
+				this._iRecordsDisplay * 1 :
 				this.aiDisplay.length;
 		},
 	
