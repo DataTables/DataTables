@@ -265,7 +265,6 @@
 }
 .syntaxhighlighter .gutter div {
   color: #5C5C5C !important;
-  width: 20px !important;
 }
 .syntaxhighlighter .gutter .line.alt1, .syntaxhighlighter  .gutter .line.alt2 {
   background-color: white !important;
@@ -373,5 +372,18 @@
 	text-decoration: underline;
 	cursor: pointer;
 	*cursor: hand;
+}
+
+.syntaxhighlighter table {
+  table-layout: fixed !important;
+}
+
+.syntaxhighlighter table td.gutter {
+  width: 6% !important;
+}
+
+.syntaxhighlighter table td.code {
+  width: 94% !important;
+  overflow: auto !important;
 }
 
