@@ -379,11 +379,11 @@
 }
 
 .syntaxhighlighter table td.gutter {
-  width: 6% !important;
+  width: 46px !important; /* enough for three digits */
 }
 
 .syntaxhighlighter table td.code {
-  width: 94% !important;
+  width: auto !important;
   overflow: auto !important;
 }
 
