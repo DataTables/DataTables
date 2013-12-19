@@ -37,9 +37,10 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>As well as being able to pass language information to DataTables through the <a href=
-				"//datatables.net/init/language"><code class="option" title="Initialisation option">language</code></a>
-				initialisation option, you can also store the language information in a file, which DataTables can load
-				by Ajax using the <a href="//datatables.net/init/language.url"><code class="option" title=
+				"//datatables.net/reference/option/language"><code class="option" title=
+				"Initialisation option">language</code></a> initialisation option, you can also store the language
+				information in a file, which DataTables can load by Ajax using the <a href=
+				"//datatables.net/reference/option/language.url"><code class="option" title=
 				"Initialisation option">language.url</code></a> option.</p>
 
 				<p>The following example shows DataTables reading a German language file.</p>
@@ -537,16 +538,14 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;language&quot;: {
 			&quot;url&quot;: &quot;../resources/de_DE.txt&quot;
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -568,10 +567,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

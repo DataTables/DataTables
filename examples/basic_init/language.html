@@ -39,8 +39,8 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>Changing the language information displayed by DataTables is as simple as passing in a <a href=
-				"//datatables.net/init/language"><code class="option" title="Initialisation option">language</code></a>
-				object to the DataTable constructor.</p>
+				"//datatables.net/reference/option/language"><code class="option" title=
+				"Initialisation option">language</code></a> object to the DataTable constructor.</p>
 
 				<p>The example above shows a different set of English string being used, rather than the defaults.</p>
 			</div>
@@ -537,9 +537,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;language&quot;: {
 			&quot;lengthMenu&quot;: &quot;Display _MENU_ records per page&quot;,
@@ -549,8 +548,7 @@ $(document).ready(function() {
 			&quot;infoFiltered&quot;: &quot;(filtered from _MAX_ total records)&quot;
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -572,10 +570,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

@@ -45,13 +45,13 @@ $(document).ready(function() {
 			<div class="info">
 				<p>The following example shows how a callback function can be used to format a particular row at draw
 				time. For each row that is generated for display, the <a href=
-				"//datatables.net/init/createdRow"><code class="option" title=
+				"//datatables.net/reference/option/createdRow"><code class="option" title=
 				"Initialisation option">createdRow</code></a> function is called once and once only. It is passed the
 				create row node which can then be modified.</p>
 
 				<p>In this case a trivial example of making the 'salary' column blue and bold by adding a CSS class to
 				the container cell if the salary is greater than $4,000. Note that <a href=
-				"//datatables.net/init/createdCell"><code class="option" title=
+				"//datatables.net/reference/option/createdCell"><code class="option" title=
 				"Initialisation option">createdCell</code></a> could also be used to create exactly the same
 				effect.</p>
 			</div>
@@ -548,9 +548,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;createdRow&quot;: function ( row, data, index ) {
 			if ( data[5].replace(/[\$,]/g, '') * 1 &gt; 4000 ) {
@@ -558,8 +557,7 @@ $(document).ready(function() {
 			}
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -581,13 +579,10 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-td.highlight {
+						below:</p><code class="multiline brush: js;">td.highlight {
 		font-weight: bold;
 		color: blue;
-	}
-</pre>
+	}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

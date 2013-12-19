@@ -36,13 +36,14 @@ $(document).ready(function() {
 				<p>DataTables has built in support for (jQuery UI ThemeRoller)[http://jqueryui.com/themeroller/] which
 				makes it very easy to style your tables to match other jQuery UI components. To enable the jQuery UI
 				styling of DataTables, simply include the jQuery stylesheet, DataTables' additions for the jQuery
-				stylesheet (to add row styling etc) and set the <a href="//datatables.net/init/jQueryUI"><code class=
-				"option" title="Initialisation option">jQueryUI</code></a> initialisation for your table.</p>
+				stylesheet (to add row styling etc) and set the <a href=
+				"//datatables.net/reference/option/jQueryUI"><code class="option" title=
+				"Initialisation option">jQueryUI</code></a> initialisation for your table.</p>
 
-				<p>Please note that the <a href="//datatables.net/init/jQueryUI"><code class="option" title=
-				"Initialisation option">jQueryUI</code></a> option is deprecated in DataTables 1.10. In DataTables 1.11
-				it will be replaced with a styling plug-in, matching how Bootstrap and Foundation styles are integrated
-				into DataTables.</p>
+				<p>Please note that the <a href="//datatables.net/reference/option/jQueryUI"><code class="option"
+				title="Initialisation option">jQueryUI</code></a> option is deprecated in DataTables 1.10. In
+				DataTables 1.11 it will be replaced with a styling plug-in, matching how Bootstrap and Foundation
+				styles are integrated into DataTables.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -537,14 +538,12 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		jQueryUI: true
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -566,10 +565,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

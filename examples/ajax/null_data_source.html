@@ -46,26 +46,28 @@ $(document).ready(function() {
 				number of ways:</p>
 
 				<ul>
-					<li><a href="//datatables.net/init/columns.render"><code class="option" title=
+					<li><a href="//datatables.net/reference/option/columns.render"><code class="option" title=
 					"Initialisation option">columns.render</code></a> for content that is dynamic (i.e. based upon the
 					row's data)</li>
-					<li><a href="//datatables.net/init/columns.defaultContent"><code class="option" title=
+					<li><a href="//datatables.net/reference/option/columns.defaultContent"><code class="option" title=
 					"Initialisation option">columns.defaultContent</code></a> for static content (i.e. simple
 					strings)</li>
 				</ul>
 
-				<p>This examples shows the use of <a href="//datatables.net/init/columns.defaultContent"><code class=
-				"option" title="Initialisation option">columns.defaultContent</code></a> to create a <em>button</em>
-				element in the last column of the table. A simple jQuery <code>click</code> event listener is used to
-				watch for clicks on the row, and when activated uses the <a href=
-				"//datatables.net/api/row%28%29.data%28%29"><code class="api" title=
+				<p>This examples shows the use of <a href=
+				"//datatables.net/reference/option/columns.defaultContent"><code class="option" title=
+				"Initialisation option">columns.defaultContent</code></a> to create a <em>button</em> element in the
+				last column of the table. A simple jQuery <code>click</code> event listener is used to watch for clicks
+				on the row, and when activated uses the <a href=
+				"//datatables.net/reference/api/row().data()"><code class="api" title=
 				"API method">row().data()</code></a> method to get the data for the row and show a bit of information
 				about it in an <code>alert</code> box. This is a simple use case, but it can be built up to be
 				arbitrarily complex.</p>
 
-				<p>Note also that the <a href="//datatables.net/init/columns.data"><code class="option" title=
-				"Initialisation option">columns.data</code></a> option for the column has been set to <code>null</code>
-				to indicate that the column has no information that should be obtained data source object.</p>
+				<p>Note also that the <a href="//datatables.net/reference/option/columns.data"><code class="option"
+				title="Initialisation option">columns.data</code></a> option for the column has been set to
+				<code>null</code> to indicate that the column has no information that should be obtained data source
+				object.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -101,9 +103,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	var table = $('#example').DataTable( {
 		&quot;ajax&quot;: &quot;data/arrays.txt&quot;,
 		&quot;columnDefs&quot;: [ {
@@ -117,8 +118,7 @@ $(document).ready(function() {
 		var data = table.row( $(this).parents('tr') ).data();
 		alert( data[0] +&quot;'s salary is: &quot;+ data[ 5 ] );
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -140,10 +140,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

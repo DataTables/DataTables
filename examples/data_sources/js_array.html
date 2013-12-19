@@ -105,10 +105,11 @@ $(document).ready(function() {
 			<div class="info">
 				<p>At times you will wish to be able to create a table from dynamic information passed directly to
 				DataTables, rather than having it read from the document. This is achieved using the <a href=
-				"//datatables.net/init/data"><code class="option" title="Initialisation option">data</code></a> option
-				in the initialisation object, passing in an array of data to be used (like all other DataTables handled
-				data, this can be arrays or objects using the <a href="//datatables.net/init/columns.data"><code class=
-				"option" title="Initialisation option">columns.data</code></a> option).</p>
+				"//datatables.net/reference/option/data"><code class="option" title=
+				"Initialisation option">data</code></a> option in the initialisation object, passing in an array of
+				data to be used (like all other DataTables handled data, this can be arrays or objects using the
+				<a href="//datatables.net/reference/option/columns.data"><code class="option" title=
+				"Initialisation option">columns.data</code></a> option).</p>
 
 				<p>A <code>&lt;table&gt;</code> must be available on the page for DataTables to use. This examples
 				shows the element being added by Javascript and then initialising the DataTable with a set of data from
@@ -125,9 +126,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-var dataSet = [
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">var dataSet = [
 	['Trident','Internet Explorer 4.0','Win 95+','4','X'],
 	['Trident','Internet Explorer 5.0','Win 95+','5','C'],
 	['Trident','Internet Explorer 5.5','Win 95+','5.5','A'],
@@ -200,8 +200,7 @@ $(document).ready(function() {
 			{ &quot;title&quot;: &quot;Grade&quot;, &quot;class&quot;: &quot;center&quot; }
 		]
 	} );	
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -223,10 +222,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

@@ -41,17 +41,17 @@ $(document).ready(function() {
 				several methods to allow the use of JSON data from any server (browsers have XSS protection rules which
 				will block standard Ajax requests to remote source for security reasons). Using JSONP allows DataTables
 				to load server-side sourced data from any domain and is quite simply done with the
-				<code>dataType</code> option of the <a href="//datatables.net/init/ajax"><code class="option" title=
-				"Initialisation option">ajax</code></a> initialisation option.</p>
+				<code>dataType</code> option of the <a href="//datatables.net/reference/option/ajax"><code class=
+				"option" title="Initialisation option">ajax</code></a> initialisation option.</p>
 
-				<p>When given as an object, the <a href="//datatables.net/init/ajax"><code class="option" title=
-				"Initialisation option">ajax</code></a> option maps directly onto the <a href=
+				<p>When given as an object, the <a href="//datatables.net/reference/option/ajax"><code class="option"
+				title="Initialisation option">ajax</code></a> option maps directly onto the <a href=
 				"http://api.jquery.com/jQuery.ajax/">jQuery ajax</a> options (i.e. any option that can be used in
 				jQuery's Ajax function can also be used in DataTable's <a href=
-				"//datatables.net/init/ajax"><code class="option" title="Initialisation option">ajax</code></a>
-				option).</p>
+				"//datatables.net/reference/option/ajax"><code class="option" title=
+				"Initialisation option">ajax</code></a> option).</p>
 
-				<p>The example below shows <a href="//datatables.net/init/ajax"><code class="option" title=
+				<p>The example below shows <a href="//datatables.net/reference/option/ajax"><code class="option" title=
 				"Initialisation option">ajax</code></a> being used with the <code>dataType</code> option set to
 				retrieve JSONP data for server-side processing in DataTables.</p>
 			</div>
@@ -89,9 +89,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;processing&quot;: true,
 		&quot;serverSide&quot;: true,
@@ -100,8 +99,7 @@ $(document).ready(function() {
 			&quot;dataType&quot;: &quot;jsonp&quot;
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -123,10 +121,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

@@ -43,9 +43,9 @@ $(document).ready(function() {
 				<p>In addition to the basic behaviour, DataTables can also take colspan and rowspans into account when
 				working with hidden columns. The colspan and rowspan attributes for each cell are automatically
 				calculated and rendered on the page for you. This allows the <a href=
-				"//datatables.net/init/columns.visible"><code class="option" title=
+				"//datatables.net/reference/option/columns.visible"><code class="option" title=
 				"Initialisation option">columns.visible</code></a> option and <a href=
-				"//datatables.net/api/column%28%29.visible%28%29"><code class="api" title=
+				"//datatables.net/reference/api/column().visible()"><code class="api" title=
 				"API method">column().visible()</code></a> method to take into account rowspan / colspan cells, drawing
 				the header correctly.</p>
 
@@ -552,17 +552,15 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;columnDefs&quot;: [ {
 			&quot;visible&quot;: false,
 			&quot;targets&quot;: -1
 		} ]
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -584,10 +582,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

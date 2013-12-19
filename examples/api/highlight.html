@@ -57,11 +57,11 @@ $(document).ready(function() {
 				easy enough using CSS, but for column highlighting, you need to use a little bit of Javascript.</p>
 
 				<p>This example shows that in action on DataTable by making use of the <a href=
-				"//datatables.net/api/cell%28%29.index%28%29"><code class="api" title=
+				"//datatables.net/reference/api/cell().index()"><code class="api" title=
 				"API method">cell().index()</code></a> method to get the index of the column that is to be operated on,
-				and then the <a href="//datatables.net/api/cells%28%29.nodes%28%29"><code class="api" title=
+				and then the <a href="//datatables.net/reference/api/cells().nodes()"><code class="api" title=
 				"API method">cells().nodes()</code></a> and <a href=
-				"//datatables.net/api/column%28%29.nodes%28%29"><code class="api" title=
+				"//datatables.net/reference/api/column().nodes()"><code class="api" title=
 				"API method">column().nodes()</code></a> methods to remove old classes and apply the new highlighted
 				class, respectively.</p>
 			</div>
@@ -558,9 +558,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	var lastIdx = null;
 	var table = $('#example').DataTable();
 	
@@ -576,8 +575,7 @@ $(document).ready(function() {
 		.on( 'mouseleave', function () {
 			$( table.cells().nodes() ).removeClass( 'highlight' );
 		} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -599,12 +597,9 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-td.highlight {
+						below:</p><code class="multiline brush: js;">td.highlight {
 	background-color: whitesmoke !important;
-}
-</pre>
+}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

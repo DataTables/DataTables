@@ -1,5 +1,6 @@
 
 /*global SyntaxHighlighter*/
+SyntaxHighlighter.config.tagName = 'code';
 
 $(document).ready( function () {
 	// Work around for WebKit bug 55740
@@ -15,16 +16,16 @@ $(document).ready( function () {
 
 	// css
 	var cssContainer = $('div.tabs div.css');
-	if ( $.trim( cssContainer.find('pre').text() ) === '' ) {
-		cssContainer.find('pre, p:eq(0), div').css('display', 'none');
+	if ( $.trim( cssContainer.find('code').text() ) === '' ) {
+		cssContainer.find('code, p:eq(0), div').css('display', 'none');
 	}
 
 	// init html
 	var table = $('<p/>').append( $('table').clone() ).html();
 	$('div.tabs div.table').append(
-		'<pre class="brush: html;">\t\t\t'+
+		'<code class="multiline brush: html;">\t\t\t'+
 			escapeHtml( table )+
-		'</pre>'
+		'</code>'
 	);
 	//SyntaxHighlighter.highlight({}, $('#display-init-html')[0]);
 
@@ -36,7 +37,7 @@ $(document).ready( function () {
 
 		var show = function ( str ) {
 			ajaxTab.css( 'display', 'block' );
-			$('div.tabs div.ajax pre').remove();
+			$('div.tabs div.ajax code').remove();
 
 			// Old IE :-|
 			try {
@@ -44,9 +45,9 @@ $(document).ready( function () {
 			} catch ( e ) {}
 
 			$('div.tabs div.ajax').append(
-				'<pre class="brush: js;">'+str+'</pre>'
+				'<code class="multiline brush: js;">'+str+'</code>'
 			);
-			SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax pre')[0] );
+			SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
 		};
 
 		// First draw

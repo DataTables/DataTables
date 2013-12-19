@@ -46,9 +46,10 @@ $(document).ready(function() {
 				working with the data much more understandable, particularly if you are using the API and you don't
 				need to keep track of array indexes.</p>
 
-				<p>This can be done quite simply by using the <a href="//datatables.net/init/columns.data"><code class=
-				"option" title="Initialisation option">columns.data</code></a> option which you use to tell DataTables
-				which property to use from the data source object for each column.</p>
+				<p>This can be done quite simply by using the <a href=
+				"//datatables.net/reference/option/columns.data"><code class="option" title=
+				"Initialisation option">columns.data</code></a> option which you use to tell DataTables which property
+				to use from the data source object for each column.</p>
 
 				<p>In this example the Ajax source returns an array of objects, which DataTables uses to display the
 				table. The structure of the row's data source in this example is:</p>
@@ -98,9 +99,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;ajax&quot;: &quot;data/objects.txt&quot;,
 		&quot;columns&quot;: [
@@ -112,8 +112,7 @@ $(document).ready(function() {
 			{ &quot;data&quot;: &quot;salary&quot; }
 		]
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -135,10 +134,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

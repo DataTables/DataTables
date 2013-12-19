@@ -40,9 +40,9 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>There are times when you may wish to call API functions inside the DataTables callback functions
-				(for example <a href="//datatables.net/init/initComplete"><code class="option" title=
+				(for example <a href="//datatables.net/reference/option/initComplete"><code class="option" title=
 				"Initialisation option">initComplete</code></a>, <a href=
-				"//datatables.net/init/rowCallback"><code class="option" title=
+				"//datatables.net/reference/option/rowCallback"><code class="option" title=
 				"Initialisation option">rowCallback</code></a> etc). The complicating issue with this is that the
 				object hasn't fully initialised, so you can't assign the result to a variable and then use that
 				variable in the callback. However, all of DataTables' callback functions are executed in the scope of
@@ -51,9 +51,9 @@ $(document).ready(function() {
 				title="HTML tag">table</code> node.</p>
 
 				<p>In this example you will be able to see that the <a href=
-				"//datatables.net/api/%24%28%29"><code class="api" title="API method">$()</code></a> method is used to
-				get all cell nodes in the table's body and then act on them (in this case adding a click event). The
-				action here is to apply a filter to the table with the value of what is in each cell.</p>
+				"//datatables.net/reference/api/%24()"><code class="api" title="API method">$()</code></a> method is
+				used to get all cell nodes in the table's body and then act on them (in this case adding a click
+				event). The action here is to apply a filter to the table with the value of what is in each cell.</p>
 
 				<p>It is also worth noting that this same effect could be achieved by attaching a delegated click event
 				after the table has been initialised - but the example shows the use of the API inside the
@@ -552,9 +552,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;initComplete&quot;: function () {
 			var api = this.api();
@@ -563,8 +562,7 @@ $(document).ready(function() {
 			} );
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -586,10 +584,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

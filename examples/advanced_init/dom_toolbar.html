@@ -45,13 +45,13 @@ $(document).ready(function() {
 				<p>DataTables inserts DOM elements around the table to control DataTables features, and you can make
 				use of this mechanism as well to insert your own custom elements. In this example a <code class="tag"
 				title="HTML tag">div</code> with a class of 'toolbar' is created using <a href=
-				"//datatables.net/init/dom"><code class="option" title="Initialisation option">dom</code></a>, with
-				which HTML is inserted to create the toolbar. You could put whatever HTML you want into the toolbar and
-				add event handlers etc.</p>
+				"//datatables.net/reference/option/dom"><code class="option" title=
+				"Initialisation option">dom</code></a>, with which HTML is inserted to create the toolbar. You could
+				put whatever HTML you want into the toolbar and add event handlers etc.</p>
 
 				<p>For more complex features, or for creating reusable plug-ins, DataTables also has a feature plug-in
 				API available, which can be used to create plug-ins which are used in a table by a single character
-				reference in the <a href="//datatables.net/init/dom"><code class="option" title=
+				reference in the <a href="//datatables.net/reference/option/dom"><code class="option" title=
 				"Initialisation option">dom</code></a> option (like the built in option of <code class="string" title=
 				"String">f</code> refers to 'filtering input', you could have an <code class="string" title=
 				"String">F</code> option which creates your own filtering input control, custom to your app).</p>
@@ -553,16 +553,14 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;dom&quot;: '&lt;&quot;toolbar&quot;&gt;frtip'
 	} );
 
 	$(&quot;div.toolbar&quot;).html('&lt;b&gt;Custom tool bar! Text/images etc.&lt;/b&gt;');
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -584,12 +582,9 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-.toolbar {
+						below:</p><code class="multiline brush: js;">.toolbar {
 	float: left;
-}
-</pre>
+}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

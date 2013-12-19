@@ -38,10 +38,10 @@ $(document).ready(function() {
 				<p>When loading data from an Ajax source, by default, DataTables will look for the data to use in the
 				<code>data</code> parameter of a returned object (e.g. <code>{ "data": [...] }</code>). This can easily
 				be change by using the <code>dataSrc</code> option of the <a href=
-				"//datatables.net/init/ajax"><code class="option" title="Initialisation option">ajax</code></a>
-				initiation option.</p>
+				"//datatables.net/reference/option/ajax"><code class="option" title=
+				"Initialisation option">ajax</code></a> initiation option.</p>
 
-				<p>The <a href="//datatables.net/init/ajax.dataSrc"><code class="option" title=
+				<p>The <a href="//datatables.net/reference/option/ajax.dataSrc"><code class="option" title=
 				"Initialisation option">ajax.dataSrc</code></a> has a number of ways in which it can be used:</p>
 
 				<ul>
@@ -54,10 +54,10 @@ $(document).ready(function() {
 					Javascript object). The value returned from the function is used as the data for the table.</li>
 				</ul>
 
-				<p>The example below shows <a href="//datatables.net/init/ajax.dataSrc"><code class="option" title=
-				"Initialisation option">ajax.dataSrc</code></a> being used as a string to get the data from a different
-				source property, in this case <code class="string" title="String">demo</code> but it could be any
-				value, included a nested property by using standard dotted Javascript object notation.</p>
+				<p>The example below shows <a href="//datatables.net/reference/option/ajax.dataSrc"><code class=
+				"option" title="Initialisation option">ajax.dataSrc</code></a> being used as a string to get the data
+				from a different source property, in this case <code class="string" title="String">demo</code> but it
+				could be any value, included a nested property by using standard dotted Javascript object notation.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -93,17 +93,15 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;ajax&quot;: {
 			&quot;url&quot;: &quot;data/arrays_custom_prop.txt&quot;,
 			&quot;dataSrc&quot;: &quot;demo&quot;
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -125,10 +123,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

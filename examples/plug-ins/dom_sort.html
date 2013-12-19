@@ -78,8 +78,9 @@ $(document).ready(function() {
 				<p>This is a fairly simple example, but it you aren't constrained to just using form input elements,
 				you could use anything and customise your DOM queries to suit yourself. You could also update the
 				ordering live as a user in entered data into a form using an event handler calling <a href=
-				"//datatables.net/api/order%28%29"><code class="api" title="API method">order()</code></a> or <a href=
-				"//datatables.net/api/draw%28%29"><code class="api" title="API method">draw()</code></a> methods.</p>
+				"//datatables.net/reference/api/order()"><code class="api" title="API method">order()</code></a> or
+				<a href="//datatables.net/reference/api/draw()"><code class="api" title="API method">draw()</code></a>
+				methods.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -1642,9 +1643,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-/* Create an array with the values of all the input boxes in a column */
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">/* Create an array with the values of all the input boxes in a column */
 $.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
 {
 	return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
@@ -1678,8 +1678,7 @@ $(document).ready(function() {
 			{ &quot;orderDataType&quot;: &quot;dom-select&quot; }
 		]
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -1701,10 +1700,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

@@ -52,14 +52,14 @@ $(document).ready(function() {
 
 				<p>After the table is initialised, the API is used to build the <code class="tag" title=
 				"HTML tag">select</code> inputs through the use of the <a href=
-				"//datatables.net/api/column%28%29.data%28%29"><code class="api" title=
+				"//datatables.net/reference/api/column().data()"><code class="api" title=
 				"API method">column().data()</code></a> method to get the data for each column in turn. The helper
-				methods <a href="//datatables.net/api/unique%28%29"><code class="api" title=
-				"API method">unique()</code></a> and <a href="//datatables.net/api/sort%28%29"><code class="api" title=
-				"API method">sort()</code></a> are also used to reduce the data for set input to unique and ordered
-				elements. Finally the <code>change</code> event from the <code class="tag" title=
+				methods <a href="//datatables.net/reference/api/unique()"><code class="api" title=
+				"API method">unique()</code></a> and <a href="//datatables.net/reference/api/sort()"><code class="api"
+				title="API method">sort()</code></a> are also used to reduce the data for set input to unique and
+				ordered elements. Finally the <code>change</code> event from the <code class="tag" title=
 				"HTML tag">select</code> input is used to trigger a column search using the <a href=
-				"//datatables.net/api/column%28%29.search%28%29"><code class="api" title=
+				"//datatables.net/reference/api/column().search()"><code class="api" title=
 				"API method">column().search()</code></a> method.</p>
 			</div>
 
@@ -555,9 +555,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	var table = $('#example').DataTable();
 
 	$(&quot;#example tfoot th&quot;).each( function ( i ) {
@@ -573,8 +572,7 @@ $(document).ready(function() {
 			select.append( '&lt;option value=&quot;'+d+'&quot;&gt;'+d+'&lt;/option&gt;' )
 		} );
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -596,10 +594,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

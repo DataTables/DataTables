@@ -43,9 +43,10 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>As is described by the basic DOM positioning example you can use the <a href=
-				"//datatables.net/init/dom"><code class="option" title="Initialisation option">dom</code></a>
-				initialisation parameter to move DataTables features around the table to where you want them. In
-				addition to this, you can also use <a href="//datatables.net/init/dom"><code class="option" title=
+				"//datatables.net/reference/option/dom"><code class="option" title=
+				"Initialisation option">dom</code></a> initialisation parameter to move DataTables features around the
+				table to where you want them. In addition to this, you can also use <a href=
+				"//datatables.net/reference/option/dom"><code class="option" title=
 				"Initialisation option">dom</code></a> to create multiple instances of these table controls. Simply
 				include the feature's identification letter where you want it to appear, as many times as you wish, and
 				the controls will all sync up (note that obviously the table ('t') should be included only once).</p>
@@ -546,14 +547,12 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;dom&quot;: '&lt;&quot;top&quot;iflp&lt;&quot;clear&quot;&gt;&gt;rt&lt;&quot;bottom&quot;iflp&lt;&quot;clear&quot;&gt;&gt;'
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -575,16 +574,13 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-div.dataTables_length {
+						below:</p><code class="multiline brush: js;">div.dataTables_length {
 	padding-left: 2em;
 	}
 	div.dataTables_length,
 	div.dataTables_filter {
 		padding-top: 0.55em;
-	}
-</pre>
+	}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

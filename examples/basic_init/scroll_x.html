@@ -40,10 +40,10 @@ $(document).ready(function() {
 			<div class="info">
 				<p>DataTables has the ability to show tables with horizontal scrolling, which is very useful for when
 				you have a wide table, but want to constrain it to a limited horizontal display area. To enable
-				x-scrolling simply set the <a href="//datatables.net/init/scrollX"><code class="option" title=
-				"Initialisation option">scrollX</code></a> parameter to be whatever you want the container wrapper's
-				width to be (this should be 100% in almost all cases with the width being constrained by the container
-				element).</p>
+				x-scrolling simply set the <a href="//datatables.net/reference/option/scrollX"><code class="option"
+				title="Initialisation option">scrollX</code></a> parameter to be whatever you want the container
+				wrapper's width to be (this should be 100% in almost all cases with the width being constrained by the
+				container element).</p>
 
 				<p>The example below shows a table too wide for the containing element with x-scrolling enabled. The
 				CSS option of <code>th, td { white-space: nowrap; }</code> is also set to have the text content of each
@@ -706,14 +706,12 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;scrollX&quot;: true
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -735,14 +733,11 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-th, td { white-space: nowrap; }
+						below:</p><code class="multiline brush: js;">th, td { white-space: nowrap; }
 	div.dataTables_wrapper {
 		width: 800px;
 		margin: 0 auto;
-	}
-</pre>
+	}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

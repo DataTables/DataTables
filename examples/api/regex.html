@@ -58,13 +58,13 @@ $(document).ready(function() {
 			<div class="info">
 				<p>Filtering a table is one of the most common user interactions with a DataTables table, and
 				DataTables provides a number of methods for you to control this interaction. There are APIs for the
-				global filter (<a href="//datatables.net/api/search%28%29"><code class="api" title=
+				global filter (<a href="//datatables.net/reference/api/search()"><code class="api" title=
 				"API method">search()</code></a>) and for each individual column (<a href=
-				"//datatables.net/api/column%28%29.search%28%29"><code class="api" title=
+				"//datatables.net/reference/api/column().search()"><code class="api" title=
 				"API method">column().search()</code></a>).</p>
 
-				<p>Note also that you must call the <a href="//datatables.net/api/draw%28%29"><code class="api" title=
-				"API method">draw()</code></a> method after performing the search, in order for the results to be
+				<p>Note also that you must call the <a href="//datatables.net/reference/api/draw()"><code class="api"
+				title="API method">draw()</code></a> method after performing the search, in order for the results to be
 				displayed.</p>
 
 				<p>Each filter (global or column) can be marked as a regular expression (allowing you to create very
@@ -630,9 +630,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-function filterGlobal () {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">function filterGlobal () {
 	$('#example').DataTable().search( 
 		$('#global_filter').val(),
 		$('#global_regex').prop('checked'), 
@@ -658,8 +657,7 @@ $(document).ready(function() {
 	$('input.column_filter').on( 'keyup click', function () {
 		filterColumn( $(this).parents('tr').attr('data-column') );
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -681,10 +679,7 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-
-</pre>
+						below:</p><code class="multiline brush: js;"></code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

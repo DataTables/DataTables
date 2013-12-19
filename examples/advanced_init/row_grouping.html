@@ -75,7 +75,7 @@ $(document).ready(function() {
 
 				<p>In the example below the 'group' is the office location, which is based on the information in the
 				third column (which is set to hidden). The grouping indicator is added by the <a href=
-				"//datatables.net/init/drawCallback"><code class="option" title=
+				"//datatables.net/reference/option/drawCallback"><code class="option" title=
 				"Initialisation option">drawCallback</code></a> function, which will parse through the rows which are
 				displayed, and enter a grouping TR element where a new group is found. A <code>click</code> event
 				handler is added for the grouping rows to allow the grouping order to be restored as well as ordering
@@ -574,9 +574,8 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this example:</p>
-					<pre class="brush: js;">
-$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	var table = $('#example').DataTable({
 		&quot;columnDefs&quot;: [
 			{ &quot;visible&quot;: false, &quot;targets&quot;: 2 }
@@ -610,8 +609,7 @@ $(document).ready(function() {
 			table.order( [ 2, 'asc' ] ).draw();
 		}
 	} );
-} );
-</pre>
+} );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
 					example:</p>
@@ -633,13 +631,10 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p>
-						<pre class="brush: js;">
-tr.group,
+						below:</p><code class="multiline brush: js;">tr.group,
 tr.group:hover {
 	background-color: #ddd !important;
-}
-</pre>
+}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the

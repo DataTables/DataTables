@@ -163,36 +163,42 @@ code {
 }
 
 code.option {
-	color: #D14;
+	color: #D14; /* red */
 	background-color: #fcf6f8;
 	border: 1px solid #f7d6df;
 }
 
 code.path {
-	color: #095c05;
+	color: #095c05; /* dark green */
 	border: 1px solid #D6E9C6;
 }
 
 code.tag {
-	color: #095c05;
-	background-color: #f5fcf5;
+	color: #cad119; /* yellow */
+	background-color: #f7f8e6;
 	border: 1px solid #D6E9C6;
 }
 
 code.api {
-	color: #0c199c;
+	color: #0c199c; /* dark blue */
 	background-color: #f4f5fc;
 	border: 1px solid #c6cbe9;
 }
 
+code.type {
+	color: #d119cf; /* purple */
+	background-color: #faebfa;
+	border: 1px solid #f3aef2;
+}
+
 code.event {
-	color: #2a839e;
+	color: #2a839e; /* deep aqua */
 	background-color: #f5fafb;
 	border: 1px solid #a8ddec;
 }
 
 code.string {
-	color: #e8941e;
+	color: #e8941e; /* orange */
 	background-color: #fcf8f1;
 	border: 1px solid #f7e4c9;
 }
@@ -241,7 +247,7 @@ ul.tabs li.active:hover {
 }
 
 div.tabs>div {
-	padding: 0 20px;
+	padding: 1em;
 	border: 1px solid #ccc;
 	margin-top: 1px;
 	display: none;
