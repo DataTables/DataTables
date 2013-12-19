@@ -1,5 +1,5 @@
 /*! DataTables 1.10.0-dev
- * ©2008-2013 Allan Jardine - datatables.net/license
+ * ©2008-2013 SpryMedia Ltd - datatables.net/license
  */
 
 /**
@@ -7,9 +7,9 @@
  * @description Paginate, search and order HTML tables
  * @version     1.10.0-dev
  * @file        jquery.dataTables.js
- * @author      Allan Jardine (www.sprymedia.co.uk)
+ * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2008-2013 Allan Jardine.
+ * @copyright   Copyright 2008-2013 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
