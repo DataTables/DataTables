@@ -256,7 +256,6 @@ var sh = {
             conf = sh.config,
             result = []
             ;
-        console.log( elements );
 
         // support for <SCRIPT TYPE="syntaxhighlighter" /> feature
         if (conf.useScriptTags)
@@ -300,8 +299,6 @@ var sh = {
             highlighter = null,
             conf = sh.config
             ;
-
-        console.log( 'elements', elements );
 
         if (elements.length === 0)
             return;
