@@ -4096,7 +4096,7 @@
 			aSort = [],
 			aiOrig = [],
 			aoColumns = settings.aoColumns,
-			aDataSort, iCol, sType,
+			aDataSort, iCol, sType, srcCol,
 			fixed = settings.aaSortingFixed,
 			fixedObj = $.isPlainObject( fixed ),
 			nestedSort = [],
@@ -4129,7 +4129,8 @@
 	
 		for ( i=0 ; i<nestedSort.length ; i++ )
 		{
-			aDataSort = aoColumns[ nestedSort[i][0] ].aDataSort;
+			srcCol = nestedSort[i][0];
+			aDataSort = aoColumns[ srcCol ].aDataSort;
 	
 			for ( k=0, kLen=aDataSort.length ; k<kLen ; k++ )
 			{
@@ -4137,6 +4138,7 @@
 				sType = aoColumns[ iCol ].sType || 'string';
 	
 				aSort.push( {
+					src:       srcCol,
 					col:       iCol,
 					dir:       nestedSort[i][1],
 					index:     nestedSort[i][2],
@@ -4434,7 +4436,7 @@
 		if ( features.bSort && features.bSortClasses ) {
 			// Remove old sorting classes
 			for ( i=0, ien=oldSort.length ; i<ien ; i++ ) {
-				colIdx = oldSort[i].col;
+				colIdx = oldSort[i].src;
 	
 				// Remove column sorting
 				$( _pluck( settings.aoData, 'anCells', colIdx ) )
@@ -4443,7 +4445,7 @@
 	
 			// Add new column sorting
 			for ( i=0, ien=sort.length ; i<ien ; i++ ) {
-				colIdx = sort[i].col;
+				colIdx = sort[i].src;
 	
 				$( _pluck( settings.aoData, 'anCells', colIdx ) )
 					.addClass( sortClass + (i<2 ? i+1 : 3) );
@@ -6139,7 +6141,7 @@
 						var sortedColumns = {};
 			
 						$.each( aSort, function (i, val) {
-							sortedColumns[ val.col ] = val.dir;
+							sortedColumns[ val.src ] = val.dir;
 						} );
 			
 						_fnCallbackFire( oSettings, null, 'order', [oSettings, aSort, sortedColumns] );
