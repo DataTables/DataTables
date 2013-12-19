@@ -27,7 +27,7 @@ h1 span {
 
 a {
 	cursor: pointer;
-	color: #3174c7;
+	color: #0063DC;
 	text-decoration: none;
 }
 
@@ -43,21 +43,14 @@ div.toc ul {
 
 div.toc li {
 	padding: 0.2em 1em;
-	border-left: 4px solid transparent;
-	border-bottom: 1px solid #e6e6e6;
 }
 
 div.toc li.active {
-	border-left: 4px solid #458ae0;
+	background-color: #ccc !important;
 }
 
-
-div.toc li:first-child {
-	border-top: 1px solid #efefef;
-}
-
-div.toc li:last-child {
-	border-bottom: 1px solid #efefef;
+div.toc li:nth-child(odd) {
+	background-color: #eaeaea;
 }
 
 
@@ -149,8 +142,8 @@ div.box {
 
 
 code {
-	font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-	padding: 2px 4px;
+	font-family: "Source Code Pro", Consolas, Menlo, Monaco, "Courier New", monospace;
+	padding: 1px 4px;
 	font-size: 0.8em;
 
 	color: #444;
