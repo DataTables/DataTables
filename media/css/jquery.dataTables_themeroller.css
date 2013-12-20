@@ -80,9 +80,7 @@ table.dataTable.cell-border tbody tr td:first-child {
   border-left: 1px solid #dddddd;
 }
 table.dataTable.cell-border tbody tr:first-child th,
-table.dataTable.cell-border tbody tr:first-child td,
-table.dataTable.cell-border tbody tr:last-child th,
-table.dataTable.cell-border tbody tr:last-child td {
+table.dataTable.cell-border tbody tr:first-child td {
   border-top: none;
 }
 table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
