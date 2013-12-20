@@ -57,6 +57,12 @@ table.dataTable thead .sorting_asc_disabled {
 table.dataTable thead .sorting_desc_disabled {
   background: url("../images/sort_desc_disabled.png") no-repeat center right;
 }
+table.dataTable tbody tr {
+  background-color: white;
+}
+table.dataTable tbody tr.selected {
+  background-color: #b0bed9;
+}
 table.dataTable tbody th,
 table.dataTable tbody td {
   padding: 8px 10px;
@@ -95,12 +101,6 @@ table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
 }
 table.dataTable.stripe tbody tr.odd.selected, table.dataTable.display tbody tr.odd.selected {
   background-color: #abb9d3;
-}
-table.dataTable.stripe tbody tr.even, table.dataTable.display tbody tr.even {
-  background-color: white;
-}
-table.dataTable.stripe tbody tr.even.selected, table.dataTable.display tbody tr.even.selected {
-  background-color: #b0bed9;
 }
 table.dataTable.hover tbody tr:hover,
 table.dataTable.hover tbody tr.odd:hover,
