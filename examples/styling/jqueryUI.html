@@ -6,7 +6,7 @@
 
 	<title>DataTables example - jQuery UI ThemeRoller</title>
 	<link rel="stylesheet" type="text/css" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables_themeroller.css">
+	<link rel="stylesheet" type="text/css" href="../resources/jqueryui/dataTables.jqueryui.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
 	<style type="text/css" class="init">
@@ -14,14 +14,13 @@
 	</style>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" language="javascript" src="../resources/jqueryui/dataTables.jqueryui.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
 	<script type="text/javascript" language="javascript" class="init">
 
 $(document).ready(function() {
-	$('#example').dataTable( {
-		jQueryUI: true
-	} );
+	$('#example').dataTable();
 } );
 
 	</script>
@@ -33,17 +32,21 @@ $(document).ready(function() {
 			<h1>DataTables example <span>- jQuery UI ThemeRoller</span></h1>
 
 			<div class="info">
-				<p>DataTables has built in support for (jQuery UI ThemeRoller)[http://jqueryui.com/themeroller/] which
-				makes it very easy to style your tables to match other jQuery UI components. To enable the jQuery UI
-				styling of DataTables, simply include the jQuery stylesheet, DataTables' additions for the jQuery
-				stylesheet (to add row styling etc) and set the <a href=
-				"//datatables.net/reference/option/jQueryUI"><code class="option" title=
-				"Initialisation option">jQueryUI</code></a> initialisation for your table.</p>
+				<p>DataTables has the ability to integrate seamlessly with almost any styling library, and integration
+				files are provided for several of the popular styling libraries, including <a href=
+				"//jqueryui.com">jQuery UI</a>.</p>
 
-				<p>Please note that the <a href="//datatables.net/reference/option/jQueryUI"><code class="option"
-				title="Initialisation option">jQueryUI</code></a> option is deprecated in DataTables 1.10. In
-				DataTables 1.11 it will be replaced with a styling plug-in, matching how Bootstrap and Foundation
-				styles are integrated into DataTables.</p>
+				<p>To have your table styles integrate with jQuery UI's ThemeRoller styles, simply include the
+				DataTables CSS and JS integration files for jQuery UI, as shown in this example. Note also that because
+				jQuery doesn't provide table styles like some other CSS frameworks, the CSS integration file does add
+				this styling information.</p>
+
+				<p>Please note that DataTables 1.10- actually has built-in support for jQuery UI styling integration
+				through the <a href="//datatables.net/reference/option/jQueryUI"><code class="option" title=
+				"Initialisation option">jQueryUI</code></a> option. However, this option is deprecated in DataTables
+				1.10 and will be removed DataTables 1.11, matching how styling integration is provided for other
+				libraries - a more modular, maintainable and extensible method. The method presented on this page is
+				the method that will be use in future.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -540,9 +543,7 @@ $(document).ready(function() {
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this
 					example:</p><code class="multiline brush: js;">$(document).ready(function() {
-	$('#example').dataTable( {
-		jQueryUI: true
-	} );
+	$('#example').dataTable();
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
@@ -551,6 +552,8 @@ $(document).ready(function() {
 					<ul>
 						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
 						<li><a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a></li>
+						<li><a href=
+						"../resources/jqueryui/dataTables.jqueryui.js">../resources/jqueryui/dataTables.jqueryui.js</a></li>
 					</ul>
 				</div>
 
@@ -573,7 +576,7 @@ $(document).ready(function() {
 						<li><a href=
 						"//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css</a></li>
 						<li><a href=
-						"../../media/css/jquery.dataTables_themeroller.css">../../media/css/jquery.dataTables_themeroller.css</a></li>
+						"../resources/jqueryui/dataTables.jqueryui.css">../resources/jqueryui/dataTables.jqueryui.css</a></li>
 					</ul>
 				</div>
 
