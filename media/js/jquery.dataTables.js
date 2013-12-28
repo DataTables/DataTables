@@ -1540,7 +1540,6 @@
 				tr.id = data.DT_RowId;
 			}
 	
-			console.log( '_fnRowAttributes', row, data.DT_RowClass );
 			if ( data.DT_RowClass ) {
 				// Remove any classes added by DT_RowClass before
 				var a = data.DT_RowClass.split(' ');
@@ -1548,7 +1547,6 @@
 					_unique( row.__rowc.concat( a ) ) :
 					a;
 	
-				console.log( row.__rowc );
 				$(tr)
 					.removeClass( row.__rowc.join(' ') )
 					.addClass( data.DT_RowClass );
