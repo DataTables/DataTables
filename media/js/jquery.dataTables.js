@@ -4438,7 +4438,9 @@
 			// Use a timeout to allow the processing display to be shown.
 			setTimeout( function() {
 				_fnSortListener( settings, colIdx, e.shiftKey, callback );
-				_fnProcessingDisplay( settings, false );
+				if ( !settings.oFeatures.bServerSide ) {
+					_fnProcessingDisplay( settings, false );
+				}
 			}, 0 );
 		} );
 	}
