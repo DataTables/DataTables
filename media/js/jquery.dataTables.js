@@ -8377,30 +8377,30 @@
 	/**
 	 * Check if a `<table>` node is a DataTable table already or not.
 	 *
-	 *  @param {node} table The `table` node to check if it is a DataTable or not
-	 *    (note that other node types can be passed in, but will always return
-	 *    false).
+	 *  @param {node|jquery|string} table Table node, jQuery object or jQuery
+	 *      selector for the table to test. Note that if more than more than one
+	 *      table is passed on, only the first will be checked
 	 *  @returns {boolean} true the table given is a DataTable, or false otherwise
 	 *  @static
 	 *  @dtopt API-Static
 	 *
 	 *  @example
-	 *    var ex = document.getElementById('example');
-	 *    if ( ! $.fn.DataTable.isDataTable( ex ) ) {
-	 *      $(ex).dataTable();
+	 *    if ( ! $.fn.DataTable.isDataTable( '#example' ) ) {
+	 *      $('#example').dataTable();
 	 *    }
 	 */
 	DataTable.isDataTable = DataTable.fnIsDataTable = function ( table )
 	{
-		var o = DataTable.settings;
+		var t = $(table).get(0);
+		var is = false;
 	
-		for ( var i=0 ; i<o.length ; i++ ) {
-			if ( o[i].nTable === table || o[i].nScrollHead === table || o[i].nScrollFoot === table ) {
-				return true;
+		$.each( DataTable.settings, function (i, o) {
+			if ( o.nTable === t || o.nScrollHead === t || o.nScrollFoot === t ) {
+				is = true;
 			}
-		}
+		} );
 	
-		return false;
+		return is;
 	};
 	
 	
@@ -8422,15 +8422,11 @@
 	 */
 	DataTable.tables = DataTable.fnTables = function ( visible )
 	{
-		var out = [];
-	
-		jQuery.each( DataTable.settings, function (i, o) {
-			if ( !visible || (visible === true && $(o.nTable).is(':visible')) ) {
-				out.push( o.nTable );
+		return jQuery.map( DataTable.settings, function (o) {
+			if ( !visible || (visible && $(o.nTable).is(':visible')) ) {
+				return o.nTable;
 			}
 		} );
-	
-		return out;
 	};
 	
 	
