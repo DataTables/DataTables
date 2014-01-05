@@ -2520,11 +2520,12 @@
 		var tableId = settings.sTableId;
 		var previousSearch = settings.oPreviousSearch;
 		var features = settings.aanFeatures;
+		var input = '<input type="search" class="'+classes.sFilterInput+'"/>';
 	
 		var str = settings.oLanguage.sSearch;
 		str = str.match(/_INPUT_/) ?
-			str.replace('_INPUT_', '<input type="search" />') :
-			str+'<input type="search" class="'+classes.sFilterInput+'"/>';
+			str.replace('_INPUT_', input) :
+			str+input;
 	
 		var filter = $('<div/>', {
 				'id': ! features.f ? tableId+'_filter' : null,
