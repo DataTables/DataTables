@@ -104,7 +104,6 @@
 	var _re_new_lines = /[\r\n]/g;
 	var _re_html = /<.*?>/g;
 	var _re_formatted_numeric = /[',$£€¥%]/g;
-	var _re_date_start = /^[\d\+\-a-zA-Z]/;
 	
 	
 	
@@ -2521,12 +2520,11 @@
 		var tableId = settings.sTableId;
 		var previousSearch = settings.oPreviousSearch;
 		var features = settings.aanFeatures;
-		var input = '<input type="search" class="'+classes.sFilterInput+'"/>';
 	
 		var str = settings.oLanguage.sSearch;
 		str = str.match(/_INPUT_/) ?
-			str.replace('_INPUT_', input) :
-			str+input;
+			str.replace('_INPUT_', '<input type="search" />') :
+			str+'<input type="search" class="'+classes.sFilterInput+'"/>';
 	
 		var filter = $('<div/>', {
 				'id': ! features.f ? tableId+'_filter' : null,
@@ -8379,30 +8377,30 @@
 	/**
 	 * Check if a `<table>` node is a DataTable table already or not.
 	 *
-	 *  @param {node|jquery|string} table Table node, jQuery object or jQuery
-	 *      selector for the table to test. Note that if more than more than one
-	 *      table is passed on, only the first will be checked
+	 *  @param {node} table The `table` node to check if it is a DataTable or not
+	 *    (note that other node types can be passed in, but will always return
+	 *    false).
 	 *  @returns {boolean} true the table given is a DataTable, or false otherwise
 	 *  @static
 	 *  @dtopt API-Static
 	 *
 	 *  @example
-	 *    if ( ! $.fn.DataTable.isDataTable( '#example' ) ) {
-	 *      $('#example').dataTable();
+	 *    var ex = document.getElementById('example');
+	 *    if ( ! $.fn.DataTable.isDataTable( ex ) ) {
+	 *      $(ex).dataTable();
 	 *    }
 	 */
 	DataTable.isDataTable = DataTable.fnIsDataTable = function ( table )
 	{
-		var t = $(table).get(0);
-		var is = false;
+		var o = DataTable.settings;
 	
-		$.each( DataTable.settings, function (i, o) {
-			if ( o.nTable === t || o.nScrollHead === t || o.nScrollFoot === t ) {
-				is = true;
+		for ( var i=0 ; i<o.length ; i++ ) {
+			if ( o[i].nTable === table || o[i].nScrollHead === table || o[i].nScrollFoot === table ) {
+				return true;
 			}
-		} );
+		}
 	
-		return is;
+		return false;
 	};
 	
 	
@@ -8424,11 +8422,15 @@
 	 */
 	DataTable.tables = DataTable.fnTables = function ( visible )
 	{
-		return jQuery.map( DataTable.settings, function (o) {
-			if ( !visible || (visible && $(o.nTable).is(':visible')) ) {
-				return o.nTable;
+		var out = [];
+	
+		jQuery.each( DataTable.settings, function (i, o) {
+			if ( !visible || (visible === true && $(o.nTable).is(':visible')) ) {
+				out.push( o.nTable );
 			}
 		} );
+	
+		return out;
 	};
 	
 	
@@ -13693,24 +13695,17 @@
 	// Built in type detection. See model.ext.aTypes for information about
 	// what is required from this methods.
 	$.extend( DataTable.ext.type.detect, [
-		// Plain numbers - first since V8 detects some plain numbers as dates
-		// e.g. Date.parse('55') (but not all, e.g. Date.parse('22')...).
-		function ( d )
-		{
-			return _isNumber( d ) ? 'numeric' : null;
-		},
-	
 		// Dates (only those recognised by the browser's Date.parse)
 		function ( d )
 		{
-			// V8 will remove any unknown characters at the start of the expression,
-			// leading to false matches such as `$245.12` being a valid date. See
-			// forum thread 18941 for detail.
-			if ( d && ! _re_date_start.test(d) ) {
-				return null;
-			}
 			var parsed = Date.parse(d);
 			return (parsed !== null && !isNaN(parsed)) || _empty(d) ? 'date' : null;
+		},
+	
+		// Plain numbers
+		function ( d )
+		{
+			return _isNumber( d ) ? 'numeric' : null;
 		},
 	
 		// Formatted numbers
