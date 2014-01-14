@@ -7772,7 +7772,7 @@
 	
 			if ( s === '' ) {
 				// All columns
-				return _range( settings.aoColumns.length );
+				return _range( columns.length );
 			}
 			else if ( selInt !== null ) {
 				// Integer selector
