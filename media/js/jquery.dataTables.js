@@ -6318,8 +6318,6 @@
 	var __arrayProto = Array.prototype;
 	
 	
-	
-	
 	/**
 	 * Abstraction for `context` parameter of the `Api` constructor to allow it to
 	 * take several different forms for ease of use.
@@ -6369,7 +6367,7 @@
 			return jq.map( function(i) {
 				idx = $.inArray( this, tables );
 				return idx !== -1 ? settings[idx] : null;
-			} );
+			} ).toArray();
 		}
 	};
 	
@@ -6458,7 +6456,7 @@
 	
 		// Initial data
 		if ( data ) {
-			this.push.apply( this, data );
+			this.push.apply( this, data.toArray ? data.toArray() : data );
 		}
 	
 		// selector
@@ -6532,7 +6530,7 @@
 		flatten: function ()
 		{
 			var a = [];
-			return new _Api( this.context, a.concat.apply( a, this ) );
+			return new _Api( this.context, a.concat.apply( a, this.toArray() ) );
 		},
 	
 	
@@ -6756,8 +6754,6 @@
 	
 		unshift: __arrayProto.unshift
 	};
-	
-	
 	
 	
 	_Api.extend = function ( scope, obj, ext )
@@ -7544,7 +7540,7 @@
 		// Return an Api.rows() extended instance, so rows().nodes() etc can be used
 		var modRows = this.rows( -1 );
 		modRows.pop();
-		modRows.push.apply( modRows, newRows );
+		modRows.push.apply( modRows, newRows.toArray() );
 	
 		return modRows;
 	} );
