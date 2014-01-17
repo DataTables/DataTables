@@ -536,6 +536,7 @@ $(document).ready(function() {
 				<li>HTML</li>
 				<li>CSS</li>
 				<li>Ajax</li>
+				<li>Server-side script</li>
 			</ul>
 
 			<div class="tabs">
@@ -581,6 +582,13 @@ $(document).ready(function() {
 					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data
 					will update automatically as any additional data is loaded.</p>
 				</div>
+
+				<div class="php">
+					<p>The script used to perform the server-side processing for this table is shown below. Please note
+					that this is just an example script using PHP. Server-side processing scripts can be written in any
+					language, using <a href="//datatables.net/manual/server-side">the protocol described in the
+					DataTables documentation</a>.</p>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -594,7 +602,7 @@ $(document).ready(function() {
 
 				<div class="toc">
 					<div class="toc-group">
-						<h3><a href="./index.html">Basic Init</a></h3>
+						<h3><a href="./index.html">Basic initialisation</a></h3>
 						<ul class="toc active">
 							<li><a href="./zero_configuration.html">Zero configuration</a></li>
 							<li><a href="./filter_only.html">Feature enable / disable</a></li>
@@ -616,7 +624,7 @@ $(document).ready(function() {
 					</div>
 
 					<div class="toc-group">
-						<h3><a href="../advanced_init/index.html">Advanced Init</a></h3>
+						<h3><a href="../advanced_init/index.html">Advanced initialisation</a></h3>
 						<ul class="toc">
 							<li><a href="../advanced_init/events_live.html">DOM / jQuery events</a></li>
 							<li><a href="../advanced_init/dt_events.html">DataTables events</a></li>
@@ -655,12 +663,34 @@ $(document).ready(function() {
 					</div>
 
 					<div class="toc-group">
-						<h3><a href="../data_sources/index.html">Data Sources</a></h3>
+						<h3><a href="../data_sources/index.html">Data sources</a></h3>
 						<ul class="toc">
-							<li><a href="../data_sources/dom.html">DOM sourced data</a></li>
+							<li><a href="../data_sources/dom.html">HTML (DOM) sourced data</a></li>
 							<li><a href="../data_sources/ajax.html">Ajax sourced data</a></li>
 							<li><a href="../data_sources/js_array.html">Javascript sourced data</a></li>
 							<li><a href="../data_sources/server_side.html">Server-side processing</a></li>
+						</ul>
+					</div>
+
+					<div class="toc-group">
+						<h3><a href="../api/index.html">API</a></h3>
+						<ul class="toc">
+							<li><a href="../api/add_row.html">Add rows</a></li>
+							<li><a href="../api/multi_filter.html">Individual column filtering (text inputs)</a></li>
+							<li><a href="../api/multi_filter_select.html">Individual column filtering (select
+							inputs)</a></li>
+							<li><a href="../api/highlight.html">Highlighting rows and columns</a></li>
+							<li><a href="../api/row_details.html">Child rows (show extra / detailed
+							information)</a></li>
+							<li><a href="../api/select_row.html">Row selection (multiple rows)</a></li>
+							<li><a href="../api/select_single_row.html">Row selection and deletion (single
+							row)</a></li>
+							<li><a href="../api/form.html">Form inputs</a></li>
+							<li><a href="../api/counter_columns.html">Index column</a></li>
+							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
+							<li><a href="../api/api_in_init.html">Using API in callbacks</a></li>
+							<li><a href="../api/tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
+							<li><a href="../api/regex.html">Filtering API (regular expressions)</a></li>
 						</ul>
 					</div>
 
@@ -680,7 +710,7 @@ $(document).ready(function() {
 					</div>
 
 					<div class="toc-group">
-						<h3><a href="../server_side/index.html">Server Side</a></h3>
+						<h3><a href="../server_side/index.html">Server-side</a></h3>
 						<ul class="toc">
 							<li><a href="../server_side/simple.html">Server-side processing</a></li>
 							<li><a href="../server_side/custom_vars.html">Custom HTTP variables</a></li>
@@ -693,28 +723,6 @@ $(document).ready(function() {
 							<li><a href="../server_side/defer_loading.html">Deferred loading of data</a></li>
 							<li><a href="../server_side/pipeline.html">Pipelining data to reduce Ajax calls for
 							paging</a></li>
-						</ul>
-					</div>
-
-					<div class="toc-group">
-						<h3><a href="../api/index.html">Api</a></h3>
-						<ul class="toc">
-							<li><a href="../api/add_row.html">Add rows</a></li>
-							<li><a href="../api/multi_filter.html">Individual column filtering (text inputs)</a></li>
-							<li><a href="../api/multi_filter_select.html">Individual column filtering (select
-							inputs)</a></li>
-							<li><a href="../api/highlight.html">Highlighting rows and columns</a></li>
-							<li><a href="../api/row_details.html">Child rows (show extra / detailed
-							information)</a></li>
-							<li><a href="../api/select_row.html">Row selection (multiple rows)</a></li>
-							<li><a href="../api/select_single_row.html">Row selection and deletion (single
-							row)</a></li>
-							<li><a href="../api/form.html">Form inputs</a></li>
-							<li><a href="../api/counter_columns.html">Index column</a></li>
-							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
-							<li><a href="../api/api_in_init.html">Using API in callbacks</a></li>
-							<li><a href="../api/tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
-							<li><a href="../api/regex.html">Filtering API (regular expressions)</a></li>
 						</ul>
 					</div>
 

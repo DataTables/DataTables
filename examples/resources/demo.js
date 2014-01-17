@@ -6,8 +6,8 @@ $(document).ready( function () {
 	// Work around for WebKit bug 55740
 	var info = $('div.info');
 
-	if ( info.height() < 158 ) {
-		info.css( 'height', '11em' );
+	if ( info.height() < 115 ) {
+		info.css( 'height', '8em' );
 	}
 
 	var escapeHtml = function ( str ) {
@@ -61,6 +61,30 @@ $(document).ready( function () {
 			show( json );
 		} );
 	} );
+
+	// php
+	var phpTab = $('ul.tabs li').eq(4).css('display', 'none');
+
+	$(document).on( 'init.dt', function ( e, settings ) {
+		if ( settings.oFeatures.bServerSide ) {
+			$.ajax( {
+				url: '../resources/examples.php',
+				data: {
+					src: settings.sAjaxSource || settings.ajax.url || settings.ajax
+				},
+				dataType: 'text',
+				type: 'post',
+				success: function ( txt ) {
+					phpTab.css( 'display', 'block' );
+					$('div.tabs div.php').append(
+						'<code class="multiline brush: php;">'+txt+'</code>'
+					);
+					SyntaxHighlighter.highlight( {}, $('div.tabs div.php code')[0] );
+				}
+			} );
+		}
+	} );
+
 
 	// Tabs
 	$('ul.tabs li').click( function () {

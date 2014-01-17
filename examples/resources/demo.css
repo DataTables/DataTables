@@ -75,17 +75,23 @@ p.copyright {
 div.info {
 	margin-bottom: 2em;
 
-	-webkit-column-count: 3;
-	   -moz-column-count: 3;
-	    -ms-column-count: 3;
-	     -o-column-count: 3;
-	column-count: 3;
+	-webkit-column-count: 2;
+	   -moz-column-count: 2;
+	    -ms-column-count: 2;
+	     -o-column-count: 2;
+	column-count: 2;
+
 
 	-webkit-column-rule: 1px solid #F3F3F3;
 	   -moz-column-rule: 1px solid #F3F3F3;
 	    -ms-column-rule: 1px solid #F3F3F3;
 	     -o-column-rule: 1px solid #F3F3F3;
 	column-rule: 1px solid #F3F3F3;
+}
+
+div.info > * {
+	-webkit-column-break-inside: avoid;
+	break-inside: avoid;
 }
 
 div.info li {
