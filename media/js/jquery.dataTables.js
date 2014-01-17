@@ -1750,8 +1750,9 @@
 					}
 	
 					/* Do the actual expansion in the DOM */
-					aoLocal[i][j].cell.rowSpan = iRowspan;
-					aoLocal[i][j].cell.colSpan = iColspan;
+					$(aoLocal[i][j].cell)
+						.attr('rowspan', iRowspan)
+						.attr('colspan', iColspan);
 				}
 			}
 		}
