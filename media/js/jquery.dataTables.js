@@ -7674,13 +7674,14 @@
 	var __details_events = function ( settings )
 	{
 		var table = $(settings.nTable);
+		var namespace = '.dt.DT_details';
 	
-		table.off('draw.DT_details');
-		table.off('column-visibility.DT_details');
+		table.off('draw'+namespace);
+		table.off('column-visibility'+namespace);
 	
 		if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
 			// On each draw, insert the required elements into the document
-			table.on('draw.DT_details', function () {
+			table.on('draw'+namespace, function () {
 				table.find('tbody tr').each( function () {
 					// Look up the row index for each row and append open row
 					var rowIdx = _fnNodeToDataIndex( settings, this );
@@ -7693,7 +7694,7 @@
 			} );
 	
 			// Column visibility change - update the colspan
-			table.on( 'column-visibility.DT_details', function ( e, settings, idx, vis ) {
+			table.on( 'column-visibility'+namespace, function ( e, settings, idx, vis ) {
 				// Update the colspan for the details rows (note, only if it already has
 				// a colspan)
 				var row, visible = _fnVisbleColumns( settings );
