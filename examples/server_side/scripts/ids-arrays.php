@@ -62,15 +62,7 @@ $sql_details = array(
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * If you just want to use the basic configuration for DataTables with PHP
  * server-side, there is no need to edit below this line.
- *
- * It should be noted that this script could be made far more modular
  */
-
-// REMOVE THIS BLOCK - used for DataTables test environment only!
-$file = $_SERVER['DOCUMENT_ROOT'].'/datatables/mysql.php';
-if ( is_file( $file ) ) {
-	include( $file );
-}
 
 require( 'ssp.class.php' );
 
