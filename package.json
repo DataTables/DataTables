@@ -17,7 +17,7 @@
 		}
 	],
 	"dependencies": {
-		"jquery": "1.4 - 1.8"
+		"jquery": ">=1.7"
 	},
 	"description": "DataTables enhances HTML tables with the ability to sort, filter and page the data in the table very easily. It provides a comprehensive API and set of configuration options, allowing you to consume data from virtually any data source.",
 	"keywords": [

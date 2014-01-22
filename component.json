@@ -6,6 +6,6 @@
 		"./media/css/jquery.dataTables.css"
 	],
 	"dependencies": {
-		"jquery": "~1.8.0"
+		"jquery": ">=1.7.0"
 	}
 }
