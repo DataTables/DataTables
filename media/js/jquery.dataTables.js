@@ -14024,6 +14024,8 @@
 	 *  @param {int} column Column index
 	 *  @param {bool} vis `false` if column now hidden, or `true` if visible
 	 */
+
+	return $.fn.dataTable;
 }));
 
 }(window, document));
