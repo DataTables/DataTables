@@ -3948,16 +3948,16 @@
 		// allows the table sizing to automatically adjust when the window is
 		// resized. Use the width attr rather than CSS, since we can't know if the
 		// CSS is a relative value or absolute - DOM read is always px.
-		if ( tableWidthAttr || scrollX ) {
+		if ( tableWidthAttr ) {
 			table.style.width = _fnStringToCss( tableWidthAttr );
+		}
 	
-			if ( ! oSettings._reszEvt ) {
-				$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
-					_fnAdjustColumnSizing( oSettings );
-				} ) );
+		if ( (tableWidthAttr || scrollX) && ! oSettings._reszEvt ) {
+			$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
+				_fnAdjustColumnSizing( oSettings );
+			} ) );
 	
-				oSettings._reszEvt = true;
-			}
+			oSettings._reszEvt = true;
 		}
 	}
 	
