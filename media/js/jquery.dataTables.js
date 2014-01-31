@@ -1938,34 +1938,33 @@
 	 */
 	function _fnAddOptionsHtml ( oSettings )
 	{
-		/*
-		 * Create a temporary, empty, div which we can later on replace with what we have generated
-		 * we do it this way to rendering the 'options' html offline - speed :-)
-		 */
-		var nHolding = $('<div></div>')[0];
-		oSettings.nTable.parentNode.insertBefore( nHolding, oSettings.nTable );
+		var classes = oSettings.oClasses;
+		var table = $(oSettings.nTable);
+		var holding = $('<div/>').insertBefore( table ); // Holding element for speed
+		var features = oSettings.oFeatures;
 	
-		/*
-		 * All DataTables are wrapped in a div
-		 */
-		oSettings.nTableWrapper = $('<div id="'+oSettings.sTableId+'_wrapper" class="'+oSettings.oClasses.sWrapper+'" role="grid"></div>')[0];
+		// All DataTables are wrapped in a div
+		var insert = $('<div/>', {
+			role:    'grid',
+			id:      oSettings.sTableId+'_wrapper',
+			'class': classes.sWrapper + (oSettings.nTFoot ? '' : ' '+classes.sNoFooter)
+		} );
+	
+		oSettings.nTableWrapper = insert[0];
 		oSettings.nTableReinsertBefore = oSettings.nTable.nextSibling;
-	
-		/* Track where we want to insert the option */
-		var nInsertNode = oSettings.nTableWrapper;
 	
 		/* Loop over the user set positioning and place the elements as needed */
 		var aDom = oSettings.sDom.split('');
-		var nTmp, iPushFeature, cOption, nNewNode, cNext, sAttr, j;
+		var featureNode, cOption, nNewNode, cNext, sAttr, j;
 		for ( var i=0 ; i<aDom.length ; i++ )
 		{
-			iPushFeature = 0;
+			featureNode = null;
 			cOption = aDom[i];
 	
 			if ( cOption == '<' )
 			{
 				/* New container div */
-				nNewNode = $('<div></div>')[0];
+				nNewNode = $('<div/>')[0];
 	
 				/* Check to see if we should append an id and/or a class name to the container */
 				cNext = aDom[i+1];
@@ -1982,11 +1981,11 @@
 					/* Replace jQuery UI constants @todo depreciated */
 					if ( sAttr == "H" )
 					{
-						sAttr = oSettings.oClasses.sJUIHeader;
+						sAttr = classes.sJUIHeader;
 					}
 					else if ( sAttr == "F" )
 					{
-						sAttr = oSettings.oClasses.sJUIFooter;
+						sAttr = classes.sJUIFooter;
 					}
 	
 					/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
@@ -2010,50 +2009,44 @@
 					i += j; /* Move along the position array */
 				}
 	
-				nInsertNode.appendChild( nNewNode );
-				nInsertNode = nNewNode;
+				insert.append( nNewNode );
+				insert = $(nNewNode);
 			}
 			else if ( cOption == '>' )
 			{
 				/* End container div */
-				nInsertNode = nInsertNode.parentNode;
+				insert = insert.parent();
 			}
 			// @todo Move options into their own plugins?
-			else if ( cOption == 'l' && oSettings.oFeatures.bPaginate && oSettings.oFeatures.bLengthChange )
+			else if ( cOption == 'l' && features.bPaginate && features.bLengthChange )
 			{
 				/* Length */
-				nTmp = _fnFeatureHtmlLength( oSettings );
-				iPushFeature = 1;
+				featureNode = _fnFeatureHtmlLength( oSettings );
 			}
-			else if ( cOption == 'f' && oSettings.oFeatures.bFilter )
+			else if ( cOption == 'f' && features.bFilter )
 			{
 				/* Filter */
-				nTmp = _fnFeatureHtmlFilter( oSettings );
-				iPushFeature = 1;
+				featureNode = _fnFeatureHtmlFilter( oSettings );
 			}
-			else if ( cOption == 'r' && oSettings.oFeatures.bProcessing )
+			else if ( cOption == 'r' && features.bProcessing )
 			{
 				/* pRocessing */
-				nTmp = _fnFeatureHtmlProcessing( oSettings );
-				iPushFeature = 1;
+				featureNode = _fnFeatureHtmlProcessing( oSettings );
 			}
 			else if ( cOption == 't' )
 			{
 				/* Table */
-				nTmp = _fnFeatureHtmlTable( oSettings );
-				iPushFeature = 1;
+				featureNode = _fnFeatureHtmlTable( oSettings );
 			}
-			else if ( cOption ==  'i' && oSettings.oFeatures.bInfo )
+			else if ( cOption ==  'i' && features.bInfo )
 			{
 				/* Info */
-				nTmp = _fnFeatureHtmlInfo( oSettings );
-				iPushFeature = 1;
+				featureNode = _fnFeatureHtmlInfo( oSettings );
 			}
-			else if ( cOption == 'p' && oSettings.oFeatures.bPaginate )
+			else if ( cOption == 'p' && features.bPaginate )
 			{
 				/* Pagination */
-				nTmp = _fnFeatureHtmlPaginate( oSettings );
-				iPushFeature = 1;
+				featureNode = _fnFeatureHtmlPaginate( oSettings );
 			}
 			else if ( DataTable.ext.feature.length !== 0 )
 			{
@@ -2063,30 +2056,29 @@
 				{
 					if ( cOption == aoFeatures[k].cFeature )
 					{
-						nTmp = aoFeatures[k].fnInit( oSettings );
-						if ( nTmp )
-						{
-							iPushFeature = 1;
-						}
+						featureNode = aoFeatures[k].fnInit( oSettings );
 						break;
 					}
 				}
 			}
 	
 			/* Add to the 2D features array */
-			if ( iPushFeature == 1 && nTmp !== null )
+			if ( featureNode )
 			{
-				if ( typeof oSettings.aanFeatures[cOption] !== 'object' )
+				var aanFeatures = oSettings.aanFeatures;
+	
+				if ( ! aanFeatures[cOption] )
 				{
-					oSettings.aanFeatures[cOption] = [];
+					aanFeatures[cOption] = [];
 				}
-				oSettings.aanFeatures[cOption].push( nTmp );
-				nInsertNode.appendChild( nTmp );
+	
+				aanFeatures[cOption].push( featureNode );
+				insert.append( featureNode );
 			}
 		}
 	
 		/* Built our DOM structure - replace the holding div with what we want */
-		nHolding.parentNode.replaceChild( oSettings.nTableWrapper, nHolding );
+		holding.replaceWith( insert );
 	}
 	
 	
