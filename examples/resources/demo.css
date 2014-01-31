@@ -82,6 +82,11 @@ p.copyright {
 	margin-bottom: 0;
 }
 
+.clear {
+	clear: both;
+	height: 0;
+}
+
 
 div.info {
 	margin-bottom: 2em;
