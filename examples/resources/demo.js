@@ -3,6 +3,8 @@
 SyntaxHighlighter.config.tagName = 'code';
 
 $(document).ready( function () {
+	var dt110 = $.fn.dataTable.Api ? true : false;
+
 	// Work around for WebKit bug 55740
 	var info = $('div.info');
 
@@ -29,62 +31,71 @@ $(document).ready( function () {
 	);
 	//SyntaxHighlighter.highlight({}, $('#display-init-html')[0]);
 
-	// json
-	var ajaxTab = $('ul.tabs li').eq(3).css('display', 'none');
+	// Allow the demo code to run if DT 1.9 is used
+	if ( dt110 ) {
+		// json
+		var ajaxTab = $('ul.tabs li').eq(3).css('display', 'none');
 
-	$(document).on( 'init.dt', function ( e, settings ) {
-		var api = new $.fn.dataTable.Api( settings );
+		$(document).on( 'init.dt', function ( e, settings ) {
+			var api = new $.fn.dataTable.Api( settings );
 
-		var show = function ( str ) {
-			ajaxTab.css( 'display', 'block' );
-			$('div.tabs div.ajax code').remove();
+			var show = function ( str ) {
+				ajaxTab.css( 'display', 'block' );
+				$('div.tabs div.ajax code').remove();
 
-			// Old IE :-|
-			try {
-				str = JSON.stringify( str, null, 2 );
-			} catch ( e ) {}
+				// Old IE :-|
+				try {
+					str = JSON.stringify( str, null, 2 );
+				} catch ( e ) {}
 
-			$('div.tabs div.ajax').append(
-				'<code class="multiline brush: js;">'+str+'</code>'
-			);
-			SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
-		};
+				$('div.tabs div.ajax').append(
+					'<code class="multiline brush: js;">'+str+'</code>'
+				);
+				SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
+			};
 
-		// First draw
-		var json = api.ajax.json();
-		if ( json ) {
-			show( json );
-		}
+			// First draw
+			var json = api.ajax.json();
+			if ( json ) {
+				show( json );
+			}
 
-		// Subsequent draws
-		api.on( 'xhr.dt', function ( e, settings, json ) {
-			show( json );
-		} );
-	} );
-
-	// php
-	var phpTab = $('ul.tabs li').eq(4).css('display', 'none');
-
-	$(document).on( 'init.dt', function ( e, settings ) {
-		if ( settings.oFeatures.bServerSide ) {
-			$.ajax( {
-				url: '../resources/examples.php',
-				data: {
-					src: settings.sAjaxSource || settings.ajax.url || settings.ajax
-				},
-				dataType: 'text',
-				type: 'post',
-				success: function ( txt ) {
-					phpTab.css( 'display', 'block' );
-					$('div.tabs div.php').append(
-						'<code class="multiline brush: php;">'+txt+'</code>'
-					);
-					SyntaxHighlighter.highlight( {}, $('div.tabs div.php code')[0] );
-				}
+			// Subsequent draws
+			api.on( 'xhr.dt', function ( e, settings, json ) {
+				show( json );
 			} );
-		}
-	} );
+		} );
 
+		// php
+		var phpTab = $('ul.tabs li').eq(4).css('display', 'none');
+
+		$(document).on( 'init.dt', function ( e, settings ) {
+			if ( settings.oFeatures.bServerSide ) {
+				if ( $.isFunction( settings.ajax ) ) {
+					return;
+				}
+				$.ajax( {
+					url: '../resources/examples.php',
+					data: {
+						src: settings.sAjaxSource || settings.ajax.url || settings.ajax
+					},
+					dataType: 'text',
+					type: 'post',
+					success: function ( txt ) {
+						phpTab.css( 'display', 'block' );
+						$('div.tabs div.php').append(
+							'<code class="multiline brush: php;">'+txt+'</code>'
+						);
+						SyntaxHighlighter.highlight( {}, $('div.tabs div.php code')[0] );
+					}
+				} );
+			}
+		} );
+	}
+	else {
+		$('ul.tabs li').eq(3).css('display', 'none');
+		$('ul.tabs li').eq(4).css('display', 'none');
+	}
 
 	// Tabs
 	$('ul.tabs li').click( function () {
