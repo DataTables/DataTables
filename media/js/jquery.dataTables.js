@@ -6349,6 +6349,7 @@
 	 *   * `node` - `TABLE` node which has already been formed into a DataTable.
 	 *   * `jQuery` - A jQuery object of `TABLE` nodes.
 	 *   * `object` - DataTables settings object
+	 *   * `DataTables.Api` - API instance
 	 * @return {array|null} Matching DataTables settings objects. `null` or
 	 *   `undefined` is returned if no matching DataTable is found.
 	 * @ignore
@@ -6369,6 +6370,9 @@
 			// Table node
 			idx = $.inArray( mixed, tables );
 			return idx !== -1 ? [ settings[idx] ] : null;
+		}
+		else if ( mixed && typeof mixed.settings === 'function' ) {
+			return mixed.settings();
 		}
 		else if ( typeof mixed === 'string' ) {
 			// jQuery selector
