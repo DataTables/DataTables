@@ -479,7 +479,8 @@
 			"nTh": nTh ? nTh : document.createElement('th'),
 			"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
 			"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
-			"mData": oDefaults.mData ? oDefaults.mData : iCol
+			"mData": oDefaults.mData ? oDefaults.mData : iCol,
+			idx: iCol
 		} );
 		oSettings.aoColumns.push( oCol );
 	
@@ -1619,7 +1620,7 @@
 			}
 	
 			_fnRenderer( oSettings, 'header' )(
-				oSettings, cell, column, i, classes
+				oSettings, cell, column, classes
 			);
 		}
 	
@@ -8769,7 +8770,6 @@
 	};
 	
 	
-	
 	/**
 	 * Template object for the column information object in DataTables. This object
 	 * is held in the settings aoColumns array and contains all the information that
@@ -8782,6 +8782,14 @@
 	 *  @namespace
 	 */
 	DataTable.models.oColumn = {
+		/**
+		 * Column index. This could be worked out on-the-fly with $.inArray, but it
+		 * is faster to just hold it as a variable
+		 *  @type integer
+		 *  @default null
+		 */
+		"idx": null,
+	
 		/**
 		 * A list of the columns that sorting should occur on when this column
 		 * is sorted. That this property is an array allows multi-column sorting
@@ -13789,26 +13797,29 @@
 	
 	$.extend( true, DataTable.ext.renderer, {
 		header: {
-			_: function ( settings, cell, column, idx, classes ) {
+			_: function ( settings, cell, column, classes ) {
 				// No additional mark-up required
-	
 				// Attach a sort listener to update on sort
 				$(settings.nTable).on( 'order.dt', function ( e, settings, sorting, columns ) {
+					var colIdx = column.idx;
+	
 					cell
 						.removeClass(
 							column.sSortingClass +' '+
 							classes.sSortAsc +' '+
 							classes.sSortDesc
 						)
-						.addClass( columns[ idx ] == 'asc' ?
-							classes.sSortAsc : columns[ idx ] == 'desc' ?
+						.addClass( columns[ colIdx ] == 'asc' ?
+							classes.sSortAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortDesc :
 								column.sSortingClass
 						);
 				} );
 			},
 	
-			jqueryui: function ( settings, cell, column, idx, classes ) {
+			jqueryui: function ( settings, cell, column, classes ) {
+				var colIdx = column.idx;
+	
 				$('<div/>')
 					.addClass( classes.sSortJUIWrapper )
 					.append( cell.contents() )
@@ -13821,8 +13832,8 @@
 				$(settings.nTable).on( 'order.dt', function ( e, settings, sorting, columns ) {
 					cell
 						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
-						.addClass( columns[ idx ] == 'asc' ?
-							classes.sSortAsc : columns[ idx ] == 'desc' ?
+						.addClass( columns[ colIdx ] == 'asc' ?
+							classes.sSortAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortDesc :
 								column.sSortingClass
 						);
@@ -13836,8 +13847,8 @@
 							classes.sSortJUIAscAllowed +" "+
 							classes.sSortJUIDescAllowed
 						)
-						.addClass( columns[ idx ] == 'asc' ?
-							classes.sSortJUIAsc : columns[ idx ] == 'desc' ?
+						.addClass( columns[ colIdx ] == 'asc' ?
+							classes.sSortJUIAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortJUIDesc :
 								column.sSortingClassJUI
 						);
