@@ -354,6 +354,15 @@ table.dataTable td {
 .dataTables_wrapper .dataTables_scroll {
   clear: both;
 }
+.dataTables_wrapper .dataTables_scroll table.no-footer {
+  margin-bottom: 0;
+}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollHead table.no-footer {
+  border-bottom: none;
+}
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody table.no-footer {
+  margin-bottom: 0.5em;
+}
 .dataTables_wrapper .dataTables_scrollBody {
   *margin-top: -1px;
   -webkit-overflow-scrolling: touch;
