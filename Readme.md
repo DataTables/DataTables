@@ -16,10 +16,10 @@ To meet this goal, DataTables is developed with two distinct groups of users in 
 In most cases, to use DataTables all you need to do is include jQuery, the DataTables Javascript and DataTables CSS files in your HTML page:
 
 ```html
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10-dev/css/jquery.dataTables.css">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.0-beta.1/css/jquery.dataTables.css">
 
 <script type="text/javascript" language="javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10-dev/js/jquery.dataTables.js"></script>
+<script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10-beta.1/js/jquery.dataTables.js"></script>
 ```
 
 
