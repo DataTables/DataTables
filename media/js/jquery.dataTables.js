@@ -4352,16 +4352,12 @@
 			var col = columns[i];
 			var asSorting = col.asSorting;
 			var sTitle = col.sTitle.replace( /<.*?>/g, "" );
-			var th = col.nTh;
-	
-			// IE7 is throwing an error when setting these properties with jQuery's
-			// attr() and removeAttr() methods...
-			th.removeAttribute('aria-sort');
+			var jqTh = $(col.nTh).removeAttr('aria-sort');
 	
 			/* In ARIA only the first sorting column can be marked as sorting - no multi-sort option */
 			if ( col.bSortable ) {
 				if ( aSort.length > 0 && aSort[0].col == i ) {
-					th.setAttribute('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
+					jqTh.attr('aria-sort', aSort[0].dir=="asc" ? "ascending" : "descending" );
 					nextSort = asSorting[ aSort[0].index+1 ] || asSorting[0];
 				}
 				else {
@@ -4377,7 +4373,7 @@
 				label = sTitle;
 			}
 	
-			th.setAttribute('aria-label', label);
+			jqTh.attr('aria-label', label);
 		}
 	}
 	
