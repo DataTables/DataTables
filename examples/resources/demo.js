@@ -3,6 +3,9 @@
 SyntaxHighlighter.config.tagName = 'code';
 
 $(document).ready( function () {
+	if ( ! $.fn.dataTable ) {
+		return;
+	}
 	var dt110 = $.fn.dataTable.Api ? true : false;
 
 	// Work around for WebKit bug 55740
