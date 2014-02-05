@@ -2552,27 +2552,33 @@
 			} )
 			.append( $('<label/>' ).append( str ) );
 	
+		var searchFn = function() {
+			/* Update all other filter input elements for the new display */
+			var n = features.f;
+			var val = !this.value ? "" : this.value; // mental IE8 fix :-(
+	
+			/* Now do the filter */
+			if ( val != previousSearch.sSearch ) {
+				_fnFilterComplete( settings, {
+					"sSearch": val,
+					"bRegex": previousSearch.bRegex,
+					"bSmart": previousSearch.bSmart ,
+					"bCaseInsensitive": previousSearch.bCaseInsensitive
+				} );
+	
+				// Need to redraw, without resorting
+				settings._iDisplayStart = 0;
+				_fnDraw( settings );
+			}
+		};
 		var jqFilter = $('input[type="search"]', filter)
 			.val( previousSearch.sSearch.replace('"','&quot;') )
-			.bind( 'keyup.DT search.DT input.DT paste.DT cut.DT', function(e) {
-				/* Update all other filter input elements for the new display */
-				var n = features.f;
-				var val = !this.value ? "" : this.value; // mental IE8 fix :-(
-	
-				/* Now do the filter */
-				if ( val != previousSearch.sSearch ) {
-					_fnFilterComplete( settings, {
-						"sSearch": val,
-						"bRegex": previousSearch.bRegex,
-						"bSmart": previousSearch.bSmart ,
-						"bCaseInsensitive": previousSearch.bCaseInsensitive
-					} );
-	
-					// Need to redraw, without resorting
-					settings._iDisplayStart = 0;
-					_fnDraw( settings );
-				}
-			} )
+			.bind(
+				'keyup.DT search.DT input.DT paste.DT cut.DT',
+				_fnDataSource( settings ) === 'ssp' ?
+					_fnThrottle( searchFn, 400 ):
+					searchFn
+			)
 			.bind( 'keypress.DT', function(e) {
 				/* Prevent form submission */
 				if ( e.keyCode == 13 ) {
@@ -3954,28 +3960,40 @@
 	}
 	
 	
-	function _fnThrottle( fn ) {
+	/**
+	 * Throttle the calls to a function. Arguments and context are maintained for
+	 * the throttled function
+	 *  @param {function} fn Function to be called
+	 *  @param {int} [freq=200] call frequency in mS
+	 *  @returns {function} wrapped function
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnThrottle( fn, freq ) {
 		var
-			frequency = 200,
+			frequency = freq || 200,
 			last,
 			timer;
 	
 		return function () {
 			var
-				now = +new Date(),
+				that = this,
+				now  = +new Date(),
 				args = arguments;
 	
 			if ( last && now < last + frequency ) {
 				clearTimeout( timer );
 	
 				timer = setTimeout( function () {
-					last = now;
-					fn();
+					last = undefined;
+					fn.apply( that, args );
 				}, frequency );
+			}
+			else if ( last ) {
+				last = now;
+				fn.apply( that, args );
 			}
 			else {
 				last = now;
-				fn();
 			}
 		};
 	}
