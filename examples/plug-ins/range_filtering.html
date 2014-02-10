@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 
-	<title>DataTables example - Custom filtering - range filter</title>
+	<title>DataTables example - Custom filtering - range search</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -18,8 +18,8 @@
 	<script type="text/javascript" language="javascript" class="init">
 
 
-/* Custom filtering function which will filter data in column four between two values */
-$.fn.dataTable.ext.filter.push(
+/* Custom filtering function which will search data in column four between two values */
+$.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
 		var min = $('#min').val() * 1;
 		var max = $('#max').val() * 1;
@@ -52,16 +52,16 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>- Custom filtering - range filter</span></h1>
+			<h1>DataTables example <span>- Custom filtering - range search</span></h1>
 
 			<div class="info">
-				<p>There may be occasions when you wish to filter data presented to the end user in your own manner,
-				common examples are number range filtering (in between two numbers) and date range filtering.
-				DataTables provide an API method to add your own filtering functions,
-				<code>$.fn.dataTable.ext.filter</code>. This is an array of functions (push your own onto it) which
-				will will be run at table draw time to see if a particular row should be included or not.</p>
+				<p>There may be occasions when you wish to search data presented to the end user in your own manner,
+				common examples are number range search (in between two numbers) and date range search. DataTables
+				provide an API method to add your own search functions, <code>$.fn.dataTable.ext.search</code>. This is
+				an array of functions (push your own onto it) which will will be run at table draw time to see if a
+				particular row should be included or not.</p>
 
-				<p>This example shows a filter being performed on the age column in the data, based upon two
+				<p>This example shows a search being performed on the age column in the data, based upon two
 				inputs.</p>
 			</div>
 
@@ -570,8 +570,8 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this
-					example:</p><code class="multiline brush: js;">/* Custom filtering function which will filter data in column four between two values */
-$.fn.dataTable.ext.filter.push(
+					example:</p><code class="multiline brush: js;">/* Custom filtering function which will search data in column four between two values */
+$.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
 		var min = $('#min').val() * 1;
 		var max = $('#max').val() * 1;
@@ -784,7 +784,7 @@ $(document).ready(function() {
 							<li><a href="./sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
 							<li><a href="./sorting_manual.html">Ordering plug-ins (no type detection)</a></li>
 							<li class="active"><a href="./range_filtering.html">Custom filtering - range
-							filter</a></li>
+							search</a></li>
 							<li><a href="./dom_sort.html">Live DOM ordering</a></li>
 						</ul>
 					</div>
