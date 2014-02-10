@@ -1,15 +1,15 @@
-/*! DataTables 1.10.0-dev
- * ©2008-2013 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.10.0-beta.2.dev
+ * ©2008-2014 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.0-dev
+ * @version     1.10.0-beta.2.dev
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
- * @copyright   Copyright 2008-2013 SpryMedia Ltd.
+ * @copyright   Copyright 2008-2014 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
@@ -2552,27 +2552,33 @@
 			} )
 			.append( $('<label/>' ).append( str ) );
 	
+		var searchFn = function() {
+			/* Update all other filter input elements for the new display */
+			var n = features.f;
+			var val = !this.value ? "" : this.value; // mental IE8 fix :-(
+	
+			/* Now do the filter */
+			if ( val != previousSearch.sSearch ) {
+				_fnFilterComplete( settings, {
+					"sSearch": val,
+					"bRegex": previousSearch.bRegex,
+					"bSmart": previousSearch.bSmart ,
+					"bCaseInsensitive": previousSearch.bCaseInsensitive
+				} );
+	
+				// Need to redraw, without resorting
+				settings._iDisplayStart = 0;
+				_fnDraw( settings );
+			}
+		};
 		var jqFilter = $('input[type="search"]', filter)
 			.val( previousSearch.sSearch.replace('"','&quot;') )
-			.bind( 'keyup.DT search.DT input.DT paste.DT cut.DT', function(e) {
-				/* Update all other filter input elements for the new display */
-				var n = features.f;
-				var val = !this.value ? "" : this.value; // mental IE8 fix :-(
-	
-				/* Now do the filter */
-				if ( val != previousSearch.sSearch ) {
-					_fnFilterComplete( settings, {
-						"sSearch": val,
-						"bRegex": previousSearch.bRegex,
-						"bSmart": previousSearch.bSmart ,
-						"bCaseInsensitive": previousSearch.bCaseInsensitive
-					} );
-	
-					// Need to redraw, without resorting
-					settings._iDisplayStart = 0;
-					_fnDraw( settings );
-				}
-			} )
+			.bind(
+				'keyup.DT search.DT input.DT paste.DT cut.DT',
+				_fnDataSource( settings ) === 'ssp' ?
+					_fnThrottle( searchFn, 400 ):
+					searchFn
+			)
 			.bind( 'keypress.DT', function(e) {
 				/* Prevent form submission */
 				if ( e.keyCode == 13 ) {
@@ -3498,6 +3504,7 @@
 			headerSrcEls, footerSrcEls,
 			headerCopy, footerCopy,
 			headerWidths=[], footerWidths=[],
+			headerContent=[],
 			idx, correction, sanityWidth,
 			zeroOut = function(nSizer) {
 				var style = nSizer.style;
@@ -3608,6 +3615,7 @@
 	
 		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
+			headerContent.push( nSizer.innerHTML );
 			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
 		}, headerSrcEls );
 	
@@ -3639,10 +3647,12 @@
 		 * 3. Apply the measurements
 		 */
 	
-		// "Hide" the header and footer that we used for the sizing. We want to also fix their width
-		// to what they currently are
+		// "Hide" the header and footer that we used for the sizing. We need to keep
+		// the content of the cell so that the width applied to the header and body
+		// both match, but we want to hide it completely. We want to also fix their
+		// width to what they currently are
 		_fnApplyToChildren( function(nSizer, i) {
-			nSizer.innerHTML = "";
+			nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+headerContent[i]+'</div>';
 			nSizer.style.width = headerWidths[i];
 		}, headerSrcEls );
 	
@@ -3954,28 +3964,40 @@
 	}
 	
 	
-	function _fnThrottle( fn ) {
+	/**
+	 * Throttle the calls to a function. Arguments and context are maintained for
+	 * the throttled function
+	 *  @param {function} fn Function to be called
+	 *  @param {int} [freq=200] call frequency in mS
+	 *  @returns {function} wrapped function
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnThrottle( fn, freq ) {
 		var
-			frequency = 200,
+			frequency = freq || 200,
 			last,
 			timer;
 	
 		return function () {
 			var
-				now = +new Date(),
+				that = this,
+				now  = +new Date(),
 				args = arguments;
 	
 			if ( last && now < last + frequency ) {
 				clearTimeout( timer );
 	
 				timer = setTimeout( function () {
-					last = now;
-					fn();
+					last = undefined;
+					fn.apply( that, args );
 				}, frequency );
+			}
+			else if ( last ) {
+				last = now;
+				fn.apply( that, args );
 			}
 			else {
 				last = now;
-				fn();
 			}
 		};
 	}
@@ -7899,7 +7921,7 @@
 		}
 		else {
 			// Remove column
-			$( _pluck( settings.aoData, 'anCells', column ) ).remove();
+			$( _pluck( settings.aoData, 'anCells', column ) ).detach();
 	
 			col.bVisible = false;
 			_fnDrawHead( settings, settings.aoHeader );
@@ -8652,7 +8674,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.0-dev";
+	DataTable.version = "1.10.0-beta.2.dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
