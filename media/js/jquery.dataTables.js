@@ -103,10 +103,11 @@
 	
 	var _re_new_lines = /[\r\n]/g;
 	var _re_html = /<.*?>/g;
-	var _re_formatted_numeric = /[',$£€¥%]/g;
 	var _re_date_start = /^[\d\+\-a-zA-Z]/;
 	
-	
+	// U+2009 is thin space and U+202F is narrow no-break space, both used in many
+	// standards as thousands separators
+	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F]/g;
 	
 	
 	var _empty = function ( d ) {
