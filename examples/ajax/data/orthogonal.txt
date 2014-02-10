@@ -3,7 +3,7 @@
         {
             "name": "Tiger Nixon",
             "position": "System Architect",
-            "salary": "$3,120",
+            "salary": "$320,800",
             "start_date": {
                 "display": "Mon 25th Apr 11",
                 "timestamp": "1303682400"
@@ -13,19 +13,19 @@
         },
         {
             "name": "Garrett Winters",
-            "position": "Director",
-            "salary": "$5,300",
+            "position": "Accountant",
+            "salary": "$170,750",
             "start_date": {
                 "display": "Mon 25th Jul 11",
                 "timestamp": "1311544800"
             },
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "8422"
         },
         {
             "name": "Ashton Cox",
-            "position": "Technical Author",
-            "salary": "$4,800",
+            "position": "Junior Technical Author",
+            "salary": "$86,000",
             "start_date": {
                 "display": "Mon 12th Jan 09",
                 "timestamp": "1231714800"
@@ -35,8 +35,8 @@
         },
         {
             "name": "Cedric Kelly",
-            "position": "Javascript Developer",
-            "salary": "$3,600",
+            "position": "Senior Javascript Developer",
+            "salary": "$433,060",
             "start_date": {
                 "display": "Thu 29th Mar 12",
                 "timestamp": "1332972000"
@@ -45,20 +45,20 @@
             "extn": "6224"
         },
         {
-            "name": "Jenna Elliott",
-            "position": "Financial Controller",
-            "salary": "$5,300",
+            "name": "Airi Satou",
+            "position": "Accountant",
+            "salary": "$162,700",
             "start_date": {
                 "display": "Fri 28th Nov 08",
                 "timestamp": "1227826800"
             },
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "5407"
         },
         {
             "name": "Brielle Williamson",
             "position": "Integration Specialist",
-            "salary": "$4,525",
+            "salary": "$372,000",
             "start_date": {
                 "display": "Sun 2nd Dec 12",
                 "timestamp": "1354402800"
@@ -69,7 +69,7 @@
         {
             "name": "Herrod Chandler",
             "position": "Sales Assistant",
-            "salary": "$4,080",
+            "salary": "$137,500",
             "start_date": {
                 "display": "Mon 6th Aug 12",
                 "timestamp": "1344204000"
@@ -80,18 +80,18 @@
         {
             "name": "Rhona Davidson",
             "position": "Integration Specialist",
-            "salary": "$6,730",
+            "salary": "$327,900",
             "start_date": {
                 "display": "Thu 14th Oct 10",
                 "timestamp": "1287007200"
             },
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "6200"
         },
         {
             "name": "Colleen Hurst",
             "position": "Javascript Developer",
-            "salary": "$5,000",
+            "salary": "$205,500",
             "start_date": {
                 "display": "Tue 15th Sep 09",
                 "timestamp": "1252965600"
@@ -102,7 +102,7 @@
         {
             "name": "Sonya Frost",
             "position": "Software Engineer",
-            "salary": "$3,600",
+            "salary": "$103,600",
             "start_date": {
                 "display": "Sat 13th Dec 08",
                 "timestamp": "1229122800"
@@ -112,8 +112,8 @@
         },
         {
             "name": "Jena Gaines",
-            "position": "System Architect",
-            "salary": "$5,000",
+            "position": "Office Manager",
+            "salary": "$90,560",
             "start_date": {
                 "display": "Fri 19th Dec 08",
                 "timestamp": "1229641200"
@@ -123,8 +123,8 @@
         },
         {
             "name": "Quinn Flynn",
-            "position": "Financial Controller",
-            "salary": "$4,200",
+            "position": "Support Lead",
+            "salary": "$342,000",
             "start_date": {
                 "display": "Sun 3rd Mar 13",
                 "timestamp": "1362265200"
@@ -135,7 +135,7 @@
         {
             "name": "Charde Marshall",
             "position": "Regional Director",
-            "salary": "$5,300",
+            "salary": "$470,600",
             "start_date": {
                 "display": "Thu 16th Oct 08",
                 "timestamp": "1224108000"
@@ -146,7 +146,7 @@
         {
             "name": "Haley Kennedy",
             "position": "Senior Marketing Designer",
-            "salary": "$4,800",
+            "salary": "$313,500",
             "start_date": {
                 "display": "Tue 18th Dec 12",
                 "timestamp": "1355785200"
@@ -157,7 +157,7 @@
         {
             "name": "Tatyana Fitzpatrick",
             "position": "Regional Director",
-            "salary": "$2,875",
+            "salary": "$385,750",
             "start_date": {
                 "display": "Wed 17th Mar 10",
                 "timestamp": "1268780400"
@@ -167,8 +167,8 @@
         },
         {
             "name": "Michael Silva",
-            "position": "Senior Marketing Designer",
-            "salary": "$3,750",
+            "position": "Marketing Designer",
+            "salary": "$198,500",
             "start_date": {
                 "display": "Tue 27th Nov 12",
                 "timestamp": "1353970800"
@@ -178,8 +178,8 @@
         },
         {
             "name": "Paul Byrd",
-            "position": "Javascript Developer",
-            "salary": "$5,000",
+            "position": "Chief Financial Officer (CFO)",
+            "salary": "$725,000",
             "start_date": {
                 "display": "Wed 9th Jun 10",
                 "timestamp": "1276034400"
@@ -190,7 +190,7 @@
         {
             "name": "Gloria Little",
             "position": "Systems Administrator",
-            "salary": "$3,120",
+            "salary": "$237,500",
             "start_date": {
                 "display": "Fri 10th Apr 09",
                 "timestamp": "1239314400"
@@ -201,7 +201,7 @@
         {
             "name": "Bradley Greer",
             "position": "Software Engineer",
-            "salary": "$3,120",
+            "salary": "$132,000",
             "start_date": {
                 "display": "Sat 13th Oct 12",
                 "timestamp": "1350079200"
@@ -211,8 +211,8 @@
         },
         {
             "name": "Dai Rios",
-            "position": "System Architect",
-            "salary": "$4,200",
+            "position": "Personnel Lead",
+            "salary": "$217,500",
             "start_date": {
                 "display": "Wed 26th Sep 12",
                 "timestamp": "1348610400"
@@ -222,8 +222,8 @@
         },
         {
             "name": "Jenette Caldwell",
-            "position": "Financial Controller",
-            "salary": "$4,965",
+            "position": "Development Lead",
+            "salary": "$345,000",
             "start_date": {
                 "display": "Sat 3rd Sep 11",
                 "timestamp": "1315000800"
@@ -233,8 +233,8 @@
         },
         {
             "name": "Yuri Berry",
-            "position": "System Architect",
-            "salary": "$3,600",
+            "position": "Chief Marketing Officer (CMO)",
+            "salary": "$675,000",
             "start_date": {
                 "display": "Thu 25th Jun 09",
                 "timestamp": "1245880800"
@@ -244,8 +244,8 @@
         },
         {
             "name": "Caesar Vance",
-            "position": "Technical Author",
-            "salary": "$4,965",
+            "position": "Pre-Sales Support",
+            "salary": "$106,450",
             "start_date": {
                 "display": "Mon 12th Dec 11",
                 "timestamp": "1323644400"
@@ -256,18 +256,18 @@
         {
             "name": "Doris Wilder",
             "position": "Sales Assistant",
-            "salary": "$4,965",
+            "salary": "$85,600",
             "start_date": {
                 "display": "Mon 20th Sep 10",
                 "timestamp": "1284933600"
             },
-            "office": "Edinburgh",
+            "office": "Sidney",
             "extn": "3023"
         },
         {
             "name": "Angelica Ramos",
-            "position": "System Architect",
-            "salary": "$2,875",
+            "position": "Chief Executive Officer (CEO)",
+            "salary": "$1,200,000",
             "start_date": {
                 "display": "Fri 9th Oct 09",
                 "timestamp": "1255039200"
@@ -278,7 +278,7 @@
         {
             "name": "Gavin Joyce",
             "position": "Developer",
-            "salary": "$4,525",
+            "salary": "$92,575",
             "start_date": {
                 "display": "Wed 22nd Dec 10",
                 "timestamp": "1292972400"
@@ -289,18 +289,18 @@
         {
             "name": "Jennifer Chang",
             "position": "Regional Director",
-            "salary": "$4,080",
+            "salary": "$357,650",
             "start_date": {
                 "display": "Sun 14th Nov 10",
                 "timestamp": "1289689200"
             },
-            "office": "London",
+            "office": "Singapore",
             "extn": "9239"
         },
         {
             "name": "Brenden Wagner",
             "position": "Software Engineer",
-            "salary": "$3,750",
+            "salary": "$206,850",
             "start_date": {
                 "display": "Tue 7th Jun 11",
                 "timestamp": "1307397600"
@@ -309,9 +309,9 @@
             "extn": "1314"
         },
         {
-            "name": "Ebony Grimes",
-            "position": "Software Engineer",
-            "salary": "$2,875",
+            "name": "Fiona Green",
+            "position": "Chief Operating Officer (COO)",
+            "salary": "$850,000",
             "start_date": {
                 "display": "Thu 11th Mar 10",
                 "timestamp": "1268262000"
@@ -320,31 +320,31 @@
             "extn": "2947"
         },
         {
-            "name": "Russell Chavez",
-            "position": "Director",
-            "salary": "$3,600",
+            "name": "Shou Itou",
+            "position": "Regional Marketing",
+            "salary": "$163,000",
             "start_date": {
                 "display": "Sun 14th Aug 11",
                 "timestamp": "1313272800"
             },
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "8899"
         },
         {
             "name": "Michelle House",
             "position": "Integration Specialist",
-            "salary": "$3,750",
+            "salary": "$95,400",
             "start_date": {
                 "display": "Thu 2nd Jun 11",
                 "timestamp": "1306965600"
             },
-            "office": "Edinburgh",
+            "office": "Sidney",
             "extn": "2769"
         },
         {
             "name": "Suki Burks",
             "position": "Developer",
-            "salary": "$2,875",
+            "salary": "$114,500",
             "start_date": {
                 "display": "Thu 22nd Oct 09",
                 "timestamp": "1256162400"
@@ -355,7 +355,7 @@
         {
             "name": "Prescott Bartlett",
             "position": "Technical Author",
-            "salary": "$6,730",
+            "salary": "$145,000",
             "start_date": {
                 "display": "Sat 7th May 11",
                 "timestamp": "1304719200"
@@ -365,8 +365,8 @@
         },
         {
             "name": "Gavin Cortez",
-            "position": "Technical Author",
-            "salary": "$6,730",
+            "position": "Team Leader",
+            "salary": "$235,500",
             "start_date": {
                 "display": "Sun 26th Oct 08",
                 "timestamp": "1224972000"
@@ -376,8 +376,8 @@
         },
         {
             "name": "Martena Mccray",
-            "position": "Integration Specialist",
-            "salary": "$4,080",
+            "position": "Post-Sales support",
+            "salary": "$324,050",
             "start_date": {
                 "display": "Wed 9th Mar 11",
                 "timestamp": "1299625200"
@@ -387,8 +387,8 @@
         },
         {
             "name": "Unity Butler",
-            "position": "Senior Marketing Designer",
-            "salary": "$3,750",
+            "position": "Marketing Designer",
+            "salary": "$85,675",
             "start_date": {
                 "display": "Wed 9th Dec 09",
                 "timestamp": "1260313200"
@@ -398,8 +398,8 @@
         },
         {
             "name": "Howard Hatfield",
-            "position": "Financial Controller",
-            "salary": "$4,080",
+            "position": "Office Manager",
+            "salary": "$164,500",
             "start_date": {
                 "display": "Tue 16th Dec 08",
                 "timestamp": "1229382000"
@@ -409,8 +409,8 @@
         },
         {
             "name": "Hope Fuentes",
-            "position": "Financial Controller",
-            "salary": "$4,200",
+            "position": "Secretary",
+            "salary": "$109,850",
             "start_date": {
                 "display": "Fri 12th Feb 10",
                 "timestamp": "1265929200"
@@ -420,8 +420,8 @@
         },
         {
             "name": "Vivian Harrell",
-            "position": "System Architect",
-            "salary": "$4,965",
+            "position": "Financial Controller",
+            "salary": "$452,500",
             "start_date": {
                 "display": "Sat 14th Feb 09",
                 "timestamp": "1234566000"
@@ -431,8 +431,8 @@
         },
         {
             "name": "Timothy Mooney",
-            "position": "Financial Controller",
-            "salary": "$4,200",
+            "position": "Office Manager",
+            "salary": "$136,200",
             "start_date": {
                 "display": "Thu 11th Dec 08",
                 "timestamp": "1228950000"
@@ -443,7 +443,7 @@
         {
             "name": "Jackson Bradshaw",
             "position": "Director",
-            "salary": "$5,000",
+            "salary": "$645,750",
             "start_date": {
                 "display": "Fri 26th Sep 08",
                 "timestamp": "1222380000"
@@ -452,20 +452,20 @@
             "extn": "1042"
         },
         {
-            "name": "Miriam Weiss",
+            "name": "Olivia Liang",
             "position": "Support Engineer",
-            "salary": "$4,965",
+            "salary": "$234,500",
             "start_date": {
                 "display": "Thu 3rd Feb 11",
                 "timestamp": "1296687600"
             },
-            "office": "Edinburgh",
+            "office": "Singapore",
             "extn": "2120"
         },
         {
             "name": "Bruno Nash",
             "position": "Software Engineer",
-            "salary": "$4,200",
+            "salary": "$163,500",
             "start_date": {
                 "display": "Tue 3rd May 11",
                 "timestamp": "1304373600"
@@ -474,20 +474,20 @@
             "extn": "6222"
         },
         {
-            "name": "Odessa Jackson",
+            "name": "Sakura Yamamoto",
             "position": "Support Engineer",
-            "salary": "$3,600",
+            "salary": "$139,575",
             "start_date": {
                 "display": "Wed 19th Aug 09",
                 "timestamp": "1250632800"
             },
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "9383"
         },
         {
             "name": "Thor Walton",
             "position": "Developer",
-            "salary": "$3,600",
+            "salary": "$98,540",
             "start_date": {
                 "display": "Sun 11th Aug 13",
                 "timestamp": "1376172000"
@@ -498,7 +498,7 @@
         {
             "name": "Finn Camacho",
             "position": "Support Engineer",
-            "salary": "$4,800",
+            "salary": "$87,500",
             "start_date": {
                 "display": "Tue 7th Jul 09",
                 "timestamp": "1246917600"
@@ -507,20 +507,20 @@
             "extn": "2927"
         },
         {
-            "name": "Elton Baldwin",
+            "name": "Serge Baldwin",
             "position": "Data Coordinator",
-            "salary": "$6,730",
+            "salary": "$138,575",
             "start_date": {
                 "display": "Mon 9th Apr 12",
                 "timestamp": "1333922400"
             },
-            "office": "Edinburgh",
+            "office": "Singapore",
             "extn": "8352"
         },
         {
             "name": "Zenaida Frank",
             "position": "Software Engineer",
-            "salary": "$4,800",
+            "salary": "$125,250",
             "start_date": {
                 "display": "Mon 4th Jan 10",
                 "timestamp": "1262559600"
@@ -531,7 +531,7 @@
         {
             "name": "Zorita Serrano",
             "position": "Software Engineer",
-            "salary": "$5,300",
+            "salary": "$115,000",
             "start_date": {
                 "display": "Fri 1st Jun 12",
                 "timestamp": "1338501600"
@@ -541,8 +541,8 @@
         },
         {
             "name": "Jennifer Acosta",
-            "position": "Javascript Developer",
-            "salary": "$2,875",
+            "position": "Junior Javascript Developer",
+            "salary": "$75,650",
             "start_date": {
                 "display": "Fri 1st Feb 13",
                 "timestamp": "1359673200"
@@ -553,7 +553,7 @@
         {
             "name": "Cara Stevens",
             "position": "Sales Assistant",
-            "salary": "$4,800",
+            "salary": "$145,600",
             "start_date": {
                 "display": "Tue 6th Dec 11",
                 "timestamp": "1323126000"
@@ -563,8 +563,8 @@
         },
         {
             "name": "Hermione Butler",
-            "position": "Director",
-            "salary": "$4,080",
+            "position": "Regional Director",
+            "salary": "$356,250",
             "start_date": {
                 "display": "Mon 21st Mar 11",
                 "timestamp": "1300662000"
@@ -575,7 +575,7 @@
         {
             "name": "Lael Greer",
             "position": "Systems Administrator",
-            "salary": "$3,120",
+            "salary": "$103,500",
             "start_date": {
                 "display": "Fri 27th Feb 09",
                 "timestamp": "1235689200"
@@ -586,7 +586,7 @@
         {
             "name": "Jonas Alexander",
             "position": "Developer",
-            "salary": "$5,300",
+            "salary": "$86,500",
             "start_date": {
                 "display": "Wed 14th Jul 10",
                 "timestamp": "1279058400"
@@ -597,7 +597,7 @@
         {
             "name": "Shad Decker",
             "position": "Regional Director",
-            "salary": "$5,300",
+            "salary": "$183,000",
             "start_date": {
                 "display": "Thu 13th Nov 08",
                 "timestamp": "1226530800"
@@ -608,18 +608,18 @@
         {
             "name": "Michael Bruce",
             "position": "Javascript Developer",
-            "salary": "$4,080",
+            "salary": "$183,000",
             "start_date": {
                 "display": "Mon 27th Jun 11",
                 "timestamp": "1309125600"
             },
-            "office": "Edinburgh",
+            "office": "Singapore",
             "extn": "5384"
         },
         {
             "name": "Donna Snider",
-            "position": "System Architect",
-            "salary": "$3,120",
+            "position": "Customer Support",
+            "salary": "$112,000",
             "start_date": {
                 "display": "Tue 25th Jan 11",
                 "timestamp": "1295910000"

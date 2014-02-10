@@ -4,7 +4,7 @@
             "name": "Tiger Nixon",
             "hr": {
                 "position": "System Architect",
-                "salary": "$3,120",
+                "salary": "$320,800",
                 "start_date": "2011\/04\/25"
             },
             "contact": [
@@ -15,20 +15,20 @@
         {
             "name": "Garrett Winters",
             "hr": {
-                "position": "Director",
-                "salary": "$5,300",
+                "position": "Accountant",
+                "salary": "$170,750",
                 "start_date": "2011\/07\/25"
             },
             "contact": [
-                "Edinburgh",
+                "Tokyo",
                 "8422"
             ]
         },
         {
             "name": "Ashton Cox",
             "hr": {
-                "position": "Technical Author",
-                "salary": "$4,800",
+                "position": "Junior Technical Author",
+                "salary": "$86,000",
                 "start_date": "2009\/01\/12"
             },
             "contact": [
@@ -39,8 +39,8 @@
         {
             "name": "Cedric Kelly",
             "hr": {
-                "position": "Javascript Developer",
-                "salary": "$3,600",
+                "position": "Senior Javascript Developer",
+                "salary": "$433,060",
                 "start_date": "2012\/03\/29"
             },
             "contact": [
@@ -49,14 +49,14 @@
             ]
         },
         {
-            "name": "Jenna Elliott",
+            "name": "Airi Satou",
             "hr": {
-                "position": "Financial Controller",
-                "salary": "$5,300",
+                "position": "Accountant",
+                "salary": "$162,700",
                 "start_date": "2008\/11\/28"
             },
             "contact": [
-                "Edinburgh",
+                "Tokyo",
                 "5407"
             ]
         },
@@ -64,7 +64,7 @@
             "name": "Brielle Williamson",
             "hr": {
                 "position": "Integration Specialist",
-                "salary": "$4,525",
+                "salary": "$372,000",
                 "start_date": "2012\/12\/02"
             },
             "contact": [
@@ -76,7 +76,7 @@
             "name": "Herrod Chandler",
             "hr": {
                 "position": "Sales Assistant",
-                "salary": "$4,080",
+                "salary": "$137,500",
                 "start_date": "2012\/08\/06"
             },
             "contact": [
@@ -88,11 +88,11 @@
             "name": "Rhona Davidson",
             "hr": {
                 "position": "Integration Specialist",
-                "salary": "$6,730",
+                "salary": "$327,900",
                 "start_date": "2010\/10\/14"
             },
             "contact": [
-                "Edinburgh",
+                "Tokyo",
                 "6200"
             ]
         },
@@ -100,7 +100,7 @@
             "name": "Colleen Hurst",
             "hr": {
                 "position": "Javascript Developer",
-                "salary": "$5,000",
+                "salary": "$205,500",
                 "start_date": "2009\/09\/15"
             },
             "contact": [
@@ -112,7 +112,7 @@
             "name": "Sonya Frost",
             "hr": {
                 "position": "Software Engineer",
-                "salary": "$3,600",
+                "salary": "$103,600",
                 "start_date": "2008\/12\/13"
             },
             "contact": [
@@ -123,8 +123,8 @@
         {
             "name": "Jena Gaines",
             "hr": {
-                "position": "System Architect",
-                "salary": "$5,000",
+                "position": "Office Manager",
+                "salary": "$90,560",
                 "start_date": "2008\/12\/19"
             },
             "contact": [
@@ -135,8 +135,8 @@
         {
             "name": "Quinn Flynn",
             "hr": {
-                "position": "Financial Controller",
-                "salary": "$4,200",
+                "position": "Support Lead",
+                "salary": "$342,000",
                 "start_date": "2013\/03\/03"
             },
             "contact": [
@@ -148,7 +148,7 @@
             "name": "Charde Marshall",
             "hr": {
                 "position": "Regional Director",
-                "salary": "$5,300",
+                "salary": "$470,600",
                 "start_date": "2008\/10\/16"
             },
             "contact": [
@@ -160,7 +160,7 @@
             "name": "Haley Kennedy",
             "hr": {
                 "position": "Senior Marketing Designer",
-                "salary": "$4,800",
+                "salary": "$313,500",
                 "start_date": "2012\/12\/18"
             },
             "contact": [
@@ -172,7 +172,7 @@
             "name": "Tatyana Fitzpatrick",
             "hr": {
                 "position": "Regional Director",
-                "salary": "$2,875",
+                "salary": "$385,750",
                 "start_date": "2010\/03\/17"
             },
             "contact": [
@@ -183,8 +183,8 @@
         {
             "name": "Michael Silva",
             "hr": {
-                "position": "Senior Marketing Designer",
-                "salary": "$3,750",
+                "position": "Marketing Designer",
+                "salary": "$198,500",
                 "start_date": "2012\/11\/27"
             },
             "contact": [
@@ -195,8 +195,8 @@
         {
             "name": "Paul Byrd",
             "hr": {
-                "position": "Javascript Developer",
-                "salary": "$5,000",
+                "position": "Chief Financial Officer (CFO)",
+                "salary": "$725,000",
                 "start_date": "2010\/06\/09"
             },
             "contact": [
@@ -208,7 +208,7 @@
             "name": "Gloria Little",
             "hr": {
                 "position": "Systems Administrator",
-                "salary": "$3,120",
+                "salary": "$237,500",
                 "start_date": "2009\/04\/10"
             },
             "contact": [
@@ -220,7 +220,7 @@
             "name": "Bradley Greer",
             "hr": {
                 "position": "Software Engineer",
-                "salary": "$3,120",
+                "salary": "$132,000",
                 "start_date": "2012\/10\/13"
             },
             "contact": [
@@ -231,8 +231,8 @@
         {
             "name": "Dai Rios",
             "hr": {
-                "position": "System Architect",
-                "salary": "$4,200",
+                "position": "Personnel Lead",
+                "salary": "$217,500",
                 "start_date": "2012\/09\/26"
             },
             "contact": [
@@ -243,8 +243,8 @@
         {
             "name": "Jenette Caldwell",
             "hr": {
-                "position": "Financial Controller",
-                "salary": "$4,965",
+                "position": "Development Lead",
+                "salary": "$345,000",
                 "start_date": "2011\/09\/03"
             },
             "contact": [
@@ -255,8 +255,8 @@
         {
             "name": "Yuri Berry",
             "hr": {
-                "position": "System Architect",
-                "salary": "$3,600",
+                "position": "Chief Marketing Officer (CMO)",
+                "salary": "$675,000",
                 "start_date": "2009\/06\/25"
             },
             "contact": [
@@ -267,8 +267,8 @@
         {
             "name": "Caesar Vance",
             "hr": {
-                "position": "Technical Author",
-                "salary": "$4,965",
+                "position": "Pre-Sales Support",
+                "salary": "$106,450",
                 "start_date": "2011\/12\/12"
             },
             "contact": [
@@ -280,19 +280,19 @@
             "name": "Doris Wilder",
             "hr": {
                 "position": "Sales Assistant",
-                "salary": "$4,965",
+                "salary": "$85,600",
                 "start_date": "2010\/09\/20"
             },
             "contact": [
-                "Edinburgh",
+                "Sidney",
                 "3023"
             ]
         },
         {
             "name": "Angelica Ramos",
             "hr": {
-                "position": "System Architect",
-                "salary": "$2,875",
+                "position": "Chief Executive Officer (CEO)",
+                "salary": "$1,200,000",
                 "start_date": "2009\/10\/09"
             },
             "contact": [
@@ -304,7 +304,7 @@
             "name": "Gavin Joyce",
             "hr": {
                 "position": "Developer",
-                "salary": "$4,525",
+                "salary": "$92,575",
                 "start_date": "2010\/12\/22"
             },
             "contact": [
@@ -316,11 +316,11 @@
             "name": "Jennifer Chang",
             "hr": {
                 "position": "Regional Director",
-                "salary": "$4,080",
+                "salary": "$357,650",
                 "start_date": "2010\/11\/14"
             },
             "contact": [
-                "London",
+                "Singapore",
                 "9239"
             ]
         },
@@ -328,7 +328,7 @@
             "name": "Brenden Wagner",
             "hr": {
                 "position": "Software Engineer",
-                "salary": "$3,750",
+                "salary": "$206,850",
                 "start_date": "2011\/06\/07"
             },
             "contact": [
@@ -337,10 +337,10 @@
             ]
         },
         {
-            "name": "Ebony Grimes",
+            "name": "Fiona Green",
             "hr": {
-                "position": "Software Engineer",
-                "salary": "$2,875",
+                "position": "Chief Operating Officer (COO)",
+                "salary": "$850,000",
                 "start_date": "2010\/03\/11"
             },
             "contact": [
@@ -349,14 +349,14 @@
             ]
         },
         {
-            "name": "Russell Chavez",
+            "name": "Shou Itou",
             "hr": {
-                "position": "Director",
-                "salary": "$3,600",
+                "position": "Regional Marketing",
+                "salary": "$163,000",
                 "start_date": "2011\/08\/14"
             },
             "contact": [
-                "Edinburgh",
+                "Tokyo",
                 "8899"
             ]
         },
@@ -364,11 +364,11 @@
             "name": "Michelle House",
             "hr": {
                 "position": "Integration Specialist",
-                "salary": "$3,750",
+                "salary": "$95,400",
                 "start_date": "2011\/06\/02"
             },
             "contact": [
-                "Edinburgh",
+                "Sidney",
                 "2769"
             ]
         },
@@ -376,7 +376,7 @@
             "name": "Suki Burks",
             "hr": {
                 "position": "Developer",
-                "salary": "$2,875",
+                "salary": "$114,500",
                 "start_date": "2009\/10\/22"
             },
             "contact": [
@@ -388,7 +388,7 @@
             "name": "Prescott Bartlett",
             "hr": {
                 "position": "Technical Author",
-                "salary": "$6,730",
+                "salary": "$145,000",
                 "start_date": "2011\/05\/07"
             },
             "contact": [
@@ -399,8 +399,8 @@
         {
             "name": "Gavin Cortez",
             "hr": {
-                "position": "Technical Author",
-                "salary": "$6,730",
+                "position": "Team Leader",
+                "salary": "$235,500",
                 "start_date": "2008\/10\/26"
             },
             "contact": [
@@ -411,8 +411,8 @@
         {
             "name": "Martena Mccray",
             "hr": {
-                "position": "Integration Specialist",
-                "salary": "$4,080",
+                "position": "Post-Sales support",
+                "salary": "$324,050",
                 "start_date": "2011\/03\/09"
             },
             "contact": [
@@ -423,8 +423,8 @@
         {
             "name": "Unity Butler",
             "hr": {
-                "position": "Senior Marketing Designer",
-                "salary": "$3,750",
+                "position": "Marketing Designer",
+                "salary": "$85,675",
                 "start_date": "2009\/12\/09"
             },
             "contact": [
@@ -435,8 +435,8 @@
         {
             "name": "Howard Hatfield",
             "hr": {
-                "position": "Financial Controller",
-                "salary": "$4,080",
+                "position": "Office Manager",
+                "salary": "$164,500",
                 "start_date": "2008\/12\/16"
             },
             "contact": [
@@ -447,8 +447,8 @@
         {
             "name": "Hope Fuentes",
             "hr": {
-                "position": "Financial Controller",
-                "salary": "$4,200",
+                "position": "Secretary",
+                "salary": "$109,850",
                 "start_date": "2010\/02\/12"
             },
             "contact": [
@@ -459,8 +459,8 @@
         {
             "name": "Vivian Harrell",
             "hr": {
-                "position": "System Architect",
-                "salary": "$4,965",
+                "position": "Financial Controller",
+                "salary": "$452,500",
                 "start_date": "2009\/02\/14"
             },
             "contact": [
@@ -471,8 +471,8 @@
         {
             "name": "Timothy Mooney",
             "hr": {
-                "position": "Financial Controller",
-                "salary": "$4,200",
+                "position": "Office Manager",
+                "salary": "$136,200",
                 "start_date": "2008\/12\/11"
             },
             "contact": [
@@ -484,7 +484,7 @@
             "name": "Jackson Bradshaw",
             "hr": {
                 "position": "Director",
-                "salary": "$5,000",
+                "salary": "$645,750",
                 "start_date": "2008\/09\/26"
             },
             "contact": [
@@ -493,14 +493,14 @@
             ]
         },
         {
-            "name": "Miriam Weiss",
+            "name": "Olivia Liang",
             "hr": {
                 "position": "Support Engineer",
-                "salary": "$4,965",
+                "salary": "$234,500",
                 "start_date": "2011\/02\/03"
             },
             "contact": [
-                "Edinburgh",
+                "Singapore",
                 "2120"
             ]
         },
@@ -508,7 +508,7 @@
             "name": "Bruno Nash",
             "hr": {
                 "position": "Software Engineer",
-                "salary": "$4,200",
+                "salary": "$163,500",
                 "start_date": "2011\/05\/03"
             },
             "contact": [
@@ -517,14 +517,14 @@
             ]
         },
         {
-            "name": "Odessa Jackson",
+            "name": "Sakura Yamamoto",
             "hr": {
                 "position": "Support Engineer",
-                "salary": "$3,600",
+                "salary": "$139,575",
                 "start_date": "2009\/08\/19"
             },
             "contact": [
-                "Edinburgh",
+                "Tokyo",
                 "9383"
             ]
         },
@@ -532,7 +532,7 @@
             "name": "Thor Walton",
             "hr": {
                 "position": "Developer",
-                "salary": "$3,600",
+                "salary": "$98,540",
                 "start_date": "2013\/08\/11"
             },
             "contact": [
@@ -544,7 +544,7 @@
             "name": "Finn Camacho",
             "hr": {
                 "position": "Support Engineer",
-                "salary": "$4,800",
+                "salary": "$87,500",
                 "start_date": "2009\/07\/07"
             },
             "contact": [
@@ -553,14 +553,14 @@
             ]
         },
         {
-            "name": "Elton Baldwin",
+            "name": "Serge Baldwin",
             "hr": {
                 "position": "Data Coordinator",
-                "salary": "$6,730",
+                "salary": "$138,575",
                 "start_date": "2012\/04\/09"
             },
             "contact": [
-                "Edinburgh",
+                "Singapore",
                 "8352"
             ]
         },
@@ -568,7 +568,7 @@
             "name": "Zenaida Frank",
             "hr": {
                 "position": "Software Engineer",
-                "salary": "$4,800",
+                "salary": "$125,250",
                 "start_date": "2010\/01\/04"
             },
             "contact": [
@@ -580,7 +580,7 @@
             "name": "Zorita Serrano",
             "hr": {
                 "position": "Software Engineer",
-                "salary": "$5,300",
+                "salary": "$115,000",
                 "start_date": "2012\/06\/01"
             },
             "contact": [
@@ -591,8 +591,8 @@
         {
             "name": "Jennifer Acosta",
             "hr": {
-                "position": "Javascript Developer",
-                "salary": "$2,875",
+                "position": "Junior Javascript Developer",
+                "salary": "$75,650",
                 "start_date": "2013\/02\/01"
             },
             "contact": [
@@ -604,7 +604,7 @@
             "name": "Cara Stevens",
             "hr": {
                 "position": "Sales Assistant",
-                "salary": "$4,800",
+                "salary": "$145,600",
                 "start_date": "2011\/12\/06"
             },
             "contact": [
@@ -615,8 +615,8 @@
         {
             "name": "Hermione Butler",
             "hr": {
-                "position": "Director",
-                "salary": "$4,080",
+                "position": "Regional Director",
+                "salary": "$356,250",
                 "start_date": "2011\/03\/21"
             },
             "contact": [
@@ -628,7 +628,7 @@
             "name": "Lael Greer",
             "hr": {
                 "position": "Systems Administrator",
-                "salary": "$3,120",
+                "salary": "$103,500",
                 "start_date": "2009\/02\/27"
             },
             "contact": [
@@ -640,7 +640,7 @@
             "name": "Jonas Alexander",
             "hr": {
                 "position": "Developer",
-                "salary": "$5,300",
+                "salary": "$86,500",
                 "start_date": "2010\/07\/14"
             },
             "contact": [
@@ -652,7 +652,7 @@
             "name": "Shad Decker",
             "hr": {
                 "position": "Regional Director",
-                "salary": "$5,300",
+                "salary": "$183,000",
                 "start_date": "2008\/11\/13"
             },
             "contact": [
@@ -664,19 +664,19 @@
             "name": "Michael Bruce",
             "hr": {
                 "position": "Javascript Developer",
-                "salary": "$4,080",
+                "salary": "$183,000",
                 "start_date": "2011\/06\/27"
             },
             "contact": [
-                "Edinburgh",
+                "Singapore",
                 "5384"
             ]
         },
         {
             "name": "Donna Snider",
             "hr": {
-                "position": "System Architect",
-                "salary": "$3,120",
+                "position": "Customer Support",
+                "salary": "$112,000",
                 "start_date": "2011\/01\/25"
             },
             "contact": [

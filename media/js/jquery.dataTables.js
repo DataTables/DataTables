@@ -22,7 +22,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_empty,_intVal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
+/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetRowData,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidateRow,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -101,9 +101,13 @@
 	var _api_register; // DataTable.Api.register
 	var _api_registerPlural; // DataTable.Api.registerPlural
 	
+	var _re_dic = {};
 	var _re_new_lines = /[\r\n]/g;
 	var _re_html = /<.*?>/g;
 	var _re_date_start = /^[\d\+\-a-zA-Z]/;
+	
+	// Escape regular expression special characters
+	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\') + ')', 'g' );
 	
 	// U+2009 is thin space and U+202F is narrow no-break space, both used in many
 	// standards as thousands separators
@@ -120,9 +124,23 @@
 		return !isNaN(integer) && isFinite(s) ? integer : null;
 	};
 	
+	var _numToDecimal = function ( num, decimalPoint ) {
+		// Cache created regular expressions for speed as this function is called often
+		if ( ! _re_dic[ decimalPoint ] ) {
+			_re_dic[ decimalPoint ] = new RegExp( _fnEscapeRegex( decimalPoint ), 'g' );
+		}
+		return num.replace( /\./g, '' ).replace( _re_dic[ decimalPoint ], '.' );
+	};
 	
-	var _isNumber = function ( d, formatted ) {
-		if ( formatted && typeof d === 'string' ) {
+	
+	var _isNumber = function ( d, decimalPoint, formatted ) {
+		var strType = typeof d === 'string';
+	
+		if ( decimalPoint && strType ) {
+			d = _numToDecimal( d, decimalPoint );
+		}
+	
+		if ( formatted && strType ) {
 			d = d.replace( _re_formatted_numeric, '' );
 		}
 	
@@ -136,7 +154,7 @@
 	};
 	
 	
-	var _htmlNumeric = function ( d, formatted ) {
+	var _htmlNumeric = function ( d, decimalPoint, formatted ) {
 		if ( _empty( d ) ) {
 			return true;
 		}
@@ -144,7 +162,7 @@
 		var html = _isHtml( d );
 		return ! html ?
 			null :
-			_isNumber( _stripHtml( d ), formatted ) ?
+			_isNumber( _stripHtml( d ), decimalPoint, formatted ) ?
 				true :
 				null;
 	};
@@ -340,25 +358,35 @@
 	 *  @param {object} oSettings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnLanguageCompat( oLanguage )
+	function _fnLanguageCompat( lang )
 	{
-		var oDefaults = DataTable.defaults.oLanguage;
-		var zeroRecords = oLanguage.sZeroRecords;
+		var defaults = DataTable.defaults.oLanguage;
+		var zeroRecords = lang.sZeroRecords;
 	
 		/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
 		 * sZeroRecords - assuming that is given.
 		 */
-		if ( !oLanguage.sEmptyTable && zeroRecords &&
-			oDefaults.sEmptyTable === "No data available in table" )
+		if ( ! lang.sEmptyTable && zeroRecords &&
+			defaults.sEmptyTable === "No data available in table" )
 		{
-			_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
+			_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
 		}
 	
 		/* Likewise with loading records */
-		if ( !oLanguage.sLoadingRecords && zeroRecords &&
-			oDefaults.sLoadingRecords === "Loading..." )
+		if ( ! lang.sLoadingRecords && zeroRecords &&
+			defaults.sLoadingRecords === "Loading..." )
 		{
-			_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
+			_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
+		}
+	
+		// Old parameter name of the thousands separator mapped onto the new
+		if ( lang.sInfoThousands ) {
+			lang.sThousands = lang.sInfoThousands;
+		}
+	
+		var decimal = lang.sDecimal;
+		if ( decimal ) {
+			_addNumericSort( decimal );
 		}
 	}
 	
@@ -754,7 +782,7 @@
 							cache[k] = _fnGetCellData( settings, k, i, 'type' );
 						}
 	
-						detectedType = types[j]( cache[k] );
+						detectedType = types[j]( cache[k], settings );
 	
 						// Doesn't match, so break early, since this type can't
 						// apply to this column. Also, HTML is a special case since
@@ -2806,9 +2834,7 @@
 	 */
 	function _fnEscapeRegex ( sVal )
 	{
-		var acEscape = [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ];
-		var reReplace = new RegExp( '(\\' + acEscape.join('|\\') + ')', 'g' );
-		return sVal.replace(reReplace, '\\$1');
+		return sVal.replace( _re_escape_regex, '\\$1' );
 	}
 	
 	
@@ -9956,7 +9982,7 @@
 		 *
 		 *  @example
 		 *    // Format a number using a single quote for the separator (note that
-		 *    // this can also be done with the language.infoThousands option)
+		 *    // this can also be done with the language.thousands option)
 		 *    $(document).ready( function() {
 		 *      $('#example').dataTable( {
 		 *        "formatNumber": function ( toFormat ) {
@@ -9970,7 +9996,7 @@
 		"fnFormatNumber": function ( toFormat ) {
 			return toFormat.toString().replace(
 				/\B(?=(\d{3})+(?!\d))/g,
-				this.oLanguage.sInfoThousands
+				this.oLanguage.sThousands
 			);
 		},
 	
@@ -10762,26 +10788,57 @@
 	
 	
 			/**
-			 * DataTables has a build in number formatter (`formatNumber`) which is used
-			 * to format large numbers that are used in the table information. By
-			 * default a comma is used, but this can be trivially changed to any
-			 * character you wish with this parameter.
+			 * This decimal place operator is a little different from the other
+			 * language options since DataTables doesn't output floating point
+			 * numbers, so it won't ever use this for display of a number. Rather,
+			 * what this parameter does is modify the sort methods of the table so
+			 * that numbers which are in a format which has a character other than
+			 * a period (`.`) as a decimal place will be sorted numerically.
+			 *
+			 * Note that numbers with different decimal places cannot be shown in
+			 * the same table and still be sortable, the table must be consistent.
+			 * However, multiple different tables on the page can use different
+			 * decimal place characters.
 			 *  @type string
-			 *  @default ,
+			 *  @default 
 			 *
 			 *  @dtopt Language
-			 *  @name DataTable.defaults.language.infoThousands
+			 *  @name DataTable.defaults.language.decimal
 			 *
 			 *  @example
 			 *    $(document).ready( function() {
 			 *      $('#example').dataTable( {
 			 *        "language": {
-			 *          "infoThousands": "'"
+			 *          "decimal": ","
+			 *          "thousands": "."
 			 *        }
 			 *      } );
 			 *    } );
 			 */
-			"sInfoThousands": ",",
+			"sDecimal": "",
+	
+	
+			/**
+			 * DataTables has a build in number formatter (`formatNumber`) which is
+			 * used to format large numbers that are used in the table information.
+			 * By default a comma is used, but this can be trivially changed to any
+			 * character you wish with this parameter.
+			 *  @type string
+			 *  @default ,
+			 *
+			 *  @dtopt Language
+			 *  @name DataTable.defaults.language.thousands
+			 *
+			 *  @example
+			 *    $(document).ready( function() {
+			 *      $('#example').dataTable( {
+			 *        "language": {
+			 *          "thousands": "'"
+			 *        }
+			 *      } );
+			 *    } );
+			 */
+			"sThousands": ",",
 	
 	
 			/**
@@ -13232,9 +13289,14 @@
 			 * a column's type, making initialisation of DataTables super easy, even
 			 * when complex data is in the table.
 			 *
-			 * The functions defined take a single parameter:
+			 * The functions defined take two parameters:
 			 *
 		     *  1. `{*}` Data from the column cell to be analysed
+		     *  2. `{settings}` DataTables settings object. This can be used to
+		     *     perform context specific type detection - for example detection
+		     *     based on language settings such as using a comma for a decimal
+		     *     place. Generally speaking the options from the settings will not
+		     *     be required
 			 *
 			 * Each function is expected to return:
 			 *
@@ -13246,7 +13308,7 @@
 			 *  @example
 			 *    // Currency type detection plug-in:
 			 *    $.fn.dataTable.ext.type.detect.push(
-			 *      function ( data ) {
+			 *      function ( data, settings ) {
 			 *        // Check the numeric part
 			 *        if ( ! $.isNumeric( data.substring(1) ) ) {
 			 *          return null;
@@ -13697,9 +13759,16 @@
 	
 	
 	
-	var __numericReplace = function ( d, re1, re2 ) {
+	var __numericReplace = function ( d, decimalPlace, re1, re2 ) {
 		if ( !d || d === '-' ) {
 			return -Infinity;
+		}
+	
+		// If a decimal place other than `.` is used, it needs to be given to the
+		// function so we can detect it and replace with a `.` which is the only
+		// decimal place Javascript recognises - it is not locale aware.
+		if ( decimalPlace ) {
+			d = _numToDecimal( d, decimalPlace );
 		}
 	
 		if ( d.replace ) {
@@ -13716,48 +13785,55 @@
 	};
 	
 	
-	$.extend( DataTable.ext.type.order, {
+	// Add the numeric 'deformatting' functions for sorting. This is done in a
+	// function to provide an easy ability for the language options to add
+	// additional methods if a non-period decimal place is used.
+	function _addNumericSort ( decimalPlace ) {
+		$.each(
+			{
+				// Plain numbers
+				"num": function ( d ) {
+					return __numericReplace( d, decimalPlace );
+				},
+	
+				// Formatted numbers
+				"num-fmt": function ( d ) {
+					return __numericReplace( d, decimalPlace, _re_formatted_numeric );
+				},
+	
+				// HTML numeric
+				"html-num": function ( d ) {
+					return __numericReplace( d, decimalPlace, _re_html );
+				},
+	
+				// HTML numeric, formatted
+				"html-num-fmt": function ( d ) {
+					return __numericReplace( d, decimalPlace, _re_html, _re_formatted_numeric );
+				}
+			},
+			function ( key, fn ) {
+				_ext.type.order[ key+decimalPlace+'-pre' ] = fn;
+			}
+		);
+	}
+	
+	
+	// Default sort methods
+	$.extend( _ext.type.order, {
 		// Dates
-		"date-pre": function ( d )
-		{
+		"date-pre": function ( d ) {
 			return Date.parse( d ) || 0;
 		},
 	
-		// Plain numbers
-		"numeric-pre": function ( d )
-		{
-			return __numericReplace( d );
-		},
-	
-		// Formatted numbers
-		"numeric-fmt-pre": function ( d )
-		{
-			return __numericReplace( d, _re_formatted_numeric );
-		},
-	
-		// HTML numeric
-		"html-numeric-pre": function ( d )
-		{
-			return __numericReplace( d, _re_html );
-		},
-	
-		// HTML numeric, formatted
-		"html-numeric-fmt-pre": function ( d )
-		{
-			return __numericReplace( d, _re_html, _re_formatted_numeric );
-		},
-	
 		// html
-		"html-pre": function ( a )
-		{
+		"html-pre": function ( a ) {
 			return a.replace ?
 				a.replace( /<.*?>/g, "" ).toLowerCase() :
 				a+'';
 		},
 	
 		// string
-		"string-pre": function ( a )
-		{
+		"string-pre": function ( a ) {
 			return typeof a === 'string' ?
 				a.toLowerCase() :
 				! a || ! a.toString ?
@@ -13767,16 +13843,18 @@
 	
 		// string-asc and -desc are retained only for compatibility with the old
 		// sort methods
-		"string-asc": function ( x, y )
-		{
+		"string-asc": function ( x, y ) {
 			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		},
 	
-		"string-desc": function ( x, y )
-		{
+		"string-desc": function ( x, y ) {
 			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 		}
 	} );
+	
+	
+	// Numeric sorting types - order doesn't matter here
+	_addNumericSort( '' );
 	
 	
 	// Built in type detection. See model.ext.aTypes for information about
@@ -13784,13 +13862,14 @@
 	$.extend( DataTable.ext.type.detect, [
 		// Plain numbers - first since V8 detects some plain numbers as dates
 		// e.g. Date.parse('55') (but not all, e.g. Date.parse('22')...).
-		function ( d )
+		function ( d, settings )
 		{
-			return _isNumber( d ) ? 'numeric' : null;
+			var decimal = settings.oLanguage.sDecimal;
+			return _isNumber( d, decimal ) ? 'num'+decimal : null;
 		},
 	
 		// Dates (only those recognised by the browser's Date.parse)
-		function ( d )
+		function ( d, settings )
 		{
 			// V8 will remove any unknown characters at the start of the expression,
 			// leading to false matches such as `$245.12` being a valid date. See
@@ -13803,25 +13882,28 @@
 		},
 	
 		// Formatted numbers
-		function ( d )
+		function ( d, settings )
 		{
-			return _isNumber( d, true ) ? 'numeric-fmt' : null;
+			var decimal = settings.oLanguage.sDecimal;
+			return _isNumber( d, decimal, true ) ? 'num-fmt'+decimal : null;
 		},
 	
 		// HTML numeric
-		function ( d )
+		function ( d, settings )
 		{
-			return _htmlNumeric( d ) ? 'html-numeric' : null;
+			var decimal = settings.oLanguage.sDecimal;
+			return _htmlNumeric( d, decimal ) ? 'html-num'+decimal : null;
 		},
 	
 		// HTML numeric, formatted
-		function ( d )
+		function ( d, settings )
 		{
-			return _htmlNumeric( d, true ) ? 'html-numeric-fmt' : null;
+			var decimal = settings.oLanguage.sDecimal;
+			return _htmlNumeric( d, decimal, true ) ? 'html-num-fmt'+decimal : null;
 		},
 	
-		// HTML (this is strict checking - there much be html)
-		function ( d )
+		// HTML (this is strict checking - there must be html)
+		function ( d, settings )
 		{
 			return _empty( d ) || (typeof d === 'string' && d.indexOf('<') !== -1) ?
 				'html' : null;

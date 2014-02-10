@@ -7,7 +7,7 @@
             ],
             "hr": [
                 "System Architect",
-                "$3,120",
+                "$320,800",
                 "2011\/04\/25"
             ],
             "office": "Edinburgh",
@@ -19,11 +19,11 @@
                 "Garrett"
             ],
             "hr": [
-                "Director",
-                "$5,300",
+                "Accountant",
+                "$170,750",
                 "2011\/07\/25"
             ],
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "8422"
         },
         {
@@ -32,8 +32,8 @@
                 "Ashton"
             ],
             "hr": [
-                "Technical Author",
-                "$4,800",
+                "Junior Technical Author",
+                "$86,000",
                 "2009\/01\/12"
             ],
             "office": "San Francisco",
@@ -45,8 +45,8 @@
                 "Cedric"
             ],
             "hr": [
-                "Javascript Developer",
-                "$3,600",
+                "Senior Javascript Developer",
+                "$433,060",
                 "2012\/03\/29"
             ],
             "office": "Edinburgh",
@@ -54,15 +54,15 @@
         },
         {
             "name": [
-                "Elliott",
-                "Jenna"
+                "Satou",
+                "Airi"
             ],
             "hr": [
-                "Financial Controller",
-                "$5,300",
+                "Accountant",
+                "$162,700",
                 "2008\/11\/28"
             ],
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "5407"
         },
         {
@@ -72,7 +72,7 @@
             ],
             "hr": [
                 "Integration Specialist",
-                "$4,525",
+                "$372,000",
                 "2012\/12\/02"
             ],
             "office": "New York",
@@ -85,7 +85,7 @@
             ],
             "hr": [
                 "Sales Assistant",
-                "$4,080",
+                "$137,500",
                 "2012\/08\/06"
             ],
             "office": "San Francisco",
@@ -98,10 +98,10 @@
             ],
             "hr": [
                 "Integration Specialist",
-                "$6,730",
+                "$327,900",
                 "2010\/10\/14"
             ],
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "6200"
         },
         {
@@ -111,7 +111,7 @@
             ],
             "hr": [
                 "Javascript Developer",
-                "$5,000",
+                "$205,500",
                 "2009\/09\/15"
             ],
             "office": "San Francisco",
@@ -124,7 +124,7 @@
             ],
             "hr": [
                 "Software Engineer",
-                "$3,600",
+                "$103,600",
                 "2008\/12\/13"
             ],
             "office": "Edinburgh",
@@ -136,8 +136,8 @@
                 "Jena"
             ],
             "hr": [
-                "System Architect",
-                "$5,000",
+                "Office Manager",
+                "$90,560",
                 "2008\/12\/19"
             ],
             "office": "London",
@@ -149,8 +149,8 @@
                 "Quinn"
             ],
             "hr": [
-                "Financial Controller",
-                "$4,200",
+                "Support Lead",
+                "$342,000",
                 "2013\/03\/03"
             ],
             "office": "Edinburgh",
@@ -163,7 +163,7 @@
             ],
             "hr": [
                 "Regional Director",
-                "$5,300",
+                "$470,600",
                 "2008\/10\/16"
             ],
             "office": "San Francisco",
@@ -176,7 +176,7 @@
             ],
             "hr": [
                 "Senior Marketing Designer",
-                "$4,800",
+                "$313,500",
                 "2012\/12\/18"
             ],
             "office": "London",
@@ -189,7 +189,7 @@
             ],
             "hr": [
                 "Regional Director",
-                "$2,875",
+                "$385,750",
                 "2010\/03\/17"
             ],
             "office": "London",
@@ -201,8 +201,8 @@
                 "Michael"
             ],
             "hr": [
-                "Senior Marketing Designer",
-                "$3,750",
+                "Marketing Designer",
+                "$198,500",
                 "2012\/11\/27"
             ],
             "office": "London",
@@ -214,8 +214,8 @@
                 "Paul"
             ],
             "hr": [
-                "Javascript Developer",
-                "$5,000",
+                "Chief Financial Officer (CFO)",
+                "$725,000",
                 "2010\/06\/09"
             ],
             "office": "New York",
@@ -228,7 +228,7 @@
             ],
             "hr": [
                 "Systems Administrator",
-                "$3,120",
+                "$237,500",
                 "2009\/04\/10"
             ],
             "office": "New York",
@@ -241,7 +241,7 @@
             ],
             "hr": [
                 "Software Engineer",
-                "$3,120",
+                "$132,000",
                 "2012\/10\/13"
             ],
             "office": "London",
@@ -253,8 +253,8 @@
                 "Dai"
             ],
             "hr": [
-                "System Architect",
-                "$4,200",
+                "Personnel Lead",
+                "$217,500",
                 "2012\/09\/26"
             ],
             "office": "Edinburgh",
@@ -266,8 +266,8 @@
                 "Jenette"
             ],
             "hr": [
-                "Financial Controller",
-                "$4,965",
+                "Development Lead",
+                "$345,000",
                 "2011\/09\/03"
             ],
             "office": "New York",
@@ -279,8 +279,8 @@
                 "Yuri"
             ],
             "hr": [
-                "System Architect",
-                "$3,600",
+                "Chief Marketing Officer (CMO)",
+                "$675,000",
                 "2009\/06\/25"
             ],
             "office": "New York",
@@ -292,8 +292,8 @@
                 "Caesar"
             ],
             "hr": [
-                "Technical Author",
-                "$4,965",
+                "Pre-Sales Support",
+                "$106,450",
                 "2011\/12\/12"
             ],
             "office": "New York",
@@ -306,10 +306,10 @@
             ],
             "hr": [
                 "Sales Assistant",
-                "$4,965",
+                "$85,600",
                 "2010\/09\/20"
             ],
-            "office": "Edinburgh",
+            "office": "Sidney",
             "extn": "3023"
         },
         {
@@ -318,8 +318,8 @@
                 "Angelica"
             ],
             "hr": [
-                "System Architect",
-                "$2,875",
+                "Chief Executive Officer (CEO)",
+                "$1,200,000",
                 "2009\/10\/09"
             ],
             "office": "London",
@@ -332,7 +332,7 @@
             ],
             "hr": [
                 "Developer",
-                "$4,525",
+                "$92,575",
                 "2010\/12\/22"
             ],
             "office": "Edinburgh",
@@ -345,10 +345,10 @@
             ],
             "hr": [
                 "Regional Director",
-                "$4,080",
+                "$357,650",
                 "2010\/11\/14"
             ],
-            "office": "London",
+            "office": "Singapore",
             "extn": "9239"
         },
         {
@@ -358,7 +358,7 @@
             ],
             "hr": [
                 "Software Engineer",
-                "$3,750",
+                "$206,850",
                 "2011\/06\/07"
             ],
             "office": "San Francisco",
@@ -366,12 +366,12 @@
         },
         {
             "name": [
-                "Grimes",
-                "Ebony"
+                "Green",
+                "Fiona"
             ],
             "hr": [
-                "Software Engineer",
-                "$2,875",
+                "Chief Operating Officer (COO)",
+                "$850,000",
                 "2010\/03\/11"
             ],
             "office": "San Francisco",
@@ -379,15 +379,15 @@
         },
         {
             "name": [
-                "Chavez",
-                "Russell"
+                "Itou",
+                "Shou"
             ],
             "hr": [
-                "Director",
-                "$3,600",
+                "Regional Marketing",
+                "$163,000",
                 "2011\/08\/14"
             ],
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "8899"
         },
         {
@@ -397,10 +397,10 @@
             ],
             "hr": [
                 "Integration Specialist",
-                "$3,750",
+                "$95,400",
                 "2011\/06\/02"
             ],
-            "office": "Edinburgh",
+            "office": "Sidney",
             "extn": "2769"
         },
         {
@@ -410,7 +410,7 @@
             ],
             "hr": [
                 "Developer",
-                "$2,875",
+                "$114,500",
                 "2009\/10\/22"
             ],
             "office": "London",
@@ -423,7 +423,7 @@
             ],
             "hr": [
                 "Technical Author",
-                "$6,730",
+                "$145,000",
                 "2011\/05\/07"
             ],
             "office": "London",
@@ -435,8 +435,8 @@
                 "Gavin"
             ],
             "hr": [
-                "Technical Author",
-                "$6,730",
+                "Team Leader",
+                "$235,500",
                 "2008\/10\/26"
             ],
             "office": "San Francisco",
@@ -448,8 +448,8 @@
                 "Martena"
             ],
             "hr": [
-                "Integration Specialist",
-                "$4,080",
+                "Post-Sales support",
+                "$324,050",
                 "2011\/03\/09"
             ],
             "office": "Edinburgh",
@@ -461,8 +461,8 @@
                 "Unity"
             ],
             "hr": [
-                "Senior Marketing Designer",
-                "$3,750",
+                "Marketing Designer",
+                "$85,675",
                 "2009\/12\/09"
             ],
             "office": "San Francisco",
@@ -474,8 +474,8 @@
                 "Howard"
             ],
             "hr": [
-                "Financial Controller",
-                "$4,080",
+                "Office Manager",
+                "$164,500",
                 "2008\/12\/16"
             ],
             "office": "San Francisco",
@@ -487,8 +487,8 @@
                 "Hope"
             ],
             "hr": [
-                "Financial Controller",
-                "$4,200",
+                "Secretary",
+                "$109,850",
                 "2010\/02\/12"
             ],
             "office": "San Francisco",
@@ -500,8 +500,8 @@
                 "Vivian"
             ],
             "hr": [
-                "System Architect",
-                "$4,965",
+                "Financial Controller",
+                "$452,500",
                 "2009\/02\/14"
             ],
             "office": "San Francisco",
@@ -513,8 +513,8 @@
                 "Timothy"
             ],
             "hr": [
-                "Financial Controller",
-                "$4,200",
+                "Office Manager",
+                "$136,200",
                 "2008\/12\/11"
             ],
             "office": "London",
@@ -527,7 +527,7 @@
             ],
             "hr": [
                 "Director",
-                "$5,000",
+                "$645,750",
                 "2008\/09\/26"
             ],
             "office": "New York",
@@ -535,15 +535,15 @@
         },
         {
             "name": [
-                "Weiss",
-                "Miriam"
+                "Liang",
+                "Olivia"
             ],
             "hr": [
                 "Support Engineer",
-                "$4,965",
+                "$234,500",
                 "2011\/02\/03"
             ],
-            "office": "Edinburgh",
+            "office": "Singapore",
             "extn": "2120"
         },
         {
@@ -553,7 +553,7 @@
             ],
             "hr": [
                 "Software Engineer",
-                "$4,200",
+                "$163,500",
                 "2011\/05\/03"
             ],
             "office": "London",
@@ -561,15 +561,15 @@
         },
         {
             "name": [
-                "Jackson",
-                "Odessa"
+                "Yamamoto",
+                "Sakura"
             ],
             "hr": [
                 "Support Engineer",
-                "$3,600",
+                "$139,575",
                 "2009\/08\/19"
             ],
-            "office": "Edinburgh",
+            "office": "Tokyo",
             "extn": "9383"
         },
         {
@@ -579,7 +579,7 @@
             ],
             "hr": [
                 "Developer",
-                "$3,600",
+                "$98,540",
                 "2013\/08\/11"
             ],
             "office": "New York",
@@ -592,7 +592,7 @@
             ],
             "hr": [
                 "Support Engineer",
-                "$4,800",
+                "$87,500",
                 "2009\/07\/07"
             ],
             "office": "San Francisco",
@@ -601,14 +601,14 @@
         {
             "name": [
                 "Baldwin",
-                "Elton"
+                "Serge"
             ],
             "hr": [
                 "Data Coordinator",
-                "$6,730",
+                "$138,575",
                 "2012\/04\/09"
             ],
-            "office": "Edinburgh",
+            "office": "Singapore",
             "extn": "8352"
         },
         {
@@ -618,7 +618,7 @@
             ],
             "hr": [
                 "Software Engineer",
-                "$4,800",
+                "$125,250",
                 "2010\/01\/04"
             ],
             "office": "New York",
@@ -631,7 +631,7 @@
             ],
             "hr": [
                 "Software Engineer",
-                "$5,300",
+                "$115,000",
                 "2012\/06\/01"
             ],
             "office": "San Francisco",
@@ -643,8 +643,8 @@
                 "Jennifer"
             ],
             "hr": [
-                "Javascript Developer",
-                "$2,875",
+                "Junior Javascript Developer",
+                "$75,650",
                 "2013\/02\/01"
             ],
             "office": "Edinburgh",
@@ -657,7 +657,7 @@
             ],
             "hr": [
                 "Sales Assistant",
-                "$4,800",
+                "$145,600",
                 "2011\/12\/06"
             ],
             "office": "New York",
@@ -669,8 +669,8 @@
                 "Hermione"
             ],
             "hr": [
-                "Director",
-                "$4,080",
+                "Regional Director",
+                "$356,250",
                 "2011\/03\/21"
             ],
             "office": "London",
@@ -683,7 +683,7 @@
             ],
             "hr": [
                 "Systems Administrator",
-                "$3,120",
+                "$103,500",
                 "2009\/02\/27"
             ],
             "office": "London",
@@ -696,7 +696,7 @@
             ],
             "hr": [
                 "Developer",
-                "$5,300",
+                "$86,500",
                 "2010\/07\/14"
             ],
             "office": "San Francisco",
@@ -709,7 +709,7 @@
             ],
             "hr": [
                 "Regional Director",
-                "$5,300",
+                "$183,000",
                 "2008\/11\/13"
             ],
             "office": "Edinburgh",
@@ -722,10 +722,10 @@
             ],
             "hr": [
                 "Javascript Developer",
-                "$4,080",
+                "$183,000",
                 "2011\/06\/27"
             ],
-            "office": "Edinburgh",
+            "office": "Singapore",
             "extn": "5384"
         },
         {
@@ -734,8 +734,8 @@
                 "Donna"
             ],
             "hr": [
-                "System Architect",
-                "$3,120",
+                "Customer Support",
+                "$112,000",
                 "2011\/01\/25"
             ],
             "office": "New York",

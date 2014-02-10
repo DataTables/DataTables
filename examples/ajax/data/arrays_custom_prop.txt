@@ -6,39 +6,39 @@
             "Edinburgh",
             "5421",
             "2011\/04\/25",
-            "$3,120"
+            "$320,800"
         ],
         [
             "Garrett Winters",
-            "Director",
-            "Edinburgh",
+            "Accountant",
+            "Tokyo",
             "8422",
             "2011\/07\/25",
-            "$5,300"
+            "$170,750"
         ],
         [
             "Ashton Cox",
-            "Technical Author",
+            "Junior Technical Author",
             "San Francisco",
             "1562",
             "2009\/01\/12",
-            "$4,800"
+            "$86,000"
         ],
         [
             "Cedric Kelly",
-            "Javascript Developer",
+            "Senior Javascript Developer",
             "Edinburgh",
             "6224",
             "2012\/03\/29",
-            "$3,600"
+            "$433,060"
         ],
         [
-            "Jenna Elliott",
-            "Financial Controller",
-            "Edinburgh",
+            "Airi Satou",
+            "Accountant",
+            "Tokyo",
             "5407",
             "2008\/11\/28",
-            "$5,300"
+            "$162,700"
         ],
         [
             "Brielle Williamson",
@@ -46,7 +46,7 @@
             "New York",
             "4804",
             "2012\/12\/02",
-            "$4,525"
+            "$372,000"
         ],
         [
             "Herrod Chandler",
@@ -54,15 +54,15 @@
             "San Francisco",
             "9608",
             "2012\/08\/06",
-            "$4,080"
+            "$137,500"
         ],
         [
             "Rhona Davidson",
             "Integration Specialist",
-            "Edinburgh",
+            "Tokyo",
             "6200",
             "2010\/10\/14",
-            "$6,730"
+            "$327,900"
         ],
         [
             "Colleen Hurst",
@@ -70,7 +70,7 @@
             "San Francisco",
             "2360",
             "2009\/09\/15",
-            "$5,000"
+            "$205,500"
         ],
         [
             "Sonya Frost",
@@ -78,23 +78,23 @@
             "Edinburgh",
             "1667",
             "2008\/12\/13",
-            "$3,600"
+            "$103,600"
         ],
         [
             "Jena Gaines",
-            "System Architect",
+            "Office Manager",
             "London",
             "3814",
             "2008\/12\/19",
-            "$5,000"
+            "$90,560"
         ],
         [
             "Quinn Flynn",
-            "Financial Controller",
+            "Support Lead",
             "Edinburgh",
             "9497",
             "2013\/03\/03",
-            "$4,200"
+            "$342,000"
         ],
         [
             "Charde Marshall",
@@ -102,7 +102,7 @@
             "San Francisco",
             "6741",
             "2008\/10\/16",
-            "$5,300"
+            "$470,600"
         ],
         [
             "Haley Kennedy",
@@ -110,7 +110,7 @@
             "London",
             "3597",
             "2012\/12\/18",
-            "$4,800"
+            "$313,500"
         ],
         [
             "Tatyana Fitzpatrick",
@@ -118,23 +118,23 @@
             "London",
             "1965",
             "2010\/03\/17",
-            "$2,875"
+            "$385,750"
         ],
         [
             "Michael Silva",
-            "Senior Marketing Designer",
+            "Marketing Designer",
             "London",
             "1581",
             "2012\/11\/27",
-            "$3,750"
+            "$198,500"
         ],
         [
             "Paul Byrd",
-            "Javascript Developer",
+            "Chief Financial Officer (CFO)",
             "New York",
             "3059",
             "2010\/06\/09",
-            "$5,000"
+            "$725,000"
         ],
         [
             "Gloria Little",
@@ -142,7 +142,7 @@
             "New York",
             "1721",
             "2009\/04\/10",
-            "$3,120"
+            "$237,500"
         ],
         [
             "Bradley Greer",
@@ -150,55 +150,55 @@
             "London",
             "2558",
             "2012\/10\/13",
-            "$3,120"
+            "$132,000"
         ],
         [
             "Dai Rios",
-            "System Architect",
+            "Personnel Lead",
             "Edinburgh",
             "2290",
             "2012\/09\/26",
-            "$4,200"
+            "$217,500"
         ],
         [
             "Jenette Caldwell",
-            "Financial Controller",
+            "Development Lead",
             "New York",
             "1937",
             "2011\/09\/03",
-            "$4,965"
+            "$345,000"
         ],
         [
             "Yuri Berry",
-            "System Architect",
+            "Chief Marketing Officer (CMO)",
             "New York",
             "6154",
             "2009\/06\/25",
-            "$3,600"
+            "$675,000"
         ],
         [
             "Caesar Vance",
-            "Technical Author",
+            "Pre-Sales Support",
             "New York",
             "8330",
             "2011\/12\/12",
-            "$4,965"
+            "$106,450"
         ],
         [
             "Doris Wilder",
             "Sales Assistant",
-            "Edinburgh",
+            "Sidney",
             "3023",
             "2010\/09\/20",
-            "$4,965"
+            "$85,600"
         ],
         [
             "Angelica Ramos",
-            "System Architect",
+            "Chief Executive Officer (CEO)",
             "London",
             "5797",
             "2009\/10\/09",
-            "$2,875"
+            "$1,200,000"
         ],
         [
             "Gavin Joyce",
@@ -206,15 +206,15 @@
             "Edinburgh",
             "8822",
             "2010\/12\/22",
-            "$4,525"
+            "$92,575"
         ],
         [
             "Jennifer Chang",
             "Regional Director",
-            "London",
+            "Singapore",
             "9239",
             "2010\/11\/14",
-            "$4,080"
+            "$357,650"
         ],
         [
             "Brenden Wagner",
@@ -222,31 +222,31 @@
             "San Francisco",
             "1314",
             "2011\/06\/07",
-            "$3,750"
+            "$206,850"
         ],
         [
-            "Ebony Grimes",
-            "Software Engineer",
+            "Fiona Green",
+            "Chief Operating Officer (COO)",
             "San Francisco",
             "2947",
             "2010\/03\/11",
-            "$2,875"
+            "$850,000"
         ],
         [
-            "Russell Chavez",
-            "Director",
-            "Edinburgh",
+            "Shou Itou",
+            "Regional Marketing",
+            "Tokyo",
             "8899",
             "2011\/08\/14",
-            "$3,600"
+            "$163,000"
         ],
         [
             "Michelle House",
             "Integration Specialist",
-            "Edinburgh",
+            "Sidney",
             "2769",
             "2011\/06\/02",
-            "$3,750"
+            "$95,400"
         ],
         [
             "Suki Burks",
@@ -254,7 +254,7 @@
             "London",
             "6832",
             "2009\/10\/22",
-            "$2,875"
+            "$114,500"
         ],
         [
             "Prescott Bartlett",
@@ -262,63 +262,63 @@
             "London",
             "3606",
             "2011\/05\/07",
-            "$6,730"
+            "$145,000"
         ],
         [
             "Gavin Cortez",
-            "Technical Author",
+            "Team Leader",
             "San Francisco",
             "2860",
             "2008\/10\/26",
-            "$6,730"
+            "$235,500"
         ],
         [
             "Martena Mccray",
-            "Integration Specialist",
+            "Post-Sales support",
             "Edinburgh",
             "8240",
             "2011\/03\/09",
-            "$4,080"
+            "$324,050"
         ],
         [
             "Unity Butler",
-            "Senior Marketing Designer",
+            "Marketing Designer",
             "San Francisco",
             "5384",
             "2009\/12\/09",
-            "$3,750"
+            "$85,675"
         ],
         [
             "Howard Hatfield",
-            "Financial Controller",
+            "Office Manager",
             "San Francisco",
             "7031",
             "2008\/12\/16",
-            "$4,080"
+            "$164,500"
         ],
         [
             "Hope Fuentes",
-            "Financial Controller",
+            "Secretary",
             "San Francisco",
             "6318",
             "2010\/02\/12",
-            "$4,200"
+            "$109,850"
         ],
         [
             "Vivian Harrell",
-            "System Architect",
+            "Financial Controller",
             "San Francisco",
             "9422",
             "2009\/02\/14",
-            "$4,965"
+            "$452,500"
         ],
         [
             "Timothy Mooney",
-            "Financial Controller",
+            "Office Manager",
             "London",
             "7580",
             "2008\/12\/11",
-            "$4,200"
+            "$136,200"
         ],
         [
             "Jackson Bradshaw",
@@ -326,15 +326,15 @@
             "New York",
             "1042",
             "2008\/09\/26",
-            "$5,000"
+            "$645,750"
         ],
         [
-            "Miriam Weiss",
+            "Olivia Liang",
             "Support Engineer",
-            "Edinburgh",
+            "Singapore",
             "2120",
             "2011\/02\/03",
-            "$4,965"
+            "$234,500"
         ],
         [
             "Bruno Nash",
@@ -342,15 +342,15 @@
             "London",
             "6222",
             "2011\/05\/03",
-            "$4,200"
+            "$163,500"
         ],
         [
-            "Odessa Jackson",
+            "Sakura Yamamoto",
             "Support Engineer",
-            "Edinburgh",
+            "Tokyo",
             "9383",
             "2009\/08\/19",
-            "$3,600"
+            "$139,575"
         ],
         [
             "Thor Walton",
@@ -358,7 +358,7 @@
             "New York",
             "8327",
             "2013\/08\/11",
-            "$3,600"
+            "$98,540"
         ],
         [
             "Finn Camacho",
@@ -366,15 +366,15 @@
             "San Francisco",
             "2927",
             "2009\/07\/07",
-            "$4,800"
+            "$87,500"
         ],
         [
-            "Elton Baldwin",
+            "Serge Baldwin",
             "Data Coordinator",
-            "Edinburgh",
+            "Singapore",
             "8352",
             "2012\/04\/09",
-            "$6,730"
+            "$138,575"
         ],
         [
             "Zenaida Frank",
@@ -382,7 +382,7 @@
             "New York",
             "7439",
             "2010\/01\/04",
-            "$4,800"
+            "$125,250"
         ],
         [
             "Zorita Serrano",
@@ -390,15 +390,15 @@
             "San Francisco",
             "4389",
             "2012\/06\/01",
-            "$5,300"
+            "$115,000"
         ],
         [
             "Jennifer Acosta",
-            "Javascript Developer",
+            "Junior Javascript Developer",
             "Edinburgh",
             "3431",
             "2013\/02\/01",
-            "$2,875"
+            "$75,650"
         ],
         [
             "Cara Stevens",
@@ -406,15 +406,15 @@
             "New York",
             "3990",
             "2011\/12\/06",
-            "$4,800"
+            "$145,600"
         ],
         [
             "Hermione Butler",
-            "Director",
+            "Regional Director",
             "London",
             "1016",
             "2011\/03\/21",
-            "$4,080"
+            "$356,250"
         ],
         [
             "Lael Greer",
@@ -422,7 +422,7 @@
             "London",
             "6733",
             "2009\/02\/27",
-            "$3,120"
+            "$103,500"
         ],
         [
             "Jonas Alexander",
@@ -430,7 +430,7 @@
             "San Francisco",
             "8196",
             "2010\/07\/14",
-            "$5,300"
+            "$86,500"
         ],
         [
             "Shad Decker",
@@ -438,23 +438,23 @@
             "Edinburgh",
             "6373",
             "2008\/11\/13",
-            "$5,300"
+            "$183,000"
         ],
         [
             "Michael Bruce",
             "Javascript Developer",
-            "Edinburgh",
+            "Singapore",
             "5384",
             "2011\/06\/27",
-            "$4,080"
+            "$183,000"
         ],
         [
             "Donna Snider",
-            "System Architect",
+            "Customer Support",
             "New York",
             "4226",
             "2011\/01\/25",
-            "$3,120"
+            "$112,000"
         ]
     ]
 }
