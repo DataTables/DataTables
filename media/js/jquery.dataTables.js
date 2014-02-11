@@ -6596,6 +6596,16 @@
 		},
 	
 	
+		eq: function ( idx )
+		{
+			var ctx = this.context;
+	
+			return ctx.length > idx ?
+				new _Api( ctx[idx], this[idx] ) :
+				null;
+		},
+	
+	
 		filter: function ( fn )
 		{
 			var a = [];
@@ -7413,11 +7423,19 @@
 			order  = opts.order,   // applied, current, index (original - compatibility with 1.9)
 			page   = opts.page;    // all, current
 	
-		// Current page implies that order=current and fitler=applied, since it is
-		// fairly senseless otherwise, regardless of what order and search actually
-		// are
-		if ( page == 'current' )
-		{
+		if ( _fnDataSource( settings ) == 'ssp' ) {
+			// In server-side processing mode, most options are irrelevant since
+			// rows not shown don't exist and the index order is the applied order
+			// Removed is a special case - for consistency just return an empty
+			// array
+			return search === 'removed' ?
+				[] :
+				_range( 0, displayMaster.length );
+		}
+		else if ( page == 'current' ) {
+			// Current page implies that order=current and fitler=applied, since it is
+			// fairly senseless otherwise, regardless of what order and search actually
+			// are
 			for ( i=settings._iDisplayStart, ien=settings.fnDisplayEnd() ; i<ien ; i++ ) {
 				a.push( displayFiltered[i] );
 			}
@@ -7749,28 +7767,28 @@
 	
 	var __details_events = function ( settings )
 	{
-		var table = $(settings.nTable);
+		var api = new _Api( settings );
 		var namespace = '.dt.DT_details';
+		var drawEvent = 'draw'+namespace;
+		var colvisEvent = 'column-visibility'+namespace;
 	
-		table.off('draw'+namespace);
-		table.off('column-visibility'+namespace);
+		api.off( drawEvent +' '+ colvisEvent );
 	
 		if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
 			// On each draw, insert the required elements into the document
-			table.on('draw'+namespace, function () {
-				table.find('tbody tr').each( function () {
-					// Look up the row index for each row and append open row
-					var rowIdx = _fnNodeToDataIndex( settings, this );
-					var row = settings.aoData[ rowIdx ];
+			api.on( drawEvent, function () {
+				api.rows( {page:'current'} ).eq(0).each( function (idx) {
+					// Internal data grab
+					var row = settings.aoData[ idx ];
 	
 					if ( row._detailsShow ) {
-						row._details.insertAfter( this );
+						row._details.insertAfter( row.nTr );
 					}
 				} );
 			} );
 	
 			// Column visibility change - update the colspan
-			table.on( 'column-visibility'+namespace, function ( e, settings, idx, vis ) {
+			api.on( colvisEvent, function ( e, settings, idx, vis ) {
 				// Update the colspan for the details rows (note, only if it already has
 				// a colspan)
 				var row, visible = _fnVisbleColumns( settings );

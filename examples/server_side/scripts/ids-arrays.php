@@ -29,7 +29,16 @@ $primaryKey = 'id';
 // parameter represents the DataTables column identifier. In this case simple
 // indexes + the primary key column for the id
 $columns = array(
-	array( 'db' => 'id',         'dt' => 'DT_RowId' ),
+	array(
+		'db' => 'id',
+		'dt' => 'DT_RowId',
+		'formatter' => function( $d, $row ) {
+			// Technically a DOM id cannot start with an integer, so we prefix
+			// a string. This can also be useful if you have multiple tables
+			// to ensure that the id is unique with a different prefix
+			return 'row_'.$d;
+		}
+	),
 	array( 'db' => 'first_name', 'dt' => 0 ),
 	array( 'db' => 'last_name',  'dt' => 1 ),
 	array( 'db' => 'position',   'dt' => 2 ),

@@ -36,7 +36,7 @@ $(document).ready(function() {
 	var dt = $('#example').DataTable( {
 		"processing": true,
 		"serverSide": true,
-		"ajax": "scripts/objects.php",
+		"ajax": "scripts/ids-objects.php",
 		"columns": [ 
 			{
 				"class":          "details-control",
@@ -52,18 +52,37 @@ $(document).ready(function() {
 		"order": [[1, 'asc']]
 	} );
 
-	$('#example tbody').on('click', 'tr td:first-child', function () {
+	// Array to track the ids of the details displayed rows
+	var detailRows = [];
+
+	$('#example tbody').on( 'click', 'tr td:first-child', function () {
 		var tr = $(this).parents('tr');
 		var row = dt.row( tr );
+		var idx = $.inArray( tr.attr('id'), detailRows );
 
 		if ( row.child.isShown() ) {
 			tr.removeClass( 'details' );
 			row.child.hide();
+
+			// Remove from the 'open' array
+			detailRows.splice( idx, 1 );
 		}
 		else {
 			tr.addClass( 'details' );
 			row.child( format( row.data() ) ).show();
+
+			// Add to the 'open' array
+			if ( idx === -1 ) {
+				detailRows.push( tr.attr('id') );
+			}
 		}
+	} );
+
+	// On each draw, loop over the `detailRows` array and show any child rows
+	dt.on( 'draw', function () {
+		$.each( detailRows, function ( i, id ) {
+			$('#'+id+' td:first-child').trigger( 'click' );
+		} );
 	} );
 } );
 
@@ -97,6 +116,12 @@ $(document).ready(function() {
 				information to show. Note that the format details function has access to the full data source object
 				for the row, including information that is not actually shown in the table (the salary parameter for
 				example).</p>
+
+				<p>Furthermore, this example shows a small difference from the <a href=
+				"../api/row_details.html">client-side row details example</a> in that to have rows automatically reopen
+				when the table is redrawn, we need to track a unique identifier for each row - in this case the row
+				<code>id</code>. This is required because in server-side processing mode rows are automatically
+				destroyed and recreated on each draw.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -142,7 +167,7 @@ $(document).ready(function() {
 	var dt = $('#example').DataTable( {
 		&quot;processing&quot;: true,
 		&quot;serverSide&quot;: true,
-		&quot;ajax&quot;: &quot;scripts/objects.php&quot;,
+		&quot;ajax&quot;: &quot;scripts/ids-objects.php&quot;,
 		&quot;columns&quot;: [ 
 			{
 				&quot;class&quot;:          &quot;details-control&quot;,
@@ -158,18 +183,37 @@ $(document).ready(function() {
 		&quot;order&quot;: [[1, 'asc']]
 	} );
 
-	$('#example tbody').on('click', 'tr td:first-child', function () {
+	// Array to track the ids of the details displayed rows
+	var detailRows = [];
+
+	$('#example tbody').on( 'click', 'tr td:first-child', function () {
 		var tr = $(this).parents('tr');
 		var row = dt.row( tr );
+		var idx = $.inArray( tr.attr('id'), detailRows );
 
 		if ( row.child.isShown() ) {
 			tr.removeClass( 'details' );
 			row.child.hide();
+
+			// Remove from the 'open' array
+			detailRows.splice( idx, 1 );
 		}
 		else {
 			tr.addClass( 'details' );
 			row.child( format( row.data() ) ).show();
+
+			// Add to the 'open' array
+			if ( idx === -1 ) {
+				detailRows.push( tr.attr('id') );
+			}
 		}
+	} );
+
+	// On each draw, loop over the `detailRows` array and show any child rows
+	dt.on( 'draw', function () {
+		$.each( detailRows, function ( i, id ) {
+			$('#'+id+' td:first-child').trigger( 'click' );
+		} );
 	} );
 } );</code>
 
