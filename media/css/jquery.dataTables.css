@@ -276,6 +276,7 @@ table.dataTable td {
   /* W3C */
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+  cursor: default;
   color: #666 !important;
   border: 1px solid transparent;
   background: transparent;
