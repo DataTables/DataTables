@@ -72,7 +72,7 @@ $(document).ready( function () {
 		// php
 		var phpTab = $('ul.tabs li').eq(4).css('display', 'none');
 
-		$(document).on( 'init.dt', function ( e, settings ) {
+		$(document).on( 'init.dt.demoSSP', function ( e, settings ) {
 			if ( settings.oFeatures.bServerSide ) {
 				if ( $.isFunction( settings.ajax ) ) {
 					return;
@@ -101,7 +101,7 @@ $(document).ready( function () {
 	}
 
 	// Tabs
-	$('ul.tabs li').click( function () {
+	$('ul.tabs').on( 'click', 'li', function () {
 		$('ul.tabs li.active').removeClass('active');
 		$(this).addClass('active');
 

@@ -282,3 +282,8 @@ div.tabs>div h1 {
 	margin-top: 1em;
 }
 
+div.column_half {
+	float: left;
+	width: 49%;
+	padding-right: 1%;
+}
