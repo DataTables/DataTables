@@ -7108,10 +7108,17 @@
 				}
 	
 				_fnReDraw( settings, holdPosition );
+			} );
+		}
 	
-				if ( callback ) {
-					callback( json );
-				}
+		// Use the draw event to trigger a callback, regardless of if it is an async
+		// or sync draw
+		if ( callback ) {
+			var api = new _Api( settings );
+	
+			api.one( 'draw', function () {
+				console.log( api.ajax.json() );
+				callback( api.ajax.json() );
 			} );
 		}
 	};
