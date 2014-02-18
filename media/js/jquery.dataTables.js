@@ -3590,6 +3590,9 @@
 		// will end up forcing the scrollbar to appear, making our measurements wrong for when we
 		// then hide it (end of this function), so add the header height to the body scroller.
 		if ( scroll.bCollapse && scrollY !== "" ) {
+			if(divBody.offsetHeight === undefined){
+				divBody.offsetHeight = 0;
+			}
 			divBodyStyle.height = (divBody.offsetHeight + header[0].offsetHeight)+"px";
 		}
 	
