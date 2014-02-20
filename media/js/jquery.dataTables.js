@@ -2294,7 +2294,7 @@
 				}
 	
 				oSettings.json = json;
-				_fnCallbackFire( oSettings, null, 'xhr', [oSettings, json] );
+				_fnCallbackFire( oSettings, null, 'xhr', [oSettings, json, this.url] );
 				fn( json );
 			},
 			"dataType": "json",
