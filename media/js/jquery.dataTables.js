@@ -8043,6 +8043,9 @@
 	
 				return a;
 			}
+			else if ( $.isPlainObject( s ) ) {
+				return [s];
+			}
 	
 			// jQuery filtered cells
 			return allCells.filter( s ).map( function (i, el) {
@@ -8062,8 +8065,15 @@
 	_api_register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 		// Argument shifting
 		if ( $.isPlainObject( rowSelector ) ) {
-			opts = rowSelector;
-			rowSelector = null;
+			// If passing in a cell index
+			if ( rowSelector.row ) {
+				opts = columnSelector;
+				columnSelector = null;
+			}
+			else {
+				opts = rowSelector;
+				rowSelector = null;
+			}
 		}
 		if ( $.isPlainObject( columnSelector ) ) {
 			opts = columnSelector;
