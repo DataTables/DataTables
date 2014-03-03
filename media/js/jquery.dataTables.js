@@ -8021,14 +8021,17 @@
 			}
 	
 			// jQuery filtered cells
-			return allCells.filter( s ).map( function (i, el) {
-				row = el.parentNode._DT_RowIndex;
+			return allCells
+				.filter( s )
+				.map( function (i, el) {
+					row = el.parentNode._DT_RowIndex;
 	
-				return {
-					row: row,
-					column: $.inArray( el, data[ row ].anCells )
-				};
-			} );
+					return {
+						row: row,
+						column: $.inArray( el, data[ row ].anCells )
+					};
+				} )
+				.toArray();
 		} );
 	};
 	
