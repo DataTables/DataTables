@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
+	<meta name="viewport" content="width=device-width">
 
 	<title>DataTables example - Zero configuration</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
@@ -19,7 +20,14 @@
 
 
 $(document).ready(function() {
-	$('#example').dataTable();
+	var oTable = $('#example').dataTable( {
+	    "fnInitComplete" : function () {
+			$('table.dataTable td').click(function() {
+			    var position=oTable.fnGetPosition(this);
+			    alert("Row is "+position[0]);
+			});
+	    }
+    } );
 } );
 
 
@@ -534,7 +542,14 @@ $(document).ready(function() {
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this
 					example:</p><code class="multiline brush: js;">$(document).ready(function() {
-	$('#example').dataTable();
+	var oTable = $('#example').dataTable( {
+	    &quot;fnInitComplete&quot; : function () {
+			$('table.dataTable td').click(function() {
+			    var position=oTable.fnGetPosition(this);
+			    alert(&quot;Row is &quot;+position[0]);
+			});
+	    }
+    } );
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this

@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
+	<meta name="viewport" content="width=device-width">
 
 	<title>DataTables example - Child rows (show extra / detailed information)</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
@@ -14,7 +15,7 @@ td.details-control {
 	background: url('../resources/details_open.png') no-repeat center center;
 	cursor: pointer;
 }
-tr.details td.details-control {
+tr.shown td.details-control {
 	background: url('../resources/details_close.png') no-repeat center center;
 }
 
@@ -216,7 +217,7 @@ $(document).ready(function() {
 	background: url('../resources/details_open.png') no-repeat center center;
 	cursor: pointer;
 }
-tr.details td.details-control {
+tr.shown td.details-control {
 	background: url('../resources/details_close.png') no-repeat center center;
 }</code>
 					</div>
