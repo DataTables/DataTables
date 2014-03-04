@@ -44,7 +44,12 @@ $.fn.dataTable.pipeline = function ( opts ) {
 		var requestLength = request.length;
 		var requestEnd    = requestStart + requestLength;
 		
-		if ( cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper ) {
+		if ( settings.clearCache ) {
+			// API requested that the cache be cleared
+			ajax = true;
+			settings.clearCache = false;
+		}
+		else if ( cacheLower < 0 || requestStart < cacheLower || requestEnd > cacheUpper ) {
 			// outside cached data - need to make a request
 			ajax = true;
 		}
@@ -118,6 +123,14 @@ $.fn.dataTable.pipeline = function ( opts ) {
 		}
 	}
 };
+
+// Register an API method that will empty the pipelined data, forcing an Ajax
+// fetch on the next draw (i.e. `table.clearPipeline().draw()`)
+$.fn.dataTable.Api.register( 'clearPipeline()', function () {
+	return this.iterator( 'table', function ( settings ) {
+		settings.clearCache = true;
+	} );
+} );
 
 
 //
@@ -221,7 +234,12 @@ $.fn.dataTable.pipeline = function ( opts ) {
 		var requestLength = request.length;
 		var requestEnd    = requestStart + requestLength;
 		
-		if ( cacheLower &lt; 0 || requestStart &lt; cacheLower || requestEnd &gt; cacheUpper ) {
+		if ( settings.clearCache ) {
+			// API requested that the cache be cleared
+			ajax = true;
+			settings.clearCache = false;
+		}
+		else if ( cacheLower &lt; 0 || requestStart &lt; cacheLower || requestEnd &gt; cacheUpper ) {
 			// outside cached data - need to make a request
 			ajax = true;
 		}
@@ -295,6 +313,14 @@ $.fn.dataTable.pipeline = function ( opts ) {
 		}
 	}
 };
+
+// Register an API method that will empty the pipelined data, forcing an Ajax
+// fetch on the next draw (i.e. `table.clearPipeline().draw()`)
+$.fn.dataTable.Api.register( 'clearPipeline()', function () {
+	return this.iterator( 'table', function ( settings ) {
+		settings.clearCache = true;
+	} );
+} );
 
 
 //
