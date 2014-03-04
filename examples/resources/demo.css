@@ -21,7 +21,7 @@ body {
 
 
 div.container {
-	width: 980px;
+	max-width: 980px;
 	margin: 0 auto;
 }
 
@@ -126,7 +126,7 @@ div.footer {
 }
 
 div.footer > div.liner {
-	width: 960px;
+	max-width: 960px;
 	margin: 0 auto;
 }
 
@@ -287,3 +287,30 @@ div.column_half {
 	width: 49%;
 	padding-right: 1%;
 }
+
+
+@media only screen and (max-width : 979px) {
+	div.container,
+	div.footer {
+		padding: 0 1em;
+	}
+}
+
+@media only screen and (max-width : 779px) {
+	div.info {
+		-webkit-column-count: 1;
+		   -moz-column-count: 1;
+		    -ms-column-count: 1;
+		     -o-column-count: 1;
+		column-count: 1;
+	}
+
+	div.toc {
+		-webkit-column-count: 1;
+		   -moz-column-count: 1;
+		    -ms-column-count: 1;
+		     -o-column-count: 1;
+		column-count: 1;
+	}
+}
+
