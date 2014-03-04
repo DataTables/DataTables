@@ -25,10 +25,11 @@
 $.fn.dataTable.pipeline = function ( opts ) {
 	// Configuration options
 	var conf = $.extend( {
-		pages: 5,  // number of pages to cache
-		url: '',   // script url
-		data: null // function or object with parameters to send to the server
-		           // matching how `ajax.data` works in DataTables
+		pages: 5,     // number of pages to cache
+		url: '',      // script url
+		data: null,   // function or object with parameters to send to the server
+		              // matching how `ajax.data` works in DataTables
+		method: 'GET' // Ajax HTTP method
 	}, opts );
 
 	// Private variables for storing the cache
@@ -90,6 +91,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 			}
 
 			settings.jqXHR = $.ajax( {
+				"type":     conf.method,
 				"url":      conf.url,
 				"data":     request,
 				"dataType": "json",
@@ -200,10 +202,11 @@ $(document).ready(function() {
 $.fn.dataTable.pipeline = function ( opts ) {
 	// Configuration options
 	var conf = $.extend( {
-		pages: 5,  // number of pages to cache
-		url: '',   // script url
-		data: null // function or object with parameters to send to the server
-		           // matching how `ajax.data` works in DataTables
+		pages: 5,     // number of pages to cache
+		url: '',      // script url
+		data: null,   // function or object with parameters to send to the server
+		              // matching how `ajax.data` works in DataTables
+		method: 'GET' // Ajax HTTP method
 	}, opts );
 
 	// Private variables for storing the cache
@@ -265,6 +268,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 			}
 
 			settings.jqXHR = $.ajax( {
+				&quot;type&quot;:     conf.method,
 				&quot;url&quot;:      conf.url,
 				&quot;data&quot;:     request,
 				&quot;dataType&quot;: &quot;json&quot;,
