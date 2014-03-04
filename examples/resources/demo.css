@@ -296,7 +296,9 @@ div.column_half {
 	}
 }
 
-@media only screen and (max-width : 779px) {
+@media
+	screen and (max-width : 767px),
+	screen and (max-width : 768px) and (orientation: portrait) {
 	div.info {
 		-webkit-column-count: 1;
 		   -moz-column-count: 1;
