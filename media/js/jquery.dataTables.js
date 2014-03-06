@@ -7569,12 +7569,21 @@
 		// Convert to array of TR elements
 		var rows = [];
 		var addRow = function ( r, k ) {
-			if ( ! r.nodeName || r.nodeName.toUpperCase() !== 'tr' ) {
-				r = $('<tr><td></td></tr>').find('td').html( r ).parent();
+			// If we get a TR element, then just add it directly - up to the dev
+			// to add the correct number of columns etc
+			if ( r.nodeName && r.nodeName.toLowerCase() === 'tr' ) {
+				rows.push( r );
 			}
+			else {
+				// Otherwise create a row with a wrapper
+				var created = $('<tr><td/></tr>');
+				$('td', created)
+					.addClass( k )
+					.html( r )
+					[0].colSpan = _fnVisbleColumns( ctx );
 	
-			$('td', r).addClass( k )[0].colSpan = _fnVisbleColumns( ctx );
-			rows.push( r[0] );
+				rows.push( created[0] );
+			}
 		};
 	
 		if ( $.isArray( data ) || data instanceof $ ) {
