@@ -2294,6 +2294,9 @@
 			}
 		};
 	
+		// Store the data submitted for the API
+		oSettings.oAjaxData = data;
+	
 		if ( oSettings.fnServerData )
 		{
 			// DataTables 1.9- compatibility
@@ -7113,6 +7116,20 @@
 	
 		if ( ctx.length > 0 ) {
 			return ctx[0].json;
+		}
+	
+		// else return undefined;
+	} );
+	
+	
+	/**
+	 * Get the data submitted in the last Ajax request
+	 */
+	_api_register( 'ajax.params()', function () {
+		var ctx = this.context;
+	
+		if ( ctx.length > 0 ) {
+			return ctx[0].oAjaxData;
 		}
 	
 		// else return undefined;
@@ -12637,6 +12654,13 @@
 		 *  @default undefined
 		 */
 		"json": undefined,
+	
+		/**
+		 * Data submitted as part of the last Ajax request
+		 *  @type object
+		 *  @default undefined
+		 */
+		"oAjaxData": undefined,
 	
 		/**
 		 * Function to get the server-side data.
