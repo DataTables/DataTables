@@ -2434,19 +2434,19 @@
 			}
 		}
 	
-		$.each( sort, function ( i, val ) {
-			d.order.push( { column: val.col, dir: val.dir } );
-	
-			param( 'iSortCol_'+i, val.col );
-			param( 'sSortDir_'+i, val.dir );
-		} );
-	
 		if ( features.bFilter ) {
 			param( 'sSearch', preSearch.sSearch );
 			param( 'bRegex', preSearch.bRegex );
 		}
 	
 		if ( features.bSort ) {
+			$.each( sort, function ( i, val ) {
+				d.order.push( { column: val.col, dir: val.dir } );
+	
+				param( 'iSortCol_'+i, val.col );
+				param( 'sSortDir_'+i, val.dir );
+			} );
+	
 			param( 'iSortingCols', sort.length );
 		}
 	
