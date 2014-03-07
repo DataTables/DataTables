@@ -1091,7 +1091,10 @@
 			} );
 	
 			return function (data, type, extra) {
-				return o[ o[type] !== undefined ? type : '_' ](data, type, extra);
+				var t = o[type] || o._;
+				return t !== undefined ?
+					t(data, type, extra) :
+					data;
 			};
 		}
 		else if ( mSource === null )
