@@ -12,7 +12,7 @@ $(document).ready( function () {
 	var info = $('div.info');
 
 	if ( info.height() < 115 ) {
-		info.css( 'height', '8em' );
+		info.css( 'min-height', '8em' );
 	}
 
 	var escapeHtml = function ( str ) {
