@@ -52,16 +52,17 @@ $(document).ready(function() {
 
 				<p>This example shows how this can be achieved with DataTables, where the first column is the counter
 				column, and is updated when ordering or searching occurs. This is done by listening for the <a href=
-				"//datatables.net/reference/event/order"><code class="event" title="Event">order</code></a> and
-				<a href="//datatables.net/reference/event/search"><code class="event" title="Event">search</code></a>
-				events emitted by the table. When these events are detected the <a href=
-				"//datatables.net/reference/api/column().nodes()"><code class="api" title=
-				"API method">column().nodes()</code></a> method is used to get the TD/TH nodes for the target column
-				and the <code>each()</code> helper function used to iterate over each, which have their contents
-				updated as needed. Note that the <code>filter</code> and <code>order</code> options are using in the
-				<a href="//datatables.net/reference/api/column()"><code class="api" title=
-				"API method">column()</code></a> method to get the nodes in the current order and with the currently
-				applied filter.</p>
+				"//datatables.net/reference/event/order"><code class="event" title=
+				"DataTables event">order<span>DT</span></code></a> and <a href=
+				"//datatables.net/reference/event/search"><code class="event" title=
+				"DataTables event">search<span>DT</span></code></a> events emitted by the table. When these events are
+				detected the <a href="//datatables.net/reference/api/column().nodes()"><code class="api" title=
+				"DataTables API method">column().nodes()<span>DT</span></code></a> method is used to get the TD/TH
+				nodes for the target column and the <code>each()</code> helper function used to iterate over each,
+				which have their contents updated as needed. Note that the <code>filter</code> and <code>order</code>
+				options are using in the <a href="//datatables.net/reference/api/column()"><code class="api" title=
+				"DataTables API method">column()<span>DT</span></code></a> method to get the nodes in the current order
+				and with the currently applied filter.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">

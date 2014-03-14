@@ -37,14 +37,13 @@ $(document).ready(function() {
 				<p>When working with large data sources, you might seek to improve the speed at which DataTables runs.
 				One method to do this is to make use of the built-in deferred rendering option in DataTables with the
 				<a href="//datatables.net/reference/option/deferRender"><code class="option" title=
-				"Initialisation option">deferRender</code></a> option.</p>
+				"DataTables initialisation option">deferRender<span>DT</span></code></a> option.</p>
 
-				<p>When deferred rendering is enabled, rather than having DataTables create all <code class="tag"
-				title="HTML tag">TR</code> and <code class="tag" title="HTML tag">TD</code> nodes required for the
-				table when the data is loaded, DataTables will only create the nodes required for each individual row
-				at the time of that row being drawn on the page (these nodes are then retained in case they are needed
-				again so they aren't created multiple times). This can give a significant performance increase, since a
-				lot less work is done at initialisation time.</p>
+				<p>When deferred rendering is enabled, rather than having DataTables create all <code>TR</code> and
+				<code>TD</code> nodes required for the table when the data is loaded, DataTables will only create the
+				nodes required for each individual row at the time of that row being drawn on the page (these nodes are
+				then retained in case they are needed again so they aren't created multiple times). This can give a
+				significant performance increase, since a lot less work is done at initialisation time.</p>
 
 				<p>The example below shows DataTables with deferred rendering enabled. For this small example you'll
 				likely notice no difference, but larger tables can benefit significantly from simply enabling this
