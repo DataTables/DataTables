@@ -136,7 +136,7 @@
   right: 1px !important;
   top: 1px !important;
   font-size: 10px !important;
-  z-index: 10 !important;
+  z-index: 7 !important;
 }
 .syntaxhighlighter .toolbar span.title {
   display: inline !important;
