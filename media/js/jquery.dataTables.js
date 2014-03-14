@@ -5398,7 +5398,7 @@
 					api.row( src ).data();
 			}
 		
-			return api.data().toArray();
+			return api.data().flatten().toArray();
 		};
 		
 		
@@ -5426,7 +5426,7 @@
 		
 			return iRow !== undefined ?
 				api.row( iRow ).node() :
-				api.rows().nodes().toArray();
+				api.rows().nodes().flatten().toArray();
 		};
 		
 		
