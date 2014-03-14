@@ -7082,8 +7082,9 @@
 		}
 		else {
 			// Trigger xhr
+			_fnProcessingDisplay( settings, true );
+	
 			_fnBuildAjax( settings, [], function( json ) {
-				// xxx can this be reduced?
 				_fnClearTable( settings );
 	
 				var data = _fnAjaxDataSrc( settings, json );
@@ -7092,6 +7093,7 @@
 				}
 	
 				_fnReDraw( settings, holdPosition );
+				_fnProcessingDisplay( settings, false );
 			} );
 		}
 	
@@ -7101,7 +7103,6 @@
 			var api = new _Api( settings );
 	
 			api.one( 'draw', function () {
-				console.log( api.ajax.json() );
 				callback( api.ajax.json() );
 			} );
 		}
