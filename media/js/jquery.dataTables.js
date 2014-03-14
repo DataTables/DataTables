@@ -2294,6 +2294,8 @@
 				else {
 					log( oSettings, 0, 'Ajax error', 7 );
 				}
+	
+				_fnProcessingDisplay( oSettings, false );
 			}
 		};
 	
