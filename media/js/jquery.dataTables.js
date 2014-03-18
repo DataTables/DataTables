@@ -1954,7 +1954,7 @@
 	{
 		var classes = oSettings.oClasses;
 		var table = $(oSettings.nTable);
-		var holding = $('<div/>').insertBefore( table ); // Holding element for speed
+		oSettings.nHolding = $('<div/>').insertBefore( table )[0]; // Holding element for speed
 		var features = oSettings.oFeatures;
 	
 		// All DataTables are wrapped in a div
@@ -2092,7 +2092,8 @@
 		}
 	
 		/* Built our DOM structure - replace the holding div with what we want */
-		holding.replaceWith( insert );
+		$(oSettings.nHolding).replaceWith( insert );
+		delete oSettings.nHolding;
 	}
 	
 	
