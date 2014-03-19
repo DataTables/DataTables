@@ -179,8 +179,8 @@ class SSP {
 
 		if ( count( $columnSearch ) ) {
 			$where = $where === '' ?
-				implode(' AND ', $globalSearch) :
-				$where .' AND '. implode(' AND ', $globalSearch);
+				implode(' AND ', $columnSearch) :
+				$where .' AND '. implode(' AND ', $columnSearch);
 		}
 
 		if ( $where !== '' ) {
