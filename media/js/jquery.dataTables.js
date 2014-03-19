@@ -2291,7 +2291,7 @@
 				if ( error == "parsererror" ) {
 					log( oSettings, 0, 'Invalid JSON response', 1 );
 				}
-				else if ( xhr.readyState === 4 ) {
+				else {
 					log( oSettings, 0, 'Ajax error', 7 );
 				}
 	
