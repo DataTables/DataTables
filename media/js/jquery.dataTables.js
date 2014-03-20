@@ -5545,7 +5545,11 @@
 		 */
 		this.fnOpen = function( nTr, mHtml, sClass )
 		{
-			return this.api( true ).row( nTr ).child( mHtml, sClass ).show();
+			return this.api( true )
+				.row( nTr )
+				.child( mHtml, sClass )
+				.show()
+				.node();
 		};
 		
 		
