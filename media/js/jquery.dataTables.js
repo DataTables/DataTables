@@ -3142,7 +3142,7 @@
 			} );
 	
 		// Update node value whenever anything changes the table's length
-		$(settings.nTable).bind( 'length', function (e, s, len) {
+		$(settings.nTable).bind( 'length.dt.DT', function (e, s, len) {
 			select.val( len );
 		} );
 	
@@ -13879,8 +13879,11 @@
 		header: {
 			_: function ( settings, cell, column, classes ) {
 				// No additional mark-up required
-				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'order.dt', function ( e, settings, sorting, columns ) {
+				// Attach a sort listener to update on sort - note that using the
+				// `DT` namespace will allow the event to be removed automatically
+				// on destroy, while the `dt` namespaced event is the one we are
+				// listening for
+				$(settings.nTable).on( 'order.dt.DT', function ( e, settings, sorting, columns ) {
 					var colIdx = column.idx;
 	
 					cell
@@ -13909,7 +13912,7 @@
 					.appendTo( cell );
 	
 				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'order.dt', function ( e, settings, sorting, columns ) {
+				$(settings.nTable).on( 'order.dt.DT', function ( e, settings, sorting, columns ) {
 					cell
 						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
 						.addClass( columns[ colIdx ] == 'asc' ?
