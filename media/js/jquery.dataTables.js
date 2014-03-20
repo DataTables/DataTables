@@ -8548,24 +8548,26 @@
 				new _Api( settings ).columns().visible( true );
 			}
 	
-			// Blitz all DT events
+			// Blitz all `DT` namespaced events (these are internal events, the
+			// lowercase, `dt` events are user subscribed and they are responsible
+			// for removing them
 			jqWrapper.unbind('.DT').find(':not(tbody *)').unbind('.DT');
 			$(window).unbind('.DT-'+settings.sInstance);
 	
 			// When scrolling we had to break the table up - restore it
 			if ( table != thead.parentNode ) {
-				jqTable.children('thead').remove();
+				jqTable.children('thead').detach();
 				jqTable.append( thead );
 			}
 	
 			if ( tfoot && table != tfoot.parentNode ) {
-				jqTable.children('tfoot').remove();
+				jqTable.children('tfoot').detach();
 				jqTable.append( tfoot );
 			}
 	
 			// Remove the DataTables generated nodes, events and classes
-			jqTable.remove();
-			jqWrapper.remove();
+			jqTable.detach();
+			jqWrapper.detach();
 	
 			settings.aaSorting = [];
 			settings.aaSortingFixed = [];
@@ -8578,11 +8580,11 @@
 			);
 	
 			if ( settings.bJUI ) {
-				$('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).remove();
+				$('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).detach();
 				$('th, td', thead).each( function () {
 					var wrapper = $('div.'+classes.sSortJUIWrapper, this);
 					$(this).append( wrapper.contents() );
-					wrapper.remove();
+					wrapper.detach();
 				} );
 			}
 	
