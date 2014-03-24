@@ -6756,7 +6756,9 @@
 			// Value
 			obj[ struct.name ] = typeof struct.val === 'function' ?
 				methodScoping( struct.val, struct ) :
-				struct.val;
+				$.isPlainObject( struct.val ) ?
+					{} :
+					struct.val;
 	
 			obj[ struct.name ].__dt_wrapper = true;
 	
