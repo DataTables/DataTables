@@ -5552,7 +5552,7 @@
 				.row( nTr )
 				.child( mHtml, sClass )
 				.show()
-				.node();
+				.child()[0];
 		};
 		
 		
