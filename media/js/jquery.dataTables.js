@@ -8024,10 +8024,10 @@
 			var ctx = this.context[0];
 	
 			if ( type === 'fromVisible' || type === 'toData' ) {
-				return _fnColumnIndexToVisible( ctx, idx );
+				return _fnVisibleToColumnIndex( ctx, idx );
 			}
 			else if ( type === 'fromData' || type === 'toVisible' ) {
-				return _fnVisibleToColumnIndex( ctx, idx );
+				return _fnColumnIndexToVisible( ctx, idx );
 			}
 		}
 	} );
