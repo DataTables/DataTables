@@ -2797,21 +2797,30 @@
 	 *  @returns {RegExp} constructed object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnFilterCreateSearch( sSearch, bRegex, bSmart, bCaseInsensitive )
+	function _fnFilterCreateSearch( search, regex, smart, caseInsensitive )
 	{
-		var asSearch,
-			sRegExpString = bRegex ? sSearch : _fnEscapeRegex( sSearch );
-	
-		if ( bSmart )
-		{
-			/* Generate the regular expression to use. Something along the lines of:
-			 * ^(?=.*?\bone\b)(?=.*?\btwo\b)(?=.*?\bthree\b).*$
+		search = regex ?
+			search :
+			_fnEscapeRegex( search );
+		
+		if ( smart ) {
+			/* For smart filtering we want to allow the search to work regardless of
+			 * word order. We also want double quoted text to be preserved, so word
+			 * order is important - a la google. So this is what we want to
+			 * generate:
+			 * 
+			 * ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$
 			 */
-			asSearch = sRegExpString.split( ' ' );
-			sRegExpString = '^(?=.*?'+asSearch.join( ')(?=.*?' )+').*$';
+			var a = $.map( search.match( /"[^"]+"|[^ ]+/g ) || '', function ( word ) {
+				return word.charAt(0) === '"' ?
+					word.match( /^"(.*)"$/ )[1] :
+					word;
+			} );
+	
+			search = '^(?=.*?'+a.join( ')(?=.*?' )+').*$';
 		}
 	
-		return new RegExp( sRegExpString, bCaseInsensitive ? "i" : "" );
+		return new RegExp( search, caseInsensitive ? 'i' : '' );
 	}
 	
 	
