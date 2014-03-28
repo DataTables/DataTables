@@ -124,12 +124,16 @@
 		return !isNaN(integer) && isFinite(s) ? integer : null;
 	};
 	
+	// Convert from a formatted number with characters other than `.` as the
+	// decimal place, to a Javascript number
 	var _numToDecimal = function ( num, decimalPoint ) {
 		// Cache created regular expressions for speed as this function is called often
 		if ( ! _re_dic[ decimalPoint ] ) {
 			_re_dic[ decimalPoint ] = new RegExp( _fnEscapeRegex( decimalPoint ), 'g' );
 		}
-		return num.replace( /\./g, '' ).replace( _re_dic[ decimalPoint ], '.' );
+		return typeof num === 'string' ?
+			num.replace( /\./g, '' ).replace( _re_dic[ decimalPoint ], '.' ) :
+			num;
 	};
 	
 	
