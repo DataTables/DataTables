@@ -344,12 +344,19 @@
 	
 			if ( hungarianKey !== undefined && (force || user[hungarianKey] === undefined) )
 			{
+				// For objects, we need to buzz down into the object to copy parameters
 				if ( hungarianKey.charAt(0) === 'o' )
 				{
-					_fnCamelToHungarian( src[hungarianKey], user[key] );
+					// Copy the camelCase options over to the hungarian
+					if ( ! user[ hungarianKey ] ) {
+						user[ hungarianKey ] = {};
+					}
+					$.extend( true, user[hungarianKey], user[key] );
+	
+					_fnCamelToHungarian( src[hungarianKey], user[hungarianKey], force );
 				}
 				else {
-					src[hungarianKey] = user[ key ];
+					user[hungarianKey] = user[ key ];
 				}
 			}
 		} );
