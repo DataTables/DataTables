@@ -8639,7 +8639,7 @@
 				} );
 			}
 	
-			if ( ! remove ) {
+			if ( ! remove && orig ) {
 				// insertBefore acts like appendChild if !arg[1]
 				orig.insertBefore( table, settings.nTableReinsertBefore );
 			}
