@@ -29,16 +29,17 @@
 (function( factory ) {
 	"use strict";
 
-	// Define as an AMD module if possible
-	if ( typeof define === 'function' && define.amd )
-	{
+	if ( typeof define === 'function' && define.amd ) {
+		// Define as an AMD module if possible
 		define( 'datatables', ['jquery'], factory );
 	}
-	/* Define using browser globals otherwise
-	 * Prevent multiple instantiations if the script is loaded twice
-	 */
-	else if ( jQuery && !jQuery.fn.dataTable )
-	{
+    else if ( typeof exports === 'object' ) {
+        // Node/CommonJS
+        factory( require( 'jquery' ) );
+    }
+	else if ( jQuery && !jQuery.fn.dataTable ) {
+		// Define using browser globals otherwise
+		// Prevent multiple instantiations if the script is loaded twice
 		factory( jQuery );
 	}
 }
@@ -8639,7 +8640,7 @@
 				} );
 			}
 	
-			if ( ! remove ) {
+			if ( ! remove && orig ) {
 				// insertBefore acts like appendChild if !arg[1]
 				orig.insertBefore( table, settings.nTableReinsertBefore );
 			}
