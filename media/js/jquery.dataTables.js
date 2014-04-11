@@ -29,16 +29,16 @@
 (function( factory ) {
 	"use strict";
 
-	// Define as an AMD module if possible
-	if ( typeof define === 'function' && define.amd )
-	{
+	if ( typeof define === 'function' && define.amd ) {
+		// Define as an AMD module if possible
 		define( 'datatables', ['jquery'], factory );
 	}
-	/* Define using browser globals otherwise
-	 * Prevent multiple instantiations if the script is loaded twice
-	 */
-	else if ( jQuery && !jQuery.fn.dataTable )
-	{
+    else if ( typeof exports === 'object' ) {
+        // Node/CommonJS
+    }
+	else if ( jQuery && !jQuery.fn.dataTable ) {
+		// Define using browser globals otherwise
+		// Prevent multiple instantiations if the script is loaded twice
 		factory( jQuery );
 	}
 }
