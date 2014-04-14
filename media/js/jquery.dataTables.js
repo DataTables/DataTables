@@ -4305,12 +4305,14 @@
 			formatters = 0,
 			sortCol,
 			displayMaster = oSettings.aiDisplayMaster,
-			aSort = _fnSortFlatten( oSettings );
+			aSort;
 	
 		// Resolve any column types that are unknown due to addition or invalidation
 		// @todo Can this be moved into a 'data-ready' handler which is called when
 		//   data is going to be used in the table?
 		_fnColumnTypes( oSettings );
+	
+		aSort = _fnSortFlatten( oSettings )
 	
 		for ( i=0, ien=aSort.length ; i<ien ; i++ ) {
 			sortCol = aSort[i];
