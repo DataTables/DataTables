@@ -4312,7 +4312,7 @@
 		//   data is going to be used in the table?
 		_fnColumnTypes( oSettings );
 	
-		aSort = _fnSortFlatten( oSettings )
+		aSort = _fnSortFlatten( oSettings );
 	
 		for ( i=0, ien=aSort.length ; i<ien ; i++ ) {
 			sortCol = aSort[i];
