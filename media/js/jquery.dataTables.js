@@ -2259,8 +2259,9 @@
 		// Compatibility with 1.9-, allow fnServerData and event to manipulate
 		_fnCallbackFire( oSettings, 'aoServerParams', 'serverParams', [data] );
 	
-		// Convert to object based for 1.10+ if using the old scheme
-		if ( data && data.__legacy ) {
+		// Convert to object based for 1.10+ if using the old array scheme which can
+		// come from server-side processing or serverParams
+		if ( data && $.isArray(data) ) {
 			var tmp = {};
 			var rbracket = /(.*?)\[\]$/;
 	
@@ -2491,8 +2492,6 @@
 	
 			param( 'iSortingCols', sort.length );
 		}
-	
-		data.__legacy = true;
 	
 		// If the legacy.ajax parameter is null, then we automatically decide which
 		// form to use, based on sAjaxSource
