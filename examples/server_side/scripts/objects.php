@@ -5,7 +5,7 @@
  */
 
 // DB table to use
-$table = 'datatables-demo';
+$table = 'datatables_demo';
 
 // Table's primary key
 $primaryKey = 'id';
