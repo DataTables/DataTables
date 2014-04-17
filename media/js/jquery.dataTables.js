@@ -13675,7 +13675,7 @@
 			_: function ( settings, host, idx, buttons, page, pages ) {
 				var classes = settings.oClasses;
 				var lang = settings.oLanguage.oPaginate;
-				var btnDisplay, btnClass;
+				var btnDisplay, btnClass, counter=0;
 	
 				var attach = function( container, buttons ) {
 					var i, ien, node, button;
@@ -13735,6 +13735,7 @@
 								node = $('<a>', {
 										'class': classes.sPageButton+' '+btnClass,
 										'aria-controls': settings.sTableId,
+										'data-dt-idx': counter,
 										'tabindex': settings.iTabIndex,
 										'id': idx === 0 && typeof button === 'string' ?
 											settings.sTableId +'_'+ button :
@@ -13746,12 +13747,24 @@
 								_fnBindAction(
 									node, {action: button}, clickHandler
 								);
+	
+								counter++;
 							}
 						}
 					}
 				};
 	
+				// Because this approach is destroying and recreating the paging
+				// elements, focus is lost on the select button which is bad for
+				// accessibility. So we want to restore focus once the draw has
+				// completed
+				var activeEl = $(document.activeElement).data('dt-idx');
+	
 				attach( $(host).empty(), buttons );
+	
+				if ( activeEl !== null ) {
+					$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+				}
 			}
 		}
 	} );
