@@ -1677,9 +1677,6 @@
 			_fnDetectHeader( oSettings.aoHeader, thead );
 		}
 	
-		/* ARIA role for the rows */
-		$(thead).find('>tr').attr('role', 'row');
-	
 		/* Deal with the footer - add classes if required */
 		$(thead).find('>tr>th, >tr>td').addClass( classes.sHeaderTH );
 		$(tfoot).find('>tr>th, >tr>td').addClass( classes.sFooterTH );
@@ -2952,9 +2949,8 @@
 			} );
 	
 			n
-				.attr( 'role', 'alert' )
-				.attr( 'aria-live', 'polite' )
-				.attr( 'aria-relevant', 'all' );
+				.attr( 'role', 'status' )
+				.attr( 'aria-live', 'polite' );
 	
 			// Table is described by our info div
 			$(settings.nTable).attr( 'aria-describedby', tid+'_info' );
