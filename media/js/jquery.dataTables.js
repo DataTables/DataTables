@@ -3322,10 +3322,12 @@
 		var changed = settings._iDisplayStart !== start;
 		settings._iDisplayStart = start;
 	
-		_fnCallbackFire( settings, null, 'page', [settings] );
+		if ( changed ) {
+			_fnCallbackFire( settings, null, 'page', [settings] );
 	
-		if ( redraw ) {
-			_fnDraw( settings );
+			if ( redraw ) {
+				_fnDraw( settings );
+			}
 		}
 	
 		return changed;
