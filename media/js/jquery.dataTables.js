@@ -5457,7 +5457,7 @@
 					api.row( src ).data() || null;
 			}
 		
-			return api.data().flatten().toArray();
+			return api.data().toArray();
 		};
 		
 		
