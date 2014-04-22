@@ -7290,7 +7290,7 @@
 			out = [], res,
 			a, i, ien, j, jen;
 	
-		if ( ! $.isArray( selector ) ) {
+		if ( ! selector || selector.length === undefined ) {
 			selector = [ selector ];
 		}
 	
