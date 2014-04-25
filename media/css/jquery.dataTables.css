@@ -378,15 +378,22 @@ table.dataTable td {
 }
 
 @media screen and (max-width: 767px) {
-  .dataTables_wrapper .dataTables_length,
-  .dataTables_wrapper .dataTables_filter,
   .dataTables_wrapper .dataTables_info,
   .dataTables_wrapper .dataTables_paginate {
     float: none;
     text-align: center;
   }
-  .dataTables_wrapper .dataTables_filter,
   .dataTables_wrapper .dataTables_paginate {
+    margin-top: 0.5em;
+  }
+}
+@media screen and (max-width: 640px) {
+  .dataTables_wrapper .dataTables_length,
+  .dataTables_wrapper .dataTables_filter {
+    float: none;
+    text-align: center;
+  }
+  .dataTables_wrapper .dataTables_filter {
     margin-top: 0.5em;
   }
 }
