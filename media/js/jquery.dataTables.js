@@ -3197,14 +3197,14 @@
 			div[0].id = tableId+'_length';
 		}
 	
-		// This split doesn't matter where _MENU_ is, we get three items back from it
 		var a = settings.oLanguage.sLengthMenu.split(/(_MENU_)/);
-		div.children()
-			.append( a[0] )
-			.append( select )
-			.append( a[2] );
+		div.children().append( a.length > 1 ?
+			[ a[0], select, a[2] ] :
+			a[0]
+		);
 	
-		select
+		// Can't use `select` variable, as user might provide their own select menu
+		$('select', div)
 			.val( settings._iDisplayLength )
 			.bind( 'change.DT', function(e) {
 				_fnLengthChange( settings, $(this).val() );
@@ -3213,7 +3213,7 @@
 	
 		// Update node value whenever anything changes the table's length
 		$(settings.nTable).bind( 'length.dt.DT', function (e, s, len) {
-			select.val( len );
+			$('select', div).val( len );
 		} );
 	
 		return div[0];
