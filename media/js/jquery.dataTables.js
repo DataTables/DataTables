@@ -505,6 +505,41 @@
 		n.remove();
 	}
 	
+	
+	/**
+	 * Array.prototype reduce[Right] method, used for browsers which don't support
+	 * JS 1.6. Done this way to reduce code size, since we iterate either way
+	 *  @param {object} settings dataTables settings object
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnReduce ( that, fn, init, start, end, inc )
+	{
+		var
+			i = start,
+			value,
+			isSet = false;
+	
+		if ( init !== undefined ) {
+			value = init;
+			isSet = true;
+		}
+	
+		while ( i !== end ) {
+			if ( ! that.hasOwnProperty(i) ) {
+				continue;
+			}
+	
+			value = isSet ?
+				fn( value, that[i], i, that ) :
+				that[i];
+	
+			isSet = true;
+			i += inc;
+		}
+	
+		return value;
+	}
+	
 	/**
 	 * Add a column to the list used for the table with default values
 	 *  @param {object} oSettings dataTables settings object
@@ -513,6 +548,7 @@
 	 */
 	function _fnAddColumn( oSettings, nTh )
 	{
+		// Add column to aoColumns array
 		var oDefaults = DataTable.defaults.column;
 		var iCol = oSettings.aoColumns.length;
 		var oCol = $.extend( {}, DataTable.models.oColumn, oDefaults, {
@@ -524,33 +560,13 @@
 		} );
 		oSettings.aoColumns.push( oCol );
 	
-		/* Add a column specific filter */
-		if ( oSettings.aoPreSearchCols[ iCol ] === undefined || oSettings.aoPreSearchCols[ iCol ] === null )
-		{
-			oSettings.aoPreSearchCols[ iCol ] = $.extend( true, {}, DataTable.models.oSearch );
-		}
-		else
-		{
-			var oPre = oSettings.aoPreSearchCols[ iCol ];
+		// Add search object for column specific search. Note that the `searchCols[ iCol ]`
+		// passed into extend can be undefined. This allows the user to give a default
+		// with only some of the parameters defined, and also not give a default
+		var searchCols = oSettings.aoPreSearchCols;
+		searchCols[ iCol ] = $.extend( {}, DataTable.models.oSearch, searchCols[ iCol ] );
 	
-			/* Don't require that the user must specify bRegex, bSmart or bCaseInsensitive */
-			if ( oPre.bRegex === undefined )
-			{
-				oPre.bRegex = true;
-			}
-	
-			if ( oPre.bSmart === undefined )
-			{
-				oPre.bSmart = true;
-			}
-	
-			if ( oPre.bCaseInsensitive === undefined )
-			{
-				oPre.bCaseInsensitive = true;
-			}
-		}
-	
-		/* Use the column options function to initialise classes etc */
+		// Use the default column options function to initialise classes etc
 		_fnColumnOptions( oSettings, iCol, null );
 	}
 	
@@ -776,6 +792,11 @@
 	}
 	
 	
+	/**
+	 * Calculate the 'type' of a column
+	 *  @param {object} settings dataTables settings object
+	 *  @memberof DataTable#oApi
+	 */
 	function _fnColumnTypes ( settings )
 	{
 		var columns = settings.aoColumns;
@@ -843,6 +864,7 @@
 	function _fnApplyColumnDefs( oSettings, aoColDefs, aoCols, fn )
 	{
 		var i, iLen, j, jLen, k, kLen, def;
+		var columns = oSettings.aoColumns;
 	
 		// Column definitions with aTargets
 		if ( aoColDefs )
@@ -867,7 +889,7 @@
 					if ( typeof aTargets[j] === 'number' && aTargets[j] >= 0 )
 					{
 						/* Add columns that we don't yet know about */
-						while( oSettings.aoColumns.length <= aTargets[j] )
+						while( columns.length <= aTargets[j] )
 						{
 							_fnAddColumn( oSettings );
 						}
@@ -878,15 +900,15 @@
 					else if ( typeof aTargets[j] === 'number' && aTargets[j] < 0 )
 					{
 						/* Negative integer, right to left column counting */
-						fn( oSettings.aoColumns.length+aTargets[j], def );
+						fn( columns.length+aTargets[j], def );
 					}
 					else if ( typeof aTargets[j] === 'string' )
 					{
 						/* Class name matching on TH element */
-						for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
+						for ( k=0, kLen=columns.length ; k<kLen ; k++ )
 						{
 							if ( aTargets[j] == "_all" ||
-							     $(oSettings.aoColumns[k].nTh).hasClass( aTargets[j] ) )
+							     $(columns[k].nTh).hasClass( aTargets[j] ) )
 							{
 								fn( k, def );
 							}
@@ -3364,7 +3386,7 @@
 	function _fnProcessingDisplay ( settings, show )
 	{
 		if ( settings.oFeatures.bProcessing ) {
-			$(settings.aanFeatures.r).css( 'visibility', show ? 'visible' : 'hidden' );
+			$(settings.aanFeatures.r).css( 'display', show ? 'block' : 'none' );
 		}
 	
 		_fnCallbackFire( settings, null, 'processing', [settings, show] );
@@ -5981,13 +6003,15 @@
 			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
 			
+			var oClasses = oSettings.oClasses;
+			
 			// @todo Remove in 1.11
 			if ( oInit.bJQueryUI )
 			{
 				/* Use the JUI classes object for display. You could clone the oStdClasses object if
 				 * you want to have multiple tables with multiple independent classes
 				 */
-				$.extend( oSettings.oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
+				$.extend( oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
 			
 				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
 				{
@@ -6004,9 +6028,9 @@
 			}
 			else
 			{
-				$.extend( oSettings.oClasses, DataTable.ext.classes, oInit.oClasses );
+				$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
 			}
-			$(this).addClass( oSettings.oClasses.sTable );
+			$(this).addClass( oClasses.sTable );
 			
 			/* Calculate the scroll bar width and cache it for use later on */
 			if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
@@ -6060,8 +6084,8 @@
 			if ( oInit.asStripeClasses === null )
 			{
 				oSettings.asStripeClasses =[
-					oSettings.oClasses.sStripeOdd,
-					oSettings.oClasses.sStripeEven
+					oClasses.sStripeOdd,
+					oClasses.sStripeEven
 				];
 			}
 			
@@ -6162,9 +6186,10 @@
 			// in case that has been altered, so the default sort reflects that option
 			if ( oInit.aaSorting === undefined )
 			{
-				for ( i=0, iLen=oSettings.aaSorting.length ; i<iLen ; i++ )
+				var sorting = oSettings.aaSorting;
+				for ( i=0, iLen=sorting.length ; i<iLen ; i++ )
 				{
-					oSettings.aaSorting[i][1] = oSettings.aoColumns[ i ].asSorting[0];
+					sorting[i][1] = oSettings.aoColumns[ i ].asSorting[0];
 				}
 			}
 			
@@ -6233,7 +6258,7 @@
 			}
 			
 			if ( tfoot.length === 0 || tfoot.children().length === 0 ) {
-				$(this).addClass( oSettings.oClasses.sNoFooter );
+				$(this).addClass( oClasses.sNoFooter );
 			}
 			else if ( tfoot.length > 0 ) {
 				oSettings.nTFoot = tfoot[0];
@@ -6685,56 +6710,15 @@
 		// Does not return an API instance
 		reduce: __arrayProto.reduce || function ( fn, init )
 		{
-			var
-				value,
-				isSet = false;
-	
-			if ( arguments.length > 1 ) {
-				value = init;
-				isSet = true;
-			}
-	
-			for ( var i=0, ien=this.length ; i<ien ; i++ ) {
-				if ( ! this.hasOwnProperty(i) ) {
-					continue;
-				}
-	
-				value = isSet ?
-					fn( value, this[i], i, this ) :
-					this[i];
-	
-				isSet = true;
-			}
-	
-			return value;
+			return _fnReduce( this, fn, init, 0, this.length, 1 );
 		},
 	
 	
 		reduceRight: __arrayProto.reduceRight || function ( fn, init )
 		{
-			var
-				value,
-				isSet = false;
-	
-			if ( arguments.length > 1 ) {
-				value = init;
-				isSet = true;
-			}
-	
-			for ( var i=this.length-1 ; i>=0 ; i-- ) {
-				if ( ! this.hasOwnProperty(i) ) {
-					continue;
-				}
-	
-				value = isSet ?
-					fn( value, this[i], i, this ) :
-					this[i];
-	
-				isSet = true;
-			}
-	
-			return value;
+			return _fnReduce( this, fn, init, this.length-1, -1, -1 );
 		},
+	
 	
 		reverse: __arrayProto.reverse,
 	
@@ -10228,7 +10212,7 @@
 		"fnStateLoadCallback": function ( settings ) {
 			try {
 				return JSON.parse(
-					localStorage.getItem('DataTables_'+settings.sInstance+'_'+window.location.pathname)
+					localStorage.getItem('DataTables_'+settings.sInstance+'_'+location.pathname)
 				);
 			} catch (e) {}
 		},
@@ -10328,7 +10312,7 @@
 		"fnStateSaveCallback": function ( settings, data ) {
 			try {
 				localStorage.setItem(
-					'DataTables_'+settings.sInstance+'_'+window.location.pathname,
+					'DataTables_'+settings.sInstance+'_'+location.pathname,
 					JSON.stringify(data)
 				);
 			} catch (e) {}
