@@ -7284,7 +7284,9 @@
 			out = [], res,
 			a, i, ien, j, jen;
 	
-		if ( ! selector || selector.length === undefined ) {
+		// Can't just check for isArray here, as an API or jQuery instance might be
+		// given with their array like look
+		if ( ! selector || typeof selector === 'string' || selector.length === undefined ) {
 			selector = [ selector ];
 		}
 	
@@ -7836,7 +7838,7 @@
 				];
 			}
 			else {
-				var match = typeof match === 'string' ?
+				var match = typeof s === 'string' ?
 					s.match( __re_column_selector ) :
 					'';
 	
