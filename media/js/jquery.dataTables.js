@@ -13991,7 +13991,7 @@
 						);
 	
 					cell
-						.find( 'span' )
+						.find( 'span.'+classes.sSortIcon )
 						.removeClass(
 							classes.sSortJUIAsc +" "+
 							classes.sSortJUIDesc +" "+
@@ -14008,7 +14008,6 @@
 			}
 		}
 	} );
-	
 	
 	/*
 	 * Public helper functions. These aren't used internally by DataTables, or
