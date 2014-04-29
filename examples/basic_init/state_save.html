@@ -18,8 +18,10 @@
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
 	<script type="text/javascript" language="javascript" class="init">
 
-$('#example').dataTable( {
-	"stateSave": true
+$(document).ready(function() {
+	$('#example').dataTable( {
+		stateSave: true
+	} );
 } );
 
 	</script>
@@ -37,20 +39,20 @@ $('#example').dataTable( {
 				"//datatables.net/reference/option/stateSave"><code class="option" title=
 				"DataTables initialisation option">stateSave<span>DT</span></code></a> option.</p>
 
-				<p>The built in state saving method uses the HTML5 <code>localStorage</code> API for efficient storage
-				of the data. Please note that this means that the built in state saving option <em>will not work with
-				IE6/7</em> as these browsers do not support this API. Alternative options of using cookies or saving
-				the state on the server through Ajax can be used through the <a href=
-				"//datatables.net/reference/option/stateSaveCallback"><code class="option" title=
-				"DataTables initialisation option">stateSaveCallback<span>DT</span></code></a> and <a href=
-				"//datatables.net/reference/option/stateLoadCallback"><code class="option" title=
+				<p>The built in state saving method uses the HTML5 <code>localStorage</code> and
+				<code>sessionStorage</code> APIs for efficient storage of the data. Please note that this means that
+				the built in state saving option <strong>will not work with IE6/7</strong> as these browsers do not
+				support these APIs. Alternative options of using cookies or saving the state on the server through Ajax
+				can be used through the <a href="//datatables.net/reference/option/stateSaveCallback"><code class=
+				"option" title="DataTables initialisation option">stateSaveCallback<span>DT</span></code></a> and
+				<a href="//datatables.net/reference/option/stateLoadCallback"><code class="option" title=
 				"DataTables initialisation option">stateLoadCallback<span>DT</span></code></a> options.</p>
 
-				<p>Additionally, note also that the duration for which the saved state is valid and can be used to
-				restore the table state can be set using the <a href=
-				"//datatables.net/reference/option/stateDuration"><code class="option" title=
+				<p>The duration for which the saved state is valid and can be used to restore the table state can be
+				set using the <a href="//datatables.net/reference/option/stateDuration"><code class="option" title=
 				"DataTables initialisation option">stateDuration<span>DT</span></code></a> initialisation parameter (2
-				hours by default).</p>
+				hours by default). This parameter also controls if <code>localStorage</code> (0 or greater) or
+				<code>sessionStorage</code> (-1) is used to store the data.</p>
 
 				<p>The example below simply shows state saving enabled in DataTables with the <a href=
 				"//datatables.net/reference/option/stateSave"><code class="option" title=
@@ -551,8 +553,10 @@ $('#example').dataTable( {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this
-					example:</p><code class="multiline brush: js;">$('#example').dataTable( {
-	&quot;stateSave&quot;: true
+					example:</p><code class="multiline brush: js;">$(document).ready(function() {
+	$('#example').dataTable( {
+		stateSave: true
+	} );
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
