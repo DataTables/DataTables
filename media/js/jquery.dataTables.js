@@ -4580,8 +4580,6 @@
 		var col = settings.aoColumns[ colIdx ];
 	
 		_fnBindAction( attachTo, {}, function (e) {
-			e.preventDefault();
-	
 			/* If the column is not sortable - don't to anything */
 			if ( col.bSortable === false ) {
 				return;
@@ -4923,12 +4921,14 @@
 					fn(e);
 				} )
 			.bind( 'keypress.DT', oData, function (e){
-				if ( e.which === 13 ) {
-					fn(e);
-				} } )
+					if ( e.which === 13 ) {
+						e.preventDefault();
+						fn(e);
+					}
+				} )
 			.bind( 'selectstart.DT', function () {
-				/* Take the brutal approach to cancelling text selection */
-				return false;
+					/* Take the brutal approach to cancelling text selection */
+					return false;
 				} );
 	}
 	
