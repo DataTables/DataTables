@@ -582,12 +582,11 @@
 	{
 		var oCol = oSettings.aoColumns[ iCol ];
 		var oClasses = oSettings.oClasses;
+		var th = $(oCol.nTh);
 	
 		// Try to get width information from the DOM. We can't get it from CSS
 		// as we'd need to parse the CSS stylesheet. `width` option can override
 		if ( ! oCol.sWidthOrig ) {
-			var th = $(oCol.nTh);
-	
 			// Width attribute
 			oCol.sWidthOrig = th.attr('width') || null;
 	
@@ -665,6 +664,7 @@
 		if ( !oSettings.oFeatures.bSort )
 		{
 			oCol.bSortable = false;
+			th.addClass( oClasses.sSortableNone ); // Have to add class here as order event isn't called
 		}
 	
 		/* Check that the class assignment is correct for sorting */
