@@ -2863,6 +2863,10 @@
 	 */
 	function _fnFilterCreateSearch( search, regex, smart, caseInsensitive )
 	{
+		if ( typeof(search) == "function" ) {
+			return {test: search};
+		}
+		
 		search = regex ?
 			search :
 			_fnEscapeRegex( search );
@@ -8380,7 +8384,7 @@
 			}
 	
 			_fnFilterComplete( settings, $.extend( {}, settings.oPreviousSearch, {
-				"sSearch": input+"",
+				"sSearch": typeof(input) == "function" ? input : input+"",
 				"bRegex":  regex === null ? false : regex,
 				"bSmart":  smart === null ? true  : smart,
 				"bCaseInsensitive": caseInsen === null ? true : caseInsen
@@ -8407,7 +8411,7 @@
 			}
 	
 			$.extend( preSearch[ column ], {
-				"sSearch": input+"",
+				"sSearch": typeof(input) == "function" ? input : input+"",
 				"bRegex":  regex === null ? false : regex,
 				"bSmart":  smart === null ? true  : smart,
 				"bCaseInsensitive": caseInsen === null ? true : caseInsen
