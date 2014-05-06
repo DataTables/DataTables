@@ -4765,10 +4765,13 @@
 		oSettings._iDisplayStart    = oData.iStart;
 		oSettings.iInitDisplayStart = oData.iStart;
 		oSettings._iDisplayLength   = oData.iLength;
-		oSettings.aaSorting = $.map( oData.aaSorting, function ( col, i ) {
-			return col[0] >= columns.length ?
+		oSettings.aaSorting = [];
+	
+		$.each( oData.aaSorting, function ( i, col ) {
+			oSettings.aaSorting.push( col[0] >= columns.length ?
 				[ 0, col[1] ] :
-				col;
+				col
+			);
 		} );
 	
 		/* Search filtering  */
