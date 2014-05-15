@@ -2675,7 +2675,7 @@
 			.attr('aria-controls', tableId);
 	
 		// Update the input elements whenever the table is filtered
-		$(settings.nTable).on( 'filter.DT', function () {
+		$(settings.nTable).on( 'search.dt.DT', function () {
 			// IE9 throws an 'unknown error' if document.activeElement is used
 			// inside an iframe or frame...
 			try {
