@@ -3207,7 +3207,7 @@
 	
 		var a = settings.oLanguage.sLengthMenu.split(/(_MENU_)/);
 		div.children().append( a.length > 1 ?
-			[ a[0], select, a[2] ] :
+			$(a[0]).add(select).add(a[2]) :
 			a[0]
 		);
 	
