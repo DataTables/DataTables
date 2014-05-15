@@ -1107,7 +1107,7 @@
 	function _fnSplitObjNotation( str )
 	{
 		return $.map( str.match(/(\\.|[^\.])+/g), function ( s ) {
-			return s.replace('\\.', '.');
+			return s.replace(/\\./g, '.');
 		} );
 	}
 	
