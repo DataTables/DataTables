@@ -4529,6 +4529,11 @@
 			return idx+1 >= asSorting.length ? 0 : idx+1;
 		};
 	
+		// Convert to 2D array if needed
+		if ( typeof sorting[0] === 'number' ) {
+			sorting = [ sorting ];
+		}
+	
 		// If appending the sort then we are multi-column sorting
 		if ( append && settings.oFeatures.bSortMulti ) {
 			// Are we already doing some kind of sort on this column?
