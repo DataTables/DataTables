@@ -768,6 +768,10 @@ function parseParams(str)
     if ( a ) {
         result['brush'] = a[1];
     }
+    else if ( str && str.indexOf('multiline') !== -1 ) {
+        // Markdown code block without a language identifier
+        result['brush'] = 'text';
+    }
 
     return result;
 };
