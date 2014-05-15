@@ -247,6 +247,8 @@ code.multiline {
 
 
 ul.tabs {
+	position: relative;
+	top: 1px;
 	height: 40px;
 	margin: 20px 20px 0 0;
 }
@@ -255,7 +257,7 @@ ul.tabs {
 ul.tabs li {
 	display: block;
 	float: left;
-	padding: 0 20px;
+	padding: 0 15px;
 	height: 40px;
 	font-size: 1.2em;
 	margin: 0 5px;
@@ -283,8 +285,12 @@ ul.tabs li.active:hover {
 	background-color: white;
 }
 
+div.tabs {
+	clear: both;
+}
+
 div.tabs>div {
-	padding: 0 20px;
+	padding: 0 15px;
 	border: 1px solid #ccc;
 	margin-top: 1px;
 	display: none;
