@@ -7751,7 +7751,6 @@
 		return this;
 	};
 	
-	
 	var __details_events = function ( settings, isRegisterRequest )
 	{
 		var api = new _Api( settings );
@@ -7844,9 +7843,9 @@
 	} );
 	
 	_api_register( [
-	    'row().child.remove()',
-	    'row().child().remove()'
-    ], function () {
+		'row().child.remove()',
+		'row().child().remove()'
+	], function () {
 		__details_remove.call( this );
 		return this;
 	} );
