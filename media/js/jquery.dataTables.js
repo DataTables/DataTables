@@ -7703,6 +7703,31 @@
 		}
 	};
 	
+	var __details_remove = function ( ) {
+		var ctx = this.context;
+		
+		if ( ctx.length && this.length ) {
+			var row = ctx[0].aoData[ this[0] ];
+			
+			if ( row._details ) {
+				// _detailsShow is used elsewhere to check if the _details is valid
+				// This object must be set/unset in concert with _details
+				if ( row._detailsShow ) {
+					row._detailsShow = null;
+				}
+				
+				row._details.remove();
+				
+				// Unregister all DataTable API events
+				__details_events( ctx[0], false );
+				
+				// To be sure it is not used unintentionally or referencing any DOM elements
+				row._details = null;
+			}
+		}
+	
+		return this;
+	};
 	
 	var __details_display = function ( show ) {
 		var ctx = this.context;
@@ -7719,7 +7744,7 @@
 					row._details.remove();
 				}
 	
-				__details_events( ctx[0] );
+				__details_events( ctx[0], true );
 			}
 		}
 	
@@ -7727,7 +7752,7 @@
 	};
 	
 	
-	var __details_events = function ( settings )
+	var __details_events = function ( settings, isRegisterRequest )
 	{
 		var api = new _Api( settings );
 		var namespace = '.dt.DT_details';
@@ -7736,33 +7761,38 @@
 	
 		api.off( drawEvent +' '+ colvisEvent );
 	
-		if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
-			// On each draw, insert the required elements into the document
-			api.on( drawEvent, function () {
-				api.rows( {page:'current'} ).eq(0).each( function (idx) {
-					// Internal data grab
-					var row = settings.aoData[ idx ];
-	
-					if ( row._detailsShow ) {
-						row._details.insertAfter( row.nTr );
+		if( isRegisterRequest ) {
+			if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
+				// On each draw, insert the required elements into the document
+				api.on( drawEvent, function () {
+					api.rows( {page:'current'} ).eq(0).each( function (idx) {
+						// Internal data grab
+						var row = settings.aoData[ idx ];
+		
+						if ( row._detailsShow ) {
+							row._details.insertAfter( row.nTr );
+						}
+					} );
+				} );
+		
+				// Column visibility change - update the colspan
+				api.on( colvisEvent, function ( e, settings, idx, vis ) {
+					// Update the colspan for the details rows (note, only if it already has
+					// a colspan)
+					var row, visible = _fnVisbleColumns( settings );
+		
+					for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
+						row = settings.aoData[i];
+		
+						if ( row._details ) {
+							row._details.children('td[colspan]').attr('colspan', visible );
+						}
 					}
 				} );
-			} );
-	
-			// Column visibility change - update the colspan
-			api.on( colvisEvent, function ( e, settings, idx, vis ) {
-				// Update the colspan for the details rows (note, only if it already has
-				// a colspan)
-				var row, visible = _fnVisbleColumns( settings );
-	
-				for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
-					row = settings.aoData[i];
-	
-					if ( row._details ) {
-						row._details.children('td[colspan]').attr('colspan', visible );
-					}
-				}
-			} );
+			}
+		} else {
+			api.off( drawEvent );
+			api.off( colvisEvent );
 		}
 	};
 	
@@ -7813,6 +7843,13 @@
 		return false;
 	} );
 	
+	_api_register( [
+	    'row().child.remove()',
+	    'row().child().remove()'
+    ], function () {
+		__details_remove.call( this );
+		return this;
+	} );
 	
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -14392,4 +14429,3 @@
 }));
 
 }(window, document));
-
