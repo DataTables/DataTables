@@ -1505,7 +1505,6 @@
 				d.push( contents );
 			}
 	
-			tds.push( cell );
 			i++;
 		};
 	
@@ -1516,6 +1515,7 @@
 	
 				if ( name == "TD" || name == "TH" ) {
 					cellProcess( td );
+					tds.push( td );
 				}
 	
 				td = td.nextSibling;
