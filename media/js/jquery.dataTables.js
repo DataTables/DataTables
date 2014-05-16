@@ -649,16 +649,16 @@
 			attrTest(mDataSrc.sort) || attrTest(mDataSrc.type) || attrTest(mDataSrc.filter)
 		);
 	
-		oCol.fnGetData = function (oData, sSpecific) {
-			var innerData = mData( oData, sSpecific );
+		oCol.fnGetData = function (rowData, type, meta) {
+			var innerData = mData( rowData, type, undefined, meta );
 	
-			if ( oCol.mRender && (sSpecific && sSpecific !== '') )
-			{
-				return mRender( innerData, sSpecific, oData );
-			}
-			return innerData;
+			return mRender && type ?
+				mRender( innerData, type, rowData, meta ) :
+				innerData;
 		};
-		oCol.fnSetData = _fnSetObjectDataFn( mDataSrc );
+		oCol.fnSetData = function ( rowData, val, meta ) {
+			return _fnSetObjectDataFn( mDataSrc )( rowData, val, meta );
+		};
 	
 		/* Feature sorting overrides column specific when off */
 		if ( !oSettings.oFeatures.bSort )
@@ -1034,64 +1034,69 @@
 	
 	/**
 	 * Get the data for a given cell from the internal cache, taking into account data mapping
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {int} iRow aoData row id
-	 *  @param {int} iCol Column index
-	 *  @param {string} sSpecific data get type ('display', 'type' 'filter' 'sort')
+	 *  @param {object} settings dataTables settings object
+	 *  @param {int} rowIdx aoData row id
+	 *  @param {int} colIdx Column index
+	 *  @param {string} type data get type ('display', 'type' 'filter' 'sort')
 	 *  @returns {*} Cell data
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnGetCellData( oSettings, iRow, iCol, sSpecific )
+	function _fnGetCellData( settings, rowIdx, coliDx, type )
 	{
-		var oCol = oSettings.aoColumns[iCol];
-		var oData = oSettings.aoData[iRow]._aData;
-		var sData = oCol.fnGetData( oData, sSpecific );
+		var draw           = settings.iDraw;
+		var col            = settings.aoColumns[coliDx];
+		var rowData        = settings.aoData[rowIdx]._aData;
+		var defaultContent = col.sDefaultContent;
+		var cellData       = col.fnGetData( rowData, type, {
+			settings: settings,
+			row:      rowIdx,
+			col:      coliDx
+		} );
 	
-		if ( sData === undefined )
-		{
-			if ( oSettings.iDrawError != oSettings.iDraw && oCol.sDefaultContent === null )
-			{
-				_fnLog( oSettings, 0, "Requested unknown parameter "+
-					(typeof oCol.mData=='function' ? '{function}' : "'"+oCol.mData+"'")+
-					" for row "+iRow, 4 );
-				oSettings.iDrawError = oSettings.iDraw;
+		if ( cellData === undefined ) {
+			if ( settings.iDrawError != draw && defaultContent === null ) {
+				_fnLog( settings, 0, "Requested unknown parameter "+
+					(typeof col.mData=='function' ? '{function}' : "'"+col.mData+"'")+
+					" for row "+rowIdx, 4 );
+				settings.iDrawError = draw;
 			}
-			return oCol.sDefaultContent;
+			return defaultContent;
 		}
 	
 		/* When the data source is null, we can use default column data */
-		if ( (sData === oData || sData === null) && oCol.sDefaultContent !== null )
-		{
-			sData = oCol.sDefaultContent;
+		if ( (cellData === rowData || cellData === null) && defaultContent !== null ) {
+			cellData = defaultContent;
 		}
-		else if ( typeof sData === 'function' )
-		{
+		else if ( typeof cellData === 'function' ) {
 			// If the data source is a function, then we run it and use the return
-			return sData();
+			return cellData();
 		}
 	
-		if ( sData === null && sSpecific == 'display' )
-		{
+		if ( cellData === null && type == 'display' ) {
 			return '';
 		}
-		return sData;
+		return cellData;
 	}
 	
 	
 	/**
 	 * Set the value for a specific cell, into the internal data cache
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {int} iRow aoData row id
-	 *  @param {int} iCol Column index
+	 *  @param {object} settings dataTables settings object
+	 *  @param {int} rowIdx aoData row id
+	 *  @param {int} colIdx Column index
 	 *  @param {*} val Value to set
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnSetCellData( oSettings, iRow, iCol, val )
+	function _fnSetCellData( settings, rowIdx, colIdx, val )
 	{
-		var oCol = oSettings.aoColumns[iCol];
-		var oData = oSettings.aoData[iRow]._aData;
+		var col     = settings.aoColumns[colIdx];
+		var rowData = settings.aoData[rowIdx]._aData;
 	
-		oCol.fnSetData( oData, val );
+		col.fnSetData( rowData, val, {
+			settings: settings,
+			row:      rowIdx,
+			col:      colIdx
+		}  );
 	}
 	
 	
@@ -1131,24 +1136,24 @@
 				}
 			} );
 	
-			return function (data, type, extra) {
+			return function (data, type, row, meta) {
 				var t = o[type] || o._;
 				return t !== undefined ?
-					t(data, type, extra) :
+					t(data, type, row, meta) :
 					data;
 			};
 		}
 		else if ( mSource === null )
 		{
 			/* Give an empty string for rendering / sorting etc */
-			return function (data, type) {
+			return function (data) { // type, row and meta also passed, but not used
 				return data;
 			};
 		}
 		else if ( typeof mSource === 'function' )
 		{
-			return function (data, type, extra) {
-				return mSource( data, type, extra );
+			return function (data, type, row, meta) {
+				return mSource( data, type, row, meta );
 			};
 		}
 		else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 ||
@@ -1221,14 +1226,14 @@
 				return data;
 			};
 	
-			return function (data, type) {
+			return function (data, type) { // row and meta also passed, but not used
 				return fetchData( data, type, mSource );
 			};
 		}
 		else
 		{
 			/* Array or flat object mapping */
-			return function (data, type) {
+			return function (data, type) { // row and meta also passed, but not used
 				return data[mSource];
 			};
 		}
@@ -1256,12 +1261,12 @@
 		else if ( mSource === null )
 		{
 			/* Nothing to do when the data source is null */
-			return function (data, val) {};
+			return function () {};
 		}
 		else if ( typeof mSource === 'function' )
 		{
-			return function (data, val) {
-				mSource( data, 'set', val );
+			return function (data, val, meta) {
+				mSource( data, 'set', val, meta );
 			};
 		}
 		else if ( typeof mSource === 'string' && (mSource.indexOf('.') !== -1 ||
@@ -1331,14 +1336,14 @@
 				}
 			};
 	
-			return function (data, val) {
+			return function (data, val) { // meta is also passed in, but not used
 				return setData( data, val, mSource );
 			};
 		}
 		else
 		{
 			/* Array or flat object mapping */
-			return function (data, val) {
+			return function (data, val) { // meta is also passed in, but not used
 				data[mSource] = val;
 			};
 		}
