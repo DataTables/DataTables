@@ -7555,7 +7555,7 @@
 			var data = settings.aoData;
 
 			// Deallocate and remove child row resources to avoid memory leak
-			__details_control_base(settings, settings.aoData[i], true, false);
+			__details_control_base(settings, settings.aoData[row], true, false);
 
 			data.splice( row, 1 );
 	
