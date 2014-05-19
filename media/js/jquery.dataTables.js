@@ -7690,47 +7690,47 @@
 		else {
 			addRow( data, klass );
 		}
-	
-		if ( row._details ) {
-			__details_control( this, true, false );
-		}
-	
+
+		__details_control_base( ctx, row, true, false );
+
 		row._details = $(rows);
-	
+
 		// If the children were already shown, that state should be retained
 		if ( row._detailsShow ) {
 			row._details.insertAfter( row.nTr );
 		}
 	};
 
+	var __details_control_base = function ( ctx, row, isRemove, show ) {
+		if ( row._details ) {
+			if(isRemove) {
+				// _detailsShow is used elsewhere to check if the _details is valid
+				// This object must be set/unset in concert with _details
+				row._detailsShow = undefined;
+
+				row._details.remove();
+
+				row._details = undefined;
+			} else {
+				row._detailsShow = show;
+				if ( show ) {
+					row._details.insertAfter( row.nTr );
+				}
+				else {
+					row._details.remove();
+				}
+			}
+			__details_events( ctx[0], !isRemove );
+		}
+	}
+	
 	var __details_control = function ( isRemove, show ) {
 		var ctx = this.context;
-	
-		if ( ctx.length && this.length ) {
-			var row = ctx[0].aoData[ this[0] ];
 
-			if ( row._details ) {
-				if(isRemove) {
-					// _detailsShow is used elsewhere to check if the _details is valid
-					// This object must be set/unset in concert with _details
-					row._detailsShow = undefined;
-					
-					row._details.remove();
-					
-					row._details = undefined;
-				} else {
-					row._detailsShow = show;
-					if ( show ) {
-						row._details.insertAfter( row.nTr );
-					}
-					else {
-						row._details.remove();
-					}
-				}
-				__details_events( ctx[0], !isRemove );
-			}
+		if ( ctx.length && this.length ) {
+			__details_control_base( ctx, ctx[0].aoData[ this[0] ], isRemove, show );
 		}
-	
+
 		return this;
 	};
 	
@@ -7750,7 +7750,7 @@
 					api.rows( {page:'current'} ).eq(0).each( function (idx) {
 						// Internal data grab
 						var row = settings.aoData[ idx ];
-		
+
 						if ( row._detailsShow ) {
 							row._details.insertAfter( row.nTr );
 						}
@@ -7762,10 +7762,10 @@
 					// Update the colspan for the details rows (note, only if it already has
 					// a colspan)
 					var row, visible = _fnVisbleColumns( settings );
-		
+
 					for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 						row = settings.aoData[i];
-		
+
 						if ( row._details ) {
 							row._details.children('td[colspan]').attr('colspan', visible );
 						}
