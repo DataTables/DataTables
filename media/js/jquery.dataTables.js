@@ -7692,7 +7692,7 @@
 		}
 	
 		if ( row._details ) {
-			row._details.remove();
+			__details_control( this, true, false );
 		}
 	
 		row._details = $(rows);
@@ -7702,56 +7702,39 @@
 			row._details.insertAfter( row.nTr );
 		}
 	};
-	
-	var __details_remove = function ( ) {
-		var ctx = this.context;
-		
-		if ( ctx.length && this.length ) {
-			var row = ctx[0].aoData[ this[0] ];
-			
-			if ( row._details ) {
-				// _detailsShow is used elsewhere to check if the _details is valid
-				// This object must be set/unset in concert with _details
-				if ( row._detailsShow ) {
-					row._detailsShow = null;
-				}
-				
-				row._details.remove();
-				
-				// Unregister all DataTable API events
-				__details_events( ctx[0], false );
-				
-				// To be sure it is not used unintentionally or referencing any DOM elements
-				row._details = null;
-			}
-		}
-	
-		return this;
-	};
-	
-	var __details_display = function ( show ) {
+
+	var __details_control = function ( isRemove, show ) {
 		var ctx = this.context;
 	
 		if ( ctx.length && this.length ) {
 			var row = ctx[0].aoData[ this[0] ];
-	
+
 			if ( row._details ) {
-				row._detailsShow = show;
-				if ( show ) {
-					row._details.insertAfter( row.nTr );
-				}
-				else {
+				if(isRemove) {
+					// _detailsShow is used elsewhere to check if the _details is valid
+					// This object must be set/unset in concert with _details
+					row._detailsShow = undefined;
+					
 					row._details.remove();
+					
+					row._details = undefined;
+				} else {
+					row._detailsShow = show;
+					if ( show ) {
+						row._details.insertAfter( row.nTr );
+					}
+					else {
+						row._details.remove();
+					}
 				}
-	
-				__details_events( ctx[0], true );
+				__details_events( ctx[0], !isRemove );
 			}
 		}
 	
 		return this;
 	};
 	
-	var __details_events = function ( settings, isRegisterRequest )
+	var __details_events = function ( settings, isRemove )
 	{
 		var api = new _Api( settings );
 		var namespace = '.dt.DT_details';
@@ -7760,7 +7743,7 @@
 	
 		api.off( drawEvent +' '+ colvisEvent );
 	
-		if( isRegisterRequest ) {
+		if( isRemove ) {
 			if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
 				// On each draw, insert the required elements into the document
 				api.on( drawEvent, function () {
@@ -7820,7 +7803,7 @@
 		'row().child.show()',
 		'row().child().show()'
 	], function () {
-		__details_display.call( this, true );
+		__details_control.call( this, false, true );
 		return this;
 	} );
 	
@@ -7828,7 +7811,7 @@
 		'row().child.hide()',
 		'row().child().hide()'
 	], function () {
-		__details_display.call( this, false );
+		__details_control.call( this, false, false );
 		return this;
 	} );
 	
@@ -7846,7 +7829,7 @@
 		'row().child.remove()',
 		'row().child().remove()'
 	], function () {
-		__details_remove.call( this );
+		__details_control.call( this, true, false );
 		return this;
 	} );
 	
