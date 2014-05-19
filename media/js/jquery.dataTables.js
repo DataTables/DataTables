@@ -7704,12 +7704,11 @@
 	var __details_control_base = function ( ctx, row, isRemove, show ) {
 		if ( row._details ) {
 			if(isRemove) {
+				row._details.remove();
+
 				// _detailsShow is used elsewhere to check if the _details is valid
 				// This object must be set/unset in concert with _details
 				row._detailsShow = undefined;
-
-				row._details.remove();
-
 				row._details = undefined;
 			} else {
 				row._detailsShow = show;
@@ -7734,8 +7733,7 @@
 		return this;
 	};
 	
-	var __details_events = function ( settings, isRemove )
-	{
+	var __details_events = function ( settings, isRegister ) {
 		var api = new _Api( settings );
 		var namespace = '.dt.DT_details';
 		var drawEvent = 'draw'+namespace;
@@ -7743,7 +7741,7 @@
 	
 		api.off( drawEvent +' '+ colvisEvent );
 	
-		if( isRemove ) {
+		if( isRegister ) {
 			if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
 				// On each draw, insert the required elements into the document
 				api.on( drawEvent, function () {
