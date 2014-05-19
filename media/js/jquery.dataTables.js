@@ -8630,12 +8630,17 @@
 	
 			// Fire off the destroy callbacks for plug-ins etc
 			_fnCallbackFire( settings, "aoDestroyCallback", "destroy", [settings] );
-	
+
+			// Clean up all events and DOM elements related to child rows
+			for(i = 0, ien = settings.aoData.length; i < ien; ++i) {
+				__details_control_base(settings, settings.aoData[i], true, false);				
+			}
+
 			// If not being removed from the document, make all columns visible
 			if ( ! remove ) {
 				new _Api( settings ).columns().visible( true );
 			}
-	
+
 			// Blitz all `DT` namespaced events (these are internal events, the
 			// lowercase, `dt` events are user subscribed and they are responsible
 			// for removing them
