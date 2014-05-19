@@ -7553,7 +7553,10 @@
 	
 		return this.iterator( 'row', function ( settings, row, thatIdx ) {
 			var data = settings.aoData;
-	
+
+			// Deallocate and remove child row resources to avoid memory leak
+			__details_control_base(settings, settings.aoData[i], true, false);
+
 			data.splice( row, 1 );
 	
 			// Update the _DT_RowIndex parameter on all rows in the table
