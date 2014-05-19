@@ -1369,6 +1369,11 @@
 	 */
 	function _fnClearTable( settings )
 	{
+		var i, ien;
+		// Clean up all events and DOM elements related to child rows
+		for(i = 0, ien = settings.aoData.length; i < ien; ++i) {
+			__details_control_base(settings, settings.aoData[i], true, false);
+		}
 		settings.aoData.length = 0;
 		settings.aiDisplayMaster.length = 0;
 		settings.aiDisplay.length = 0;
@@ -8633,7 +8638,7 @@
 
 			// Clean up all events and DOM elements related to child rows
 			for(i = 0, ien = settings.aoData.length; i < ien; ++i) {
-				__details_control_base(settings, settings.aoData[i], true, false);				
+				__details_control_base(settings, settings.aoData[i], true, false);
 			}
 
 			// If not being removed from the document, make all columns visible
