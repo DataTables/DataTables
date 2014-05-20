@@ -3210,13 +3210,12 @@
 			div[0].id = tableId+'_length';
 		}
 	
-		var a = settings.oLanguage.sLengthMenu.split(/(_MENU_)/);
-		div.children().append( a.length > 1 ?
-			$(a[0]).add(select).add(a[2]) :
-			a[0]
+		div.children().append(
+			settings.oLanguage.sLengthMenu.replace( '_MENU_', select[0].outerHTML )
 		);
 	
-		// Can't use `select` variable, as user might provide their own select menu
+		// Can't use `select` variable as user might provide their own and the
+		// reference is broken by the use of outerHTML
 		$('select', div)
 			.val( settings._iDisplayLength )
 			.bind( 'change.DT', function(e) {
