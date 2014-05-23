@@ -5007,7 +5007,6 @@
 		}
 	
 		if ( e !== null ) {
-			console.log( e+'.dt' );
 			$(settings.nTable).trigger( e+'.dt', args );
 		}
 	
@@ -13977,7 +13976,6 @@
 				// on destroy, while the `dt` namespaced event is the one we are
 				// listening for
 				$(settings.nTable).on( 'order.dt.DT', function ( e, settings, sorting, columns ) {
-					console.log( 'doing an order' );
 					var colIdx = column.idx;
 	
 					cell

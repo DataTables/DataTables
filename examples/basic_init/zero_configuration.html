@@ -20,11 +20,7 @@
 
 
 $(document).ready(function() {
-	$('#example').dataTable( {
-		columnDefs: [
-			{ targets: 0, width: '50px' }
-		]
-	} );
+	$('#example').dataTable();
 } );
 
 
@@ -539,11 +535,7 @@ $(document).ready(function() {
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this
 					example:</p><code class="multiline brush: js;">$(document).ready(function() {
-	$('#example').dataTable( {
-		columnDefs: [
-			{ targets: 0, width: '50px' }
-		]
-	} );
+	$('#example').dataTable();
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this
