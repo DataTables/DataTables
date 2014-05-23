@@ -2003,11 +2003,14 @@
 			settings.aiDisplay = settings.aiDisplayMaster.slice();
 		}
 	
+		settings._drawHold = holdPosition;
 		if ( holdPosition !== true ) {
 			settings._iDisplayStart = 0;
 		}
 	
 		_fnDraw( settings );
+	
+		settings._drawHold = false;
 	}
 	
 	
@@ -3847,8 +3850,9 @@
 		/* Adjust the position of the header in case we loose the y-scrollbar */
 		divBody.scroll();
 	
-		/* If sorting or filtering has occurred, jump the scrolling back to the top */
-		if ( settings.bSorted || settings.bFiltered ) {
+		// If sorting or filtering has occurred, jump the scrolling back to the top
+		// only if we aren't holding the position
+		if ( (settings.bSorted || settings.bFiltered) && ! settings._drawHold ) {
 			divBodyEl.scrollTop = 0;
 		}
 	}
@@ -3948,7 +3952,8 @@
 			// Otherwise construct a single row table with the widest node in the
 			// data, assign any user defined widths, then insert it into the DOM and
 			// allow the browser to do all the hard work of calculating table widths
-			var tmpTable = $( table.cloneNode( false ) )
+			var tmpTable = $(table).clone() // don't use cloneNode - IE8 will remove events on the main table
+				.empty()
 				.css( 'visibility', 'hidden' )
 				.removeAttr( 'id' )
 				.append( $(oSettings.nTHead).clone( false ) )
@@ -4991,7 +4996,7 @@
 	 *      trigger
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnCallbackFire( settings, callbackArr, event, args )
+	function _fnCallbackFire( settings, callbackArr, e, args )
 	{
 		var ret = [];
 	
@@ -5001,8 +5006,9 @@
 			} );
 		}
 	
-		if ( event !== null ) {
-			$(settings.nTable).trigger( event+'.dt', args );
+		if ( e !== null ) {
+			console.log( e+'.dt' );
+			$(settings.nTable).trigger( e+'.dt', args );
 		}
 	
 		return ret;
@@ -13971,6 +13977,7 @@
 				// on destroy, while the `dt` namespaced event is the one we are
 				// listening for
 				$(settings.nTable).on( 'order.dt.DT', function ( e, settings, sorting, columns ) {
+					console.log( 'doing an order' );
 					var colIdx = column.idx;
 	
 					cell
