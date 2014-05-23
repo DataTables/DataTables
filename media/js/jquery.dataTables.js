@@ -2003,10 +2003,13 @@
 			settings.aiDisplay = settings.aiDisplayMaster.slice();
 		}
 	
-		settings._drawHold = holdPosition;
 		if ( holdPosition !== true ) {
 			settings._iDisplayStart = 0;
 		}
+	
+		// Let any modules know about the draw hold position state (used by
+		// scrolling internally)
+		settings._drawHold = holdPosition;
 	
 		_fnDraw( settings );
 	
