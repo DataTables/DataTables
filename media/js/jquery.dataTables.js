@@ -2664,7 +2664,7 @@
 			}
 		};
 		var jqFilter = $('input', filter)
-			.val( previousSearch.sSearch.replace('"','&quot;') )
+			.val( previousSearch.sSearch )
 			.bind(
 				'keyup.DT search.DT input.DT paste.DT cut.DT',
 				_fnDataSource( settings ) === 'ssp' ?
