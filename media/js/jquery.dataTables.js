@@ -2620,7 +2620,7 @@
 		}
 	
 		return dataSrc !== "" ?
-			_fnGetObjectDataFn( dataSrc )( json ) :
+			_fnGetObjectDataFn( dataSrc )( json, oSettings.jqXHR ) :
 			json;
 	}
 	
