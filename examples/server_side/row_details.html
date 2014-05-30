@@ -57,7 +57,7 @@ $(document).ready(function() {
 	var detailRows = [];
 
 	$('#example tbody').on( 'click', 'tr td:first-child', function () {
-		var tr = $(this).closest('tr');
+		var tr = $(this).parents('tr');
 		var row = dt.row( tr );
 		var idx = $.inArray( tr.attr('id'), detailRows );
 
@@ -188,7 +188,7 @@ $(document).ready(function() {
 	var detailRows = [];
 
 	$('#example tbody').on( 'click', 'tr td:first-child', function () {
-		var tr = $(this).closest('tr');
+		var tr = $(this).parents('tr');
 		var row = dt.row( tr );
 		var idx = $.inArray( tr.attr('id'), detailRows );
 
