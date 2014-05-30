@@ -41,6 +41,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 	return function ( request, drawCallback, settings ) {
 		var ajax          = false;
 		var requestStart  = request.start;
+		var drawStart     = request.start;
 		var requestLength = request.length;
 		var requestEnd    = requestStart + requestLength;
 		
@@ -104,8 +105,8 @@ $.fn.dataTable.pipeline = function ( opts ) {
 				"success":  function ( json ) {
 					cacheLastJson = $.extend(true, {}, json);
 
-					if ( cacheLower != requestStart ) {
-						json.data.splice( 0, requestStart-cacheLower );
+					if ( cacheLower != drawStart ) {
+						json.data.splice( 0, drawStart-cacheLower );
 					}
 					json.data.splice( requestLength, json.data.length );
 					
@@ -232,6 +233,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 	return function ( request, drawCallback, settings ) {
 		var ajax          = false;
 		var requestStart  = request.start;
+		var drawStart     = request.start;
 		var requestLength = request.length;
 		var requestEnd    = requestStart + requestLength;
 		
@@ -295,8 +297,8 @@ $.fn.dataTable.pipeline = function ( opts ) {
 				&quot;success&quot;:  function ( json ) {
 					cacheLastJson = $.extend(true, {}, json);
 
-					if ( cacheLower != requestStart ) {
-						json.data.splice( 0, requestStart-cacheLower );
+					if ( cacheLower != drawStart ) {
+						json.data.splice( 0, drawStart-cacheLower );
 					}
 					json.data.splice( requestLength, json.data.length );
 					
