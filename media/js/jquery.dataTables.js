@@ -110,10 +110,12 @@
 	// Escape regular expression special characters
 	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\') + ')', 'g' );
 	
+	// Characters that prevent the filterRow from being used and require each column data to be matched individually
+	var _re_no_filter_row = new RegExp('(\\' + ['^'].join('|\\') +')', 'g');
+	
 	// U+2009 is thin space and U+202F is narrow no-break space, both used in many
 	// standards as thousands separators
 	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F]/g;
-	
 	
 	var _empty = function ( d ) {
 		return !d || d === '-' ? true : false;
@@ -2792,7 +2794,8 @@
 	
 		var data;
 		var display = settings.aiDisplay;
-		var rpSearch = _fnFilterCreateSearch( searchStr, regex, smart, caseInsensitive );
+		var createSearchResult = _fnFilterCreateSearch( searchStr, regex, smart, caseInsensitive );
+		var rpSearch = createSearchResult.RegExp;
 	
 		for ( var i=display.length-1 ; i>=0 ; i-- ) {
 			data = settings.aoData[ display[i] ]._aFilterData[ colIdx ];
@@ -2816,10 +2819,11 @@
 	 */
 	function _fnFilter( settings, input, force, regex, smart, caseInsensitive )
 	{
-		var rpSearch = _fnFilterCreateSearch( input, regex, smart, caseInsensitive );
+		var createSearchResult = _fnFilterCreateSearch( input, regex, smart, caseInsensitive ); 
+		var rpSearch = createSearchResult.RegExp;
 		var prevSearch = settings.oPreviousSearch.sSearch;
 		var displayMaster = settings.aiDisplayMaster;
-		var display, invalidated, i;
+		var display, invalidated, i, j, data, foundMatch;
 	
 		// Need to take account of custom filtering functions - always filter
 		if ( DataTable.ext.search.length !== 0 ) {
@@ -2839,8 +2843,8 @@
 				 force ||
 				 prevSearch.length > input.length ||
 				 input.indexOf(prevSearch) !== 0 ||
-				 settings.bSorted // On resort, the display master needs to be
-				                  // re-filtered since indexes will have changed
+				 settings.bSorted	// On resort, the display master needs to be
+				 					// re-filtered since indexes will have changed
 			) {
 				settings.aiDisplay = displayMaster.slice();
 			}
@@ -2848,9 +2852,25 @@
 			// Search the display array
 			display = settings.aiDisplay;
 	
-			for ( i=display.length-1 ; i>=0 ; i-- ) {
-				if ( ! rpSearch.test( settings.aoData[ display[i] ]._sFilterRow ) ) {
-					display.splice( i, 1 );
+			if(createSearchResult.canUseFilterRow) {
+				for ( i=display.length-1 ; i>=0 ; i-- ) {
+					if ( ! rpSearch.test( settings.aoData[ display[i] ]._sFilterRow ) ) {
+						display.splice( i, 1 );
+					}
+				}
+			} else {
+				for ( i=display.length-1 ; i>=0 ; i-- ) {
+					foundMatch = false;
+					data = settings.aoData[ display[i] ]._aFilterData;
+					for( j = data.length-1; j >= 0; --j ) {
+						if ( rpSearch.test( data[j] ) ) {
+							foundMatch = true;
+							break;
+						}
+					}
+					if(!foundMatch) {
+						display.splice( i, 1 );
+					}
 				}
 			}
 		}
@@ -2868,9 +2888,10 @@
 	 */
 	function _fnFilterCreateSearch( search, regex, smart, caseInsensitive )
 	{
+		var canUseFilterRow = regex ? !_re_no_filter_row.test(search) : true;
 		search = regex ?
-			search :
-			_fnEscapeRegex( search );
+					search :
+					_fnEscapeRegex( search );
 		
 		if ( smart ) {
 			/* For smart filtering we want to allow the search to work regardless of
@@ -2878,18 +2899,26 @@
 			 * order is important - a la google. So this is what we want to
 			 * generate:
 			 * 
-			 * ^(?=.*?\bone\b)(?=.*?\btwo three\b)(?=.*?\bfour\b).*$
+			 * ^(?=.*?one)(?=.*?two)(?=.*?three)(?=.*?four).*$
 			 */
 			var a = $.map( search.match( /"[^"]+"|[^ ]+/g ) || '', function ( word ) {
 				return word.charAt(0) === '"' ?
 					word.match( /^"(.*)"$/ )[1] :
 					word;
 			} );
-	
+
+			if(regex) {
+				for(var i = 0, n = a.length; i < n; ++i) {
+					if(_re_no_filter_row.test(a[i])) {
+						canUseFilterRow = false;
+						break;
+					}
+				}
+			}
 			search = '^(?=.*?'+a.join( ')(?=.*?' )+').*$';
 		}
 	
-		return new RegExp( search, caseInsensitive ? 'i' : '' );
+		return {RegExp: new RegExp( search, caseInsensitive ? 'i' : '' ), canUseFilterRow: canUseFilterRow};
 	}
 	
 	
