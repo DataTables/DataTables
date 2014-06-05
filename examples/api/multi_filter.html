@@ -11,6 +11,12 @@
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
 	<style type="text/css" class="init">
 
+	tfoot input {
+		width: 100%;
+		padding: 3px;
+		box-sizing: border-box;
+	}
+
 	</style>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
@@ -28,13 +34,15 @@ $(document).ready(function() {
 
 	// DataTable
 	var table = $('#example').DataTable();
-	
+
 	// Apply the filter
-	$("#example tfoot input").on( 'keyup change', function () {
-		table
-			.column( $(this).parent().index()+':visible' )
-			.search( this.value )
-			.draw();
+	table.columns().eq( 0 ).each( function ( colIdx ) {
+		$( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+			table
+				.column( colIdx )
+				.search( this.value )
+				.draw();
+		} );
 	} );
 } );
 
@@ -575,13 +583,15 @@ $(document).ready(function() {
 
 	// DataTable
 	var table = $('#example').DataTable();
-	
+
 	// Apply the filter
-	$(&quot;#example tfoot input&quot;).on( 'keyup change', function () {
-		table
-			.column( $(this).parent().index()+':visible' )
-			.search( this.value )
-			.draw();
+	table.columns().eq( 0 ).each( function ( colIdx ) {
+		$( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+			table
+				.column( colIdx )
+				.search( this.value )
+				.draw();
+		} );
 	} );
 } );</code>
 
@@ -603,7 +613,11 @@ $(document).ready(function() {
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
 						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p><code class="multiline brush: js;"></code>
+						below:</p><code class="multiline brush: js;">tfoot input {
+		width: 100%;
+		padding: 3px;
+		box-sizing: border-box;
+	}</code>
 					</div>
 
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the
