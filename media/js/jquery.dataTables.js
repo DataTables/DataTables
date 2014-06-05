@@ -7948,12 +7948,6 @@
 		else {
 			// Remove column
 			$( _pluck( settings.aoData, 'anCells', column ) ).detach();
-	
-			col.bVisible = false;
-			_fnDrawHead( settings, settings.aoHeader );
-			_fnDrawHead( settings, settings.aoFooter );
-	
-			_fnSaveState( settings );
 		}
 	
 		// Common actions
