@@ -13774,17 +13774,23 @@
 					}
 				};
 	
-				// Because this approach is destroying and recreating the paging
-				// elements, focus is lost on the select button which is bad for
-				// accessibility. So we want to restore focus once the draw has
-				// completed
-				var activeEl = $(document.activeElement).data('dt-idx');
+				// IE9 throws an 'unknown error' if document.activeElement is used
+				// inside an iframe or frame. Try / catch the error. Not good for
+				// accessibility, but neither are frames.
+				try {
+					// Because this approach is destroying and recreating the paging
+					// elements, focus is lost on the select button which is bad for
+					// accessibility. So we want to restore focus once the draw has
+					// completed
+					var activeEl = $(document.activeElement).data('dt-idx');
 	
-				attach( $(host).empty(), buttons );
+					attach( $(host).empty(), buttons );
 	
-				if ( activeEl !== null ) {
-					$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+					if ( activeEl !== null ) {
+						$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+					}
 				}
+				catch (e) {}
 			}
 		}
 	} );
