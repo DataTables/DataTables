@@ -3732,7 +3732,7 @@
 		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
 			headerContent.push( nSizer.innerHTML );
-			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+			headerWidths.push( _fnStringToCss( nSizer.style.width ) );
 		}, headerSrcEls );
 	
 		// Apply all widths in final pass
@@ -3748,7 +3748,7 @@
 			_fnApplyToChildren( zeroOut, footerSrcEls );
 	
 			_fnApplyToChildren( function(nSizer) {
-				footerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+				footerWidths.push( _fnStringToCss( nSizer.style.width ) );
 			}, footerSrcEls );
 	
 			_fnApplyToChildren( function(nToSize, i) {
