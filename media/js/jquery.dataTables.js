@@ -3666,7 +3666,7 @@
 	
 		$.each( _fnGetUniqueThs( settings, headerCopy ), function ( i, el ) {
 			idx = _fnVisibleToColumnIndex( settings, i );
-			el.style.width = settings.aoColumns[idx].sWidth || _fnStringToCss( settings.aoColumns[idx].sWidthOrig );
+			el.style.width = settings.aoColumns[idx].sWidth || _fnStringToCss( settings.aoColumns[idx].sWidthOrig || '' );
 		} );
 	
 		if ( footer ) {
