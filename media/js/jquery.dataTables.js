@@ -2635,11 +2635,12 @@
 	{
 		var classes = settings.oClasses;
 		var tableId = settings.sTableId;
+		var language = settings.oLanguage;
 		var previousSearch = settings.oPreviousSearch;
 		var features = settings.aanFeatures;
 		var input = '<input type="search" class="'+classes.sFilterInput+'"/>';
 	
-		var str = settings.oLanguage.sSearch;
+		var str = language.sSearch;
 		str = str.match(/_INPUT_/) ?
 			str.replace('_INPUT_', input) :
 			str+input;
@@ -2671,6 +2672,7 @@
 		};
 		var jqFilter = $('input', filter)
 			.val( previousSearch.sSearch )
+			.attr( 'placeholder', language.sSearchPlaceholder )
 			.bind(
 				'keyup.DT search.DT input.DT paste.DT cut.DT',
 				_fnDataSource( settings ) === 'ssp' ?
@@ -10972,6 +10974,17 @@
 			 *    } );
 			 */
 			"sSearch": "Search:",
+	
+	
+			/**
+			 * Assign a `placeholder` attribute to the search `input` element
+			 *  @type string
+			 *  @default 
+			 *
+			 *  @dtopt Language
+			 *  @name DataTable.defaults.language.searchPlaceholder
+			 */
+			"sSearchPlaceholder": "",
 	
 	
 			/**
