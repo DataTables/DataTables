@@ -1369,6 +1369,11 @@
 	 */
 	function _fnClearTable( settings )
 	{
+		var i, ien;
+		// Clean up all events and DOM elements related to child rows
+		for(i = 0, ien = settings.aoData.length; i < ien; ++i) {
+			__details_control_base(settings, settings.aoData[i], true, false);
+		}
 		settings.aoData.length = 0;
 		settings.aiDisplayMaster.length = 0;
 		settings.aiDisplay.length = 0;
@@ -7565,7 +7570,10 @@
 	
 		return this.iterator( 'row', function ( settings, row, thatIdx ) {
 			var data = settings.aoData;
-	
+
+			// Deallocate and remove child row resources to avoid memory leak
+			__details_control_base(settings, settings.aoData[row], true, false);
+
 			data.splice( row, 1 );
 	
 			// Update the _DT_RowIndex parameter on all rows in the table
@@ -7707,27 +7715,27 @@
 		else {
 			addRow( data, klass );
 		}
-	
-		if ( row._details ) {
-			row._details.remove();
-		}
-	
+
+		__details_control_base( ctx, row, true, false );
+
 		row._details = $(rows);
-	
+
 		// If the children were already shown, that state should be retained
 		if ( row._detailsShow ) {
 			row._details.insertAfter( row.nTr );
 		}
 	};
-	
-	
-	var __details_display = function ( show ) {
-		var ctx = this.context;
-	
-		if ( ctx.length && this.length ) {
-			var row = ctx[0].aoData[ this[0] ];
-	
-			if ( row._details ) {
+
+	var __details_control_base = function ( ctx, row, isRemove, show ) {
+		if ( row._details ) {
+			if(isRemove) {
+				row._details.remove();
+
+				// _detailsShow is used elsewhere to check if the _details is valid
+				// This object must be set/unset in concert with _details
+				row._detailsShow = undefined;
+				row._details = undefined;
+			} else {
 				row._detailsShow = show;
 				if ( show ) {
 					row._details.insertAfter( row.nTr );
@@ -7735,17 +7743,22 @@
 				else {
 					row._details.remove();
 				}
-	
-				__details_events( ctx[0] );
 			}
+			__details_events( ctx[0], !isRemove );
 		}
+	}
 	
+	var __details_control = function ( isRemove, show ) {
+		var ctx = this.context;
+
+		if ( ctx.length && this.length ) {
+			__details_control_base( ctx, ctx[0].aoData[ this[0] ], isRemove, show );
+		}
+
 		return this;
 	};
 	
-	
-	var __details_events = function ( settings )
-	{
+	var __details_events = function ( settings, isRegister ) {
 		var api = new _Api( settings );
 		var namespace = '.dt.DT_details';
 		var drawEvent = 'draw'+namespace;
@@ -7753,33 +7766,38 @@
 	
 		api.off( drawEvent +' '+ colvisEvent );
 	
-		if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
-			// On each draw, insert the required elements into the document
-			api.on( drawEvent, function () {
-				api.rows( {page:'current'} ).eq(0).each( function (idx) {
-					// Internal data grab
-					var row = settings.aoData[ idx ];
-	
-					if ( row._detailsShow ) {
-						row._details.insertAfter( row.nTr );
+		if( isRegister ) {
+			if ( _pluck( settings.aoData, '_details' ).length > 0 ) {
+				// On each draw, insert the required elements into the document
+				api.on( drawEvent, function () {
+					api.rows( {page:'current'} ).eq(0).each( function (idx) {
+						// Internal data grab
+						var row = settings.aoData[ idx ];
+
+						if ( row._detailsShow ) {
+							row._details.insertAfter( row.nTr );
+						}
+					} );
+				} );
+		
+				// Column visibility change - update the colspan
+				api.on( colvisEvent, function ( e, settings, idx, vis ) {
+					// Update the colspan for the details rows (note, only if it already has
+					// a colspan)
+					var row, visible = _fnVisbleColumns( settings );
+
+					for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
+						row = settings.aoData[i];
+
+						if ( row._details ) {
+							row._details.children('td[colspan]').attr('colspan', visible );
+						}
 					}
 				} );
-			} );
-	
-			// Column visibility change - update the colspan
-			api.on( colvisEvent, function ( e, settings, idx, vis ) {
-				// Update the colspan for the details rows (note, only if it already has
-				// a colspan)
-				var row, visible = _fnVisbleColumns( settings );
-	
-				for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
-					row = settings.aoData[i];
-	
-					if ( row._details ) {
-						row._details.children('td[colspan]').attr('colspan', visible );
-					}
-				}
-			} );
+			}
+		} else {
+			api.off( drawEvent );
+			api.off( colvisEvent );
 		}
 	};
 	
@@ -7808,7 +7826,7 @@
 		'row().child.show()',
 		'row().child().show()'
 	], function () {
-		__details_display.call( this, true );
+		__details_control.call( this, false, true );
 		return this;
 	} );
 	
@@ -7816,7 +7834,7 @@
 		'row().child.hide()',
 		'row().child().hide()'
 	], function () {
-		__details_display.call( this, false );
+		__details_control.call( this, false, false );
 		return this;
 	} );
 	
@@ -7830,6 +7848,13 @@
 		return false;
 	} );
 	
+	_api_register( [
+		'row().child.remove()',
+		'row().child().remove()'
+	], function () {
+		__details_control.call( this, true, false );
+		return this;
+	} );
 	
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -8624,12 +8649,17 @@
 	
 			// Fire off the destroy callbacks for plug-ins etc
 			_fnCallbackFire( settings, "aoDestroyCallback", "destroy", [settings] );
-	
+
+			// Clean up all events and DOM elements related to child rows
+			for(i = 0, ien = settings.aoData.length; i < ien; ++i) {
+				__details_control_base(settings, settings.aoData[i], true, false);
+			}
+
 			// If not being removed from the document, make all columns visible
 			if ( ! remove ) {
 				new _Api( settings ).columns().visible( true );
 			}
-	
+
 			// Blitz all `DT` namespaced events (these are internal events, the
 			// lowercase, `dt` events are user subscribed and they are responsible
 			// for removing them
@@ -14420,4 +14450,3 @@
 }));
 
 }(window, document));
-
