@@ -591,7 +591,7 @@
 			oCol.sWidthOrig = th.attr('width') || null;
 	
 			// Style attribute
-			var t = (th.attr('style') || '').match(/width:\s*(\d+[pxem%])/);
+			var t = (th.attr('style') || '').match(/width:\s*(\d+(px|em|%)?)/);
 			if ( t ) {
 				oCol.sWidthOrig = t[1];
 			}
@@ -3668,7 +3668,7 @@
 	
 		$.each( _fnGetUniqueThs( settings, headerCopy ), function ( i, el ) {
 			idx = _fnVisibleToColumnIndex( settings, i );
-			el.style.width = settings.aoColumns[idx].sWidth;
+			el.style.width = settings.aoColumns[idx].sWidth || _fnStringToCss( settings.aoColumns[idx].sWidthOrig || '' );
 		} );
 	
 		if ( footer ) {
@@ -3734,7 +3734,12 @@
 		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
 			headerContent.push( nSizer.innerHTML );
-			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+			if ( !nSizer.style.width && $(nSizer).css('width') != "0px" ) {
+				headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+			}
+			else {
+				headerWidths.push( _fnStringToCss( nSizer.style.width ) );
+			}
 		}, headerSrcEls );
 	
 		// Apply all widths in final pass
@@ -3750,7 +3755,12 @@
 			_fnApplyToChildren( zeroOut, footerSrcEls );
 	
 			_fnApplyToChildren( function(nSizer) {
-				footerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+				if ( !nSizer.style.width && $(nSizer).css('width') != "0px" ) {
+					footerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
+				}
+				else {
+					footerWidths.push( _fnStringToCss( nSizer.style.width ) );
+				}
 			}, footerSrcEls );
 	
 			_fnApplyToChildren( function(nToSize, i) {
