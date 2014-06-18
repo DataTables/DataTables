@@ -7043,6 +7043,13 @@
 	} );
 	
 	
+	_api_registerPlural( 'tables().containers()', 'table().container()' , function () {
+		return this.iterator( 'table', function ( ctx ) {
+			return ctx.nTableWrapper;
+		} );
+	} );
+	
+	
 	
 	/**
 	 * Redraw the tables in the current context.
