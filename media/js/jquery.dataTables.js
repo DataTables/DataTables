@@ -14139,13 +14139,15 @@
 		number: function ( thousands, decimal, precision, prefix ) {
 			return {
 				display: function ( d ) {
-					d = parseFloat( d );
+					var negative = d < 0 ? '-' : '';
+					d = Math.abs( parseFloat( d ) );
+	
 					var intPart = parseInt( d, 10 );
 					var floatPart = precision ?
 						decimal+(d - intPart).toFixed( precision ).substring( 2 ):
 						'';
 	
-					return (prefix||'') +
+					return negative + (prefix||'') +
 						intPart.toString().replace(
 							/\B(?=(\d{3})+(?!\d))/g, thousands
 						) +
