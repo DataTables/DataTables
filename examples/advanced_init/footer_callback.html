@@ -24,7 +24,8 @@
 $(document).ready(function() {
 	$('#example').dataTable( {
 		"footerCallback": function ( row, data, start, end, display ) {
-			var api = this.api();
+			var api = this.api(), data;
+
 			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
 				return typeof i === 'string' ?
@@ -34,20 +35,20 @@ $(document).ready(function() {
 			};
 
 			// Total over all pages
-			var total = api
-				.column( 4 )
-				.data()
-				.reduce( function (a, b) {
-					return intVal(a) + intVal(b);
-				} );
+			data = api.column( 4 ).data();
+			total = data.length ?
+				data.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+				} ) :
+				0;
 
 			// Total over this page
-			var pageTotal = api
-				.column( 4, { page: 'current'} )
-				.data()
-				.reduce( function (a, b) {
-					return intVal(a) + intVal(b);
-				} );
+			data = api.column( 4, { page: 'current'} ).data();
+			pageTotal = data.length ?
+				data.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+				} ) :
+				0;
 
 			// Update footer
 			$( api.column( 4 ).footer() ).html(
@@ -518,7 +519,8 @@ $(document).ready(function() {
 					example:</p><code class="multiline brush: js;">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;footerCallback&quot;: function ( row, data, start, end, display ) {
-			var api = this.api();
+			var api = this.api(), data;
+
 			// Remove the formatting to get integer data for summation
 			var intVal = function ( i ) {
 				return typeof i === 'string' ?
@@ -528,20 +530,20 @@ $(document).ready(function() {
 			};
 
 			// Total over all pages
-			var total = api
-				.column( 4 )
-				.data()
-				.reduce( function (a, b) {
-					return intVal(a) + intVal(b);
-				} );
+			data = api.column( 4 ).data();
+			total = data.length ?
+				data.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+				} ) :
+				0;
 
 			// Total over this page
-			var pageTotal = api
-				.column( 4, { page: 'current'} )
-				.data()
-				.reduce( function (a, b) {
-					return intVal(a) + intVal(b);
-				} );
+			data = api.column( 4, { page: 'current'} ).data();
+			pageTotal = data.length ?
+				data.reduce( function (a, b) {
+						return intVal(a) + intVal(b);
+				} ) :
+				0;
 
 			// Update footer
 			$( api.column( 4 ).footer() ).html(
