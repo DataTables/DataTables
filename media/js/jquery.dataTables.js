@@ -2415,22 +2415,23 @@
 	
 	/**
 	 * Update the table using an Ajax call
-	 *  @param {object} oSettings dataTables settings object
+	 *  @param {object} settings dataTables settings object
 	 *  @returns {boolean} Block the table drawing or not
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnAjaxUpdate( oSettings )
+	function _fnAjaxUpdate( settings )
 	{
-		if ( oSettings.bAjaxDataGet )
-		{
-			oSettings.iDraw++;
-			_fnProcessingDisplay( oSettings, true );
-			var iColumns = oSettings.aoColumns.length;
-			var aoData = _fnAjaxParameters( oSettings );
+		if ( settings.bAjaxDataGet ) {
+			settings.iDraw++;
+			_fnProcessingDisplay( settings, true );
 	
-			_fnBuildAjax( oSettings, aoData, function(json) {
-				_fnAjaxUpdateDraw( oSettings, json );
-			}, oSettings );
+			_fnBuildAjax(
+				settings,
+				_fnAjaxParameters( settings ),
+				function(json) {
+					_fnAjaxUpdateDraw( settings, json );
+				}
+			);
 	
 			return false;
 		}
