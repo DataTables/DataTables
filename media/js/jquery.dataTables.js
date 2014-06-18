@@ -6500,7 +6500,7 @@
 	 *   // Initialisation as a constructor
 	 *   var api = new $.fn.DataTable.Api( 'table.dataTable' );
 	 */
-	DataTable.Api = _Api = function ( context, data )
+	_Api = function ( context, data )
 	{
 		if ( ! this instanceof _Api ) {
 			throw 'DT API must be constructed as a new object';
@@ -6543,6 +6543,7 @@
 		_Api.extend( this, this, __apiStruct );
 	};
 	
+	DataTable.Api = _Api;
 	
 	_Api.prototype = /** @lends DataTables.Api */{
 		/**
@@ -6810,7 +6811,7 @@
 			i, ien,
 			j, jen,
 			struct, inner,
-			methodScoping = function ( fn, struc ) {
+			methodScoping = function ( scope, fn, struc ) {
 				return function () {
 					var ret = fn.apply( scope, arguments );
 	
@@ -6825,7 +6826,7 @@
 	
 			// Value
 			obj[ struct.name ] = typeof struct.val === 'function' ?
-				methodScoping( struct.val, struct ) :
+				methodScoping( scope, struct.val, struct ) :
 				$.isPlainObject( struct.val ) ?
 					{} :
 					struct.val;
@@ -6920,11 +6921,6 @@
 					src.methodExt :
 					src.propExt;
 			}
-		}
-	
-		// Rebuild the API with the new construct
-		if ( _Api.ready ) {
-			DataTable.api.build();
 		}
 	};
 	
