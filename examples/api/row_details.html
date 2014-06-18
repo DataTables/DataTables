@@ -71,7 +71,7 @@ $(document).ready(function() {
 
 		if ( row.child.isShown() ) {
 			// This row is already open - close it
-			row.child( false );
+			row.child.hide();
 			tr.removeClass('shown');
 		}
 		else {
@@ -185,7 +185,7 @@ $(document).ready(function() {
 
 		if ( row.child.isShown() ) {
 			// This row is already open - close it
-			row.child( false );
+			row.child.hide();
 			tr.removeClass('shown');
 		}
 		else {
