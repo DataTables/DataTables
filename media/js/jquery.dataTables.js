@@ -8628,7 +8628,7 @@
 			var args = Array.prototype.slice.call(arguments);
 	
 			// Add the `dt` namespace automatically if it isn't already present
-			if ( args[0].indexOf( '.dt' ) === -1 ) {
+			if ( ! args[0].match(/\.dt\b/) ) {
 				args[0] += '.dt';
 			}
 	
