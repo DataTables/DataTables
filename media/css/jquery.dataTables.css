@@ -207,6 +207,21 @@ table.dataTable.order-column.hover tbody tr.even:hover.selected > .sorting_3 {
 table.dataTable.no-footer {
   border-bottom: 1px solid #111111;
 }
+table.dataTable.no-wrap th, table.dataTable.no-wrap td {
+  white-space: nowrap;
+}
+table.dataTable.compact thead th,
+table.dataTable.compact thead td {
+  padding: 5px 9px;
+}
+table.dataTable.compact tfoot th,
+table.dataTable.compact tfoot td {
+  padding: 5px 9px 3px 9px;
+}
+table.dataTable.compact tbody th,
+table.dataTable.compact tbody td {
+  padding: 4px 5px;
+}
 
 table.dataTable,
 table.dataTable th,
