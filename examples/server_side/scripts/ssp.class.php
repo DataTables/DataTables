@@ -93,7 +93,7 @@ class SSP {
 
 		if ( isset($request['order']) && count($request['order']) ) {
 			$orderBy = array();
-			$dtColumns = SSP::pluck( $columns, 'dt' );
+			$dtColumns = self::pluck( $columns, 'dt' );
 
 			for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
 				// Convert the column index into the column data property
@@ -138,7 +138,7 @@ class SSP {
 	{
 		$globalSearch = array();
 		$columnSearch = array();
-		$dtColumns = SSP::pluck( $columns, 'dt' );
+		$dtColumns = self::pluck( $columns, 'dt' );
 
 		if ( isset($request['search']) && $request['search']['value'] != '' ) {
 			$str = $request['search']['value'];
@@ -149,7 +149,7 @@ class SSP {
 				$column = $columns[ $columnIdx ];
 
 				if ( $requestColumn['searchable'] == 'true' ) {
-					$binding = SSP::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
+					$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
 					$globalSearch[] = "`".$column['db']."` LIKE ".$binding;
 				}
 			}
@@ -165,7 +165,7 @@ class SSP {
 
 			if ( $requestColumn['searchable'] == 'true' &&
 			 $str != '' ) {
-				$binding = SSP::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
+				$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
 				$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
 			}
 		}
@@ -208,16 +208,16 @@ class SSP {
 	static function simple ( $request, $sql_details, $table, $primaryKey, $columns )
 	{
 		$bindings = array();
-		$db = SSP::sql_connect( $sql_details );
+		$db = self::sql_connect( $sql_details );
 
 		// Build the SQL query string from the request
-		$limit = SSP::limit( $request, $columns );
-		$order = SSP::order( $request, $columns );
-		$where = SSP::filter( $request, $columns, $bindings );
+		$limit = self::limit( $request, $columns );
+		$order = self::order( $request, $columns );
+		$where = self::filter( $request, $columns, $bindings );
 
 		// Main query to actually get the data
-		$data = SSP::sql_exec( $db, $bindings,
-			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", SSP::pluck($columns, 'db'))."`
+		$data = self::sql_exec( $db, $bindings,
+			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
 			 FROM `$table`
 			 $where
 			 $order
@@ -225,13 +225,13 @@ class SSP {
 		);
 
 		// Data set length after filtering
-		$resFilterLength = SSP::sql_exec( $db,
+		$resFilterLength = self::sql_exec( $db,
 			"SELECT FOUND_ROWS()"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 
 		// Total data set length
-		$resTotalLength = SSP::sql_exec( $db,
+		$resTotalLength = self::sql_exec( $db,
 			"SELECT COUNT(`{$primaryKey}`)
 			 FROM   `$table`"
 		);
@@ -245,7 +245,7 @@ class SSP {
 			"draw"            => intval( $request['draw'] ),
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
-			"data"            => SSP::data_output( $columns, $data )
+			"data"            => self::data_output( $columns, $data )
 		);
 	}
 
@@ -272,7 +272,7 @@ class SSP {
 			);
 		}
 		catch (PDOException $e) {
-			SSP::fatal(
+			self::fatal(
 				"An error occurred while connecting to the database. ".
 				"The error reported by the server was: ".$e->getMessage()
 			);
@@ -315,7 +315,7 @@ class SSP {
 			$stmt->execute();
 		}
 		catch (PDOException $e) {
-			SSP::fatal( "An SQL error occurred: ".$e->getMessage() );
+			self::fatal( "An SQL error occurred: ".$e->getMessage() );
 		}
 
 		// Return all
