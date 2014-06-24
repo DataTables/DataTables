@@ -2690,15 +2690,17 @@
 			.attr('aria-controls', tableId);
 	
 		// Update the input elements whenever the table is filtered
-		$(settings.nTable).on( 'search.dt.DT', function () {
-			// IE9 throws an 'unknown error' if document.activeElement is used
-			// inside an iframe or frame...
-			try {
-				if ( jqFilter[0] !== document.activeElement ) {
-					jqFilter.val( previousSearch.sSearch );
+		$(settings.nTable).on( 'search.dt.DT', function ( ev, s ) {
+			if ( settings === s ) {
+				// IE9 throws an 'unknown error' if document.activeElement is used
+				// inside an iframe or frame...
+				try {
+					if ( jqFilter[0] !== document.activeElement ) {
+						jqFilter.val( previousSearch.sSearch );
+					}
 				}
+				catch ( e ) {}
 			}
-			catch ( e ) {}
 		} );
 	
 		return filter[0];
@@ -3243,7 +3245,9 @@
 	
 		// Update node value whenever anything changes the table's length
 		$(settings.nTable).bind( 'length.dt.DT', function (e, s, len) {
-			$('select', div).val( len );
+			if ( settings === s ) {
+				$('select', div).val( len );
+			}
 		} );
 	
 		return div[0];
@@ -7778,7 +7782,11 @@
 	
 		if ( _pluck( data, '_details' ).length > 0 ) {
 			// On each draw, insert the required elements into the document
-			api.on( drawEvent, function () {
+			api.on( drawEvent, function ( e, ctx ) {
+				if ( settings !== ctx ) {
+					return;
+				}
+	
 				api.rows( {page:'current'} ).eq(0).each( function (idx) {
 					// Internal data grab
 					var row = data[ idx ];
@@ -7790,10 +7798,14 @@
 			} );
 	
 			// Column visibility change - update the colspan
-			api.on( colvisEvent, function ( e, settings, idx, vis ) {
+			api.on( colvisEvent, function ( e, ctx, idx, vis ) {
+				if ( settings !== ctx ) {
+					return;
+				}
+	
 				// Update the colspan for the details rows (note, only if it already has
 				// a colspan)
-				var row, visible = _fnVisbleColumns( settings );
+				var row, visible = _fnVisbleColumns( ctx );
 	
 				for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 					row = data[i];
@@ -7805,7 +7817,11 @@
 			} );
 	
 			// Table destroyed - nuke any child rows
-			api.on( destroyEvent, function () {
+			api.on( destroyEvent, function ( e, ctx ) {
+				if ( settings !== ctx ) {
+					return;
+				}
+	
 				for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 					if ( data[i]._details ) {
 						__details_remove( data[i] );
@@ -14056,7 +14072,11 @@
 				// `DT` namespace will allow the event to be removed automatically
 				// on destroy, while the `dt` namespaced event is the one we are
 				// listening for
-				$(settings.nTable).on( 'order.dt.DT', function ( e, settings, sorting, columns ) {
+				$(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
+					if ( settings !== ctx ) { // need to check this this is the host
+						return;               // table, not a nested one
+					}
+	
 					var colIdx = column.idx;
 	
 					cell
@@ -14085,7 +14105,11 @@
 					.appendTo( cell );
 	
 				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'order.dt.DT', function ( e, settings, sorting, columns ) {
+				$(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
+					if ( settings !== ctx ) {
+						return;
+					}
+	
 					cell
 						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
 						.addClass( columns[ colIdx ] == 'asc' ?
