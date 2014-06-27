@@ -1431,9 +1431,19 @@
 		else {
 			// Reading from data object, update the DOM
 			var cells = row.anCells;
+			var cell;
 	
 			if ( cells ) {
 				for ( i=0, ien=cells.length ; i<ien ; i++ ) {
+					cell = cells[i];
+	
+					// This is very frustrating, but in IE if you just write directly
+					// to innerHTML, and elements that are overwritten are GC'ed,
+					// even if there is a reference to them elsewhere
+					while ( cell.childNodes ) {
+						cell.removeChild( cell.firstChild );
+					}
+	
 					cells[i].innerHTML = _fnGetCellData( settings, rowIdx, i, 'display' );
 				}
 			}
