@@ -22,14 +22,14 @@
 /* Custom filtering function which will search data in column four between two values */
 $.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
-		var min = $('#min').val() * 1;
-		var max = $('#max').val() * 1;
+		var min = parseInt( $('#min').val(), 10 );
+		var max = parseInt( $('#max').val(), 10 );
 		var age = parseFloat( data[3] ) || 0; // use data for the age column
 
-		if ( ( min == '' && max == '' ) ||
-			 ( min == '' && age <= max ) ||
-			 ( min <= age && '' == max ) ||
-			 ( min <= age && age <= max ) )
+		if ( ( isNaN( min ) && isNaN( max ) ) ||
+			 ( isNaN( min ) && age <= max ) ||
+			 ( min <= age   && isNaN( max ) ) ||
+			 ( min <= age   && age <= max ) )
 		{
 			return true;
 		}
@@ -574,14 +574,14 @@ $(document).ready(function() {
 					example:</p><code class="multiline brush: js;">/* Custom filtering function which will search data in column four between two values */
 $.fn.dataTable.ext.search.push(
 	function( settings, data, dataIndex ) {
-		var min = $('#min').val() * 1;
-		var max = $('#max').val() * 1;
+		var min = parseInt( $('#min').val(), 10 );
+		var max = parseInt( $('#max').val(), 10 );
 		var age = parseFloat( data[3] ) || 0; // use data for the age column
 
-		if ( ( min == '' &amp;&amp; max == '' ) ||
-			 ( min == '' &amp;&amp; age &lt;= max ) ||
-			 ( min &lt;= age &amp;&amp; '' == max ) ||
-			 ( min &lt;= age &amp;&amp; age &lt;= max ) )
+		if ( ( isNaN( min ) &amp;&amp; isNaN( max ) ) ||
+			 ( isNaN( min ) &amp;&amp; age &lt;= max ) ||
+			 ( min &lt;= age   &amp;&amp; isNaN( max ) ) ||
+			 ( min &lt;= age   &amp;&amp; age &lt;= max ) )
 		{
 			return true;
 		}
