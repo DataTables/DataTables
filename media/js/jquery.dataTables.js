@@ -6582,16 +6582,8 @@
 	
 		each: function ( fn )
 		{
-			if ( __arrayProto.forEach ) {
-				// Where possible, use the built-in forEach
-				__arrayProto.forEach.call( this, fn, this );
-			}
-			else {
-				// Compatibility for browsers without EMCA-252-5 (JS 1.6)
-				for ( var i=0, ien=this.length ; i<ien; i++ ) {
-					// In strict mode the execution scope is the passed value
-					fn.call( this, this[i], i, this );
-				}
+			for ( var i=0, ien=this.length ; i<ien; i++ ) {
+				fn.call( this, this[i], i, this );
 			}
 	
 			return this;
