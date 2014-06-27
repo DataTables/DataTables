@@ -26,8 +26,10 @@ $(document).ready(function() {
 		var select = $('<select><option value=""></option></select>')
 			.appendTo( $(this).empty() )
 			.on( 'change', function () {
+				var val = $(this).val();
+
 				table.column( i )
-					.search( '^'+$(this).val()+'$', true, false )
+					.search( val ? '^'+$(this).val()+'$' : val, true, false )
 					.draw();
 			} );
 
@@ -575,8 +577,10 @@ $(document).ready(function() {
 		var select = $('&lt;select&gt;&lt;option value=&quot;&quot;&gt;&lt;/option&gt;&lt;/select&gt;')
 			.appendTo( $(this).empty() )
 			.on( 'change', function () {
+				var val = $(this).val();
+
 				table.column( i )
-					.search( '^'+$(this).val()+'$', true, false )
+					.search( val ? '^'+$(this).val()+'$' : val, true, false )
 					.draw();
 			} );
 
