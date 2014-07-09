@@ -4810,6 +4810,7 @@
 	
 		_fnCallbackFire( settings, "aoStateSaveParams", 'stateSaveParams', [settings, state] );
 	
+		settings.oSavedState = state;
 		settings.fnStateSaveCallback.call( settings.oInstance, settings, state );
 	}
 	
@@ -8568,6 +8569,38 @@
 			} );
 	
 			_fnFilterComplete( settings, settings.oPreviousSearch, 1 );
+		} );
+	} );
+	
+	/*
+	 * State API methods
+	 */
+	
+	_api_register( 'state()', function () {
+		return this.context.length ?
+			this.context[0].oSavedState :
+			null;
+	} );
+	
+	
+	_api_register( 'state.clear()', function () {
+		return this.iterator( 'table', function ( settings ) {
+			// Save an empty object
+			settings.fnStateSaveCallback.call( settings.oInstance, settings, {} );
+		} );
+	} );
+	
+	
+	_api_register( 'state.loaded()', function () {
+		return this.context.length ?
+			this.context[0].oLoadedState :
+			null;
+	} );
+	
+	
+	_api_register( 'state.save()', function () {
+		return this.iterator( 'table', function ( settings ) {
+			_fnSaveState( settings );
 		} );
 	} );
 	
@@ -12847,6 +12880,13 @@
 		 *  @default []
 		 */
 		"aoStateLoad": [],
+	
+		/**
+		 * State that was saved. Useful for back reference
+		 *  @type object
+		 *  @default null
+		 */
+		"oSavedState": null,
 	
 		/**
 		 * State that was loaded. Useful for back reference
