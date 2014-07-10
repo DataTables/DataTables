@@ -117,7 +117,7 @@
 	
 	
 	var _empty = function ( d ) {
-		return !d || d === '-' ? true : false;
+		return !d || d === true || d === '-' ? true : false;
 	};
 	
 	
@@ -150,13 +150,13 @@
 			d = d.replace( _re_formatted_numeric, '' );
 		}
 	
-		return !d || d==='-' || (!isNaN( parseFloat(d) ) && isFinite( d ));
+		return _empty( d ) || (!isNaN( parseFloat(d) ) && isFinite( d ));
 	};
 	
 	
 	// A string without HTML in it can be considered to be HTML still
 	var _isHtml = function ( d ) {
-		return !d || typeof d === 'string';
+		return _empty( d ) || typeof d === 'string';
 	};
 	
 	
@@ -14051,7 +14051,7 @@
 	
 		// html
 		"html-pre": function ( a ) {
-			return ! a ?
+			return _empty(a) ?
 				'' :
 				a.replace ?
 					a.replace( /<.*?>/g, "" ).toLowerCase() :
@@ -14060,11 +14060,15 @@
 	
 		// string
 		"string-pre": function ( a ) {
-			return typeof a === 'string' ?
-				a.toLowerCase() :
-				! a || ! a.toString ?
-					'' :
-					a.toString();
+			// This is a little complex, but faster than always calling toString,
+			// http://jsperf.com/tostring-v-check
+			return _empty(a) ?
+				'' :
+				typeof a === 'string' ?
+					a.toLowerCase() :
+					! a.toString ?
+						'' :
+						a.toString();
 		},
 	
 		// string-asc and -desc are retained only for compatibility with the old
@@ -14145,7 +14149,7 @@
 	$.extend( DataTable.ext.type.search, {
 		html: function ( data ) {
 			return _empty(data) ?
-				'' :
+				data :
 				typeof data === 'string' ?
 					data
 						.replace( _re_new_lines, " " )
@@ -14155,7 +14159,7 @@
 	
 		string: function ( data ) {
 			return _empty(data) ?
-				'' :
+				data :
 				typeof data === 'string' ?
 					data.replace( _re_new_lines, " " ) :
 					data;
