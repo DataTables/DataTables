@@ -1054,16 +1054,16 @@
 	 *  @returns {*} Cell data
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnGetCellData( settings, rowIdx, coliDx, type )
+	function _fnGetCellData( settings, rowIdx, colIdx, type )
 	{
 		var draw           = settings.iDraw;
-		var col            = settings.aoColumns[coliDx];
+		var col            = settings.aoColumns[colIdx];
 		var rowData        = settings.aoData[rowIdx]._aData;
 		var defaultContent = col.sDefaultContent;
 		var cellData       = col.fnGetData( rowData, type, {
 			settings: settings,
 			row:      rowIdx,
-			col:      coliDx
+			col:      colIdx
 		} );
 	
 		if ( cellData === undefined ) {
@@ -1081,8 +1081,9 @@
 			cellData = defaultContent;
 		}
 		else if ( typeof cellData === 'function' ) {
-			// If the data source is a function, then we run it and use the return
-			return cellData();
+			// If the data source is a function, then we run it and use the return,
+			// executing in the scope of the data object (for instances)
+			return cellData.call( rowData );
 		}
 	
 		if ( cellData === null && type == 'display' ) {
