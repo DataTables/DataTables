@@ -8256,7 +8256,7 @@
 		var a, i, ien, j;
 	
 		return _selector_run( selector, function ( s ) {
-			if ( ! s ) {
+			if ( s === null || s === undefined ) {
 				// All cells
 				a = [];
 	
@@ -8298,8 +8298,8 @@
 	_api_register( 'cells()', function ( rowSelector, columnSelector, opts ) {
 		// Argument shifting
 		if ( $.isPlainObject( rowSelector ) ) {
-			// If passing in a cell index
-			if ( rowSelector.row ) {
+			// Indexes
+			if ( typeof rowSelector.row !== undefined ) {
 				opts = columnSelector;
 				columnSelector = null;
 			}
