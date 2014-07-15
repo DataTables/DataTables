@@ -1631,7 +1631,7 @@
 				if ( oCol.fnCreatedCell )
 				{
 					oCol.fnCreatedCell.call( oSettings.oInstance,
-						nTd, _fnGetCellData( oSettings, iRow, i, 'display' ), rowData, iRow, i
+						nTd, _fnGetCellData( oSettings, iRow, i ), rowData, iRow, i
 					);
 				}
 			}
