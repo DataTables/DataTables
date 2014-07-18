@@ -5,7 +5,7 @@
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
-	<title>DataTables example - Filtering API (regular expressions)</title>
+	<title>DataTables example - Search API (regular expressions)</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -54,12 +54,12 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>Filtering API (regular expressions)</span></h1>
+			<h1>DataTables example <span>Search API (regular expressions)</span></h1>
 
 			<div class="info">
-				<p>Filtering a table is one of the most common user interactions with a DataTables table, and
+				<p>Searching a table is one of the most common user interactions with a DataTables table, and
 				DataTables provides a number of methods for you to control this interaction. There are APIs for the
-				global filter (<a href="//datatables.net/reference/api/search()"><code class="api" title=
+				global search (<a href="//datatables.net/reference/api/search()"><code class="api" title=
 				"DataTables API method">search()<span>DT</span></code></a>) and for each individual column (<a href=
 				"//datatables.net/reference/api/column().search()"><code class="api" title=
 				"DataTables API method">column().search()<span>DT</span></code></a>).</p>
@@ -68,27 +68,27 @@ $(document).ready(function() {
 				title="DataTables API method">draw()<span>DT</span></code></a> method after performing the search, in
 				order for the results to be displayed.</p>
 
-				<p>Each filter (global or column) can be marked as a regular expression (allowing you to create very
-				complex interactions) and as a smart filter or not. When smart filtering is enabled on a particular
-				filter, DataTables will modify the user input string to a complex regular expression which can make
-				filtering more intuitive.</p>
+				<p>Each search (global or column) can be marked as a regular expression (allowing you to create very
+				complex interactions) and as a smart search or not. When smart searching is enabled on a particular
+				search, DataTables will modify the user input string to a complex regular expression which can make
+				searching more intuitive.</p>
 
-				<p>This example allows you to "play" with the various filtering options that DataTables provides.</p>
+				<p>This example allows you to "play" with the various searching options that DataTables provides.</p>
 			</div>
 
 			<table cellpadding="3" cellspacing="0" border="0" style="width: 67%; margin: 0 auto 2em auto;">
 				<thead>
 					<tr>
 						<th>Target</th>
-						<th>Filter text</th>
+						<th>Search text</th>
 						<th>Treat as regex</th>
-						<th>Use smart filter</th>
+						<th>Use smart search</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<tr id="filter_global">
-						<td>Global filtering</td>
+						<td>Global search</td>
 						<td align="center"><input type="text" class="global_filter" id="global_filter"></td>
 						<td align="center"><input type="checkbox" class="global_filter" id="global_regex"></td>
 						<td align="center"><input type="checkbox" class="global_filter" id="global_smart" checked=
@@ -805,7 +805,7 @@ $(document).ready(function() {
 							<li><a href="./show_hide.html">Show / hide columns dynamically</a></li>
 							<li><a href="./api_in_init.html">Using API in callbacks</a></li>
 							<li><a href="./tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
-							<li class="active"><a href="./regex.html">Filtering API (regular expressions)</a></li>
+							<li class="active"><a href="./regex.html">Search API (regular expressions)</a></li>
 						</ul>
 					</div>
 
