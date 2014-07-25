@@ -8553,33 +8553,34 @@
 	} );
 	
 	
-	_api_register( [
+	_api_registerPlural(
 		'columns().search()',
-		'column().search()'
-	], function ( input, regex, smart, caseInsen ) {
-		return this.iterator( 'column', function ( settings, column ) {
-			var preSearch = settings.aoPreSearchCols;
+		'column().search()',
+		function ( input, regex, smart, caseInsen ) {
+			return this.iterator( 'column', function ( settings, column ) {
+				var preSearch = settings.aoPreSearchCols;
 	
-			if ( input === undefined ) {
-				// get
-				return preSearch[ column ].sSearch;
-			}
+				if ( input === undefined ) {
+					// get
+					return preSearch[ column ].sSearch;
+				}
 	
-			// set
-			if ( ! settings.oFeatures.bFilter ) {
-				return;
-			}
+				// set
+				if ( ! settings.oFeatures.bFilter ) {
+					return;
+				}
 	
-			$.extend( preSearch[ column ], {
-				"sSearch": input+"",
-				"bRegex":  regex === null ? false : regex,
-				"bSmart":  smart === null ? true  : smart,
-				"bCaseInsensitive": caseInsen === null ? true : caseInsen
+				$.extend( preSearch[ column ], {
+					"sSearch": input+"",
+					"bRegex":  regex === null ? false : regex,
+					"bSmart":  smart === null ? true  : smart,
+					"bCaseInsensitive": caseInsen === null ? true : caseInsen
+				} );
+	
+				_fnFilterComplete( settings, settings.oPreviousSearch, 1 );
 			} );
-	
-			_fnFilterComplete( settings, settings.oPreviousSearch, 1 );
-		} );
-	} );
+		}
+	);
 	
 	/*
 	 * State API methods
