@@ -7989,7 +7989,7 @@
 	// can be an array of these items, comma separated list, or an array of comma
 	// separated lists
 	
-	var __re_column_selector = /^(.*):(name|visIdx|visible)$/;
+	var __re_column_selector = /^(.+):(name|visIdx|visible)$/;
 	
 	var __column_selector = function ( settings, selector, opts )
 	{
