@@ -8057,7 +8057,7 @@
 	
 	
 	
-	var __setColumnVis = function ( settings, column, vis ) {
+	var __setColumnVis = function ( settings, column, vis, recalc ) {
 		var
 			cols = settings.aoColumns,
 			col  = cols[ column ],
@@ -8100,12 +8100,14 @@
 		_fnDrawHead( settings, settings.aoHeader );
 		_fnDrawHead( settings, settings.aoFooter );
 	
-		// Automatically adjust column sizing
-		_fnAdjustColumnSizing( settings );
+		if ( recalc === undefined || recalc ) {
+			// Automatically adjust column sizing
+			_fnAdjustColumnSizing( settings );
 	
-		// Realign columns for scrolling
-		if ( settings.oScroll.sX || settings.oScroll.sY ) {
-			_fnScrollDraw( settings );
+			// Realign columns for scrolling
+			if ( settings.oScroll.sX || settings.oScroll.sY ) {
+				_fnScrollDraw( settings );
+			}
 		}
 	
 		_fnCallbackFire( settings, null, 'column-visibility', [settings, column, vis] );
@@ -8192,11 +8194,11 @@
 	
 	
 	
-	_api_registerPlural( 'columns().visible()', 'column().visible()', function ( vis ) {
+	_api_registerPlural( 'columns().visible()', 'column().visible()', function ( vis, calc ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return vis === undefined ?
 				settings.aoColumns[ column ].bVisible :
-				__setColumnVis( settings, column, vis );
+				__setColumnVis( settings, column, vis, calc );
 		} );
 	} );
 	
