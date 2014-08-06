@@ -77,3 +77,5 @@ INSERT INTO datatables_demo
 		( 55, 'Shad', 'Decker', 51, 'Regional Director', 183000, '2008/11/13', 6373, 's.decker@datatables.net', 'Edinburgh' ),
 		( 56, 'Michael', 'Bruce', 29, 'Javascript Developer', 183000, '2011/06/27', 5384, 'm.bruce@datatables.net', 'Singapore' ),
 		( 57, 'Donna', 'Snider', 27, 'Customer Support', 112000, '2011/01/25', 4226, 'd.snider@datatables.net', 'New York' );
+
+ALTER SEQUENCE datatables_demo_id_seq RESTART WITH 58;
