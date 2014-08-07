@@ -3599,11 +3599,16 @@
 				$(_div, { 'class': classes.sScrollFoot } )
 					.css( {
 						overflow: 'hidden',
+						position: 'relative',
 						border: 0,
 						width: scrollX ? size(scrollX) : '100%'
 					} )
 					.append(
 						$(_div, { 'class': classes.sScrollFootInner } )
+							.css( {
+								'box-sizing': 'content-box',
+								width: scroll.sXInner || '100%'
+							} )
 							.append(
 								footerClone
 									.removeAttr('id')
