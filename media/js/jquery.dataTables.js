@@ -591,7 +591,7 @@
 	 *  @param {object} oOptions object with sType, bVisible and bSearchable etc
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnColumnOptions( oSettings, iCol, oOptions )
+	function _fnColumnOptions( oSettings, iCol, oOptions, reorder )
 	{
 		var oCol = oSettings.aoColumns[ iCol ];
 		var oClasses = oSettings.oClasses;
@@ -599,7 +599,7 @@
 	
 		// Try to get width information from the DOM. We can't get it from CSS
 		// as we'd need to parse the CSS stylesheet. `width` option can override
-		if ( ! oCol.sWidthOrig ) {
+		if ( ! oCol.sWidthOrig && ! reorder ) {
 			// Width attribute
 			oCol.sWidthOrig = th.attr('width') || null;
 	
