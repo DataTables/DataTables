@@ -12,7 +12,7 @@
 	"support": {
 		"forum": "https://datatables.net/forums",
 		"source": "https://github.com/DataTables/DataTablesSrc/"
-	}
+	},
 	"require": {
         	"robloach/component-installer": "*"
 	},
