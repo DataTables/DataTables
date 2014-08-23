@@ -14,7 +14,6 @@
 		"source": "https://github.com/DataTables/DataTablesSrc/"
 	},
 	"require": {
-        	"robloach/component-installer": "*",
         	"components/jquery": "1.11.1"
 	},
 	"extra": {
