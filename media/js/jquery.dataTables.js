@@ -3669,8 +3669,9 @@
 	 *  @param {object} settings dataTables settings object
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnScrollDraw ( settings )
+	function _fnScrollDraw ( settings, iAmUseless, showFooter, init )
 	{
+        
 		// Given that this is such a monster function, a lot of variables are use
 		// to try and keep the minimised size as small as possible
 		var
@@ -3725,7 +3726,7 @@
 		headerSrcEls = headerCopy.find('tr');
 		headerCopy.find('th, td').removeAttr('tabindex');
 	
-		if ( footer ) {
+		if ( footer && divFooter.css('display') !== 'none' ) {
 			footerCopy = footer.clone().prependTo( table );
 			footerTrgEls = footer.find('tr'); // the original tfoot is in its own table and must be sized
 			footerSrcEls = footerCopy.find('tr');
@@ -3750,7 +3751,7 @@
 			el.style.width = settings.aoColumns[idx].sWidth;
 		} );
 	
-		if ( footer ) {
+		if ( footer && divFooter.css('display') !== 'none' ) {
 			_fnApplyToChildren( function(n) {
 				n.style.width = "";
 			}, footerSrcEls );
@@ -3764,7 +3765,16 @@
 		}
 	
 		// Size the table as a whole
-		sanityWidth = table.outerWidth();
+		sanityWidth = divBody.outerWidth();
+        if (init) {
+            sanityWidth = divBodyStyle.width;
+        }
+        if ( showFooter === true && divBody.height() < table.height() ) {
+            sanityWidth -= barWidth;
+        }
+        if ( !showFooter && footer && divFooter.css('display') !== 'none' && divBody.height() < table.height()) {
+            sanityWidth -= barWidth;
+        }
 		if ( scrollX === "" ) {
 			// No x scrolling
 			tableStyle.width = "100%";
@@ -3785,7 +3795,7 @@
 				// x scroll inner has been given - use it
 				tableStyle.width = _fnStringToCss(scrollXInner);
 			}
-			else if ( sanityWidth == divBody.width() && divBody.height() < table.height() ) {
+			else if ( footer && divFooter.css('display') === 'none' && sanityWidth == divBody.width() && divBody.height() < table.height() ) {
 				// There is y-scrolling - try to take account of the y scroll bar
 				tableStyle.width = _fnStringToCss( sanityWidth-barWidth );
 				if ( table.outerWidth() > sanityWidth-barWidth ) {
@@ -3824,7 +3834,7 @@
 		$(headerSrcEls).height(0);
 	
 		/* Same again with the footer if we have one */
-		if ( footer )
+		if ( footer && divFooter.css('display') !== 'none' )
 		{
 			_fnApplyToChildren( zeroOut, footerSrcEls );
 	
@@ -3853,7 +3863,7 @@
 			nSizer.style.width = headerWidths[i];
 		}, headerSrcEls );
 	
-		if ( footer )
+		if ( footer && divFooter.css('display') !== 'none' )
 		{
 			_fnApplyToChildren( function(nSizer, i) {
 				nSizer.innerHTML = "";
@@ -3892,7 +3902,7 @@
 		divBodyStyle.width = _fnStringToCss( correction );
 		divHeaderStyle.width = _fnStringToCss( correction );
 	
-		if ( footer ) {
+		if ( footer && divFooter.css('display') !== 'none' ) {
 			settings.nScrollFoot.style.width = _fnStringToCss( correction );
 		}
 	
@@ -3924,6 +3934,9 @@
 	
 		/* Finally set the width's of the header and footer tables */
 		var iOuterWidth = table.outerWidth();
+        if (init) {
+            iOuterWidth = divBodyStyle.width;
+        }
 		divHeaderTable[0].style.width = _fnStringToCss( iOuterWidth );
 		divHeaderInnerStyle.width = _fnStringToCss( iOuterWidth );
 	
@@ -3933,7 +3946,7 @@
 		var padding = 'padding' + (browser.bScrollbarLeft ? 'Left' : 'Right' );
 		divHeaderInnerStyle[ padding ] = bScrolling ? barWidth+"px" : "0px";
 	
-		if ( footer ) {
+		if ( footer && divFooter.css('display') !== 'none' ) {
 			divFooterTable[0].style.width = _fnStringToCss( iOuterWidth );
 			divFooterInner[0].style.width = _fnStringToCss( iOuterWidth );
 			divFooterInner[0].style[padding] = bScrolling ? barWidth+"px" : "0px";
