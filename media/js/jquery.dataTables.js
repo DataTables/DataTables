@@ -4413,7 +4413,7 @@
 					src:       srcCol,
 					col:       iCol,
 					dir:       nestedSort[i][1],
-					index:     nestedSort[i][2],
+					index:     $.inArray( nestedSort[i][1], aoColumns[iCol].asSorting ),
 					type:      sType,
 					formatter: DataTable.ext.type.order[ sType+"-pre" ]
 				} );
