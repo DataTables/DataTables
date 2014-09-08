@@ -13,7 +13,7 @@ CREATE TABLE datatables_demo (
 	start_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
 	age        integer,
 	salary     integer,
-	extn       integer
+	extn       text NOT NULL default ''
 );
 
 INSERT INTO datatables_demo

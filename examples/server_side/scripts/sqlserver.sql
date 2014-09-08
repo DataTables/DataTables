@@ -14,7 +14,7 @@ CREATE TABLE datatables_demo (
 	start_date datetime DEFAULT GETDATE(),
 	age        int,
 	salary     int,
-	extn       int,
+	extn       varchar(8) NOT NULL default '',
 	PRIMARY KEY (id)
 );
 
