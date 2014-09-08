@@ -26,7 +26,7 @@ $(document).ready(function() {
 		"processing": true,
 		"serverSide": true,
 		"ajax": "scripts/ids-arrays.php",
-		"rowCallback": function( row, data, displayIndex ) {
+		"rowCallback": function( row, data ) {
 			if ( $.inArray(data.DT_RowId, selected) !== -1 ) {
 				$(row).addClass('selected');
 			}
@@ -110,7 +110,7 @@ $(document).ready(function() {
 		&quot;processing&quot;: true,
 		&quot;serverSide&quot;: true,
 		&quot;ajax&quot;: &quot;scripts/ids-arrays.php&quot;,
-		&quot;rowCallback&quot;: function( row, data, displayIndex ) {
+		&quot;rowCallback&quot;: function( row, data ) {
 			if ( $.inArray(data.DT_RowId, selected) !== -1 ) {
 				$(row).addClass('selected');
 			}
