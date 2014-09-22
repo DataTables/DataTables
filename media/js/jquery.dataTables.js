@@ -7815,12 +7815,12 @@
 	};
 	
 	
-	var __details_remove = function ( api )
+	var __details_remove = function ( api, idx )
 	{
 		var ctx = api.context;
 	
-		if ( ctx.length && api.length ) {
-			var row = ctx[0].aoData[ api[0] ];
+		if ( ctx.length ) {
+			var row = ctx[0].aoData[ idx !== undefined ? idx : api[0] ];
 	
 			if ( row._details ) {
 				row._details.remove();
@@ -7909,7 +7909,7 @@
 	
 				for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 					if ( data[i]._details ) {
-						__details_remove( data[i] );
+						__details_remove( api, i );
 					}
 				}
 			} );
