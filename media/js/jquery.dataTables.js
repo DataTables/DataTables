@@ -6740,8 +6740,10 @@
 			}
 	
 			for ( i=0, ien=context.length ; i<ien ; i++ ) {
+				var apiInst = new _Api( context[i] );
+	
 				if ( type === 'table' ) {
-					ret = fn( context[i], i );
+					ret = fn.call( apiInst, context[i], i );
 	
 					if ( ret !== undefined ) {
 						a.push( ret );
@@ -6749,7 +6751,7 @@
 				}
 				else if ( type === 'columns' || type === 'rows' ) {
 					// this has same length as context - one entry for each table
-					ret = fn( context[i], this[i], i );
+					ret = fn.call( apiInst, context[i], this[i], i );
 	
 					if ( ret !== undefined ) {
 						a.push( ret );
@@ -6768,10 +6770,10 @@
 						item = items[j];
 	
 						if ( type === 'cell' ) {
-							ret = fn( context[i], item.row, item.column, i, j );
+							ret = fn.call( apiInst, context[i], item.row, item.column, i, j );
 						}
 						else {
-							ret = fn( context[i], item, i, j, rows );
+							ret = fn.call( apiInst, context[i], item, i, j, rows );
 						}
 	
 						if ( ret !== undefined ) {
