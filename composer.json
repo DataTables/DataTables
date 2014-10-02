@@ -1,6 +1,7 @@
 {
 	"name": "datatables/datatables",
 	"version": "1.10.3-dev",
+	"type": "component",
 	"description": "DataTables is a plug-in for the jQuery Javascript library. It is a highly flexible tool, based upon the foundations of progressive enhancement, which will add advanced interaction controls to any HTML table.", 
 	"homepage": "http://www.datatables.net/",
 	"author": "SpryMedia", 
@@ -11,5 +12,24 @@
 	"support": {
 		"forum": "https://datatables.net/forums",
 		"source": "https://github.com/DataTables/DataTablesSrc/"
+	},
+	"require": {
+        	"components/jquery": "1.11.1"
+	},
+	"extra": {
+	        "component": {
+	            "scripts": [
+	                "media/js/jquery.dataTables.js"
+	            ],
+	            "styles": [
+	                "media/css/jquery.dataTables.css"
+	            ],
+	            "files": [
+	                "media/images/*.png",
+	                "media/images/*.ico",
+	                "media/js/jquery.dataTables.min.js",
+	                "media/css/jquery.dataTables.min.css"
+	            ]
+	        }
 	}
 }
