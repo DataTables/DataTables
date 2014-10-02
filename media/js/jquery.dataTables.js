@@ -1612,7 +1612,7 @@
 				// Need to create the HTML if new, or if a rendering function is defined
 				if ( !nTrIn || oCol.mRender || oCol.mData !== i )
 				{
-					var html = nTd.innerHTML;
+					var html = _fnGetCellData( oSettings, iRow, i, 'display' );
 					if (html) {
 						nTd.innerHTML = html;
 					}
