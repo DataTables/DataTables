@@ -12,10 +12,6 @@
 			"url": "http://datatables.net/license"
 		}
 	],
-	"repository": {
-  		"type": "git",
-  		"url": "https://github.com/DataTables/DataTables.git"
-	},
 	"dependencies": {
 		"jquery": ">=1.7"
 	},
