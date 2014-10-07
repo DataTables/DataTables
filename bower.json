@@ -7,5 +7,21 @@
 	],
 	"dependencies": {
 		"jquery": ">=1.7.0"
-	}
+	},
+	"license": "MIT",
+	"keywords": [
+		"jquery",
+		"datatables",
+		"table",
+		"javascript",
+		"library"
+	],
+	"ignore": [
+		"/.*",
+		"examples",
+		"media/unit_testing",
+		"composer.json",
+		"dataTables.jquery.json",
+		"package.json"
+	]
 }
