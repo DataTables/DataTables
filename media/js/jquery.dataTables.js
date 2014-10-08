@@ -2697,13 +2697,20 @@
 				_fnDraw( settings );
 			}
 		};
+	
+		var searchDelay = settings.searchDelay !== null ?
+			settings.searchDelay :
+			_fnDataSource( settings ) === 'ssp' ?
+				400 :
+				0;
+	
 		var jqFilter = $('input', filter)
 			.val( previousSearch.sSearch )
 			.attr( 'placeholder', language.sSearchPlaceholder )
 			.bind(
 				'keyup.DT search.DT input.DT paste.DT cut.DT',
-				_fnDataSource( settings ) === 'ssp' ?
-					_fnThrottle( searchFn, 400 ):
+				searchDelay ?
+					_fnThrottle( searchFn, searchDelay ) :
 					searchFn
 			)
 			.bind( 'keypress.DT', function(e) {
@@ -6110,6 +6117,7 @@
 				"fnStateLoadCallback",
 				"fnStateSaveCallback",
 				"renderer",
+				"searchDelay",
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
 				[ "aoSearchCols", "aoPreSearchCols" ],
@@ -11379,6 +11387,26 @@
 	
 	
 		/**
+		 * Search delay option. This will throttle full table searches that use the
+		 * DataTables provided search input element (it does not effect calls to
+		 * `dt-api search()`, providing a delay before the search is made.
+		 *  @type integer
+		 *  @default 0
+		 *
+		 *  @dtopt Options
+		 *  @name DataTable.defaults.searchDelay
+		 *
+		 *  @example
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "searchDelay": 200
+		 *      } );
+		 *    } )
+		 */
+		"searchDelay": null,
+	
+	
+		/**
 		 * DataTables features four different built-in options for the buttons to
 		 * display for pagination control:
 		 *
@@ -12893,6 +12921,13 @@
 		 *  @default null
 		 */
 		"sDom": null,
+	
+		/**
+		 * Search delay (in mS)
+		 *  @type integer
+		 *  @default null
+		 */
+		"searchDelay": null,
 	
 		/**
 		 * Which type of pagination should be used.
