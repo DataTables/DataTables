@@ -673,6 +673,12 @@
 			return _fnSetObjectDataFn( mDataSrc )( rowData, val, meta );
 		};
 	
+		// Indicate if DataTables should read DOM data as an object or array
+		// Used in _fnGetRowElements
+		if ( typeof mDataSrc !== 'number' ) {
+			oSettings._rowReadObject = true;
+		}
+	
 		/* Feature sorting overrides column specific when off */
 		if ( !oSettings.oFeatures.bSort )
 		{
@@ -1498,11 +1504,14 @@
 	function _fnGetRowElements( settings, row )
 	{
 		var
-			d = [],
 			tds = [],
 			td = row.firstChild,
 			name, col, o, i=0, contents,
-			columns = settings.aoColumns;
+			columns = settings.aoColumns,
+			objectRead = settings._rowReadObject,
+			write;
+	
+		var d = objectRead ? {} : [];
 	
 		var attr = function ( str, data, td  ) {
 			if ( typeof str === 'string' ) {
@@ -1528,10 +1537,23 @@
 				attr( col.mData.type, o, cell );
 				attr( col.mData.filter, o, cell );
 	
-				d.push( o );
+				write = o;
 			}
 			else {
-				d.push( contents );
+				write = contents;
+			}
+	
+			// Depending on the `data` option for the columns the data can be read
+			// to either an object or an array.
+			if ( objectRead ) {
+				if ( ! col._setter ) {
+					// Cache the setter function
+					col._setter = _fnSetObjectDataFn( col.mData );
+				}
+				col._setter( d, write );
+			}
+			else {
+				d.push( write );
 			}
 	
 			i++;
