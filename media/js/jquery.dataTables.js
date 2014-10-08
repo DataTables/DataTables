@@ -1508,18 +1508,18 @@
 			td = row.firstChild,
 			name, col, o, i=0, contents,
 			columns = settings.aoColumns,
-			objectRead = settings._rowReadObject,
-			write;
+			objectRead = settings._rowReadObject;
 	
 		var d = objectRead ? {} : [];
 	
-		var attr = function ( str, data, td  ) {
+		var attr = function ( str, td  ) {
 			if ( typeof str === 'string' ) {
 				var idx = str.indexOf('@');
 	
 				if ( idx !== -1 ) {
-					var src = str.substring( idx+1 );
-					o[ '@'+src ] = td.getAttribute( src );
+					var attr = str.substring( idx+1 );
+					var setter = _fnSetObjectDataFn( str );
+					setter( d, td.getAttribute( attr ) );
 				}
 			}
 		};
@@ -1529,31 +1529,26 @@
 			contents = $.trim(cell.innerHTML);
 	
 			if ( col && col._bAttrSrc ) {
-				o = {
-					display: contents
-				};
+				var setter = _fnSetObjectDataFn( col.mData._ );
+				setter( d, contents );
 	
-				attr( col.mData.sort, o, cell );
-				attr( col.mData.type, o, cell );
-				attr( col.mData.filter, o, cell );
-	
-				write = o;
+				attr( col.mData.sort, cell );
+				attr( col.mData.type, cell );
+				attr( col.mData.filter, cell );
 			}
 			else {
-				write = contents;
-			}
-	
-			// Depending on the `data` option for the columns the data can be read
-			// to either an object or an array.
-			if ( objectRead ) {
-				if ( ! col._setter ) {
-					// Cache the setter function
-					col._setter = _fnSetObjectDataFn( col.mData );
+				// Depending on the `data` option for the columns the data can be
+				// read to either an object or an array.
+				if ( objectRead ) {
+					if ( ! col._setter ) {
+						// Cache the setter function
+						col._setter = _fnSetObjectDataFn( col.mData );
+					}
+					col._setter( d, contents );
 				}
-				col._setter( d, write );
-			}
-			else {
-				d.push( write );
+				else {
+					d.push( contents );
+				}
 			}
 	
 			i++;
