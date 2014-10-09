@@ -7438,11 +7438,12 @@
 	{
 		var
 			out = [], res,
-			a, i, ien, j, jen;
+			a, i, ien, j, jen,
+			selectorType = typeof selector;
 	
 		// Can't just check for isArray here, as an API or jQuery instance might be
 		// given with their array like look
-		if ( ! selector || typeof selector === 'string' || selector.length === undefined ) {
+		if ( ! selector || selectorType === 'string' || selectorType === 'function' || selector.length === undefined ) {
 			selector = [ selector ];
 		}
 	
@@ -7580,6 +7581,7 @@
 	{
 		return _selector_run( selector, function ( sel ) {
 			var selInt = _intVal( sel );
+			var i, ien;
 	
 			// Short cut - selector is a number and no options provided (default is
 			// all records, so no need to check if the index is in there, since it
@@ -7599,14 +7601,19 @@
 				return rows;
 			}
 	
-			// Get nodes in the order from the `rows` array (can't use `pluck`) @todo - use pluck_order
-			var nodes = [];
-			for ( var i=0, ien=rows.length ; i<ien ; i++ ) {
-				nodes.push( settings.aoData[ rows[i] ].nTr );
+			// Get nodes in the order from the `rows` array
+			var nodes = _pluck_order( settings.aoData, rows, 'nTr' );
+	
+			// Selector - function
+			if ( typeof sel === 'function' ) {
+				return $.map( rows, function (idx) {
+					var row = settings.aoData[ idx ];
+					return sel( idx, row._aData, row.nTr ) ? idx : null;
+				} );
 			}
 	
+			// Selector - node
 			if ( sel.nodeName ) {
-				// Selector - node
 				if ( $.inArray( sel, nodes ) !== -1 ) {
 					return [ sel._DT_RowIndex ];// sel is a TR node that is in the table
 											// and DataTables adds a prop for fast lookup
@@ -8036,6 +8043,18 @@
 	
 	var __re_column_selector = /^(.+):(name|visIdx|visible)$/;
 	
+	
+	// r1 and r2 are redundant - but it means that the parameters match for the
+	// iterator callback in columns().data()
+	var __columnData = function ( settings, column, r1, r2, rows ) {
+		var a = [];
+		for ( var row=0, ien=rows.length ; row<ien ; row++ ) {
+			a.push( _fnGetCellData( settings, rows[row], column ) );
+		}
+		return a;
+	};
+	
+	
 	var __column_selector = function ( settings, selector, opts )
 	{
 		var
@@ -8046,60 +8065,71 @@
 		return _selector_run( selector, function ( s ) {
 			var selInt = _intVal( s );
 	
+			// Selector - all
 			if ( s === '' ) {
-				// All columns
 				return _range( columns.length );
 			}
-			else if ( selInt !== null ) {
-				// Integer selector
+			
+			// Selector - index
+			if ( selInt !== null ) {
 				return [ selInt >= 0 ?
 					selInt : // Count from left
 					columns.length + selInt // Count from right (+ because its a negative value)
 				];
 			}
-			else {
-				var match = typeof s === 'string' ?
-					s.match( __re_column_selector ) :
-					'';
+			
+			// Selector = function
+			if ( typeof s === 'function' ) {
+				var rows = _selector_row_indexes( settings, opts );
 	
-				if ( match ) {
-					switch( match[2] ) {
-						case 'visIdx':
-						case 'visible':
-							var idx = parseInt( match[1], 10 );
-							// Visible index given, convert to column index
-							if ( idx < 0 ) {
-								// Counting from the right
-								var visColumns = $.map( columns, function (col,i) {
-									return col.bVisible ? i : null;
-								} );
-								return [ visColumns[ visColumns.length + idx ] ];
-							}
-							// Counting from the left
-							return [ _fnVisibleToColumnIndex( settings, idx ) ];
+				return $.map( columns, function (col, idx) {
+					return s(
+							idx,
+							__columnData( settings, idx, 0, 0, rows ),
+							nodes[ idx ]
+						) ? idx : null;
+				} );
+			}
 	
-						case 'name':
-							// match by name. `names` is column index complete and in order
-							return $.map( names, function (name, i) {
-								return name === match[1] ? i : null;
+			// jQuery or string selector
+			var match = typeof s === 'string' ?
+				s.match( __re_column_selector ) :
+				'';
+	
+			if ( match ) {
+				switch( match[2] ) {
+					case 'visIdx':
+					case 'visible':
+						var idx = parseInt( match[1], 10 );
+						// Visible index given, convert to column index
+						if ( idx < 0 ) {
+							// Counting from the right
+							var visColumns = $.map( columns, function (col,i) {
+								return col.bVisible ? i : null;
 							} );
-					}
+							return [ visColumns[ visColumns.length + idx ] ];
+						}
+						// Counting from the left
+						return [ _fnVisibleToColumnIndex( settings, idx ) ];
+	
+					case 'name':
+						// match by name. `names` is column index complete and in order
+						return $.map( names, function (name, i) {
+							return name === match[1] ? i : null;
+						} );
 				}
-				else {
-					// jQuery selector on the TH elements for the columns
-					return $( nodes )
-						.filter( s )
-						.map( function () {
-							return $.inArray( this, nodes ); // `nodes` is column index complete and in order
-						} )
-						.toArray();
-				}
+			}
+			else {
+				// jQuery selector on the TH elements for the columns
+				return $( nodes )
+					.filter( s )
+					.map( function () {
+						return $.inArray( this, nodes ); // `nodes` is column index complete and in order
+					} )
+					.toArray();
 			}
 		} );
 	};
-	
-	
-	
 	
 	
 	var __setColumnVis = function ( settings, column, vis, recalc ) {
@@ -8212,13 +8242,7 @@
 	 *
 	 */
 	_api_registerPlural( 'columns().data()', 'column().data()', function () {
-		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
-			var a = [];
-			for ( var row=0, ien=rows.length ; row<ien ; row++ ) {
-				a.push( _fnGetCellData( settings, rows[row], column, '' ) );
-			}
-			return a;
-		} );
+		return this.iterator( 'column-rows', __columnData );
 	} );
 	
 	
@@ -8315,31 +8339,48 @@
 		var allCells = $( [].concat.apply([], cells) );
 		var row;
 		var columns = settings.aoColumns.length;
-		var a, i, ien, j;
+		var a, i, ien, j, o, host;
 	
 		return _selector_run( selector, function ( s ) {
-			if ( s === null || s === undefined ) {
-				// All cells
+			var fnSelector = typeof s === 'function';
+	
+			if ( s === null || s === undefined || fnSelector ) {
+				// All cells and function selectors
 				a = [];
 	
 				for ( i=0, ien=rows.length ; i<ien ; i++ ) {
 					row = rows[i];
 	
 					for ( j=0 ; j<columns ; j++ ) {
-						a.push( {
+						o = {
 							row: row,
 							column: j
-						} );
+						};
+	
+						if ( fnSelector ) {
+							// Selector - function
+							host = settings.aoData[ row ];
+	
+							if ( s( o, _fnGetCellData(settings, row, j), host.anCells[j] ) ) {
+								a.push( o );
+							}
+						}
+						else {
+							// Selector - all
+							a.push( o );
+						}
 					}
 				}
 	
 				return a;
 			}
-			else if ( $.isPlainObject( s ) ) {
+			
+			// Selector - index
+			if ( $.isPlainObject( s ) ) {
 				return [s];
 			}
 	
-			// jQuery filtered cells
+			// Selector - jQuery filtered cells
 			return allCells
 				.filter( s )
 				.map( function (i, el) {
