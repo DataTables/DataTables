@@ -6225,26 +6225,31 @@
 			}
 			
 			/* Language definitions */
-			if ( oInit.oLanguage.sUrl !== "" )
+			var oLanguage = oSettings.oLanguage;
+			$.extend( true, oLanguage, oInit.oLanguage );
+			
+			if ( oLanguage.sUrl !== "" )
 			{
 				/* Get the language definitions from a file - because this Ajax call makes the language
 				 * get async to the remainder of this function we use bInitHandedOff to indicate that
 				 * _fnInitialise will be fired by the returned Ajax handler, rather than the constructor
 				 */
-				oSettings.oLanguage.sUrl = oInit.oLanguage.sUrl;
-				$.getJSON( oSettings.oLanguage.sUrl, null, function( json ) {
-					_fnLanguageCompat( json );
-					_fnCamelToHungarian( defaults.oLanguage, json );
-					$.extend( true, oSettings.oLanguage, oInit.oLanguage, json );
-					_fnInitialise( oSettings );
+				$.ajax( {
+					dataType: 'json',
+					url: oLanguage.sUrl,
+					success: function ( json ) {
+						_fnLanguageCompat( json );
+						_fnCamelToHungarian( defaults.oLanguage, json );
+						$.extend( true, oLanguage, json );
+						_fnInitialise( oSettings );
+					},
+					error: function () {
+						// Error occurred loading language file, continue on as best we can
+						_fnInitialise( oSettings );
+					}
 				} );
 				bInitHandedOff = true;
 			}
-			else
-			{
-				$.extend( true, oSettings.oLanguage, oInit.oLanguage );
-			}
-			
 			
 			/*
 			 * Stripes
