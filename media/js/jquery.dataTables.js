@@ -2972,7 +2972,7 @@
 	
 	
 	/**
-	 * scape a string such that it can be used in a regular expression
+	 * Escape a string such that it can be used in a regular expression
 	 *  @param {string} sVal string to escape
 	 *  @returns {string} escaped string
 	 *  @memberof DataTable#oApi
@@ -8842,7 +8842,16 @@
 		 * @param {integer} freq Call frequency in mS
 		 * @return {function} Wrapped function
 		 */
-		throttle: _fnThrottle
+		throttle: _fnThrottle,
+	
+	
+		/**
+		 * Escape a string such that it can be used in a regular expression
+		 *
+		 *  @param {string} sVal string to escape
+		 *  @returns {string} escaped string
+		 */
+		escapeRegex: _fnEscapeRegex
 	};
 	
 	

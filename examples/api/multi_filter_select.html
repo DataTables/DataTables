@@ -29,7 +29,9 @@ $(document).ready(function() {
 				var select = $('<select><option value=""></option></select>')
 					.appendTo( $(column.footer()).empty() )
 					.on( 'change', function () {
-						var val = $(this).val();
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
 
 						column
 							.search( val ? '^'+val+'$' : '', true, false )
@@ -76,9 +78,12 @@ $(document).ready(function() {
 				performs an exact match through the use of a custom regular expression and disabling DataTables built
 				in smart searching. For more information on the search options in DataTables API please refer to the
 				documentation for <a href="//datatables.net/reference/api/search()"><code class="api" title=
-				"DataTables API method">search()<span>DT</span></code></a> and <a href=
+				"DataTables API method">search()<span>DT</span></code></a>, <a href=
 				"//datatables.net/reference/api/column().search()"><code class="api" title=
-				"DataTables API method">column().search()<span>DT</span></code></a>.</p>
+				"DataTables API method">column().search()<span>DT</span></code></a> and <a href=
+				"//datatables.net/reference/api/%24.fn.dataTable.util.escapeRegex()"><code class="api" title=
+				"DataTables API method">$.fn.dataTable.util.escapeRegex()<span>DT</span></code></a> which are used for
+				searching globally, by column and escaping regular expressions respectively.</p>
 
 				<p>Note also that this example shows the use of <a href=
 				"//datatables.net/reference/option/initComplete"><code class="option" title=
@@ -594,7 +599,9 @@ $(document).ready(function() {
 				var select = $('&lt;select&gt;&lt;option value=&quot;&quot;&gt;&lt;/option&gt;&lt;/select&gt;')
 					.appendTo( $(column.footer()).empty() )
 					.on( 'change', function () {
-						var val = $(this).val();
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
 
 						column
 							.search( val ? '^'+val+'$' : '', true, false )
