@@ -210,7 +210,9 @@
 		// is essential here
 		if ( prop2 !== undefined ) {
 			for ( ; i<ien ; i++ ) {
-				out.push( a[ order[i] ][ prop ][ prop2 ] );
+				if ( a[ order[i] ][ prop ] ) {
+					out.push( a[ order[i] ][ prop ][ prop2 ] );
+				}
 			}
 		}
 		else {
@@ -239,6 +241,20 @@
 	
 		for ( var i=start ; i<end ; i++ ) {
 			out.push( i );
+		}
+	
+		return out;
+	};
+	
+	
+	var _removeEmpty = function ( a )
+	{
+		var out = [];
+	
+		for ( var i=0, ien=a.length ; i<ien ; i++ ) {
+			if ( a[i] ) { // careful - will remove all falsy values!
+				out.push( a[i] );
+			}
 		}
 	
 		return out;
@@ -6765,8 +6781,8 @@
 			return -1;
 		},
 	
-		// Internal only at the moment - relax?
-		iterator: function ( flatten, type, fn ) {
+		// Note that `alwaysNew` is internal - use iteratorNew externally
+		iterator: function ( flatten, type, fn, alwaysNew ) {
 			var
 				a = [], ret,
 				i, ien, j, jen,
@@ -6776,6 +6792,7 @@
 	
 			// Argument shifting
 			if ( typeof flatten === 'string' ) {
+				alwaysNew = fn;
 				fn = type;
 				type = flatten;
 				flatten = false;
@@ -6825,7 +6842,7 @@
 				}
 			}
 	
-			if ( a.length ) {
+			if ( a.length || alwaysNew ) {
 				var api = new _Api( context, flatten ? a.concat.apply( [], a ) : a );
 				var apiSelector = api.selector;
 				apiSelector.rows = selector.rows;
@@ -7152,35 +7169,35 @@
 	_api_registerPlural( 'tables().nodes()', 'table().node()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTable;
-		} );
+		}, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'tables().body()', 'table().body()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTBody;
-		} );
+		}, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'tables().header()', 'table().header()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTHead;
-		} );
+		}, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'tables().footer()', 'table().footer()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTFoot;
-		} );
+		}, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'tables().containers()', 'table().container()' , function () {
 		return this.iterator( 'table', function ( ctx ) {
 			return ctx.nTableWrapper;
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -7615,9 +7632,6 @@
 				return rows;
 			}
 	
-			// Get nodes in the order from the `rows` array
-			var nodes = _pluck_order( settings.aoData, rows, 'nTr' );
-	
 			// Selector - function
 			if ( typeof sel === 'function' ) {
 				return $.map( rows, function (idx) {
@@ -7626,11 +7640,16 @@
 				} );
 			}
 	
+			// Get nodes in the order from the `rows` array with null values removed
+			var nodes = _removeEmpty(
+				_pluck_order( settings.aoData, rows, 'nTr' )
+			);
+	
 			// Selector - node
 			if ( sel.nodeName ) {
 				if ( $.inArray( sel, nodes ) !== -1 ) {
-					return [ sel._DT_RowIndex ];// sel is a TR node that is in the table
-											// and DataTables adds a prop for fast lookup
+					return [ sel._DT_RowIndex ]; // sel is a TR node that is in the table
+					                             // and DataTables adds a prop for fast lookup
 				}
 			}
 	
@@ -7664,7 +7683,7 @@
 	
 		var inst = this.iterator( 'table', function ( settings ) {
 			return __row_selector( settings, selector, opts );
-		} );
+		}, 1 );
 	
 		// Want argument shifting here and in __row_selector?
 		inst.selector.rows = selector;
@@ -7677,32 +7696,32 @@
 	_api_register( 'rows().nodes()', function () {
 		return this.iterator( 'row', function ( settings, row ) {
 			return settings.aoData[ row ].nTr || undefined;
-		} );
+		}, 1 );
 	} );
 	
 	_api_register( 'rows().data()', function () {
 		return this.iterator( true, 'rows', function ( settings, rows ) {
 			return _pluck_order( settings.aoData, rows, '_aData' );
-		} );
+		}, 1 );
 	} );
 	
 	_api_registerPlural( 'rows().cache()', 'row().cache()', function ( type ) {
 		return this.iterator( 'row', function ( settings, row ) {
 			var r = settings.aoData[ row ];
 			return type === 'search' ? r._aFilterData : r._aSortData;
-		} );
+		}, 1 );
 	} );
 	
 	_api_registerPlural( 'rows().invalidate()', 'row().invalidate()', function ( src ) {
 		return this.iterator( 'row', function ( settings, row ) {
 			_fnInvalidateRow( settings, row, src );
-		} );
+		}, 1 );
 	} );
 	
 	_api_registerPlural( 'rows().indexes()', 'row().index()', function () {
 		return this.iterator( 'row', function ( settings, row ) {
 			return row;
-		} );
+		}, 1 );
 	} );
 	
 	_api_registerPlural( 'rows().remove()', 'row().remove()', function () {
@@ -7751,7 +7770,7 @@
 				}
 	
 				return out;
-			} );
+			}, 1 );
 	
 		// Return an Api.rows() extended instance, so rows().nodes() etc can be used
 		var modRows = this.rows( -1 );
@@ -8222,7 +8241,7 @@
 	
 		var inst = this.iterator( 'table', function ( settings ) {
 			return __column_selector( settings, selector, opts );
-		} );
+		}, 1 );
 	
 		// Want argument shifting here and in _row_selector?
 		inst.selector.cols = selector;
@@ -8238,7 +8257,7 @@
 	_api_registerPlural( 'columns().header()', 'column().header()', function ( selector, opts ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return settings.aoColumns[column].nTh;
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8248,7 +8267,7 @@
 	_api_registerPlural( 'columns().footer()', 'column().footer()', function ( selector, opts ) {
 		return this.iterator( 'column', function ( settings, column ) {
 			return settings.aoColumns[column].nTf;
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8256,14 +8275,14 @@
 	 *
 	 */
 	_api_registerPlural( 'columns().data()', 'column().data()', function () {
-		return this.iterator( 'column-rows', __columnData );
+		return this.iterator( 'column-rows', __columnData, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'columns().dataSrc()', 'column().dataSrc()', function () {
 		return this.iterator( 'column', function ( settings, column ) {
 			return settings.aoColumns[column].mData;
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8272,14 +8291,14 @@
 			return _pluck_order( settings.aoData, rows,
 				type === 'search' ? '_aFilterData' : '_aSortData', column
 			);
-		} );
+		}, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'columns().nodes()', 'column().nodes()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8289,7 +8308,7 @@
 			return vis === undefined ?
 				settings.aoColumns[ column ].bVisible :
 				__setColumnVis( settings, column, vis, calc );
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8299,7 +8318,7 @@
 			return type === 'visible' ?
 				_fnColumnIndexToVisible( settings, column ) :
 				column;
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8319,7 +8338,7 @@
 	_api_register( 'columns.adjust()', function () {
 		return this.iterator( 'table', function ( settings ) {
 			_fnAdjustColumnSizing( settings );
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8349,7 +8368,7 @@
 	{
 		var data = settings.aoData;
 		var rows = _selector_row_indexes( settings, opts );
-		var cells = _pluck_order( data, rows, 'anCells' );
+		var cells = _removeEmpty( _pluck_order( data, rows, 'anCells' ) );
 		var allCells = $( [].concat.apply([], cells) );
 		var row;
 		var columns = settings.aoColumns.length;
@@ -8455,7 +8474,7 @@
 			}
 	
 			return a;
-		} );
+		}, 1 );
 	
 		$.extend( cells.selector, {
 			cols: columnSelector,
@@ -8469,15 +8488,18 @@
 	
 	_api_registerPlural( 'cells().nodes()', 'cell().node()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
-			return settings.aoData[ row ].anCells[ column ];
-		} );
+			var cells = settings.aoData[ row ].anCells;
+			return cells ?
+				cells[ column ] :
+				undefined;
+		}, 1 );
 	} );
 	
 	
 	_api_register( 'cells().data()', function () {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return _fnGetCellData( settings, row, column );
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8486,14 +8508,14 @@
 	
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return settings.aoData[ row ][ type ][ column ];
-		} );
+		}, 1 );
 	} );
 	
 	
 	_api_registerPlural( 'cells().render()', 'cell().render()', function ( type ) {
 		return this.iterator( 'cell', function ( settings, row, column ) {
 			return _fnGetCellData( settings, row, column, type );
-		} );
+		}, 1 );
 	} );
 	
 	
@@ -8504,7 +8526,7 @@
 				column: column,
 				columnVisible: _fnColumnIndexToVisible( settings, column )
 			};
-		} );
+		}, 1 );
 	} );
 	
 	
