@@ -2633,7 +2633,7 @@
 	
 		var draw            = compat( 'sEcho',                'draw' );
 		var recordsTotal    = compat( 'iTotalRecords',        'recordsTotal' );
-		var rocordsFiltered = compat( 'iTotalDisplayRecords', 'recordsFiltered' );
+		var recordsFiltered = compat( 'iTotalDisplayRecords', 'recordsFiltered' );
 	
 		if ( draw ) {
 			// Protect against out of sequence returns
@@ -2645,7 +2645,7 @@
 	
 		_fnClearTable( settings );
 		settings._iRecordsTotal   = parseInt(recordsTotal, 10);
-		settings._iRecordsDisplay = parseInt(rocordsFiltered, 10);
+		settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
 	
 		var data = _fnAjaxDataSrc( settings, json );
 		for ( var i=0, ien=data.length ; i<ien ; i++ ) {
