@@ -1485,7 +1485,10 @@
 						cell.removeChild( cell.firstChild );
 					}
 	
-					cells[i].innerHTML = _fnGetCellData( settings, rowIdx, i, 'display' );
+					var html = _fnGetCellData( settings, rowIdx, i, 'display' );
+					if (html) {
+						cells[i].innerHTML = html;
+					}
 				}
 			}
 		}
@@ -1648,7 +1651,10 @@
 				// Need to create the HTML if new, or if a rendering function is defined
 				if ( !nTrIn || oCol.mRender || oCol.mData !== i )
 				{
-					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+					var html = _fnGetCellData( oSettings, iRow, i, 'display' );
+					if (html) {
+						nTd.innerHTML = html;
+					}
 				}
 	
 				/* Add user defined class */
