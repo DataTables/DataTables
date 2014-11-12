@@ -1734,6 +1734,10 @@
 					.addClass( data.DT_RowClass );
 			}
 	
+			if ( data.DT_RowAttr ) {
+				$(tr).attr( data.DT_RowAttr );
+			}
+	
 			if ( data.DT_RowData ) {
 				$(tr).data( data.DT_RowData );
 			}
