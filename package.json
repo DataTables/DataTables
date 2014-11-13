@@ -8,7 +8,7 @@
 		"media/js/jquery.dataTables.min.js",
 		"media/css/jquery.dataTables.css",
 		"media/css/jquery.dataTables.min.css",
-		"media/images",
+		"media/images"
 	],
 	"license": "MIT",
 	"dependencies": {
