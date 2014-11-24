@@ -8827,7 +8827,10 @@
 		var is = false;
 	
 		$.each( DataTable.settings, function (i, o) {
-			if ( o.nTable === t || o.nScrollHead === t || o.nScrollFoot === t ) {
+			if ( o.nTable === t ||
+				$('table', o.nScrollHead)[0] === t ||
+				$('table', o.nScrollFoot)[0] === t
+			) {
 				is = true;
 			}
 		} );
