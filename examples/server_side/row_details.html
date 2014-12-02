@@ -112,8 +112,8 @@ $(document).ready(function() {
 				<p>The event handler makes use of the <a href="//datatables.net/reference/api/row().child"><code class=
 				"api" title="DataTables API method">row().child<span>DT</span></code></a> methods to firstly check if a
 				row is already displayed, and if so hide it, if not show it. The content of the child row is, in this
-				example, defined by the <code>formatDetails()</code> function, but you would replace that with whatever
-				you wanted to show the content required, possibly including, for example, an Ajax call to the server to
+				example, defined by the <code>format()</code> function, but you would replace that with whatever you
+				wanted to show the content required, possibly including, for example, an Ajax call to the server to
 				obtain the extra information to show. Note that the format details function has access to the full data
 				source object for the row, including information that is not actually shown in the table (the salary
 				parameter for example).</p>
