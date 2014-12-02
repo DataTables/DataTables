@@ -6357,7 +6357,7 @@
 			 */
 			if ( rowOne.length ) {
 				var a = function ( cell, name ) {
-					return cell.getAttribute( 'data-'+name ) ? name : null;
+					return cell.getAttribute( 'data-'+name ) !== null ? name : null;
 				};
 			
 				$.each( _fnGetRowElements( oSettings, rowOne[0] ).cells, function (i, cell) {
