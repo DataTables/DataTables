@@ -97,7 +97,7 @@ var sh = {
             brushNotHtmlScript : 'Brush wasn\'t configured for html-script option: ',
 
             // this is populated by the build script
-            aboutDialog : '<%- about %>'
+            aboutDialog : ''
         }
     },
 
@@ -193,7 +193,7 @@ var sh = {
                 ;
 
             // execute the toolbar command
-            if (highlighter && commandName)
+            if (highlighter && commandName && sh.toolbar.items[commandName].execute)
                 sh.toolbar.items[commandName].execute(highlighter);
 
             // disable default A click behaviour
@@ -203,7 +203,7 @@ var sh = {
         /** Collection of toolbar items. */
         items : {
             // Ordered lis of items in the toolbar. Can't expect `for (var n in items)` to be consistent.
-            list: ['expandSource', 'help'],
+            list: ['expandSource', 'language'],
 
             expandSource: {
                 getHtml: function(highlighter)
@@ -233,6 +233,14 @@ var sh = {
                     doc.write(sh.config.strings.aboutDialog);
                     doc.close();
                     wnd.focus();
+                }
+            },
+
+            language: {
+                getHtml: function (highlighter) {
+                    return highlighter.langLabel ?
+                        sh.toolbar.getButtonHtml(highlighter, 'lang', highlighter.langLabel) :
+                        '';
                 }
             }
         }
@@ -1763,6 +1771,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
             ];
     
         this.forHtmlScript(r.scriptScriptTags);
+        this.langLabel = "Javascript";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
@@ -1822,6 +1831,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
             { regex: SyntaxHighlighter.regexLib.xmlComments,                                                css: 'comments' },  // <!-- ... -->
             { regex: XRegExp('(&lt;|<)[\\s\\/\\?!]*(\\w+)(?<attributes>.*?)[\\s\\/\\?]*(&gt;|>)', 'sg'), func: process }
         ];
+        this.langLabel = "HTML";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
@@ -1901,6 +1911,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
             left: /(&lt;|<)\s*style.*?(&gt;|>)/gi, 
             right: /(&lt;|<)\/\s*style\s*(&gt;|>)/gi 
             });
+        this.langLabel = "CSS";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
@@ -1977,6 +1988,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
             ];
 
         this.forHtmlScript(SyntaxHighlighter.regexLib.phpScriptTags);
+        this.langLabel = "PHP";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
@@ -2029,6 +2041,8 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
             { regex: new RegExp(this.getKeywords(operators), 'gmi'),            css: 'color1' },     // operators and such
             { regex: new RegExp(this.getKeywords(keywords), 'gmi'),             css: 'keyword' }     // keyword
             ];
+
+        this.langLabel = "SQL";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
@@ -2049,6 +2063,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
 
     function Brush()
     {
+        this.langLabel = "Plain text";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
@@ -2099,10 +2114,11 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
             ];
         
         this.forHtmlScript(SyntaxHighlighter.regexLib.aspScriptTags);
+        this.langLabel = "C#";
     };
 
     Brush.prototype = new SyntaxHighlighter.Highlighter();
-    Brush.aliases   = ['c#', 'c-sharp', 'csharp'];
+    Brush.aliases   = ['c#', 'cs', 'c-sharp', 'csharp'];
 
     SyntaxHighlighter.brushes.CSharp = Brush;
 
