@@ -6072,28 +6072,34 @@
 			/* Setting up the initialisation object */
 			_fnCamelToHungarian( defaults, oInit );
 			
+			console.log( 'init' );
+			
 			/* Check to see if we are re-initialising a table */
 			var allSettings = DataTable.settings;
 			for ( i=0, iLen=allSettings.length ; i<iLen ; i++ )
 			{
+				console.log( i );
+			
+				var s = allSettings[i];
 				/* Base check on table node */
-				if ( allSettings[i].nTable == this )
+				console.log( this, s.nTable, s.nTHead, s.nTFoot );
+				if ( s.nTable == this || s.nTHead.parentNode == this || (s.nTFoot && s.nTFoot.parentNode == this) )
 				{
 					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
 					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : defaults.bDestroy;
 			
 					if ( emptyInit || bRetrieve )
 					{
-						return allSettings[i].oInstance;
+						return s.oInstance;
 					}
 					else if ( bDestroy )
 					{
-						allSettings[i].oInstance.fnDestroy();
+						s.oInstance.fnDestroy();
 						break;
 					}
 					else
 					{
-						_fnLog( allSettings[i], 0, 'Cannot reinitialise DataTable', 3 );
+						_fnLog( s, 0, 'Cannot reinitialise DataTable', 3 );
 						return;
 					}
 				}
@@ -6103,7 +6109,7 @@
 				 * instance by simply deleting it. This is under the assumption that the table has been
 				 * destroyed by other methods. Anyone using non-id selectors will need to do this manually
 				 */
-				if ( allSettings[i].sTableId == this.id )
+				if ( s.sTableId == this.id )
 				{
 					allSettings.splice( i, 1 );
 					break;
