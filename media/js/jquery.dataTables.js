@@ -6078,11 +6078,9 @@
 			var allSettings = DataTable.settings;
 			for ( i=0, iLen=allSettings.length ; i<iLen ; i++ )
 			{
-				console.log( i );
-			
 				var s = allSettings[i];
+			
 				/* Base check on table node */
-				console.log( this, s.nTable, s.nTHead, s.nTFoot );
 				if ( s.nTable == this || s.nTHead.parentNode == this || (s.nTFoot && s.nTFoot.parentNode == this) )
 				{
 					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
