@@ -6077,8 +6077,6 @@
 			/* Setting up the initialisation object */
 			_fnCamelToHungarian( defaults, oInit );
 			
-			console.log( 'init' );
-			
 			/* Check to see if we are re-initialising a table */
 			var allSettings = DataTable.settings;
 			for ( i=0, iLen=allSettings.length ; i<iLen ; i++ )
