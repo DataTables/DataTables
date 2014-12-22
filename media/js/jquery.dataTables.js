@@ -5026,11 +5026,16 @@
 			var ext = DataTable.ext;
 			var type = ext.sErrMode || ext.errMode;
 	
+			_fnCallbackFire( settings, null, 'error', [ settings, tn, msg ] );
+	
 			if ( type == 'alert' ) {
 				alert( msg );
 			}
-			else {
+			else if ( type == 'throw' ) {
 				throw new Error(msg);
+			}
+			else if ( typeof type == 'function' ) {
+				type( settings, tn, msg );
 			}
 		}
 		else if ( window.console && console.log ) {
@@ -13466,10 +13471,10 @@
 		/**
 		 * Error reporting.
 		 * 
-		 * How should DataTables report an error. Can take the value 'alert' or
-		 * 'throw'
+		 * How should DataTables report an error. Can take the value 'alert',
+		 * 'throw', 'none' or a function.
 		 *
-		 *  @type string
+		 *  @type string|function
 		 *  @default alert
 		 */
 		errMode: "alert",
