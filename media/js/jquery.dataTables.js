@@ -2424,7 +2424,7 @@
 				ajaxData( data ) :  // fn can manipulate data or return an object
 				ajaxData;           // object or array to merge
 	
-			// If the function returned an object, use that alone
+			// If the function returned something, use that alone
 			data = $.isFunction( ajaxData ) && newData ?
 				newData :
 				$.extend( true, data, newData );
