@@ -69,7 +69,7 @@
   font-style: italic !important;
 }
 .syntaxhighlighter .line {
-  white-space: pre !important;
+  white-space: nowrap !important;
 }
 .syntaxhighlighter table {
   width: 100% !important;
