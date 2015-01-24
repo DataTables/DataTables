@@ -33,5 +33,15 @@
 		"type": "git",
 		"url": "https://github.com/DataTables/DataTables.git"
 	},
-	"homepage": "http://datatables.net"
+	"homepage": "http://datatables.net",
+	"jspm": {
+		"directories": {
+			"lib": "media"
+		},
+		"main": "js/jquery.dataTables",
+		"registry": "jspm",
+		"dependencies": {
+			"jquery": "^1.11"
+		}
+	}
 }
