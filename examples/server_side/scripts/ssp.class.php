@@ -188,8 +188,10 @@ class SSP {
 
 			if ( $requestColumn['searchable'] == 'true' &&
 			 $str != '' ) {
-				$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-				$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
+				$selector = $requestColumn['search']["regex"] == 'true' ? " REGEXP ":" LIKE ";
+				$string = $selector == "LIKE" ? '%'.$str.'%':$str;
+				$binding = self::bind( $bindings, $string, PDO::PARAM_STR );
+				$columnSearch[] = "`".$column['db']."`".$selector.$binding;
 			}
 		}
 
