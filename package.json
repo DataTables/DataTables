@@ -42,6 +42,12 @@
 		"registry": "jspm",
 		"dependencies": {
 			"jquery": "^1.11"
+		},
+		"shim": {
+			"js/jquery.dataTables": {
+				"imports": "jquery",
+				"exports": "$"
+			}
 		}
 	}
 }
