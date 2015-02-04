@@ -3,8 +3,7 @@
 	"version": "1.10.5-dev",
 	"main": [
 		"media/js/jquery.dataTables.js",
-		"media/css/jquery.dataTables.css",
-		"media/images/*.png"
+		"media/css/jquery.dataTables.css"
 	],
 	"dependencies": {
 		"jquery": ">=1.7.0"
