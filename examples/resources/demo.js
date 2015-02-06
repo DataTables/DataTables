@@ -45,6 +45,7 @@ $(document).ready( function () {
 			var show = function ( str ) {
 				ajaxTab.css( 'display', 'block' );
 				$('div.tabs div.ajax code').remove();
+				$('div.tabs div.ajax div.syntaxhighlighter').remove();
 
 				// Old IE :-|
 				try {
