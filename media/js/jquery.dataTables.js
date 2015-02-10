@@ -13461,6 +13461,17 @@
 	 */
 	DataTable.ext = _ext = {
 		/**
+		 * Buttons. For use with the Buttons extension for DataTables. This is
+		 * defined here so other extensions can define buttons regardless of load
+		 * order. It is _not_ used by DataTables core.
+		 *
+		 *  @type object
+		 *  @default {}
+		 */
+		buttons: {},
+	
+	
+		/**
 		 * Element class names
 		 *
 		 *  @type object
