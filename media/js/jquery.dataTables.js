@@ -10379,10 +10379,10 @@
 		 *    } );
 		 */
 		"fnFormatNumber": function ( toFormat ) {
-			return toFormat.toString().replace(
+			return parseInt(toFormat.toString().replace(
 				/\B(?=(\d{3})+(?!\d))/g,
 				this.oLanguage.sThousands
-			);
+			), 10);
 		},
 	
 	
