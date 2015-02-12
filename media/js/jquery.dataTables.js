@@ -1,11 +1,11 @@
-/*! DataTables 1.10.5
+/*! DataTables 1.10.6-dev
  * ©2008-2014 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.5
+ * @version     1.10.6-dev
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -478,6 +478,12 @@
 		_fnCompatMap( init, 'orderData',     'aDataSort' );
 		_fnCompatMap( init, 'orderSequence', 'asSorting' );
 		_fnCompatMap( init, 'orderDataType', 'sortDataType' );
+	
+		// orderData can be given as an integer
+		var dataSort = init.aDataSort;
+		if ( dataSort && ! $.isArray( dataSort ) ) {
+			init.aDataSort = [ dataSort ];
+		}
 	}
 	
 	
@@ -658,7 +664,7 @@
 			/* iDataSort to be applied (backwards compatibility), but aDataSort will take
 			 * priority if defined
 			 */
-			if ( typeof oOptions.iDataSort === 'number' )
+			if ( oOptions.iDataSort !== undefined )
 			{
 				oCol.aDataSort = [ oOptions.iDataSort ];
 			}
@@ -9086,7 +9092,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.5";
+	DataTable.version = "1.10.6-dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
