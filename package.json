@@ -36,8 +36,8 @@
 	"homepage": "http://datatables.net",
 
 	"jspm": {
-		"css": "^0.1.5",
 		"dependencies": {
+			"css": "^0.1.5",
 			"jquery": "*"
 		},
 		"registry": "jspm",
