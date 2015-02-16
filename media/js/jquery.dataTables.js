@@ -1,4 +1,4 @@
-/*! DataTables 1.10.6-dev
+﻿/*! DataTables 1.10.6-dev
  * ©2008-2014 SpryMedia Ltd - datatables.net/license
  */
 
@@ -2680,8 +2680,10 @@
 		settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
 	
 		var data = _fnAjaxDataSrc( settings, json );
-		for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-			_fnAddData( settings, data[i] );
+		if(data){
+			for ( var i=0, ien=data.length ; i<ien ; i++ ) {
+				_fnAddData( settings, data[i] );
+			}
 		}
 		settings.aiDisplay = settings.aiDisplayMaster.slice();
 	
