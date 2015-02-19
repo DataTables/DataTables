@@ -2427,8 +2427,8 @@
 			ajaxData = ajax.data;
 	
 			var newData = $.isFunction( ajaxData ) ?
-				ajaxData( data ) :  // fn can manipulate data or return an object
-				ajaxData;           // object or array to merge
+				ajaxData( data, oSettings ) :  // fn can manipulate data or return
+				ajaxData;                      // an object object or array to merge
 	
 			// If the function returned something, use that alone
 			data = $.isFunction( ajaxData ) && newData ?
