@@ -2377,8 +2377,6 @@
 		return aReturn;
 	}
 	
-	
-	
 	/**
 	 * Create an Ajax call based on the table's settings, taking into account that
 	 * parameters can have multiple forms, and backwards compatibility.
@@ -2663,6 +2661,7 @@
 			return json[old] !== undefined ? json[old] : json[modern];
 		};
 	
+		var data = _fnAjaxDataSrc( settings, json );
 		var draw            = compat( 'sEcho',                'draw' );
 		var recordsTotal    = compat( 'iTotalRecords',        'recordsTotal' );
 		var recordsFiltered = compat( 'iTotalDisplayRecords', 'recordsFiltered' );
@@ -2679,7 +2678,6 @@
 		settings._iRecordsTotal   = parseInt(recordsTotal, 10);
 		settings._iRecordsDisplay = parseInt(recordsFiltered, 10);
 	
-		var data = _fnAjaxDataSrc( settings, json );
 		for ( var i=0, ien=data.length ; i<ien ; i++ ) {
 			_fnAddData( settings, data[i] );
 		}
@@ -2721,7 +2719,6 @@
 			_fnGetObjectDataFn( dataSrc )( json ) :
 			json;
 	}
-	
 	
 	/**
 	 * Generate the node required for filtering text
