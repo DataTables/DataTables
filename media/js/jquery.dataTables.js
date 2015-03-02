@@ -6140,13 +6140,14 @@
 			
 			/* Create the settings object for this table and set some of the default parameters */
 			var oSettings = $.extend( true, {}, DataTable.models.oSettings, {
-				"nTable":        this,
-				"oApi":          _that.internal,
-				"oInit":         oInit,
 				"sDestroyWidth": $this[0].style.width,
 				"sInstance":     sId,
 				"sTableId":      sId
 			} );
+			oSettings.nTable = this;
+			oSettings.oApi   = _that.internal;
+			oSettings.oInit  = oInit;
+			
 			allSettings.push( oSettings );
 			
 			// Need to add the instance after the instance after the settings object has been added
