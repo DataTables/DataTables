@@ -36,10 +36,11 @@ $(document).ready(function() {
 	var table = $('#example').DataTable();
 
 	// Apply the search
-	table.columns().eq( 0 ).each( function ( colIdx ) {
-		$( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
-			table
-				.column( colIdx )
+	table.columns().every( function () {
+		var that = this;
+
+		$( 'input', this.footer() ).on( 'keyup change', function () {
+			that
 				.search( this.value )
 				.draw();
 		} );
@@ -64,8 +65,8 @@ $(document).ready(function() {
 				since <a href="//datatables.net/reference/api/filter()"><code class="api" title="DataTables API method">filter()<span>DT</span></code></a> is used to apply a
 				filter to a result set).</p>
 
-				<p>The column searches are cumulative, so you can apply multiple individual column searchs, in addition to the global search, allowing complex searching options to
-				be presented to the user.</p>
+				<p>The column searches are cumulative, so you can apply multiple individual column searches, in addition to the global search, allowing complex searching options
+				to be presented to the user.</p>
 
 				<p>This examples shows text elements being used with the <a href="//datatables.net/reference/api/column().search()"><code class="api" title=
 				"DataTables API method">column().search()<span>DT</span></code></a> method to add input controls in the footer of the table for each column. Note that the
@@ -577,10 +578,11 @@ $(document).ready(function() {
 	var table = $('#example').DataTable();
 
 	// Apply the search
-	table.columns().eq( 0 ).each( function ( colIdx ) {
-		$( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
-			table
-				.column( colIdx )
+	table.columns().every( function () {
+		var that = this;
+
+		$( 'input', this.footer() ).on( 'keyup change', function () {
+			that
 				.search( this.value )
 				.draw();
 		} );

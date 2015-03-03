@@ -22,10 +22,8 @@
 $(document).ready(function() {
 	$('#example').DataTable( {
 		initComplete: function () {
-			var api = this.api();
-
-			api.columns().indexes().flatten().each( function ( i ) {
-				var column = api.column( i );
+			this.api().columns().every( function () {
+				var column = this;
 				var select = $('<select><option value=""></option></select>')
 					.appendTo( $(column.footer()).empty() )
 					.on( 'change', function () {
@@ -579,10 +577,8 @@ $(document).ready(function() {
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
 	$('#example').DataTable( {
 		initComplete: function () {
-			var api = this.api();
-
-			api.columns().indexes().flatten().each( function ( i ) {
-				var column = api.column( i );
+			this.api().columns().every( function () {
+				var column = this;
 				var select = $('&lt;select&gt;&lt;option value=&quot;&quot;&gt;&lt;/option&gt;&lt;/select&gt;')
 					.appendTo( $(column.footer()).empty() )
 					.on( 'change', function () {
