@@ -8808,10 +8808,10 @@
 		var is = false;
 	
 		$.each( DataTable.settings, function (i, o) {
-			if ( o.nTable === t ||
-				$('table', o.nScrollHead)[0] === t ||
-				$('table', o.nScrollFoot)[0] === t
-			) {
+			var head = o.nScrollHead ? $('table', o.nScrollHead)[0] : null;
+			var foot = o.nScrollFoot ? $('table', o.nScrollFoot)[0] : null;
+	
+			if ( o.nTable === t || head === t || foot === t ) {
 				is = true;
 			}
 		} );
