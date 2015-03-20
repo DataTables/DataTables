@@ -14,7 +14,7 @@ CREATE TABLE `datatables_demo` (
 	`start_date` timestamp DEFAULT CURRENT_TIMESTAMP,
 	`age`        int(8),
 	`salary`     int(8),
-	`extn`       int(8),
+	`extn`       varchar(8) NOT NULL default '',
 	PRIMARY KEY  (`id`)
 );
 

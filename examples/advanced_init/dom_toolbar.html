@@ -43,24 +43,18 @@ $(document).ready(function() {
 			<h1>DataTables example <span>Custom toolbar elements</span></h1>
 
 			<div class="info">
-				<p>DataTables inserts DOM elements around the table to control DataTables features, and you can make
-				use of this mechanism as well to insert your own custom elements. In this example a <code class="tag"
-				title="HTML tag">div</code> with a class of 'toolbar' is created using <a href=
-				"//datatables.net/reference/option/dom"><code class="option" title=
-				"DataTables initialisation option">dom<span>DT</span></code></a>, with which HTML is inserted to create
-				the toolbar. You could put whatever HTML you want into the toolbar and add event handlers etc.</p>
+				<p>DataTables inserts DOM elements around the table to control DataTables features, and you can make use of this mechanism as well to insert your own custom
+				elements. In this example a <code class="tag" title="HTML tag">div</code> with a class of 'toolbar' is created using <a href=
+				"//datatables.net/reference/option/dom"><code class="option" title="DataTables initialisation option">dom<span>DT</span></code></a>, with which HTML is inserted to
+				create the toolbar. You could put whatever HTML you want into the toolbar and add event handlers etc.</p>
 
-				<p>For more complex features, or for creating reusable plug-ins, DataTables also has a feature plug-in
-				API available, which can be used to create plug-ins which are used in a table by a single character
-				reference in the <a href="//datatables.net/reference/option/dom"><code class="option" title=
-				"DataTables initialisation option">dom<span>DT</span></code></a> option (like the built in option of
-				<code class="string" title="String">f</code> refers to 'filtering input', you could have an
-				<code class="string" title="String">F</code> option which creates your own filtering input control,
-				custom to your app).</p>
+				<p>For more complex features, or for creating reusable plug-ins, DataTables also has a feature plug-in API available, which can be used to create plug-ins which
+				are used in a table by a single character reference in the <a href="//datatables.net/reference/option/dom"><code class="option" title=
+				"DataTables initialisation option">dom<span>DT</span></code></a> option (like the built in option of <code class="string" title="String">f</code> refers to
+				'filtering input', you could have an <code class="string" title="String">F</code> option which creates your own filtering input control, custom to your app).</p>
 
-				<p><a href="https://datatables.net/extras/tabletools">TableTools</a> is a feature plug-in for
-				DataTables which adds buttons into a toolbar for a table, which controls such as copy to clipboard,
-				export and custom buttons.</p>
+				<p><a href="https://datatables.net/extras/tabletools">TableTools</a> is a feature plug-in for DataTables which adds buttons into a toolbar for a table, which
+				controls such as copy to clipboard, export and custom buttons.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -556,8 +550,7 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this
-					example:</p><code class="multiline brush: js;">$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;dom&quot;: '&lt;&quot;toolbar&quot;&gt;frtip'
 	} );
@@ -565,8 +558,7 @@ $(document).ready(function() {
 	$(&quot;div.toolbar&quot;).html('&lt;b&gt;Custom tool bar! Text/images etc.&lt;/b&gt;');
 } );</code>
 
-					<p>In addition to the above code, the following Javascript library files are loaded for use in this
-					example:</p>
+					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
 						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
@@ -575,38 +567,33 @@ $(document).ready(function() {
 				</div>
 
 				<div class="table">
-					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by
-					DataTables:</p>
+					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by DataTables:</p>
 				</div>
 
 				<div class="css">
 					<div>
-						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
-						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p><code class="multiline brush: js;">.toolbar {
+						<p>This example uses a little bit of additional CSS beyond what is loaded from the library files (below), in order to correctly display the table. The
+						additional CSS used is shown below:</p><code class="multiline language-css">.toolbar {
 	float: left;
 }</code>
 					</div>
 
-					<p>The following CSS library files are loaded for use in this example to provide the styling of the
-					table:</p>
+					<p>The following CSS library files are loaded for use in this example to provide the styling of the table:</p>
 
 					<ul>
-						<li><a href=
-						"../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
+						<li><a href="../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
 					</ul>
 				</div>
 
 				<div class="ajax">
-					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data
-					will update automatically as any additional data is loaded.</p>
+					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data will update automatically as any additional data is
+					loaded.</p>
 				</div>
 
 				<div class="php">
-					<p>The script used to perform the server-side processing for this table is shown below. Please note
-					that this is just an example script using PHP. Server-side processing scripts can be written in any
-					language, using <a href="//datatables.net/manual/server-side">the protocol described in the
-					DataTables documentation</a>.</p>
+					<p>The script used to perform the server-side processing for this table is shown below. Please note that this is just an example script using PHP. Server-side
+					processing scripts can be written in any language, using <a href="//datatables.net/manual/server-side">the protocol described in the DataTables
+					documentation</a>.</p>
 				</div>
 			</div>
 		</section>
@@ -629,8 +616,7 @@ $(document).ready(function() {
 							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
-							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
-							colspan)</a></li>
+							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and colspan)</a></li>
 							<li><a href="../basic_init/dom.html">DOM positioning</a></li>
 							<li><a href="../basic_init/flexible_width.html">Flexible table width</a></li>
 							<li><a href="../basic_init/state_save.html">State saving</a></li>
@@ -638,8 +624,7 @@ $(document).ready(function() {
 							<li><a href="../basic_init/scroll_y.html">Scroll - vertical</a></li>
 							<li><a href="../basic_init/scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="../basic_init/scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI
-							ThemeRoller</a></li>
+							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li><a href="../basic_init/comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="../basic_init/language.html">Language options</a></li>
 						</ul>
@@ -654,7 +639,9 @@ $(document).ready(function() {
 							<li><a href="./length_menu.html">Page length options</a></li>
 							<li><a href="./dom_multiple_elements.html">Multiple table control elements</a></li>
 							<li><a href="./complex_header.html">Complex headers (rowspan / colspan)</a></li>
-							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes</a></li>
+							<li><a href="./object_dom_read.html">Read HTML to data objects</a></li>
+							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
+							<li><a href="./html5-data-options.html">HTML5 data-* attributes - table options</a></li>
 							<li><a href="./language_file.html">Language file</a></li>
 							<li><a href="./defaults.html">Setting defaults</a></li>
 							<li><a href="./row_callback.html">Row created callback</a></li>
@@ -697,14 +684,11 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../api/add_row.html">Add rows</a></li>
 							<li><a href="../api/multi_filter.html">Individual column searching (text inputs)</a></li>
-							<li><a href="../api/multi_filter_select.html">Individual column searching (select
-							inputs)</a></li>
+							<li><a href="../api/multi_filter_select.html">Individual column searching (select inputs)</a></li>
 							<li><a href="../api/highlight.html">Highlighting rows and columns</a></li>
-							<li><a href="../api/row_details.html">Child rows (show extra / detailed
-							information)</a></li>
+							<li><a href="../api/row_details.html">Child rows (show extra / detailed information)</a></li>
 							<li><a href="../api/select_row.html">Row selection (multiple rows)</a></li>
-							<li><a href="../api/select_single_row.html">Row selection and deletion (single
-							row)</a></li>
+							<li><a href="../api/select_single_row.html">Row selection and deletion (single row)</a></li>
 							<li><a href="../api/form.html">Form inputs</a></li>
 							<li><a href="../api/counter_columns.html">Index column</a></li>
 							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
@@ -741,8 +725,7 @@ $(document).ready(function() {
 							<li><a href="../server_side/select_rows.html">Row selection</a></li>
 							<li><a href="../server_side/jsonp.html">JSONP data source for remote domains</a></li>
 							<li><a href="../server_side/defer_loading.html">Deferred loading of data</a></li>
-							<li><a href="../server_side/pipeline.html">Pipelining data to reduce Ajax calls for
-							paging</a></li>
+							<li><a href="../server_side/pipeline.html">Pipelining data to reduce Ajax calls for paging</a></li>
 						</ul>
 					</div>
 
@@ -750,10 +733,8 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
-							detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
-							detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range search</a></li>
 							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
@@ -761,14 +742,11 @@ $(document).ready(function() {
 				</div>
 
 				<div class="epilogue">
-					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full
-					information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and
-					<a href="http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of
-					DataTables.</p>
+					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
+					which extend the capabilities of DataTables.</p>
 
-					<p class="copyright">DataTables designed and created by <a href=
-					"http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2014<br>
+					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>
 				</div>
 			</div>

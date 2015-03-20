@@ -20,22 +20,27 @@
 
 
 $(document).ready(function() {
-	var table = $('#example').DataTable();
+	$('#example').DataTable( {
+		initComplete: function () {
+			this.api().columns().every( function () {
+				var column = this;
+				var select = $('<select><option value=""></option></select>')
+					.appendTo( $(column.footer()).empty() )
+					.on( 'change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
 
-	$("#example tfoot th").each( function ( i ) {
-		var select = $('<select><option value=""></option></select>')
-			.appendTo( $(this).empty() )
-			.on( 'change', function () {
-				var val = $(this).val();
+						column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+					} );
 
-				table.column( i )
-					.search( val ? '^'+$(this).val()+'$' : val, true, false )
-					.draw();
+				column.data().unique().sort().each( function ( d, j ) {
+					select.append( '<option value="'+d+'">'+d+'</option>' )
+				} );
 			} );
-
-		table.column( i ).data().unique().sort().each( function ( d, j ) {
-			select.append( '<option value="'+d+'">'+d+'</option>' )
-		} );
+		}
 	} );
 } );
 
@@ -49,31 +54,31 @@ $(document).ready(function() {
 			<h1>DataTables example <span>Individual column searching (select inputs)</span></h1>
 
 			<div class="info">
-				<p>This example is almost identical to text based individual column example and provides the same
-				functionality, but in this case using <code class="tag" title="HTML tag">select</code> input
-				controls.</p>
+				<p>This example is almost identical to text based individual column example and provides the same functionality, but in this case using <code class="tag" title=
+				"HTML tag">select</code> input controls.</p>
 
-				<p>After the table is initialised, the API is used to build the <code class="tag" title=
-				"HTML tag">select</code> inputs through the use of the <a href=
-				"//datatables.net/reference/api/column().data()"><code class="api" title=
-				"DataTables API method">column().data()<span>DT</span></code></a> method to get the data for each
-				column in turn. The helper methods <a href="//datatables.net/reference/api/unique()"><code class="api"
-				title="DataTables API method">unique()<span>DT</span></code></a> and <a href=
-				"//datatables.net/reference/api/sort()"><code class="api" title=
-				"DataTables API method">sort()<span>DT</span></code></a> are also used to reduce the data for set input
-				to unique and ordered elements. Finally the <code>change</code> event from the <code class="tag" title=
-				"HTML tag">select</code> input is used to trigger a column search using the <a href=
-				"//datatables.net/reference/api/column().search()"><code class="api" title=
-				"DataTables API method">column().search()<span>DT</span></code></a> method.</p>
+				<p>After the table is initialised, the API is used to build the <code class="tag" title="HTML tag">select</code> inputs through the use of the <a href=
+				"//datatables.net/reference/api/column().data()"><code class="api" title="DataTables API method">column().data()<span>DT</span></code></a> method to get the data
+				for each column in turn. The helper methods <a href="//datatables.net/reference/api/unique()"><code class="api" title=
+				"DataTables API method">unique()<span>DT</span></code></a> and <a href="//datatables.net/reference/api/sort()"><code class="api" title=
+				"DataTables API method">sort()<span>DT</span></code></a> are also used to reduce the data for set input to unique and ordered elements. Finally the
+				<code>change</code> event from the <code class="tag" title="HTML tag">select</code> input is used to trigger a column search using the <a href=
+				"//datatables.net/reference/api/column().search()"><code class="api" title="DataTables API method">column().search()<span>DT</span></code></a> method.</p>
 
 				<p>Note that the <a href="//datatables.net/reference/api/column().search()"><code class="api" title=
-				"DataTables API method">column().search()<span>DT</span></code></a> method in this particular case
-				performs an exact match through the use of a custom regular expression and disabling DataTables built
-				in smart searching. For more information on the search options in DataTables API please refer to the
-				documentation for <a href="//datatables.net/reference/api/search()"><code class="api" title=
-				"DataTables API method">search()<span>DT</span></code></a> and <a href=
-				"//datatables.net/reference/api/column().search()"><code class="api" title=
-				"DataTables API method">column().search()<span>DT</span></code></a>.</p>
+				"DataTables API method">column().search()<span>DT</span></code></a> method in this particular case performs an exact match through the use of a custom regular
+				expression and disabling DataTables built in smart searching. For more information on the search options in DataTables API please refer to the documentation for
+				<a href="//datatables.net/reference/api/search()"><code class="api" title="DataTables API method">search()<span>DT</span></code></a>, <a href=
+				"//datatables.net/reference/api/column().search()"><code class="api" title="DataTables API method">column().search()<span>DT</span></code></a> and <a href=
+				"//datatables.net/reference/api/%24.fn.dataTable.util.escapeRegex()"><code class="api" title=
+				"DataTables API method">$.fn.dataTable.util.escapeRegex()<span>DT</span></code></a> which are used for searching globally, by column and escaping regular
+				expressions respectively.</p>
+
+				<p>Note also that this example shows the use of <a href="//datatables.net/reference/option/initComplete"><code class="option" title=
+				"DataTables initialisation option">initComplete<span>DT</span></code></a> a callback function that is triggered when the table has fully loaded. Use of this
+				callback isn't actually required in this example since the data is available in the table on load, but in the case of Ajax loaded data, <a href=
+				"//datatables.net/reference/option/initComplete"><code class="option" title="DataTables initialisation option">initComplete<span>DT</span></code></a> is useful to
+				execute code after the data has been loaded.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -569,29 +574,32 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this
-					example:</p><code class="multiline brush: js;">$(document).ready(function() {
-	var table = $('#example').DataTable();
+					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
+	$('#example').DataTable( {
+		initComplete: function () {
+			this.api().columns().every( function () {
+				var column = this;
+				var select = $('&lt;select&gt;&lt;option value=&quot;&quot;&gt;&lt;/option&gt;&lt;/select&gt;')
+					.appendTo( $(column.footer()).empty() )
+					.on( 'change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
 
-	$(&quot;#example tfoot th&quot;).each( function ( i ) {
-		var select = $('&lt;select&gt;&lt;option value=&quot;&quot;&gt;&lt;/option&gt;&lt;/select&gt;')
-			.appendTo( $(this).empty() )
-			.on( 'change', function () {
-				var val = $(this).val();
+						column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+					} );
 
-				table.column( i )
-					.search( val ? '^'+$(this).val()+'$' : val, true, false )
-					.draw();
+				column.data().unique().sort().each( function ( d, j ) {
+					select.append( '&lt;option value=&quot;'+d+'&quot;&gt;'+d+'&lt;/option&gt;' )
+				} );
 			} );
-
-		table.column( i ).data().unique().sort().each( function ( d, j ) {
-			select.append( '&lt;option value=&quot;'+d+'&quot;&gt;'+d+'&lt;/option&gt;' )
-		} );
+		}
 	} );
 } );</code>
 
-					<p>In addition to the above code, the following Javascript library files are loaded for use in this
-					example:</p>
+					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
 						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
@@ -600,36 +608,31 @@ $(document).ready(function() {
 				</div>
 
 				<div class="table">
-					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by
-					DataTables:</p>
+					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by DataTables:</p>
 				</div>
 
 				<div class="css">
 					<div>
-						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
-						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p><code class="multiline brush: js;"></code>
+						<p>This example uses a little bit of additional CSS beyond what is loaded from the library files (below), in order to correctly display the table. The
+						additional CSS used is shown below:</p><code class="multiline language-css"></code>
 					</div>
 
-					<p>The following CSS library files are loaded for use in this example to provide the styling of the
-					table:</p>
+					<p>The following CSS library files are loaded for use in this example to provide the styling of the table:</p>
 
 					<ul>
-						<li><a href=
-						"../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
+						<li><a href="../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
 					</ul>
 				</div>
 
 				<div class="ajax">
-					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data
-					will update automatically as any additional data is loaded.</p>
+					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data will update automatically as any additional data is
+					loaded.</p>
 				</div>
 
 				<div class="php">
-					<p>The script used to perform the server-side processing for this table is shown below. Please note
-					that this is just an example script using PHP. Server-side processing scripts can be written in any
-					language, using <a href="//datatables.net/manual/server-side">the protocol described in the
-					DataTables documentation</a>.</p>
+					<p>The script used to perform the server-side processing for this table is shown below. Please note that this is just an example script using PHP. Server-side
+					processing scripts can be written in any language, using <a href="//datatables.net/manual/server-side">the protocol described in the DataTables
+					documentation</a>.</p>
 				</div>
 			</div>
 		</section>
@@ -652,8 +655,7 @@ $(document).ready(function() {
 							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
-							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
-							colspan)</a></li>
+							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and colspan)</a></li>
 							<li><a href="../basic_init/dom.html">DOM positioning</a></li>
 							<li><a href="../basic_init/flexible_width.html">Flexible table width</a></li>
 							<li><a href="../basic_init/state_save.html">State saving</a></li>
@@ -661,8 +663,7 @@ $(document).ready(function() {
 							<li><a href="../basic_init/scroll_y.html">Scroll - vertical</a></li>
 							<li><a href="../basic_init/scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="../basic_init/scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI
-							ThemeRoller</a></li>
+							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li><a href="../basic_init/comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="../basic_init/language.html">Language options</a></li>
 						</ul>
@@ -675,19 +676,18 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/dt_events.html">DataTables events</a></li>
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
-							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control
-							elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan /
-							colspan)</a></li>
-							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes</a></li>
+							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
+							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
+							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>
 							<li><a href="../advanced_init/language_file.html">Language file</a></li>
 							<li><a href="../advanced_init/defaults.html">Setting defaults</a></li>
 							<li><a href="../advanced_init/row_callback.html">Row created callback</a></li>
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
-							control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence control</a></li>
 						</ul>
 					</div>
 
@@ -723,8 +723,7 @@ $(document).ready(function() {
 						<ul class="toc active">
 							<li><a href="./add_row.html">Add rows</a></li>
 							<li><a href="./multi_filter.html">Individual column searching (text inputs)</a></li>
-							<li class="active"><a href="./multi_filter_select.html">Individual column searching (select
-							inputs)</a></li>
+							<li class="active"><a href="./multi_filter_select.html">Individual column searching (select inputs)</a></li>
 							<li><a href="./highlight.html">Highlighting rows and columns</a></li>
 							<li><a href="./row_details.html">Child rows (show extra / detailed information)</a></li>
 							<li><a href="./select_row.html">Row selection (multiple rows)</a></li>
@@ -765,8 +764,7 @@ $(document).ready(function() {
 							<li><a href="../server_side/select_rows.html">Row selection</a></li>
 							<li><a href="../server_side/jsonp.html">JSONP data source for remote domains</a></li>
 							<li><a href="../server_side/defer_loading.html">Deferred loading of data</a></li>
-							<li><a href="../server_side/pipeline.html">Pipelining data to reduce Ajax calls for
-							paging</a></li>
+							<li><a href="../server_side/pipeline.html">Pipelining data to reduce Ajax calls for paging</a></li>
 						</ul>
 					</div>
 
@@ -774,10 +772,8 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
-							detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
-							detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range search</a></li>
 							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
@@ -785,14 +781,11 @@ $(document).ready(function() {
 				</div>
 
 				<div class="epilogue">
-					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full
-					information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and
-					<a href="http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of
-					DataTables.</p>
+					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
+					which extend the capabilities of DataTables.</p>
 
-					<p class="copyright">DataTables designed and created by <a href=
-					"http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2014<br>
+					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>
 				</div>
 			</div>

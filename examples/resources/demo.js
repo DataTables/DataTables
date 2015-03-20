@@ -28,7 +28,7 @@ $(document).ready( function () {
 	// init html
 	var table = $('<p/>').append( $('table').clone() ).html();
 	$('div.tabs div.table').append(
-		'<code class="multiline brush: html;">\t\t\t'+
+		'<code class="multiline language-html">\t\t\t'+
 			escapeHtml( table )+
 		'</code>'
 	);
@@ -45,6 +45,7 @@ $(document).ready( function () {
 			var show = function ( str ) {
 				ajaxTab.css( 'display', 'block' );
 				$('div.tabs div.ajax code').remove();
+				$('div.tabs div.ajax div.syntaxhighlighter').remove();
 
 				// Old IE :-|
 				try {
@@ -52,7 +53,7 @@ $(document).ready( function () {
 				} catch ( e ) {}
 
 				$('div.tabs div.ajax').append(
-					'<code class="multiline brush: js;">'+str+'</code>'
+					'<code class="multiline language-js">'+str+'</code>'
 				);
 				SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
 			};
@@ -87,7 +88,7 @@ $(document).ready( function () {
 					success: function ( txt ) {
 						phpTab.css( 'display', 'block' );
 						$('div.tabs div.php').append(
-							'<code class="multiline brush: php;">'+txt+'</code>'
+							'<code class="multiline language-php">'+txt+'</code>'
 						);
 						SyntaxHighlighter.highlight( {}, $('div.tabs div.php code')[0] );
 					}

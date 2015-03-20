@@ -36,25 +36,19 @@ $(document).ready(function() {
 			<h1>DataTables example <span>Deferred loading of data</span></h1>
 
 			<div class="info">
-				<p>When using DataTables with server-side processing, the default behaviour is to have DataTables
-				automatically make an Ajax call and load the data, removing anything which might have already been in
-				the table. However, this behaviour might not always be desirable when the first page of the table has
-				already been preloaded in the HTML (which you might do to ensure accessibility or for performance
-				reasons).</p>
+				<p>When using DataTables with server-side processing, the default behaviour is to have DataTables automatically make an Ajax call and load the data, removing
+				anything which might have already been in the table. However, this behaviour might not always be desirable when the first page of the table has already been
+				preloaded in the HTML (which you might do to ensure accessibility or for performance reasons).</p>
 
-				<p>This automatic Ajax call to get the first page of data can be overridden by using the <a href=
-				"//datatables.net/reference/option/deferLoading"><code class="option" title=
-				"DataTables initialisation option">deferLoading<span>DT</span></code></a> initialisation property. It
-				serves two purposes, firstly to indicate that deferred loading is required, but also to tell DataTables
-				how many records there are in the full table, in this case 57 (this allows the information element and
+				<p>This automatic Ajax call to get the first page of data can be overridden by using the <a href="//datatables.net/reference/option/deferLoading"><code class=
+				"option" title="DataTables initialisation option">deferLoading<span>DT</span></code></a> initialisation property. It serves two purposes, firstly to indicate that
+				deferred loading is required, but also to tell DataTables how many records there are in the full table, in this case 57 (this allows the information element and
 				pagination to be displayed correctly).</p>
 
-				<p>In the example below, the HTML page already has the first 10 rows of data available it in, so we use
-				<a href="//datatables.net/reference/option/deferLoading"><code class="option" title=
-				"DataTables initialisation option">deferLoading<span>DT</span></code></a> to tell DataTables that this
-				data is available and that it should wait for under interaction (ordering, paging etc) before making an
-				Ajax call.</p>
-			</div>"
+				<p>In the example below, the HTML page already has the first 10 rows of data available it in, so we use <a href=
+				"//datatables.net/reference/option/deferLoading"><code class="option" title="DataTables initialisation option">deferLoading<span>DT</span></code></a> to tell
+				DataTables that this data is available and that it should wait for under interaction (ordering, paging etc) before making an Ajax call.</p>
+			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
@@ -80,83 +74,83 @@ $(document).ready(function() {
 				</tfoot>
 
 				<tr class="odd">
-					<td class="sorting_1">Airi Satou</td>
+					<td>Airi</td>
+					<td>Satou</td>
 					<td>Accountant</td>
 					<td>Tokyo</td>
-					<td>33</td>
-					<td>2008/11/28</td>
+					<td>28th Nov 08</td>
 					<td>$162,700</td>
 				</tr>
 				<tr class="even">
-					<td class="sorting_1">Angelica Ramos</td>
+					<td>Angelica</td>
+					<td>Ramos</td>
 					<td>Chief Executive Officer (CEO)</td>
 					<td>London</td>
-					<td>47</td>
-					<td>2009/10/09</td>
+					<td>9th Oct 09</td>
 					<td>$1,200,000</td>
 				</tr>
 				<tr class="odd">
-					<td class="sorting_1">Ashton Cox</td>
+					<td>Ashton</td>
+					<td>Cox</td>
 					<td>Junior Technical Author</td>
 					<td>San Francisco</td>
-					<td>66</td>
-					<td>2009/01/12</td>
+					<td>12th Jan 09</td>
 					<td>$86,000</td>
 				</tr>
 				<tr class="even">
-					<td class="sorting_1">Bradley Greer</td>
+					<td>Bradley</td>
+					<td>Greer</td>
 					<td>Software Engineer</td>
 					<td>London</td>
-					<td>41</td>
-					<td>2012/10/13</td>
+					<td>13th Oct 12</td>
 					<td>$132,000</td>
 				</tr>
 				<tr class="odd">
-					<td class="sorting_1">Brenden Wagner</td>
+					<td>Brenden</td>
+					<td>Wagner</td>
 					<td>Software Engineer</td>
 					<td>San Francisco</td>
-					<td>28</td>
-					<td>2011/06/07</td>
+					<td>7th Jun 11</td>
 					<td>$206,850</td>
 				</tr>
 				<tr class="even">
-					<td class="sorting_1">Brielle Williamson</td>
+					<td>Brielle</td>
+					<td>Williamson</td>
 					<td>Integration Specialist</td>
 					<td>New York</td>
-					<td>61</td>
-					<td>2012/12/02</td>
+					<td>2nd Dec 12</td>
 					<td>$372,000</td>
 				</tr>
 				<tr class="odd">
-					<td class="sorting_1">Bruno Nash</td>
+					<td>Bruno</td>
+					<td>Nash</td>
 					<td>Software Engineer</td>
 					<td>London</td>
-					<td>38</td>
-					<td>2011/05/03</td>
+					<td>3rd May 11</td>
 					<td>$163,500</td>
 				</tr>
 				<tr class="even">
-					<td class="sorting_1">Caesar Vance</td>
+					<td>Caesar</td>
+					<td>Vance</td>
 					<td>Pre-Sales Support</td>
 					<td>New York</td>
-					<td>21</td>
-					<td>2011/12/12</td>
+					<td>12th Dec 11</td>
 					<td>$106,450</td>
 				</tr>
 				<tr class="odd">
-					<td class="sorting_1">Cara Stevens</td>
+					<td>Cara</td>
+					<td>Stevens</td>
 					<td>Sales Assistant</td>
 					<td>New York</td>
-					<td>46</td>
-					<td>2011/12/06</td>
+					<td>6th Dec 11</td>
 					<td>$145,600</td>
 				</tr>
 				<tr class="even">
-					<td class="sorting_1">Cedric Kelly</td>
+					<td>Cedric</td>
+					<td>Kelly</td>
 					<td>Senior Javascript Developer</td>
 					<td>Edinburgh</td>
-					<td>22</td>
-					<td>2012/03/29</td>
+					<td>29th Mar 12</td>
 					<td>$433,060</td>
 				</tr>
 			</table>
@@ -171,8 +165,7 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this
-					example:</p><code class="multiline brush: js;">$(document).ready(function() {
+					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
 	$('#example').dataTable( {
 		&quot;processing&quot;: true,
 		&quot;serverSide&quot;: true,
@@ -181,8 +174,7 @@ $(document).ready(function() {
 	} );
 } );</code>
 
-					<p>In addition to the above code, the following Javascript library files are loaded for use in this
-					example:</p>
+					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
 						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
@@ -191,36 +183,31 @@ $(document).ready(function() {
 				</div>
 
 				<div class="table">
-					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by
-					DataTables:</p>
+					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by DataTables:</p>
 				</div>
 
 				<div class="css">
 					<div>
-						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
-						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p><code class="multiline brush: js;"></code>
+						<p>This example uses a little bit of additional CSS beyond what is loaded from the library files (below), in order to correctly display the table. The
+						additional CSS used is shown below:</p><code class="multiline language-css"></code>
 					</div>
 
-					<p>The following CSS library files are loaded for use in this example to provide the styling of the
-					table:</p>
+					<p>The following CSS library files are loaded for use in this example to provide the styling of the table:</p>
 
 					<ul>
-						<li><a href=
-						"../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
+						<li><a href="../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
 					</ul>
 				</div>
 
 				<div class="ajax">
-					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data
-					will update automatically as any additional data is loaded.</p>
+					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data will update automatically as any additional data is
+					loaded.</p>
 				</div>
 
 				<div class="php">
-					<p>The script used to perform the server-side processing for this table is shown below. Please note
-					that this is just an example script using PHP. Server-side processing scripts can be written in any
-					language, using <a href="//datatables.net/manual/server-side">the protocol described in the
-					DataTables documentation</a>.</p>
+					<p>The script used to perform the server-side processing for this table is shown below. Please note that this is just an example script using PHP. Server-side
+					processing scripts can be written in any language, using <a href="//datatables.net/manual/server-side">the protocol described in the DataTables
+					documentation</a>.</p>
 				</div>
 			</div>
 		</section>
@@ -243,8 +230,7 @@ $(document).ready(function() {
 							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
-							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
-							colspan)</a></li>
+							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and colspan)</a></li>
 							<li><a href="../basic_init/dom.html">DOM positioning</a></li>
 							<li><a href="../basic_init/flexible_width.html">Flexible table width</a></li>
 							<li><a href="../basic_init/state_save.html">State saving</a></li>
@@ -252,8 +238,7 @@ $(document).ready(function() {
 							<li><a href="../basic_init/scroll_y.html">Scroll - vertical</a></li>
 							<li><a href="../basic_init/scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="../basic_init/scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI
-							ThemeRoller</a></li>
+							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li><a href="../basic_init/comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="../basic_init/language.html">Language options</a></li>
 						</ul>
@@ -266,19 +251,18 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/dt_events.html">DataTables events</a></li>
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
-							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control
-							elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan /
-							colspan)</a></li>
-							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes</a></li>
+							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
+							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
+							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>
 							<li><a href="../advanced_init/language_file.html">Language file</a></li>
 							<li><a href="../advanced_init/defaults.html">Setting defaults</a></li>
 							<li><a href="../advanced_init/row_callback.html">Row created callback</a></li>
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
-							control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence control</a></li>
 						</ul>
 					</div>
 
@@ -314,14 +298,11 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../api/add_row.html">Add rows</a></li>
 							<li><a href="../api/multi_filter.html">Individual column searching (text inputs)</a></li>
-							<li><a href="../api/multi_filter_select.html">Individual column searching (select
-							inputs)</a></li>
+							<li><a href="../api/multi_filter_select.html">Individual column searching (select inputs)</a></li>
 							<li><a href="../api/highlight.html">Highlighting rows and columns</a></li>
-							<li><a href="../api/row_details.html">Child rows (show extra / detailed
-							information)</a></li>
+							<li><a href="../api/row_details.html">Child rows (show extra / detailed information)</a></li>
 							<li><a href="../api/select_row.html">Row selection (multiple rows)</a></li>
-							<li><a href="../api/select_single_row.html">Row selection and deletion (single
-							row)</a></li>
+							<li><a href="../api/select_single_row.html">Row selection and deletion (single row)</a></li>
 							<li><a href="../api/form.html">Form inputs</a></li>
 							<li><a href="../api/counter_columns.html">Index column</a></li>
 							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
@@ -366,10 +347,8 @@ $(document).ready(function() {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
-							detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
-							detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range search</a></li>
 							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
@@ -377,14 +356,11 @@ $(document).ready(function() {
 				</div>
 
 				<div class="epilogue">
-					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full
-					information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and
-					<a href="http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of
-					DataTables.</p>
+					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
+					which extend the capabilities of DataTables.</p>
 
-					<p class="copyright">DataTables designed and created by <a href=
-					"http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2014<br>
+					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>
 				</div>
 			</div>

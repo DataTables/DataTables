@@ -32,26 +32,34 @@ table.dataTable tfoot td {
   padding: 10px 18px 6px 18px;
   border-top: 1px solid #111111;
 }
+table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc,
-table.dataTable thead .sorting_desc,
-table.dataTable thead .sorting {
+table.dataTable thead .sorting_desc {
   cursor: pointer;
   *cursor: hand;
 }
+table.dataTable thead .sorting,
+table.dataTable thead .sorting_asc,
+table.dataTable thead .sorting_desc,
+table.dataTable thead .sorting_asc_disabled,
+table.dataTable thead .sorting_desc_disabled {
+  background-repeat: no-repeat;
+  background-position: center right;
+}
 table.dataTable thead .sorting {
-  background: url("../images/sort_both.png") no-repeat center right;
+  background-image: url("../images/sort_both.png");
 }
 table.dataTable thead .sorting_asc {
-  background: url("../images/sort_asc.png") no-repeat center right;
+  background-image: url("../images/sort_asc.png");
 }
 table.dataTable thead .sorting_desc {
-  background: url("../images/sort_desc.png") no-repeat center right;
+  background-image: url("../images/sort_desc.png");
 }
 table.dataTable thead .sorting_asc_disabled {
-  background: url("../images/sort_asc_disabled.png") no-repeat center right;
+  background-image: url("../images/sort_asc_disabled.png");
 }
 table.dataTable thead .sorting_desc_disabled {
-  background: url("../images/sort_desc_disabled.png") no-repeat center right;
+  background-image: url("../images/sort_desc_disabled.png");
 }
 table.dataTable tbody tr {
   background-color: white;

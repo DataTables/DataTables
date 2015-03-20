@@ -58,6 +58,29 @@ class SSP {
 
 
 	/**
+	 * Database connection
+	 *
+	 * Obtain an PHP PDO connection from a connection details array
+	 *
+	 *  @param  array $conn SQL connection details. The array should have
+	 *    the following properties
+	 *     * host - host name
+	 *     * db   - database name
+	 *     * user - user name
+	 *     * pass - user password
+	 *  @return resource PDO connection
+	 */
+	static function db ( $conn )
+	{
+		if ( is_array( $conn ) ) {
+			return self::sql_connect( $conn );
+		}
+
+		return $conn;
+	}
+
+
+	/**
 	 * Paging
 	 *
 	 * Construct the LIMIT clause for server-side processing SQL query
@@ -199,16 +222,16 @@ class SSP {
 	 * sending back to the client.
 	 *
 	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  array $sql_details SQL connection details - see sql_connect()
+	 *  @param  array|PDO $conn PDO connection resource or connection parameters array
 	 *  @param  string $table SQL table to query
 	 *  @param  string $primaryKey Primary key of the table
 	 *  @param  array $columns Column information array
 	 *  @return array          Server-side processing response array
 	 */
-	static function simple ( $request, $sql_details, $table, $primaryKey, $columns )
+	static function simple ( $request, $conn, $table, $primaryKey, $columns )
 	{
 		$bindings = array();
-		$db = self::sql_connect( $sql_details );
+		$db = self::db( $conn );
 
 		// Build the SQL query string from the request
 		$limit = self::limit( $request, $columns );
@@ -237,6 +260,94 @@ class SSP {
 		);
 		$recordsTotal = $resTotalLength[0][0];
 
+
+		/*
+		 * Output
+		 */
+		return array(
+			"draw"            => intval( $request['draw'] ),
+			"recordsTotal"    => intval( $recordsTotal ),
+			"recordsFiltered" => intval( $recordsFiltered ),
+			"data"            => self::data_output( $columns, $data )
+		);
+	}
+
+
+	/**
+	 * The difference between this method and the `simple` one, is that you can
+	 * apply additional `where` conditions to the SQL queries. These can be in
+	 * one of two forms:
+	 *
+	 * * 'Result condition' - This is applied to the result set, but not the
+	 *   overall paging information query - i.e. it will not effect the number
+	 *   of records that a user sees they can have access to. This should be
+	 *   used when you want apply a filtering condition that the user has sent.
+	 * * 'All condition' - This is applied to all queries that are made and
+	 *   reduces the number of records that the user can access. This should be
+	 *   used in conditions where you don't want the user to ever have access to
+	 *   particular records (for example, restricting by a login id).
+	 *
+	 *  @param  array $request Data sent to server by DataTables
+	 *  @param  array|PDO $conn PDO connection resource or connection parameters array
+	 *  @param  string $table SQL table to query
+	 *  @param  string $primaryKey Primary key of the table
+	 *  @param  array $columns Column information array
+	 *  @param  string $whereResult WHERE condition to apply to the result set
+	 *  @param  string $whereAll WHERE condition to apply to all queries
+	 *  @return array          Server-side processing response array
+	 */
+	static function complex ( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $whereAll=null )
+	{
+		$bindings = array();
+		$db = self::db( $conn );
+		$localWhereResult = array();
+		$localWhereAll = array();
+		$whereAllSql = '';
+
+		// Build the SQL query string from the request
+		$limit = self::limit( $request, $columns );
+		$order = self::order( $request, $columns );
+		$where = self::filter( $request, $columns, $bindings );
+
+		$whereResult = self::_flatten( $whereResult );
+		$whereAll = self::_flatten( $whereAll );
+
+		if ( $whereResult ) {
+			$where = $where ?
+				$where .' AND '.$whereResult :
+				'WHERE '.$whereResult;
+		}
+
+		if ( $whereAll ) {
+			$where = $where ?
+				$where .' AND '.$whereAll :
+				'WHERE '.$whereAll;
+
+			$whereAllSql = 'WHERE '.$whereAll;
+		}
+
+		// Main query to actually get the data
+		$data = self::sql_exec( $db, $bindings,
+			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+			 FROM `$table`
+			 $where
+			 $order
+			 $limit"
+		);
+
+		// Data set length after filtering
+		$resFilterLength = self::sql_exec( $db,
+			"SELECT FOUND_ROWS()"
+		);
+		$recordsFiltered = $resFilterLength[0][0];
+
+		// Total data set length
+		$resTotalLength = self::sql_exec( $db, $bindings,
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table` ".
+			$whereAllSql
+		);
+		$recordsTotal = $resTotalLength[0][0];
 
 		/*
 		 * Output
@@ -385,6 +496,25 @@ class SSP {
 		}
 
 		return $out;
+	}
+
+
+	/**
+	 * Return a string from an array or a string
+	 *
+	 * @param  array|string $a Array to join
+	 * @param  string $join Glue for the concatenation
+	 * @return string Joined string
+	 */
+	static function _flatten ( $a, $join = ' AND ' )
+	{
+		if ( ! $a ) {
+			return '';
+		}
+		else if ( $a && is_array($a) ) {
+			return implode( $join, $a );
+		}
+		return $a;
 	}
 }
 
