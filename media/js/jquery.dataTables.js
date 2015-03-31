@@ -4732,6 +4732,10 @@
 				// Yes, modify the sort
 				nextSortIdx = next( sorting[sortIdx], true );
 	
+				if ( nextSortIdx === null && sorting.length === 1 ) {
+					nextSortIdx = 0; // can't remove sorting completely
+				}
+	
 				if ( nextSortIdx === null ) {
 					sorting.splice( sortIdx, 1 );
 				}
