@@ -1746,6 +1746,7 @@
 	
 			if ( data.DT_RowData ) {
 				$(tr).data( data.DT_RowData );
+				console.log( tr );
 			}
 		}
 	}
