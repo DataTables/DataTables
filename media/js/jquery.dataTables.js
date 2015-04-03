@@ -4423,41 +4423,28 @@
 	{
 		// On first run a static variable is set, since this is only needed once.
 		// Subsequent runs will just use the previously calculated value
-		if ( ! DataTable.__scrollbarWidth ) {
-			var inner = $('<p/>').css( {
-				width: '100%',
-				height: 200,
-				padding: 0
-			} )[0];
+		var width = DataTable.__scrollbarWidth;
 	
-			var outer = $('<div/>')
-				.css( {
+		if ( width === undefined ) {
+			var sizer = $('<p/>').css( {
 					position: 'absolute',
 					top: 0,
 					left: 0,
-					width: 200,
+					width: '100%',
 					height: 150,
 					padding: 0,
-					overflow: 'hidden',
+					overflow: 'scroll',
 					visibility: 'hidden'
 				} )
-				.append( inner )
-				.appendTo( 'body' );
+				.appendTo('body');
 	
-			var w1 = inner.offsetWidth;
-			outer.css( 'overflow', 'scroll' );
-			var w2 = inner.offsetWidth;
+			width = sizer[0].offsetWidth - sizer[0].clientWidth;
+			DataTable.__scrollbarWidth = width;
 	
-			if ( w1 === w2 ) {
-				w2 = outer[0].clientWidth;
-			}
-	
-			outer.remove();
-	
-			DataTable.__scrollbarWidth = w1 - w2;
+			sizer.remove();
 		}
 	
-		return DataTable.__scrollbarWidth;
+		return width;
 	}
 	
 	
