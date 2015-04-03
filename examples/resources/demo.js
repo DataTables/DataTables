@@ -40,6 +40,10 @@ $(document).ready( function () {
 		var ajaxTab = $('ul.tabs li').eq(3).css('display', 'none');
 
 		$(document).on( 'init.dt', function ( e, settings ) {
+			if ( e.namespace !== 'dt' ) {
+				return;
+			}
+
 			var api = new $.fn.dataTable.Api( settings );
 
 			var show = function ( str ) {
@@ -74,6 +78,10 @@ $(document).ready( function () {
 		var phpTab = $('ul.tabs li').eq(4).css('display', 'none');
 
 		$(document).on( 'init.dt.demoSSP', function ( e, settings ) {
+			if ( e.namespace !== 'dt' ) {
+				return;
+			}
+
 			if ( settings.oFeatures.bServerSide ) {
 				if ( $.isFunction( settings.ajax ) ) {
 					return;
