@@ -7892,6 +7892,14 @@
 		// Convert to array of TR elements
 		var rows = [];
 		var addRow = function ( r, k ) {
+			// Recursion to allow for arrays of jQuery objects
+			if ( $.isArray( r ) || r instanceof $ ) {
+				for ( var i=0, ien=r.length ; i<ien ; i++ ) {
+					addRow( r[i], k );
+				}
+				return;
+			}
+	
 			// If we get a TR element, then just add it directly - up to the dev
 			// to add the correct number of columns etc
 			if ( r.nodeName && r.nodeName.toLowerCase() === 'tr' ) {
@@ -7909,14 +7917,7 @@
 			}
 		};
 	
-		if ( $.isArray( data ) || data instanceof $ ) {
-			for ( var i=0, ien=data.length ; i<ien ; i++ ) {
-				addRow( data[i], klass );
-			}
-		}
-		else {
-			addRow( data, klass );
-		}
+		addRow( data, klass );
 	
 		if ( row._details ) {
 			row._details.remove();
