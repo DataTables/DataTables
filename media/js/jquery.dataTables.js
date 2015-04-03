@@ -111,9 +111,17 @@
 	// Escape regular expression special characters
 	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\') + ')', 'g' );
 	
-	// U+2009 is thin space and U+202F is narrow no-break space, both used in many
-	// standards as thousands separators
-	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F]/g;
+	// http://en.wikipedia.org/wiki/Foreign_exchange_market
+	// - \u20BD - Russian ruble.
+	// - \u20a9 - South Korean Won
+	// - \u20BA - Turkish Lira
+	// - \u20B9 - Indian Rupee
+	// - R - Brazil (R$) and South Africa
+	// - fr - Swiss Franc
+	// - kr - Swedish krona, Norwegian krone and Danish krone
+	// - \u2009 is thin space and \u202F is narrow no-break space, both used in many
+	//   standards as thousands separators.
+	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]/gi;
 	
 	
 	var _empty = function ( d ) {
@@ -142,6 +150,13 @@
 	var _isNumber = function ( d, decimalPoint, formatted ) {
 		var strType = typeof d === 'string';
 	
+		// If empty return immediately so there must be a number if it is a
+		// formatted string (this stops the string "k", or "kr", etc being detected
+		// as a formatted number for currency
+		if ( _empty( d ) ) {
+			return true;
+		}
+	
 		if ( decimalPoint && strType ) {
 			d = _numToDecimal( d, decimalPoint );
 		}
@@ -150,7 +165,7 @@
 			d = d.replace( _re_formatted_numeric, '' );
 		}
 	
-		return _empty( d ) || (!isNaN( parseFloat(d) ) && isFinite( d ));
+		return !isNaN( parseFloat(d) ) && isFinite( d );
 	};
 	
 	
