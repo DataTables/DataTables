@@ -14080,7 +14080,7 @@
 			numbers.splice( 0, 0, 0 );
 		}
 		else {
-			numbers = _range( page-1, page+2 );
+			numbers = _range( page-half+2, page+half-1 );
 			numbers.push( 'ellipsis' );
 			numbers.push( pages-1 );
 			numbers.splice( 0, 0, 'ellipsis' );
@@ -14111,6 +14111,8 @@
 	
 		// For testing and plug-ins to use
 		_numbers: _numbers,
+	
+		// Number of number buttons (including ellipsis) to show. _Must be odd!_
 		numbers_length: 7
 	} );
 	
@@ -14142,7 +14144,7 @@
 	
 							switch ( button ) {
 								case 'ellipsis':
-									container.append('<span>&#x2026;</span>');
+									container.append('<span class="ellipsis">&#x2026;</span>');
 									break;
 	
 								case 'first':
