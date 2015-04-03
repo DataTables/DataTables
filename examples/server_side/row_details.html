@@ -56,7 +56,7 @@ $(document).ready(function() {
 	// Array to track the ids of the details displayed rows
 	var detailRows = [];
 
-	$('#example tbody').on( 'click', 'tr td:first-child', function () {
+	$('#example tbody').on( 'click', 'tr td.details-control', function () {
 		var tr = $(this).closest('tr');
 		var row = dt.row( tr );
 		var idx = $.inArray( tr.attr('id'), detailRows );
@@ -82,7 +82,7 @@ $(document).ready(function() {
 	// On each draw, loop over the `detailRows` array and show any child rows
 	dt.on( 'draw', function () {
 		$.each( detailRows, function ( i, id ) {
-			$('#'+id+' td:first-child').trigger( 'click' );
+			$('#'+id+' td.details-control').trigger( 'click' );
 		} );
 	} );
 } );
@@ -177,7 +177,7 @@ $(document).ready(function() {
 	// Array to track the ids of the details displayed rows
 	var detailRows = [];
 
-	$('#example tbody').on( 'click', 'tr td:first-child', function () {
+	$('#example tbody').on( 'click', 'tr td.details-control', function () {
 		var tr = $(this).closest('tr');
 		var row = dt.row( tr );
 		var idx = $.inArray( tr.attr('id'), detailRows );
@@ -203,7 +203,7 @@ $(document).ready(function() {
 	// On each draw, loop over the `detailRows` array and show any child rows
 	dt.on( 'draw', function () {
 		$.each( detailRows, function ( i, id ) {
-			$('#'+id+' td:first-child').trigger( 'click' );
+			$('#'+id+' td.details-control').trigger( 'click' );
 		} );
 	} );
 } );</code>
