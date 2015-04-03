@@ -211,15 +211,15 @@ table.dataTable.nowrap th, table.dataTable.nowrap td {
 }
 table.dataTable.compact thead th,
 table.dataTable.compact thead td {
-  padding: 5px 9px;
+  padding: 4px 17px 4px 4px;
 }
 table.dataTable.compact tfoot th,
 table.dataTable.compact tfoot td {
-  padding: 5px 9px 3px 9px;
+  padding: 4px;
 }
 table.dataTable.compact tbody th,
 table.dataTable.compact tbody td {
-  padding: 4px 5px;
+  padding: 4px;
 }
 table.dataTable th.dt-left,
 table.dataTable td.dt-left {
