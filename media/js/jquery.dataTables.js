@@ -4972,31 +4972,43 @@
 	
 		// Restore key features - todo - for 1.11 this needs to be done by
 		// subscribed events
-		settings._iDisplayStart    = state.start;
-		settings.iInitDisplayStart = state.start;
-		settings._iDisplayLength   = state.length;
-		settings.aaSorting = [];
+		if ( state.start !== undefined ) {
+			settings._iDisplayStart    = state.start;
+			settings.iInitDisplayStart = state.start;
+		}
+		if ( state.length !== undefined ) {
+			settings._iDisplayLength   = state.length;
+		}
 	
 		// Order
-		$.each( state.order, function ( i, col ) {
-			settings.aaSorting.push( col[0] >= columns.length ?
-				[ 0, col[1] ] :
-				col
-			);
-		} );
+		if ( state.order !== undefined ) {
+			settings.aaSorting = [];
+			$.each( state.order, function ( i, col ) {
+				settings.aaSorting.push( col[0] >= columns.length ?
+					[ 0, col[1] ] :
+					col
+				);
+			} );
+		}
 	
 		// Search
-		$.extend( settings.oPreviousSearch, _fnSearchToHung( state.search ) );
+		if ( state.search !== undefined ) {
+			$.extend( settings.oPreviousSearch, _fnSearchToHung( state.search ) );
+		}
 	
 		// Columns
 		for ( i=0, ien=state.columns.length ; i<ien ; i++ ) {
 			var col = state.columns[i];
 	
 			// Visibility
-			columns[i].bVisible = col.visible;
+			if ( col.visible !== undefined ) {
+				columns[i].bVisible = col.visible;
+			}
 	
 			// Search
-			$.extend( settings.aoPreSearchCols[i], _fnSearchToHung( col.search ) );
+			if ( col.search !== undefined ) {
+				$.extend( settings.aoPreSearchCols[i], _fnSearchToHung( col.search ) );
+			}
 		}
 	
 		_fnCallbackFire( settings, 'aoStateLoaded', 'stateLoaded', [settings, state] );
