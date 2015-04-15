@@ -6766,18 +6766,12 @@
 	DataTable.Api = _Api;
 	
 	_Api.prototype = /** @lends DataTables.Api */{
-		/**
-		 * Return a new Api instance, comprised of the data held in the current
-		 * instance, join with the other array(s) and/or value(s).
-		 *
-		 * An alias for `Array.prototype.concat`.
-		 *
-		 * @type method
-		 * @param {*} value1 Arrays and/or values to concatenate.
-		 * @param {*} [...] Additional arrays and/or values to concatenate.
-		 * @returns {DataTables.Api} New API instance, comprising of the combined
-		 *   array.
-		 */
+		any: function ()
+		{
+			return this.flatten().length !== 0;
+		},
+	
+	
 		concat:  __arrayProto.concat,
 	
 	
