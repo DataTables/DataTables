@@ -6844,7 +6844,6 @@
 			return -1;
 		},
 	
-		// Note that `alwaysNew` is internal - use iteratorNew externally
 		iterator: function ( flatten, type, fn, alwaysNew ) {
 			var
 				a = [], ret,
