@@ -4252,9 +4252,20 @@
 		}
 	
 		if ( (tableWidthAttr || scrollX) && ! oSettings._reszEvt ) {
-			$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
-				_fnAdjustColumnSizing( oSettings );
-			} ) );
+			var bindResize = function () {
+				$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
+					_fnAdjustColumnSizing( oSettings );
+				} ) );
+			};
+	
+			// IE6/7 will crash if we bind a resize event handler on page load.
+			// To be removed in 1.11 which drops IE6/7 support
+			if ( oSettings.oBrowser.bScrollOversize ) {
+				setTimeout( bindResize, 1000 );
+			}
+			else {
+				bindResize();
+			}
 	
 			oSettings._reszEvt = true;
 		}
