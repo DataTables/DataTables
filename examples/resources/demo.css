@@ -9,6 +9,11 @@ body {
 	background-color: #fff;
 }
 
+body.dt-example-bootstrap {
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	line-height: 1.42857143;
+}
 
 div.container {
 	max-width: 980px;
@@ -277,6 +282,7 @@ ul.tabs li.active:hover {
 
 div.tabs {
 	clear: both;
+	margin-top: -1px;
 }
 
 div.tabs>div {
