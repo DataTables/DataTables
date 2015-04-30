@@ -302,6 +302,13 @@ var sh = {
      */
     highlight: function(globalParams, element)
     {
+        // Don't run the syntax highlighter on IE6/7 as it absolutely kills
+        // performance
+        var userAgent = navigator.appVersion;
+        if (userAgent.indexOf("MSIE 7.") !== -1 || userAgent.indexOf("MSIE 6.") !== -1) {
+            return;
+        }
+
         var elements = this.findElements(globalParams, element),
             propertyName = 'innerHTML',
             highlighter = null,
