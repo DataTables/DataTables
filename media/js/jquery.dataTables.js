@@ -6739,10 +6739,8 @@
 	 */
 	_Api = function ( context, data )
 	{
-		if ( ! this instanceof _Api ) {
-			throw 'DT API must be constructed as a new object';
-			// or should it do the 'new' for the caller?
-			// return new _Api.apply( this, arguments );
+		if ( ! (this instanceof _Api) ) {
+			return new _Api( context, data );
 		}
 	
 		var settings = [];
