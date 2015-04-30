@@ -4141,21 +4141,20 @@
 		}
 		else
 		{
-			// Otherwise construct a single row table with the widest node in the
-			// data, assign any user defined widths, then insert it into the DOM and
-			// allow the browser to do all the hard work of calculating table widths
+			// Otherwise construct a single row, worst case, table with the widest
+			// node in the data, assign any user defined widths, then insert it into
+			// the DOM and allow the browser to do all the hard work of calculating
+			// table widths
 			var tmpTable = $(table).clone() // don't use cloneNode - IE8 will remove events on the main table
-				.empty()
 				.css( 'visibility', 'hidden' )
-				.removeAttr( 'id' )
-				.append( $(oSettings.nTHead).clone( false ) )
-				.append( $(oSettings.nTFoot).clone( false ) )
-				.append( $('<tbody><tr/></tbody>') );
+				.removeAttr( 'id' );
+	
+			// Clean up the table body
+			tmpTable.find('tbody tr').remove();
+			var tr = $('<tr/>').appendTo( tmpTable.find('tbody') );
 	
 			// Remove any assigned widths from the footer (from scrolling)
 			tmpTable.find('tfoot th, tfoot td').css('width', '');
-	
-			var tr = tmpTable.find( 'tbody tr' );
 	
 			// Apply custom sizing to the cloned header
 			headerCells = _fnGetUniqueThs( oSettings, tmpTable.find('thead')[0] );
