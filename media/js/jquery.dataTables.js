@@ -2462,7 +2462,7 @@
 			"success": function (json) {
 				var error = json.error || json.sError;
 				if ( error ) {
-					oSettings.oApi._fnLog( oSettings, 0, error );
+					_fnLog( oSettings, 0, error );
 				}
 	
 				oSettings.json = json;
@@ -2472,14 +2472,15 @@
 			"cache": false,
 			"type": oSettings.sServerMethod,
 			"error": function (xhr, error, thrown) {
-				_fnCallbackFire( oSettings, null, 'xhr', [oSettings, null, oSettings.jqXHR] );
+				var ret = _fnCallbackFire( oSettings, null, 'xhr', [oSettings, null, oSettings.jqXHR] );
 	
-				var log = oSettings.oApi._fnLog;
-				if ( error == "parsererror" ) {
-					log( oSettings, 0, 'Invalid JSON response', 1 );
-				}
-				else if ( xhr.readyState === 4 ) {
-					log( oSettings, 0, 'Ajax error', 7 );
+				if ( $.inArray( true, ret ) === -1 ) {
+					if ( error == "parsererror" ) {
+						_fnLog( oSettings, 0, 'Invalid JSON response', 1 );
+					}
+					else if ( xhr.readyState === 4 ) {
+						_fnLog( oSettings, 0, 'Ajax error', 7 );
+					}
 				}
 	
 				_fnProcessingDisplay( oSettings, false );
@@ -5220,13 +5221,13 @@
 	 *  @param {object} settings dataTables settings object
 	 *  @param {string} callbackArr Name of the array storage for the callbacks in
 	 *      oSettings
-	 *  @param {string} event Name of the jQuery custom event to trigger. If null no
-	 *      trigger is fired
+	 *  @param {string} eventName Name of the jQuery custom event to trigger. If
+	 *      null no trigger is fired
 	 *  @param {array} args Array of arguments to pass to the callback function /
 	 *      trigger
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnCallbackFire( settings, callbackArr, e, args )
+	function _fnCallbackFire( settings, callbackArr, eventName, args )
 	{
 		var ret = [];
 	
@@ -5236,8 +5237,12 @@
 			} );
 		}
 	
-		if ( e !== null ) {
-			$(settings.nTable).trigger( e+'.dt', args );
+		if ( eventName !== null ) {
+			var e = $.Event( eventName+'.dt' );
+	
+			$(settings.nTable).trigger( e, args );
+	
+			ret.push( e.result );
 		}
 	
 		return ret;
