@@ -4108,7 +4108,8 @@
 			tableWidthAttr = table.getAttribute('width'), // from DOM element
 			tableContainer = table.parentNode,
 			userInputs = false,
-			i, column, columnIdx, width, outerWidth;
+			i, column, columnIdx, width, outerWidth,
+			ie67 = oSettings.oBrowser.bScrollOversize;
 	
 		var styleWidth = table.style.width;
 		if ( styleWidth && styleWidth.indexOf('%') !== -1 ) {
@@ -4131,9 +4132,11 @@
 		 * the web- browser. No custom sizes can be set in order for this to happen,
 		 * nor scrolling used
 		 */
-		if ( ! userInputs && ! scrollX && ! scrollY &&
-		    columnCount == _fnVisbleColumns( oSettings ) &&
-			columnCount == headerCells.length
+		if ( ie67 || (
+				! userInputs && ! scrollX && ! scrollY &&
+				columnCount == _fnVisbleColumns( oSettings ) &&
+				columnCount == headerCells.length
+			)
 		) {
 			for ( i=0 ; i<columnCount ; i++ ) {
 				columns[i].sWidth = _fnStringToCss( headerCells.eq(i).width() );
@@ -4269,7 +4272,7 @@
 	
 			// IE6/7 will crash if we bind a resize event handler on page load.
 			// To be removed in 1.11 which drops IE6/7 support
-			if ( oSettings.oBrowser.bScrollOversize ) {
+			if ( ie67 ) {
 				setTimeout( bindResize, 1000 );
 			}
 			else {
