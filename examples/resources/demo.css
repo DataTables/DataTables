@@ -39,7 +39,7 @@ a {
 	text-decoration: none;
 }
 
-a:hover {
+p > a:hover {
 	text-decoration: underline;
 }
 
@@ -286,9 +286,8 @@ div.tabs {
 }
 
 div.tabs>div {
-	padding: 0 15px;
+	padding: 15px;
 	border: 1px solid #ccc;
-	margin-top: 1px;
 	display: none;
 	border-radius: 5px;
 	box-shadow: 2px 2px 2px #bbb;
@@ -297,6 +296,10 @@ div.tabs>div {
 div.tabs>div h1 {
 	border-bottom: none;
 	margin-top: 1em;
+}
+
+div.tabs > div > p:first-child {
+	margin-top: 0;
 }
 
 div.column_half {
