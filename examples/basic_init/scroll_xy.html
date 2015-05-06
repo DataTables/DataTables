@@ -11,7 +11,6 @@
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
 	<style type="text/css" class="init">
 
-	th, td { white-space: nowrap; }
 	div.dataTables_wrapper {
 		width: 800px;
 		margin: 0 auto;
@@ -44,7 +43,7 @@ $(document).ready(function() {
 				the scrolling accounts for this.</p>
 			</div>
 
-			<table id="example" class="display" cellspacing="0" width="100%">
+			<table id="example" class="display nowrap" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>First name</th>
@@ -722,8 +721,7 @@ $(document).ready(function() {
 				<div class="css">
 					<div>
 						<p>This example uses a little bit of additional CSS beyond what is loaded from the library files (below), in order to correctly display the table. The
-						additional CSS used is shown below:</p><code class="multiline language-css">th, td { white-space: nowrap; }
-	div.dataTables_wrapper {
+						additional CSS used is shown below:</p><code class="multiline language-css">div.dataTables_wrapper {
 		width: 800px;
 		margin: 0 auto;
 	}</code>
