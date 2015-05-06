@@ -4153,6 +4153,14 @@
 			tmpTable.find('tbody tr').remove();
 			var tr = $('<tr/>').appendTo( tmpTable.find('tbody') );
 	
+			// Clone the table header and footer - we can't use the header / footer
+			// from the cloned table, since if scrolling is active, the table's
+			// real header and footer are contained in different table tags
+			tmpTable.find('thead, tfoot').remove();
+			tmpTable
+				.append( $(oSettings.nTHead).clone() )
+				.append( $(oSettings.nTFoot).clone() );
+	
 			// Remove any assigned widths from the footer (from scrolling)
 			tmpTable.find('tfoot th, tfoot td').css('width', '');
 	
