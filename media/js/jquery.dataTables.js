@@ -1179,7 +1179,7 @@
 	 */
 	function _fnSplitObjNotation( str )
 	{
-		return $.map( str.match(/(\\.|[^\.])+/g) || [''], function ( s ) {
+		return $.map( str.match(/(\\.|[^\.])+/g), function ( s ) {
 			return s.replace(/\\./g, '.');
 		} );
 	}
@@ -1640,7 +1640,7 @@
 		else {
 			// Existing row object passed in
 			tds = row.anCells;
-	
+			
 			for ( var j=0, jen=tds.length ; j<jen ; j++ ) {
 				cellProcess( tds[j] );
 			}
