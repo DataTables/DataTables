@@ -14240,7 +14240,7 @@
 							attach( inner, button );
 						}
 						else {
-							btnDisplay = '';
+							btnDisplay = null;
 							btnClass = '';
 	
 							switch ( button ) {
@@ -14279,7 +14279,7 @@
 									break;
 							}
 	
-							if ( btnDisplay ) {
+							if ( btnDisplay !== null ) {
 								node = $('<a>', {
 										'class': classes.sPageButton+' '+btnClass,
 										'aria-controls': settings.sTableId,
