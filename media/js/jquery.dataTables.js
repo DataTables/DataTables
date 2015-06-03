@@ -14610,11 +14610,12 @@
 	 *
 	 * * `number` - Will format numeric data (defined by `columns.data`) for
 	 *   display, retaining the original unformatted data for sorting and filtering.
-	 *   It takes 4 parameters:
+	 *   It takes 5 parameters:
 	 *   * `string` - Thousands grouping separator
 	 *   * `string` - Decimal point indicator
 	 *   * `integer` - Number of decimal points to show
 	 *   * `string` (optional) - Prefix.
+	 *   * `string` (optional) - Postfix (/suffix).
 	 *
 	 * @example
 	 *   // Column definition using the number renderer
@@ -14626,7 +14627,7 @@
 	 * @namespace
 	 */
 	DataTable.render = {
-		number: function ( thousands, decimal, precision, prefix ) {
+		number: function ( thousands, decimal, precision, prefix, postfix ) {
 			return {
 				display: function ( d ) {
 					if ( typeof d !== 'number' && typeof d !== 'string' ) {
@@ -14645,7 +14646,8 @@
 						intPart.toString().replace(
 							/\B(?=(\d{3})+(?!\d))/g, thousands
 						) +
-						floatPart;
+						floatPart +
+						(postfix||'');
 				}
 			};
 		}
