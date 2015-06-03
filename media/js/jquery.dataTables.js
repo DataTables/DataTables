@@ -9117,9 +9117,21 @@
 	// Add the `every()` method for rows, columns and cells in a compact form
 	$.each( [ 'column', 'row', 'cell' ], function ( i, type ) {
 		_api_register( type+'s().every()', function ( fn ) {
-			return this.iterator( type, function ( settings, idx, idx2 ) {
-				// idx2 is undefined for rows and columns.
-				fn.call( new _Api( settings )[ type ]( idx, idx2 ) );
+			return this.iterator( type, function ( settings, arg1, arg2, arg3, arg4 ) {
+				// Rows and columns:
+				//  arg1 - index
+				//  arg2 - table counter
+				//  arg3 - loop counter
+				//  arg4 - undefined
+				// Cells:
+				//  arg1 - row index
+				//  arg2 - column index
+				//  arg3 - table counter
+				//  arg4 - loop counter
+				fn.call(
+					new _Api( settings )[ type ]( arg1, type==='cell' ? arg2 : undefined ),
+					arg1, arg2, arg3, arg4
+				);
 			} );
 		} );
 	} );
