@@ -6795,7 +6795,7 @@
 	_Api.prototype = /** @lends DataTables.Api */{
 		any: function ()
 		{
-			return this.flatten().length !== 0;
+			return this.count() !== 0;
 		},
 	
 	
@@ -6803,6 +6803,12 @@
 	
 	
 		context: [], // array of table settings objects
+	
+	
+		count: function ()
+		{
+			return this.flatten().length;
+		},
 	
 	
 		each: function ( fn )
