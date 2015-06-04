@@ -1545,7 +1545,7 @@
 			}
 	
 			// Update DataTables special `DT_*` attributes for the row
-			_fnRowAttributes( row );
+			_fnRowAttributes( settings, row );
 		}
 	}
 	
@@ -1683,7 +1683,7 @@
 			nTr._DT_RowIndex = iRow;
 	
 			/* Special parameters can be given by the data source to be used on the row */
-			_fnRowAttributes( row );
+			_fnRowAttributes( oSettings, row );
 	
 			/* Process each column */
 			for ( i=0, iLen=oSettings.aoColumns.length ; i<iLen ; i++ )
@@ -1735,17 +1735,20 @@
 	/**
 	 * Add attributes to a row based on the special `DT_*` parameters in a data
 	 * source object.
+	 *  @param {object} settings DataTables settings object
 	 *  @param {object} DataTables row object for the row to be modified
 	 *  @memberof DataTable#oApi
 	 */
-	function _fnRowAttributes( row )
+	function _fnRowAttributes( settings, row )
 	{
 		var tr = row.nTr;
 		var data = row._aData;
 	
 		if ( tr ) {
-			if ( data.DT_RowId ) {
-				tr.id = data.DT_RowId;
+			var id = settings.rowId( data );
+	
+			if ( id ) {
+				tr.id = id;
 			}
 	
 			if ( data.DT_RowClass ) {
@@ -6285,6 +6288,8 @@
 			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
 			
+			oSettings.rowId = _fnGetObjectDataFn( oInit.rowId );
+			
 			var oClasses = oSettings.oClasses;
 			
 			// @todo Remove in 1.11
@@ -7816,6 +7821,12 @@
 	_api_registerPlural( 'rows().indexes()', 'row().index()', function () {
 		return this.iterator( 'row', function ( settings, row ) {
 			return row;
+		}, 1 );
+	} );
+	
+	_api_registerPlural( 'rows().ids()', 'row().id()', function ( hash ) {
+		return this.iterator( 'row', function ( settings, row ) {
+			return (hash ? '#' : '') + settings.rowId( settings.aoData[ row ]._aData );
 		}, 1 );
 	} );
 	
@@ -11757,7 +11768,18 @@
 		 *  @name DataTable.defaults.renderer
 		 *
 		 */
-		"renderer": null
+		"renderer": null,
+	
+	
+		/**
+		 * Set the data property name that DataTables should use to get a row's id
+		 * to set as the `id` property in the node.
+		 *  @type string
+		 *  @default DT_RowId
+		 *
+		 *  @name DataTable.defaults.rowId
+		 */
+		"rowId": "DT_RowId",
 	};
 	
 	_fnHungarianMap( DataTable.defaults );
@@ -13509,7 +13531,14 @@
 		 *  @type object
 		 *  @default {}
 		 */
-		"oPlugins": {}
+		"oPlugins": {},
+	
+		/**
+		 * Function used to get a row's id from the row's data
+		 *  @type function
+		 *  @default null
+		 */
+		"rowId": null
 	};
 
 	/**

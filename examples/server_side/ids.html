@@ -44,16 +44,20 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>Often when using server-side processing you will find that it can be useful to have a specific ID on each row (the primary key value from the database for
-				example). By assigning the ID you want to apply to each row using the property <code>DT_RowId</code> of the data source object for each row, DataTables will
-				automatically add it for you.</p>
+				example). By assigning the ID you want to apply to each row using the property <code>DT_RowId</code> of the data source object for each row (this property name can
+				be configured using the <a href="//datatables.net/reference/option/idSrc"><code class="option" title=
+				"DataTables initialisation option">idSrc<span>DT</span></code></a> option), DataTables will automatically add it for you (note that this will work for Ajax and
+				Javascript loaded data as well as for server-side processing).</p>
 
-				<p>In addition to <code>DT_RowId</code> there are two other properties which perform similar actions: <code>DT_RowClass</code> and <code>DT_RowData</code>:</p>
+				<p>In addition to <code>DT_RowId</code> there are other properties which perform similar actions:</p>
 
 				<ul class="markdown">
-					<li>{string} <code>DT_RowId</code> - Add an ID to the <em>TR</em> element</li>
-					<li>{string} <code>DT_RowClass</code> - Add a class name to the <em>TR</em> element</li>
-					<li>{object} <code>DT_RowData</code> - Add HTML5 <em>data-</em> attributes to the <em>TR</em> element. This is an object of key / value pairs which are
-					assigned as data attributes to the <em>TR</em> element.</li>
+					<li>{string} <code>DT_RowId</code> - Add an ID to the <code class="tag" title="HTML tag">tr</code> element</li>
+					<li>{string} <code>DT_RowClass</code> - Add a class name to the <code class="tag" title="HTML tag">tr</code> element</li>
+					<li>{object} <code>DT_RowData</code> - Add HTML5 <em>data-</em> attributes to the <code class="tag" title="HTML tag">tr</code> element. This is an object of
+					key / value pairs which are assigned as data attributes to the <code class="tag" title="HTML tag">tr</code> element.</li>
+					<li>{object} <code>DT_RowAttr</code> - Add attributes to the <code class="tag" title="HTML tag">tr</code> element. This is an object of key / value pairs which
+					are assigned as attributes to the <code class="tag" title="HTML tag">tr</code> element.</li>
 				</ul>
 
 				<p>This example below shows <code>DT_RowId</code> being used to add information to the table. In addition objects are used as the data source for the rows.</p>
