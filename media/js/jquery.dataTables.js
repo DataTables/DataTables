@@ -11779,7 +11779,7 @@
 		 *
 		 *  @name DataTable.defaults.rowId
 		 */
-		"rowId": "DT_RowId",
+		"rowId": "DT_RowId"
 	};
 	
 	_fnHungarianMap( DataTable.defaults );
