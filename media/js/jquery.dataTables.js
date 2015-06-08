@@ -7428,9 +7428,15 @@
 			_fnReDraw( settings, holdPosition );
 		}
 		else {
-			// Trigger xhr
 			_fnProcessingDisplay( settings, true );
 	
+			// Cancel an existing request
+			var xhr = settings.jqXHR;
+			if ( xhr && xhr.readyState !== 4 ) {
+				xhr.abort();
+			}
+	
+			// Trigger xhr
 			_fnBuildAjax( settings, [], function( json ) {
 				_fnClearTable( settings );
 	
