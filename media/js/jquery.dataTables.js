@@ -1813,7 +1813,7 @@
 				}
 			}
 	
-			if ( column.sTitle != cell[0].innerHTML ) {
+			if ( column.sTitle != cell.html() ) {
 				cell.html( column.sTitle );
 			}
 	
@@ -3304,8 +3304,6 @@
 				column.nTh.style.width = _fnStringToCss( column.sWidth );
 			}
 		}
-	
-		_fnCallbackFire( settings, null, 'preInit', [settings] );
 	
 		// If there is default sorting required - let's do it. The sort function
 		// will do the drawing for us. Otherwise we draw the table regardless of the
@@ -5077,7 +5075,7 @@
 	function _fnLog( settings, level, msg, tn )
 	{
 		msg = 'DataTables warning: '+
-			(settings ? 'table id='+settings.sTableId+' - ' : '')+msg;
+			(settings!==null ? 'table id='+settings.sTableId+' - ' : '')+msg;
 	
 		if ( tn ) {
 			msg += '. For more information about this error, please see '+
@@ -5089,9 +5087,7 @@
 			var ext = DataTable.ext;
 			var type = ext.sErrMode || ext.errMode;
 	
-			if ( settings ) {
-				_fnCallbackFire( settings, null, 'error', [ settings, tn, msg ] );
-			}
+			_fnCallbackFire( settings, null, 'error', [ settings, tn, msg ] );
 	
 			if ( type == 'alert' ) {
 				alert( msg );
