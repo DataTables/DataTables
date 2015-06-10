@@ -59,7 +59,11 @@ $(document).ready( function () {
 				$('div.tabs div.ajax').append(
 					'<code class="multiline language-js">'+str+'</code>'
 				);
-				SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
+
+				// This can be really slow for large builds
+				setTimeout( function () {
+					SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
+				}, 500 );
 			};
 
 			// First draw
