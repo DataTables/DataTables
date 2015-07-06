@@ -7837,9 +7837,18 @@
 	} );
 	
 	_api_registerPlural( 'rows().ids()', 'row().id()', function ( hash ) {
-		return this.iterator( 'row', function ( settings, row ) {
-			return (hash ? '#' : '') + settings.rowId( settings.aoData[ row ]._aData );
-		}, 1 );
+		var a = [];
+		var context = this.context;
+	
+		// `iterator` will drop undefined values, but in this case we want them
+		for ( var i=0, ien=context.length ; i<ien ; i++ ) {
+			for ( var j=0, jen=this[i].length ; j<jen ; j++ ) {
+				var id = context[i].rowId( context[i].aoData[ this[i][j] ]._aData );
+				a.push( id );
+			}
+		}
+	
+		return new _Api( context, a );
 	} );
 	
 	_api_registerPlural( 'rows().remove()', 'row().remove()', function () {
