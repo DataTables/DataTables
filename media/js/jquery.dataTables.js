@@ -7385,7 +7385,8 @@
 			"end":            settings.fnDisplayEnd(),
 			"length":         len,
 			"recordsTotal":   settings.fnRecordsTotal(),
-			"recordsDisplay": visRecords
+			"recordsDisplay": visRecords,
+			"serverSide":     _fnDataSource( settings ) === 'ssp'
 		};
 	} );
 	
