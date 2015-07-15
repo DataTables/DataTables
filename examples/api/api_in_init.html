@@ -41,16 +41,15 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>There are times when you may wish to call API functions inside the DataTables callback functions (for example <a href=
-				"//datatables.net/reference/option/initComplete"><code class="option" title="DataTables initialisation option">initComplete<span>DT</span></code></a>, <a href=
-				"//datatables.net/reference/option/rowCallback"><code class="option" title="DataTables initialisation option">rowCallback<span>DT</span></code></a> etc). The
-				complicating issue with this is that the object hasn't fully initialised, so you can't assign the result to a variable and then use that variable in the callback.
-				However, all of DataTables' callback functions are executed in the scope of the DataTable instance, so you can use the Javascript special variable
-				<code>this</code> to access the API (<code>this.api()</code> will give an API instance) as <code>this</code> is the <code class="tag" title="HTML tag">table</code>
-				node.</p>
+				"//datatables.net/reference/option/initComplete"><code class="option" title="DataTables initialisation option">initComplete</code></a>, <a href=
+				"//datatables.net/reference/option/rowCallback"><code class="option" title="DataTables initialisation option">rowCallback</code></a> etc). The complicating issue
+				with this is that the object hasn't fully initialised, so you can't assign the result to a variable and then use that variable in the callback. However, all of
+				DataTables' callback functions are executed in the scope of the DataTable instance, so you can use the Javascript special variable <code>this</code> to access the
+				API (<code>this.api()</code> will give an API instance) as <code>this</code> is the <code class="tag" title="HTML tag">table</code> node.</p>
 
-				<p>In this example you will be able to see that the <a href="//datatables.net/reference/api/%24()"><code class="api" title=
-				"DataTables API method">$()<span>DT</span></code></a> method is used to get all cell nodes in the table's body and then act on them (in this case adding a click
-				event). The action here is to apply a filter to the table with the value of what is in each cell.</p>
+				<p>In this example you will be able to see that the <a href="//datatables.net/reference/api/%24()"><code class="api" title="DataTables API method">$()</code></a>
+				method is used to get all cell nodes in the table's body and then act on them (in this case adding a click event). The action here is to apply a filter to the
+				table with the value of what is in each cell.</p>
 
 				<p>It is also worth noting that this same effect could be achieved by attaching a delegated click event after the table has been initialised - but the example
 				shows the use of the API inside the callbacks!</p>

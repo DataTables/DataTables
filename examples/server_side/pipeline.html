@@ -164,8 +164,8 @@ $(document).ready(function() {
 				<p>This example shows one technique to reduce the number of Ajax calls that are made to the server by caching more data than is needed for each draw. This is done
 				by intercepting the Ajax call and routing it through a data cache control; using the data from the cache if available, and making the Ajax request if not. This
 				intercept of the Ajax request is performed by giving the <a href="//datatables.net/reference/option/ajax"><code class="option" title=
-				"DataTables initialisation option">ajax<span>DT</span></code></a> option as a function. This function then performs the logic of deciding if another Ajax call is
-				needed, or if data from the cache can be used.</p>
+				"DataTables initialisation option">ajax</code></a> option as a function. This function then performs the logic of deciding if another Ajax call is needed, or if
+				data from the cache can be used.</p>
 
 				<p>Keep in mind that this caching is for paging only; the pipeline must be cleared for other interactions such as ordering and searching since the full data set,
 				when using server-side processing, is only available at the server.</p>

@@ -181,11 +181,16 @@ code {
 	        border-radius: 3px;
 }
 
-code > span {
+code:after {
+	display: inline-block;
 	border-left: 1px solid rgba( 0, 0, 0, 0.2 );
 	margin-left: 4px;
 	padding-left: 4px;
 	opacity: 0.5;
+}
+
+a code {
+	text-decoration: underline;
 }
 
 code.option {
@@ -193,47 +198,63 @@ code.option {
 	background-color: #fcf6f8;
 	border: 1px solid #f7d6df;
 }
+code.option:after { content: 'Option'; }
 
 code.path {
 	color: #095c05; /* dark green */
-	border: 1px solid #D6E9C6;
+	background-color: #eef7ed;
+	border: 1px solid #8ccb89;
 }
+code.path:after { content: 'Path'; }
 
 code.tag {
-	color: #a1a713; /* yellow */
-	background-color: #f7f8e6;
-	border: 1px solid #D6E9C6;
+	color: #c29f00; /* yellow */
+	background-color: #fff9d7;
+	border: 1px solid #ffe700;
 }
+code.tag:after { content: 'Tag'; }
 
 code.api {
 	color: #0c199c; /* dark blue */
 	background-color: #f4f5fc;
 	border: 1px solid #c6cbe9;
 }
+code.api:after { content: 'API'; }
 
 code.type {
-	color: #d119cf; /* purple */
+	color: #d119cf; /* pink */
 	background-color: #faebfa;
 	border: 1px solid #f3aef2;
 }
+code.type:after { content: 'Type'; }
 
 code.event {
 	color: #2a839e; /* deep aqua */
 	background-color: #f5fafb;
 	border: 1px solid #a8ddec;
 }
+code.event:after { content: 'Event'; }
 
 code.string {
-	color: #e8941e; /* orange */
-	background-color: #fcf8f1;
-	border: 1px solid #f7e4c9;
+	color: #c05f1d; /* brown */
+	background-color: #f5eee9;
+	border: 1px solid #dfc4b2;
 }
+code.string:after { content: 'String'; }
 
 code.field {
 	color: #ad1ee8; /* purple */
 	background-color: #f9f1fc;
 	border: 1px solid #ebc9f7;
 }
+code.field:after { content: 'Field'; }
+
+code.button {
+	color: #464e50; /* grey */
+	background-color: #f2f7f9;
+	border: 1px solid #b8c3c5;
+}
+code.button:after { content: 'Button'; }
 
 code.multiline {
 	display: inline-block;

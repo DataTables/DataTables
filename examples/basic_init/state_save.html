@@ -35,22 +35,20 @@ $(document).ready(function() {
 			<div class="info">
 				<p>DataTables has the option of being able to save the state of a table (its paging position, ordering state etc) so that is can be restored when the user reloads
 				a page, or comes back to the page after visiting a sub-page. This state saving ability is enabled by the <a href=
-				"//datatables.net/reference/option/stateSave"><code class="option" title="DataTables initialisation option">stateSave<span>DT</span></code></a> option.</p>
+				"//datatables.net/reference/option/stateSave"><code class="option" title="DataTables initialisation option">stateSave</code></a> option.</p>
 
 				<p>The built in state saving method uses the HTML5 <code>localStorage</code> and <code>sessionStorage</code> APIs for efficient storage of the data. Please note
 				that this means that the built in state saving option <strong>will not work with IE6/7</strong> as these browsers do not support these APIs. Alternative options of
 				using cookies or saving the state on the server through Ajax can be used through the <a href="//datatables.net/reference/option/stateSaveCallback"><code class=
-				"option" title="DataTables initialisation option">stateSaveCallback<span>DT</span></code></a> and <a href=
-				"//datatables.net/reference/option/stateLoadCallback"><code class="option" title="DataTables initialisation option">stateLoadCallback<span>DT</span></code></a>
-				options.</p>
+				"option" title="DataTables initialisation option">stateSaveCallback</code></a> and <a href="//datatables.net/reference/option/stateLoadCallback"><code class=
+				"option" title="DataTables initialisation option">stateLoadCallback</code></a> options.</p>
 
 				<p>The duration for which the saved state is valid and can be used to restore the table state can be set using the <a href=
-				"//datatables.net/reference/option/stateDuration"><code class="option" title="DataTables initialisation option">stateDuration<span>DT</span></code></a>
-				initialisation parameter (2 hours by default). This parameter also controls if <code>localStorage</code> (0 or greater) or <code>sessionStorage</code> (-1) is used
-				to store the data.</p>
+				"//datatables.net/reference/option/stateDuration"><code class="option" title="DataTables initialisation option">stateDuration</code></a> initialisation parameter
+				(2 hours by default). This parameter also controls if <code>localStorage</code> (0 or greater) or <code>sessionStorage</code> (-1) is used to store the data.</p>
 
 				<p>The example below simply shows state saving enabled in DataTables with the <a href="//datatables.net/reference/option/stateSave"><code class="option" title=
-				"DataTables initialisation option">stateSave<span>DT</span></code></a> option.</p>
+				"DataTables initialisation option">stateSave</code></a> option.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">

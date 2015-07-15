@@ -101,15 +101,15 @@ $(document).ready(function() {
 
 				<p>The example below shows server-side processing being used with the first column having an event listener attached to it which will toggle the child row's
 				display. This is set up using <a href="//datatables.net/reference/option/columns.data"><code class="option" title=
-				"DataTables initialisation option">columns.data<span>DT</span></code></a> and <a href="//datatables.net/reference/option/columns.defaultContent"><code class=
-				"option" title="DataTables initialisation option">columns.defaultContent<span>DT</span></code></a>, in combination with CSS to show an empty cell with a background
-				image which can be clicked upon.</p>
+				"DataTables initialisation option">columns.data</code></a> and <a href="//datatables.net/reference/option/columns.defaultContent"><code class="option" title=
+				"DataTables initialisation option">columns.defaultContent</code></a>, in combination with CSS to show an empty cell with a background image which can be clicked
+				upon.</p>
 
-				<p>The event handler makes use of the <a href="//datatables.net/reference/api/row().child"><code class="api" title=
-				"DataTables API method">row().child<span>DT</span></code></a> methods to firstly check if a row is already displayed, and if so hide it, if not show it. The
-				content of the child row is, in this example, defined by the <code>format()</code> function, but you would replace that with whatever you wanted to show the
-				content required, possibly including, for example, an Ajax call to the server to obtain the extra information to show. Note that the format details function has
-				access to the full data source object for the row, including information that is not actually shown in the table (the salary parameter for example).</p>
+				<p>The event handler makes use of the <a href="//datatables.net/reference/api/row().child"><code class="api" title="DataTables API method">row().child</code></a>
+				methods to firstly check if a row is already displayed, and if so hide it, if not show it. The content of the child row is, in this example, defined by the
+				<code>format()</code> function, but you would replace that with whatever you wanted to show the content required, possibly including, for example, an Ajax call to
+				the server to obtain the extra information to show. Note that the format details function has access to the full data source object for the row, including
+				information that is not actually shown in the table (the salary parameter for example).</p>
 
 				<p>Furthermore, this example shows a small difference from the <a href="../api/row_details.html">client-side row details example</a> in that to have rows
 				automatically reopen when the table is redrawn, we need to track a unique identifier for each row - in this case the row <code>id</code>. This is required because
