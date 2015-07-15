@@ -519,7 +519,7 @@
 		// Scrolling feature / quirks detection
 		var n = $('<div/>')
 			.css( {
-				position: 'fixed',
+				position: 'absolute',
 				top: 0,
 				left: 0,
 				height: 1,
