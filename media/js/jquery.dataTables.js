@@ -14440,7 +14440,7 @@
 					// elements, focus is lost on the select button which is bad for
 					// accessibility. So we want to restore focus once the draw has
 					// completed
-					activeEl = $(document.activeElement).data('dt-idx');
+					activeEl = $(host).find(document.activeElement).data('dt-idx');
 				}
 				catch (e) {}
 	
