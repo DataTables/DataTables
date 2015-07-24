@@ -5,7 +5,7 @@
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
-	<title>DataTables example - Base style - cell borders</title>
+	<title>DataTables example - Read HTML to data objects</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -18,9 +18,20 @@
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
 	<script type="text/javascript" language="javascript" class="init">
 
+
 $(document).ready(function() {
-	$('#example').dataTable();
+	$('#example').DataTable({
+		"columns": [
+			{ "data": "name" },
+			{ "data": "position" },
+			{ "data": "office" },
+			{ "data": "age" },
+			{ "data": "start_date" },
+			{ "data": "salary" }
+		]
+	});
 } );
+
 
 	</script>
 </head>
@@ -28,13 +39,37 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>Base style - cell borders</span></h1>
+			<h1>DataTables example <span>Read HTML to data objects</span></h1>
 
 			<div class="info">
-				<p>This example shows DataTables with just the <code>cell-border</code> class specified, giving a strong delineation between individual cells.</p>
+				<p>When DataTables reads the table content from an HTML table (rather than an Ajax or Javascript data source), by default it will read the information in the table
+				into an array that DataTables stores internally. Each array element represents a column.</p>
+
+				<p>It can be very useful to have DataTables read the information into an object rather than an array, an option that can be triggered using the <a href=
+				"//datatables.net/reference/option/columns.data"><code class="option" title="DataTables initialisation option">columns.data</code></a> initialisation option to
+				define how you want the data to be stored. Typically <a href="//datatables.net/reference/option/columns.data"><code class="option" title=
+				"DataTables initialisation option">columns.data</code></a> is used with <a href="../ajax/objects.html">Ajax sourced data</a> to tell DataTables where to read data
+				from, but as can be seen here it also tells DataTables where to write the data to.</p>
+
+				<p>This ability to store data into an object can be very useful when working with the DataTables API after the table has been initialised.</p>
+
+				<p>In the example shown here, the data read from each row in the table is read into a Javascript object with the structure:</p>
+				<pre>
+<code class="multiline language-js">{
+	"name":	   "...",
+	"position":   "...",
+	"office":	 "...",
+	"age":		"...",
+	"start_date": "...",
+	"salary":	 "..."
+}
+</code>
+</pre>
+
+				<p>Please note that this feature requires DataTables 1.10.3 or newer.</p>
 			</div>
 
-			<table id="example" class="cell-border" cellspacing="0" width="100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -528,7 +563,16 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').dataTable();
+	$('#example').DataTable({
+		&quot;columns&quot;: [
+			{ &quot;data&quot;: &quot;name&quot; },
+			{ &quot;data&quot;: &quot;position&quot; },
+			{ &quot;data&quot;: &quot;office&quot; },
+			{ &quot;data&quot;: &quot;age&quot; },
+			{ &quot;data&quot;: &quot;start_date&quot; },
+			{ &quot;data&quot;: &quot;salary&quot; }
+		]
+	});
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
@@ -603,41 +647,41 @@ $(document).ready(function() {
 					</div>
 
 					<div class="toc-group">
-						<h3><a href="../advanced_init/index.html">Advanced initialisation</a></h3>
-						<ul class="toc">
-							<li><a href="../advanced_init/events_live.html">DOM / jQuery events</a></li>
-							<li><a href="../advanced_init/dt_events.html">DataTables events</a></li>
-							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
-							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
-							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
-							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
-							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
-							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>
-							<li><a href="../advanced_init/language_file.html">Language file</a></li>
-							<li><a href="../advanced_init/defaults.html">Setting defaults</a></li>
-							<li><a href="../advanced_init/row_callback.html">Row created callback</a></li>
-							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
-							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
-							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence control</a></li>
+						<h3><a href="./index.html">Advanced initialisation</a></h3>
+						<ul class="toc active">
+							<li><a href="./events_live.html">DOM / jQuery events</a></li>
+							<li><a href="./dt_events.html">DataTables events</a></li>
+							<li><a href="./column_render.html">Column rendering</a></li>
+							<li><a href="./length_menu.html">Page length options</a></li>
+							<li><a href="./dom_multiple_elements.html">Multiple table control elements</a></li>
+							<li><a href="./complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li class="active"><a href="./object_dom_read.html">Read HTML to data objects</a></li>
+							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
+							<li><a href="./html5-data-options.html">HTML5 data-* attributes - table options</a></li>
+							<li><a href="./language_file.html">Language file</a></li>
+							<li><a href="./defaults.html">Setting defaults</a></li>
+							<li><a href="./row_callback.html">Row created callback</a></li>
+							<li><a href="./row_grouping.html">Row grouping</a></li>
+							<li><a href="./footer_callback.html">Footer callback</a></li>
+							<li><a href="./dom_toolbar.html">Custom toolbar elements</a></li>
+							<li><a href="./sort_direction_control.html">Order direction sequence control</a></li>
 						</ul>
 					</div>
 
 					<div class="toc-group">
-						<h3><a href="./index.html">Styling</a></h3>
-						<ul class="toc active">
-							<li><a href="./display.html">Base style</a></li>
-							<li><a href="./no-classes.html">Base style - no styling classes</a></li>
-							<li class="active"><a href="./cell-border.html">Base style - cell borders</a></li>
-							<li><a href="./compact.html">Base style - compact</a></li>
-							<li><a href="./hover.html">Base style - hover</a></li>
-							<li><a href="./order-column.html">Base style - order-column</a></li>
-							<li><a href="./row-border.html">Base style - row borders</a></li>
-							<li><a href="./stripe.html">Base style - stripe</a></li>
-							<li><a href="./bootstrap.html">Bootstrap</a></li>
-							<li><a href="./foundation.html">Foundation</a></li>
-							<li><a href="./jqueryUI.html">jQuery UI ThemeRoller</a></li>
+						<h3><a href="../styling/index.html">Styling</a></h3>
+						<ul class="toc">
+							<li><a href="../styling/display.html">Base style</a></li>
+							<li><a href="../styling/no-classes.html">Base style - no styling classes</a></li>
+							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
+							<li><a href="../styling/compact.html">Base style - compact</a></li>
+							<li><a href="../styling/hover.html">Base style - hover</a></li>
+							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
+							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
+							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
+							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
+							<li><a href="../styling/foundation.html">Foundation</a></li>
+							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 						</ul>
 					</div>
 

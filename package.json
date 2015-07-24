@@ -1,19 +1,22 @@
 {
-	"name": "DataTables",
-	"version": "1.10.1-dev",
+	"name": "datatables",
+	"version": "1.10.8-dev",
 	"title": "DataTables",
+	"main": "media/js/jquery.dataTables",
+	"files": [
+		"media/js/jquery.dataTables.js",
+		"media/js/jquery.dataTables.min.js",
+		"media/css/jquery.dataTables.css",
+		"media/css/jquery.dataTables.min.css",
+		"media/images"
+	],
+	"license": "MIT",
+	"dependencies": {
+		"jquery": ">=1.7"
+	},
 	"author": {
 		"name": "Allan Jardine",
 		"url": "http://sprymedia.co.uk"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://datatables.net/license"
-		}
-	],
-	"dependencies": {
-		"jquery": ">=1.7"
 	},
 	"description": "DataTables enhances HTML tables with the ability to sort, filter and page the data in the table very easily. It provides a comprehensive API and set of configuration options, allowing you to consume data from virtually any data source.",
 	"keywords": [
@@ -26,5 +29,23 @@
 		"page",
 		"internationalisable"
 	],
-	"homepage": "http://datatables.net"
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/DataTables/DataTables.git"
+	},
+	"homepage": "http://datatables.net",
+
+	"jspm": {
+		"dependencies": {
+			"css": "^0.1.5",
+			"jquery": "*"
+		},
+		"registry": "jspm",
+		"shim": {
+			"media/js/jquery.dataTables": {
+				"deps": ["jquery", "../css/jquery.dataTables.css!"],
+				"exports": "$"
+			}
+		}
+	}
 }

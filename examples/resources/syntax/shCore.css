@@ -69,7 +69,7 @@
   font-style: italic !important;
 }
 .syntaxhighlighter .line {
-  white-space: pre !important;
+  white-space: nowrap !important;
 }
 .syntaxhighlighter table {
   width: 100% !important;
@@ -134,7 +134,7 @@
 .syntaxhighlighter .toolbar {
   position: absolute !important;
   right: 1px !important;
-  top: 1px !important;
+  top: -18px !important;
   font-size: 10px !important;
   z-index: 7 !important;
 }

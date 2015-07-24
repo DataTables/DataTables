@@ -63,7 +63,14 @@ $sql_details = array(
  */
 require( 'ssp.class.php' );
 
-echo $_GET['callback'].'('.json_encode(
-	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
-).');';
+// Validate the JSONP to make use it is an okay Javascript function to execute
+$jsonp = preg_match('/^[$A-Z_][0-9A-Z_$]*$/i', $_GET['callback']) ?
+	$_GET['callback'] :
+	false;
+
+if ( $jsonp ) {
+	echo $jsonp.'('.json_encode(
+		SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
+	).');';
+}
 

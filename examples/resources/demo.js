@@ -28,7 +28,7 @@ $(document).ready( function () {
 	// init html
 	var table = $('<p/>').append( $('table').clone() ).html();
 	$('div.tabs div.table').append(
-		'<code class="multiline brush: html;">\t\t\t'+
+		'<code class="multiline language-html">\t\t\t'+
 			escapeHtml( table )+
 		'</code>'
 	);
@@ -40,11 +40,16 @@ $(document).ready( function () {
 		var ajaxTab = $('ul.tabs li').eq(3).css('display', 'none');
 
 		$(document).on( 'init.dt', function ( e, settings ) {
+			if ( e.namespace !== 'dt' ) {
+				return;
+			}
+
 			var api = new $.fn.dataTable.Api( settings );
 
 			var show = function ( str ) {
 				ajaxTab.css( 'display', 'block' );
 				$('div.tabs div.ajax code').remove();
+				$('div.tabs div.ajax div.syntaxhighlighter').remove();
 
 				// Old IE :-|
 				try {
@@ -52,9 +57,13 @@ $(document).ready( function () {
 				} catch ( e ) {}
 
 				$('div.tabs div.ajax').append(
-					'<code class="multiline brush: js;">'+str+'</code>'
+					'<code class="multiline language-js">'+str+'</code>'
 				);
-				SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
+
+				// This can be really slow for large builds
+				setTimeout( function () {
+					SyntaxHighlighter.highlight( {}, $('div.tabs div.ajax code')[0] );
+				}, 500 );
 			};
 
 			// First draw
@@ -73,6 +82,10 @@ $(document).ready( function () {
 		var phpTab = $('ul.tabs li').eq(4).css('display', 'none');
 
 		$(document).on( 'init.dt.demoSSP', function ( e, settings ) {
+			if ( e.namespace !== 'dt' ) {
+				return;
+			}
+
 			if ( settings.oFeatures.bServerSide ) {
 				if ( $.isFunction( settings.ajax ) ) {
 					return;
@@ -87,7 +100,7 @@ $(document).ready( function () {
 					success: function ( txt ) {
 						phpTab.css( 'display', 'block' );
 						$('div.tabs div.php').append(
-							'<code class="multiline brush: php;">'+txt+'</code>'
+							'<code class="multiline language-php">'+txt+'</code>'
 						);
 						SyntaxHighlighter.highlight( {}, $('div.tabs div.php code')[0] );
 					}

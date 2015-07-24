@@ -56,8 +56,8 @@ $(document).ready(function() {
 	// Array to track the ids of the details displayed rows
 	var detailRows = [];
 
-	$('#example tbody').on( 'click', 'tr td:first-child', function () {
-		var tr = $(this).parents('tr');
+	$('#example tbody').on( 'click', 'tr td.details-control', function () {
+		var tr = $(this).closest('tr');
 		var row = dt.row( tr );
 		var idx = $.inArray( tr.attr('id'), detailRows );
 
@@ -82,7 +82,7 @@ $(document).ready(function() {
 	// On each draw, loop over the `detailRows` array and show any child rows
 	dt.on( 'draw', function () {
 		$.each( detailRows, function ( i, id ) {
-			$('#'+id+' td:first-child').trigger( 'click' );
+			$('#'+id+' td.details-control').trigger( 'click' );
 		} );
 	} );
 } );
@@ -96,33 +96,24 @@ $(document).ready(function() {
 			<h1>DataTables example <span>Row details</span></h1>
 
 			<div class="info">
-				<p>This example shows the use of DataTables' ability to show and hide child rows which are attached to
-				a parent row in the host table. This is often used to show additional information about a row,
-				particularly when you wish to convey more information about a row than there is space for in the host
-				table.</p>
+				<p>This example shows the use of DataTables' ability to show and hide child rows which are attached to a parent row in the host table. This is often used to show
+				additional information about a row, particularly when you wish to convey more information about a row than there is space for in the host table.</p>
 
-				<p>The example below shows server-side processing being used with the first column having an event
-				listener attached to it which will toggle the child row's display. This is set up using <a href=
-				"//datatables.net/reference/option/columns.data"><code class="option" title=
-				"DataTables initialisation option">columns.data<span>DT</span></code></a> and <a href=
-				"//datatables.net/reference/option/columns.defaultContent"><code class="option" title=
-				"DataTables initialisation option">columns.defaultContent<span>DT</span></code></a>, in combination
-				with CSS to show an empty cell with a background image which can be clicked upon.</p>
+				<p>The example below shows server-side processing being used with the first column having an event listener attached to it which will toggle the child row's
+				display. This is set up using <a href="//datatables.net/reference/option/columns.data"><code class="option" title=
+				"DataTables initialisation option">columns.data</code></a> and <a href="//datatables.net/reference/option/columns.defaultContent"><code class="option" title=
+				"DataTables initialisation option">columns.defaultContent</code></a>, in combination with CSS to show an empty cell with a background image which can be clicked
+				upon.</p>
 
-				<p>The event handler makes use of the <a href="//datatables.net/reference/api/row().child"><code class=
-				"api" title="DataTables API method">row().child<span>DT</span></code></a> methods to firstly check if a
-				row is already displayed, and if so hide it, if not show it. The content of the child row is, in this
-				example, defined by the <code>formatDetails()</code> function, but you would replace that with whatever
-				you wanted to show the content required, possibly including, for example, an Ajax call to the server to
-				obtain the extra information to show. Note that the format details function has access to the full data
-				source object for the row, including information that is not actually shown in the table (the salary
-				parameter for example).</p>
+				<p>The event handler makes use of the <a href="//datatables.net/reference/api/row().child"><code class="api" title="DataTables API method">row().child</code></a>
+				methods to firstly check if a row is already displayed, and if so hide it, if not show it. The content of the child row is, in this example, defined by the
+				<code>format()</code> function, but you would replace that with whatever you wanted to show the content required, possibly including, for example, an Ajax call to
+				the server to obtain the extra information to show. Note that the format details function has access to the full data source object for the row, including
+				information that is not actually shown in the table (the salary parameter for example).</p>
 
-				<p>Furthermore, this example shows a small difference from the <a href=
-				"../api/row_details.html">client-side row details example</a> in that to have rows automatically reopen
-				when the table is redrawn, we need to track a unique identifier for each row - in this case the row
-				<code>id</code>. This is required because in server-side processing mode rows are automatically
-				destroyed and recreated on each draw.</p>
+				<p>Furthermore, this example shows a small difference from the <a href="../api/row_details.html">client-side row details example</a> in that to have rows
+				automatically reopen when the table is redrawn, we need to track a unique identifier for each row - in this case the row <code>id</code>. This is required because
+				in server-side processing mode rows are automatically destroyed and recreated on each draw.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -157,8 +148,7 @@ $(document).ready(function() {
 
 			<div class="tabs">
 				<div class="js">
-					<p>The Javascript shown below is used to initialise the table shown in this
-					example:</p><code class="multiline brush: js;">function format ( d ) {
+					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">function format ( d ) {
 	return 'Full name: '+d.first_name+' '+d.last_name+'&lt;br&gt;'+
 	    'Salary: '+d.salary+'&lt;br&gt;'+
 		'The child row can contain any data you wish, including links, images, inner tables etc.';
@@ -187,8 +177,8 @@ $(document).ready(function() {
 	// Array to track the ids of the details displayed rows
 	var detailRows = [];
 
-	$('#example tbody').on( 'click', 'tr td:first-child', function () {
-		var tr = $(this).parents('tr');
+	$('#example tbody').on( 'click', 'tr td.details-control', function () {
+		var tr = $(this).closest('tr');
 		var row = dt.row( tr );
 		var idx = $.inArray( tr.attr('id'), detailRows );
 
@@ -213,13 +203,12 @@ $(document).ready(function() {
 	// On each draw, loop over the `detailRows` array and show any child rows
 	dt.on( 'draw', function () {
 		$.each( detailRows, function ( i, id ) {
-			$('#'+id+' td:first-child').trigger( 'click' );
+			$('#'+id+' td.details-control').trigger( 'click' );
 		} );
 	} );
 } );</code>
 
-					<p>In addition to the above code, the following Javascript library files are loaded for use in this
-					example:</p>
+					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
 						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
@@ -228,15 +217,13 @@ $(document).ready(function() {
 				</div>
 
 				<div class="table">
-					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by
-					DataTables:</p>
+					<p>The HTML shown below is the raw HTML table element, before it has been enhanced by DataTables:</p>
 				</div>
 
 				<div class="css">
 					<div>
-						<p>This example uses a little bit of additional CSS beyond what is loaded from the library
-						files (below), in order to correctly display the table. The additional CSS used is shown
-						below:</p><code class="multiline brush: js;">td.details-control {
+						<p>This example uses a little bit of additional CSS beyond what is loaded from the library files (below), in order to correctly display the table. The
+						additional CSS used is shown below:</p><code class="multiline language-css">td.details-control {
 	background: url('../resources/details_open.png') no-repeat center center;
 	cursor: pointer;
 }
@@ -245,25 +232,22 @@ tr.details td.details-control {
 }</code>
 					</div>
 
-					<p>The following CSS library files are loaded for use in this example to provide the styling of the
-					table:</p>
+					<p>The following CSS library files are loaded for use in this example to provide the styling of the table:</p>
 
 					<ul>
-						<li><a href=
-						"../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
+						<li><a href="../../media/css/jquery.dataTables.css">../../media/css/jquery.dataTables.css</a></li>
 					</ul>
 				</div>
 
 				<div class="ajax">
-					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data
-					will update automatically as any additional data is loaded.</p>
+					<p>This table loads data by Ajax. The latest data that has been loaded is shown below. This data will update automatically as any additional data is
+					loaded.</p>
 				</div>
 
 				<div class="php">
-					<p>The script used to perform the server-side processing for this table is shown below. Please note
-					that this is just an example script using PHP. Server-side processing scripts can be written in any
-					language, using <a href="//datatables.net/manual/server-side">the protocol described in the
-					DataTables documentation</a>.</p>
+					<p>The script used to perform the server-side processing for this table is shown below. Please note that this is just an example script using PHP. Server-side
+					processing scripts can be written in any language, using <a href="//datatables.net/manual/server-side">the protocol described in the DataTables
+					documentation</a>.</p>
 				</div>
 			</div>
 		</section>
@@ -286,17 +270,16 @@ tr.details td.details-control {
 							<li><a href="../basic_init/multi_col_sort.html">Multi-column ordering</a></li>
 							<li><a href="../basic_init/multiple_tables.html">Multiple tables</a></li>
 							<li><a href="../basic_init/hidden_columns.html">Hidden columns</a></li>
-							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and
-							colspan)</a></li>
+							<li><a href="../basic_init/complex_header.html">Complex headers (rowspan and colspan)</a></li>
 							<li><a href="../basic_init/dom.html">DOM positioning</a></li>
 							<li><a href="../basic_init/flexible_width.html">Flexible table width</a></li>
 							<li><a href="../basic_init/state_save.html">State saving</a></li>
 							<li><a href="../basic_init/alt_pagination.html">Alternative pagination</a></li>
 							<li><a href="../basic_init/scroll_y.html">Scroll - vertical</a></li>
+							<li><a href="../basic_init/scroll_y_dynamic.html">Scroll - vertical, dynamic height</a></li>
 							<li><a href="../basic_init/scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="../basic_init/scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI
-							ThemeRoller</a></li>
+							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li><a href="../basic_init/comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="../basic_init/language.html">Language options</a></li>
 						</ul>
@@ -309,19 +292,18 @@ tr.details td.details-control {
 							<li><a href="../advanced_init/dt_events.html">DataTables events</a></li>
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
-							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control
-							elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan /
-							colspan)</a></li>
-							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes</a></li>
+							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
+							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
+							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>
 							<li><a href="../advanced_init/language_file.html">Language file</a></li>
 							<li><a href="../advanced_init/defaults.html">Setting defaults</a></li>
 							<li><a href="../advanced_init/row_callback.html">Row created callback</a></li>
 							<li><a href="../advanced_init/row_grouping.html">Row grouping</a></li>
 							<li><a href="../advanced_init/footer_callback.html">Footer callback</a></li>
 							<li><a href="../advanced_init/dom_toolbar.html">Custom toolbar elements</a></li>
-							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence
-							control</a></li>
+							<li><a href="../advanced_init/sort_direction_control.html">Order direction sequence control</a></li>
 						</ul>
 					</div>
 
@@ -330,14 +312,15 @@ tr.details td.details-control {
 						<ul class="toc">
 							<li><a href="../styling/display.html">Base style</a></li>
 							<li><a href="../styling/no-classes.html">Base style - no styling classes</a></li>
-							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/cell-border.html">Base style - cell borders</a></li>
+							<li><a href="../styling/compact.html">Base style - compact</a></li>
 							<li><a href="../styling/hover.html">Base style - hover</a></li>
 							<li><a href="../styling/order-column.html">Base style - order-column</a></li>
+							<li><a href="../styling/row-border.html">Base style - row borders</a></li>
 							<li><a href="../styling/stripe.html">Base style - stripe</a></li>
-							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 							<li><a href="../styling/bootstrap.html">Bootstrap</a></li>
 							<li><a href="../styling/foundation.html">Foundation</a></li>
+							<li><a href="../styling/jqueryUI.html">jQuery UI ThemeRoller</a></li>
 						</ul>
 					</div>
 
@@ -355,21 +338,18 @@ tr.details td.details-control {
 						<h3><a href="../api/index.html">API</a></h3>
 						<ul class="toc">
 							<li><a href="../api/add_row.html">Add rows</a></li>
-							<li><a href="../api/multi_filter.html">Individual column filtering (text inputs)</a></li>
-							<li><a href="../api/multi_filter_select.html">Individual column filtering (select
-							inputs)</a></li>
+							<li><a href="../api/multi_filter.html">Individual column searching (text inputs)</a></li>
+							<li><a href="../api/multi_filter_select.html">Individual column searching (select inputs)</a></li>
 							<li><a href="../api/highlight.html">Highlighting rows and columns</a></li>
-							<li><a href="../api/row_details.html">Child rows (show extra / detailed
-							information)</a></li>
+							<li><a href="../api/row_details.html">Child rows (show extra / detailed information)</a></li>
 							<li><a href="../api/select_row.html">Row selection (multiple rows)</a></li>
-							<li><a href="../api/select_single_row.html">Row selection and deletion (single
-							row)</a></li>
+							<li><a href="../api/select_single_row.html">Row selection and deletion (single row)</a></li>
 							<li><a href="../api/form.html">Form inputs</a></li>
 							<li><a href="../api/counter_columns.html">Index column</a></li>
 							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
 							<li><a href="../api/api_in_init.html">Using API in callbacks</a></li>
 							<li><a href="../api/tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
-							<li><a href="../api/regex.html">Filtering API (regular expressions)</a></li>
+							<li><a href="../api/regex.html">Search API (regular expressions)</a></li>
 						</ul>
 					</div>
 
@@ -408,10 +388,8 @@ tr.details td.details-control {
 						<h3><a href="../plug-ins/index.html">Plug-ins</a></h3>
 						<ul class="toc">
 							<li><a href="../plug-ins/api.html">API plug-in methods</a></li>
-							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type
-							detection)</a></li>
-							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type
-							detection)</a></li>
+							<li><a href="../plug-ins/sorting_auto.html">Ordering plug-ins (with type detection)</a></li>
+							<li><a href="../plug-ins/sorting_manual.html">Ordering plug-ins (no type detection)</a></li>
 							<li><a href="../plug-ins/range_filtering.html">Custom filtering - range search</a></li>
 							<li><a href="../plug-ins/dom_sort.html">Live DOM ordering</a></li>
 						</ul>
@@ -419,14 +397,11 @@ tr.details td.details-control {
 				</div>
 
 				<div class="epilogue">
-					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full
-					information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and
-					<a href="http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of
-					DataTables.</p>
+					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
+					which extend the capabilities of DataTables.</p>
 
-					<p class="copyright">DataTables designed and created by <a href=
-					"http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2014<br>
+					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>
 				</div>
 			</div>
