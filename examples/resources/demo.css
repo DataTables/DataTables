@@ -261,6 +261,10 @@ code.multiline {
 	width: 95%;
 }
 
+div.syntaxhighlighter code:after {
+	display: none;
+}
+
 
 ul.tabs {
 	position: relative;
