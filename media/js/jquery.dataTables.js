@@ -33,10 +33,10 @@
 		// Define as an AMD module if possible
 		define( 'datatables', ['jquery'], factory );
 	}
-    else if ( typeof exports === 'object' ) {
-        // Node/CommonJS
-        module.exports = factory( require( 'jquery' ) );
-    }
+	else if ( typeof exports === 'object' ) {
+		// Node/CommonJS
+		module.exports = factory( require( 'jquery' ) );
+	}
 	else if ( jQuery && !jQuery.fn.dataTable ) {
 		// Define using browser globals otherwise
 		// Prevent multiple instantiations if the script is loaded twice
