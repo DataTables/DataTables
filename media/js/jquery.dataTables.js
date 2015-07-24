@@ -22,7 +22,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnScrollingWidthAdjust,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
+/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -3362,9 +3362,9 @@
 	{
 		settings._bInitComplete = true;
 	
-		// On an Ajax load we now have data and therefore want to apply the column
-		// sizing
-		if ( json ) {
+		// When data was added after the initialisation (data or Ajax) we need to
+		// calculate the column sizing
+		if ( json || settings.oInit.aaData ) {
 			_fnAdjustColumnSizing( settings );
 		}
 	
@@ -3889,32 +3889,17 @@
 			) {
 				tableStyle.width = _fnStringToCss( table.outerWidth() - barWidth);
 			}
-		}
-		else
-		{
-			// x scrolling
-			if ( scrollXInner !== "" ) {
-				// x scroll inner has been given - use it
-				tableStyle.width = _fnStringToCss(scrollXInner);
-			}
-			else if ( sanityWidth == divBody.width() && divBody.height() < table.height() ) {
-				// There is y-scrolling - try to take account of the y scroll bar
-				tableStyle.width = _fnStringToCss( sanityWidth-barWidth );
-				if ( table.outerWidth() > sanityWidth-barWidth ) {
-					// Not possible to take account of it
-					tableStyle.width = _fnStringToCss( sanityWidth );
-				}
-			}
-			else {
-				// When all else fails
-				tableStyle.width = _fnStringToCss( sanityWidth );
-			}
-		}
 	
-		// Recalculate the sanity width - now that we've applied the required width,
-		// before it was a temporary variable. This is required because the column
-		// width calculation is done before this table DOM is created.
-		sanityWidth = table.outerWidth();
+			// Recalculate the sanity width
+			sanityWidth = table.outerWidth();
+		}
+		else if ( scrollXInner !== "" ) {
+			// legacy x scroll inner has been given - use it
+			tableStyle.width = _fnStringToCss(scrollXInner);
+	
+			// Recalculate the sanity width
+			sanityWidth = table.outerWidth();
+		}
 	
 		// Hidden header should have zero height, so remove padding and borders. Then
 		// set the width based on the real headers
@@ -4149,11 +4134,9 @@
 		 * the web- browser. No custom sizes can be set in order for this to happen,
 		 * nor scrolling used
 		 */
-		if ( ie67 || (
-				! userInputs && ! scrollX && ! scrollY &&
-				columnCount == _fnVisbleColumns( oSettings ) &&
-				columnCount == headerCells.length
-			)
+		if ( ! userInputs && ! scrollX && ! scrollY &&
+		     columnCount == _fnVisbleColumns( oSettings ) &&
+		     columnCount == headerCells.length
 		) {
 			for ( i=0 ; i<columnCount ; i++ ) {
 				columns[i].sWidth = _fnStringToCss( headerCells.eq(i).width() );
@@ -4220,19 +4203,16 @@
 			else if ( scrollX ) {
 				tmpTable.css( 'width', 'auto' );
 	
-				if ( tmpTable.width() < tableContainer.offsetWidth ) {
-					tmpTable.width( tableContainer.offsetWidth );
+				if ( tmpTable.width() < tableContainer.clientWidth ) {
+					tmpTable.width( tableContainer.clientWidth );
 				}
 			}
 			else if ( scrollY ) {
-				tmpTable.width( tableContainer.offsetWidth );
+				tmpTable.width( tableContainer.clientWidth );
 			}
 			else if ( tableWidthAttr ) {
 				tmpTable.width( tableWidthAttr );
 			}
-	
-			// Take into account the y scrollbar
-			_fnScrollingWidthAdjust( oSettings, tmpTable[0] );
 	
 			// Browsers need a bit of a hand when a width is assigned to any columns
 			// when x-scrolling as they tend to collapse the table to the min-width,
@@ -4358,27 +4338,6 @@
 		n.remove();
 	
 		return val;
-	}
-	
-	
-	/**
-	 * Adjust a table's width to take account of vertical scroll bar
-	 *  @param {object} oSettings dataTables settings object
-	 *  @param {node} n table node
-	 *  @memberof DataTable#oApi
-	 */
-	
-	function _fnScrollingWidthAdjust ( settings, n )
-	{
-		var scroll = settings.oScroll;
-	
-		if ( scroll.sX || scroll.sY ) {
-			// When y-scrolling only, we want to remove the width of the scroll bar
-			// so the table + scroll bar will fit into the area available, otherwise
-			// we fix the table at its current size with no adjustment
-			var correction = ! scroll.sX ? scroll.iBarWidth : 0;
-			n.style.width = _fnStringToCss( $(n).outerWidth() - correction );
-		}
 	}
 	
 	
@@ -14885,7 +14844,6 @@
 		_fnCalculateColumnWidths: _fnCalculateColumnWidths,
 		_fnThrottle: _fnThrottle,
 		_fnConvertToWidth: _fnConvertToWidth,
-		_fnScrollingWidthAdjust: _fnScrollingWidthAdjust,
 		_fnGetWidestNode: _fnGetWidestNode,
 		_fnGetMaxLenString: _fnGetMaxLenString,
 		_fnStringToCss: _fnStringToCss,
