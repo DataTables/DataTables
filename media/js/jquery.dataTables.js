@@ -3907,15 +3907,15 @@
 		// Hidden header should have zero height, so remove padding and borders. Then
 		// set the width based on the real headers
 	
-		// Apply all styles in one pass
-		_fnApplyToChildren( zeroOut, headerSrcEls );
-	
 		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
 			headerContent.push( nSizer.innerHTML );
 			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
 		}, headerSrcEls );
 	
+		// Apply all styles in one pass
+		_fnApplyToChildren( zeroOut, headerSrcEls );
+		
 		// Apply all widths in final pass
 		_fnApplyToChildren( function(nToSize, i) {
 			nToSize.style.width = headerWidths[i];
