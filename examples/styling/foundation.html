@@ -21,7 +21,10 @@
 	<script type="text/javascript" language="javascript" class="init">
 
 $(document).ready(function() {
-	$('#example').dataTable();
+	$('#example').dataTable( {
+		scrollY: 200,
+		paging: false
+	} );
 } );
 
 	</script>
@@ -537,7 +540,10 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').dataTable();
+	$('#example').dataTable( {
+		scrollY: 200,
+		paging: false
+	} );
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>

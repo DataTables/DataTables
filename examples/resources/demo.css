@@ -197,6 +197,7 @@ code.option {
 	color: #D14; /* red */
 	background-color: #fcf6f8;
 	border: 1px solid #f7d6df;
+	white-space: nowrap;
 }
 code.option:after { content: 'Option'; }
 
@@ -204,6 +205,7 @@ code.path {
 	color: #095c05; /* dark green */
 	background-color: #eef7ed;
 	border: 1px solid #8ccb89;
+	white-space: nowrap;
 }
 code.path:after { content: 'Path'; }
 
@@ -211,6 +213,7 @@ code.tag {
 	color: #c29f00; /* yellow */
 	background-color: #fff9d7;
 	border: 1px solid #ffe700;
+	white-space: nowrap;
 }
 code.tag:after { content: 'Tag'; }
 
@@ -218,6 +221,7 @@ code.api {
 	color: #0c199c; /* dark blue */
 	background-color: #f4f5fc;
 	border: 1px solid #c6cbe9;
+	white-space: nowrap;
 }
 code.api:after { content: 'API'; }
 
@@ -225,6 +229,7 @@ code.type {
 	color: #d119cf; /* pink */
 	background-color: #faebfa;
 	border: 1px solid #f3aef2;
+	white-space: nowrap;
 }
 code.type:after { content: 'Type'; }
 
@@ -232,6 +237,7 @@ code.event {
 	color: #2a839e; /* deep aqua */
 	background-color: #f5fafb;
 	border: 1px solid #a8ddec;
+	white-space: nowrap;
 }
 code.event:after { content: 'Event'; }
 
@@ -239,6 +245,7 @@ code.string {
 	color: #c05f1d; /* brown */
 	background-color: #f5eee9;
 	border: 1px solid #dfc4b2;
+	white-space: nowrap;
 }
 code.string:after { content: 'String'; }
 
@@ -246,6 +253,7 @@ code.field {
 	color: #ad1ee8; /* purple */
 	background-color: #f9f1fc;
 	border: 1px solid #ebc9f7;
+	white-space: nowrap;
 }
 code.field:after { content: 'Field'; }
 
@@ -253,6 +261,7 @@ code.button {
 	color: #464e50; /* grey */
 	background-color: #f2f7f9;
 	border: 1px solid #b8c3c5;
+	white-space: nowrap;
 }
 code.button:after { content: 'Button'; }
 
