@@ -3820,6 +3820,7 @@
 			headerWidths=[], footerWidths=[],
 			headerContent=[],
 			idx, correction, sanityWidth,
+			newHeight,
 			zeroOut = function(nSizer) {
 				var style = nSizer.style;
 				style.paddingTop = "0";
@@ -3877,7 +3878,11 @@
 		// will end up forcing the scrollbar to appear, making our measurements wrong for when we
 		// then hide it (end of this function), so add the header height to the body scroller.
 		if ( scroll.bCollapse && scrollY !== "" ) {
-			divBodyStyle.height = (divBody[0].offsetHeight + header[0].offsetHeight)+"px";
+			newHeight = divBody[0].offsetHeight + header[0].offsetHeight;
+			divBodyStyle.height = newHeight+"px";
+			// correction is required if divBody has border.
+			newHeight += newHeight - divBody[0].offsetHeight;
+			divBodyStyle.height = newHeight+"px";
 		}
 	
 		// Size the table as a whole
@@ -3909,15 +3914,15 @@
 		// Hidden header should have zero height, so remove padding and borders. Then
 		// set the width based on the real headers
 	
-		// Apply all styles in one pass
-		_fnApplyToChildren( zeroOut, headerSrcEls );
-	
 		// Read all widths in next pass
 		_fnApplyToChildren( function(nSizer) {
 			headerContent.push( nSizer.innerHTML );
 			headerWidths.push( _fnStringToCss( $(nSizer).css('width') ) );
 		}, headerSrcEls );
 	
+		// Apply all styles in one pass
+		_fnApplyToChildren( zeroOut, headerSrcEls );
+		
 		// Apply all widths in final pass
 		_fnApplyToChildren( function(nToSize, i) {
 			nToSize.style.width = headerWidths[i];
