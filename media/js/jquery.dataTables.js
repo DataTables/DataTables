@@ -4140,7 +4140,7 @@
 		 * the web- browser. No custom sizes can be set in order for this to happen,
 		 * nor scrolling used
 		 */
-		if ( ! userInputs && ! scrollX && ! scrollY &&
+		if ( ie67 || ! userInputs && ! scrollX && ! scrollY &&
 		     columnCount == _fnVisbleColumns( oSettings ) &&
 		     columnCount == headerCells.length
 		) {
