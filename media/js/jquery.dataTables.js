@@ -3710,7 +3710,6 @@
 					.css( {
 						position: 'relative',
 						overflow: 'auto',
-						height: size( scrollY ),
 						width: size( scrollX )
 					} )
 					.append( table )
@@ -3756,6 +3755,11 @@
 				}
 			} );
 		}
+	
+		$(scrollBody).css(
+			scrollY && scroll.bCollapse ? 'max-height' : 'height', 
+			scrollY
+		);
 	
 		settings.nScrollHead = scrollHead;
 		settings.nScrollBody = scrollBody;
@@ -3871,13 +3875,6 @@
 			_fnApplyToChildren( function(n) {
 				n.style.width = "";
 			}, footerSrcEls );
-		}
-	
-		// If scroll collapse is enabled, when we put the headers back into the body for sizing, we
-		// will end up forcing the scrollbar to appear, making our measurements wrong for when we
-		// then hide it (end of this function), so add the header height to the body scroller.
-		if ( scroll.bCollapse && scrollY !== "" ) {
-			divBodyStyle.height = (divBody[0].offsetHeight + header[0].offsetHeight)+"px";
 		}
 	
 		// Size the table as a whole
@@ -4009,18 +4006,6 @@
 			 */
 			if ( ie67 ) {
 				divBodyStyle.height = _fnStringToCss( tableEl.offsetHeight+barWidth );
-			}
-		}
-	
-		if ( scrollY && scroll.bCollapse ) {
-			divBodyStyle.height = _fnStringToCss( scrollY );
-	
-			var iExtra = (scrollX && tableEl.offsetWidth > divBodyEl.offsetWidth) ?
-				barWidth :
-				0;
-	
-			if ( tableEl.offsetHeight < divBodyEl.offsetHeight ) {
-				divBodyStyle.height = _fnStringToCss( tableEl.offsetHeight+iExtra );
 			}
 		}
 	
