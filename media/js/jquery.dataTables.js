@@ -1040,7 +1040,7 @@
 		/* Add to the display array */
 		oSettings.aiDisplayMaster.push( iRow );
 	
-		var id = oSettings.rowId( aDataIn );
+		var id = oSettings.rowIdFn( aDataIn );
 		if ( id !== undefined ) {
 			oSettings.aIds[ id ] = oData;
 		}
@@ -1655,6 +1655,12 @@
 			}
 		}
 	
+		// Read the ID from the DOM if present
+		var id = row.getAttribute( 'id' );
+		if ( id ) {
+			_fnSetObjectDataFn( settings.rowId )( d, id );
+		}
+	
 		return {
 			data: d,
 			cells: tds
@@ -1754,7 +1760,7 @@
 		var data = row._aData;
 	
 		if ( tr ) {
-			var id = settings.rowId( data );
+			var id = settings.rowIdFn( data );
 	
 			if ( id ) {
 				tr.id = id;
@@ -6243,6 +6249,7 @@
 				"fnStateSaveCallback",
 				"renderer",
 				"searchDelay",
+				"rowId",
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
 				[ "aoSearchCols", "aoPreSearchCols" ],
@@ -6270,7 +6277,7 @@
 			_fnCallbackReg( oSettings, 'aoInitComplete',       oInit.fnInitComplete,      'user' );
 			_fnCallbackReg( oSettings, 'aoPreDrawCallback',    oInit.fnPreDrawCallback,   'user' );
 			
-			oSettings.rowId = _fnGetObjectDataFn( oInit.rowId );
+			oSettings.rowIdFn = _fnGetObjectDataFn( oInit.rowId );
 			
 			var oClasses = oSettings.oClasses;
 			
@@ -7846,7 +7853,7 @@
 		// `iterator` will drop undefined values, but in this case we want them
 		for ( var i=0, ien=context.length ; i<ien ; i++ ) {
 			for ( var j=0, jen=this[i].length ; j<jen ; j++ ) {
-				var id = context[i].rowId( context[i].aoData[ this[i][j] ]._aData );
+				var id = context[i].rowIdFn( context[i].aoData[ this[i][j] ]._aData );
 				a.push( (hash === true ? '#' : '' )+ id );
 			}
 		}
@@ -13601,6 +13608,13 @@
 		/**
 		 * Function used to get a row's id from the row's data
 		 *  @type function
+		 *  @default null
+		 */
+		"rowIdFn": null,
+	
+		/**
+		 * Data location where to store a row's id
+		 *  @type string
 		 *  @default null
 		 */
 		"rowId": null
