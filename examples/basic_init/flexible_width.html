@@ -37,7 +37,8 @@ $(document).ready(function() {
 			<div class="info">
 				<p>Often you may want to have your table resize dynamically with the page. Typically this is done by assigning <code>width:100%</code> in your CSS, but this
 				presents a problem for Javascript since it can be very hard to get that relative size rather than the absolute pixels. As such, if you apply the <code>width</code>
-				attribute to the HTML table tag, it will be used as the width for the table (overruling any CSS styles).</p>
+				attribute to the HTML table tag or inline width style (<code>style="width:100%"</code>), it will be used as the width for the table (overruling any CSS
+				styles).</p>
 
 				<p>This example shows a table with <code>width="100%"</code> and the container is also flexible width, so as the window is resized, the table will also resize
 				dynamically.</p>
@@ -620,7 +621,7 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
 							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>

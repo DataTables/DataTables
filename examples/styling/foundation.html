@@ -21,10 +21,7 @@
 	<script type="text/javascript" language="javascript" class="init">
 
 $(document).ready(function() {
-	$('#example').DataTable( {
-		scrollY: 200,
-		paging: false
-	} );
+	$('#example').DataTable();
 } );
 
 	</script>
@@ -540,10 +537,7 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').DataTable( {
-		scrollY: 200,
-		paging: false
-	} );
+	$('#example').DataTable();
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
@@ -627,7 +621,7 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
 							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>

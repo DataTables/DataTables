@@ -20,11 +20,11 @@
 
 
 $(document).ready(function() {
-	$('#example').DataTable();
+	var table = $('#example').DataTable();
 	
 	$('#example tbody').on('click', 'tr', function () {
-		var name = $('td', this).eq(0).text();
-		alert( 'You clicked on '+name+'\'s row' );
+		var data = table.row( this ).data();
+		alert( 'You clicked on '+data[0]+'\'s row' );
 	} );
 } );
 
@@ -42,7 +42,9 @@ $(document).ready(function() {
 				as they are needed (i.e. when paging only the visible elements are actually available in the DOM). As such, this can lead to the odd hiccup when working with
 				events.</p>
 
-				<p>One of the best ways of dealing with this is through the use of delegated events with jQuery's <code>on</code> method, as shown in this example.</p>
+				<p>One of the best ways of dealing with this is through the use of delegated events with jQuery's <code>on</code> method, as shown in this example. This example
+				also uses the DataTables <a href="//datatables.net/reference/api/row().data()"><code class="api" title="DataTables API method">row().data()</code></a> method to
+				retrieve information about the selected row - the row's data so we can show it in the <code>alert</code> message in this case.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -539,11 +541,11 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').DataTable();
+	var table = $('#example').DataTable();
 	
 	$('#example tbody').on('click', 'tr', function () {
-		var name = $('td', this).eq(0).text();
-		alert( 'You clicked on '+name+'\'s row' );
+		var data = table.row( this ).data();
+		alert( 'You clicked on '+data[0]+'\'s row' );
 	} );
 } );</code>
 
@@ -625,7 +627,7 @@ $(document).ready(function() {
 							<li><a href="./column_render.html">Column rendering</a></li>
 							<li><a href="./length_menu.html">Page length options</a></li>
 							<li><a href="./dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="./complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="./complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="./object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="./html5-data-options.html">HTML5 data-* attributes - table options</a></li>

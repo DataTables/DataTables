@@ -20,78 +20,56 @@
 
 
 var dataSet = [
-	['Trident','Internet Explorer 4.0','Win 95+','4','X'],
-	['Trident','Internet Explorer 5.0','Win 95+','5','C'],
-	['Trident','Internet Explorer 5.5','Win 95+','5.5','A'],
-	['Trident','Internet Explorer 6','Win 98+','6','A'],
-	['Trident','Internet Explorer 7','Win XP SP2+','7','A'],
-	['Trident','AOL browser (AOL desktop)','Win XP','6','A'],
-	['Gecko','Firefox 1.0','Win 98+ / OSX.2+','1.7','A'],
-	['Gecko','Firefox 1.5','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Firefox 2.0','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Firefox 3.0','Win 2k+ / OSX.3+','1.9','A'],
-	['Gecko','Camino 1.0','OSX.2+','1.8','A'],
-	['Gecko','Camino 1.5','OSX.3+','1.8','A'],
-	['Gecko','Netscape 7.2','Win 95+ / Mac OS 8.6-9.2','1.7','A'],
-	['Gecko','Netscape Browser 8','Win 98SE+','1.7','A'],
-	['Gecko','Netscape Navigator 9','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Mozilla 1.0','Win 95+ / OSX.1+',1,'A'],
-	['Gecko','Mozilla 1.1','Win 95+ / OSX.1+',1.1,'A'],
-	['Gecko','Mozilla 1.2','Win 95+ / OSX.1+',1.2,'A'],
-	['Gecko','Mozilla 1.3','Win 95+ / OSX.1+',1.3,'A'],
-	['Gecko','Mozilla 1.4','Win 95+ / OSX.1+',1.4,'A'],
-	['Gecko','Mozilla 1.5','Win 95+ / OSX.1+',1.5,'A'],
-	['Gecko','Mozilla 1.6','Win 95+ / OSX.1+',1.6,'A'],
-	['Gecko','Mozilla 1.7','Win 98+ / OSX.1+',1.7,'A'],
-	['Gecko','Mozilla 1.8','Win 98+ / OSX.1+',1.8,'A'],
-	['Gecko','Seamonkey 1.1','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Epiphany 2.20','Gnome','1.8','A'],
-	['Webkit','Safari 1.2','OSX.3','125.5','A'],
-	['Webkit','Safari 1.3','OSX.3','312.8','A'],
-	['Webkit','Safari 2.0','OSX.4+','419.3','A'],
-	['Webkit','Safari 3.0','OSX.4+','522.1','A'],
-	['Webkit','OmniWeb 5.5','OSX.4+','420','A'],
-	['Webkit','iPod Touch / iPhone','iPod','420.1','A'],
-	['Webkit','S60','S60','413','A'],
-	['Presto','Opera 7.0','Win 95+ / OSX.1+','-','A'],
-	['Presto','Opera 7.5','Win 95+ / OSX.2+','-','A'],
-	['Presto','Opera 8.0','Win 95+ / OSX.2+','-','A'],
-	['Presto','Opera 8.5','Win 95+ / OSX.2+','-','A'],
-	['Presto','Opera 9.0','Win 95+ / OSX.3+','-','A'],
-	['Presto','Opera 9.2','Win 88+ / OSX.3+','-','A'],
-	['Presto','Opera 9.5','Win 88+ / OSX.3+','-','A'],
-	['Presto','Opera for Wii','Wii','-','A'],
-	['Presto','Nokia N800','N800','-','A'],
-	['Presto','Nintendo DS browser','Nintendo DS','8.5','C/A<sup>1</sup>'],
-	['KHTML','Konqureror 3.1','KDE 3.1','3.1','C'],
-	['KHTML','Konqureror 3.3','KDE 3.3','3.3','A'],
-	['KHTML','Konqureror 3.5','KDE 3.5','3.5','A'],
-	['Tasman','Internet Explorer 4.5','Mac OS 8-9','-','X'],
-	['Tasman','Internet Explorer 5.1','Mac OS 7.6-9','1','C'],
-	['Tasman','Internet Explorer 5.2','Mac OS 8-X','1','C'],
-	['Misc','NetFront 3.1','Embedded devices','-','C'],
-	['Misc','NetFront 3.4','Embedded devices','-','A'],
-	['Misc','Dillo 0.8','Embedded devices','-','X'],
-	['Misc','Links','Text only','-','X'],
-	['Misc','Lynx','Text only','-','X'],
-	['Misc','IE Mobile','Windows Mobile 6','-','C'],
-	['Misc','PSP browser','PSP','-','C'],
-	['Other browsers','All others','-','-','U']
+    [ "Tiger Nixon", "System Architect", "Edinburgh", "5421", "2011/04/25", "$320,800" ],
+    [ "Garrett Winters", "Accountant", "Tokyo", "8422", "2011/07/25", "$170,750" ],
+    [ "Ashton Cox", "Junior Technical Author", "San Francisco", "1562", "2009/01/12", "$86,000" ],
+    [ "Cedric Kelly", "Senior Javascript Developer", "Edinburgh", "6224", "2012/03/29", "$433,060" ],
+    [ "Airi Satou", "Accountant", "Tokyo", "5407", "2008/11/28", "$162,700" ],
+    [ "Brielle Williamson", "Integration Specialist", "New York", "4804", "2012/12/02", "$372,000" ],
+    [ "Herrod Chandler", "Sales Assistant", "San Francisco", "9608", "2012/08/06", "$137,500" ],
+    [ "Rhona Davidson", "Integration Specialist", "Tokyo", "6200", "2010/10/14", "$327,900" ],
+    [ "Colleen Hurst", "Javascript Developer", "San Francisco", "2360", "2009/09/15", "$205,500" ],
+    [ "Sonya Frost", "Software Engineer", "Edinburgh", "1667", "2008/12/13", "$103,600" ],
+    [ "Jena Gaines", "Office Manager", "London", "3814", "2008/12/19", "$90,560" ],
+    [ "Quinn Flynn", "Support Lead", "Edinburgh", "9497", "2013/03/03", "$342,000" ],
+    [ "Charde Marshall", "Regional Director", "San Francisco", "6741", "2008/10/16", "$470,600" ],
+    [ "Haley Kennedy", "Senior Marketing Designer", "London", "3597", "2012/12/18", "$313,500" ],
+    [ "Tatyana Fitzpatrick", "Regional Director", "London", "1965", "2010/03/17", "$385,750" ],
+    [ "Michael Silva", "Marketing Designer", "London", "1581", "2012/11/27", "$198,500" ],
+    [ "Paul Byrd", "Chief Financial Officer (CFO)", "New York", "3059", "2010/06/09", "$725,000" ],
+    [ "Gloria Little", "Systems Administrator", "New York", "1721", "2009/04/10", "$237,500" ],
+    [ "Bradley Greer", "Software Engineer", "London", "2558", "2012/10/13", "$132,000" ],
+    [ "Dai Rios", "Personnel Lead", "Edinburgh", "2290", "2012/09/26", "$217,500" ],
+    [ "Jenette Caldwell", "Development Lead", "New York", "1937", "2011/09/03", "$345,000" ],
+    [ "Yuri Berry", "Chief Marketing Officer (CMO)", "New York", "6154", "2009/06/25", "$675,000" ],
+    [ "Caesar Vance", "Pre-Sales Support", "New York", "8330", "2011/12/12", "$106,450" ],
+    [ "Doris Wilder", "Sales Assistant", "Sidney", "3023", "2010/09/20", "$85,600" ],
+    [ "Angelica Ramos", "Chief Executive Officer (CEO)", "London", "5797", "2009/10/09", "$1,200,000" ],
+    [ "Gavin Joyce", "Developer", "Edinburgh", "8822", "2010/12/22", "$92,575" ],
+    [ "Jennifer Chang", "Regional Director", "Singapore", "9239", "2010/11/14", "$357,650" ],
+    [ "Brenden Wagner", "Software Engineer", "San Francisco", "1314", "2011/06/07", "$206,850" ],
+    [ "Fiona Green", "Chief Operating Officer (COO)", "San Francisco", "2947", "2010/03/11", "$850,000" ],
+    [ "Shou Itou", "Regional Marketing", "Tokyo", "8899", "2011/08/14", "$163,000" ],
+    [ "Michelle House", "Integration Specialist", "Sidney", "2769", "2011/06/02", "$95,400" ],
+    [ "Suki Burks", "Developer", "London", "6832", "2009/10/22", "$114,500" ],
+    [ "Prescott Bartlett", "Technical Author", "London", "3606", "2011/05/07", "$145,000" ],
+    [ "Gavin Cortez", "Team Leader", "San Francisco", "2860", "2008/10/26", "$235,500" ],
+    [ "Martena Mccray", "Post-Sales support", "Edinburgh", "8240", "2011/03/09", "$324,050" ],
+    [ "Unity Butler", "Marketing Designer", "San Francisco", "5384", "2009/12/09", "$85,675" ]
 ];
 
 $(document).ready(function() {
-	$('#demo').html( '<table cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
-
 	$('#example').DataTable( {
-		"data": dataSet,
-		"columns": [
-			{ "title": "Engine" },
-			{ "title": "Browser" },
-			{ "title": "Platform" },
-			{ "title": "Version", "class": "center" },
-			{ "title": "Grade", "class": "center" }
+		data: dataSet,
+		columns: [
+			{ title: "Name" },
+			{ title: "Position" },
+			{ title: "Office" },
+			{ title: "Extn." },
+			{ title: "Start date" },
+			{ title: "Salary" }
 		]
-	} );	
+	} );
 } );
 
 
@@ -109,11 +87,13 @@ $(document).ready(function() {
 				initialisation object, passing in an array of data to be used (like all other DataTables handled data, this can be arrays or objects using the <a href=
 				"//datatables.net/reference/option/columns.data"><code class="option" title="DataTables initialisation option">columns.data</code></a> option).</p>
 
-				<p>A <code>&lt;table&gt;</code> must be available on the page for DataTables to use. This examples shows the element being added by Javascript and then
-				initialising the DataTable with a set of data from a Javascript array.</p>
+				<p>A <code class="tag" title="HTML tag">table</code> must be available on the page for DataTables to use. This examples shows an empty <code class="tag" title=
+				"HTML tag">table</code> element being initialising as a DataTable with a set of data from a Javascript array. The columns in the table are dynamically created
+				based on the <a href="//datatables.net/reference/option/columns.title"><code class="option" title="DataTables initialisation option">columns.title</code></a>
+				configuration option.</p>
 			</div>
 
-			<div id="demo"></div>
+			<table id="example" class="display" width="100%"></table>
 
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -126,78 +106,56 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">var dataSet = [
-	['Trident','Internet Explorer 4.0','Win 95+','4','X'],
-	['Trident','Internet Explorer 5.0','Win 95+','5','C'],
-	['Trident','Internet Explorer 5.5','Win 95+','5.5','A'],
-	['Trident','Internet Explorer 6','Win 98+','6','A'],
-	['Trident','Internet Explorer 7','Win XP SP2+','7','A'],
-	['Trident','AOL browser (AOL desktop)','Win XP','6','A'],
-	['Gecko','Firefox 1.0','Win 98+ / OSX.2+','1.7','A'],
-	['Gecko','Firefox 1.5','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Firefox 2.0','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Firefox 3.0','Win 2k+ / OSX.3+','1.9','A'],
-	['Gecko','Camino 1.0','OSX.2+','1.8','A'],
-	['Gecko','Camino 1.5','OSX.3+','1.8','A'],
-	['Gecko','Netscape 7.2','Win 95+ / Mac OS 8.6-9.2','1.7','A'],
-	['Gecko','Netscape Browser 8','Win 98SE+','1.7','A'],
-	['Gecko','Netscape Navigator 9','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Mozilla 1.0','Win 95+ / OSX.1+',1,'A'],
-	['Gecko','Mozilla 1.1','Win 95+ / OSX.1+',1.1,'A'],
-	['Gecko','Mozilla 1.2','Win 95+ / OSX.1+',1.2,'A'],
-	['Gecko','Mozilla 1.3','Win 95+ / OSX.1+',1.3,'A'],
-	['Gecko','Mozilla 1.4','Win 95+ / OSX.1+',1.4,'A'],
-	['Gecko','Mozilla 1.5','Win 95+ / OSX.1+',1.5,'A'],
-	['Gecko','Mozilla 1.6','Win 95+ / OSX.1+',1.6,'A'],
-	['Gecko','Mozilla 1.7','Win 98+ / OSX.1+',1.7,'A'],
-	['Gecko','Mozilla 1.8','Win 98+ / OSX.1+',1.8,'A'],
-	['Gecko','Seamonkey 1.1','Win 98+ / OSX.2+','1.8','A'],
-	['Gecko','Epiphany 2.20','Gnome','1.8','A'],
-	['Webkit','Safari 1.2','OSX.3','125.5','A'],
-	['Webkit','Safari 1.3','OSX.3','312.8','A'],
-	['Webkit','Safari 2.0','OSX.4+','419.3','A'],
-	['Webkit','Safari 3.0','OSX.4+','522.1','A'],
-	['Webkit','OmniWeb 5.5','OSX.4+','420','A'],
-	['Webkit','iPod Touch / iPhone','iPod','420.1','A'],
-	['Webkit','S60','S60','413','A'],
-	['Presto','Opera 7.0','Win 95+ / OSX.1+','-','A'],
-	['Presto','Opera 7.5','Win 95+ / OSX.2+','-','A'],
-	['Presto','Opera 8.0','Win 95+ / OSX.2+','-','A'],
-	['Presto','Opera 8.5','Win 95+ / OSX.2+','-','A'],
-	['Presto','Opera 9.0','Win 95+ / OSX.3+','-','A'],
-	['Presto','Opera 9.2','Win 88+ / OSX.3+','-','A'],
-	['Presto','Opera 9.5','Win 88+ / OSX.3+','-','A'],
-	['Presto','Opera for Wii','Wii','-','A'],
-	['Presto','Nokia N800','N800','-','A'],
-	['Presto','Nintendo DS browser','Nintendo DS','8.5','C/A&lt;sup&gt;1&lt;/sup&gt;'],
-	['KHTML','Konqureror 3.1','KDE 3.1','3.1','C'],
-	['KHTML','Konqureror 3.3','KDE 3.3','3.3','A'],
-	['KHTML','Konqureror 3.5','KDE 3.5','3.5','A'],
-	['Tasman','Internet Explorer 4.5','Mac OS 8-9','-','X'],
-	['Tasman','Internet Explorer 5.1','Mac OS 7.6-9','1','C'],
-	['Tasman','Internet Explorer 5.2','Mac OS 8-X','1','C'],
-	['Misc','NetFront 3.1','Embedded devices','-','C'],
-	['Misc','NetFront 3.4','Embedded devices','-','A'],
-	['Misc','Dillo 0.8','Embedded devices','-','X'],
-	['Misc','Links','Text only','-','X'],
-	['Misc','Lynx','Text only','-','X'],
-	['Misc','IE Mobile','Windows Mobile 6','-','C'],
-	['Misc','PSP browser','PSP','-','C'],
-	['Other browsers','All others','-','-','U']
+    [ &quot;Tiger Nixon&quot;, &quot;System Architect&quot;, &quot;Edinburgh&quot;, &quot;5421&quot;, &quot;2011/04/25&quot;, &quot;$320,800&quot; ],
+    [ &quot;Garrett Winters&quot;, &quot;Accountant&quot;, &quot;Tokyo&quot;, &quot;8422&quot;, &quot;2011/07/25&quot;, &quot;$170,750&quot; ],
+    [ &quot;Ashton Cox&quot;, &quot;Junior Technical Author&quot;, &quot;San Francisco&quot;, &quot;1562&quot;, &quot;2009/01/12&quot;, &quot;$86,000&quot; ],
+    [ &quot;Cedric Kelly&quot;, &quot;Senior Javascript Developer&quot;, &quot;Edinburgh&quot;, &quot;6224&quot;, &quot;2012/03/29&quot;, &quot;$433,060&quot; ],
+    [ &quot;Airi Satou&quot;, &quot;Accountant&quot;, &quot;Tokyo&quot;, &quot;5407&quot;, &quot;2008/11/28&quot;, &quot;$162,700&quot; ],
+    [ &quot;Brielle Williamson&quot;, &quot;Integration Specialist&quot;, &quot;New York&quot;, &quot;4804&quot;, &quot;2012/12/02&quot;, &quot;$372,000&quot; ],
+    [ &quot;Herrod Chandler&quot;, &quot;Sales Assistant&quot;, &quot;San Francisco&quot;, &quot;9608&quot;, &quot;2012/08/06&quot;, &quot;$137,500&quot; ],
+    [ &quot;Rhona Davidson&quot;, &quot;Integration Specialist&quot;, &quot;Tokyo&quot;, &quot;6200&quot;, &quot;2010/10/14&quot;, &quot;$327,900&quot; ],
+    [ &quot;Colleen Hurst&quot;, &quot;Javascript Developer&quot;, &quot;San Francisco&quot;, &quot;2360&quot;, &quot;2009/09/15&quot;, &quot;$205,500&quot; ],
+    [ &quot;Sonya Frost&quot;, &quot;Software Engineer&quot;, &quot;Edinburgh&quot;, &quot;1667&quot;, &quot;2008/12/13&quot;, &quot;$103,600&quot; ],
+    [ &quot;Jena Gaines&quot;, &quot;Office Manager&quot;, &quot;London&quot;, &quot;3814&quot;, &quot;2008/12/19&quot;, &quot;$90,560&quot; ],
+    [ &quot;Quinn Flynn&quot;, &quot;Support Lead&quot;, &quot;Edinburgh&quot;, &quot;9497&quot;, &quot;2013/03/03&quot;, &quot;$342,000&quot; ],
+    [ &quot;Charde Marshall&quot;, &quot;Regional Director&quot;, &quot;San Francisco&quot;, &quot;6741&quot;, &quot;2008/10/16&quot;, &quot;$470,600&quot; ],
+    [ &quot;Haley Kennedy&quot;, &quot;Senior Marketing Designer&quot;, &quot;London&quot;, &quot;3597&quot;, &quot;2012/12/18&quot;, &quot;$313,500&quot; ],
+    [ &quot;Tatyana Fitzpatrick&quot;, &quot;Regional Director&quot;, &quot;London&quot;, &quot;1965&quot;, &quot;2010/03/17&quot;, &quot;$385,750&quot; ],
+    [ &quot;Michael Silva&quot;, &quot;Marketing Designer&quot;, &quot;London&quot;, &quot;1581&quot;, &quot;2012/11/27&quot;, &quot;$198,500&quot; ],
+    [ &quot;Paul Byrd&quot;, &quot;Chief Financial Officer (CFO)&quot;, &quot;New York&quot;, &quot;3059&quot;, &quot;2010/06/09&quot;, &quot;$725,000&quot; ],
+    [ &quot;Gloria Little&quot;, &quot;Systems Administrator&quot;, &quot;New York&quot;, &quot;1721&quot;, &quot;2009/04/10&quot;, &quot;$237,500&quot; ],
+    [ &quot;Bradley Greer&quot;, &quot;Software Engineer&quot;, &quot;London&quot;, &quot;2558&quot;, &quot;2012/10/13&quot;, &quot;$132,000&quot; ],
+    [ &quot;Dai Rios&quot;, &quot;Personnel Lead&quot;, &quot;Edinburgh&quot;, &quot;2290&quot;, &quot;2012/09/26&quot;, &quot;$217,500&quot; ],
+    [ &quot;Jenette Caldwell&quot;, &quot;Development Lead&quot;, &quot;New York&quot;, &quot;1937&quot;, &quot;2011/09/03&quot;, &quot;$345,000&quot; ],
+    [ &quot;Yuri Berry&quot;, &quot;Chief Marketing Officer (CMO)&quot;, &quot;New York&quot;, &quot;6154&quot;, &quot;2009/06/25&quot;, &quot;$675,000&quot; ],
+    [ &quot;Caesar Vance&quot;, &quot;Pre-Sales Support&quot;, &quot;New York&quot;, &quot;8330&quot;, &quot;2011/12/12&quot;, &quot;$106,450&quot; ],
+    [ &quot;Doris Wilder&quot;, &quot;Sales Assistant&quot;, &quot;Sidney&quot;, &quot;3023&quot;, &quot;2010/09/20&quot;, &quot;$85,600&quot; ],
+    [ &quot;Angelica Ramos&quot;, &quot;Chief Executive Officer (CEO)&quot;, &quot;London&quot;, &quot;5797&quot;, &quot;2009/10/09&quot;, &quot;$1,200,000&quot; ],
+    [ &quot;Gavin Joyce&quot;, &quot;Developer&quot;, &quot;Edinburgh&quot;, &quot;8822&quot;, &quot;2010/12/22&quot;, &quot;$92,575&quot; ],
+    [ &quot;Jennifer Chang&quot;, &quot;Regional Director&quot;, &quot;Singapore&quot;, &quot;9239&quot;, &quot;2010/11/14&quot;, &quot;$357,650&quot; ],
+    [ &quot;Brenden Wagner&quot;, &quot;Software Engineer&quot;, &quot;San Francisco&quot;, &quot;1314&quot;, &quot;2011/06/07&quot;, &quot;$206,850&quot; ],
+    [ &quot;Fiona Green&quot;, &quot;Chief Operating Officer (COO)&quot;, &quot;San Francisco&quot;, &quot;2947&quot;, &quot;2010/03/11&quot;, &quot;$850,000&quot; ],
+    [ &quot;Shou Itou&quot;, &quot;Regional Marketing&quot;, &quot;Tokyo&quot;, &quot;8899&quot;, &quot;2011/08/14&quot;, &quot;$163,000&quot; ],
+    [ &quot;Michelle House&quot;, &quot;Integration Specialist&quot;, &quot;Sidney&quot;, &quot;2769&quot;, &quot;2011/06/02&quot;, &quot;$95,400&quot; ],
+    [ &quot;Suki Burks&quot;, &quot;Developer&quot;, &quot;London&quot;, &quot;6832&quot;, &quot;2009/10/22&quot;, &quot;$114,500&quot; ],
+    [ &quot;Prescott Bartlett&quot;, &quot;Technical Author&quot;, &quot;London&quot;, &quot;3606&quot;, &quot;2011/05/07&quot;, &quot;$145,000&quot; ],
+    [ &quot;Gavin Cortez&quot;, &quot;Team Leader&quot;, &quot;San Francisco&quot;, &quot;2860&quot;, &quot;2008/10/26&quot;, &quot;$235,500&quot; ],
+    [ &quot;Martena Mccray&quot;, &quot;Post-Sales support&quot;, &quot;Edinburgh&quot;, &quot;8240&quot;, &quot;2011/03/09&quot;, &quot;$324,050&quot; ],
+    [ &quot;Unity Butler&quot;, &quot;Marketing Designer&quot;, &quot;San Francisco&quot;, &quot;5384&quot;, &quot;2009/12/09&quot;, &quot;$85,675&quot; ]
 ];
 
 $(document).ready(function() {
-	$('#demo').html( '&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; border=&quot;0&quot; class=&quot;display&quot; id=&quot;example&quot;&gt;&lt;/table&gt;' );
-
 	$('#example').DataTable( {
-		&quot;data&quot;: dataSet,
-		&quot;columns&quot;: [
-			{ &quot;title&quot;: &quot;Engine&quot; },
-			{ &quot;title&quot;: &quot;Browser&quot; },
-			{ &quot;title&quot;: &quot;Platform&quot; },
-			{ &quot;title&quot;: &quot;Version&quot;, &quot;class&quot;: &quot;center&quot; },
-			{ &quot;title&quot;: &quot;Grade&quot;, &quot;class&quot;: &quot;center&quot; }
+		data: dataSet,
+		columns: [
+			{ title: &quot;Name&quot; },
+			{ title: &quot;Position&quot; },
+			{ title: &quot;Office&quot; },
+			{ title: &quot;Extn.&quot; },
+			{ title: &quot;Start date&quot; },
+			{ title: &quot;Salary&quot; }
 		]
-	} );	
+	} );
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
@@ -278,7 +236,7 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
 							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>

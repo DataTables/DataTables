@@ -52,12 +52,17 @@ $(document).ready(function() {
 				<p>New rows can be added to a DataTable very easily using the <a href="//datatables.net/reference/api/row.add()"><code class="api" title=
 				"DataTables API method">row.add()</code></a> API method. Simply call the API function with the data that is to be used for the new row (be it an array or object).
 				Multiple rows can be added using the <a href="//datatables.net/reference/api/rows.add()"><code class="api" title="DataTables API method">rows.add()</code></a>
-				method (note the plural).</p>
+				method (note the plural). Data can be likewise be updated with the <a href="//datatables.net/reference/api/row().data()"><code class="api" title=
+				"DataTables API method">row().data()</code></a> and <a href="//datatables.net/reference/api/row().remove()"><code class="api" title=
+				"DataTables API method">row().remove()</code></a> methods.</p>
 
 				<p>Note that in order to see the new row in the table you must call the <a href="//datatables.net/reference/api/draw()"><code class="api" title=
 				"DataTables API method">draw()</code></a> method, which is easily done through the chaining that the DataTables API makes use of.</p>
 
 				<p>This example shows a single row being added each time the button below is clicked upon.</p>
+
+				<p>The <a href="https://editor.datatables.net/">Editor extension</a> adds full table editing controls, including creating, editing and deleting rows, to a
+				DataTable.</p>
 			</div><button id="addRow">Add new row</button>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -190,7 +195,7 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
 							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>

@@ -5,7 +5,7 @@
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 
-	<title>DataTables example - Complex headers (rowspan / colspan)</title>
+	<title>DataTables example - Complex headers with column visibility</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -35,19 +35,20 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>Complex headers (rowspan / colspan)</span></h1>
+			<h1>DataTables example <span>Complex headers with column visibility</span></h1>
 
 			<div class="info">
-				<p>Complex headers (using colspan / rowspan) can be used to group columns of similar information in DataTables, creating a very powerful visual effect.</p>
+				<p>Complex headers (using <code>colspan</code> / <code>rowspan</code>) can be used to group columns of similar information in DataTables, creating a very powerful
+				visual effect.</p>
 
-				<p>In addition to the basic behaviour, DataTables can also take colspan and rowspans into account when working with hidden columns. The colspan and rowspan
-				attributes for each cell are automatically calculated and rendered on the page for you. This allows the <a href=
+				<p>In addition to the basic behaviour, DataTables can also take <code>colspan</code> and <code>rowspan</code>s into account when working with hidden columns. The
+				<code>colspan</code> and <code>rowspan</code> attributes for each cell are automatically calculated and rendered on the page for you. This allows the <a href=
 				"//datatables.net/reference/option/columns.visible"><code class="option" title="DataTables initialisation option">columns.visible</code></a> option and <a href=
 				"//datatables.net/reference/api/column().visible()"><code class="api" title="DataTables API method">column().visible()</code></a> method to take into account
-				rowspan / colspan cells, drawing the header correctly.</p>
+				<code>rowspan</code> / <code>colspan</code> cells, drawing the header correctly.</p>
 
-				<p>Note that each column must have at least one unique cell (i.e. a cell without colspan) so DataTables can use that cell to detect the column and use it to apply
-				ordering.</p>
+				<p>Note that each column must have at least one unique cell (i.e. a cell without <code>colspan</code>) so DataTables can use that cell to detect the column and use
+				it to apply ordering.</p>
 
 				<p>The example below shows a header spanning multiple cells over the contact information, with one of the columns that the span covers being hidden.</p>
 			</div>
@@ -636,7 +637,7 @@ $(document).ready(function() {
 							<li><a href="./column_render.html">Column rendering</a></li>
 							<li><a href="./length_menu.html">Page length options</a></li>
 							<li><a href="./dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li class="active"><a href="./complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li class="active"><a href="./complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="./object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="./html5-data-options.html">HTML5 data-* attributes - table options</a></li>
