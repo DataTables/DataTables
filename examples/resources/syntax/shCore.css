@@ -50,6 +50,7 @@
   font-size: 1em !important;
   min-height: inherit !important;
   min-height: auto !important;
+  white-space: nowrap;
 }
 
 .syntaxhighlighter {
