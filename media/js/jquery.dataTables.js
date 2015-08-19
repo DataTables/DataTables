@@ -1,11 +1,11 @@
-/*! DataTables 1.10.9-dev
+/*! DataTables 1.10.8
  * ©2008-2014 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.9-dev
+ * @version     1.10.8
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -1656,14 +1656,9 @@
 		}
 	
 		// Read the ID from the DOM if present
-		var rowNode = td ? row : row.nTr;
-	
-		if ( rowNode ) {
-			var id = rowNode.getAttribute( 'id' );
-	
-			if ( id ) {
-				_fnSetObjectDataFn( settings.rowId )( d, id );
-			}
+		var id = row.getAttribute( 'id' );
+		if ( id ) {
+			_fnSetObjectDataFn( settings.rowId )( d, id );
 		}
 	
 		return {
@@ -9229,7 +9224,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.9-dev";
+	DataTable.version = "1.10.8";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
