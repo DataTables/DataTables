@@ -1586,7 +1586,11 @@
 			objectRead = settings._rowReadObject;
 	
 		// Allow the data object to be passed in, or construct
-		d = d || objectRead ? {} : [];
+		d = d !== undefined ?
+			d :
+			objectRead ?
+				{} :
+				[];
 	
 		var attr = function ( str, td  ) {
 			if ( typeof str === 'string' ) {
