@@ -10,6 +10,10 @@ table.dataTable th {
   -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
+table.dataTable td.dataTables_empty,
+table.dataTable th.dataTables_empty {
+  text-align: center;
+}
 table.dataTable.nowrap th, table.dataTable.nowrap td {
   white-space: nowrap;
 }
