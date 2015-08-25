@@ -1050,14 +1050,10 @@
 		/* Create the cells */
 		var nTd, sThisType;
 		var columns = oSettings.aoColumns;
+	
+		// Invalidate the column types as the new data needs to be revalidated
 		for ( var i=0, iLen=columns.length ; i<iLen ; i++ )
 		{
-			// When working with a row, the data source object must be populated. In
-			// all other cases, the data source object is already populated, so we
-			// don't overwrite it, which might break bindings etc
-			if ( nTr ) {
-				_fnSetCellData( oSettings, iRow, i, _fnGetCellData( oSettings, iRow, i ) );
-			}
 			columns[i].sType = null;
 		}
 	
