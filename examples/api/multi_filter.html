@@ -40,9 +40,11 @@ $(document).ready(function() {
 		var that = this;
 
 		$( 'input', this.footer() ).on( 'keyup change', function () {
-			that
-				.search( this.value )
-				.draw();
+			if ( that.search() !== this.value ) {
+				that
+					.search( this.value )
+					.draw();
+			}
 		} );
 	} );
 } );
@@ -581,9 +583,11 @@ $(document).ready(function() {
 		var that = this;
 
 		$( 'input', this.footer() ).on( 'keyup change', function () {
-			that
-				.search( this.value )
-				.draw();
+			if ( that.search() !== this.value ) {
+				that
+					.search( this.value )
+					.draw();
+			}
 		} );
 	} );
 } );</code>
