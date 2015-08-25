@@ -22,7 +22,7 @@
  */
 
 /*jslint evil: true, undef: true, browser: true */
-/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnScrollBarWidth,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
+/*globals $,require,jQuery,define,_selector_run,_selector_opts,_selector_first,_selector_row_indexes,_ext,_Api,_api_register,_api_registerPlural,_re_new_lines,_re_html,_re_formatted_numeric,_re_escape_regex,_empty,_intVal,_numToDecimal,_isNumber,_isHtml,_htmlNumeric,_pluck,_pluck_order,_range,_stripHtml,_unique,_fnBuildAjax,_fnAjaxUpdate,_fnAjaxParameters,_fnAjaxUpdateDraw,_fnAjaxDataSrc,_fnAddColumn,_fnColumnOptions,_fnAdjustColumnSizing,_fnVisibleToColumnIndex,_fnColumnIndexToVisible,_fnVisbleColumns,_fnGetColumns,_fnColumnTypes,_fnApplyColumnDefs,_fnHungarianMap,_fnCamelToHungarian,_fnLanguageCompat,_fnBrowserDetect,_fnAddData,_fnAddTr,_fnNodeToDataIndex,_fnNodeToColumnIndex,_fnGetCellData,_fnSetCellData,_fnSplitObjNotation,_fnGetObjectDataFn,_fnSetObjectDataFn,_fnGetDataMaster,_fnClearTable,_fnDeleteIndex,_fnInvalidate,_fnGetRowElements,_fnCreateTr,_fnBuildHead,_fnDrawHead,_fnDraw,_fnReDraw,_fnAddOptionsHtml,_fnDetectHeader,_fnGetUniqueThs,_fnFeatureHtmlFilter,_fnFilterComplete,_fnFilterCustom,_fnFilterColumn,_fnFilter,_fnFilterCreateSearch,_fnEscapeRegex,_fnFilterData,_fnFeatureHtmlInfo,_fnUpdateInfo,_fnInfoMacros,_fnInitialise,_fnInitComplete,_fnLengthChange,_fnFeatureHtmlLength,_fnFeatureHtmlPaginate,_fnPageChange,_fnFeatureHtmlProcessing,_fnProcessingDisplay,_fnFeatureHtmlTable,_fnScrollDraw,_fnApplyToChildren,_fnCalculateColumnWidths,_fnThrottle,_fnConvertToWidth,_fnGetWidestNode,_fnGetMaxLenString,_fnStringToCss,_fnSortFlatten,_fnSort,_fnSortAria,_fnSortListener,_fnSortAttachListener,_fnSortingClasses,_fnSortData,_fnSaveState,_fnLoadState,_fnSettingsFromNode,_fnLog,_fnMap,_fnBindAction,_fnCallbackReg,_fnCallbackFire,_fnLengthOverflow,_fnRenderer,_fnDataSource,_fnRowAttributes*/
 
 (/** @lends <global> */function( window, document, undefined ) {
 
@@ -514,52 +514,76 @@
 	 */
 	function _fnBrowserDetect( settings )
 	{
-		var browser = settings.oBrowser;
+		// We don't need to do this every time DataTables is constructed, the values
+		// calculated are specific to the browser and OS configuration which we
+		// don't expect to change between initialisations
+		if ( ! DataTable.__browser ) {
+			var browser = {};
+			DataTable.__browser = browser;
 	
-		// Scrolling feature / quirks detection
-		var n = $('<div/>')
-			.css( {
-				position: 'fixed',
-				top: 0,
-				left: 0,
-				height: 1,
-				width: 1,
-				overflow: 'hidden'
-			} )
-			.append(
-				$('<div/>')
-					.css( {
-						position: 'absolute',
-						top: 1,
-						left: 1,
-						width: 100,
-						overflow: 'scroll'
-					} )
-					.append(
-						$('<div class="test"/>')
-							.css( {
-								width: '100%',
-								height: 10
-							} )
-					)
-			)
-			.appendTo( 'body' );
+			// Scrolling feature / quirks detection
+			var n = $('<div/>')
+				.css( {
+					position: 'fixed',
+					top: 0,
+					left: 0,
+					height: 1,
+					width: 1,
+					overflow: 'hidden'
+				} )
+				.append(
+					$('<div/>')
+						.css( {
+							position: 'absolute',
+							top: 1,
+							left: 1,
+							width: 100,
+							overflow: 'scroll'
+						} )
+						.append(
+							$('<div/>')
+								.css( {
+									width: '100%',
+									height: 10
+								} )
+						)
+				)
+				.appendTo( 'body' );
 	
-		var test = n.find('.test');
+			var outer = n.children();
+			var inner = outer.children();
 	
-		// IE6/7 will oversize a width 100% element inside a scrolling element, to
-		// include the width of the scrollbar, while other browsers ensure the inner
-		// element is contained without forcing scrolling
-		browser.bScrollOversize = test[0].offsetWidth === 100;
+			// Numbers below, in order, are:
+			// inner.offsetWidth, inner.clientWidth, outer.offsetWidth, outer.clientWidth
+			//
+			// IE6 XP:                           100 100 100  83
+			// IE7 Vista:                        100 100 100  83
+			// IE 8+ Windows:                     83  83 100  83
+			// Evergreen Windows:                 83  83 100  83
+			// Evergreen Mac with scrollbars:     85  85 100  85
+			// Evergreen Mac without scrollbars: 100 100 100 100
 	
-		// In rtl text layout, some browsers (most, but not all) will place the
-		// scrollbar on the left, rather than the right.
-		browser.bScrollbarLeft = Math.round( test.offset().left ) !== 1;
+			// Get scrollbar width
+			browser.barWidth = outer[0].offsetWidth - outer[0].clientWidth;
 	
-		// IE8- don't provide height and width for getBoundingClientRect
-		browser.bBounding = n[0].getBoundingClientRect().width ? true : false;
+			// IE6/7 will oversize a width 100% element inside a scrolling element, to
+			// include the width of the scrollbar, while other browsers ensure the inner
+			// element is contained without forcing scrolling
+			//console.log( inner.offsetWidth );
+			browser.bScrollOversize = inner[0].offsetWidth === 100 && outer[0].clientWidth !== 100;
 	
-		n.remove();
+			// In rtl text layout, some browsers (most, but not all) will place the
+			// scrollbar on the left, rather than the right.
+			browser.bScrollbarLeft = Math.round( inner.offset().left ) !== 1;
+	
+			// IE8- don't provide height and width for getBoundingClientRect
+			browser.bBounding = n[0].getBoundingClientRect().width ? true : false;
+	
+			n.remove();
+		}
+	
+		$.extend( settings.oBrowser, DataTable.__browser );
+		settings.oScroll.iBarWidth = DataTable.__browser.barWidth;
 	}
 	
 	
@@ -4439,40 +4463,6 @@
 	}
 	
 	
-	/**
-	 * Get the width of a scroll bar in this browser being used
-	 *  @returns {int} width in pixels
-	 *  @memberof DataTable#oApi
-	 */
-	function _fnScrollBarWidth ()
-	{
-		// On first run a static variable is set, since this is only needed once.
-		// Subsequent runs will just use the previously calculated value
-		var width = DataTable.__scrollbarWidth;
-	
-		if ( width === undefined ) {
-			var sizer = $('<p/>').css( {
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: '100%',
-					height: 150,
-					padding: 0,
-					overflow: 'scroll',
-					visibility: 'hidden'
-				} )
-				.appendTo('body');
-	
-			width = sizer[0].offsetWidth - sizer[0].clientWidth;
-			DataTable.__scrollbarWidth = width;
-	
-			sizer.remove();
-		}
-	
-		return width;
-	}
-	
-	
 	
 	function _fnSortFlatten ( settings )
 	{
@@ -6288,6 +6278,9 @@
 			
 			oSettings.rowIdFn = _fnGetObjectDataFn( oInit.rowId );
 			
+			/* Browser support detection */
+			_fnBrowserDetect( oSettings );
+			
 			var oClasses = oSettings.oClasses;
 			
 			// @todo Remove in 1.11
@@ -6317,11 +6310,6 @@
 			}
 			$this.addClass( oClasses.sTable );
 			
-			/* Calculate the scroll bar width and cache it for use later on */
-			if ( oSettings.oScroll.sX !== "" || oSettings.oScroll.sY !== "" )
-			{
-				oSettings.oScroll.iBarWidth = _fnScrollBarWidth();
-			}
 			
 			if ( oSettings.iInitDisplayStart === undefined )
 			{
@@ -6513,9 +6501,6 @@
 			 * Final init
 			 * Cache the header, body and footer as required, creating them if needed
 			 */
-			
-			/* Browser support detection */
-			_fnBrowserDetect( oSettings );
 			
 			// Work around for Webkit bug 83867 - store the caption-side before removing from doc
 			var captions = $this.children('caption').each( function () {
@@ -12954,7 +12939,14 @@
 			 *  @type boolean
 			 *  @default false
 			 */
-			"bBounding": false
+			"bBounding": false,
+	
+			/**
+			 * Browser scrollbar width
+			 *  @type integer
+			 *  @default 0
+			 */
+			"barWidth": 0
 		},
 	
 	
@@ -14891,7 +14883,6 @@
 		_fnGetWidestNode: _fnGetWidestNode,
 		_fnGetMaxLenString: _fnGetMaxLenString,
 		_fnStringToCss: _fnStringToCss,
-		_fnScrollBarWidth: _fnScrollBarWidth,
 		_fnSortFlatten: _fnSortFlatten,
 		_fnSort: _fnSort,
 		_fnSortAria: _fnSortAria,
