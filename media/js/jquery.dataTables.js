@@ -7604,7 +7604,7 @@
 			}
 		}
 	
-		return out;
+		return _unique( out );
 	};
 	
 	
