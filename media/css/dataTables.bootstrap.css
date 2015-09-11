@@ -175,3 +175,13 @@ table.table-bordered.dataTable tbody td {
 div.dataTables_scrollHead table.table-bordered {
   border-bottom-width: 0;
 }
+
+div.table-responsive > div.dataTables_wrapper > div.row {
+  margin: 0;
+}
+div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:first-child {
+  padding-left: 0;
+}
+div.table-responsive > div.dataTables_wrapper > div.row > div[class^="col-"]:last-child {
+  padding-right: 0;
+}
