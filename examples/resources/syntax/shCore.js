@@ -193,8 +193,9 @@ var sh = {
                 ;
 
             // execute the toolbar command
-            if (highlighter && commandName && sh.toolbar.items[commandName].execute)
+            if (highlighter && commandName && sh.toolbar.items[commandName] && sh.toolbar.items[commandName].execute) {
                 sh.toolbar.items[commandName].execute(highlighter);
+            }
 
             // disable default A click behaviour
             e.preventDefault();
