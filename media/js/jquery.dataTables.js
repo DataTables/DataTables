@@ -34,8 +34,10 @@
 		define( 'datatables', ['jquery'], factory );
 	}
 	else if ( typeof exports === 'object' ) {
-		// Node/CommonJS
-		module.exports = factory( require( 'jquery' ) );
+		module.exports = function ($) {
+			// Get jQuery if it wasn't passed in
+			return factory( $ || require( 'jquery' ) );
+		};
 	}
 	else if ( jQuery && !jQuery.fn.dataTable ) {
 		// Define using browser globals otherwise
@@ -9226,6 +9228,8 @@
 	// Add the `every()` method for rows, columns and cells in a compact form
 	$.each( [ 'column', 'row', 'cell' ], function ( i, type ) {
 		_api_register( type+'s().every()', function ( fn ) {
+			var opts = this.selector.opts;
+	
 			return this.iterator( type, function ( settings, arg1, arg2, arg3, arg4 ) {
 				// Rows and columns:
 				//  arg1 - index
@@ -9238,7 +9242,11 @@
 				//  arg3 - table counter
 				//  arg4 - loop counter
 				fn.call(
-					new _Api( settings )[ type ]( arg1, type==='cell' ? arg2 : undefined ),
+					new _Api( settings )[ type ](
+						arg1,
+						type==='cell' ? arg2 : opts,
+						type==='cell' ? opts : undefined
+					),
 					arg1, arg2, arg3, arg4
 				);
 			} );
