@@ -4183,7 +4183,10 @@
 			for ( i=0 ; i<columnCount ; i++ ) {
 				var colIdx = _fnVisibleToColumnIndex( oSettings, i );
 	
-				if ( colIdx ) {
+			    // The below if statement was introduced in DataTables 1.10.9.  It was incorrect because it checked: if ( colIdx )
+			    // That then returned false when the index of the first column was 0.  Adding "!= null" fixed the issue.  
+				// The behavior was that column widths were not correct in IE for tables that had not been shown when their data was loaded.
+				if ( colIdx != null ) {
 					columns[ colIdx ].sWidth = _fnStringToCss( headerCells.eq(i).width() );
 				}
 			}
