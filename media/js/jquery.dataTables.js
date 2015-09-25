@@ -34,10 +34,8 @@
 		define( 'datatables', ['jquery'], factory );
 	}
 	else if ( typeof exports === 'object' ) {
-		module.exports = function ($) {
-			// Get jQuery if it wasn't passed in
-			return factory( $ || require( 'jquery' ) );
-		};
+		// Node/CommonJS
+		module.exports = factory( require( 'jquery' ) );
 	}
 	else if ( jQuery && !jQuery.fn.dataTable ) {
 		// Define using browser globals otherwise
