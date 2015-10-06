@@ -134,8 +134,16 @@ if ( typeof define === 'function' && define.amd ) {
 	define( ['jquery', 'datatables'], factory );
 }
 else if ( typeof exports === 'object' ) {
-    // Node/CommonJS
-    factory( require('jquery'), require('datatables') );
+	// Node/CommonJS
+	module.exports = function ($, dt) {
+		if ( ! $ ) {
+			$ = require('jquery');
+		}
+		if ( ! dt ) {
+			dt = $.fn.dataTable || require('datatables');
+		}
+		factory( $, dt );
+	};
 }
 else if ( jQuery ) {
 	// Otherwise simply initialise as normal, stopping multiple evaluation
