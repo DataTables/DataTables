@@ -30,19 +30,18 @@
 	"use strict";
 
 	if ( typeof define === 'function' && define.amd ) {
-		// Define as an AMD module if possible
+		// AMD
 		define( ['jquery'], factory );
 	}
 	else if ( typeof exports === 'object' ) {
-		// Node/CommonJS
+		// CommonJS
 		module.exports = function ($) {
 			// Get jQuery if it wasn't passed in
 			return factory( $ || require('jquery') );
 		};
 	}
-	else if ( jQuery && !jQuery.fn.dataTable ) {
-		// Define using browser globals otherwise
-		// Prevent multiple instantiations if the script is loaded twice
+	else {
+		// Browser
 		factory( jQuery );
 	}
 }

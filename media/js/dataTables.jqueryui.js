@@ -16,18 +16,21 @@
 		define( ['jquery', 'datatables'], factory );
 	}
 	else if ( typeof exports === 'object' ) {
-		// Node / CommonJS
-		module.exports = function ($, dt) {
+		// CommonJS
+		module.exports = function ($) {
 			if ( ! $ ) { $ = require('jquery'); }
-			factory( $, dt || $.fn.dataTable || require('datatables') );
+			if ( ! $.fn.dataTable ) { require('datatables')($); }
+
+			factory( $ );
 		};
 	}
 	else if ( jQuery ) {
-		// Browser standard
-		factory( jQuery, jQuery.fn.dataTable );
+		// Browser
+		factory( jQuery );
 	}
-}(function( $, DataTable ) {
+}(function( $ ) {
 'use strict';
+var DataTable = $.fn.dataTable;
 
 
 var sort_prefix = 'css_right ui-icon ui-icon-';
