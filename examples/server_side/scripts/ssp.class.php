@@ -179,17 +179,19 @@ class SSP {
 		}
 
 		// Individual column filtering
-		for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
-			$requestColumn = $request['columns'][$i];
-			$columnIdx = array_search( $requestColumn['data'], $dtColumns );
-			$column = $columns[ $columnIdx ];
+		if ( isset( $request['columns'] ) ) {
+			for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
+				$requestColumn = $request['columns'][$i];
+				$columnIdx = array_search( $requestColumn['data'], $dtColumns );
+				$column = $columns[ $columnIdx ];
 
-			$str = $requestColumn['search']['value'];
+				$str = $requestColumn['search']['value'];
 
-			if ( $requestColumn['searchable'] == 'true' &&
-			 $str != '' ) {
-				$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-				$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
+				if ( $requestColumn['searchable'] == 'true' &&
+				 $str != '' ) {
+					$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
+					$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
+				}
 			}
 		}
 
@@ -265,7 +267,9 @@ class SSP {
 		 * Output
 		 */
 		return array(
-			"draw"            => intval( $request['draw'] ),
+			"draw"            => isset ( $request['draw'] ) ?
+				intval( $request['draw'] ) :
+				0,
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
 			"data"            => self::data_output( $columns, $data )
@@ -353,7 +357,9 @@ class SSP {
 		 * Output
 		 */
 		return array(
-			"draw"            => intval( $request['draw'] ),
+			"draw"            => isset ( $request['draw'] ) ?
+				intval( $request['draw'] ) :
+				0,
 			"recordsTotal"    => intval( $recordsTotal ),
 			"recordsFiltered" => intval( $recordsFiltered ),
 			"data"            => self::data_output( $columns, $data )

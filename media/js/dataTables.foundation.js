@@ -1,5 +1,5 @@
 /*! DataTables Foundation integration
- * ©2011-2014 SpryMedia Ltd - datatables.net/license
+ * ©2011-2015 SpryMedia Ltd - datatables.net/license
  */
 
 /**
@@ -10,10 +10,27 @@
  * controls using Foundation. See http://datatables.net/manual/styling/foundation
  * for further information.
  */
-(function(window, document, undefined){
+(function( factory ){
+	if ( typeof define === 'function' && define.amd ) {
+		// AMD
+		define( ['jquery', 'datatables.net'], factory );
+	}
+	else if ( typeof exports === 'object' ) {
+		// CommonJS
+		module.exports = function ($) {
+			if ( ! $ ) { $ = require('jquery'); }
+			if ( ! $.fn.dataTable ) { require('datatables.net')($); }
 
-var factory = function( $, DataTable ) {
-"use strict";
+			factory( $ );
+		};
+	}
+	else {
+		// Browser
+		factory( jQuery );
+	}
+}(function( $ ) {
+'use strict';
+var DataTable = $.fn.dataTable;
 
 
 $.extend( DataTable.ext.classes, {
@@ -43,7 +60,7 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 		var i, ien, node, button;
 		var clickHandler = function ( e ) {
 			e.preventDefault();
-			if ( e.data.action !== 'ellipsis' ) {
+			if ( !$(e.currentTarget).hasClass('unavailable') && api.page() != e.data.action ) {
 				api.page( e.data.action ).draw( 'page' );
 			}
 		};
@@ -126,22 +143,5 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 };
 
 
-}; // /factory
-
-
-// Define as an AMD module if possible
-if ( typeof define === 'function' && define.amd ) {
-	define( ['jquery', 'datatables'], factory );
-}
-else if ( typeof exports === 'object' ) {
-    // Node/CommonJS
-    factory( require('jquery'), require('datatables') );
-}
-else if ( jQuery ) {
-	// Otherwise simply initialise as normal, stopping multiple evaluation
-	factory( jQuery, jQuery.fn.dataTable );
-}
-
-
-})(window, document);
-
+return DataTable;
+}));
