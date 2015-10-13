@@ -77,7 +77,7 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 
 				switch ( button ) {
 					case 'ellipsis':
-						btnDisplay = '&hellip;';
+						btnDisplay = '&#x2026;';
 						btnClass = 'unavailable';
 						break;
 

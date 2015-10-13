@@ -80,7 +80,7 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 
 				switch ( button ) {
 					case 'ellipsis':
-						btnDisplay = '&hellip;';
+						btnDisplay = '&#x2026;';
 						btnClass = 'disabled';
 						break;
 
