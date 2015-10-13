@@ -1753,6 +1753,8 @@
 				oCol = oSettings.aoColumns[i];
 	
 				nTd = nTrIn ? anTds[i] : document.createElement( oCol.sCellType );
+				nTd._DT_CellIndex = { row: iRow, column: i };
+				
 				cells.push( nTd );
 	
 				// Need to create the HTML if new, or if a rendering function is defined
@@ -7889,6 +7891,15 @@
 				if ( data[i].nTr !== null ) {
 					data[i].nTr._DT_RowIndex = i;
 				}
+				if (data[i].anCells !== null) {
+	+				for (var j = 0, jen = data[i].anCells.length; j < jen; j++) {
+	+				    if (data[i].anCells[j]) {
+	+				        if (data[i].anCells[j]._DT_CellIndex) {
+	+				            data[i].anCells[j]._DT_CellIndex.row = i;
+	+				        }
+	+				    }
+	+				}
+				}
 			}
 	
 			// Delete from the display arrays
@@ -8545,24 +8556,10 @@
 			return allCells
 				.filter( s )
 				.map( function (i, el) {
-					if ( el.parentNode ) {
-						row = el.parentNode._DT_RowIndex;
-					}
-					else {
-						// If no parent node, then the cell is hidden and we'll need
-						// to traverse the array to find it
-						for ( i=0, ien=data.length ; i<ien ; i++ ) {
-							if ( $.inArray( el, data[i].anCells ) !== -1 ) {
-								row = i;
-								break;
-							}
-						}
-					}
-	
 					return {
-						row: row,
-						column: $.inArray( el, data[ row ].anCells )
-					};
+	+					    row: el._DT_CellIndex.row,
+	+					    column: el._DT_CellIndex.column
+	 					};
 				} )
 				.toArray();
 		};
