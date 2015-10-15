@@ -8329,7 +8329,8 @@
 					case 'visible':
 					case 'orderable':
 					case 'searchable':
-						var setting = 'b' + match[2][0].toUpperCase() + match[2][0].slice(1);
+						var rlname = match[2] === 'orderable' ? 'sortable' : orderable;
+						var setting = 'b' + rlname[0].toUpperCase() + rlname[0].slice(1);
 						// No index given, return all matches
 						if (match[1] === "*") {
 							return _fnGetColumns( settings, setting );
