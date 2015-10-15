@@ -813,8 +813,24 @@
 	
 		_fnCallbackFire( settings, null, 'column-sizing', [settings] );
 	}
-	
-	
+
+	/**
+	 * Convert the index of a column to the index in the data array based on a setting
+	 *  @param {object} oSettings dataTables settings object
+	 *  @param {int} iMatch Column index to lookup
+	 *  @param {string} sSetting Setting
+	 *  @returns {int} i the data index
+	 *  @memberof DataTable#oApi
+	 */
+	function _fnSettingToColumnIndex( oSettings, iMatch, sSetting )
+	{
+		var aiVis = _fnGetColumns( oSettings, sSetting );
+
+		return typeof aiVis[iMatch] === 'number' ?
+			aiVis[iMatch] :
+			null;
+	}
+
 	/**
 	 * Covert the index of a visible column to the index in the data array (take account
 	 * of hidden columns)
@@ -825,11 +841,7 @@
 	 */
 	function _fnVisibleToColumnIndex( oSettings, iMatch )
 	{
-		var aiVis = _fnGetColumns( oSettings, 'bVisible' );
-	
-		return typeof aiVis[iMatch] === 'number' ?
-			aiVis[iMatch] :
-			null;
+		return _fnSettingToColumnIndex(oSettings, iMatch, 'bVisible');
 	}
 	
 	
@@ -8256,7 +8268,7 @@
 	// can be an array of these items, comma separated list, or an array of comma
 	// separated lists
 	
-	var __re_column_selector = /^(.+):(name|visIdx|visible)$/;
+	var __re_column_selector = /^(.+):(name|visIdx|visible|orderable|searchable)$/;
 	
 	
 	// r1 and r2 are redundant - but it means that the parameters match for the
@@ -8315,17 +8327,24 @@
 				switch( match[2] ) {
 					case 'visIdx':
 					case 'visible':
+					case 'orderable':
+					case 'searchable':
+						var setting = 'b' + match[2][0].toUpperCase() + match[2][0].slice(1);
+						// No index given, return all matches
+						if (match[1] === "*") {
+							return _fnGetColumns( settings, setting );
+						}
 						var idx = parseInt( match[1], 10 );
-						// Visible index given, convert to column index
+						// Index given, convert to column index
 						if ( idx < 0 ) {
 							// Counting from the right
 							var visColumns = $.map( columns, function (col,i) {
-								return col.bVisible ? i : null;
+								return col[setting] ? i : null;
 							} );
 							return [ visColumns[ visColumns.length + idx ] ];
 						}
 						// Counting from the left
-						return [ _fnVisibleToColumnIndex( settings, idx ) ];
+						return [ _fnSettingToColumnIndex( settings, idx, setting ) ];
 	
 					case 'name':
 						// match by name. `names` is column index complete and in order
