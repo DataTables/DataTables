@@ -8329,7 +8329,7 @@
 					case 'visible':
 					case 'orderable':
 					case 'searchable':
-						var rlname = match[2] === 'orderable' ? 'sortable' : orderable;
+						var rlname = match[2] === 'orderable' ? 'sortable' : match[2];
 						var setting = 'b' + rlname[0].toUpperCase() + rlname[0].slice(1);
 						// No index given, return all matches
 						if (match[1] === "*") {
