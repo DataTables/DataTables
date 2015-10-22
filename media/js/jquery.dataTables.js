@@ -4106,14 +4106,6 @@
 		if ( (settings.bSorted || settings.bFiltered) && ! settings._drawHold ) {
 			divBodyEl.scrollTop = 0;
 		}
-	
-		// Chrome has a weird bug that means the max-height might not collapse the
-		// element fully (appears to be related to a horizontal scrollbar). Need to
-		// force it to redraw the element
-		if ( scrollY && scroll.bCollapse ) {
-			divBody.css( 'max-height', '' ).height();
-			divBody.css( 'max-height', scrollY );
-		}
 	}
 	
 	
