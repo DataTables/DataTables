@@ -3891,6 +3891,20 @@
 				style.height = 0;
 			};
 	
+		// If the scrollbar visibility has changed from the last draw, we need to
+		// adjust the column sizes as the table width will have changed to account
+		// for the scrollbar
+		var scrollBarVis = divBodyEl.scrollHeight > divBodyEl.clientHeight;
+		
+		if ( settings.scrollBarVis !== scrollBarVis && settings.scrollBarVis !== undefined ) {
+			settings.scrollBarVis = scrollBarVis;
+			_fnAdjustColumnSizing( settings );
+			return; // adjust column sizing will call this function again
+		}
+		else {
+			settings.scrollBarVis = scrollBarVis;
+		}
+	
 		/*
 		 * 1. Re-create the table inside the scrolling div
 		 */
@@ -4091,6 +4105,14 @@
 		// only if we aren't holding the position
 		if ( (settings.bSorted || settings.bFiltered) && ! settings._drawHold ) {
 			divBodyEl.scrollTop = 0;
+		}
+	
+		// Chrome has a weird bug that means the max-height might not collapse the
+		// element fully (appears to be related to a horizontal scrollbar). Need to
+		// force it to redraw the element
+		if ( scrollY && scroll.bCollapse ) {
+			divBody.css( 'max-height', '' ).height();
+			divBody.css( 'max-height', scrollY );
 		}
 	}
 	
