@@ -4297,44 +4297,32 @@
 				tmpTable.width( tableWidthAttr );
 			}
 	
-			// Browsers need a bit of a hand when a width is assigned to any columns
-			// when x-scrolling as they tend to collapse the table to the min-width,
-			// even if we sent the column widths. So we need to keep track of what
-			// the table width should be by summing the user given values, and the
-			// automatic values
-			if ( scrollX )
-			{
-				var total = 0;
-	
-				for ( i=0 ; i<visibleColumns.length ; i++ ) {
-					column = columns[ visibleColumns[i] ];
-	
-					// Much prefer to use getBoundingClientRect due to its sub-pixel
-					// resolution, but IE8- do not support the width property.
-					outerWidth = browser.bBounding ?
-						headerCells[i].getBoundingClientRect().width :
-						$(headerCells[i]).outerWidth();
-	
-					total += column.sWidthOrig === null ?
-						outerWidth :
-						parseInt( column.sWidth, 10 ) + outerWidth - $(headerCells[i]).width();
-				}
-	
-				tmpTable.width( _fnStringToCss( total ) );
-				table.style.width = _fnStringToCss( total );
-			}
-	
-			// Get the width of each column in the constructed table
+			// Get the width of each column in the constructed table - we need to
+			// know the inner width (so it can be assigned to the other table's
+			// cells) and the outer width so we can calculate the full width of the
+			// table. This is safe since DataTables requires a unique cell for each
+			// column, but if ever a header can span multiple columns, this will
+			// need to be modified.
+			var total = 0;
 			for ( i=0 ; i<visibleColumns.length ; i++ ) {
-				column = columns[ visibleColumns[i] ];
-				width = $(headerCells[i]).width();
+				var cell = $(headerCells[i]);
+				var border = cell.outerWidth() - cell.width();
 	
-				if ( width ) {
-					column.sWidth = _fnStringToCss( width );
-				}
+				// Use getBounding... where possible (not IE8-) because it can give
+				// sub-pixel accuracy, which we then want to round up!
+				var bounding = browser.bBounding ?
+					Math.ceil( headerCells[i].getBoundingClientRect().width ) :
+					cell.outerWidth();
+	
+				// Total is tracked to remove any sub-pixel errors as the outerWidth
+				// of the table might not equal the total given here (IE!).
+				total += bounding;
+	
+				// Width for each column to use
+				columns[ visibleColumns[i] ].sWidth = _fnStringToCss( bounding - border );
 			}
 	
-			table.style.width = _fnStringToCss( tmpTable.css('width') );
+			table.style.width = _fnStringToCss( total );
 	
 			// Finished with the table - ditch it
 			holder.remove();
@@ -4464,6 +4452,7 @@
 		for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
 			s = _fnGetCellData( settings, i, colIdx, 'display' )+'';
 			s = s.replace( __re_html_remove, '' );
+			s = s.replace( /&nbsp;/g, ' ' );
 	
 			if ( s.length > max ) {
 				max = s.length;
