@@ -54,6 +54,7 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 	var api = new DataTable.Api( settings );
 	var classes = settings.oClasses;
 	var lang = settings.oLanguage.oPaginate;
+	var aria = settings.oLanguage.oAria.paginate || {};
 	var btnDisplay, btnClass;
 
 	var attach = function( container, buttons ) {
@@ -116,6 +117,7 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 					node = $('<li>', {
 							'class': classes.sPageButton+' '+btnClass,
 							'aria-controls': settings.sTableId,
+							'aria-label': aria[ button ],
 							'tabindex': settings.iTabIndex,
 							'id': idx === 0 && typeof button === 'string' ?
 								settings.sTableId +'_'+ button :
