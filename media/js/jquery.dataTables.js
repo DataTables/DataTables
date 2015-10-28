@@ -1158,7 +1158,7 @@
 			if ( settings.iDrawError != draw && defaultContent === null ) {
 				_fnLog( settings, 0, "Requested unknown parameter "+
 					(typeof col.mData=='function' ? '{function}' : "'"+col.mData+"'")+
-					" for row "+rowIdx, 4 );
+					" for row "+rowIdx+", column "+colIdx, 4 );
 				settings.iDrawError = draw;
 			}
 			return defaultContent;
