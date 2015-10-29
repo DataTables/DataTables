@@ -4704,7 +4704,11 @@
 			var asSorting = col.asSorting;
 			var sTitle = col.sTitle.replace( /<.*?>/g, "" );
 			var th = col.nTh;
-	
+
+			if (typeof col.sTitle == 'function') {
+				col.sTitle = col.sTitle();
+			}
+
 			// IE7 is throwing an error when setting these properties with jQuery's
 			// attr() and removeAttr() methods...
 			th.removeAttribute('aria-sort');
@@ -6362,6 +6366,9 @@
 				 * get async to the remainder of this function we use bInitHandedOff to indicate that
 				 * _fnInitialise will be fired by the returned Ajax handler, rather than the constructor
 				 */
+				if (typeof oLanguage.sUrl == 'function') {
+					oLanguage.sUrl = oLanguage.sUrl();
+				}
 				$.ajax( {
 					dataType: 'json',
 					url: oLanguage.sUrl,
