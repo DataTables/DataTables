@@ -43,7 +43,7 @@ $(document).ready(function() {
 				.data()
 				.reduce( function (a, b) {
 					return intVal(a) + intVal(b);
-				} );
+				}, 0 );
 
 			// Total over this page
 			pageTotal = api
@@ -524,7 +524,7 @@ $(document).ready(function() {
 				.data()
 				.reduce( function (a, b) {
 					return intVal(a) + intVal(b);
-				} );
+				}, 0 );
 
 			// Total over this page
 			pageTotal = api
