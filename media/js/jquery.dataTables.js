@@ -4239,10 +4239,11 @@
 	
 			for ( i=0 ; i<visibleColumns.length ; i++ ) {
 				column = columns[ visibleColumns[i] ];
-	
-				headerCells[i].style.width = column.sWidthOrig !== null && column.sWidthOrig !== '' ?
-					_fnStringToCss( column.sWidthOrig ) :
-					'';
+                if(typeof headerCells[i] != "undefined"){
+                    headerCells[i].style.width = column.sWidthOrig !== null && column.sWidthOrig !== '' ?
+                        _fnStringToCss( column.sWidthOrig ) :
+                        '';
+                }
 			}
 	
 			// Find the widest cell for each column and put it into the table
@@ -15173,4 +15174,3 @@
 }));
 
 }(window, document));
-
