@@ -3706,17 +3706,6 @@
 			return !s ? null : _fnStringToCss( s );
 		};
 	
-		// This is fairly messy, but with x scrolling enabled, if the table has a
-		// width attribute, regardless of any width applied using the column width
-		// options, the browser will shrink or grow the table as needed to fit into
-		// that 100%. That would make the width options useless. So we remove it.
-		// This is okay, under the assumption that width:100% is applied to the
-		// table in CSS (it is in the default stylesheet) which will set the table
-		// width as appropriate (the attribute and css behave differently...)
-		if ( scroll.sX && table.attr('width') === '100%' ) {
-			table.removeAttr('width');
-		}
-	
 		if ( ! footer.length ) {
 			footer = null;
 		}
@@ -4243,6 +4232,19 @@
 				headerCells[i].style.width = column.sWidthOrig !== null && column.sWidthOrig !== '' ?
 					_fnStringToCss( column.sWidthOrig ) :
 					'';
+	
+				// For scrollX we need to force the column width otherwise the
+				// browser will collapse it. If this width is smaller than the
+				// width the column requires, then it will have no effect
+				if ( column.sWidthOrig && scrollX ) {
+					$( headerCells[i] ).append( $('<div/>').css( {
+						width: column.sWidthOrig,
+						margin: 0,
+						padding: 0,
+						border: 0,
+						height: 1
+					} ) );
+				}
 			}
 	
 			// Find the widest cell for each column and put it into the table
@@ -4285,8 +4287,11 @@
 			}
 			else if ( scrollX ) {
 				tmpTable.css( 'width', 'auto' );
+				tmpTable.removeAttr('width');
 	
-				if ( tmpTable.width() < tableContainer.clientWidth ) {
+				// If there is no width attribute or style, then allow the table to
+				// collapse
+				if ( tmpTable.width() < tableContainer.clientWidth && tableWidthAttr ) {
 					tmpTable.width( tableContainer.clientWidth );
 				}
 			}
