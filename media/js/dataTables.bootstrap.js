@@ -13,22 +13,32 @@
 (function( factory ){
 	if ( typeof define === 'function' && define.amd ) {
 		// AMD
-		define( ['jquery', 'datatables.net'], factory );
+		define( ['jquery', 'datatables.net'], function ( $ ) {
+			return factory( $, window, document );
+		} );
 	}
 	else if ( typeof exports === 'object' ) {
 		// CommonJS
-		module.exports = function ($) {
-			if ( ! $ ) { $ = require('jquery'); }
-			if ( ! $.fn.dataTable ) { require('datatables.net')($); }
+		module.exports = function (root, $) {
+			if ( ! root ) {
+				root = window;
+			}
 
-			factory( $ );
+			if ( ! $ || ! $.fn.dataTable ) {
+				// Require DataTables, which attaches to jQuery, including
+				// jQuery if needed and have a $ property so we can access the
+				// jQuery object that is used
+				$ = require('datatables.net')(root, $).$;
+			}
+
+			return factory( $, root, root.document );
 		};
 	}
 	else {
 		// Browser
-		factory( jQuery );
+		factory( jQuery, window, document );
 	}
-}(function( $ ) {
+}(function( $, window, document, undefined ) {
 'use strict';
 var DataTable = $.fn.dataTable;
 
