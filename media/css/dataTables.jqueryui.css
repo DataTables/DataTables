@@ -451,7 +451,6 @@ table.dataTable tfoot th.ui-state-default:first-child {
   text-decoration: none !important;
   cursor: pointer;
   *cursor: hand;
-  color: #333 !important;
   border: 1px solid transparent;
 }
 .dataTables_wrapper .dataTables_paginate .fg-button:active {
@@ -473,4 +472,11 @@ table.dataTable tfoot th.ui-state-default:first-child {
 }
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
   border-bottom: none;
+}
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_processing,
+.dataTables_wrapper .dataTables_paginate {
+  color: inherit;
 }
