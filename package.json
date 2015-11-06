@@ -1,6 +1,6 @@
 {
 	"name": "datatables",
-	"version": "1.10.10-dev",
+	"version": "1.10.10",
 	"title": "DataTables",
 	"main": "media/js/jquery.dataTables",
 	"files": [
