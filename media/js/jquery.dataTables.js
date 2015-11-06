@@ -14841,6 +14841,8 @@
 	 *   * `integer` - Number of decimal points to show
 	 *   * `string` (optional) - Prefix.
 	 *   * `string` (optional) - Postfix (/suffix).
+	 * * `text` - Escape HTML to help prevent XSS attacks. It has no optional
+	 *   parameters.
 	 *
 	 * @example
 	 *   // Column definition using the number renderer
@@ -14860,7 +14862,15 @@
 					}
 	
 					var negative = d < 0 ? '-' : '';
-					d = Math.abs( parseFloat( d ) );
+					var flo = parseFloat( d );
+	
+					// If NaN then there isn't much formatting that we can do - just
+					// return immediately
+					if ( isNaN( flo ) ) {
+						return d;
+					}
+	
+					d = Math.abs( flo );
 	
 					var intPart = parseInt( d, 10 );
 					var floatPart = precision ?
@@ -14873,6 +14883,16 @@
 						) +
 						floatPart +
 						(postfix||'');
+				}
+			};
+		},
+	
+		text: function () {
+			return {
+				display: function ( d ) {
+					return typeof d === 'string' ?
+						d.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') :
+						d;
 				}
 			};
 		}
