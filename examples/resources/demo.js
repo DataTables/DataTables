@@ -58,7 +58,7 @@ if ( window.$ ) {
 					} catch ( e ) {}
 
 					$('div.tabs div.ajax').append(
-						'<code class="multiline language-js">'+str+'</code>'
+						$('<code class="multiline language-js"/>').text( str )
 					);
 
 					// This can be really slow for large builds
