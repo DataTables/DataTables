@@ -40,7 +40,7 @@ A full list of the options available for DataTables are available in the [docume
 
 ## Documentation
 
-Full documentation of the DataTables options, API and pug-in interface are available on the [DataTables web-site](//datatables.net). The site also contains information on the wide variety of plug-ins that are available for DataTables, which can be used to enhance and customise your table even further.
+Full documentation of the DataTables options, API and plug-in interface are available on the [DataTables web-site](//datatables.net). The site also contains information on the wide variety of plug-ins that are available for DataTables, which can be used to enhance and customise your table even further.
 
 
 ## Support
