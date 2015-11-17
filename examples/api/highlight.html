@@ -29,20 +29,14 @@ td.highlight {
 	
 
 $(document).ready(function() {
-	var lastIdx = null;
 	var table = $('#example').DataTable();
 	
 	$('#example tbody')
-		.on( 'mouseover', 'td', function () {
+		.on( 'mouseenter', 'td', function () {
 			var colIdx = table.cell(this).index().column;
 
-			if ( colIdx !== lastIdx ) {
-				$( table.cells().nodes() ).removeClass( 'highlight' );
-				$( table.column( colIdx ).nodes() ).addClass( 'highlight' );
-			}
-		} )
-		.on( 'mouseleave', function () {
 			$( table.cells().nodes() ).removeClass( 'highlight' );
+			$( table.column( colIdx ).nodes() ).addClass( 'highlight' );
 		} );
 } );
 
@@ -552,20 +546,14 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	var lastIdx = null;
 	var table = $('#example').DataTable();
 	
 	$('#example tbody')
-		.on( 'mouseover', 'td', function () {
+		.on( 'mouseenter', 'td', function () {
 			var colIdx = table.cell(this).index().column;
 
-			if ( colIdx !== lastIdx ) {
-				$( table.cells().nodes() ).removeClass( 'highlight' );
-				$( table.column( colIdx ).nodes() ).addClass( 'highlight' );
-			}
-		} )
-		.on( 'mouseleave', function () {
 			$( table.cells().nodes() ).removeClass( 'highlight' );
+			$( table.column( colIdx ).nodes() ).addClass( 'highlight' );
 		} );
 } );</code>
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
