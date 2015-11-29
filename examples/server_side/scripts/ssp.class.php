@@ -235,6 +235,13 @@ class SSP {
 		$bindings = array();
 		$db = self::db( $conn );
 
+	        if (count($columns)==0) {
+	            foreach ($db->query("SHOW COLUMNS FROM $table") as $mas) {
+	                $t = $mas['Field'];
+	                $columns[] = ( '*'!==$primaryKey&& $t===$primaryKey ) ? array( 'db' => $primaryKey, 'dt' => 'DT_RowId' ) : array( 'db' => $t, 'dt' => $t );
+	            }
+	        }
+
 		// Build the SQL query string from the request
 		$limit = self::limit( $request, $columns );
 		$order = self::order( $request, $columns );
