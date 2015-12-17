@@ -1773,9 +1773,13 @@
 				// Need to create the HTML if new, or if a rendering function is defined
 				if ( !nTrIn || oCol.mRender || oCol.mData !== i )
 				{
-					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+					//Don't render cell if it is not visible
+					if ( (oSettings.oFeatures.bDeferRender && oCol.bVisible) || !oSettings.oFeatures.bDeferRender)
+					{
+						nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+					}
 				}
-	
+
 				/* Add user defined class */
 				if ( oCol.sClass )
 				{
@@ -8394,7 +8398,11 @@
 			for ( i=0, ien=data.length ; i<ien ; i++ ) {
 				tr = data[i].nTr;
 				cells = data[i].anCells;
-	
+				if ( cells[column].innerHTML === "" )
+				{
+					cells[column].innerHTML = _fnGetCellData( settings, i, column, 'display' );
+				}
+
 				if ( tr ) {
 					// insertBefore can act like appendChild if 2nd arg is null
 					tr.insertBefore( cells[ column ], cells[ insertBefore ] || null );
