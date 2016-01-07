@@ -11,7 +11,7 @@ CREATE TABLE `datatables_demo` (
 	`position`   varchar(250) NOT NULL default '',
 	`email`      varchar(250) NOT NULL default '',
 	`office`     varchar(250) NOT NULL default '',
-	`start_date` datetime default CURRENT_TIMESTAMP,
+	`start_date` datetime default NULL,
 	`age`        int(8),
 	`salary`     int(8),
 	`seq`        int(8),
