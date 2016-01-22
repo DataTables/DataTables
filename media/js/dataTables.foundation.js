@@ -39,6 +39,11 @@
 'use strict';
 var DataTable = $.fn.dataTable;
 
+// Detect Foundation 5 / 6 as they have different element and class requirements
+var meta = $('<meta class="foundation-mq"/>').appendTo('head');
+DataTable.ext.foundationVersion = meta.css('font-family').match(/small|medium|large/) ? 6 : 5;
+meta.remove();
+
 
 $.extend( DataTable.ext.classes, {
 	sWrapper:    "dataTables_wrapper dt-foundation",
@@ -64,6 +69,7 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 	var aria = settings.oLanguage.oAria.paginate || {};
 	var btnDisplay, btnClass;
 	var tag;
+	var v5 = DataTable.ext.foundationVersion === 5;
 
 	var attach = function( container, buttons ) {
 		var i, ien, node, button;
@@ -127,6 +133,10 @@ DataTable.ext.renderer.pageButton.foundation = function ( settings, host, idx, b
 						tag = page === button ?
 							null : 'a';
 						break;
+				}
+
+				if ( v5 ) {
+					tag = 'a';
 				}
 
 				if ( btnDisplay ) {
