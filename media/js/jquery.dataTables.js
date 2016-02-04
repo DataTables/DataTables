@@ -8636,7 +8636,7 @@
 			return host.length ?
 				[ {
 					row: host.data('dt-row'),
-					column: host.data('dt-column'),
+					column: host.data('dt-column')
 				} ] :
 				[];
 		};
