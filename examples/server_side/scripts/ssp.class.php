@@ -436,7 +436,7 @@ class SSP {
 		}
 
 		// Return all
-		return $stmt->fetchAll( PDO::FETCH_BOTH );
+		return $stmt->fetchAll();
 	}
 
 

@@ -303,10 +303,10 @@ var sh = {
      */
     highlight: function(globalParams, element)
     {
-        // Don't run the syntax highlighter on IE6/7/8 as it absolutely kills
+        // Don't run the syntax highlighter on IE6/7 as it absolutely kills
         // performance
         var userAgent = navigator.appVersion;
-        if (userAgent.indexOf("MSIE 8.") !== -1 || userAgent.indexOf("MSIE 7.") !== -1 || userAgent.indexOf("MSIE 6.") !== -1) {
+        if (userAgent.indexOf("MSIE 7.") !== -1 || userAgent.indexOf("MSIE 6.") !== -1) {
             return;
         }
 
