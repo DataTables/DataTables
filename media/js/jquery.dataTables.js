@@ -4989,7 +4989,7 @@
 			search:  _fnSearchToCamel( settings.oPreviousSearch ),
 			columns: $.map( settings.aoColumns, function ( col, i ) {
 				return {
-					visible: col.bVisible,
+					visible: (col.bVisible || col.visible),
 					search: _fnSearchToCamel( settings.aoPreSearchCols[i] )
 				};
 			} )
@@ -5018,7 +5018,7 @@
 		}
 	
 		var state = settings.fnStateLoadCallback.call( settings.oInstance, settings );
-		if ( ! state || ! state.time ) {
+		if ( ! state || ! state.time || state.columns == undefined) {
 			return;
 		}
 	
@@ -6394,20 +6394,52 @@
 				 * get async to the remainder of this function we use bInitHandedOff to indicate that
 				 * _fnInitialise will be fired by the returned Ajax handler, rather than the constructor
 				 */
-				$.ajax( {
-					dataType: 'json',
-					url: oLanguage.sUrl,
-					success: function ( json ) {
-						_fnLanguageCompat( json );
-						_fnCamelToHungarian( defaults.oLanguage, json );
-						$.extend( true, oLanguage, json );
-						_fnInitialise( oSettings );
-					},
-					error: function () {
-						// Error occurred loading language file, continue on as best we can
-						_fnInitialise( oSettings );
-					}
-				} );
+				 
+				var language = null;
+
+				if(typeof localStorage != 'undefined')
+				{
+					var nom_cle = "datatables-localstorage-key";
+					var language = localStorage.getItem(nom_cle);
+				}
+				if(language != null)
+				{
+					var json = $.parseJSON(language);
+					_fnLanguageCompat( json );
+					_fnCamelToHungarian( defaults.oLanguage, json );
+					$.extend( true, oLanguage, json );
+					_fnInitialise( oSettings );
+				}
+				else
+				{
+					$.ajax( {
+						dataType: 'json',
+						url: oLanguage.sUrl,
+						cache:true,
+						success: function ( json ) {
+							try
+							{
+								if(typeof localStorage != 'undefined')
+								{
+									localStorage.setItem(nom_cle, JSON.stringify(json));
+								}
+							}
+							catch(e)
+							{
+								_fnLog( oSettings, 0, 'Impossible to store datas in localStorage');
+							}
+							
+							_fnLanguageCompat( json );
+							_fnCamelToHungarian( defaults.oLanguage, json );
+							$.extend( true, oLanguage, json );
+							_fnInitialise( oSettings );
+						},
+						error: function (){
+							// Error occurred loading language file, continue on as best we can
+							_fnInitialise( oSettings );
+						}
+					});
+				}
 				bInitHandedOff = true;
 			}
 			
@@ -6506,7 +6538,7 @@
 			{
 				features.bStateSave = true;
 				_fnLoadState( oSettings, oInit );
-				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
+				//_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
 			}
 			
 			
@@ -8460,7 +8492,7 @@
 	
 		_fnCallbackFire( settings, null, 'column-visibility', [settings, column, vis, recalc] );
 	
-		_fnSaveState( settings );
+		//_fnSaveState( settings );
 	};
 	
 	
