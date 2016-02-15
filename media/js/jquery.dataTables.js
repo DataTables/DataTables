@@ -869,7 +869,16 @@
 	 */
 	function _fnVisbleColumns( oSettings )
 	{
-		return $( _pluck( oSettings.aoColumns, 'nTh' ) ).filter(':visible').length;
+		var vis = 0;
+	
+		// No reduce in IE8, use a loop for now
+		$.each( oSettings.aoColumns, function ( i, col ) {
+			if ( col.bVisible && $(col.nTh).css('display') !== 'none' ) {
+				vis++;
+			}
+		} );
+	
+		return vis;
 	}
 	
 	
