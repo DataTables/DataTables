@@ -7,6 +7,7 @@ table.dataTable {
 table.dataTable td,
 table.dataTable th {
   -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 table.dataTable td.dataTables_empty,
