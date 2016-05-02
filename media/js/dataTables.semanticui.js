@@ -199,9 +199,7 @@ $(document).on( 'init.dt', function (e, ctx) {
 	if ( $.fn.dropdown ) {
 		var api = new $.fn.dataTable.Api( ctx );
 
-		$( 'div.dataTables_length select', api.table().container() ).dropdown( {
-			on: 'click'
-		} );
+		$( 'div.dataTables_length select', api.table().container() ).dropdown();
 	}
 } );
 
