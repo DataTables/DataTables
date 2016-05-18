@@ -242,7 +242,7 @@ class SSP {
 
 		// Main query to actually get the data
 		$data = self::sql_exec( $db, $bindings,
-			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+			"SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
 			 FROM `$table`
 			 $where
 			 $order
@@ -250,8 +250,10 @@ class SSP {
 		);
 
 		// Data set length after filtering
-		$resFilterLength = self::sql_exec( $db,
-			"SELECT FOUND_ROWS()"
+		$resFilterLength = self::sql_exec( $db, $bindings,
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`
+			 $where"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 
@@ -261,7 +263,6 @@ class SSP {
 			 FROM   `$table`"
 		);
 		$recordsTotal = $resTotalLength[0][0];
-
 
 		/*
 		 * Output
@@ -332,7 +333,7 @@ class SSP {
 
 		// Main query to actually get the data
 		$data = self::sql_exec( $db, $bindings,
-			"SELECT SQL_CALC_FOUND_ROWS `".implode("`, `", self::pluck($columns, 'db'))."`
+			"SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
 			 FROM `$table`
 			 $where
 			 $order
@@ -340,8 +341,10 @@ class SSP {
 		);
 
 		// Data set length after filtering
-		$resFilterLength = self::sql_exec( $db,
-			"SELECT FOUND_ROWS()"
+		$resFilterLength = self::sql_exec( $db, $bindings,
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`
+			 $where"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 
