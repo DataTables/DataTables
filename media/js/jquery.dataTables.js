@@ -33,24 +33,6 @@
 			return factory( $, window, document );
 		} );
 	}
-	else if ( typeof exports === 'object' ) {
-		// CommonJS
-		module.exports = function (root, $) {
-			if ( ! root ) {
-				// CommonJS environments without a window global must pass a
-				// root. This will give an error otherwise
-				root = window;
-			}
-
-			if ( ! $ ) {
-				$ = typeof window !== 'undefined' ? // jQuery's factory checks for a global window
-					require('jquery') :
-					require('jquery')( root );
-			}
-
-			return factory( $, root, root.document );
-		};
-	}
 	else {
 		// Browser
 		factory( jQuery, window, document );
@@ -15273,6 +15255,8 @@
 	 *  @param {int} column Column index
 	 *  @param {bool} vis `false` if column now hidden, or `true` if visible
 	 */
-
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = $.fn.dataTable;
+	}
 	return $.fn.dataTable;
 }));
