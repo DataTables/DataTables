@@ -279,7 +279,7 @@
 		 *        "bPaginate": false
 		 *      } );
 		 *
-		 *      $(window).on('resize', function () {
+		 *      $(window).bind('resize', function () {
 		 *        oTable.fnAdjustColumnSizing();
 		 *      } );
 		 *    } );
@@ -4202,13 +4202,13 @@
 		var jqFilter = $('input', filter)
 			.val( previousSearch.sSearch )
 			.attr( 'placeholder', language.sSearchPlaceholder )
-			.on(
+			.bind(
 				'keyup.DT search.DT input.DT paste.DT cut.DT',
 				searchDelay ?
 					_fnThrottle( searchFn, searchDelay ) :
 					searchFn
 			)
-			.on( 'keypress.DT', function(e) {
+			.bind( 'keypress.DT', function(e) {
 				/* Prevent form submission */
 				if ( e.keyCode == 13 ) {
 					return false;
@@ -4812,13 +4812,13 @@
 		// reference is broken by the use of outerHTML
 		$('select', div)
 			.val( settings._iDisplayLength )
-			.on( 'change.DT', function(e) {
+			.bind( 'change.DT', function(e) {
 				_fnLengthChange( settings, $(this).val() );
 				_fnDraw( settings );
 			} );
 	
 		// Update node value whenever anything changes the table's length
-		$(settings.nTable).on( 'length.dt.DT', function (e, s, len) {
+		$(settings.nTable).bind( 'length.dt.DT', function (e, s, len) {
 			if ( settings === s ) {
 				$('select', div).val( len );
 			}
@@ -5683,7 +5683,7 @@
 	
 		if ( (tableWidthAttr || scrollX) && ! oSettings._reszEvt ) {
 			var bindResize = function () {
-				$(window).on('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
+				$(window).bind('resize.DT-'+oSettings.sInstance, _fnThrottle( function () {
 					_fnAdjustColumnSizing( oSettings );
 				} ) );
 			};
@@ -6526,17 +6526,17 @@
 	function _fnBindAction( n, oData, fn )
 	{
 		$(n)
-			.on( 'click.DT', oData, function (e) {
+			.bind( 'click.DT', oData, function (e) {
 					n.blur(); // Remove focus outline for mouse users
 					fn(e);
 				} )
-			.on( 'keypress.DT', oData, function (e){
+			.bind( 'keypress.DT', oData, function (e){
 					if ( e.which === 13 ) {
 						e.preventDefault();
 						fn(e);
 					}
 				} )
-			.on( 'selectstart.DT', function () {
+			.bind( 'selectstart.DT', function () {
 					/* Take the brutal approach to cancelling text selection */
 					return false;
 				} );
@@ -9240,8 +9240,8 @@
 			// Blitz all `DT` namespaced events (these are internal events, the
 			// lowercase, `dt` events are user subscribed and they are responsible
 			// for removing them
-			jqWrapper.off('.DT').find(':not(tbody *)').off('.DT');
-			$(window).off('.DT-'+settings.sInstance);
+			jqWrapper.unbind('.DT').find(':not(tbody *)').unbind('.DT');
+			$(window).unbind('.DT-'+settings.sInstance);
 	
 			// When scrolling we had to break the table up - restore it
 			if ( table != thead.parentNode ) {
