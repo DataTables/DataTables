@@ -8462,10 +8462,6 @@
 		_fnDrawHead( settings, settings.aoHeader );
 		_fnDrawHead( settings, settings.aoFooter );
 	
-	
-	
-		_fnCallbackFire( settings, null, 'column-visibility', [settings, column, vis, recalc] );
-	
 		_fnSaveState( settings );
 	};
 	
@@ -8530,17 +8526,23 @@
 	} );
 	
 	_api_registerPlural( 'columns().visible()', 'column().visible()', function ( vis, calc ) {
-	  var ret = this.iterator( 'column', function ( settings, column ) {
+		var ret = this.iterator( 'column', function ( settings, column ) {
 			if ( vis === undefined ) {
 				return settings.aoColumns[ column ].bVisible;
 			} // else
 			__setColumnVis( settings, column, vis );
 		} );
 	
+		// Group the column visibility changes
 		if ( vis !== undefined && ( calc === undefined || calc ) ) {
-			 // Automatically adjust column sizing
-			 this.columns.adjust();
+			this.columns.adjust();
+	
+			// Fire the column visibility event after any recalc is done
+			this.iterator( 'column', function ( settings, column ) {
+				_fnCallbackFire( settings, null, 'column-visibility', [settings, column, vis, calc] );
+			} );
 		}
+	
 		return ret;
 	} );
 	
