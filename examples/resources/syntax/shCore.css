@@ -60,11 +60,6 @@
   overflow: auto !important;
   font-size: 1em !important;
   clear: both;
-
-  box-shadow: inset 0 0 3px #555;
-  padding: 5px 3px;
-  background: #f8f8f8 !important;
-  box-sizing: border-box;
 }
 .syntaxhighlighter.source {
   overflow: hidden !important;
@@ -140,8 +135,8 @@
 }
 .syntaxhighlighter .toolbar {
   position: absolute !important;
-  right: 10px !important;
-  top: 0 !important;
+  right: 1px !important;
+  top: -18px !important;
   font-size: 10px !important;
   z-index: 7 !important;
 }
@@ -249,6 +244,7 @@
  * Dual licensed under the MIT and GPL licenses.
  */
 .syntaxhighlighter {
+  background-color: white !important;
   font-size: 13px !important;
   overflow: visible !important;
 }
@@ -273,7 +269,7 @@
   color: #5C5C5C !important;
 }
 .syntaxhighlighter .gutter .line.alt1, .syntaxhighlighter  .gutter .line.alt2 {
-  background-color: transparent !important;
+  background-color: white !important;
 }
 .odd .syntaxhighlighter .gutter .line.alt1, .odd .syntaxhighlighter  .gutter .line.alt2 {
   background-color: #F2F2F2 !important;

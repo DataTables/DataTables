@@ -27,8 +27,7 @@
 		"filter",
 		"sort",
 		"page",
-		"internationalisable",
-		"jquery-plugin"
+		"internationalisable"
 	],
 	"repository": {
 		"type": "git",
