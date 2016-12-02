@@ -7835,7 +7835,7 @@
 				// Selector - integer
 				return [ selInt ];
 			}
-			else if ( sel === null || sel === undefined ) {
+			else if ( sel === null || sel === undefined || sel === '' ) {
 				// Selector - none
 				return rows;
 			}
