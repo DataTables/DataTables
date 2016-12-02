@@ -41,7 +41,6 @@ table.dataTable.table thead td.sorting_desc:after {
 table.dataTable.table td,
 table.dataTable.table th {
   -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
   box-sizing: content-box;
 }
 table.dataTable.table td.dataTables_empty,
