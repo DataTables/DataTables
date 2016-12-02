@@ -8148,7 +8148,7 @@
 		addRow( data, klass );
 	
 		if ( row._details ) {
-			row._details.remove();
+			row._details.detach();
 		}
 	
 		row._details = $(rows);
