@@ -183,7 +183,7 @@ DataTable.ext.renderer.pageButton.semanticUI = function ( settings, host, idx, b
 		buttons
 	);
 
-	if ( activeEl ) {
+	if ( activeEl !== undefined ) {
 		$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
 	}
 };
