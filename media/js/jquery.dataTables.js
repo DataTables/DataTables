@@ -1,11 +1,11 @@
-/*! DataTables 1.10.12
+/*! DataTables 1.10.13-dev
  * ©2008-2015 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.12
+ * @version     1.10.13-dev
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd (www.sprymedia.co.uk)
  * @contact     www.sprymedia.co.uk/contact
@@ -1325,8 +1325,8 @@
 			if ( oInit.bStateSave )
 			{
 				features.bStateSave = true;
-				_fnLoadState( oSettings, oInit, loadedInit );
 				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSaveState, 'state_save' );
+				_fnLoadState( oSettings, oInit, loadedInit );
 			}
 			else {
 				loadedInit();
@@ -9382,7 +9382,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.12";
+	DataTable.version = "1.10.13-dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
