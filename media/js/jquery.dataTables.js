@@ -1101,7 +1101,7 @@
 			var oLanguage = oSettings.oLanguage;
 			$.extend( true, oLanguage, oInit.oLanguage );
 			
-			if ( oLanguage.sUrl !== "" )
+			if ( typeof oLanguage.sUrl !== 'undefined' && oLanguage.sUrl !== "" )
 			{
 				/* Get the language definitions from a file - because this Ajax call makes the language
 				 * get async to the remainder of this function we use bInitHandedOff to indicate that
