@@ -1362,8 +1362,10 @@
 	var _re_dic = {};
 	var _re_new_lines = /[\r\n]/g;
 	var _re_html = /<.*?>/g;
-	var _re_date_start = /^[\w\+\-]/;
-	var _re_date_end = /[\w\+\-]$/;
+	
+	// This is not strict ISO8601 - Date.parse() is quite lax, although
+	// implementations differ between browsers.
+	var _re_date = /^\d{2,4}[\.\/\-]\d{1,2}[\.\/\-]\d{1,2}([T ]{1}\d{1,2}[:\.]\d{2}([\.:]\d{2})?)?$/;
 	
 	// Escape regular expression special characters
 	var _re_escape_regex = new RegExp( '(\\' + [ '/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\', '$', '^', '-' ].join('|\\') + ')', 'g' );
@@ -14652,10 +14654,10 @@
 		// Dates (only those recognised by the browser's Date.parse)
 		function ( d, settings )
 		{
-			// V8 will remove any unknown characters at the start and end of the
-			// expression, leading to false matches such as `$245.12` or `10%` being
-			// a valid date. See forum thread 18941 for detail.
-			if ( d && !(d instanceof Date) && ( ! _re_date_start.test(d) || ! _re_date_end.test(d) ) ) {
+			// V8 tries _very_ hard to make a string passed into `Date.parse()`
+			// valid, so we need to use a regex to restrict date formats. Use a
+			// plug-in for anything other than ISO8601 style strings
+			if ( d && !(d instanceof Date) && ! _re_date.test(d) ) {
 				return null;
 			}
 			var parsed = Date.parse(d);
