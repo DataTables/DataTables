@@ -4397,7 +4397,7 @@
 	
 			for ( i=0 ; i<display.length ; i++ ) {
 				if ( rpSearch.test( settings.aoData[ display[i] ]._sFilterRow ) ) {
-					filtered.push( i );
+					filtered.push( display[i] );
 				}
 			}
 	
