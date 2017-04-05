@@ -1,5 +1,5 @@
 --
--- DataTables Ajax and server-side processing database (Oracle)
+-- DataTables Ajax and server-side processing database (SQL Server)
 --
 BEGIN
 	EditorDelObject('datatables_demo', 'TABLE');
