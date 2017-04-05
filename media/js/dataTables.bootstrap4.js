@@ -58,7 +58,7 @@ $.extend( DataTable.ext.classes, {
 	sWrapper:      "dataTables_wrapper container-fluid dt-bootstrap4",
 	sFilterInput:  "form-control form-control-sm",
 	sLengthSelect: "form-control form-control-sm",
-	sProcessing:   "dataTables_processing card bg-faded",
+	sProcessing:   "dataTables_processing card",
 	sPageButton:   "paginate_button page-item"
 } );
 
