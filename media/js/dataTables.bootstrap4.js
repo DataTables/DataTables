@@ -56,9 +56,9 @@ $.extend( true, DataTable.defaults, {
 /* Default class modification */
 $.extend( DataTable.ext.classes, {
 	sWrapper:      "dataTables_wrapper container-fluid dt-bootstrap4",
-	sFilterInput:  "form-control form-control-sm",
-	sLengthSelect: "form-control form-control-sm",
-	sProcessing:   "dataTables_processing card",
+	sFilterInput:  "form-control input-sm",
+	sLengthSelect: "form-control input-sm",
+	sProcessing:   "dataTables_processing panel panel-default",
 	sPageButton:   "paginate_button page-item"
 } );
 
@@ -170,7 +170,7 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 	catch (e) {}
 
 	attach(
-		$(host).empty().html('<ul class="pagination pagination-sm"/>').children('ul'),
+		$(host).empty().html('<ul class="pagination"/>').children('ul'),
 		buttons
 	);
 
