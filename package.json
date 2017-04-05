@@ -4,8 +4,10 @@
 	"title": "DataTables",
 	"main": "media/js/jquery.dataTables",
 	"files": [
-		"media/js",
-		"media/css",
+		"media/js/jquery.dataTables.js",
+		"media/js/jquery.dataTables.min.js",
+		"media/css/jquery.dataTables.css",
+		"media/css/jquery.dataTables.min.css",
 		"media/images"
 	],
 	"license": "MIT",

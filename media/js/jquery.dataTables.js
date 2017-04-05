@@ -9387,7 +9387,6 @@
 	
 		return resolved.replace( '%d', plural ); // nb: plural might be undefined,
 	} );
-
 	/**
 	 * Version string for plug-ins to check compatibility. Allowed format is
 	 * `a.b.c-d` where: a:int, b:int, c:int, d:string(dev|beta|alpha). `d` is used
