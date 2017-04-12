@@ -170,7 +170,7 @@ DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, bu
 	catch (e) {}
 
 	attach(
-		$(host).empty().html('<ul class="pagination pagination-sm"/>').children('ul'),
+		$(host).empty().html('<ul class="pagination"/>').children('ul'),
 		buttons
 	);
 
