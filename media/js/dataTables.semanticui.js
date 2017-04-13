@@ -46,7 +46,7 @@ var DataTable = $.fn.dataTable;
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		"<'ui grid'"+
+		"<'ui stackable grid'"+
 			"<'row'"+
 				"<'eight wide column'l>"+
 				"<'right aligned eight wide column'f>"+
@@ -179,7 +179,7 @@ DataTable.ext.renderer.pageButton.semanticUI = function ( settings, host, idx, b
 	catch (e) {}
 
 	attach(
-		$(host).empty().html('<div class="ui pagination menu"/>').children(),
+		$(host).empty().html('<div class="ui stackable pagination menu"/>').children(),
 		buttons
 	);
 
