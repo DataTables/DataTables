@@ -4939,8 +4939,8 @@
 	function _fnPageChange ( settings, action, redraw )
 	{
 		var
-			start     = settings._iDisplayStart,
-			len       = settings._iDisplayLength,
+			start     = Number(settings._iDisplayStart),
+			len       = Number(settings._iDisplayLength),
 			records   = settings.fnRecordsDisplay();
 	
 		if ( records === 0 || len === -1 )
