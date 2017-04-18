@@ -85,19 +85,25 @@ class SSP {
 	 *
 	 * Construct the LIMIT clause for server-side processing SQL query
 	 *
-	 *  @param  array $request Data sent to server by DataTables
-	 *  @param  array $columns Column information array
+	 *  @param  array  $request Data sent to server by DataTables
+	 *  @param  string $driver  Connection driver name. This makes possible to
+	 *                          construct limit statement for different types
+	 *                          of database. In first case TSQL.
 	 *  @return string SQL limit clause
 	 */
-	static function limit ( $request, $columns )
+	static function limit($request, $driver = 'mysql')
 	{
-		$limit = '';
-
-		if ( isset($request['start']) && $request['length'] != -1 ) {
-			$limit = "LIMIT ".intval($request['start']).", ".intval($request['length']);
+		if (!isset($request['start']) || $request['length'] == -1) {
+			return '';
 		}
 
-		return $limit;
+		$offsetSyntax = array('dblib', 'mssql', 'oci');
+		if (in_array($driver, $offsetSyntax)) {
+			return 'OFFSET '.intval($request['start']).' ROWS '
+				. 'FETCH NEXT '.intval($request['length']).' ROWS ONLY';
+		}
+
+		return "LIMIT ".intval($request['start']).", ".intval($request['length']);
 	}
 
 
@@ -131,7 +137,7 @@ class SSP {
 						'ASC' :
 						'DESC';
 
-					$orderBy[] = '`'.$column['db'].'` '.$dir;
+					$orderBy[] = '"'.$column['db'].'" '.$dir;
 				}
 			}
 
@@ -173,7 +179,7 @@ class SSP {
 
 				if ( $requestColumn['searchable'] == 'true' ) {
 					$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-					$globalSearch[] = "`".$column['db']."` LIKE ".$binding;
+					$globalSearch[] = '"'.$column['db'].'" LIKE '.$binding;
 				}
 			}
 		}
@@ -190,7 +196,7 @@ class SSP {
 				if ( $requestColumn['searchable'] == 'true' &&
 				 $str != '' ) {
 					$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-					$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
+					$columnSearch[] = '"'.$column['db'].'" LIKE '.$binding;
 				}
 			}
 		}
@@ -235,15 +241,17 @@ class SSP {
 		$bindings = array();
 		$db = self::db( $conn );
 
+		$driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+
 		// Build the SQL query string from the request
-		$limit = self::limit( $request, $columns );
+		$limit = self::limit( $request, $driver );
 		$order = self::order( $request, $columns );
 		$where = self::filter( $request, $columns, $bindings );
 
 		// Main query to actually get the data
 		$data = self::sql_exec( $db, $bindings,
-			"SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
-			 FROM `$table`
+			'SELECT "'.implode('", "', self::pluck($columns, 'db'))."\"
+			 FROM \"$table\"
 			 $where
 			 $order
 			 $limit"
@@ -251,16 +259,16 @@ class SSP {
 
 		// Data set length after filtering
 		$resFilterLength = self::sql_exec( $db, $bindings,
-			"SELECT COUNT(`{$primaryKey}`)
-			 FROM   `$table`
+			"SELECT COUNT(\"{$primaryKey}\")
+			 FROM   \"$table\"
 			 $where"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 
 		// Total data set length
 		$resTotalLength = self::sql_exec( $db,
-			"SELECT COUNT(`{$primaryKey}`)
-			 FROM   `$table`"
+			"SELECT COUNT(\"{$primaryKey}\")
+			 FROM   \"$table\""
 		);
 		$recordsTotal = $resTotalLength[0][0];
 
@@ -279,8 +287,8 @@ class SSP {
 
 
 	/**
-	 * The difference between this method and the `simple` one, is that you can
-	 * apply additional `where` conditions to the SQL queries. These can be in
+	 * The difference between this method and the "simple" one, is that you can
+	 * apply additional "where" conditions to the SQL queries. These can be in
 	 * one of two forms:
 	 *
 	 * * 'Result condition' - This is applied to the result set, but not the
@@ -309,8 +317,10 @@ class SSP {
 		$localWhereAll = array();
 		$whereAllSql = '';
 
+		$driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
+
 		// Build the SQL query string from the request
-		$limit = self::limit( $request, $columns );
+		$limit = self::limit( $request, $driver );
 		$order = self::order( $request, $columns );
 		$where = self::filter( $request, $columns, $bindings );
 
@@ -333,8 +343,8 @@ class SSP {
 
 		// Main query to actually get the data
 		$data = self::sql_exec( $db, $bindings,
-			"SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
-			 FROM `$table`
+			'SELECT "'.implode('", "', self::pluck($columns, 'db'))."\"
+			 FROM \"$table\"
 			 $where
 			 $order
 			 $limit"
@@ -342,16 +352,16 @@ class SSP {
 
 		// Data set length after filtering
 		$resFilterLength = self::sql_exec( $db, $bindings,
-			"SELECT COUNT(`{$primaryKey}`)
-			 FROM   `$table`
+			"SELECT COUNT(\"{$primaryKey}\")
+			 FROM   \"$table\"
 			 $where"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 
 		// Total data set length
 		$resTotalLength = self::sql_exec( $db, $bindings,
-			"SELECT COUNT(`{$primaryKey}`)
-			 FROM   `$table` ".
+			"SELECT COUNT(\"{$primaryKey}\")
+			 FROM   \"$table\" ".
 			$whereAllSql
 		);
 		$recordsTotal = $resTotalLength[0][0];
@@ -375,17 +385,23 @@ class SSP {
 	 *
 	 * @param  array $sql_details SQL server connection details array, with the
 	 *   properties:
-	 *     * host - host name
-	 *     * db   - database name
-	 *     * user - user name
-	 *     * pass - user password
+	 *     * driver - PDO driver name (Default is mysql)
+	 *     * host   - host name
+	 *     * db     - database name
+	 *     * user   - user name
+	 *     * pass   - user password
 	 * @return resource Database connection handle
 	 */
 	static function sql_connect ( $sql_details )
 	{
+		$driver = 'mysql';
+		if (isset($sql_details['driver'])) {
+			$driver = $sql_details['driver'];
+		}
+		
 		try {
 			$db = @new PDO(
-				"mysql:host={$sql_details['host']};dbname={$sql_details['db']}",
+				"{$driver}:host={$sql_details['host']};dbname={$sql_details['db']}",
 				$sql_details['user'],
 				$sql_details['pass'],
 				array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION )
