@@ -12,6 +12,7 @@ table.dataTable.table thead th.sorting, table.dataTable.table thead th.sorting_a
 table.dataTable.table thead td.sorting,
 table.dataTable.table thead td.sorting_asc,
 table.dataTable.table thead td.sorting_desc {
+  background-image: none;
   padding-right: 20px;
 }
 table.dataTable.table thead th.sorting:after, table.dataTable.table thead th.sorting_asc:after, table.dataTable.table thead th.sorting_desc:after,
