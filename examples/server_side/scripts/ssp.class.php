@@ -116,7 +116,7 @@ class SSP {
 
 		if ( isset($request['order']) && count($request['order']) ) {
 			$orderBy = array();
-			$dtColumns = self::pluck( $columns, 'dt' );
+			$dtColumns = self::pluck( $columns, 'db' );
 
 			for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
 				// Convert the column index into the column data property
