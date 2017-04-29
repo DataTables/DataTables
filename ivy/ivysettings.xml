@@ -1,0 +1,30 @@
+<ivysettings>
+   <typedef name="svn" classname="fm.last.ivy.plugins.svnresolver.SvnResolver" />
+   <settings defaultCacheDir="${ivy.cache.dir}"
+      defaultResolver="oss" defaultConflictManager="latest-revision" />
+   <!-- in order to get all revisions without any eviction -->
+   <resolvers>
+      <chain name="oss">
+         <filesystem name="user-local">
+            <ivy pattern="${local.root}/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+            <artifact pattern="${local.root}/[organisation]/[module]/[revision]/[type]s/[artifact]-[revision].[ext]" />
+            <artifact pattern="${local.root}/[organisation]/[module]/[revision]/[type]s/[artifact].[ext]" />
+         </filesystem>
+         <svn name="appdev-shared" userName="${svn.user}"
+            userPassword="${svn.password}" repositoryRoot="${appdev.ivy.url}"
+            binaryDiff="false">
+            <ivy pattern="shared/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+            <artifact pattern="shared/[organisation]/[module]/[revision]/[type]s/[artifact]-[revision].[ext]" />
+            <artifact pattern="shared/[organisation]/[module]/[revision]/[type]s/[artifact].[ext]" />
+         </svn>
+         <svn name="appdev-public" userName="${svn.user}"
+            userPassword="${svn.password}" repositoryRoot="${appdev.ivy.url}"
+            binaryDiff="false">
+            <ivy pattern="public/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]" />
+            <artifact pattern="public/[organisation]/[module]/[revision]/[type]s/[artifact]-[revision].[ext]" />
+            <artifact pattern="public/[organisation]/[module]/[revision]/[type]s/[artifact].[ext]" />
+         </svn>
+      </chain>
+   </resolvers>
+</ivysettings>
+

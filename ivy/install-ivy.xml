@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+    This ant script can be used to install ivy into your ant environment.
+    To execute it, type ant -f install-ivy.xml
+-->
+<project name="install-ivy" default="install">
+
+    <!-- The latest jars and version information come from this URL -->
+    <property url="https://svn.cbeyond.net/appdev/dev/ivy/software/ivy.properties"/>
+
+    <property name="ivy-task-lib" value="ivy/ivy-task-lib"/>
+
+    <!-- Install ivy & ivysvn into ${ant.home} -->
+    <target name="install">
+        <echo message="Installing ivy ${ivy.version}"/>
+        <get src="${latest.ivy.jar}" dest="${ant.home}/lib/ivy.jar"/>
+        <echo message="Installing ivysvn ${ivysvn.version}"/>
+        <get src="${latest.ivysvn.jar}" dest="${ant.home}/lib/ivysvnresolver.jar"/>
+        <get src="${latest.svnkit.jar}" dest="${ant.home}/lib/svnkit.jar"/>
+        <get src="${latest.trilead.jar}" dest="${ant.home}/lib/trilead.jar"/>
+    </target>
+
+   <!-- Install ivy & ivysvn into ${ant.home} -->
+   <target name="install-local">
+      <mkdir dir="${ivy-task-lib}"/>
+      <echo message="Installing ivy ${ivy.version}"/>
+      <get src="${latest.ivy.jar}" dest="${ivy-task-lib}/ivy.jar"/>
+      <echo message="Installing ivysvn ${ivysvn.version}"/>
+      <get src="${latest.ivysvn.jar}" dest="${ivy-task-lib}/ivysvnresolver.jar"/>
+      <get src="${latest.svnkit.jar}" dest="${ivy-task-lib}/svnkit.jar"/>
+      <get src="${latest.trilead.jar}" dest="${ivy-task-lib}/trilead.jar"/>
+       
+       <!-- for svn ant use. -->
+      <get src="https://svn.cbeyond.net/IS/oss/ivy/tools/svnant_1.2.1/svnant.jar" 
+           dest="${ivy-task-lib}/svnant.jar" 
+           username="itsvn" password="v3rs1on"/>
+       <get src="https://svn.cbeyond.net/IS/oss/ivy/tools/svnant_1.2.1/svnClientAdapter.jar" 
+            dest="${ivy-task-lib}/svnClientAdapter.jar"
+           username="itsvn" password="v3rs1on"/>
+   </target>
+</project>

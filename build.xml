@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project name="datatables" default="package" basedir=".">  
+
+    <property name="dist.dir" value="dist"/>
+
+    <property name="build.dir" value="build"/>
+    <!--
+         This is the build file for handlebars.js. It simply invokes the Rakefile based build.
+
+    -->
+
+    <!-- Addin' the IVY Stuff... -->
+    <import file="ivy/ivy_build.xml"/>
+
+    <!-- ivy publish targets call this -->
+    <target name="package">
+        <exec executable="bash" outputproperty="git.tagnumber">
+            <arg value="-c"/>
+            <arg line='"git describe --abbrev=0 --tags | sed s/v//"'/>
+        </exec>
+        <echo>(cleaned up) Git tag: ${git.tagnumber}</echo>
+
+        <property name="ivy.major.revision" value="${git.tagnumber}"/>
+
+        
+        <delete dir="${build.dir}"/>
+        <mkdir dir="${build.dir}"/>
+
+        <copy file="media/js/jquery.dataTables.js" todir="${build.dir}"/>
+        <copy file="media/css/jquery.dataTables.css" todir="${build.dir}"/>
+    </target>
+</project>

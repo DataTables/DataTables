@@ -5,3 +5,6 @@ cdn
 media/css/jquery.dataTables_themeroller.min.css
 .DS_Store
 Plugins
+ivy-lib
+build
+*.swp

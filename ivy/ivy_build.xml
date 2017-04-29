@@ -1,0 +1,292 @@
+<!--
+This file is designed to be imported by all builds that use Ivy for dependency management.
+It creates the task definitions related to Ivy, and defines a number of build targets to resolve
+and download dependencies, report on the dependency tree, and to publish artifacts to
+Ivy repositories.
+-->
+<project name="common" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <!-- load the Ivy related build properties -->
+    <property file="ivy/ivy_build.properties"/>
+
+    <!-- define the Ivy settings file to use -->
+    <property name="ivy.file" value="ivy/ivy.xml"/>
+
+    <!-- define where to find the Ivy local repository.  -->
+    <property name="ivy.local.default.root" value="${user.dir}/.ivy2/local"/>
+
+    <!-- where to put our Ivy downloaded libraries -->
+    <property name="ivy.lib.dir" value="ivy-lib"/>
+
+    <property name="ivy.task.lib.dir" value="ivy/ivy-task-lib"/>
+
+    <available file="${ivy.task.lib.dir}/ivy.jar" property="ivy-is-installed"/>
+
+    <target name="check-ivy-install" unless="ivy-is-installed">
+        <echo message="Installing Ivy to ${ivy.task.lib.dir}"/>
+        <ant antfile="ivy/install-ivy.xml"
+             target="install-local"
+             inheritAll="true"/>
+    </target>
+
+    <path id="ivy-task-lib.path.id">
+        <fileset dir="${ivy.task.lib.dir}" includes="*.jar"/>
+    </path>
+
+    <target name="ivy-taskdef" depends="check-ivy-install">
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+             uri="antlib:org.apache.ivy.ant"
+             classpathref="ivy-task-lib.path.id"/>
+        <!-- Tell Ivy the settings file to use -->
+        <ivy:settings file="ivy/ivysettings.xml"/>
+    </target>
+
+    <!-- define a classpath that references everything downloaded by Ivy -->
+    <path id="ivy-lib.path.id">
+        <fileset dir="${ivy.lib.dir}"/>
+    </path>
+
+    <!-- =================================
+      target: update-ivy-config
+     ================================= -->
+    <target name="update-ivy-config" description="--> Update your ivy configuration files to the latest">
+        <mkdir dir="ivy/old"/>
+        <copy file="ivy/ivy_build.properties" todir="ivy/old"/>
+        <copy file="ivy/ivysettings.xml" todir="ivy/old"/>
+        <copy file="ivy/ivy_build.xml" todir="ivy/old"/>
+        <get src="${appdev.ivy.url}/config/ivy_build.properties" dest="ivy/ivy_build.properties"/>
+        <get src="${appdev.ivy.url}/config/ivysettings.xml" dest="ivy/ivysettings.xml"/>
+        <get src="${appdev.ivy.url}/config/ivy_build.xml" dest="ivy/ivy_build.xml"/>
+        <get src="${appdev.ivy.url}/config/install-ivy.xml" dest="ivy/install-ivy.xml"/>
+    </target>
+
+    <!-- =================================
+          target: resolve
+         ================================= -->
+    <target name="resolve" depends="clean-ivy-lib,ivy-taskdef" description="--> resolve and retrieve dependencies with Ivy">
+        <mkdir dir="${ivy.lib.dir}"/>
+        <!-- not usually necessary, ivy creates the directory IF there are dependencies -->
+        <!-- the call to resolve is not mandatory, retrieve makes an implicit call if we don't -->
+        <ivy:resolve file="${ivy.file}"/>
+        <ivy:retrieve pattern="${ivy.lib.dir}/[conf]/[artifact].[ext]"/>
+    </target>
+
+    <!-- =================================
+          target: report
+         ================================= -->
+    <target name="report" depends="resolve,ivy-taskdef" description="--> generates a report of dependencies">
+        <mkdir dir="${ivy.report.dir}"/>
+        <!--ivy:report todir="${ivy.report.dir}" dot="true" outputpattern="report.[ext]"/-->
+        <ivy:report todir="${ivy.report.dir}" dot="true" outputpattern="[organisation]-[module]-[conf].[ext]"/>
+
+        <exec executable="dot" ><arg line="-Tpng report/report.dot -O"/></exec>
+    </target>
+
+    <!-- =================================
+          target: publish-local
+         ================================= -->
+    <target name="publish-local" depends="ivy-taskdef, package, resolve, local-version" description="--> publish this project in the local Ivy repository">
+        <delete file="${bld.dist.dir}/ivy.xml"/>
+        <ivy:publish artifactspattern="${bld.dist.dir}/[artifact].[ext]" 
+            resolver="user-local"  pubdate="${now}" 
+            status="integration" forcedeliver="true" 
+            revision="working"/>
+        
+        <echo message="project ${ant.project.name} published locally with version ${now}"/>
+    </target>
+
+    <!-- =================================
+          target: publish-shared
+         ================================= -->
+    <target name="publish-shared" depends="ivy-taskdef, package, resolve, publish-version" description="--> publish this project in the public Ivy repository">
+        
+        <echo message="Publishing ${ant.project.name}, revision: ${version}"/>
+        <echo message="bld.dist.dir= ${bld.dist.dir}"/>
+        <echo message="using svn user ${svn.user}"/>
+        <delete file="${bld.dist.dir}/ivy.xml"/>
+        
+        <ivy:publish artifactspattern="${bld.dist.dir}/[artifact].[ext]" 
+                     resolver="appdev-shared" pubrevision="${version}" 
+                     status="integration" update="true" revision="working"/>
+        <echo message="project ${ant.project.name} released with version ${version}"/>
+    </target>
+
+    <!-- =================================
+          target: publish-public
+         ================================= -->
+    <target name="publish-public" depends="ivy-taskdef, package, resolve, publish-version" description="--> publish this project in the public Ivy repository">
+        <echo message="Publishing ${ant.project.name}, revision: ${version}"/>
+        <echo message="using svn user ${svn.user}"/>
+        <delete file="${bld.dist.dir}/ivy.xml"/>
+        
+        <ivy:publish artifactspattern="${bld.dist.dir}/[artifact].[ext]" 
+                     resolver="appdev-public" pubrevision="${version}" 
+                     status="release" revision="working"/>
+        <echo message="project ${ant.project.name} released with version ${version}"/>
+    </target>
+
+    <target name="publish-version" depends="ivy-new-version">
+       <property name="publishing" value="true"/>
+       <property name="version" value="${ivy.new.revision}"/>
+        
+        <echo message="Version for SVN publish: ${version}"/>
+    </target>
+
+    <target name="local-version">
+        <tstamp>
+            <format property="now" pattern="yyyyMMddHHmmss"/>
+        </tstamp>
+        <property name="local.version" value="local-${now}"/>
+        
+        <property name="version" value="${local.version}"/>
+        
+        <echo message="Version for local publish: ${version}"/>
+    </target>
+    
+    <target name="ivy-new-version" depends="ivy-taskdef">
+        <!-- asks to ivy an available version number -->
+        
+        <!-- Had to add the prefix 'localivy' due to this error: 
+        /home/bemo/cbeyond/svnroot/cbo20/core/ivy/ivy_build.xml:102: 
+        cbeyond#cbo-core;1.0.0: java.lang.IllegalStateException: 
+        ivy file not found in cache for cbeyond#cbo-core;1.0.0: 
+        please resolve dependencies before delivering 
+        (/home/bemo/.ivy2/cache/resolved-cbeyond-cbo-core-1.0.0.xml)
+        
+        Solution suggested here:
+        http://www.mail-archive.com/ivy-user@ant.apache.org/msg01459.html
+        
+        Basically, a property name collision.
+        -->
+        <ivy:info file="${ivy.file}"/>
+        <ivy:buildnumber organisation="${ivy.organisation}" 
+                         module="${ivy.module}" 
+                         defaultBuildNumber="1" revSep="." 
+                         revision="${ivy.major.revision}"/>
+        <echo>
+After ivy:buildnumber
+ivy.revision (last in repo): ${ivy.revision}
+ivy.new.revision (new revsion calculed from above): ${ivy.new.revision}
+ivy.build.number (build number found in repo): ${ivy.build.number}
+ivy.new.build.number (calculated as above+1): ${ivy.new.build.number}
+        </echo>
+    </target>
+
+
+    <!--
+    This task builds various versions.  Which version is used depends on the 
+    context in which the task is called. 
+    
+    The 3 versions produced are:
+      - The 'current.svn.revision' - this is the current svn revision number for 
+        this module. There is a 'M' suffix if any files are locally modified.
+        - produced by the dependent get-svn-revision task.
+      - The 'local.version'. This is simply a derivative of the currnet timestamp
+        - prduced by the local-version task
+      - The 'ivy.new.revision' is the "next" version in the ivy repository.
+        So if the current revision is 1.0.5 in ivy, the new one will be 1.0.6.
+        This is typically only used when a new revision is going to be published.
+        - produced by the ivy-new-revsion task, which is only called if the
+          task is called from a publish-public task.
+          
+    After these revisions are constructed, they are echoed to a properties 
+    file named '<modulename>.version.properties' file - which is put into 
+    the root of the build.classes dir, then then ultimately into the .jar file.
+    -->
+    <target name="version" depends="get-svn-revision">
+        <!-- create version file in classpath for later inclusion in jar -->
+        <echo message="local.version=${local.version}"/>
+        <echo message="current.svn.revsion=${current.svn.revision}"/>
+        <echo message="svn.repository.url=${repository.url}$"/>
+        <echo message="ivy.revision=${localivy.new.revision}"/>
+        
+        <!-- Now put relevant versions into the versions file. -->
+        <property name="version.file" value="${bld.classes.dir}/${ant.project.name}.version.properties"/>
+        <mkdir dir="${bld.classes.dir}"/>
+        <echo message="ivy.revision=${localivy.new.revision}${line.separator}" 
+            file="${version.file}"/>
+        
+        <echo message="current.svn.revsion=${current.svn.revision}${line.separator}" 
+            file="${version.file}" append="true" />
+        
+        <echo message="svn.repository.url=${repository.url}${line.separator}" 
+            file="${version.file}" append="true" />
+        
+        <echo message="local.version=${local.version}${line.separator}" 
+            file="${version.file}" append="true" />
+        
+        <!-- Define the 'version' - used by the including build file for 
+             naming the artifact, and also used by the publish-* tasks to
+             find that artifact and define the 'version' of it to publish -->
+        <condition property="version" value="${localivy.new.revision}" else="${current.svn.revision}">
+           <equals arg1="${publishing}" arg2="true"/>
+        </condition>
+        
+        <echo message="Version: ${version}"/>
+        <!-- load generated version properties file -->
+        <!-- property file="${bld.classes.dir}/${ant.project.name}.properties" /-->
+    </target>
+
+    <!-- Gets the current revision from SVN.-->
+    <target name="get-svn-revision">
+        <!-- This is a pure java way to do the same thing as above, but it is
+          dependent on svnant-1.2.1, and svnkit.  Which is fine, but
+          we need a more genaral way to integrate tools... We have a general
+          way to integrate Ivy - but ivy should be considered one of many
+          tools.  For now, if the svn executable is up to snuff (1.5.x) the
+          above exec commands work fine.
+
+          This code is left for reference. Please do not remove.
+          Paul Bemowski, 2 mar 2009.
+        -->
+        <path id="svn-ant-path">
+          <fileset dir="${ivy.task.lib.dir}" includes="*.jar"/>
+        </path>
+
+        <typedef resource="org/tigris/subversion/svnant/svnantlib.xml"
+                 classpathref="svn-ant-path" />
+        <svn javahl="false" svnkit="true">
+           <wcVersion path="."/>
+        </svn>
+        <echo message="Post SVN, revision.max=${revision.max}, modified=${modified}"/>
+
+        <condition property="is.modified" value="M" else="">
+            <equals arg1="${modified}" arg2="true"/>
+        </condition>
+        <property name="current.svn.revision" value="${revision.max}${is.modified}"/>
+
+        <!--
+        <exec outputproperty="build.current.revision" executable="svnversion">
+                 <arg line="-n -c ." />
+                 <redirector>
+                   <outputfilterchain>
+                     <tokenfilter>
+                         <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
+                     </tokenfilter>
+                  </outputfilterchain>
+                </redirector>
+        </exec>
+        -->
+        <echo message="Current revision is ${current.svn.revision}"/>
+    </target>
+    
+    
+    <!-- =================================
+          target: clean-lib
+         ================================= -->
+    <target name="clean-ivy-lib" description="--> clean the project's Ivy libraries directory (dependencies)">
+        <delete includeemptydirs="true" dir="${ivy.lib.dir}"/>
+    </target>
+
+    <target name="clean-ivy-cache">
+       <echo message="Cleaning(deleting) Ivy Cache dir at ${ivy.cache.dir}"/>
+       <delete dir="${ivy.cache.dir}"/>
+       <echo message="Done cleaning Ivy Cache."/>
+    </target>
+    
+    <target name="noop"/>
+
+    <!-- This is to make Eclipse shut up.  Any build.xml that imports this file will have to implement this for real... -->
+    <target name="package"/>
+
+</project>
