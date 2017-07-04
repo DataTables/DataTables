@@ -1,5 +1,7 @@
 {
-	"name": "datatables",
+	"name": "datatables-AgileContent",
+	"homepage": "https://github.com/UUX-Brasil/DataTables",
+	"version": "1.10.15.1",
 	"main": [
 		"media/js/jquery.dataTables.js",
 		"media/css/jquery.dataTables.css",
