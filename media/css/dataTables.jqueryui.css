@@ -233,7 +233,6 @@ table.dataTable tbody td.dt-body-nowrap {
 table.dataTable,
 table.dataTable th,
 table.dataTable td {
-  -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
 
