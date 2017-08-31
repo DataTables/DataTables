@@ -136,6 +136,9 @@ div.dataTables_scrollFoot > table {
   margin-top: 0 !important;
   border-top: none;
 }
+div.dataTables_scrollFoot > .dataTables_scrollFootInner {
+  box-sizing: content-box;
+}
 
 @media screen and (max-width: 767px) {
   div.dataTables_wrapper div.dataTables_length,
