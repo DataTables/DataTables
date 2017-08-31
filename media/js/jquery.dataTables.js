@@ -1023,7 +1023,8 @@
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
 				[ "aoSearchCols", "aoPreSearchCols" ],
-				[ "iDisplayLength", "_iDisplayLength" ]
+				[ "iDisplayLength", "_iDisplayLength" ],
+				[ "bJQueryUI", "bJUI" ]
 			] );
 			_fnMap( oSettings.oScroll, oInit, [
 				[ "sScrollX", "sX" ],
@@ -1053,7 +1054,31 @@
 			
 			var oClasses = oSettings.oClasses;
 			
-			$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
+			// @todo Remove in 1.11
+			if ( oInit.bJQueryUI )
+			{
+				/* Use the JUI classes object for display. You could clone the oStdClasses object if
+				 * you want to have multiple tables with multiple independent classes
+				 */
+				$.extend( oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
+			
+				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
+				{
+					/* Set the DOM to use a layout suitable for jQuery UI's theming */
+					oSettings.sDom = '<"H"lfr>t<"F"ip>';
+				}
+			
+				if ( ! oSettings.renderer ) {
+					oSettings.renderer = 'jqueryui';
+				}
+				else if ( $.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
+					oSettings.renderer.header = 'jqueryui';
+				}
+			}
+			else
+			{
+				$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
+			}
 			$this.addClass( oClasses.sTable );
 			
 			
@@ -9302,6 +9327,15 @@
 				classes.sSortableAsc+' '+classes.sSortableDesc+' '+classes.sSortableNone
 			);
 	
+			if ( settings.bJUI ) {
+				$('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).detach();
+				$('th, td', thead).each( function () {
+					var wrapper = $('div.'+classes.sSortJUIWrapper, this);
+					$(this).append( wrapper.contents() );
+					wrapper.detach();
+				} );
+			}
+	
 			// Add the TR elements back into the table in their original order
 			jqTbody.children().detach();
 			jqTbody.append( rows );
@@ -10327,6 +10361,26 @@
 		 *    } );
 		 */
 		"bInfo": true,
+	
+	
+		/**
+		 * Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
+		 * slightly different and additional mark-up from what DataTables has
+		 * traditionally used).
+		 *  @type boolean
+		 *  @default false
+		 *
+		 *  @dtopt Features
+		 *  @name DataTable.defaults.jQueryUI
+		 *
+		 *  @example
+		 *    $(document).ready( function() {
+		 *      $('#example').dataTable( {
+		 *        "jQueryUI": true
+		 *      } );
+		 *    } );
+		 */
+		"bJQueryUI": false,
 	
 	
 		/**
@@ -13610,6 +13664,14 @@
 		"_iRecordsDisplay": 0,
 	
 		/**
+		 * Flag to indicate if jQuery UI marking and classes should be used.
+		 * Note that this parameter will be set by the initialisation routine. To
+		 * set a default use {@link DataTable.defaults}.
+		 *  @type boolean
+		 */
+		"bJUI": null,
+	
+		/**
 		 * The classes to use for the table
 		 *  @type object
 		 *  @default {}
@@ -14384,6 +14446,59 @@
 		"sJUIHeader": "",
 		"sJUIFooter": ""
 	} );
+	
+	
+	(function() {
+	
+	// Reused strings for better compression. Closure compiler appears to have a
+	// weird edge case where it is trying to expand strings rather than use the
+	// variable version. This results in about 200 bytes being added, for very
+	// little preference benefit since it this run on script load only.
+	var _empty = '';
+	_empty = '';
+	
+	var _stateDefault = _empty + 'ui-state-default';
+	var _sortIcon     = _empty + 'css_right ui-icon ui-icon-';
+	var _headerFooter = _empty + 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix';
+	
+	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.classes, {
+		/* Full numbers paging buttons */
+		"sPageButton":         "fg-button ui-button "+_stateDefault,
+		"sPageButtonActive":   "ui-state-disabled",
+		"sPageButtonDisabled": "ui-state-disabled",
+	
+		/* Features */
+		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
+			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
+	
+		/* Sorting */
+		"sSortAsc":            _stateDefault+" sorting_asc",
+		"sSortDesc":           _stateDefault+" sorting_desc",
+		"sSortable":           _stateDefault+" sorting",
+		"sSortableAsc":        _stateDefault+" sorting_asc_disabled",
+		"sSortableDesc":       _stateDefault+" sorting_desc_disabled",
+		"sSortableNone":       _stateDefault+" sorting_disabled",
+		"sSortJUIAsc":         _sortIcon+"triangle-1-n",
+		"sSortJUIDesc":        _sortIcon+"triangle-1-s",
+		"sSortJUI":            _sortIcon+"carat-2-n-s",
+		"sSortJUIAscAllowed":  _sortIcon+"carat-1-n",
+		"sSortJUIDescAllowed": _sortIcon+"carat-1-s",
+		"sSortJUIWrapper":     "DataTables_sort_wrapper",
+		"sSortIcon":           "DataTables_sort_icon",
+	
+		/* Scrolling */
+		"sScrollHead": "dataTables_scrollHead "+_stateDefault,
+		"sScrollFoot": "dataTables_scrollFoot "+_stateDefault,
+	
+		/* Misc */
+		"sHeaderTH":  _stateDefault,
+		"sFooterTH":  _stateDefault,
+		"sJUIHeader": _headerFooter+" ui-corner-tl ui-corner-tr",
+		"sJUIFooter": _headerFooter+" ui-corner-bl ui-corner-br"
+	} );
+	
+	}());
+	
 	
 	
 	var extPagination = DataTable.ext.pager;
