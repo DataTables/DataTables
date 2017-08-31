@@ -8567,20 +8567,6 @@
 		}, 1 );
 	} );
 	
-	_api_registerPlural( 'columns().names()', 'column().name()', function ( setter ) {
-		return this.iterator( 'column', function ( settings, column ) {
-			var col = settings.aoColumns[column];
-	
-			if ( setter !== undefined ) {
-				col.sName = setter;
-				return this;
-			}
-			else {
-				return col.sName;
-			}
-		}, 1 );
-	} );
-	
 	_api_registerPlural( 'columns().nodes()', 'column().nodes()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
