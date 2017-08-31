@@ -1,11 +1,11 @@
-/*! DataTables 1.10.15
+/*! DataTables 2.0.0-dev
  * ©2008-2017 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.15
+ * @version     2.0.0-dev
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
@@ -1023,8 +1023,7 @@
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
 				[ "aoSearchCols", "aoPreSearchCols" ],
-				[ "iDisplayLength", "_iDisplayLength" ],
-				[ "bJQueryUI", "bJUI" ]
+				[ "iDisplayLength", "_iDisplayLength" ]
 			] );
 			_fnMap( oSettings.oScroll, oInit, [
 				[ "sScrollX", "sX" ],
@@ -1054,31 +1053,7 @@
 			
 			var oClasses = oSettings.oClasses;
 			
-			// @todo Remove in 1.11
-			if ( oInit.bJQueryUI )
-			{
-				/* Use the JUI classes object for display. You could clone the oStdClasses object if
-				 * you want to have multiple tables with multiple independent classes
-				 */
-				$.extend( oClasses, DataTable.ext.oJUIClasses, oInit.oClasses );
-			
-				if ( oInit.sDom === defaults.sDom && defaults.sDom === "lfrtip" )
-				{
-					/* Set the DOM to use a layout suitable for jQuery UI's theming */
-					oSettings.sDom = '<"H"lfr>t<"F"ip>';
-				}
-			
-				if ( ! oSettings.renderer ) {
-					oSettings.renderer = 'jqueryui';
-				}
-				else if ( $.isPlainObject( oSettings.renderer ) && ! oSettings.renderer.header ) {
-					oSettings.renderer.header = 'jqueryui';
-				}
-			}
-			else
-			{
-				$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
-			}
+			$.extend( oClasses, DataTable.ext.classes, oInit.oClasses );
 			$this.addClass( oClasses.sTable );
 			
 			
@@ -2114,22 +2089,18 @@
 		if ( !oCol.bSortable || (!bAsc && !bDesc) )
 		{
 			oCol.sSortingClass = oClasses.sSortableNone;
-			oCol.sSortingClassJUI = "";
 		}
 		else if ( bAsc && !bDesc )
 		{
 			oCol.sSortingClass = oClasses.sSortableAsc;
-			oCol.sSortingClassJUI = oClasses.sSortJUIAscAllowed;
 		}
 		else if ( !bAsc && bDesc )
 		{
 			oCol.sSortingClass = oClasses.sSortableDesc;
-			oCol.sSortingClassJUI = oClasses.sSortJUIDescAllowed;
 		}
 		else
 		{
 			oCol.sSortingClass = oClasses.sSortable;
-			oCol.sSortingClassJUI = oClasses.sSortJUI;
 		}
 	}
 	
@@ -3609,16 +3580,6 @@
 					{
 						sAttr += aDom[i+j];
 						j++;
-					}
-	
-					/* Replace jQuery UI constants @todo depreciated */
-					if ( sAttr == "H" )
-					{
-						sAttr = classes.sJUIHeader;
-					}
-					else if ( sAttr == "F" )
-					{
-						sAttr = classes.sJUIFooter;
 					}
 	
 					/* The attribute can be in the format of "#id.class", "#id" or "class" This logic
@@ -8606,6 +8567,20 @@
 		}, 1 );
 	} );
 	
+	_api_registerPlural( 'columns().names()', 'column().name()', function ( setter ) {
+		return this.iterator( 'column', function ( settings, column ) {
+			var col = settings.aoColumns[column];
+	
+			if ( setter !== undefined ) {
+				col.sName = setter;
+				return this;
+			}
+			else {
+				return col.sName;
+			}
+		}, 1 );
+	} );
+	
 	_api_registerPlural( 'columns().nodes()', 'column().nodes()', function () {
 		return this.iterator( 'column-rows', function ( settings, column, i, j, rows ) {
 			return _pluck_order( settings.aoData, rows, 'anCells', column ) ;
@@ -9327,15 +9302,6 @@
 				classes.sSortableAsc+' '+classes.sSortableDesc+' '+classes.sSortableNone
 			);
 	
-			if ( settings.bJUI ) {
-				$('th span.'+classes.sSortIcon+ ', td span.'+classes.sSortIcon, thead).detach();
-				$('th, td', thead).each( function () {
-					var wrapper = $('div.'+classes.sSortJUIWrapper, this);
-					$(this).append( wrapper.contents() );
-					wrapper.detach();
-				} );
-			}
-	
 			// Add the TR elements back into the table in their original order
 			jqTbody.children().detach();
 			jqTbody.append( rows );
@@ -9434,7 +9400,7 @@
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.15";
+	DataTable.version = "2.0.0-dev";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -9806,14 +9772,6 @@
 		 *  @default null
 		 */
 		"sSortingClass": null,
-	
-		/**
-		 * Class to be applied to the header element when sorting on this column -
-		 * when jQuery UI theming is used.
-		 *  @type string
-		 *  @default null
-		 */
-		"sSortingClassJUI": null,
 	
 		/**
 		 * Title of the column - what is seen in the TH element (nTh).
@@ -10361,26 +10319,6 @@
 		 *    } );
 		 */
 		"bInfo": true,
-	
-	
-		/**
-		 * Enable jQuery UI ThemeRoller support (required as ThemeRoller requires some
-		 * slightly different and additional mark-up from what DataTables has
-		 * traditionally used).
-		 *  @type boolean
-		 *  @default false
-		 *
-		 *  @dtopt Features
-		 *  @name DataTable.defaults.jQueryUI
-		 *
-		 *  @example
-		 *    $(document).ready( function() {
-		 *      $('#example').dataTable( {
-		 *        "jQueryUI": true
-		 *      } );
-		 *    } );
-		 */
-		"bJQueryUI": false,
 	
 	
 		/**
@@ -11862,8 +11800,7 @@
 		 *     </li>
 		 *   </ul>
 		 *  @type string
-		 *  @default lfrtip <i>(when `jQueryUI` is false)</i> <b>or</b>
-		 *    <"H"lfr>t<"F"ip> <i>(when `jQueryUI` is true)</i>
+		 *  @default lftrip
 		 *
 		 *  @dtopt Options
 		 *  @name DataTable.defaults.dom
@@ -11875,7 +11812,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"sDom": "lfrtip",
+		"sDom": "lftrip",
 	
 	
 		/**
@@ -13664,14 +13601,6 @@
 		"_iRecordsDisplay": 0,
 	
 		/**
-		 * Flag to indicate if jQuery UI marking and classes should be used.
-		 * Note that this parameter will be set by the initialisation routine. To
-		 * set a default use {@link DataTable.defaults}.
-		 *  @type boolean
-		 */
-		"bJUI": null,
-	
-		/**
 		 * The classes to use for the table
 		 *  @type object
 		 *  @default {}
@@ -14352,14 +14281,6 @@
 	
 	
 		/**
-		 * jQuery UI class container
-		 *  @type object
-		 *  @deprecated Since v1.10
-		 */
-		oJUIClasses: {},
-	
-	
-		/**
 		 * Software version
 		 *  @type string
 		 *  @deprecated Since v1.10
@@ -14436,69 +14357,8 @@
 		"sFooterTH": "",
 	
 		// Deprecated
-		"sSortJUIAsc": "",
-		"sSortJUIDesc": "",
-		"sSortJUI": "",
-		"sSortJUIAscAllowed": "",
-		"sSortJUIDescAllowed": "",
-		"sSortJUIWrapper": "",
-		"sSortIcon": "",
-		"sJUIHeader": "",
-		"sJUIFooter": ""
+		"sSortIcon": ""
 	} );
-	
-	
-	(function() {
-	
-	// Reused strings for better compression. Closure compiler appears to have a
-	// weird edge case where it is trying to expand strings rather than use the
-	// variable version. This results in about 200 bytes being added, for very
-	// little preference benefit since it this run on script load only.
-	var _empty = '';
-	_empty = '';
-	
-	var _stateDefault = _empty + 'ui-state-default';
-	var _sortIcon     = _empty + 'css_right ui-icon ui-icon-';
-	var _headerFooter = _empty + 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix';
-	
-	$.extend( DataTable.ext.oJUIClasses, DataTable.ext.classes, {
-		/* Full numbers paging buttons */
-		"sPageButton":         "fg-button ui-button "+_stateDefault,
-		"sPageButtonActive":   "ui-state-disabled",
-		"sPageButtonDisabled": "ui-state-disabled",
-	
-		/* Features */
-		"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
-			"ui-buttonset-multi paging_", /* Note that the type is postfixed */
-	
-		/* Sorting */
-		"sSortAsc":            _stateDefault+" sorting_asc",
-		"sSortDesc":           _stateDefault+" sorting_desc",
-		"sSortable":           _stateDefault+" sorting",
-		"sSortableAsc":        _stateDefault+" sorting_asc_disabled",
-		"sSortableDesc":       _stateDefault+" sorting_desc_disabled",
-		"sSortableNone":       _stateDefault+" sorting_disabled",
-		"sSortJUIAsc":         _sortIcon+"triangle-1-n",
-		"sSortJUIDesc":        _sortIcon+"triangle-1-s",
-		"sSortJUI":            _sortIcon+"carat-2-n-s",
-		"sSortJUIAscAllowed":  _sortIcon+"carat-1-n",
-		"sSortJUIDescAllowed": _sortIcon+"carat-1-s",
-		"sSortJUIWrapper":     "DataTables_sort_wrapper",
-		"sSortIcon":           "DataTables_sort_icon",
-	
-		/* Scrolling */
-		"sScrollHead": "dataTables_scrollHead "+_stateDefault,
-		"sScrollFoot": "dataTables_scrollFoot "+_stateDefault,
-	
-		/* Misc */
-		"sHeaderTH":  _stateDefault,
-		"sFooterTH":  _stateDefault,
-		"sJUIHeader": _headerFooter+" ui-corner-tl ui-corner-tr",
-		"sJUIFooter": _headerFooter+" ui-corner-bl ui-corner-br"
-	} );
-	
-	}());
-	
 	
 	
 	var extPagination = DataTable.ext.pager;
@@ -14900,48 +14760,6 @@
 							classes.sSortAsc : columns[ colIdx ] == 'desc' ?
 								classes.sSortDesc :
 								column.sSortingClass
-						);
-				} );
-			},
-	
-			jqueryui: function ( settings, cell, column, classes ) {
-				$('<div/>')
-					.addClass( classes.sSortJUIWrapper )
-					.append( cell.contents() )
-					.append( $('<span/>')
-						.addClass( classes.sSortIcon+' '+column.sSortingClassJUI )
-					)
-					.appendTo( cell );
-	
-				// Attach a sort listener to update on sort
-				$(settings.nTable).on( 'order.dt.DT', function ( e, ctx, sorting, columns ) {
-					if ( settings !== ctx ) {
-						return;
-					}
-	
-					var colIdx = column.idx;
-	
-					cell
-						.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
-						.addClass( columns[ colIdx ] == 'asc' ?
-							classes.sSortAsc : columns[ colIdx ] == 'desc' ?
-								classes.sSortDesc :
-								column.sSortingClass
-						);
-	
-					cell
-						.find( 'span.'+classes.sSortIcon )
-						.removeClass(
-							classes.sSortJUIAsc +" "+
-							classes.sSortJUIDesc +" "+
-							classes.sSortJUI +" "+
-							classes.sSortJUIAscAllowed +" "+
-							classes.sSortJUIDescAllowed
-						)
-						.addClass( columns[ colIdx ] == 'asc' ?
-							classes.sSortJUIAsc : columns[ colIdx ] == 'desc' ?
-								classes.sSortJUIDesc :
-								column.sSortingClassJUI
 						);
 				} );
 			}
