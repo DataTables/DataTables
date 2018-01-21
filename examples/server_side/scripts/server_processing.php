@@ -51,10 +51,10 @@ $columns = array(
 
 // SQL server connection information
 $sql_details = array(
-	'user' => '',
-	'pass' => '',
-	'db'   => '',
-	'host' => ''
+	'user' => 'root',
+	'pass' => 'root',
+	'db'   => 'datatables_serverside',
+	'host' => 'localhost'
 );
 
 
@@ -66,7 +66,7 @@ $sql_details = array(
 require( 'ssp.class.php' );
 
 echo json_encode(
-	SSP::simple( $_GET, $sql_details, $table, $primaryKey, $columns )
+	SSP::complex( $_POST, $sql_details, $table, $primaryKey, $columns,array(),array() )
 );
 
 

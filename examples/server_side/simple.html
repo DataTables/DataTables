@@ -25,8 +25,9 @@ $(document).ready(function() {
 	$('#example').DataTable( {
 		"processing": true,
 		"serverSide": true,
-		"ajax": "scripts/server_processing.php"
-	} );
+		
+		"ajax":{ "url": "scripts/server_processing.php","type": "POST"
+	} });
 } );
 
 	</script>
@@ -34,7 +35,7 @@ $(document).ready(function() {
 <body class="dt-example">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>Server-side processing</span></h1>
+			<h1>DataTables example GOOGLE WELCOME <span>Server-side processing</span></h1>
 			<div class="info">
 				<p>There are many ways to get your data into DataTables, and if you are working with seriously large databases, you might want to consider using the server-side
 				options that DataTables provides. With server-side processing enabled, all paging, searching, ordering etc actions that DataTables performs are handed off to a
