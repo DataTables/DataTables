@@ -3800,6 +3800,12 @@
 				{
 					aReturn[j] = aLayout[i][j].cell;
 				}
+				
+				if ( aLayout[i][j].unique &&
+						(!aReturn[j] || Number.isInteger(oSettings.bSortCellsTop)) )
+				   {
+					   aReturn[j] = aLayout[oSettings.bSortCellsTop][j].cell;
+				   }
 			}
 		}
 	
