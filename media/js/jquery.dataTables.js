@@ -3801,8 +3801,9 @@
 					aReturn[j] = aLayout[i][j].cell;
 				}
 				
+				// In case the bSortCellsTop is an integer, insert the header cells to a provided header row index
 				if ( aLayout[i][j].unique &&
-						(!aReturn[j] || Number.isInteger(oSettings.bSortCellsTop)) )
+					(!aReturn[j] || Number.isInteger(oSettings.bSortCellsTop)) )
 				   {
 					   aReturn[j] = aLayout[oSettings.bSortCellsTop][j].cell;
 				   }
@@ -10532,8 +10533,9 @@
 		/**
 		 * Allows control over whether DataTables should use the top (true) unique
 		 * cell that is found for a single column, or the bottom (false - default).
+		 * If an integer is provided, order controls will be inserted into a header row with given index
 		 * This is useful when using complex headers.
-		 *  @type boolean
+		 *  @type boolean | integer
 		 *  @default false
 		 *
 		 *  @dtopt Options
