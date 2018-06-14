@@ -7807,21 +7807,22 @@
 			}
 		}
 		else if ( order == 'current' || order == 'applied' ) {
-			if ( search == 'none') {
-				a = displayMaster.slice();
-			} else if ( search == 'applied' ) {
-				a = displayFiltered.slice();
-			} else if ( search == 'removed' ) {
-				// Instead of looping through displayFiltered array inside the displayMaster array
-				// we create a map to avoid inner loops which will significantly increase performance 
-				// for bigger values reducing complexity from exponential to linear
+			if ( search == 'removed' ) {
+				// O(2n) solution by creating a hash map
 				var displayFilteredMap = {};
-				for ( var i=0; i<displayFiltered.length; i++ ) {
+	
+				for ( var i=0, ien=displayFiltered.length ; i<ien ; i++ ) {
 					displayFilteredMap[displayFiltered[i]] = null;
 				}
+	
 				a = $.map( displayMaster, function (el) {
-					return !displayFilteredMap.hasOwnProperty(el) ? el : null;
+					return ! displayFilteredMap.hasOwnProperty(el) ?
+						el :
+						null;
 				} );
+			}
+			else {
+				a = displayMaster.slice();
 			}
 		}
 		else if ( order == 'index' || order == 'original' ) {
