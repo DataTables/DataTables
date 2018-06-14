@@ -60,15 +60,15 @@ $(document).ready(function() {
 				and ordered elements. Finally the <code>change</code> event from the <code class="tag" title="HTML tag">select</code> input is used to trigger a column search
 				using the <a href="//datatables.net/reference/api/column().search()"><code class="api" title="DataTables API method">column().search()</code></a> method.</p>
 				<p>Note that the <a href="//datatables.net/reference/api/column().search()"><code class="api" title="DataTables API method">column().search()</code></a> method in
-				this particular case performs an exact match through the use of a custom regular expression and disabling DataTables built-in smart searching. For more information
-				on the search options in DataTables API, please refer to the documentation for <a href="//datatables.net/reference/api/search()"><code class="api" title=
+				this particular case performs an exact match through the use of a custom regular expression and disabling DataTables built in smart searching. For more information
+				on the search options in DataTables API please refer to the documentation for <a href="//datatables.net/reference/api/search()"><code class="api" title=
 				"DataTables API method">search()</code></a>, <a href="//datatables.net/reference/api/column().search()"><code class="api" title=
 				"DataTables API method">column().search()</code></a> and <a href="//datatables.net/reference/api/%24.fn.dataTable.util.escapeRegex()"><code class="api" title=
 				"DataTables API method">$.fn.dataTable.util.escapeRegex()</code></a> which are used for searching globally, by column and escaping regular expressions
 				respectively.</p>
-				<p>Also note this example demonstrates the use of <a href="//datatables.net/reference/option/initComplete"><code class="option" title=
-				"DataTables initialisation option">initComplete</code></a>, a callback function triggered when the table has fully loaded. Use of this callback isn't required in
-				this example since the data is available in the table on load, but in the case of Ajax loaded data, <a href=
+				<p>Note also that this example shows the use of <a href="//datatables.net/reference/option/initComplete"><code class="option" title=
+				"DataTables initialisation option">initComplete</code></a> a callback function that is triggered when the table has fully loaded. Use of this callback isn't
+				actually required in this example since the data is available in the table on load, but in the case of Ajax loaded data, <a href=
 				"//datatables.net/reference/option/initComplete"><code class="option" title="DataTables initialisation option">initComplete</code></a> is useful to execute code
 				after the data has been loaded.</p>
 			</div>

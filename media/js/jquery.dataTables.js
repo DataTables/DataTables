@@ -12364,8 +12364,8 @@
 		 *          { "data": "engine" },
 		 *          { "data": "browser" },
 		 *          { "data": "platform.inner" },
-		 *          { "data": "details.0" },
-		 *          { "data": "details.1" }
+		 *          { "data": "platform.details.0" },
+		 *          { "data": "platform.details.1" }
 		 *        ]
 		 *      } );
 		 *    } );
