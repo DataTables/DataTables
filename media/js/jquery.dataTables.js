@@ -1357,7 +1357,7 @@
 	// - Ƀ - Bitcoin
 	// - Ξ - Ethereum
 	//   standards as thousands separators.
-	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]ɃΞ/gi;
+	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfkɃΞ]/gi;
 	
 	
 	var _empty = function ( d ) {
@@ -14745,8 +14745,7 @@
 	$.extend( _ext.type.order, {
 		// Dates
 		"date-pre": function ( d ) {
-			var ts = Date.parse( d );
-			return isNaN(ts) ? -Infinity : ts;
+			return Date.parse( d ) || -Infinity;
 		},
 	
 		// html
