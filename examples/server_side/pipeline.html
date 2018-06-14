@@ -81,7 +81,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 			request.length = requestLength*conf.pages;
 
 			// Provide the same `data` options as DataTables.
-			if ( $.isFunction ( conf.data ) ) {
+			if ( typeof conf.data === 'function' ) {
 				// As a function it is executed with the data object as an arg
 				// for manipulation. If an object is returned, it is used as the
 				// data object to submit
@@ -262,7 +262,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 			request.length = requestLength*conf.pages;
 
 			// Provide the same `data` options as DataTables.
-			if ( $.isFunction ( conf.data ) ) {
+			if ( typeof conf.data === 'function' ) {
 				// As a function it is executed with the data object as an arg
 				// for manipulation. If an object is returned, it is used as the
 				// data object to submit
