@@ -54,9 +54,9 @@ $.extend( DataTable.ext.classes, {
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		"<'row grid-x'<'small-6 columns cell'l><'small-6 columns cell'f>r>"+
+		"<'row'<'small-6 columns'l><'small-6 columns'f>r>"+
 		"t"+
-		"<'row grid-x'<'small-6 columns cell'i><'small-6 columns cell'p>>",
+		"<'row'<'small-6 columns'i><'small-6 columns'p>>",
 	renderer: 'foundation'
 } );
 

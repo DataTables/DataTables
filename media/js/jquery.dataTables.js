@@ -7807,13 +7807,22 @@
 			}
 		}
 		else if ( order == 'current' || order == 'applied' ) {
-			a = search == 'none' ?
-				displayMaster.slice() :                      // no search
-				search == 'applied' ?
-					displayFiltered.slice() :                // applied search
-					$.map( displayMaster, function (el, i) { // removed search
-						return $.inArray( el, displayFiltered ) === -1 ? el : null;
-					} );
+			if ( search == 'none') {
+				a = displayMaster.slice();
+			} else if ( search == 'applied' ) {
+				a = displayFiltered.slice();
+			} else if ( search == 'removed' ) {
+				// Instead of looping through displayFiltered array inside the displayMaster array
+				// we create a map to avoid inner loops which will significantly increase performance 
+				// for bigger values reducing complexity from exponential to linear
+				var displayFilteredMap = {};
+				for ( var i=0; i<displayFiltered.length; i++ ) {
+					displayFilteredMap[displayFiltered[i]] = null;
+				}
+			 	a = $.map( displayMaster, function (el) {
+					return !displayFilteredMap.hasOwnProperty(el) ? el : null;
+				} );
+			}
 		}
 		else if ( order == 'index' || order == 'original' ) {
 			for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
