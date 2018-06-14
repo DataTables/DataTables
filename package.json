@@ -2,7 +2,7 @@
 	"name": "datatables",
 	"version": "1.10.17",
 	"title": "DataTables",
-	"main": "media/js/jquery.dataTables",
+	"main": "media/js/jquery.dataTables.js",
 	"files": [
 		"media/js/jquery.dataTables.js",
 		"media/js/jquery.dataTables.min.js",
