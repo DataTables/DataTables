@@ -24,18 +24,19 @@ tr.group:hover {
 	
 
 $(document).ready(function() {
+	var groupColumn = 2;
 	var table = $('#example').DataTable({
 		"columnDefs": [
-			{ "visible": false, "targets": 2 }
+			{ "visible": false, "targets": groupColumn }
 		],
-		"order": [[ 2, 'asc' ]],
+		"order": [[ groupColumn, 'asc' ]],
 		"displayLength": 25,
 		"drawCallback": function ( settings ) {
 			var api = this.api();
 			var rows = api.rows( {page:'current'} ).nodes();
 			var last=null;
 
-			api.column(2, {page:'current'} ).data().each( function ( group, i ) {
+			api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
 				if ( last !== group ) {
 					$(rows).eq( i ).before(
 						'<tr class="group"><td colspan="5">'+group+'</td></tr>'
@@ -50,11 +51,11 @@ $(document).ready(function() {
 	// Order by the grouping
 	$('#example tbody').on( 'click', 'tr.group', function () {
 		var currentOrder = table.order()[0];
-		if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
-			table.order( [ 2, 'desc' ] ).draw();
+		if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
+			table.order( [ groupColumn, 'desc' ] ).draw();
 		}
 		else {
-			table.order( [ 2, 'asc' ] ).draw();
+			table.order( [ groupColumn, 'asc' ] ).draw();
 		}
 	} );
 } );
@@ -570,18 +571,19 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
+	var groupColumn = 2;
 	var table = $('#example').DataTable({
 		&quot;columnDefs&quot;: [
-			{ &quot;visible&quot;: false, &quot;targets&quot;: 2 }
+			{ &quot;visible&quot;: false, &quot;targets&quot;: groupColumn }
 		],
-		&quot;order&quot;: [[ 2, 'asc' ]],
+		&quot;order&quot;: [[ groupColumn, 'asc' ]],
 		&quot;displayLength&quot;: 25,
 		&quot;drawCallback&quot;: function ( settings ) {
 			var api = this.api();
 			var rows = api.rows( {page:'current'} ).nodes();
 			var last=null;
 
-			api.column(2, {page:'current'} ).data().each( function ( group, i ) {
+			api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
 				if ( last !== group ) {
 					$(rows).eq( i ).before(
 						'&lt;tr class=&quot;group&quot;&gt;&lt;td colspan=&quot;5&quot;&gt;'+group+'&lt;/td&gt;&lt;/tr&gt;'
@@ -596,11 +598,11 @@ $(document).ready(function() {
 	// Order by the grouping
 	$('#example tbody').on( 'click', 'tr.group', function () {
 		var currentOrder = table.order()[0];
-		if ( currentOrder[0] === 2 &amp;&amp; currentOrder[1] === 'asc' ) {
-			table.order( [ 2, 'desc' ] ).draw();
+		if ( currentOrder[0] === groupColumn &amp;&amp; currentOrder[1] === 'asc' ) {
+			table.order( [ groupColumn, 'desc' ] ).draw();
 		}
 		else {
-			table.order( [ 2, 'asc' ] ).draw();
+			table.order( [ groupColumn, 'asc' ] ).draw();
 		}
 	} );
 } );</code>
