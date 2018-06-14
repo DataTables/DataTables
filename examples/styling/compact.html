@@ -31,7 +31,7 @@ $(document).ready(function() {
 				<p>The <code>compact</code> class reduces the amount of white-space in the default styling, increasing the information density on screen, as shown below.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display compact" cellspacing="0" width="100%">
+			<table id="example" class="display compact" style="width:100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -42,16 +42,6 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -510,6 +500,16 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
