@@ -7807,7 +7807,13 @@
 			}
 		}
 		else if ( order == 'current' || order == 'applied' ) {
-			if ( search == 'removed' ) {
+			if ( search == 'none') {
+				a = displayMaster.slice();
+			}
+			else if ( search == 'applied' ) {
+				a = displayFiltered.slice();
+			}
+			else if ( search == 'removed' ) {
 				// O(2n) solution by creating a hash map
 				var displayFilteredMap = {};
 	
@@ -7820,9 +7826,6 @@
 						el :
 						null;
 				} );
-			}
-			else {
-				a = displayMaster.slice();
 			}
 		}
 		else if ( order == 'index' || order == 'original' ) {
