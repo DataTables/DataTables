@@ -15093,6 +15093,7 @@
 		_fnRenderer: _fnRenderer,
 		_fnDataSource: _fnDataSource,
 		_fnRowAttributes: _fnRowAttributes,
+		_fnExtend: _fnExtend,
 		_fnCalculateEnd: function () {} // Used by a lot of plug-ins, but redundant
 		                                // in 1.10, so this dead-end function is
 		                                // added to prevent errors
