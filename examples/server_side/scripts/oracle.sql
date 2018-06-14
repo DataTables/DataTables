@@ -8,16 +8,16 @@ END;
 
 CREATE TABLE datatables_demo (
 	id INT PRIMARY KEY NOT NULL,
-	first_name VARCHAR(250),
-	last_name  VARCHAR(250),
-	position   VARCHAR(250),
-	email      VARCHAR(250),
-	office     VARCHAR(250),
+	first_name NVARCHAR(250),
+	last_name  NVARCHAR(250),
+	position   NVARCHAR(250),
+	email      NVARCHAR(250),
+	office     NVARCHAR(250),
 	start_date DATE,
 	age        INT,
 	salary     INT,
 	seq        INT,
-	extn       VARCHAR(8)
+	extn       NVARCHAR(8)
 );
 
 CREATE SEQUENCE datatables_demo_seq;
