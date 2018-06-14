@@ -66,7 +66,7 @@ $.extend( true, DataTable.defaults, {
 /* Default class modification */
 $.extend( DataTable.ext.classes, {
 	sWrapper:      "dataTables_wrapper dt-semanticUI",
-	sFilter:       "dataTables_filter ui form",
+	sFilter:       "dataTables_filter ui input",
 	sProcessing:   "dataTables_processing ui segment",
 	sPageButton:   "paginate_button item"
 } );
@@ -203,6 +203,7 @@ $(document).on( 'init.dt', function (e, ctx) {
 	}
 
 	// Filtering input
+	$( 'div.dataTables_filter.ui.input', api.table().container() ).removeClass('input').addClass('form');
 	$( 'div.dataTables_filter input', api.table().container() ).wrap( '<span class="ui input" />' );
 } );
 
