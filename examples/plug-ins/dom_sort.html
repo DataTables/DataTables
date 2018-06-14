@@ -70,14 +70,14 @@ $(document).ready(function() {
 		<section>
 			<h1>DataTables example <span>Live DOM ordering</span></h1>
 			<div class="info">
-				<p>This example shows how you can use information available in the DOM to order columns. Typically DataTables will read information to be ordered during it's
+				<p>This example shows how you can use information available in the DOM to order columns. Typically DataTables will read information to be ordered during its
 				initialisation phase, and this will not be updated based on user interaction, so ordering on columns which have, for example, form elements in them, may not
 				reflect the current value of the input. To overcome this problem, you must update the data that DataTables will order on, just prior to the order. This method is
 				much more efficient than actually ordering using the DOM, since only one DOM query is needed for each cell to be ordered.</p>
-				<p>The example below shows the first two columns as normal text with ordering as you would expect. The following columns all have a form input element of different
+				<p>The example below shows the first column as normal text with ordering as you would expect. The following columns all have a form input element of different
 				kinds, and the information contained within is what DataTables will perform the order on, based on the value at the time of the order.</p>
-				<p>This is a fairly simple example, but it you aren't constrained to just using form input elements, you could use anything and customise your DOM queries to suit
-				yourself. You could also update the ordering live as a user in entered data into a form using an event handler calling <a href=
+				<p>This is a fairly simple example, but you aren't constrained to just using form input elements, you could use anything and customise your DOM queries to suit
+				yourself. You could also update the ordering live as a user enters data into a form by using an event handler calling <a href=
 				"//datatables.net/reference/api/order()"><code class="api" title="DataTables API method">order()</code></a> or <a href=
 				"//datatables.net/reference/api/draw()"><code class="api" title="DataTables API method">draw()</code></a> methods.</p>
 			</div>

@@ -92,11 +92,10 @@ $(document).ready(function() {
 				<p>The DataTables API has a number of methods for attaching child rows to a <em>parent</em> row in the DataTable. This can be used to show additional information
 				about a row, useful for cases where you wish to convey more information about a row than there is space for in the host table.</p>
 				<p>The example below makes use of the <a href="//datatables.net/reference/api/row().child"><code class="api" title="DataTables API method">row().child</code></a>
-				methods to firstly check if a row is already displayed, and if so hide it (<a href="//datatables.net/reference/api/row().child.hide()"><code class="api" title=
+				methods to first check if a row is already displayed, and if so hide it (<a href="//datatables.net/reference/api/row().child.hide()"><code class="api" title=
 				"DataTables API method">row().child.hide()</code></a>), otherwise show it (<a href="//datatables.net/reference/api/row().child.show()"><code class="api" title=
-				"DataTables API method">row().child.show()</code></a>). The content of the child row is, in this example, defined by the <code>formatDetails()</code> function, but
-				you would replace that with whatever you wanted to show the content required, possibly including, for example, an Ajax call to the server to obtain the extra
-				information to show.</p>
+				"DataTables API method">row().child.show()</code></a>). The content of the child row in this example is defined by the <code>format()</code> function, but you
+				would replace that with whatever content you wanted to show, possibly including, for example, an Ajax call to the server to obtain any extra information.</p>
 			</div>
 			<div class="demo-html"></div>
 			<table id="example" class="display" cellspacing="0" width="100%">
