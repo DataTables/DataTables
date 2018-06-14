@@ -7814,7 +7814,7 @@
 				a = displayFiltered.slice();
 			}
 			else if ( search == 'removed' ) {
-				// O(2n) solution by creating a hash map
+				// O(n+m) solution by creating a hash map
 				var displayFilteredMap = {};
 	
 				for ( var i=0, ien=displayFiltered.length ; i<ien ; i++ ) {
