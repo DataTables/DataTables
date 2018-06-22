@@ -54,7 +54,7 @@ $(document).ready(function() {
 				"DataTables API method">column()</code></a> method to get the nodes in the current order and with the currently applied filter.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th></th>
@@ -65,6 +65,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th></th>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td></td>
@@ -523,16 +533,6 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th></th>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>

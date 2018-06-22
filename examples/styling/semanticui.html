@@ -5,7 +5,7 @@
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - Semantic UI</title>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
 	<link rel="stylesheet" type="text/css" href="../../media/css/dataTables.semanticui.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -15,7 +15,7 @@
 	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/dataTables.semanticui.js"></script>
-	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
 	<script type="text/javascript" language="javascript" class="init">
@@ -35,7 +35,7 @@ $(document).ready(function() {
 				names like words to create natural language styling library.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="ui celled table" style="width:100%">
+			<table id="example" class="ui celled table" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -46,6 +46,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -504,16 +514,6 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -540,7 +540,7 @@ $(document).ready(function() {
 						</li>
 						<li>
 							<a href=
-							"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js">https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js</a>
+							"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js">https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js</a>
 						</li>
 					</ul>
 				</div>
@@ -556,7 +556,7 @@ $(document).ready(function() {
 					<ul>
 						<li>
 							<a href=
-							"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css">https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css</a>
+							"https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css</a>
 						</li>
 						<li>
 							<a href="../../media/css/dataTables.semanticui.css">../../media/css/dataTables.semanticui.css</a>

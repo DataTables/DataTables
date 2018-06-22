@@ -38,7 +38,7 @@ $(document).ready(function() {
 				normal, as shown in this example.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="table table-striped table-bordered" style="width:100%">
+			<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -49,6 +49,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -507,16 +517,6 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>

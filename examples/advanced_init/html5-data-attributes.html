@@ -46,7 +46,7 @@ $(document).ready(function() {
 				the column will correctly order numerically as the <code>data-sort</code> / <code>data-order</code> attribute is set on the column with plain numeric data.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -57,6 +57,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td data-search="Tiger Nixon">T. Nixon</td>
@@ -515,16 +525,6 @@ $(document).ready(function() {
 						<td data-order="112000">$112,000/y</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
