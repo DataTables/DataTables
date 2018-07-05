@@ -2889,14 +2889,7 @@
 		var row = settings.aoData[ rowIdx ];
 		var i, ien;
 		var cellWrite = function ( cell, col ) {
-			// This is very frustrating, but in IE if you just write directly
-			// to innerHTML, and elements that are overwritten are GC'ed,
-			// even if there is a reference to them elsewhere
-			while ( cell.childNodes.length ) {
-				cell.removeChild( cell.firstChild );
-			}
-	
-			cell.innerHTML = _fnGetCellData( settings, rowIdx, col, 'display' );
+            $( cell ).empty().append( _fnGetCellData( settings, rowIdx, col, 'display' ) );
 		};
 	
 		// Are we reading last data from DOM or the data object?
@@ -3112,7 +3105,7 @@
 				if ( (!nTrIn || oCol.mRender || oCol.mData !== i) &&
 					 (!$.isPlainObject(oCol.mData) || oCol.mData._ !== i+'.display')
 				) {
-					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+                    $( nTd ).empty().append( _fnGetCellData( oSettings, iRow, i, 'display' ) );
 				}
 	
 				/* Add user defined class */
@@ -5786,7 +5779,7 @@
 	
 		var data = settings.aoData[ idx ];
 		return ! data.nTr ? // Might not have been created when deferred rendering
-			$('<td/>').html( _fnGetCellData( settings, idx, colIdx, 'display' ) )[0] :
+		    $('<td/>').append( _fnGetCellData( settings, idx, colIdx, 'display' ) )[0] :
 			data.anCells[ colIdx ];
 	}
 	
@@ -5803,7 +5796,7 @@
 		var s, max=-1, maxIdx = -1;
 	
 		for ( var i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
-			s = _fnGetCellData( settings, i, colIdx, 'display' )+'';
+            s = $( '<span/>' ).append( _fnGetCellData( settings, i, colIdx, 'display' ) ).html();
 			s = s.replace( __re_html_remove, '' );
 			s = s.replace( /&nbsp;/g, ' ' );
 	
