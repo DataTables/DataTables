@@ -3600,7 +3600,7 @@
 						j++;
 					}
 	
-					/* Replace jQuery UI constants @todo depreciated */
+					/* Replace jQuery UI constants @todo deprecated */
 					if ( sAttr == "H" )
 					{
 						sAttr = classes.sJUIHeader;
@@ -6006,7 +6006,7 @@
 				} );
 			}
 			else {
-				// Depreciated - remove in 1.11 (providing a plug-in option)
+				// Deprecated - remove in 1.11 (providing a plug-in option)
 				// Not all sort types have formatting methods, so we have to call their sorting
 				// methods.
 				displayMaster.sort( function ( a, b ) {
@@ -14331,7 +14331,7 @@
 	
 	
 		//
-		// Depreciated
+		// Deprecated
 		// The following properties are retained for backwards compatiblity only.
 		// The should not be used in new projects and will be removed in a future
 		// version
@@ -14340,7 +14340,7 @@
 		/**
 		 * Version check function.
 		 *  @type function
-		 *  @depreciated Since 1.10
+		 *  @deprecated Since 1.10
 		 */
 		fnVersionCheck: DataTable.fnVersionCheck,
 	
