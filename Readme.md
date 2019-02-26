@@ -21,6 +21,67 @@ If you prefer to use a package manager such as NPM or Bower, distribution reposi
 
 Please see the DataTables [NPM](//datatables.net/download/npm) and [Bower](//datatables.net/download/bower) installation pages for further information. The [DataTables installation manual](//datatables.net/manual/installation) also has details on how to use package managers with DataTables.
 
+### Composer
+
+If you processing server side with php, you may use composer package.
+
+```bash
+composer require datatables/datatables
+```
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use DataTables\DataTables\RequestFactory;
+use DataTables\DataTables\Response;
+
+// Example data
+$data = [
+    [
+        'first_name' => 'Tiger Nixon',
+        'last_name' => 'System Architect',
+        'position' => 'Edinburgh',
+        'office' => '5421',
+        'start_date' => '2011/04/25',
+        'salary' => '$320,800'
+    ],
+    [
+        'first_name' => 'Garrett Winters',
+        'last_name' => 'Accountant',
+        'position' => 'Tokyo',
+        'office' => '8422',
+        'start_date' => '2011/07/25',
+        'salary' => '$170,750'
+    ],
+    // ...
+];
+
+// Create request object from $_GET
+$request = RequestFactory::fromGlobals();
+
+// Order, search, etc..
+// $request->getOrder()
+// $request->getSearch()->getValue()
+// $request->getStart()
+// $request->getLength()
+// foreach ($request->getColumns() as $column) {
+//     $search[$column->getName()] = $column->getSearch()->getValue();
+// }
+
+// Response
+header('Content-Type: application/json');
+
+echo json_encode(
+    new Response(
+        $data,
+        count($data),
+        count($data),
+        $request->getDraw()
+    )
+);
+```
 
 ## Usage
 
