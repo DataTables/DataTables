@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html" />
+	<title>DataTables mongoDB</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body>
+<p>you can use the file <b>datatables_mongodb.json</b> to load a colection example</p>
+<table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>CAMPO 1</th>
+                <th>CAMPO 2</th>
+                <th>CAMPO 3</th>
+                <th>CAMPO 4</th>
+                <th>CAMPO 5</th>
+            </tr>
+        </thead>
+    </table>
+<script>
+$(document).ready(function() {
+    $('#example').DataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": {
+            "url": "./scripts/server_processing_mongodb.php",
+            "dataType": "jsonp",
+        },
+    //indicate the names of fields how apeart in mongo collection
+    "columns": [
+            { "data": "campo_1"},
+            { "data": "campo_2"},
+            { "data": "campo_3"},
+            { "data": "campo_4"},
+            { "data": "campo_5"}
+        ]
+});
+} );
+
+</script>
+
+</body>
+</html>
