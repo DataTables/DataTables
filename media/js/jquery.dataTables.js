@@ -8815,9 +8815,16 @@
 			} );
 		}
 	
+		// The default built in options need to apply to row and columns
+		var internalOpts = opts ? {
+			page: opts.page,
+			order: opts.order,
+			search: opts.search
+		} : {};
+	
 		// Row + column selector
-		var columns = this.columns( columnSelector );
-		var rows = this.rows( rowSelector );
+		var columns = this.columns( columnSelector, internalOpts );
+		var rows = this.rows( rowSelector, internalOpts );
 		var a, i, ien, j, jen;
 	
 		this.iterator( 'table', function ( settings, idx ) {
