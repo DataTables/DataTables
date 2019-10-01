@@ -10,7 +10,7 @@ CREATE TABLE datatables_demo (
 	position   text NOT NULL default '',
 	email      text NOT NULL default '',
 	office     text NOT NULL default '',
-	start_date timestamp without time zone default NULL,
+	start_date timestamp default NULL,
 	age        integer,
 	salary     integer,
 	seq        integer,
