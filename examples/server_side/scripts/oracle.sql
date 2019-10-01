@@ -5,6 +5,7 @@ BEGIN
 	EditorDelObject('datatables_demo', 'TABLE');
 	EditorDelObject('datatables_demo_seq', 'SEQUENCE');
 END;
+/
 
 CREATE TABLE datatables_demo (
 	id INT PRIMARY KEY NOT NULL,
@@ -30,6 +31,7 @@ CREATE OR REPLACE TRIGGER datatables_demo_on_insert
 		INTO :new.id
 		FROM dual;
 	END;
+	/
 INSERT INTO datatables_demo ( first_name, last_name, age, position, salary, start_date, extn, email, office, seq ) VALUES ( 'Tiger', 'Nixon', 61, 'System Architect', 320800, '25-Apr-2011', 5421, 't.nixon@datatables.net', 'Edinburgh', 2 );
 INSERT INTO datatables_demo ( first_name, last_name, age, position, salary, start_date, extn, email, office, seq ) VALUES ( 'Garrett', 'Winters', 63, 'Accountant', 170750, '25-Jul-2011', 8422, 'g.winters@datatables.net', 'Tokyo', 22 );
 INSERT INTO datatables_demo ( first_name, last_name, age, position, salary, start_date, extn, email, office, seq ) VALUES ( 'Ashton', 'Cox', 66, 'Junior Technical Author', 86000, '12-Jan-2009', 1562, 'a.cox@datatables.net', 'San Francisco', 6 );
