@@ -15220,7 +15220,7 @@
 
 	/**
 	 * Processing event, fired when DataTables is doing some kind of processing
-	 * (be it, order, searcg or anything else). It can be used to indicate to
+	 * (be it, order, search or anything else). It can be used to indicate to
 	 * the end user that there is something happening, or that something has
 	 * finished.
 	 *  @name DataTable#processing.dt
