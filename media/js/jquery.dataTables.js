@@ -8828,7 +8828,7 @@
 		var rows = this.rows( rowSelector, internalOpts );
 		var i, ien, j, jen;
 	
-		var cells = this.iterator( 'table', function ( settings, idx ) {
+		var cellsNoOpts = this.iterator( 'table', function ( settings, idx ) {
 			var a = [];
 	
 			for ( i=0, ien=rows[idx].length ; i<ien ; i++ ) {
@@ -8846,9 +8846,9 @@
 		// There is currently only one extension which uses a cell selector extension
 		// It is a _major_ performance drag to run this if it isn't needed, so this is
 		// an extension specific check at the moment
-		if ( opts && opts.selected ) {
-			cells = this.cells( a, opts );
-		}
+		var cells = opts && opts.selected ?
+			this.cells( cellsNoOpts, opts ) :
+			cellsNoOpts;
 	
 		$.extend( cells.selector, {
 			cols: columnSelector,
