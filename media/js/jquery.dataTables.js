@@ -4407,6 +4407,7 @@
 			// New search - start from the master array
 			if ( invalidated ||
 				 force ||
+				 regex ||
 				 prevSearch.length > input.length ||
 				 input.indexOf(prevSearch) !== 0 ||
 				 settings.bSorted // On resort, the display master needs to be
