@@ -50,8 +50,8 @@ $.extend( true, DataTable.defaults, {
 /* Default class modification */
 $.extend( DataTable.ext.classes, {
 	sWrapper:      "dataTables_wrapper uk-form dt-uikit",
-	sFilterInput:  "uk-form-small",
-	sLengthSelect: "uk-form-small",
+	sFilterInput:  "uk-form-small uk-input",
+	sLengthSelect: "uk-form-small uk-select",
 	sProcessing:   "dataTables_processing uk-panel"
 } );
 
