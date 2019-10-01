@@ -7309,8 +7309,6 @@
 		}
 	};
 	
-	window.__apiStruct = __apiStruct;
-	
 	_Api.registerPlural = _api_registerPlural = function ( pluralName, singularName, val ) {
 		_Api.register( pluralName, val );
 	
