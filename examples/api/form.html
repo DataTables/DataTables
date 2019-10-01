@@ -19,7 +19,12 @@
 	
 
 $(document).ready(function() {
-	var table = $('#example').DataTable();
+	var table = $('#example').DataTable({
+		columnDefs: [{
+			orderable: false,
+			targets: [1,2,3]
+		}]
+	});
 
 	$('button').click( function() {
 		var data = table.$('input, select').serialize();
@@ -1336,7 +1341,12 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	var table = $('#example').DataTable();
+	var table = $('#example').DataTable({
+		columnDefs: [{
+			orderable: false,
+			targets: [1,2,3]
+		}]
+	});
 
 	$('button').click( function() {
 		var data = table.$('input, select').serialize();
