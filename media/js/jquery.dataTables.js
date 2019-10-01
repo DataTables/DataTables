@@ -3109,7 +3109,6 @@
 				
 				cells.push( nTd );
 	
-				console.log( 'create', i, create );
 				// Need to create the HTML if new, or if a rendering function is defined
 				if ( create || ((!nTrIn || oCol.mRender || oCol.mData !== i) &&
 					 (!$.isPlainObject(oCol.mData) || oCol.mData._ !== i+'.display')
