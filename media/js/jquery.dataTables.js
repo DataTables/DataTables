@@ -7288,7 +7288,7 @@
 					val:       {},
 					methodExt: [],
 					propExt:   [],
-					type:      ''
+					type:      'object'
 				};
 				struct.push( src );
 			}
