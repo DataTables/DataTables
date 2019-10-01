@@ -38,7 +38,7 @@ $(document).ready(function() {
 	table.columns().every( function () {
 		var that = this;
 
-		$( 'input', this.footer() ).on( 'keyup change', function () {
+		$( 'input clear', this.footer() ).on( 'keyup change', function () {
 			if ( that.search() !== this.value ) {
 				that
 					.search( this.value )
@@ -572,7 +572,7 @@ $(document).ready(function() {
 	table.columns().every( function () {
 		var that = this;
 
-		$( 'input', this.footer() ).on( 'keyup change', function () {
+		$( 'input clear', this.footer() ).on( 'keyup change', function () {
 			if ( that.search() !== this.value ) {
 				that
 					.search( this.value )
