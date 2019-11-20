@@ -187,7 +187,7 @@
         [
             "Doris Wilder",
             "Sales Assistant",
-            "Sydney",
+            "Sidney",
             "3023",
             "2010\/09\/20",
             "$85,600"
@@ -243,7 +243,7 @@
         [
             "Michelle House",
             "Integration Specialist",
-            "Sydney",
+            "Sidney",
             "2769",
             "2011\/06\/02",
             "$95,400"
