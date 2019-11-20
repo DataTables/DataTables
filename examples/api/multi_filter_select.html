@@ -53,9 +53,12 @@ $(document).ready(function() {
 			<div class="info">
 				<p>This example is almost identical to text based individual column example and provides the same functionality, but in this case using <code class="tag" title=
 				"HTML tag">select</code> input controls.</p>
-				<p>After the table is initialised, the API is used to build the <code class="tag" title="HTML tag">select</code> inputs through the use of the <a href=
-				"//datatables.net/reference/api/column().data()"><code class="api" title="DataTables API method">column().data()</code></a> method to get the data for each column
-				in turn. The helper methods <a href="//datatables.net/reference/api/unique()"><code class="api" title="DataTables API method">unique()</code></a> and <a href=
+				<p>After the table is initialised, the API is used to build the <code class="tag" title="HTML tag">select</code> inputs through the use of <a href=
+				"//datatables.net/reference/api/columns().every()"><code class="api" title="DataTables API method">columns().every()</code></a> to loop over the columns (the
+				<a href="//datatables.net/reference/api/columns()"><code class="api" title="DataTables API method">columns()</code></a> selector can also be used to limit the
+				selected columns if required), then the <a href="//datatables.net/reference/api/column().data()"><code class="api" title=
+				"DataTables API method">column().data()</code></a> method is used to get the data for each column in turn. The helper methods <a href=
+				"//datatables.net/reference/api/unique()"><code class="api" title="DataTables API method">unique()</code></a> and <a href=
 				"//datatables.net/reference/api/sort()"><code class="api" title="DataTables API method">sort()</code></a> are also used to reduce the data for set input to unique
 				and ordered elements. Finally the <code>change</code> event from the <code class="tag" title="HTML tag">select</code> input is used to trigger a column search
 				using the <a href="//datatables.net/reference/api/column().search()"><code class="api" title="DataTables API method">column().search()</code></a> method.</p>
