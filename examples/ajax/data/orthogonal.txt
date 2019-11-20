@@ -261,7 +261,7 @@
                 "display": "Mon 20th Sep 10",
                 "timestamp": "1284940800"
             },
-            "office": "Sidney",
+            "office": "Sydney",
             "extn": "3023"
         },
         {
@@ -338,7 +338,7 @@
                 "display": "Thu 2nd Jun 11",
                 "timestamp": "1306972800"
             },
-            "office": "Sidney",
+            "office": "Sydney",
             "extn": "2769"
         },
         {

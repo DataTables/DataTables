@@ -213,7 +213,7 @@
             "position": "Sales Assistant",
             "salary": "$85,600",
             "start_date": "2010\/09\/20",
-            "office": "Sidney",
+            "office": "Sydney",
             "extn": "3023"
         },
         {
@@ -276,7 +276,7 @@
             "position": "Integration Specialist",
             "salary": "$95,400",
             "start_date": "2011\/06\/02",
-            "office": "Sidney",
+            "office": "Sydney",
             "extn": "2769"
         },
         {
