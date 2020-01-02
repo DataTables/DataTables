@@ -1018,6 +1018,7 @@
 				"fnStateSaveCallback",
 				"renderer",
 				"searchDelay",
+				"minPageButtonsLength",
 				"rowId",
 				[ "iCookieDuration", "iStateDuration" ], // backwards compat
 				[ "oSearch", "oPreviousSearch" ],
@@ -1097,6 +1098,17 @@
 				} );
 				bInitHandedOff = true;
 			}
+			
+			/*
+             * Pagination Differents buttons lenght
+             */
+
+            if (oSettings.minPageButtonsLength == null ||
+                typeof oSettings.minPageButtonsLength !== "number" ||
+                oSettings.minPageButtonsLength < 7)
+            {
+                oSettings.minPageButtonsLength = 7
+            }
 			
 			/*
 			 * Stripes
@@ -4902,7 +4914,7 @@
 							all        = len === -1,
 							page = all ? 0 : Math.ceil( start / len ),
 							pages = all ? 1 : Math.ceil( visRecords / len ),
-							buttons = plugin(page, pages),
+							buttons = plugin(page, pages, settings.minPageButtonsLength),
 							i, ien;
 	
 						for ( i=0, ien=features.p.length ; i<ien ; i++ ) {
@@ -11956,7 +11968,13 @@
 		 *      } );
 		 *    } )
 		 */
-		"sPaginationType": "simple_numbers",
+		 "sPaginationType": "simple_numbers",
+		 
+		 /**
+         *  Minimun lenght for pagination's differents button (exclude buttons previous, next, first and last)
+         *  Default: 7 (according extPagination.numbers_length property)
+         */
+          "minPageButtonsLength":7,
 	
 	
 		/**
@@ -14475,10 +14493,10 @@
 	
 	var extPagination = DataTable.ext.pager;
 	
-	function _numbers ( page, pages ) {
+	function _numbers ( page, pages, numberButtonsLenght ) {
 		var
 			numbers = [],
-			buttons = extPagination.numbers_length,
+			buttons = numberButtonsLenght,
 			half = Math.floor( buttons / 2 ),
 			i = 1;
 	
@@ -14509,28 +14527,28 @@
 	
 	
 	$.extend( extPagination, {
-		simple: function ( page, pages ) {
+		simple: function ( page, pages, numberButtonsLenght ) {
 			return [ 'previous', 'next' ];
 		},
 	
-		full: function ( page, pages ) {
+		full: function ( page, pages, numberButtonsLenght ) {
 			return [  'first', 'previous', 'next', 'last' ];
 		},
 	
-		numbers: function ( page, pages ) {
-			return [ _numbers(page, pages) ];
+		numbers: function ( page, pages, numberButtonsLenght) {
+			return [ _numbers(page, pages, numberButtonsLenght) ];
 		},
 	
-		simple_numbers: function ( page, pages ) {
-			return [ 'previous', _numbers(page, pages), 'next' ];
+		simple_numbers: function ( page, pages, numberButtonsLenght) {
+			return [ 'previous', _numbers(page, pages, numberButtonsLenght), 'next' ];
 		},
 	
-		full_numbers: function ( page, pages ) {
-			return [ 'first', 'previous', _numbers(page, pages), 'next', 'last' ];
+		full_numbers: function ( page, pages, numberButtonsLenght ) {
+			return [ 'first', 'previous', _numbers(page, pages, numberButtonsLenght), 'next', 'last' ];
 		},
 		
-		first_last_numbers: function (page, pages) {
-	 		return ['first', _numbers(page, pages), 'last'];
+		first_last_numbers: function (page, pages, numberButtonsLenght) {
+	 		return ['first', _numbers(page, pages, numberButtonsLenght), 'last'];
 	 	},
 	
 		// For testing and plug-ins to use
