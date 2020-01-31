@@ -3216,6 +3216,10 @@
 			if ( createHeader ) {
 				cell.appendTo( row );
 			}
+			
+			if ( column.id ) {
+				cell.attr( 'data-id', column.id );
+			}
 	
 			// 1.11 move into sorting
 			if ( oSettings.oFeatures.bSort ) {
