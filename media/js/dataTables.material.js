@@ -46,27 +46,29 @@ var DataTable = $.fn.dataTable;
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		"<'mdl-grid'"+
-			"<'mdl-cell mdl-cell--6-col'l>"+
-			"<'mdl-cell mdl-cell--6-col'f>"+
-		">"+
-		"<'mdl-grid dt-table'"+
-			"<'mdl-cell mdl-cell--12-col'tr>"+
-		">"+
-		"<'mdl-grid'"+
-			"<'mdl-cell mdl-cell--4-col'i>"+
-			"<'mdl-cell mdl-cell--8-col'p>"+
-		">",
+		"<'mdc-layout-grid'<'mdc-layout-grid__inner'"+
+			"<'mdc-cell mdc-layout-grid__cell--span-6'l>"+
+			"<'mdc-cell mdc-layout-grid__cell--span-6'f>"+
+		">>"+
+		"<'mdc-layout-grid dt-table'<'mdc-layout-grid__inner'"+
+			"<'mdc-cell mdc-layout-grid__cell--span-12'tr>"+
+		">>"+
+		"<'mdc-layout-grid'<'mdc-layout-grid__inner'"+
+			"<'mdc-cell mdc-layout-grid__cell--span-4'i>"+
+			"<'mdc-cell mdc-layout-grid__cell--span-8'p>"+
+		">>",
 	renderer: 'material'
 } );
 
 
 /* Default class modification */
 $.extend( DataTable.ext.classes, {
-	sWrapper:      "dataTables_wrapper form-inline dt-material",
-	sFilterInput:  "form-control input-sm",
-	sLengthSelect: "form-control input-sm",
-	sProcessing:   "dataTables_processing panel panel-default"
+	sTable: 		"mdc-data-table__table",
+	sHeaderTH:		"mdc-data-table__header-row",
+	sWrapper:       "dataTables_wrapper form-inline dt-material mdc-data-table",
+	sFilterInput:   "form-control input-sm",
+	sLengthSelect:  "form-control input-sm",
+	sProcessing:    "dataTables_processing panel panel-default"
 } );
 
 
@@ -135,12 +137,12 @@ DataTable.ext.renderer.pageButton.material = function ( settings, host, idx, but
 				}
 
 				if ( active ) {
-					btnClass += ' mdl-button--raised mdl-button--colored';
+					btnClass += ' mdc-button--raised mdc-button--colored';
 				}
 
 				if ( btnDisplay ) {
 					node = $('<button>', {
-							'class': 'mdl-button '+btnClass,
+							'class': 'mdc-button '+btnClass,
 							'id': idx === 0 && typeof button === 'string' ?
 								settings.sTableId +'_'+ button :
 								null,
@@ -185,6 +187,63 @@ DataTable.ext.renderer.pageButton.material = function ( settings, host, idx, but
 		$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
 	}
 };
+
+$(document).on('init.dt', function(e, ctx) {
+	if (e.namespace !== 'dt') {
+		return;
+	}
+
+	var api = new $.fn.dataTable.Api(ctx);
+
+	applyFormatting();
+})
+
+$(document).on('draw.dt', function(e, ctx) {
+	if (e.namespace !== 'dt') {
+		return;
+	}
+
+	var api = new $.fn.dataTable.Api(ctx);
+
+	applyFormatting();
+})
+
+function applyFormatting(){
+	var kid = $('table.mdc-data-table__table').children();
+	for(var i = 0; i < kid.length; i++){
+		if(kid[i].tagName === 'THEAD'){
+			var rows = $(kid[i]).children();
+			console.log(rows)
+			for(var j = 0; j < rows.length; j++){
+				if (rows[j].tagName === 'TR') {
+					$(rows[j]).addClass('mdc-data-table__header-row')
+					var ths = $(rows[j]).children();
+					for(var k = 0; k < ths.length; k++) {
+						if (ths[k].tagName === 'TH') {
+							$(ths[k]).addClass('mdc-data-table__header-cell')
+						}
+					}
+				}
+			}
+		}
+		else if(kid[i].tagName === 'TBODY'){
+			$(kid[i]).addClass('mdc-data-table__content')
+			var rows = $(kid[i]).children();
+			for(var j = 0; j < rows.length; j++){
+				if (rows[j].tagName === 'TR') {
+					$(rows[j]).addClass('mdc-data-table__row')
+					var ths = $(rows[j]).children();
+					for(var k = 0; k < ths.length; k++) {
+						if (ths[k].tagName === 'TD') {
+							$(ths[k]).addClass('mdc-data-table__cell')
+						}
+					}
+				}
+			}
+		}
+	}
+	console.log(kid)
+}
 
 
 return DataTable;
