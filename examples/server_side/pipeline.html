@@ -95,7 +95,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 				$.extend( request, conf.data );
 			}
 
-			return $.ajax( {
+			settings.jqXHR = $.ajax( {
 				"type":     conf.method,
 				"url":      conf.url,
 				"data":     request,
@@ -276,7 +276,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 				$.extend( request, conf.data );
 			}
 
-			return $.ajax( {
+			settings.jqXHR = $.ajax( {
 				&quot;type&quot;:     conf.method,
 				&quot;url&quot;:      conf.url,
 				&quot;data&quot;:     request,

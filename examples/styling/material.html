@@ -5,7 +5,7 @@
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - Material Design (Tech. preview)</title>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
 	<link rel="stylesheet" type="text/css" href="../../media/css/dataTables.material.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
@@ -21,11 +21,10 @@
 	
 $(document).ready(function() {
 	$('#example').DataTable( {
-		autoWidth: false,
 		columnDefs: [
 			{
-				targets: ['_all'],
-				className: 'mdc-data-table__cell'
+				targets: [ 0, 1, 2 ],
+				className: 'mdl-data-table__cell--non-numeric'
 			}
 		]
 	} );
@@ -536,11 +535,10 @@ $(document).ready(function() {
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
 	$('#example').DataTable( {
-		autoWidth: false,
 		columnDefs: [
 			{
-				targets: ['_all'],
-				className: 'mdc-data-table__cell'
+				targets: [ 0, 1, 2 ],
+				className: 'mdl-data-table__cell--non-numeric'
 			}
 		]
 	} );
@@ -570,7 +568,7 @@ $(document).ready(function() {
 					<ul>
 						<li>
 							<a href=
-							"https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css">https://cdnjs.cloudflare.com/ajax/libs/material-components-web/4.0.0/material-components-web.min.css</a>
+							"https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css</a>
 						</li>
 						<li>
 							<a href="../../media/css/dataTables.material.css">../../media/css/dataTables.material.css</a>
