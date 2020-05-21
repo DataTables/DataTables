@@ -69,7 +69,7 @@ if ( window.$ ) {
 					if(strArr.length > 1000){
 						var first = strArr.splice(0, 500);
 						var second = strArr.splice(strArr.length - 499, 499);
-						first.push('... Truncated for berevity - look at your browsers network inspector to see the full source ...');
+						first.push("\n\n... Truncated for brevity - look at your browser's network inspector to see the full source ...\n\n");
 						str = first.concat(second).join('\n');
 					}
 
