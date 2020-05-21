@@ -28,6 +28,7 @@ if ( window.$ ) {
 
 		// init html
 		var table = $('<p/>').append( $('table').clone() ).html();
+		
 		var demoHtml = $.trim( $('div.demo-html').html() );
 
 		if ( demoHtml ) {
@@ -62,6 +63,14 @@ if ( window.$ ) {
 					try {
 						str = JSON.stringify( str, null, 2 );
 					} catch ( e ) {}
+
+					var strArr = str.split('\n');
+
+					if(strArr.length > 1000){
+						strArr.splice(999);
+						strArr.push('...');
+						str = strArr.join('\n');
+					}
 
 					$('div.tabs div.ajax').append(
 						$('<code class="multiline language-js"/>').text( str )
