@@ -28,7 +28,6 @@ if ( window.$ ) {
 
 		// init html
 		var table = $('<p/>').append( $('table').clone() ).html();
-		
 		var demoHtml = $.trim( $('div.demo-html').html() );
 
 		if ( demoHtml ) {
@@ -64,15 +63,6 @@ if ( window.$ ) {
 						str = JSON.stringify( str, null, 2 );
 					} catch ( e ) {}
 
-					var strArr = str.split('\n');
-
-					if(strArr.length > 1000){
-						var first = strArr.splice(0, 500);
-						var second = strArr.splice(strArr.length - 499, 499);
-						first.push("\n\n... Truncated for brevity - look at your browser's network inspector to see the full source ...\n\n");
-						str = first.concat(second).join('\n');
-					}
-
 					$('div.tabs div.ajax').append(
 						$('<code class="multiline language-js"/>').text( str )
 					);
@@ -104,7 +94,7 @@ if ( window.$ ) {
 				}
 
 				if ( settings.oFeatures.bServerSide ) {
-					if ( typeof settings.ajax === 'function' ) {
+					if ( $.isFunction( settings.ajax ) ) {
 						return;
 					}
 					$.ajax( {

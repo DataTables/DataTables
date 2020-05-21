@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>DataTables example - HTML5 data-* attributes - cell data</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -46,7 +46,7 @@ $(document).ready(function() {
 				the column will correctly order numerically as the <code>data-sort</code> / <code>data-order</code> attribute is set on the column with plain numeric data.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -57,6 +57,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td data-search="Tiger Nixon">T. Nixon</td>
@@ -245,7 +255,7 @@ $(document).ready(function() {
 					<tr>
 						<td data-search="Doris Wilder">D. Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>23</td>
 						<td data-order="1284940800">Mon 20th Sep 10</td>
 						<td data-order="85600">$85,600/y</td>
@@ -301,7 +311,7 @@ $(document).ready(function() {
 					<tr>
 						<td data-search="Michelle House">M. House</td>
 						<td>Integration Specialist</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>37</td>
 						<td data-order="1306972800">Thu 2nd Jun 11</td>
 						<td data-order="95400">$95,400/y</td>
@@ -515,16 +525,6 @@ $(document).ready(function() {
 						<td data-order="112000">$112,000/y</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -541,7 +541,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
+							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -736,7 +736,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

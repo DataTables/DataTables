@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>DataTables example - Row selection and deletion (single row)</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -44,19 +44,20 @@ $(document).ready(function() {
 		<section>
 			<h1>DataTables example <span>Row selection and deletion (single row)</span></h1>
 			<div class="info">
-				<p>This example modifies the multiple row selection example by only allowing the selection of a single row. This is done by checking to see if the row already has
-				a selected class, and if so removing it, but if not then the class is removed from all other rows in the table and then applied to the row being selected.</p>
+				<p>This example shows a modification of the multiple row selection example, where just a single can now be selected. This is done simply by checking to see if the
+				row already has a selected class or not, and if so removing it, if not then the class is removed from any other row in the table which does have it and applied to
+				the row to be selected.</p>
 				<p>Also shown is the <a href="//datatables.net/reference/api/row().remove()"><code class="api" title="DataTables API method">row().remove()</code></a> method which
-				deletes a row from a table, and the <a href="//datatables.net/reference/api/draw()"><code class="api" title="DataTables API method">draw()</code></a> method with
-				<code>false</code> as its first parameter. This will redraw the table keeping the current paging (without the <code>false</code> parameter the paging would be
+				will delete a row from a table, and the <a href="//datatables.net/reference/api/draw()"><code class="api" title="DataTables API method">draw()</code></a> method
+				with <code>false</code> as its first parameter. This will redraw the table keeping the current paging (without the <code>false</code> parameter the paging would be
 				reset to the first page).</p>
-				<p>If you are looking for a more complete and easier to use row selection option, the <a href="https://datatables.net/extras/select">Select extension</a> provides
-				an API that is fully integrated with DataTables for selecting rows and acting upon that selection.</p>
+				<p>If you are looking for a more complete and easier to use row selection option, check out the <a href="https://datatables.net/extras/select">Select extension</a>
+				provides an API that is fully integrated with DataTables for selecting rows and acting upon those selected rows.</p>
 			</div>
 			<div class="demo-html">
 				<button id="button">Delete selected row</button>
 			</div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -67,6 +68,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -255,7 +266,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>23</td>
 						<td>2010/09/20</td>
 						<td>$85,600</td>
@@ -311,7 +322,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>37</td>
 						<td>2011/06/02</td>
 						<td>$95,400</td>
@@ -525,16 +536,6 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -565,7 +566,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
+							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -760,7 +761,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

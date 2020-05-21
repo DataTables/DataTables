@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>DataTables example - Complex headers with column visibility</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -37,7 +37,7 @@ $(document).ready(function() {
 			<div class="info">
 				<p>Complex headers (using <code>colspan</code> / <code>rowspan</code>) can be used to group columns of similar information in DataTables, creating a very powerful
 				visual effect.</p>
-				<p>In addition to the basic behaviour, DataTables can also take <code>colspan</code> and <code>rowspan</code> into account when working with hidden columns. The
+				<p>In addition to the basic behaviour, DataTables can also take <code>colspan</code> and <code>rowspan</code>s into account when working with hidden columns. The
 				<code>colspan</code> and <code>rowspan</code> attributes for each cell are automatically calculated and rendered on the page for you. This allows the <a href=
 				"//datatables.net/reference/option/columns.visible"><code class="option" title="DataTables initialisation option">columns.visible</code></a> option and <a href=
 				"//datatables.net/reference/api/column().visible()"><code class="api" title="DataTables API method">column().visible()</code></a> method to take into account
@@ -47,7 +47,7 @@ $(document).ready(function() {
 				<p>The example below shows a header spanning multiple cells over the contact information, with one of the columns that the span covers being hidden.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th rowspan="2">Name</th>
@@ -62,6 +62,16 @@ $(document).ready(function() {
 						<th>E-mail</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Salary</th>
+						<th>Office</th>
+						<th>Extn.</th>
+						<th>E-mail</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -251,7 +261,7 @@ $(document).ready(function() {
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
 						<td>$85,600</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>3023</td>
 						<td>d.wilder@datatables.net</td>
 					</tr>
@@ -307,7 +317,7 @@ $(document).ready(function() {
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
 						<td>$95,400</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>2769</td>
 						<td>m.house@datatables.net</td>
 					</tr>
@@ -520,16 +530,6 @@ $(document).ready(function() {
 						<td>d.snider@datatables.net</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Salary</th>
-						<th>Office</th>
-						<th>Extn.</th>
-						<th>E-mail</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -551,7 +551,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
+							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -746,7 +746,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

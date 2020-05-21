@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>DataTables example - Pipelining data to reduce Ajax calls for paging</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -81,7 +81,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 			request.length = requestLength*conf.pages;
 
 			// Provide the same `data` options as DataTables.
-			if ( typeof conf.data === 'function' ) {
+			if ( $.isFunction ( conf.data ) ) {
 				// As a function it is executed with the data object as an arg
 				// for manipulation. If an object is returned, it is used as the
 				// data object to submit
@@ -95,7 +95,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 				$.extend( request, conf.data );
 			}
 
-			return $.ajax( {
+			settings.jqXHR = $.ajax( {
 				"type":     conf.method,
 				"url":      conf.url,
 				"data":     request,
@@ -168,7 +168,7 @@ $(document).ready(function() {
 				when using server-side processing, is only available at the server.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>First name</th>
@@ -262,7 +262,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 			request.length = requestLength*conf.pages;
 
 			// Provide the same `data` options as DataTables.
-			if ( typeof conf.data === 'function' ) {
+			if ( $.isFunction ( conf.data ) ) {
 				// As a function it is executed with the data object as an arg
 				// for manipulation. If an object is returned, it is used as the
 				// data object to submit
@@ -276,7 +276,7 @@ $.fn.dataTable.pipeline = function ( opts ) {
 				$.extend( request, conf.data );
 			}
 
-			return $.ajax( {
+			settings.jqXHR = $.ajax( {
 				&quot;type&quot;:     conf.method,
 				&quot;url&quot;:      conf.url,
 				&quot;data&quot;:     request,
@@ -332,7 +332,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
+							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -527,7 +527,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

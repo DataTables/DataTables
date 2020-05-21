@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
 	<title>DataTables example - Row grouping</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -16,7 +16,7 @@ tr.group:hover {
 }
 
 	</style>
-	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -24,19 +24,18 @@ tr.group:hover {
 	
 
 $(document).ready(function() {
-	var groupColumn = 2;
 	var table = $('#example').DataTable({
 		"columnDefs": [
-			{ "visible": false, "targets": groupColumn }
+			{ "visible": false, "targets": 2 }
 		],
-		"order": [[ groupColumn, 'asc' ]],
+		"order": [[ 2, 'asc' ]],
 		"displayLength": 25,
 		"drawCallback": function ( settings ) {
 			var api = this.api();
 			var rows = api.rows( {page:'current'} ).nodes();
 			var last=null;
 
-			api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+			api.column(2, {page:'current'} ).data().each( function ( group, i ) {
 				if ( last !== group ) {
 					$(rows).eq( i ).before(
 						'<tr class="group"><td colspan="5">'+group+'</td></tr>'
@@ -51,11 +50,11 @@ $(document).ready(function() {
 	// Order by the grouping
 	$('#example tbody').on( 'click', 'tr.group', function () {
 		var currentOrder = table.order()[0];
-		if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
-			table.order( [ groupColumn, 'desc' ] ).draw();
+		if ( currentOrder[0] === 2 && currentOrder[1] === 'asc' ) {
+			table.order( [ 2, 'desc' ] ).draw();
 		}
 		else {
-			table.order( [ groupColumn, 'asc' ] ).draw();
+			table.order( [ 2, 'asc' ] ).draw();
 		}
 	} );
 } );
@@ -81,7 +80,7 @@ $(document).ready(function() {
 				new sites that make use of row grouping, it is suggested that you use the new RowGroup extension.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" style="width:100%">
+			<table id="example" class="display" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -92,6 +91,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -280,7 +289,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>23</td>
 						<td>2010/09/20</td>
 						<td>$85,600</td>
@@ -336,7 +345,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>37</td>
 						<td>2011/06/02</td>
 						<td>$95,400</td>
@@ -550,16 +559,6 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -571,19 +570,18 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	var groupColumn = 2;
 	var table = $('#example').DataTable({
 		&quot;columnDefs&quot;: [
-			{ &quot;visible&quot;: false, &quot;targets&quot;: groupColumn }
+			{ &quot;visible&quot;: false, &quot;targets&quot;: 2 }
 		],
-		&quot;order&quot;: [[ groupColumn, 'asc' ]],
+		&quot;order&quot;: [[ 2, 'asc' ]],
 		&quot;displayLength&quot;: 25,
 		&quot;drawCallback&quot;: function ( settings ) {
 			var api = this.api();
 			var rows = api.rows( {page:'current'} ).nodes();
 			var last=null;
 
-			api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+			api.column(2, {page:'current'} ).data().each( function ( group, i ) {
 				if ( last !== group ) {
 					$(rows).eq( i ).before(
 						'&lt;tr class=&quot;group&quot;&gt;&lt;td colspan=&quot;5&quot;&gt;'+group+'&lt;/td&gt;&lt;/tr&gt;'
@@ -598,18 +596,18 @@ $(document).ready(function() {
 	// Order by the grouping
 	$('#example tbody').on( 'click', 'tr.group', function () {
 		var currentOrder = table.order()[0];
-		if ( currentOrder[0] === groupColumn &amp;&amp; currentOrder[1] === 'asc' ) {
-			table.order( [ groupColumn, 'desc' ] ).draw();
+		if ( currentOrder[0] === 2 &amp;&amp; currentOrder[1] === 'asc' ) {
+			table.order( [ 2, 'desc' ] ).draw();
 		}
 		else {
-			table.order( [ groupColumn, 'asc' ] ).draw();
+			table.order( [ 2, 'asc' ] ).draw();
 		}
 	} );
 } );</code>
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
+							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -807,7 +805,7 @@ tr.group:hover {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

@@ -3,16 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
-	<title>DataTables example - UIKit 3 (Tech. preview)</title>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<title>DataTables example - UIKit (Tech. preview)</title>
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.24.3/css/uikit.min.css">
 	<link rel="stylesheet" type="text/css" href="../../media/css/dataTables.uikit.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/dataTables.uikit.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
@@ -28,14 +28,14 @@ $(document).ready(function() {
 <body class="dt-example dt-example-uikit">
 	<div class="container">
 		<section>
-			<h1>DataTables example <span>UIKit 3 (Tech. preview)</span></h1>
+			<h1>DataTables example <span>UIKit (Tech. preview)</span></h1>
 			<div class="info">
-				<p>This example shows DataTables integrated with <a href="http://getuikit.com/">UIKit 3</a>.</p>
+				<p>This example shows DataTables integrated with <a href="http://getuikit.com/">UIKit</a>.</p>
 				<p>The DataTables integration with UIKit is still in development and not all elements might work correctly yet. Only once all of DataTables extensions fully
 				support UIKit will the integration be complete and available via the DataTables download builder.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="uk-table uk-table-hover uk-table-striped" style="width:100%">
+			<table id="example" class="uk-table uk-table-hover uk-table-striped" cellspacing="0" width="100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -46,6 +46,16 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -234,7 +244,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>23</td>
 						<td>2010/09/20</td>
 						<td>$85,600</td>
@@ -290,7 +300,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
-						<td>Sydney</td>
+						<td>Sidney</td>
 						<td>37</td>
 						<td>2011/06/02</td>
 						<td>$95,400</td>
@@ -504,16 +514,6 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -530,7 +530,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
+							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -551,7 +551,7 @@ $(document).ready(function() {
 					<p>The following CSS library files are loaded for use in this example to provide the styling of the table:</p>
 					<ul>
 						<li>
-							<a href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css">https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css</a>
+							<a href="//cdnjs.cloudflare.com/ajax/libs/uikit/2.24.3/css/uikit.min.css">//cdnjs.cloudflare.com/ajax/libs/uikit/2.24.3/css/uikit.min.css</a>
 						</li>
 						<li>
 							<a href="../../media/css/dataTables.uikit.css">../../media/css/dataTables.uikit.css</a>
@@ -731,7 +731,7 @@ $(document).ready(function() {
 								<a href="./material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li class="active">
-								<a href="./uikit.html">UIKit 3 (Tech. preview)</a>
+								<a href="./uikit.html">UIKit (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>
