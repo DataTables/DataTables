@@ -6578,7 +6578,7 @@
 	{
 		$(n)
 			.on( 'click.DT', oData, function (e) {
-					$(n).blur(); // Remove focus outline for mouse users
+					$(n).trigger('blur'); // Remove focus outline for mouse users
 					fn(e);
 				} )
 			.on( 'keypress.DT', oData, function (e){
@@ -14660,7 +14660,7 @@
 				attach( $(host).empty(), buttons );
 	
 				if ( activeEl !== undefined ) {
-					$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+					$(host).find( '[data-dt-idx='+activeEl+']' ).trigger('focus');
 				}
 			}
 		}

@@ -167,7 +167,7 @@ DataTable.ext.renderer.pageButton.uikit = function ( settings, host, idx, button
 	);
 
 	if ( activeEl ) {
-		$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+		$(host).find( '[data-dt-idx='+activeEl+']' ).trigger('focus');
 	}
 };
 
