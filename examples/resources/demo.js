@@ -67,9 +67,10 @@ if ( window.$ ) {
 					var strArr = str.split('\n');
 
 					if(strArr.length > 1000){
-						strArr.splice(999);
-						strArr.push('...');
-						str = strArr.join('\n');
+						var first = strArr.splice(0, 500);
+						var second = strArr.splice(strArr.length - 499, 499);
+						first.push('... Truncated for berevity - look at your browsers network inspector to see the full source ...');
+						str = first.concat(second).join('\n');
 					}
 
 					$('div.tabs div.ajax').append(
