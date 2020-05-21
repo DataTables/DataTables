@@ -165,7 +165,7 @@ div.dataTables_scrollFoot > .dataTables_scrollFootInner > table {
     justify-content: center !important;
   }
 }
-table.dataTable.table-sm > thead > tr > th {
+table.dataTable.table-sm > thead > tr > th :not(.sorting_disabled) {
   padding-right: 20px;
 }
 table.dataTable.table-sm .sorting:before,
