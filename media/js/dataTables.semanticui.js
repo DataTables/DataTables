@@ -195,12 +195,16 @@ $(document).on( 'init.dt', function (e, ctx) {
 		return;
 	}
 
+	var api = new $.fn.dataTable.Api( ctx );
+
 	// Length menu drop down
 	if ( $.fn.dropdown ) {
-		var api = new $.fn.dataTable.Api( ctx );
-
 		$( 'div.dataTables_length select', api.table().container() ).dropdown();
 	}
+
+	// Filtering input
+	$( 'div.dataTables_filter.ui.input', api.table().container() ).removeClass('input').addClass('form');
+	$( 'div.dataTables_filter input', api.table().container() ).wrap( '<span class="ui input" />' );
 } );
 
 

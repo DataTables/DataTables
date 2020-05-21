@@ -59,7 +59,7 @@ div.dataTables_wrapper div.dataTables_length select {
 div.dataTables_wrapper div.dataTables_length .ui.selection.dropdown {
   min-width: 0;
 }
-div.dataTables_wrapper div.dataTables_filter input {
+div.dataTables_wrapper div.dataTables_filter span.input {
   margin-left: 0.5em;
 }
 div.dataTables_wrapper div.dataTables_info {

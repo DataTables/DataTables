@@ -94,7 +94,7 @@ if ( window.$ ) {
 				}
 
 				if ( settings.oFeatures.bServerSide ) {
-					if ( $.isFunction( settings.ajax ) ) {
+					if ( typeof settings.ajax === 'function' ) {
 						return;
 					}
 					$.ajax( {

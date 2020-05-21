@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - Alternative pagination</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -42,7 +42,7 @@ $(document).ready(function() {
 					<li><code class="string" title="String">full_numbers</code> - 'First', 'Previous', 'Next' and 'Last' buttons, plus page numbers</li>
 					<li><code class="string" title="String">first_last_numbers</code> - 'First' and 'Last' buttons, plus page numbers</li>
 				</ul>
-				<p>The language strings of 'First', 'Previous' etc can be optionally through the internationalisation options of DataTables; <a href=
+				<p>The language strings of 'First', 'Previous' etc can be optionally changed through the internationalisation options of DataTables; <a href=
 				"//datatables.net/reference/option/language.paginate.first"><code class="option" title="DataTables initialisation option">language.paginate.first</code></a>,
 				<a href="//datatables.net/reference/option/language.paginate.previous"><code class="option" title=
 				"DataTables initialisation option">language.paginate.previous</code></a> etc.</p>
@@ -51,7 +51,7 @@ $(document).ready(function() {
 				<p>The example below shows the <code class="string" title="String">full_numbers</code> type of pagination.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" cellspacing="0" width="100%">
+			<table id="example" class="display" style="width:100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -62,16 +62,6 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -260,7 +250,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sidney</td>
+						<td>Sydney</td>
 						<td>23</td>
 						<td>2010/09/20</td>
 						<td>$85,600</td>
@@ -316,7 +306,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
-						<td>Sidney</td>
+						<td>Sydney</td>
 						<td>37</td>
 						<td>2011/06/02</td>
 						<td>$95,400</td>
@@ -530,6 +520,16 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -548,7 +548,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
+							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -743,7 +743,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

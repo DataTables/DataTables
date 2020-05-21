@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - Javascript sourced data</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -42,14 +42,14 @@ var dataSet = [
     [ "Jenette Caldwell", "Development Lead", "New York", "1937", "2011/09/03", "$345,000" ],
     [ "Yuri Berry", "Chief Marketing Officer (CMO)", "New York", "6154", "2009/06/25", "$675,000" ],
     [ "Caesar Vance", "Pre-Sales Support", "New York", "8330", "2011/12/12", "$106,450" ],
-    [ "Doris Wilder", "Sales Assistant", "Sidney", "3023", "2010/09/20", "$85,600" ],
+    [ "Doris Wilder", "Sales Assistant", "Sydney", "3023", "2010/09/20", "$85,600" ],
     [ "Angelica Ramos", "Chief Executive Officer (CEO)", "London", "5797", "2009/10/09", "$1,200,000" ],
     [ "Gavin Joyce", "Developer", "Edinburgh", "8822", "2010/12/22", "$92,575" ],
     [ "Jennifer Chang", "Regional Director", "Singapore", "9239", "2010/11/14", "$357,650" ],
     [ "Brenden Wagner", "Software Engineer", "San Francisco", "1314", "2011/06/07", "$206,850" ],
     [ "Fiona Green", "Chief Operating Officer (COO)", "San Francisco", "2947", "2010/03/11", "$850,000" ],
     [ "Shou Itou", "Regional Marketing", "Tokyo", "8899", "2011/08/14", "$163,000" ],
-    [ "Michelle House", "Integration Specialist", "Sidney", "2769", "2011/06/02", "$95,400" ],
+    [ "Michelle House", "Integration Specialist", "Sydney", "2769", "2011/06/02", "$95,400" ],
     [ "Suki Burks", "Developer", "London", "6832", "2009/10/22", "$114,500" ],
     [ "Prescott Bartlett", "Technical Author", "London", "3606", "2011/05/07", "$145,000" ],
     [ "Gavin Cortez", "Team Leader", "San Francisco", "2860", "2008/10/26", "$235,500" ],
@@ -123,14 +123,14 @@ $(document).ready(function() {
     [ &quot;Jenette Caldwell&quot;, &quot;Development Lead&quot;, &quot;New York&quot;, &quot;1937&quot;, &quot;2011/09/03&quot;, &quot;$345,000&quot; ],
     [ &quot;Yuri Berry&quot;, &quot;Chief Marketing Officer (CMO)&quot;, &quot;New York&quot;, &quot;6154&quot;, &quot;2009/06/25&quot;, &quot;$675,000&quot; ],
     [ &quot;Caesar Vance&quot;, &quot;Pre-Sales Support&quot;, &quot;New York&quot;, &quot;8330&quot;, &quot;2011/12/12&quot;, &quot;$106,450&quot; ],
-    [ &quot;Doris Wilder&quot;, &quot;Sales Assistant&quot;, &quot;Sidney&quot;, &quot;3023&quot;, &quot;2010/09/20&quot;, &quot;$85,600&quot; ],
+    [ &quot;Doris Wilder&quot;, &quot;Sales Assistant&quot;, &quot;Sydney&quot;, &quot;3023&quot;, &quot;2010/09/20&quot;, &quot;$85,600&quot; ],
     [ &quot;Angelica Ramos&quot;, &quot;Chief Executive Officer (CEO)&quot;, &quot;London&quot;, &quot;5797&quot;, &quot;2009/10/09&quot;, &quot;$1,200,000&quot; ],
     [ &quot;Gavin Joyce&quot;, &quot;Developer&quot;, &quot;Edinburgh&quot;, &quot;8822&quot;, &quot;2010/12/22&quot;, &quot;$92,575&quot; ],
     [ &quot;Jennifer Chang&quot;, &quot;Regional Director&quot;, &quot;Singapore&quot;, &quot;9239&quot;, &quot;2010/11/14&quot;, &quot;$357,650&quot; ],
     [ &quot;Brenden Wagner&quot;, &quot;Software Engineer&quot;, &quot;San Francisco&quot;, &quot;1314&quot;, &quot;2011/06/07&quot;, &quot;$206,850&quot; ],
     [ &quot;Fiona Green&quot;, &quot;Chief Operating Officer (COO)&quot;, &quot;San Francisco&quot;, &quot;2947&quot;, &quot;2010/03/11&quot;, &quot;$850,000&quot; ],
     [ &quot;Shou Itou&quot;, &quot;Regional Marketing&quot;, &quot;Tokyo&quot;, &quot;8899&quot;, &quot;2011/08/14&quot;, &quot;$163,000&quot; ],
-    [ &quot;Michelle House&quot;, &quot;Integration Specialist&quot;, &quot;Sidney&quot;, &quot;2769&quot;, &quot;2011/06/02&quot;, &quot;$95,400&quot; ],
+    [ &quot;Michelle House&quot;, &quot;Integration Specialist&quot;, &quot;Sydney&quot;, &quot;2769&quot;, &quot;2011/06/02&quot;, &quot;$95,400&quot; ],
     [ &quot;Suki Burks&quot;, &quot;Developer&quot;, &quot;London&quot;, &quot;6832&quot;, &quot;2009/10/22&quot;, &quot;$114,500&quot; ],
     [ &quot;Prescott Bartlett&quot;, &quot;Technical Author&quot;, &quot;London&quot;, &quot;3606&quot;, &quot;2011/05/07&quot;, &quot;$145,000&quot; ],
     [ &quot;Gavin Cortez&quot;, &quot;Team Leader&quot;, &quot;San Francisco&quot;, &quot;2860&quot;, &quot;2008/10/26&quot;, &quot;$235,500&quot; ],
@@ -154,7 +154,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
+							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -349,7 +349,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

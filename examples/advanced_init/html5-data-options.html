@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - HTML5 data-* attributes - table options</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -33,9 +33,9 @@ $(document).ready(function() {
 				<p>As of DataTables 1.10.5 it is now possible to define <a href="//datatables.net/reference/option">initialisation options</a> using HTML5 <code>data-*</code>
 				attributes. The attribute names are read by DataTables and used, potentially in combination with, the standard Javascript initialisation options (with the
 				<code>data-*</code> attributes taking priority).</p>
-				<p>Please note that the attribute values must contain valid JSON data or a Javascript primitive (as require by <a href=
-				"http://api.jquery.com/data/#data-html5">jQuery's <code>$().data()</code> method</a> - this means that double quotes should be used inside the attribute if needed
-				for a string (see the <code>data-order</code> example below).</p>
+				<p>Please note that the attribute values must contain valid JSON data or a Javascript primitive, as required by <a href=
+				"http://api.jquery.com/data/#data-html5">jQuery's <code>$().data()</code> method</a>. This means that double quotes should be used inside the attribute if needed
+				for a string (see the <code>data-order</code> in this example).</p>
 				<p>Additionally, jQuery will convert a dashed string into the camel-case notation used by DataTables for its options. For example <code>data-page-length</code> is
 				used to represent <a href="//datatables.net/reference/option/pageLength"><code class="option" title="DataTables initialisation option">pageLength</code></a>.</p>
 				<p>The table below shows the use of <a href="//datatables.net/reference/option/pageLength"><code class="option" title=
@@ -540,7 +540,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
+							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -735,7 +735,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

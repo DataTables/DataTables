@@ -3,7 +3,7 @@
 /*
  * DataTables example server-side processing script.
  *
- * Please note that this script is intentionally extremely simply to show how
+ * Please note that this script is intentionally extremely simple to show how
  * server-side processing can be implemented, and probably shouldn't be used as
  * the basis for a large complex system. It is suitable for simple use cases as
  * for learning.

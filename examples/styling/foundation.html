@@ -3,16 +3,16 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - Foundation</title>
-	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">
 	<link rel="stylesheet" type="text/css" href="../../media/css/dataTables.foundation.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../resources/demo.css">
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/dataTables.foundation.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
@@ -34,11 +34,11 @@ $(document).ready(function() {
 				"http://foundation.zurb.com/docs/components/tables.html">table styling options</a> to present a consistent interface with your Foundation driven site / app.</p>
 				<p>DataTables' Foundation integration also provides a renderer for the pagination control in DataTables to ensure that the pagination of the table is also styled
 				consistently by Foundation.</p>
-				<p>This integration is done simply by including the DataTables Foundation files (CSS and JS) which will set the defaults needed for DataTables to be initialised as
-				normal, as shown in this examples.</p>
+				<p>This integration is done simply by including the DataTables Foundation files (CSS and JS) which sets the defaults needed for DataTables to be initialised as
+				normal, as shown in this example.</p>
 			</div>
 			<div class="demo-html"></div>
-			<table id="example" class="display" cellspacing="0" width="100%">
+			<table id="example" class="display" style="width:100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -49,16 +49,6 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -247,7 +237,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sidney</td>
+						<td>Sydney</td>
 						<td>23</td>
 						<td>2010/09/20</td>
 						<td>$85,600</td>
@@ -303,7 +293,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
-						<td>Sidney</td>
+						<td>Sydney</td>
 						<td>37</td>
 						<td>2011/06/02</td>
 						<td>$95,400</td>
@@ -517,6 +507,16 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -533,7 +533,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
+							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -555,7 +555,7 @@ $(document).ready(function() {
 					<ul>
 						<li>
 							<a href=
-							"//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css">//cdnjs.cloudflare.com/ajax/libs/foundation/5.5.2/css/foundation.min.css</a>
+							"https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css">https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css</a>
 						</li>
 						<li>
 							<a href="../../media/css/dataTables.foundation.css">../../media/css/dataTables.foundation.css</a>
@@ -735,7 +735,7 @@ $(document).ready(function() {
 								<a href="./material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="./uikit.html">UIKit (Tech. preview)</a>
+								<a href="./uikit.html">UIKit 3 (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

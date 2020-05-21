@@ -16,7 +16,7 @@
  */
 
 
-// REMOVE THIS BLOCK - used for DataTables test environment only!
+// Please Remove below 4 lines as this is use in Datatatables test environment for your local or live environment please remove it or else it will not work
 $file = $_SERVER['DOCUMENT_ROOT'].'/datatables/pdo.php';
 if ( is_file( $file ) ) {
 	include( $file );
@@ -135,7 +135,9 @@ class SSP {
 				}
 			}
 
-			$order = 'ORDER BY '.implode(', ', $orderBy);
+			if ( count( $orderBy ) ) {
+				$order = 'ORDER BY '.implode(', ', $orderBy);
+			}
 		}
 
 		return $order;

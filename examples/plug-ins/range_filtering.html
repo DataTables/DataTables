@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/ico" href="http://www.datatables.net/favicon.ico">
-	<meta name="viewport" content="initial-scale=1.0, maximum-scale=2.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0, user-scalable=no">
 	<title>DataTables example - Custom filtering - range search</title>
 	<link rel="stylesheet" type="text/css" href="../../media/css/jquery.dataTables.css">
 	<link rel="stylesheet" type="text/css" href="../resources/syntax/shCore.css">
@@ -11,7 +11,7 @@
 	<style type="text/css" class="init">
 	
 	</style>
-	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -53,8 +53,8 @@ $(document).ready(function() {
 		<section>
 			<h1>DataTables example <span>Custom filtering - range search</span></h1>
 			<div class="info">
-				<p>There may be occasions when you wish to search data presented to the end user in your own manner, common examples are number range search (in between two
-				numbers) and date range search. DataTables provide an API method to add your own search functions, <code>$.fn.dataTable.ext.search</code>. This is an array of
+				<p>There may be occasions when you wish to search data presented to the end user in your own manner, common examples are number range searches (in between two
+				numbers) and date range searches. DataTables provides an API method to add your own search functions, <code>$.fn.dataTable.ext.search</code>. This is an array of
 				functions (push your own onto it) which will will be run at table draw time to see if a particular row should be included or not.</p>
 				<p>This example shows a search being performed on the age column in the data, based upon two inputs.</p>
 			</div>
@@ -70,7 +70,7 @@ $(document).ready(function() {
 					</tr>
 				</table>
 			</div>
-			<table id="example" class="display" cellspacing="0" width="100%">
+			<table id="example" class="display" style="width:100%">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -81,16 +81,6 @@ $(document).ready(function() {
 						<th>Salary</th>
 					</tr>
 				</thead>
-				<tfoot>
-					<tr>
-						<th>Name</th>
-						<th>Position</th>
-						<th>Office</th>
-						<th>Age</th>
-						<th>Start date</th>
-						<th>Salary</th>
-					</tr>
-				</tfoot>
 				<tbody>
 					<tr>
 						<td>Tiger Nixon</td>
@@ -279,7 +269,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Doris Wilder</td>
 						<td>Sales Assistant</td>
-						<td>Sidney</td>
+						<td>Sydney</td>
 						<td>23</td>
 						<td>2010/09/20</td>
 						<td>$85,600</td>
@@ -335,7 +325,7 @@ $(document).ready(function() {
 					<tr>
 						<td>Michelle House</td>
 						<td>Integration Specialist</td>
-						<td>Sidney</td>
+						<td>Sydney</td>
 						<td>37</td>
 						<td>2011/06/02</td>
 						<td>$95,400</td>
@@ -549,6 +539,16 @@ $(document).ready(function() {
 						<td>$112,000</td>
 					</tr>
 				</tbody>
+				<tfoot>
+					<tr>
+						<th>Name</th>
+						<th>Position</th>
+						<th>Office</th>
+						<th>Age</th>
+						<th>Start date</th>
+						<th>Salary</th>
+					</tr>
+				</tfoot>
 			</table>
 			<ul class="tabs">
 				<li class="active">Javascript</li>
@@ -588,7 +588,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 					<ul>
 						<li>
-							<a href="//code.jquery.com/jquery-1.12.4.js">//code.jquery.com/jquery-1.12.4.js</a>
+							<a href="https://code.jquery.com/jquery-3.3.1.js">https://code.jquery.com/jquery-3.3.1.js</a>
 						</li>
 						<li>
 							<a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a>
@@ -783,7 +783,7 @@ $(document).ready(function() {
 								<a href="../styling/material.html">Material Design (Tech. preview)</a>
 							</li>
 							<li>
-								<a href="../styling/uikit.html">UIKit (Tech. preview)</a>
+								<a href="../styling/uikit.html">UIKit 3 (Tech. preview)</a>
 							</li>
 						</ul>
 					</div>

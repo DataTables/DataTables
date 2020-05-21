@@ -87,13 +87,15 @@
 }
 .syntaxhighlighter table td.code {
   width: 100% !important;
+  position: relative !important;
 }
 .syntaxhighlighter table td.code .container {
   position: relative !important;
+  overflow: auto !important;
 }
 .syntaxhighlighter table td.code .container textarea {
   box-sizing: border-box !important;
-  position: absolute !important;
+  position: relative !important;
   left: 0 !important;
   top: 0 !important;
   width: 100% !important;
@@ -103,6 +105,18 @@
   padding-left: 1em !important;
   overflow: hidden !important;
   white-space: pre !important;
+  line-height: 1.4em !important;
+}
+.syntaxhighlighter.source table td.code .container {
+  position: absolute !important;
+  overflow-x: auto !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+.syntaxhighlighter.source table td.code .container div.line {
+  display: none !important;
 }
 .syntaxhighlighter table td.gutter .line {
   text-align: right !important;
@@ -390,6 +404,5 @@
 
 .syntaxhighlighter table td.code {
   width: auto !important;
-  overflow: auto !important;
 }
 
