@@ -1862,7 +1862,7 @@
 			DataTable.__browser = browser;
 	
 			// Scrolling feature / quirks detection
-			var n = $('<div/>')
+			var n = $('<div></div>')
 				.css( {
 					position: 'fixed',
 					top: 0,
@@ -1872,7 +1872,7 @@
 					overflow: 'hidden'
 				} )
 				.append(
-					$('<div/>')
+					$('<div></div>')
 						.css( {
 							position: 'absolute',
 							top: 1,
@@ -1881,7 +1881,7 @@
 							overflow: 'scroll'
 						} )
 						.append(
-							$('<div/>')
+							$('<div></div>')
 								.css( {
 									width: '100%',
 									height: 10
@@ -3563,11 +3563,11 @@
 	{
 		var classes = oSettings.oClasses;
 		var table = $(oSettings.nTable);
-		var holding = $('<div/>').insertBefore( table ); // Holding element for speed
+		var holding = $('<div></div>').insertBefore( table ); // Holding element for speed
 		var features = oSettings.oFeatures;
 	
 		// All DataTables are wrapped in a div
-		var insert = $('<div/>', {
+		var insert = $('<div></div>', {
 			id:      oSettings.sTableId+'_wrapper',
 			'class': classes.sWrapper + (oSettings.nTFoot ? '' : ' '+classes.sNoFooter)
 		} );
@@ -3587,7 +3587,7 @@
 			if ( cOption == '<' )
 			{
 				/* New container div */
-				nNewNode = $('<div/>')[0];
+				nNewNode = $('<div></div>')[0];
 	
 				/* Check to see if we should append an id and/or a class name to the container */
 				cNext = aDom[i+1];
@@ -4186,7 +4186,7 @@
 			str.replace('_INPUT_', input) :
 			str+input;
 	
-		var filter = $('<div/>', {
+		var filter = $('<div></div>', {
 				'id': ! features.f ? tableId+'_filter' : null,
 				'class': classes.sFilter
 			} )
@@ -4602,7 +4602,7 @@
 		var
 			tid = settings.sTableId,
 			nodes = settings.aanFeatures.i,
-			n = $('<div/>', {
+			n = $('<div></div>', {
 				'class': settings.oClasses.sInfo,
 				'id': ! nodes ? tid+'_info' : null
 			} );
@@ -4888,7 +4888,7 @@
 			redraw = function( settings ) {
 				_fnDraw( settings );
 			},
-			node = $('<div/>').addClass( settings.oClasses.sPaging + type )[0],
+			node = $('<div></div>').addClass( settings.oClasses.sPaging + type )[0],
 			features = settings.aanFeatures;
 	
 		if ( ! modern ) {
@@ -5015,7 +5015,7 @@
 	 */
 	function _fnFeatureHtmlProcessing ( settings )
 	{
-		return $('<div/>', {
+		return $('<div></div>', {
 				'id': ! settings.aanFeatures.r ? settings.sTableId+'_processing' : null,
 				'class': settings.oClasses.sProcessing
 			} )
@@ -5067,7 +5067,7 @@
 		var headerClone = $( table[0].cloneNode(false) );
 		var footerClone = $( table[0].cloneNode(false) );
 		var footer = table.children('tfoot');
-		var _div = '<div/>';
+		var _div = '<div></div>';
 		var size = function ( s ) {
 			return !s ? null : _fnStringToCss( s );
 		};
@@ -5616,7 +5616,7 @@
 				// browser will collapse it. If this width is smaller than the
 				// width the column requires, then it will have no effect
 				if ( column.sWidthOrig && scrollX ) {
-					$( headerCells[i] ).append( $('<div/>').css( {
+					$( headerCells[i] ).append( $('<div></div>').css( {
 						width: column.sWidthOrig,
 						margin: 0,
 						padding: 0,
@@ -5648,7 +5648,7 @@
 			// with minimal height, so it has no effect on if the container scrolls
 			// or not. Otherwise it might trigger scrolling when it actually isn't
 			// needed
-			var holder = $('<div/>').css( scrollX || scrollY ?
+			var holder = $('<div></div>').css( scrollX || scrollY ?
 					{
 						position: 'absolute',
 						top: 0,
@@ -5769,7 +5769,7 @@
 			return 0;
 		}
 	
-		var n = $('<div/>')
+		var n = $('<div></div>')
 			.css( 'width', _fnStringToCss( width ) )
 			.appendTo( parent || document.body );
 	
@@ -14908,7 +14908,7 @@
 			},
 	
 			jqueryui: function ( settings, cell, column, classes ) {
-				$('<div/>')
+				$('<div></div>')
 					.addClass( classes.sSortJUIWrapper )
 					.append( cell.contents() )
 					.append( $('<span/>')
