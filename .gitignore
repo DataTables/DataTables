@@ -5,3 +5,5 @@ cdn
 media/css/jquery.dataTables_themeroller.min.css
 .DS_Store
 Plugins
+node_modules/*
+yarn.lock
