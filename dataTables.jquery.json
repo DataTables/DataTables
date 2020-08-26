@@ -2,18 +2,18 @@
 	"name": "DataTables",
 	"version": "1.10.21",
 	"description": "DataTables enhances HTML tables with the ability to sort, filter and page the data in the table very easily. It provides a comprehensive API and set of configuration options, allowing you to consume data from virtually any data source.",
-	"homepage": "http://datatables.net/",
-	"docs": "http://datatables.net/",
-	"demo": "http://datatables.net/examples",
-	"download": "http://datatables.net/download",
+	"homepage": "https://datatables.net/",
+	"docs": "https://datatables.net/",
+	"demo": "https://datatables.net/examples",
+	"download": "https://datatables.net/download",
 	"author": {
 		"name": "Allan Jardine",
-		"url": "http://sprymedia.co.uk"
+		"url": "https://sprymedia.co.uk/"
 	},
 	"licenses": [
 		{
 			"type": "MIT",
-			"url": "http://datatables.net/license_bsd"
+			"url": "https://datatables.net/license_bsd"
 		}
 	],
 	"dependencies": {
