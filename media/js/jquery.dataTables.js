@@ -3113,7 +3113,12 @@
 				if ( create || ((!nTrIn || oCol.mRender || oCol.mData !== i) &&
 					 (!$.isPlainObject(oCol.mData) || oCol.mData._ !== i+'.display')
 				)) {
-					nTd.innerHTML = _fnGetCellData( oSettings, iRow, i, 'display' );
+					var r = _fnGetCellData(oSettings, iRow, i, 'display');
+					if (typeof (r) == "string") {
+						nTd.innerHTML = r;
+					} else {
+						nTd.appendChild(r);
+                                        }
 				}
 	
 				/* Add user defined class */
