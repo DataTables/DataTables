@@ -267,7 +267,7 @@ class SSP {
 
 		// Data set length after filtering
 		$resFilterLength = self::sql_exec( $db, $bindings,
-			"SELECT COUNT(`{$primaryKey}`)
+			"SELECT COUNT( DISTINCT(`{$primaryKey}`) )
 			 FROM   `$table`
 			 $where"
 		);
@@ -275,7 +275,7 @@ class SSP {
 
 		// Total data set length
 		$resTotalLength = self::sql_exec( $db,
-			"SELECT COUNT(`{$primaryKey}`)
+			"SELECT COUNT( DISTINCT(`{$primaryKey}`) )
 			 FROM   `$table`"
 		);
 		$recordsTotal = $resTotalLength[0][0];
