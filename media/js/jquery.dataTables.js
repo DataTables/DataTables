@@ -4179,7 +4179,8 @@
 		var language = settings.oLanguage;
 		var previousSearch = settings.oPreviousSearch;
 		var features = settings.aanFeatures;
-		var input = '<input type="search" class="'+classes.sFilterInput+'"/>';
+		var inputFilterId = tableId + '_input_filter';
+		var input = '<input type="search" id="' + inputFilterId + '" class="'+classes.sFilterInput+'"/>';
 	
 		var str = language.sSearch;
 		str = str.match(/_INPUT_/) ?
@@ -4190,7 +4191,7 @@
 				'id': ! features.f ? tableId+'_filter' : null,
 				'class': classes.sFilter
 			} )
-			.append( $('<label/>' ).append( str ) );
+			.append( $('<label for="' + inputFilterId + '" />' ).append( str ) );
 	
 		var searchFn = function() {
 			/* Update all other filter input elements for the new display */
