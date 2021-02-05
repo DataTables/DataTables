@@ -133,7 +133,12 @@ class SSP {
 				$columnIdx = intval($request['order'][$i]['column']);
 				$requestColumn = $request['columns'][$columnIdx];
 
-				$columnIdx = array_search( $requestColumn['data'], $dtColumns );
+				if(is_array($requestColumn['data'])){
+					$columnIdx = array_search( $requestColumn['data']['sort'], $dtColumns );
+				}else{
+					$columnIdx = array_search( $requestColumn['data'], $dtColumns );
+				}
+				
 				$column = $columns[ $columnIdx ];
 
 				if ( $requestColumn['orderable'] == 'true' ) {
