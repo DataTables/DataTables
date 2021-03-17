@@ -4179,7 +4179,7 @@
 		var language = settings.oLanguage;
 		var previousSearch = settings.oPreviousSearch;
 		var features = settings.aanFeatures;
-		var input = '<input type="search" class="'+classes.sFilterInput+'"/>';
+		var input = '<form autocomplete="off"><input type="search" class="'+classes.sFilterInput+'"/></form>';
 	
 		var str = language.sSearch;
 		str = str.match(/_INPUT_/) ?
