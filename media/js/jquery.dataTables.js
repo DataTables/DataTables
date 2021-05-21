@@ -11336,7 +11336,7 @@
 				 * sorted descending by activing the column (click or return when focused).
 				 * Note that the column header is prefixed to this string.
 				 *  @type string
-				 *  @default : activate to sort column ascending
+				 *  @default : activate to sort column descending
 				 *
 				 *  @dtopt Language
 				 *  @name DataTable.defaults.language.aria.sortDescending
