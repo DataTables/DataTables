@@ -10,4 +10,4 @@ $(window).load(()=>{
  })
 
 
- /*Also i have tried to integrate the following in the main dataTable.js file i.e jquery.dataTable.js but is not able to integrate, if anyone can do that and please let me know in detail.*/ 
+ /*Also i have tried to integrate the following in the main dataTable.js file i.e jquery.dataTable.js but was not able to integrate, if anyone can do that and please let me know in detail.*/ 
