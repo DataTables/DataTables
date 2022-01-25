@@ -1,3 +1,11 @@
+# Legacy repository
+
+Please note that this is a **legacy repo** for DataTables. The main source repo [is DataTables/DataTablesSrc](https://github.com/DataTables/DataTablesSrc).
+
+Our distribution repos (for NPM, Nuget, etc packages) are the `DataTables/Dist-*` repos - e.g. [DataTables/Dist-DataTables](https://github.com/DataTables/Dist-DataTables). Each distribution repo has a core Javascript file or styling for DataTables or an extension. Please use our [download builder](https://datatables.net/download) to obtain the files you need, including for NPM, Nuget, CDN and download.
+
+
+
 # DataTables plug-in for jQuery
 
 DataTables is a table enhancing plug-in for the [jQuery](//jquery.com) Javascript library, adding sorting, paging and filtering abilities to plain HTML tables with minimal effort. The stated goal of DataTables is:
